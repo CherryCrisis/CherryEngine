@@ -1,0 +1,9 @@
+x64
+*.user
+.vs
+
+*.o
+*.d
+
+imgui.ini
+.vscode
