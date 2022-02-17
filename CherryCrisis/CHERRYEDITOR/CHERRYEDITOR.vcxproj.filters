@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Externals">
-      <UniqueIdentifier>{0771e16c-a627-4f58-af34-aca76fc7ca47}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers d%27en-tête\Externals">
       <UniqueIdentifier>{2ea34e0e-f321-4389-bddf-87387e2a8af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers externes">
+      <UniqueIdentifier>{0771e16c-a627-4f58-af34-aca76fc7ca47}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -25,31 +25,31 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="externals\glad.c">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\stb_image.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_demo.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_draw.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_glfw.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_tables.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
-      <Filter>Externals</Filter>
+      <Filter>Fichiers externes</Filter>
     </ClCompile>
     <ClCompile Include="EditorManager.cpp">
       <Filter>Fichiers sources</Filter>

@@ -19,18 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\CHERRYDLL\framework.h" />
-    <ClInclude Include="..\CHERRYDLL\pch.h" />
+    <ClInclude Include="..\CHERRYDLL\include\framework.h" />
+    <ClInclude Include="..\CHERRYDLL\include\pch.h" />
     <ClInclude Include="printer.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\CHERRYDLL\dllmain.cpp" />
-    <ClCompile Include="..\CHERRYDLL\pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\CHERRYDLL\src\dllmain.cpp" />
+    <ClCompile Include="..\CHERRYDLL\src\pch.cpp" />
     <ClCompile Include="printer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -135,7 +130,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../CHERRYDLL</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CHERRYDLL/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,7 +148,7 @@
       <PreprocessorDefinitions>NDEBUG;CHERRYGP_EXPORTS;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../CHERRYDLL</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CHERRYDLL/include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

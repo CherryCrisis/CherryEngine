@@ -18,10 +18,10 @@
     <ClInclude Include="printer.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\CHERRYDLL\pch.h">
+    <ClInclude Include="..\CHERRYDLL\include\framework.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\CHERRYDLL\framework.h">
+    <ClInclude Include="..\CHERRYDLL\include\pch.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,10 +29,10 @@
     <ClCompile Include="printer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\CHERRYDLL\pch.cpp">
+    <ClCompile Include="..\CHERRYDLL\src\dllmain.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\CHERRYDLL\dllmain.cpp">
+    <ClCompile Include="..\CHERRYDLL\src\pch.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
