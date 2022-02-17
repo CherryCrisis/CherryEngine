@@ -21,7 +21,7 @@
 
 int main()
 {
-	Engine engine {};
+
 
     int screenWidth = 1200;
     int screenHeight = 1000;
@@ -61,6 +61,8 @@ int main()
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
     EditorManager editor{};
+    Engine engine{};
+
     editor.engine = &engine;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
@@ -74,6 +76,7 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.f, 0.f, 0.f, 1.f);
+
         editor.DisplayEditorUI(window);
 
         if (engine.isPlaying)

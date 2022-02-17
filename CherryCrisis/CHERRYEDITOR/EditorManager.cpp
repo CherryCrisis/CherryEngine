@@ -70,6 +70,18 @@ EditorManager::EditorManager()
     {
         std::cout << "failed to load Play icon" << std::endl;
     }
+    if (!LoadTextureFromFile("../Internal/Icons/pause_icon.png", &PauseIcon, &null, &null))
+    {
+        std::cout << "failed to load Pause icon" << std::endl;
+    }
+    if (!LoadTextureFromFile("../Internal/Icons/replay_icon.png", &ReplayIcon, &null, &null))
+    {
+        std::cout << "failed to load Replay icon" << std::endl;
+    }
+    if (!LoadTextureFromFile("../Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
+    {
+        std::cout << "failed to load Stop icon" << std::endl;
+    }
 
     currentDirectory = AssetPath;
 }
@@ -211,30 +223,32 @@ void EditorManager::HandleMenuBar()
 void EditorManager::HandleToolsWindow() 
 {
     ImGuiWindowClass window_class;
-    window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar;
+    window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_NoDockingOverMe;
     ImGui::SetNextWindowClass(&window_class);
-    ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiCond_FirstUseEver);
 
     if (ImGui::Begin("Tools", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
-        float size = ImGui::GetWindowHeight() - 4.0f;
-        ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * .5f ) - (size * .5f));
-        if (ImGui::ImageButton((ImTextureID)PlayIcon, ImVec2(size, size)))
+        float size = ImGui::GetWindowHeight() / 2.f;
+        ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * .5f) - (size * 3 * .5f));
+
+
+        if (ImGui::ImageButton(engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
         {
             if (engine->isPlaying)
             {
                 engine->Stop();
             }
-            else 
+            else
             {
                 engine->Launch();
             }
         } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID) browserIcon, ImVec2(size, size)))
+        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
         {
 
         } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)FileIcon, ImVec2(size, size)))
+        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
         {
 
         }
@@ -323,7 +337,10 @@ void EditorManager::HandleInspectorWindow()
     {
         for (const auto comp : engine->behaviours)
         {
-            ImGui::Text("Component");
+            std::string name = typeid(*comp).name();
+            name = name.substr(name.find_first_of(" \t") + 1);
+
+            ImGui::Text(name.c_str());
         }
     }
     ImGui::End();
@@ -426,7 +443,6 @@ void EditorManager::QuerryBrowser()
         std::string name = entry.path().filename().string();
 
         unsigned int icon = entry.is_directory() ? browserIcon : FileIcon;
-        ImGui::PushID(i);
 
         ImGui::ImageButton((void*)(intptr_t)icon, {thumbnailSize, thumbnailSize}, { 0,1 }, { 1, 0 });
         

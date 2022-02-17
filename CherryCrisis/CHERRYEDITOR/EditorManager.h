@@ -42,6 +42,9 @@ private:
     unsigned int browserIcon = 0;
     unsigned int FileIcon = 0;
     unsigned int PlayIcon = 0;
+    unsigned int PauseIcon = 0;
+    unsigned int ReplayIcon = 0;
+    unsigned int StopIcon = 0;
 
     std::filesystem::path currentDirectory; 
 };
