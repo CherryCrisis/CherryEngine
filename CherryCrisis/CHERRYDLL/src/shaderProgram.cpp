@@ -7,6 +7,11 @@
 
 #include "shader.hpp"
 
+ShaderProgram::~ShaderProgram()
+{
+	glDeleteProgram(m_shaderProgram);
+}
+
 Resource* ShaderProgram::Create(const char* programName, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
@@ -51,10 +56,5 @@ Resource* ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>
 	}
 
 	return shaderProgram;
-}
-
-ShaderProgram::~ShaderProgram()
-{
-	glDeleteProgram(m_shaderProgram);
 }
 

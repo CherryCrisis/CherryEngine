@@ -14,4 +14,6 @@ private:
 public:
 
     static Resource* Create(const char* texturePath);
+
+    ~Texture();
 };

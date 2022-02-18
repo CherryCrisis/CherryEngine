@@ -18,19 +18,25 @@ namespace CCModelLoader
         std::vector<std::shared_ptr<Model>>& models,
         ResourceManager* resourceManager, const char* filepath)
     {
-        aiVector3D trs[3];
-        node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
-
-        std::shared_ptr<Model> model = resourceManager->AddResource<Model>(filepath, false, scene, node);
-        models.push_back(model);
-
         ModelNode* modelNode = new ModelNode();
         modelNode->m_parentNode = parentModelNode;
+
+        std::shared_ptr<Model> model;
+        if (scene->mRootNode != node)
+        {
+            aiVector3D trs[3];
+            node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
+
+            std::shared_ptr<Model> model = resourceManager->AddResource<Model>(filepath, false, scene, node);
+            models.push_back(model);
+
+            for (int i = 0; i < 3; ++i)
+                for (int j = 0; j < 3; ++j)
+                    modelNode->m_baseTRS[i].data[j] = trs[i][j];
+        }
+
         modelNode->m_model = model;
 
-        for (int i = 0; i < 3; ++i)
-            for (int j = 0; j < 3; ++j)
-                modelNode->m_baseTRS[i].data[j] = trs[i][j];
 
         const size_t nbChildren = (size_t)node->mNumChildren;
 

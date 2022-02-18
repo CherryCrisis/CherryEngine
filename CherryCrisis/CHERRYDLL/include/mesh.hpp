@@ -29,6 +29,8 @@ private :
 	Mesh(const char* meshName) : Resource(meshName) {}
 public :
 
+	~Mesh();
+	
 	static Resource* Create(const char* modelPath, const aiMesh* assimpMesh);
 
 };

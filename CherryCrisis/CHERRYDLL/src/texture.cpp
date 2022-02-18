@@ -8,6 +8,12 @@ Texture::Texture(const char* texturePath)
 
 }
 
+Texture::~Texture()
+{
+
+}
+
+
 Resource* Texture::Create(const char* texturePath)
 {
 	Texture* texture = new Texture(texturePath);

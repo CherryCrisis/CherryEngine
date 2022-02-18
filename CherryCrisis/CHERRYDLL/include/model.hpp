@@ -6,6 +6,7 @@
 #include "resource.hpp"
 
 class Mesh;
+class Material;
 class Model;
 
 struct aiScene;
@@ -17,6 +18,7 @@ private:
 	Model(const char* filepath) : Resource(filepath) {}
 
 	std::shared_ptr<Mesh> m_mesh;
+	std::shared_ptr<Material> m_material;
 
 public:
 	~Model();

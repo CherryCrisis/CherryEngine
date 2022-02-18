@@ -4,6 +4,12 @@
 
 #include <assimp/mesh.h>
 
+Mesh::~Mesh()
+{
+
+}
+
+
 Resource* Mesh::Create(const char* modelFilepath, const aiMesh* assimpMesh)
 {
     std::string meshPath = modelFilepath + std::string("/") + std::string(assimpMesh->mName.C_Str());

@@ -22,5 +22,7 @@ private:
 	Material(const char* materialName) : Resource(materialName) {}
 public:
 
+	~Material();
+
 	static Resource* Create(const char* filepath, const aiMaterial* assimpMaterial);
 };
