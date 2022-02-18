@@ -6,7 +6,7 @@
 #include <CherryHeader.h>
 
 static const std::filesystem::path AssetPath = "../Assets";
-
+ 
 class EditorManager 
 {
 public:

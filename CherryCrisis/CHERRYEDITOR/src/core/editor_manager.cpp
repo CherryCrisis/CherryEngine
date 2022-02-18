@@ -1,5 +1,5 @@
 
-#include "EditorManager.h"
+#include "core/editor_manager.hpp"
 
 //#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -156,8 +156,38 @@ void EditorManager::HandleLogWindow()
         return;
 
     ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Logs", &isLogOpened, ImGuiWindowFlags_NoBringToFrontOnFocus))
+    if (ImGui::Begin("Logs", &isLogOpened, ImGuiWindowFlags_MenuBar))
     {
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::Button("Clear on play")) {}
+            if (ImGui::Button("Clear")) {}
+            if (ImGui::Button("AutoScroll")) {}
+            if (ImGui::BeginMenu("Menu"))
+            {
+                ImGui::EndMenu();
+            }
+            /*if (ImGui::BeginMenu("Examples"))
+            {
+                ImGui::MenuItem("Main menu bar", NULL, NULL);
+                ImGui::MenuItem("Console", NULL, NULL);
+                ImGui::MenuItem("Log", NULL, &show_app_log);
+                ImGui::MenuItem("Simple layout", NULL, &show_app_layout);
+                ImGui::MenuItem("Property editor", NULL, &show_app_property_editor);
+                ImGui::MenuItem("Long text display", NULL, &show_app_long_text);
+                ImGui::MenuItem("Auto-resizing window", NULL, &show_app_auto_resize);
+                ImGui::MenuItem("Constrained-resizing window", NULL, &show_app_constrained_resize);
+                ImGui::MenuItem("Simple overlay", NULL, &show_app_simple_overlay);
+                ImGui::MenuItem("Fullscreen window", NULL, &show_app_fullscreen);
+                ImGui::MenuItem("Manipulating window titles", NULL, &show_app_window_titles);
+                ImGui::MenuItem("Custom rendering", NULL, &show_app_custom_rendering);
+                ImGui::MenuItem("Dockspace", NULL, &show_app_dockspace);
+                ImGui::MenuItem("Documents", NULL, &show_app_documents);
+                ImGui::EndMenu();
+            }*/
+            ImGui::EndMenuBar();
+        }
+
         Debug* debug = Debug::GetInstance();
         for (const auto message : debug->GetLogs()) 
         {

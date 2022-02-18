@@ -13,8 +13,8 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
-#include "EditorManager.h"
-#include "imguiStyle.h"
+#include "core/editor_manager.hpp"
+#include "core/imgui_style.hpp"
 
 #include "stb_image.h"
 
