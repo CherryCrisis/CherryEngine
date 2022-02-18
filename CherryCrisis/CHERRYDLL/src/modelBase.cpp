@@ -38,7 +38,6 @@ std::vector<Entity> ModelBase::GenerateEntities(Entity& rootEntity)
 void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity, std::vector<Entity>& entities)
 {
     Entity entity;
-    entity.m_modelRenderer = new ModelRenderer();
     entity.m_modelRenderer->SetModel(node->m_model);
 
     entity.m_transform->SetPosition(node->m_baseTRS[0]);

@@ -375,6 +375,9 @@
     <ClInclude Include="include\subpipeline_interface.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\CherryMacros.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -491,6 +494,9 @@
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\render_manager.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\basic_subpipeline.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>

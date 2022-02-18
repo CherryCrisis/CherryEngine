@@ -5,6 +5,8 @@
 
 #include "basic_subpipeline.hpp"
 
+#include "entity.hpp"
+
 ModelRenderer::ModelRenderer()
 	: Behaviour()
 {
@@ -23,7 +25,7 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 	m_model = newModel;
 
 	if (m_model)
-		BasicSubPipeline::Generate(this);
+		RenderManager::instance()->GenerateFromPipeline<BasicSubPipeline>(this);
 	else
 		RemoveModel();
 }
@@ -35,5 +37,5 @@ void ModelRenderer::RemoveModel()
 
 void ModelRenderer::Draw()
 {
-	BasicSubPipeline::Consume(this);
+	RenderManager::instance()->ConsumeFromPipeline<BasicSubPipeline>(this);
 }

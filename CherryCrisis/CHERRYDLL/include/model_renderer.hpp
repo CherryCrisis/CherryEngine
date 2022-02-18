@@ -1,18 +1,26 @@
 #pragma once
 
+#include <CherryMacros.h>
+
 #include "Component.h"
+
+#include "renderer.hpp"
 
 #include "modelBase.hpp"
 
 struct GPUMesh;
 
-class CHERRY_API ModelRenderer : public Behaviour, public ARenderer
+class Transform;
+
+class CCENGINE_API ModelRenderer : public Behaviour, public ARenderer
 {
+private:
 public:
+	Transform* m_transform = nullptr;
 	std::shared_ptr<Model> m_model;
 
 	ModelRenderer();
-	virtual ~ModelRenderer();
+	~ModelRenderer();
 
 	void SetModel(std::shared_ptr<Model> newModel);
 	void RemoveModel();

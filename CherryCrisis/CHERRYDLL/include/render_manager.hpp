@@ -14,18 +14,22 @@
 
 #include "shaderProgram.hpp"
 
-class CHERRY_API RenderManager : public Singleton<RenderManager>
+class CCENGINE_API RenderManager : public Singleton<RenderManager>
 {
 	friend class Singleton<RenderManager>;
 
 private:
-	std::shared_ptr<ShaderProgram> m_program;
-
-	std::unordered_multimap<std::type_index, ARenderer*> m_renderers;
-	std::unordered_multimap<std::type_index, ISubPipeline*> m_subpipelines;
+	std::unordered_multimap<std::type_index, ARenderer*>	m_renderers;
+	std::unordered_map<std::type_index, ASubPipeline*>		m_subpipelines;
 
 public:
 	RenderManager();
+
+	template <class SubPipelineT, class RendererT>
+	void GenerateFromPipeline(RendererT* renderer);
+
+	template <class SubPipelineT, class RendererT>
+	void ConsumeFromPipeline(RendererT* renderer);
 
 	template<class RendererT>
 	void SubscribeRenderer(RendererT* renderer);

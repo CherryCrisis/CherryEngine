@@ -2,7 +2,7 @@
 
 #include <CherryHeader.h>
 
-class CHERRY_API Printer : public Behaviour
+class CCSCRIPT_API Printer : public Behaviour
 {
 public:
 	Printer() : Behaviour() {}

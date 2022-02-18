@@ -97,6 +97,7 @@
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h" />
     <ClInclude Include="include\basic_subpipeline.hpp" />
     <ClInclude Include="include\CherryHeader.h" />
+    <ClInclude Include="include\CherryMacros.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\debug.hpp" />
     <ClInclude Include="include\engine.h" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="externals\src\gl.c" />
     <ClCompile Include="externals\src\stb_image.cpp" />
+    <ClCompile Include="src\basic_subpipeline.cpp" />
     <ClCompile Include="src\debug.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\engine.cpp" />

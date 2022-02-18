@@ -7,7 +7,7 @@
 #include "resource.hpp"
 #include "entity.hpp"
 
-class CHERRY_API Scene : public Resource
+class CCENGINE_API Scene : public Resource
 {
 private:
 	Scene(const char* filePath) : Resource(filePath) { }

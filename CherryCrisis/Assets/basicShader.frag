@@ -8,15 +8,13 @@ out vec4 oColor;
 
 struct Material
 {
-	vec4 albedoColor;
+	vec3 albedoColor;
 };
 
 uniform Material uMaterial;
 
-uniform sampler2D uDiffuseTexture;
-
 void main()
 {
-	vec4 albedo = texture(uDiffuseTexture, vUV) * uMaterial.albedoColor;
-    oColor = albedo;
+	vec3 albedo = uMaterial.albedoColor;
+    oColor = vec4(albedo, 1.0);
 }

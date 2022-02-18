@@ -9,7 +9,7 @@
 
 #include "resource.hpp"
 
-class CHERRY_API ResourceManager
+class CCENGINE_API ResourceManager
 {
 private:
 	std::unordered_multimap<std::type_index, std::shared_ptr<Resource>> m_resources;

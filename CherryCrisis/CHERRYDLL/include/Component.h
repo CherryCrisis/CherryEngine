@@ -1,20 +1,12 @@
 #pragma once
 
-#ifdef CHERRYDLL_EXPORTS
-#define CHERRY_API __declspec(dllexport)
-#else
-#define CHERRY_API __declspec(dllimport)
-#endif
+#include <CherryMacros.h>
 
-class CHERRY_API Behaviour
+class CCENGINE_API Behaviour
 {
-
-	
 public:
 
 	Behaviour() {}
-	virtual ~Behaviour() {};
 	virtual void Start() {};
 	virtual void Update() {};
-
 };

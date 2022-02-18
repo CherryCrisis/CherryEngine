@@ -1,16 +1,11 @@
 #pragma once
 
-#ifdef CHERRYDLL_EXPORTS
-#define CHERRY_API __declspec(dllexport)
-#else
-#define CHERRY_API __declspec(dllimport)
-#endif
-
 #include <string>
 #include <vector>
 
+#include <CherryMacros.h>
 
-class CHERRY_API Debug
+class CCENGINE_API Debug
 {
 private:
 	static Debug* instance;

@@ -2,10 +2,12 @@
 
 #include <memory>
 
+#include <CherryHeader.h>
+
 #include "transform.hpp"
 #include "model_renderer.hpp"
 
-class Entity
+class CCENGINE_API Entity
 {
 public:
 	Entity();
@@ -13,5 +15,5 @@ public:
 
 	//En attendant l'ECS !
 	Transform*		m_transform = new Transform();
-	ModelRenderer*	m_modelRenderer;
+	ModelRenderer*  m_modelRenderer = new ModelRenderer();
 };
