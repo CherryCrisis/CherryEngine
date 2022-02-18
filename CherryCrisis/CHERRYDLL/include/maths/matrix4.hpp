@@ -8,41 +8,306 @@ namespace CCMaths
 	{
 		union
 		{
-			float data[16];
-			Vector4 row[4];
+			float data[16];		//!< Pointer on the Matrix4's data
+			Vector4 row[4];		//!< Array of the four row of the Matrix4
 		};
 
-		inline static const Matrix4 Identity();
+		/*!
+		*	```
+		*	{
+		*		1, 0, 0, 0,
+		*		0, 1, 0, 0,
+		*		0, 0, 1, 0,
+		*		0, 0, 0, 1
+		*	}
+		*	```
+		*/
+		const static Matrix4 Identity;
 
-		inline Matrix4 operator*(const float rhs);
-		inline Vector4 operator*(const Vector4& rhs);
-		inline Matrix4 operator*(const Matrix4& rhs);
+		//! Mutliply the Matrix4 by the Vector4
+		/*!
+		*	\param object: Matrix4 on the left side of the operator
+		*	\param rhs: Vector4 on the right side of the operator
+		*
+		*	Create a Vector4 \b out equals to the product of \b object by \b rhs
+		*
+		*	\return Vector4 \b out
+		*/
+		inline Vector4 operator*(const Vector4& rhs) const;
 
-		inline Matrix4& operator*=(const float rhs);
+		//! Mutliply the two Matrices
+		/*!
+		*	\param object: Matrix4 on the left side of the operator
+		*	\param rhs: Matrix4 on the right side of the operator
+		*
+		*	Create a Matrix4 \b out equals to the product of \b object by \b rhs
+		*
+		*	\return Matrix4 \b out
+		* 
+		*	\sa operator*=(const Matrix4&)
+		*	\sa operator*(const float&) const
+		*	\sa operator*=(const float)
+		*/
+		inline Matrix4 operator*(const Matrix4& rhs) const;
+
+		//! Mutliply the two Matrices
+		/*!
+		*	\param object: Matrix4 on the left side of the operator
+		*	\param rhs: Matrix4 on the right side of the operator
+		*
+		*	Mutliply \b object by \b rhs
+		*
+		*	\return Reference to \b object
+		* 
+		*	\sa operator*(const Matrix4&) const
+		*	\sa operator*=(const float)
+		*	\sa operator*(const float) const
+		*/
 		inline Matrix4& operator*=(const Matrix4& rhs);
 
+		//! Mutliply the Matrix4 by the scalar
+		/*!
+		*	\param object: Matrix4 on the left side of the operator
+		*	\param rhs: float on the right side of the operator
+		*
+		*	Create a Matrix4 \b out equals to the product of \b object by \b rhs
+		*
+		*	\return Matrix4 \b out
+		* 
+		*	\sa operator*=(const float)
+		*	\sa operator*(const Matrix4&) const
+		*	\sa operator*=(const Matrix4&)
+		*/
+		inline Matrix4 operator*(const float rhs) const;
+		
+		//! Mutliply the Vector4 by the scalar
+		/*!
+		*	\param object : Vector4 on the left side of the operator
+		*	\param rhs : float on the right side of the operator
+		*
+		*	Mutliply \b object by \b rhs
+		*
+		*	\return Reference to \b object
+		*
+		*	\sa operator*(const float) const
+		*	\sa operator*=(const Matrix4&)
+		*	\sa operator*(const Matrix4&) const
+		*/
+		inline Matrix4& operator*=(const float rhs);
+
+		//! Transpose the Matrix4
+		/*!
+		*	\attention Use as a member method of a specific object
+		*
+		*	\param object: Matrix4 from which the method is called
+		*
+		*	Create a new Matrix4 \b out as the transposed matrix of \b object
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\note Has the same result as the non-object specific static version: Transpose(const Matrix4&)
+		*
+		*	\sa Transpose(const Matrix4&)
+		*/
 		inline Matrix4 Transpose() const;
+
+		//! Transpose the Matrix4
+		/*!
+		*	\attention Use as an independant method of the struct (not relative to a specific object)
+		*
+		*	\param lhs: Matrix4 given as parameter
+		*
+		*	Create a new Matrix4 \b out as the transposed matrix of \b object
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\note Has the same result as the object specific version: Transpose() const
+		*
+		*	\sa Transpose() const
+		*/
 		inline static Matrix4 Transpose(const Matrix4& lhs);
 
-		inline Matrix4 Invert() const;
-		inline static Matrix4 Invert(const Matrix4& lhs);
+		//! Inverse the Matrix4
+		/*!
+		*	\attention Use as a member method of a specific object
+		*
+		*	\param object: Matrix4 from which the method is called
+		*
+		*	Create a new Matrix4 \b out as the inversed matrix of \b object
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\note Has the same result as the non-object specific static version: Inverse(const Matrix4&)
+		*
+		*	\sa Inverse(const Matrix4&)
+		*/
+		inline Matrix4 Inverse() const;
 
-		inline static Matrix4 Translate(const Vector3& rhs);
-		inline static Matrix4 Scale(const float rhs);
-		inline static Matrix4 Scale(const Vector3& rhs);
+		//! Inverse the Matrix4
+		/*!
+		*	\attention Use as an independant method of the struct (not relative to a specific object)
+		*
+		*	\param lhs: Matrix4 given as parameter
+		*
+		*	Create a new Matrix4 \b out as the inversed matrix of \b object
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\note Has the same result as the object specific version: Inverse() const
+		*
+		*	\sa Inverse() const
+		*/
+		inline static Matrix4 Inverse(const Matrix4& lhs);
 
+		//! Translation Matrix
+		/*!
+		*	\param in: Vector3 of the translation (position)
+		*
+		*	Create a new Matrix4 \b out with the translation
+		*
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		1.f,  0.f,  0.f,  0.f,
+		*		0.f,  1.f,  0.f,  0.f,
+		*		0.f,  0.f,  1.f,  0.f,
+		*		in.x, in.y, in.z, 1.f,
+		*	}	
+		*	```
+		*/
+		inline static Matrix4 Translate(const Vector3& inPosition);
+
+		//! Scale Matrix
+		/*!
+		*	\param in: float of the scale
+		*
+		*	Create a new Matrix4 \b out with the scale
+		*
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		in,  0.f, 0.f, 0.f,
+		*		0.f, in,  0.f, 0.f,
+		*		0.f, 0.f, in,  0.f,
+		*		0.f, 0.f, 0.f, 1.f
+		*	}
+		*	```
+		*
+		*	\sa Scale(const Vector3&)
+		*/
+		inline static Matrix4 Scale(const float inScale);
+		
+		//! Scale Matrix
+		/*!
+		*	\param in: Vector3 of the scale
+		*
+		*	Create a new Matrix4 \b out with the scale
+		*
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		in.x, 0.f,  0.f,  0.f,
+		*		0.f,  in.y, 0.f,  0.f,
+		*		0.f,  0.f,  in.z, 0.f,
+		*		0.f,  0.f,  0.f,  1.f
+		*	}
+		*	```
+		*
+		*	\sa Scale(const float)
+		*/
+		inline static Matrix4 Scale(const Vector3& inScale);
+
+		//! Rotation Matrix
+		/*!
+		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*
+		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
 		inline static Matrix4 Rotate(const Vector3& eulerAngles);
-
+ 
+		//! X-axis Rotation Matrix
+		/*!
+		*	\param rad: float angle of the rotation in radians (yaw)
+		*
+		*	Create a new Matrix4 \b out with the rotation around X-axis
+		* 
+		*	With the \b cos and \b sin of the angle
+		* 
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		1.f, 0.f, 0.f, 0.f,
+		*		0.f, cos, sin, 0.f,
+		*		0.f,-sin, cos, 0.f,
+		*		0.f, 0.f, 0.f, 1.f,
+		*	}
+		*	```
+		*
+		*	\sa Rotate(const Vector3&)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
 		inline static Matrix4 RotateX(const float rad);
+
+		//! Y-axis Rotation Matrix
+		/*!
+		*	\param rad: float angle of the rotation in radians (pitch)
+		*
+		*	Create a new Matrix4 \b out with the rotation around Y-axis
+		* 
+		*	With the \b cos and \b sin of the angle
+		*
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		cos, 0.f,-sin, 0.f,
+		*		0.f, 1.f, 0.f, 0.f,
+		*		sin, 0.f, cos, 0.f,
+		*		0.f, 0.f, 0.f, 1.f,
+		*	}
+		*	```
+		* 
+		*	\sa Rotate(const Vector3&)
+		*	\sa RotateX(const float)
+		*	\sa RotateZ(const float)
+		*/
 		inline static Matrix4 RotateY(const float rad);
+
+		//! Z-axis Rotation Matrix
+		/*!
+		*	\param rad: float angle of the rotation in radians (roll)
+		*
+		*	Create a new Matrix4 \b out with the rotation around Z-axis
+		* 
+		*	With the \b cos and \b sin of the angle
+		*
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		cos, sin, 0.f, 0.f,
+		*	   -sin, cos, 0.f, 0.f,
+		*		0.f, 0.f, 1.f, 0.f,
+		*		0.f, 0.f, 0.f, 1.f,
+		*	}
+		*	```
+		* 
+		*	\sa Rotate(const Vector3&)
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*/
 		inline static Matrix4 RotateZ(const float rad);
-		inline static Matrix4 RotateX(const float cos, const float sin);
-		inline static Matrix4 RotateY(const float cos, const float sin);
-		inline static Matrix4 RotateZ(const float cos, const float sin);
 
-		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
-
+		//! \hiderefs
 		inline static Matrix4 Perspective(const float FovY, const float Aspect, const float Near, const float Far);
+
+		//! \hiderefs
+		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
 	};
 }
 
