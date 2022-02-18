@@ -342,6 +342,9 @@
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h">
       <Filter>Fichiers externes\Assimp</Filter>
     </ClInclude>
+    <ClInclude Include="include\shaderProgram.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -438,6 +441,9 @@
     </ClCompile>
     <ClCompile Include="externals\src\gl.c">
       <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shaderProgram.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

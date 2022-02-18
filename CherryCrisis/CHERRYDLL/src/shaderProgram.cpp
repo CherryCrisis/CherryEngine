@@ -12,15 +12,15 @@ Resource* ShaderProgram::Create(const char* programName, const char* vxFilepath,
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
 	assert(vxFilepath != "");
-	std::shared_ptr<Shader> vertexShader = resourceManager->AddResource<Shader>(vxFilepath, true);
+	std::shared_ptr<Shader> vertexShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::VERTEX);
 	std::shared_ptr<Shader> fragmentShader;
 	std::shared_ptr<Shader> geometryShader;
 
 	if (gmFilepath != "")
-		std::shared_ptr<Shader> geometryShader = resourceManager->AddResource<Shader>(vxFilepath, true);
+		std::shared_ptr<Shader> geometryShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::GEOMETRY);
 
 	if (fgFilepath != "")
-		std::shared_ptr<Shader> fragmentShader = resourceManager->AddResource<Shader>(vxFilepath, true);
+		std::shared_ptr<Shader> fragmentShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::FRAGMENT);
 
 	Create(programName, vertexShader, fragmentShader, geometryShader);
 }

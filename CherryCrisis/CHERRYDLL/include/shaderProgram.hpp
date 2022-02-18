@@ -1,8 +1,10 @@
 #pragma once
 
+#include <memory>
+
 #include "resource.hpp"
 
-class Shader
+class Shader;
 
 class ShaderProgram : public Resource
 {
