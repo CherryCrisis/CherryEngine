@@ -10,7 +10,6 @@ Transform::Transform()
 
 void Transform::SetParent(Transform* transform)
 {
-
 	if (transform)
 	{
 		transform->m_children.push_back(this);

@@ -20,9 +20,6 @@ public:
 	template<class T = Resource, typename... Args>
 	inline std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
 
-	template<class T = Resource, typename... Args>
-	inline std::shared_ptr<T> AddResource(const char* filepath, Args... args);
-
 	template<class T = Resource>
 	inline std::shared_ptr<T> GetResource(const char* filepath) const;
 

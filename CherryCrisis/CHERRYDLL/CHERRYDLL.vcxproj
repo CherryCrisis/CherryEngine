@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -117,6 +117,7 @@
     <ClInclude Include="include\resource.hpp" />
     <ClInclude Include="include\resourceManager.hpp" />
     <ClInclude Include="include\shader.hpp" />
+    <ClInclude Include="include\shaderProgram.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClCompile Include="src\pch.cpp" />
     <ClCompile Include="src\resourceManager.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\shaderProgram.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
