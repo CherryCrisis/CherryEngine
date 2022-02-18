@@ -17,4 +17,6 @@ public:
     GPUTexture* gpuTexture = nullptr;
 
     static Resource* Create(const char* texturePath);
+
+    ~Texture();
 };

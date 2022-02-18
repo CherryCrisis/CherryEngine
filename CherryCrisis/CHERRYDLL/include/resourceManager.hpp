@@ -19,13 +19,13 @@ public:
 	static ResourceManager* GetInstance();
 
 	template<class T = Resource, typename... Args>
-	inline std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
+	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
 
 	template<class T = Resource>
-	inline std::shared_ptr<T> GetResource(const char* filepath) const;
+	std::shared_ptr<T> GetResource(const char* filepath) const;
 
 	template<class T = Resource>
-	inline void GetAllResources(std::vector<std::shared_ptr<T>>& resources) const;
+	void GetAllResources(std::vector<std::shared_ptr<T>>& resources) const;
 
 	size_t GetResourceCount() const { return m_resources.size(); }
 };

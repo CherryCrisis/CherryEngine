@@ -41,13 +41,10 @@
       <UniqueIdentifier>{86cf7f2c-3c86-4dd3-bb93-e9aa81105b5d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers d%27en-tête\Rendering">
-      <UniqueIdentifier>{ccf4781e-7110-4fbe-b59d-35eb9f655076}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Utils">
-      <UniqueIdentifier>{6e6732c4-08ba-4a2b-9957-947079a2ae55}</UniqueIdentifier>
+      <UniqueIdentifier>{634c2c81-51b5-4f0b-b4e2-1625dbd80036}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers sources\Rendering">
-      <UniqueIdentifier>{7ab7aa7c-a1f8-44b0-939e-6b265e46b0c0}</UniqueIdentifier>
+      <UniqueIdentifier>{4c3ee403-c5ce-4c26-bf4f-00e0404f094a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -351,29 +348,32 @@
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h">
       <Filter>Fichiers externes\Assimp</Filter>
     </ClInclude>
-    <ClInclude Include="include\render_manager.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    <ClInclude Include="include\shaderProgram.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scene.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="include\singleton.hpp">
-      <Filter>Fichiers d%27en-tête\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="include\renderer.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\model_renderer.hpp">
-      <Filter>Fichiers d%27en-tête\Components</Filter>
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="include\gl_manager.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\subpipeline_interface.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\basic_subpipeline.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\scene.hpp">
-      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    <ClInclude Include="include\model_renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\render_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\subpipeline_interface.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -425,6 +425,12 @@
     <None Include="include\renderer_manager.inl">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </None>
+    <None Include="..\Assets\basicShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\Assets\basicShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entity.cpp">
@@ -475,14 +481,17 @@
     <ClCompile Include="externals\src\gl.c">
       <Filter>Fichiers externes</Filter>
     </ClCompile>
-    <ClCompile Include="src\render_manager.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
+    <ClCompile Include="src\shaderProgram.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\model_renderer.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene.cpp">
-      <Filter>Fichiers sources\Resource</Filter>
+    <ClCompile Include="src\render_manager.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

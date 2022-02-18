@@ -5,9 +5,8 @@
 #include <assimp/scene.h>
 
 #include "resourceManager.hpp"
-
-#include "material.hpp"
 #include "mesh.hpp"
+#include "material.hpp"
 
 Resource* Model::Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode)
 {

@@ -3,8 +3,6 @@
 #include "modelLoader.hpp"
 #include "entity.hpp"
 
-#include <iostream>
-
 Resource* ModelBase::Create(const char* filepath)
 {
 	ModelBase* modelBase = new ModelBase(filepath);

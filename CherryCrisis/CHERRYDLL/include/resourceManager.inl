@@ -5,7 +5,7 @@
 #include "mesh.hpp"
 
 template <class T, typename... Args>
-inline std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
+std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {
 	if (verifIsExist)
 	{
@@ -28,7 +28,7 @@ inline std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, boo
 }
 
 template<class T>
-inline std::shared_ptr<T> ResourceManager::GetResource(const char* filepath) const
+std::shared_ptr<T> ResourceManager::GetResource(const char* filepath) const
 {
 	auto resourceRange = m_resources.equal_range(typeid(T));
 
@@ -44,11 +44,16 @@ inline std::shared_ptr<T> ResourceManager::GetResource(const char* filepath) con
 }
 
 template<class T>
-inline void ResourceManager::GetAllResources(std::vector<std::shared_ptr<T>>& resources) const
+void ResourceManager::GetAllResources(std::vector<std::shared_ptr<T>>& resources) const
 {
 	auto resourceRange = m_resources.equal_range(typeid(T));
 
-	for (auto it = resourceRange.first; it != resourceRange.second; ++it)
+	auto firstIt = resourceRange.first;
+	auto lastIt = resourceRange.second;
+
+	resources.reserve(size_t(lastIt - firstIt));
+
+	for (auto it = firstIt; it != lastIt; ++it)
 	{
 		resources.push_back(std::dynamic_pointer_cast<T>(it->second));
 	}

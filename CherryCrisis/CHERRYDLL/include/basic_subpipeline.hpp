@@ -85,7 +85,7 @@ public:
 
 		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-		glDrawElements(GL_TRIANGLES, mesh->m_indices.size(), GL_FLOAT, nullptr);
+		glDrawElements(GL_TRIANGLES, mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
 
 		glBindVertexArray(0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

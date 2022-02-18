@@ -10,12 +10,17 @@
 
 #include "texture.hpp"
 
+Material::~Material()
+{
+
+}
+
 Resource* Material::Create(const char* modelFilepath, const aiMaterial* assimpMaterial)
 {
     ResourceManager* resourceManager = ResourceManager::GetInstance();
 
 	aiString name = assimpMaterial->GetName();
-	std::string materialPath = modelFilepath + std::string("/")+ std::string(name.C_Str());
+	std::string materialPath = modelFilepath + std::string("/") + std::string(name.C_Str());
 
 	Material* material = new Material(materialPath.c_str());
 
