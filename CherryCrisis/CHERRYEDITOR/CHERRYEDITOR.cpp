@@ -18,6 +18,7 @@
 
 #include "stb_image.h"
 
+#include "render_manager.hpp"
 
 int main()
 {
@@ -76,6 +77,8 @@ int main()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.f, 0.f, 0.f, 1.f);
+
+        RenderManager::DrawScene();
 
         editor.DisplayEditorUI(window);
 

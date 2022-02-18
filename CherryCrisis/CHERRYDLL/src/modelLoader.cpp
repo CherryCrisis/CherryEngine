@@ -18,19 +18,24 @@ namespace CCModelLoader
         std::vector<std::shared_ptr<Model>>& models,
         ResourceManager* resourceManager, const char* filepath)
     {
-        aiVector3D trs[3];
-        node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
-
-        std::shared_ptr<Model> model = resourceManager->AddResource<Model>(filepath, false, scene, node);
-        models.push_back(model);
-
         ModelNode* modelNode = new ModelNode();
         modelNode->m_parentNode = parentModelNode;
-        modelNode->m_model = model;
 
-        for (int i = 0; i < 3; ++i)
-            for (int j = 0; j < 3; ++j)
-                modelNode->m_baseTRS[i].data[j] = trs[i][j];
+        std::shared_ptr<Model> model;
+        if (scene->mRootNode != node)
+        {
+            aiVector3D trs[3];
+            node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
+
+            model = resourceManager->AddResource<Model>(filepath, false, scene, node);
+            models.push_back(model);
+
+            for (int i = 0; i < 3; ++i)
+                for (int j = 0; j < 3; ++j)
+                    modelNode->m_baseTRS[i].data[j] = trs[i][j];
+        }
+
+        modelNode->m_model = model;
 
         const size_t nbChildren = (size_t)node->mNumChildren;
 
@@ -46,16 +51,16 @@ namespace CCModelLoader
     }
 
     void ProcessData(const aiScene* scene,
-        std::vector<std::shared_ptr<Model>>& models, ModelNode* rootModelNode, const char* filepath)
+        std::vector<std::shared_ptr<Model>>& models, ModelNode** rootModelNode, const char* filepath)
     {
         ResourceManager* resourceManager = ResourceManager::GetInstance();
 
         models.reserve((size_t)scene->mNumMeshes);
 
-        rootModelNode = ProcessDataRecursive(scene->mRootNode, nullptr, scene, models, resourceManager, filepath);
+        *rootModelNode = ProcessDataRecursive(scene->mRootNode, nullptr, scene, models, resourceManager, filepath);
     }
 
-    void LoadModel(const char* filepath, ModelNode* rootModels, std::vector<std::shared_ptr<Model>>& models)
+    void LoadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models)
     {
         Assimp::Importer importer = Assimp::Importer();
 

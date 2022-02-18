@@ -1,13 +1,12 @@
 #pragma once
 
 #include <string>
-#include <ostream>
 
 class Resource
 {
 public:
-	Resource(const std::string& filepath) :
-		hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
+	Resource(const std::string& filepath)
+		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
 
 	virtual ~Resource() {};
 

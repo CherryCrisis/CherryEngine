@@ -73,3 +73,8 @@ void Transform::GetChildren(std::vector<Transform*>& transformChildren)
 	transformChildren.resize(m_children.size());
 	std::copy(m_children.begin(), m_children.end(), transformChildren.data());
 }
+
+void Transform::AddChildren(Transform* transform)
+{
+	m_children.push_back(transform);
+}

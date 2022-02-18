@@ -3,10 +3,12 @@
 #include "modelLoader.hpp"
 #include "entity.hpp"
 
+#include <iostream>
+
 Resource* ModelBase::Create(const char* filepath)
 {
 	ModelBase* modelBase = new ModelBase(filepath);
-	CCModelLoader::LoadModel(filepath, modelBase->m_rootNode, modelBase->m_models);
+	CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
 
 	return modelBase;
 }
@@ -25,28 +27,31 @@ void ModelBase::DeleteModelNode(ModelNode* modelNode)
 	delete modelNode;
 }
 
-
-void ModelBase::GenerateEntities(Entity* rootEntity, std::vector<Entity*>& entities)
+std::vector<Entity> ModelBase::GenerateEntities(Entity& rootEntity)
 {
-	if (m_models.size() == 0 || m_rootNode == nullptr)
-		return;
+    std::vector<Entity> entities;
 
-	GenerateEntitiesRecursive(m_rootNode, nullptr, entities);
+    if (m_models.size() != 0 && m_rootNode != nullptr)
+        GenerateEntitiesRecursive(m_rootNode, rootEntity, entities);
+
+    return std::move(entities);
 }
 
-void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities)
+void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity, std::vector<Entity>& entities)
 {
-	Entity* entity = new Entity();
-	entity->m_model = node->m_model;
+    Entity entity;
+    entity.m_modelRenderer = new ModelRenderer();
+    entity.m_modelRenderer->SetModel(node->m_model);
 
-	entity->m_transform.SetPosition(node->m_baseTRS[0]);
-	entity->m_transform.SetRotation(node->m_baseTRS[1]);
-	entity->m_transform.SetScale(node->m_baseTRS[2]);
-	
-	entities.push_back(entity);
-	
-	for (ModelNode* childNode : node->m_childrenNode)
-	{
-		GenerateEntitiesRecursive(childNode, entity, entities);
-	}
+    entity.m_transform->SetPosition(node->m_baseTRS[0]);
+    entity.m_transform->SetRotation(node->m_baseTRS[1]);
+    entity.m_transform->SetScale(node->m_baseTRS[2]);
+    entity.m_transform->SetParent(parentEntity.m_transform);
+
+    entities.push_back(entity);
+
+    for (ModelNode* childNode : node->m_childrenNode)
+        GenerateEntitiesRecursive(childNode, entity, entities);
+
+    parentEntity.m_transform->AddChildren(entity.m_transform);
 }

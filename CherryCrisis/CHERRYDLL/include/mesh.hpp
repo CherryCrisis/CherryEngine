@@ -5,6 +5,8 @@
 #include "resource.hpp"
 #include "maths.hpp"
 
+#include "renderer.hpp"
+
 //Assimp
 struct aiMesh;
 
@@ -19,16 +21,17 @@ struct Vertex
 	Vector3 bitangent;
 };
 
+struct GPUMesh { };
+
 class Mesh : public Resource
 {
 private :
+	//meshName = filepath\name
+	Mesh(const char* meshName) : Resource(meshName) {}
+
+public:
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
 
-	//meshName = filepath\name
-	Mesh(const char* meshName) : Resource(meshName) {}
-public :
-
 	static Resource* Create(const char* modelPath, const aiMesh* assimpMesh);
-
 };

@@ -2,6 +2,8 @@
 
 #include "resource.hpp"
 
+struct GPUTexture { };
+
 class Texture : public Resource
 {
 private:
@@ -12,6 +14,7 @@ private:
     void*   m_data;
 
 public:
+    GPUTexture* gpuTexture = nullptr;
 
     static Resource* Create(const char* texturePath);
 };

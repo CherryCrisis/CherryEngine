@@ -19,6 +19,7 @@ private:
 	bool m_hasChanged;
 
 public:
+
 	Transform();
 	void SetParent(Transform* transform);
 	void UpdateMatrix();
@@ -35,6 +36,8 @@ public:
 	Vector3 GetScale() { return m_scale; }
 
 	void GetChildren(std::vector<Transform*>& transformChildren);
+
+	void AddChildren(Transform* transform);
 
 	Matrix4 GetWorldMatrix() { return m_worldMatrix; }
 };

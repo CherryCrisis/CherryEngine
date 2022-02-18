@@ -4,12 +4,6 @@
 
 #include "mesh.hpp"
 
-//template<class T, typename... Args>
-//inline std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, Args... args)
-//{
-//	return AddResource<T>(filepath, true, args);
-//}
-
 template <class T, typename... Args>
 inline std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {
@@ -20,7 +14,6 @@ inline std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, boo
 			return findedResource;
 	}
 
-	//TODO : Change this !
 	Resource* resource = T::Create(filepath, args...);
 
 	if (resource == nullptr)

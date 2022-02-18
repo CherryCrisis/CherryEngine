@@ -1,9 +1,13 @@
 #pragma once
+
 #include <vector>
+#include <memory>
 #include <map>
 
 #include "resource.hpp"
 #include "maths.hpp"
+
+#include "renderer.hpp"
 
 class Model;
 class Entity;
@@ -24,17 +28,16 @@ private:
 	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
 
 	ModelNode* m_rootNode;
-	std::vector<std::shared_ptr<Model>>			m_models;
+	std::vector<std::shared_ptr<Model>>	m_models;
 
-	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities);
+	void GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity, std::vector<Entity>& entities);
 	void DeleteModelNode(ModelNode* modelNode);
 
 public:
-
 	~ModelBase();
 
 	static Resource* Create(const char* filepath);
 
 	//Generate entities with modelBase (model instance)
-	void GenerateEntities(Entity* rootEntity, std::vector<Entity*>& entities);
+	std::vector<Entity> GenerateEntities(Entity& rootEntity);
 };

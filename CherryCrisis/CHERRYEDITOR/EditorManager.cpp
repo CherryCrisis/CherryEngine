@@ -19,6 +19,8 @@
 
 #include <CherryHeader.h>
 #include "printer.hpp"
+#include "scene.hpp"
+#include "resourceManager.hpp"
 
 bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
 {
@@ -57,6 +59,8 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 
 EditorManager::EditorManager() 
 {
+    scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
+
     int null = 0;
     if (!LoadTextureFromFile("../Internal/Icons/file_icon.png", &FileIcon, &null, &null))
     {
@@ -379,6 +383,16 @@ void EditorManager::HandleGraphWindow(GLFWwindow* window)
         {
             Printer* printer = new Printer();
             engine->behaviours.push_back(printer);
+        }
+
+        scene->Draw();
+
+        if (ImGui::Button("Clear components"))
+        {
+            for (Behaviour* behaviour : engine->behaviours)
+                delete behaviour;
+
+            engine->behaviours.clear();
         }
 
         if (ImGui::Button("Success"))

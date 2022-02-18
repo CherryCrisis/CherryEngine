@@ -95,12 +95,14 @@
     <ClInclude Include="externals\include\assimp\XmlParser.h" />
     <ClInclude Include="externals\include\assimp\XMLTools.h" />
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h" />
+    <ClInclude Include="include\basic_subpipeline.hpp" />
     <ClInclude Include="include\CherryHeader.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\debug.hpp" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\framework.h" />
+    <ClInclude Include="include\gl_manager.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
     <ClInclude Include="include\maths\matrix3.hpp" />
@@ -113,10 +115,16 @@
     <ClInclude Include="include\model.hpp" />
     <ClInclude Include="include\modelBase.hpp" />
     <ClInclude Include="include\modelLoader.hpp" />
+    <ClInclude Include="include\model_renderer.hpp" />
     <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\renderer.hpp" />
+    <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
     <ClInclude Include="include\resourceManager.hpp" />
+    <ClInclude Include="include\scene.hpp" />
     <ClInclude Include="include\shader.hpp" />
+    <ClInclude Include="include\singleton.hpp" />
+    <ClInclude Include="include\subpipeline_interface.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
@@ -136,6 +144,7 @@
     <None Include="include\maths\vector3.inl" />
     <None Include="include\maths\vector4.inl" />
     <None Include="include\resourceManager.inl" />
+    <None Include="include\renderer_manager.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\src\gl.c" />
@@ -149,8 +158,11 @@
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\modelBase.cpp" />
     <ClCompile Include="src\modelLoader.cpp" />
+    <ClCompile Include="src\model_renderer.cpp" />
     <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\render_manager.cpp" />
     <ClCompile Include="src\resourceManager.cpp" />
+    <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\transform.cpp" />
@@ -235,6 +247,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -252,6 +266,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -269,7 +285,9 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -289,7 +307,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

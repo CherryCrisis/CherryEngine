@@ -3,8 +3,7 @@
 #include <memory>
 
 #include "transform.hpp"
-
-class Model;
+#include "model_renderer.hpp"
 
 class Entity
 {
@@ -13,6 +12,6 @@ public:
 	~Entity();
 
 	//En attendant l'ECS !
-	Transform				m_transform;
-	std::shared_ptr<Model>	m_model;
+	Transform*		m_transform = new Transform();
+	ModelRenderer*	m_modelRenderer;
 };

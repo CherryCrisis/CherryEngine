@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "resource.hpp"
 #include "maths.hpp"
 

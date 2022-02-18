@@ -3,14 +3,16 @@
 #include "imgui_notify.h"
 #include <filesystem>
 
+#include <memory>
 #include <CherryHeader.h>
+#include "scene.hpp"
 
 static const std::filesystem::path AssetPath = "../Assets";
 
 class EditorManager 
 {
 public:
-
+    std::shared_ptr<Scene> scene;
     EditorManager();
 	void DisplayEditorUI(GLFWwindow* window);
     Engine* engine;
