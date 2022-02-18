@@ -8,7 +8,6 @@ Transform::Transform()
 	m_scale = { 0.f };
 }
 
-
 void Transform::SetParent(Transform* transform)
 {
 
@@ -21,8 +20,8 @@ void Transform::SetParent(Transform* transform)
 		//To remove this transform in parent
 		if (m_parent)
 		{
-			int childrenSize = m_parent->m_children.size();
-			for (int i = 0; i < m_parent->m_children.size(); ++i)
+			size_t childrenSize = m_parent->m_children.size();
+			for (size_t i = 0; i < m_parent->m_children.size(); ++i)
 			{
 				if (this == m_parent->m_children[i])
 				{
