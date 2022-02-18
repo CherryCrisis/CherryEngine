@@ -28,13 +28,22 @@
     <ClCompile Include="externals\src\imgui_tables.cpp" />
     <ClCompile Include="externals\src\imgui_widgets.cpp" />
     <ClCompile Include="externals\src\stb_image.cpp" />
+    <ClCompile Include="include\core\asset_browser.cpp" />
     <ClCompile Include="src\core\editor_manager.cpp" />
     <ClCompile Include="src\core\main.cpp" />
+    <ClCompile Include="src\panels\inspector.cpp" />
+    <ClCompile Include="src\panels\log_displayer.cpp" />
+    <ClCompile Include="src\panels\toolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\imgui_notify.h" />
     <ClInclude Include="include\core\editor_manager.hpp" />
     <ClInclude Include="include\core\imgui_style.hpp" />
+    <ClInclude Include="include\core\panel.hpp" />
+    <ClInclude Include="include\panels\asset_browser.hpp" />
+    <ClInclude Include="include\panels\inspector.hpp" />
+    <ClInclude Include="include\panels\log_displayer.hpp" />
+    <ClInclude Include="include\panels\toolbar.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

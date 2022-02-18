@@ -15,8 +15,6 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
-#include <iostream>
-
 #include <CherryHeader.h>
 #include "printer.hpp"
 
@@ -58,14 +56,7 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 EditorManager::EditorManager() 
 {
     int null = 0;
-    if (!LoadTextureFromFile("../Internal/Icons/file_icon.png", &FileIcon, &null, &null))
-    {
-        std::cout << "failed to load file icon" << std::endl;
-    }
-    if (!LoadTextureFromFile("../Internal/Icons/folder_icon.png", &browserIcon, &null, &null))
-    {
-        std::cout << "failed to load folder icon" << std::endl;
-    }
+
     if (!LoadTextureFromFile("../Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
     {
         std::cout << "failed to load Play icon" << std::endl;
@@ -82,23 +73,27 @@ EditorManager::EditorManager()
     {
         std::cout << "failed to load Stop icon" << std::endl;
     }
-
-    currentDirectory = AssetPath;
 }
 
 
+void EditorManager::LinkEngine(Engine* engine) 
+{
+    m_engine = engine;
+    m_inspector.m_engine = engine;
+}
 
 void EditorManager::DisplayEditorUI(GLFWwindow* window) 
 {
     HandleDocking();
 
-    HandleBrowserWindow();
-    HandleLogWindow();
-    HandleToolsWindow();
+    m_browser.Render();
+    m_logDisplayer.Render();
+    m_inspector.Render();
     HandleMenuBar();
+    HandleToolsWindow();
+    //HandleToolBar();
     HandleGameWindow();
     HandleEditorWindow();
-    HandleInspectorWindow();
     HandleGraphWindow(window);
 
     HandleNotifications();
@@ -149,52 +144,48 @@ void EditorManager::HandleDocking()
 
     ImGui::End();
 }
-
-void EditorManager::HandleLogWindow() 
+void EditorManager::HandleToolBar() 
 {
-    if (!isLogOpened)
-        return;
+    ImGuiViewportP* viewport = (ImGuiViewportP*)(void*)ImGui::GetMainViewport();
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
+    float height = ImGui::GetFrameHeight();
 
-    ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Logs", &isLogOpened, ImGuiWindowFlags_MenuBar))
-    {
-        if (ImGui::BeginMenuBar())
-        {
-            if (ImGui::Button("Clear on play")) {}
-            if (ImGui::Button("Clear")) {}
-            if (ImGui::Button("AutoScroll")) {}
-            if (ImGui::BeginMenu("Menu"))
-            {
-                ImGui::EndMenu();
-            }
-            /*if (ImGui::BeginMenu("Examples"))
-            {
-                ImGui::MenuItem("Main menu bar", NULL, NULL);
-                ImGui::MenuItem("Console", NULL, NULL);
-                ImGui::MenuItem("Log", NULL, &show_app_log);
-                ImGui::MenuItem("Simple layout", NULL, &show_app_layout);
-                ImGui::MenuItem("Property editor", NULL, &show_app_property_editor);
-                ImGui::MenuItem("Long text display", NULL, &show_app_long_text);
-                ImGui::MenuItem("Auto-resizing window", NULL, &show_app_auto_resize);
-                ImGui::MenuItem("Constrained-resizing window", NULL, &show_app_constrained_resize);
-                ImGui::MenuItem("Simple overlay", NULL, &show_app_simple_overlay);
-                ImGui::MenuItem("Fullscreen window", NULL, &show_app_fullscreen);
-                ImGui::MenuItem("Manipulating window titles", NULL, &show_app_window_titles);
-                ImGui::MenuItem("Custom rendering", NULL, &show_app_custom_rendering);
-                ImGui::MenuItem("Dockspace", NULL, &show_app_dockspace);
-                ImGui::MenuItem("Documents", NULL, &show_app_documents);
-                ImGui::EndMenu();
-            }*/
+    if (ImGui::BeginViewportSideBar("##SecondaryMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
+        if (ImGui::BeginMenuBar()) {
+            ImGui::Text("Happy secondary menu bar");
             ImGui::EndMenuBar();
         }
-
-        Debug* debug = Debug::GetInstance();
-        for (const auto message : debug->GetLogs()) 
-        {
-            ImGui::Text(message.c_str());
-        }
+        ImGui::End();
     }
-    ImGui::End();
+    /*
+    if (ImGui::BeginSecondMenuBar())
+    {
+        float size = ImGui::GetWindowHeight() - 4.f;
+
+        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f));
+
+        if (ImGui::ImageButton(engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        {
+            if (engine->isPlaying)
+            {
+                engine->Stop();
+            }
+            else
+            {
+                engine->Launch();
+            }
+        } ImGui::SameLine();
+        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        {
+
+        } ImGui::SameLine();
+        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        {
+
+        }
+        ImGui::EndMainMenuBar();
+    }
+    */
 }
 
 void EditorManager::HandleMenuBar() 
@@ -232,10 +223,10 @@ void EditorManager::HandleMenuBar()
         {
             if (ImGui::BeginMenu("Open"))
             {
-                if (ImGui::MenuItem("Browser")) { isBrowserOpened = true; }
+                if (ImGui::MenuItem("Browser")) { m_browser.Toggle(true); }
                 if (ImGui::MenuItem("Hierarchy")) { isHierarchyOpened = true; }
-                if (ImGui::MenuItem("Log")) { isLogOpened = true; }
-                if (ImGui::MenuItem("Inspector")) { isInspectorOpened = true; }
+                if (ImGui::MenuItem("Log")) { m_logDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Inspector")) { m_inspector.Toggle(true); }
                 if (ImGui::MenuItem("Game")) { isGameOpened = true; }
                 if (ImGui::MenuItem("Scene")) { isSceneOpened = true; }
 
@@ -246,8 +237,6 @@ void EditorManager::HandleMenuBar()
         }
         ImGui::EndMainMenuBar();
     }
-
-    
 }
 
 void EditorManager::HandleToolsWindow() 
@@ -263,15 +252,15 @@ void EditorManager::HandleToolsWindow()
         ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * .5f) - (size * 3 * .5f));
 
 
-        if (ImGui::ImageButton(engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
+        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
         {
-            if (engine->isPlaying)
+            if (m_engine->isPlaying)
             {
-                engine->Stop();
+                m_engine->Stop();
             }
             else
             {
-                engine->Launch();
+                m_engine->Launch();
             }
         } ImGui::SameLine();
         if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
@@ -284,36 +273,6 @@ void EditorManager::HandleToolsWindow()
         }
     }
 
-    ImGui::End();
-}
-
-void EditorManager::HandleBrowserWindow() 
-{
-    if (!isBrowserOpened)
-        return;
-
-
-    ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Browser", &isBrowserOpened, ImGuiWindowFlags_NoBringToFrontOnFocus))
-    {
-        if (currentDirectory != AssetPath)
-            if (ImGui::Button("<-"))
-            {
-                currentDirectory = currentDirectory.parent_path();
-            }
-        std::filesystem::path path_iterator = currentDirectory;
-
-        while (path_iterator != AssetPath.parent_path())
-        {
-            ImGui::SameLine(); ImGui::Text("/"); ImGui::SameLine();
-            std::string name = path_iterator.filename().string();
-            ImGui::Text(name.c_str());
-
-            path_iterator = path_iterator.parent_path();
-        }
-
-        QuerryBrowser();
-    }
     ImGui::End();
 }
 
@@ -357,25 +316,6 @@ void EditorManager::HandleEditorWindow(unsigned int fbo)
     ImGui::End();
 }
 
-void EditorManager::HandleInspectorWindow() 
-{
-    if (!isInspectorOpened)
-        return;
-
-    ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Inspector", &isInspectorOpened))
-    {
-        for (const auto comp : engine->behaviours)
-        {
-            std::string name = typeid(*comp).name();
-            name = name.substr(name.find_first_of(" \t") + 1);
-
-            ImGui::Text(name.c_str());
-        }
-    }
-    ImGui::End();
-}
-
 void EditorManager::HandleGraphWindow(GLFWwindow* window)
 {
     if (!isHierarchyOpened)
@@ -408,7 +348,7 @@ void EditorManager::HandleGraphWindow(GLFWwindow* window)
         if (ImGui::Button("Add Printer"))
         {
             Printer* printer = new Printer();
-            engine->behaviours.push_back(printer);
+            m_engine->behaviours.push_back(printer);
         }
 
         if (ImGui::Button("Success"))
@@ -446,49 +386,4 @@ void EditorManager::HandleNotifications()
 void EditorManager::SendNotifiction(const char* title, const char* content, ImGuiToastType_ type, float displayTime)
 {
     ImGui::InsertNotification({ type, displayTime, title, content});
-}
-
-unsigned int EditorManager::GetIconByExtension(const char* ext)
-{
-    return 0;
-}
-
-void EditorManager::QuerryBrowser() 
-{
-    int i = 0;
-
-    namespace fs = std::filesystem;
-    
-    float width = ImGui::GetContentRegionAvail().x;
-    
-    static float padding = 16.f;
-    static float thumbnailSize = 128.f;
-    float cellSize = thumbnailSize + padding;
-    int columnCount = (int)(width / cellSize);    if (columnCount < 1) columnCount = 1;
-    
-    ImGui::Columns(columnCount, 0, false);
-
-    for (const fs::directory_entry& entry : fs::directory_iterator(currentDirectory))
-    {
-        std::string name = entry.path().filename().string();
-
-        unsigned int icon = entry.is_directory() ? browserIcon : FileIcon;
-
-        ImGui::ImageButton((void*)(intptr_t)icon, {thumbnailSize, thumbnailSize}, { 0,1 }, { 1, 0 });
-        
-        // Double Click Callback
-        if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) >= 2)
-        {
-            if (entry.is_directory()) 
-            {
-                currentDirectory /= entry.path().filename();
-            }
-        }
-
-        ImGui::Text(name.c_str());
-
-        ImGui::NextColumn();
-        i++;
-    }
-    ImGui::Columns(1);
 }

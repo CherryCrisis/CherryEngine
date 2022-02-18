@@ -63,7 +63,8 @@ int main()
     EditorManager editor{};
     Engine engine{};
 
-    editor.engine = &engine;
+    editor.LinkEngine(&engine);
+
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     while (glfwWindowShouldClose(window) == false)
