@@ -6822,6 +6822,70 @@ bool ImGui::BeginMainMenuBar()
     return is_open;
 }
 
+bool ImGui::BeginSecondMenuBar()
+{
+   /* ImGuiContext& g = *GImGui;
+    ImGuiViewportP* viewport = g.Viewports[0];
+    ImGuiWindow* menu_bar_window = ImGui::FindWindowByName("##MainStatusBar");
+
+    // For the main menu bar, which cannot be moved, we honor g.Style.DisplaySafeAreaPadding to ensure text can be visible on a TV set.
+    g.NextWindowData.MenuBarOffsetMinVal = ImVec2(g.Style.DisplaySafeAreaPadding.x, ImMax(g.Style.DisplaySafeAreaPadding.y - g.Style.FramePadding.y, 0.0f));
+
+    // Get our rectangle at the top of the work area
+    //__debugbreak();
+    if (menu_bar_window == NULL || menu_bar_window->BeginCount == 0)
+    {
+        // Set window position
+        // We don't attempt to calculate our height ahead, as it depends on the per-viewport font size. However menu-bar will affect the minimum window size so we'll get the right height.
+        ImVec2 menu_bar_pos = viewport->Pos + viewport->BuildWorkOffsetMin;
+        ImVec2 menu_bar_size = ImVec2(viewport->Size.x - viewport->BuildWorkOffsetMin.x + viewport->BuildWorkOffsetMax.x, 1.0f);
+        ImGui::SetNextWindowPos(menu_bar_pos);
+        ImGui::SetNextWindowSize(menu_bar_size);
+    }
+
+    // Create window
+    ImGui::SetNextWindowViewport(viewport->ID); // Enforce viewport so we don't create our own viewport when ImGuiConfigFlags_ViewportsNoMerge is set.
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(0, 0));    // Lift normal size constraint, however the presence of a menu-bar will give us the minimum height we want.
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
+    bool is_open = ImGui::Begin("##MainStatusBar", NULL, window_flags) && ImGui::BeginMenuBar();
+    ImGui::PopStyleVar(2);
+
+    // Report our size into work area (for next frame) using actual window size
+    menu_bar_window = ImGui::GetCurrentWindow();
+    if (menu_bar_window->BeginCount == 1)
+        viewport->BuildWorkOffsetMin.y += menu_bar_window->Size.y;
+
+    g.NextWindowData.MenuBarOffsetMinVal = ImVec2(0.0f, 0.0f);
+    if (!is_open)
+    {
+        ImGui::End();
+        return false;
+    }
+    return true; //-V1020*/
+
+    ImGuiContext& g = *GImGui;
+    ImGuiViewportP* viewport = (ImGuiViewportP*)(void*)GetMainViewport();
+
+    // Notify of viewport change so GetFrameHeight() can be accurate in case of DPI change
+    SetCurrentViewport(NULL, viewport);
+
+    // For the main menu bar, which cannot be moved, we honor g.Style.DisplaySafeAreaPadding to ensure text can be visible on a TV set.
+    // FIXME: This could be generalized as an opt-in way to clamp window->DC.CursorStartPos to avoid SafeArea?
+    // FIXME: Consider removing support for safe area down the line... it's messy. Nowadays consoles have support for TV calibration in OS settings.
+    g.NextWindowData.MenuBarOffsetMinVal = ImVec2(g.Style.DisplaySafeAreaPadding.x, ImMax(g.Style.DisplaySafeAreaPadding.y - g.Style.FramePadding.y, 0.0f));
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
+    float height = GetFrameHeight();
+    bool is_open = BeginViewportSideBar("##SecondMenuBar", viewport, ImGuiDir_Up, height, window_flags);
+    g.NextWindowData.MenuBarOffsetMinVal = ImVec2(0.0f, 0.0f);
+
+    if (is_open)
+        BeginMenuBar();
+    else
+        End();
+    return is_open;
+}
+
 void ImGui::EndMainMenuBar()
 {
     EndMenuBar();

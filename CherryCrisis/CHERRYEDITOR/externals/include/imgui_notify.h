@@ -209,8 +209,8 @@ public:
 		IM_ASSERT(type < ImGuiToastType_COUNT);
 
 		this->type = type;
-		this->dismiss_time = dismiss_time;
-		this->creation_time = glfwGetTime();
+		this->dismiss_time = dismiss_time; 
+		this->creation_time = (float)glfwGetTime();
 
 		memset(this->title, 0, sizeof(this->title));
 		memset(this->content, 0, sizeof(this->content));

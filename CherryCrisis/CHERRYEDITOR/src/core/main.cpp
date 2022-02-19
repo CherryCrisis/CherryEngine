@@ -13,8 +13,8 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
-#include "EditorManager.h"
-#include "imguiStyle.h"
+#include "core/editor_manager.hpp"
+#include "core/imgui_style.hpp"
 
 #include "stb_image.h"
 
@@ -63,7 +63,8 @@ int main()
     EditorManager editor{};
     Engine engine{};
 
-    editor.engine = &engine;
+    editor.LinkEngine(&engine);
+
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
     while (glfwWindowShouldClose(window) == false)

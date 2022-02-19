@@ -24,6 +24,7 @@
     <ProjectGuid>{cc32da17-fa71-4568-89ff-10a9a068bdc0}</ProjectGuid>
     <RootNamespace>CHERRYGAME</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>CHERRYSTANDALONE</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
