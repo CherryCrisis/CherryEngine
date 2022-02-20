@@ -286,6 +286,7 @@ void EditorManager::HandleToolsWindow()
             }
             else
             {
+                m_logDisplayer.TryClearOnPlay();
                 m_engine->Launch();
             }
         } ImGui::SameLine();

@@ -72,6 +72,7 @@ void Engine::Tick()
 void Engine::Launch() 
 {
 	isPlaying = true;
+
 	for (Behaviour* behaviour : behaviours) 
 	{
 		behaviour->Start();

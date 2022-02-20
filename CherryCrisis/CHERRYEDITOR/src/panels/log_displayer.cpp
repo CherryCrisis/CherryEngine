@@ -19,7 +19,6 @@ void LogDisplayer::Render()
     {
         RenderMenuBar();
 
-        // Collapsing ISSUE#39
         for (LogMessage& message : m_debug->GetLogs())
         {
             if (m_isCollapsing) 
@@ -73,4 +72,11 @@ void LogDisplayer::Clear()
 {
     // Add Clearing code
     m_debug->Clear();
+}
+
+void LogDisplayer::TryClearOnPlay()
+{
+    // Add Clearing code
+    if (m_isClearOnPlay)
+        m_debug->Clear();
 }

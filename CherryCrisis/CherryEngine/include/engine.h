@@ -16,7 +16,7 @@ public:
 
 	static void PlayFile(const char* fileNam);
 	void Launch();
-	void Stop() { isPlaying = false; behaviours.clear(); Debug::GetInstance()->Clear(); }
+	void Stop() { isPlaying = false; behaviours.clear(); }
 	void SoundInit();
 
 	void Tick();

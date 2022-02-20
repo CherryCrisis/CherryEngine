@@ -5,9 +5,7 @@
 
 #include <CherryMacros.h>
 
-class CCENGINE_API Debug
-
-class CHERRY_API LogMessage 
+class CCENGINE_API LogMessage
 {
 public:
 	std::string string;
@@ -19,7 +17,7 @@ public:
 };
 
 
-class CHERRY_API Debug
+class CCENGINE_API Debug
 {
 private:
 	static Debug* instance;
@@ -29,6 +27,7 @@ private:
 	Debug(Debug& other) = delete;
 	void operator=(const Debug&) = delete;
 	Debug();
+
 public:
 	static Debug* GetInstance();
 	
