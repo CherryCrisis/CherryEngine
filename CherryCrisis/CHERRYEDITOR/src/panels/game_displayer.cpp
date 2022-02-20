@@ -11,7 +11,8 @@ void GameDisplayer::Render()
     if (ImGui::Begin("Game", &m_isOpened))
     {
         m_isActive = !ImGui::IsWindowCollapsed();
-            
+
+        ImGui::SetWindowSize({1920,1080});
 
         FrameDisplayer::Render();
         ImGui::BeginChild("GameFrameBuffer");

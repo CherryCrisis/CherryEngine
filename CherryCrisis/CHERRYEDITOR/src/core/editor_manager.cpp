@@ -21,6 +21,7 @@
 #include "resourceManager.hpp"
 #include "render_manager.hpp"
 
+//To Replace with Resource Manager Texture Handling
 bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
 {
     // Load from file
@@ -58,27 +59,24 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 
 EditorManager::EditorManager() 
 {
+    // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
-
     m_hierarchyDisplayer.SetScene(scene.get());
     
-    int null = 0;
+    { // To Replace with Resource Manager Texture Handler
+        int null = 0;
 
-    if (!LoadTextureFromFile("../Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
-    {
-        std::cout << "failed to load Play icon" << std::endl;
-    }
-    if (!LoadTextureFromFile("../Internal/Icons/pause_icon.png", &PauseIcon, &null, &null))
-    {
-        std::cout << "failed to load Pause icon" << std::endl;
-    }
-    if (!LoadTextureFromFile("../Internal/Icons/replay_icon.png", &ReplayIcon, &null, &null))
-    {
-        std::cout << "failed to load Replay icon" << std::endl;
-    }
-    if (!LoadTextureFromFile("../Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
-    {
-        std::cout << "failed to load Stop icon" << std::endl;
+        if (!LoadTextureFromFile("../Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
+            std::cout << "failed to load Play icon" << std::endl;
+
+        if (!LoadTextureFromFile("../Internal/Icons/pause_icon.png", &PauseIcon, &null, &null))
+            std::cout << "failed to load Pause icon" << std::endl;
+
+        if (!LoadTextureFromFile("../Internal/Icons/replay_icon.png", &ReplayIcon, &null, &null))
+            std::cout << "failed to load Replay icon" << std::endl;
+
+        if (!LoadTextureFromFile("../Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
+            std::cout << "failed to load Stop icon" << std::endl;
     }
 }
 
@@ -99,10 +97,11 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_sceneDisplayer.Render();
     m_gameDisplayer.Render();
     m_hierarchyDisplayer.Render();
+    HandleFeaturerWindow(window);
 
     HandleNotifications();
 
-    if (isDemoOpened)   ImGui::ShowDemoWindow(&isDemoOpened);
+    if (m_isDemoOpened)   ImGui::ShowDemoWindow(&m_isDemoOpened);
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -183,12 +182,12 @@ void EditorManager::HandleMenuBar()
             if (ImGui::BeginMenu("Open"))
             {
                 if (ImGui::MenuItem("Browser"))   { m_browser.Toggle(true); }
-                if (ImGui::MenuItem("Hierarchy")) { isHierarchyOpened = true; }
+                if (ImGui::MenuItem("Hierarchy")) { m_hierarchyDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Log"))       { m_logDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Inspector")) { m_inspector.Toggle(true); }
                 if (ImGui::MenuItem("Game"))      { m_gameDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Scene"))     { m_sceneDisplayer.Toggle(true); }
-
+                if (ImGui::MenuItem("Featurer"))  { m_isFeaturerOpened = true; }
                 ImGui::EndMenu();
             }
 
@@ -226,17 +225,16 @@ void EditorManager::HandleMenuBar()
     }
 }
 
-void EditorManager::HandleGraphWindow(GLFWwindow* window)
+void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 {
-    if (!isHierarchyOpened)
+    if (!m_isFeaturerOpened)
         return;
 
-    if (ImGui::Begin("Hierarchy", &isHierarchyOpened))
+    if (ImGui::Begin("Featurer", &m_isFeaturerOpened))
     {
         if (ImGui::Button("Close.."))
             ImGui::OpenPopup("Close?");
 
-        // Always center this window when appearing
         ImVec2 center = ImGui::GetMainViewport()->GetCenter();
         ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 
@@ -277,17 +275,17 @@ void EditorManager::HandleGraphWindow(GLFWwindow* window)
         ImGui::SameLine();
 
         if (ImGui::Button("Show Demo"))
-            isDemoOpened = true;
+            m_isDemoOpened = true;
     }
     ImGui::End();
 }
 
 void EditorManager::HandleNotifications()
 {
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f); // Round borders
-    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f)); // Background color
-    ImGui::RenderNotifications(); // <-- Here we render all notifications
-    ImGui::PopStyleVar(1); // Don't forget to Pop()
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
+    ImGui::RenderNotifications(); 
+    ImGui::PopStyleVar(1); 
     ImGui::PopStyleColor(1);
 }
 

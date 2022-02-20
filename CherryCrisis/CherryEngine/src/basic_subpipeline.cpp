@@ -76,6 +76,8 @@ void BasicSubPipeline::Generate(ModelRenderer* toGenerate)
 		if (!albedoTexture)
 			return;
 
+		if (albedoTexture->m_gpuTexture) return;
+
 		// Albedo texture
 		GPUTextureBasic gpuTexture;
 		glGenTextures(1, &gpuTexture.ID);
