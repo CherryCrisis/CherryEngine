@@ -31,12 +31,20 @@ Resource* Material::Create(const char* modelFilepath, const aiMaterial* assimpMa
 			material->m_albedo.data[i] = color[i];
 	else 
 		material->m_albedo = { 0.f };
-
 	//Material Texture
-    aiString texturePath;
-	if (AI_SUCCESS == assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath))
 	{
-		resourceManager->AddResource<Texture>(texturePath.C_Str(), true);
+		aiString ambientTexturePath;
+		if (AI_SUCCESS == assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &ambientTexturePath))
+		{
+			material->ambientTexture = resourceManager->AddResource<Texture>(ambientTexturePath.C_Str(), true);
+		}
+		aiString albedoTexturePath;
+		if (AI_SUCCESS == assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &albedoTexturePath))
+		{
+			// TODO: Remove this
+			std::string path = "../Assets/" + std::string(albedoTexturePath.C_Str());
+			material->albedoTexture = resourceManager->AddResource<Texture>(path.c_str(), true);
+		}
 	}
 
 	return material;

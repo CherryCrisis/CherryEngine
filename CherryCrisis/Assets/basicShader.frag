@@ -13,8 +13,10 @@ struct Material
 
 uniform Material uMaterial;
 
+uniform sampler2D uDiffuseTexture;
+
 void main()
 {
-	vec3 albedo = uMaterial.albedoColor;
+	vec3 albedo = texture(uDiffuseTexture, vUV).rgb * uMaterial.albedoColor;
     oColor = vec4(albedo, 1.0);
 }

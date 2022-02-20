@@ -18,7 +18,7 @@ Resource* Model::Create(const char* filepath, const aiScene* assimpScene, const 
 
 	const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
 	const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
-
+	
 	model->m_mesh = resourceManager->AddResource<Mesh>(filepath, false, assimpMesh);
 	model->m_material = resourceManager->AddResource<Material>(filepath, true, assimpMaterial);
 

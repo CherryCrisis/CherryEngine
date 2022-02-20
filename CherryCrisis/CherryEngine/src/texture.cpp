@@ -18,7 +18,7 @@ Resource* Texture::Create(const char* texturePath)
 {
 	Texture* texture = new Texture(texturePath);
 
-    stbi_set_flip_vertically_on_load(false);
+    stbi_set_flip_vertically_on_load(true);
     int nrComponents;
 
     texture->m_data = stbi_load(texturePath, &texture->m_width, &texture->m_height, &nrComponents, STBI_rgb_alpha);

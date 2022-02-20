@@ -14,9 +14,14 @@ private:
     void*   m_data;
 
 public:
-    GPUTexture* gpuTexture = nullptr;
-
-    static Resource* Create(const char* texturePath);
+    GPUTexture* m_gpuTexture = nullptr;
 
     ~Texture();
+
+    int GetWidth()  { return m_width; }
+    int GetHeight() { return m_height; }
+
+    const void* GetData() { return m_data; }
+
+    static Resource* Create(const char* texturePath);
 };
