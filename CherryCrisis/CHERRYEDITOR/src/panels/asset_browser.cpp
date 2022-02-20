@@ -7,7 +7,9 @@ static const std::filesystem::path AssetPath = "../Assets";
 
 AssetBrowser::AssetBrowser() 
 {
-    m_current_directory = AssetPath;
+    m_currentDirectory = AssetPath;
+
+    // Load Icons
 }
 
 void AssetBrowser::QuerryBrowser() 
@@ -17,23 +19,23 @@ void AssetBrowser::QuerryBrowser()
     float width = ImGui::GetContentRegionAvail().x;
 
 
-    float cellSize = m_thumbnail_size + m_padding;
+    float cellSize = m_thumbnailSize + m_padding;
     int columnCount = (int)(width / cellSize);    if (columnCount < 1) columnCount = 1;
 
     ImGui::Columns(columnCount, 0, false);
 
-    for (const fs::directory_entry& entry : fs::directory_iterator(m_current_directory))
+    for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
     {
 
-        unsigned int icon = entry.is_directory() ? m_browser_icon : m_file_icon;
+        unsigned int icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
 
-        ImGui::ImageButton((void*)(intptr_t)icon, { m_thumbnail_size, m_thumbnail_size }, { 0,1 }, { 1, 0 });
+        ImGui::ImageButton((void*)(intptr_t)icon, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
 
         // Double Click Callback
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) >= 2)
         {
             if (entry.is_directory())
-                m_current_directory /= entry.path().filename();
+                m_currentDirectory /= entry.path().filename();
         }
 
         ImGui::Text(entry.path().filename().string().c_str());
@@ -45,19 +47,19 @@ void AssetBrowser::QuerryBrowser()
 
 void AssetBrowser::Render()
 {
-    if (!is_opened)
+    if (!m_isOpened)
         return;
 
 
     ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Browser", &is_opened, ImGuiWindowFlags_NoBringToFrontOnFocus))
+    if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
-        if (m_current_directory != AssetPath)
+        if (m_currentDirectory != AssetPath)
             if (ImGui::Button("<-"))
-                m_current_directory = m_current_directory.parent_path();
+                m_currentDirectory = m_currentDirectory.parent_path();
 
 
-        std::filesystem::path path_iterator = m_current_directory;
+        std::filesystem::path path_iterator = m_currentDirectory;
 
         while (path_iterator != AssetPath.parent_path())
         {

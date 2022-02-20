@@ -31,8 +31,12 @@ namespace CCModelLoader
             models.push_back(model);
 
             for (int i = 0; i < 3; ++i)
-                for (int j = 0; j < 3; ++j)
-                    modelNode->m_baseTRS[i].data[j] = trs[i][j];
+            {
+                for (int comp = 0; comp < 3; ++comp)
+                {
+                    modelNode->m_baseTRS[i].data[comp] = trs[i][comp];
+                }
+            }
         }
 
         modelNode->m_model = model;
@@ -41,8 +45,7 @@ namespace CCModelLoader
 
         for (size_t i = 0; i < nbChildren; ++i)
         {
-            ModelNode* childModel =
-                ProcessDataRecursive(node->mChildren[i], modelNode, scene, models, resourceManager, filepath);
+            ModelNode* childModel = ProcessDataRecursive(node->mChildren[i], modelNode, scene, models, resourceManager, filepath);
 
             modelNode->m_childrenNode.push_back(childModel);
         }
@@ -65,20 +68,10 @@ namespace CCModelLoader
         Assimp::Importer importer = Assimp::Importer();
 
         const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate |
-            aiProcess_GenSmoothNormals |
-            aiProcess_FlipUVs |
-            aiProcess_JoinIdenticalVertices |
-            aiProcess_CalcTangentSpace);
-
-        /*(filepath, aiProcess_MakeLeftHanded |
-            aiProcess_FlipWindingOrder |
-            aiProcess_FlipUVs |
-            aiProcess_CalcTangentSpace |
-            aiProcess_GenSmoothNormals |
-            aiProcess_Triangulate |
-            aiProcess_FixInfacingNormals |
-            aiProcess_FindInvalidData |
-            aiProcess_ValidateDataStructure);*/
+                                                           aiProcess_GenSmoothNormals |
+                                                           aiProcess_FlipUVs |
+                                                           aiProcess_JoinIdenticalVertices |
+                                                           aiProcess_CalcTangentSpace);
 
         if (scene)
         {

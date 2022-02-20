@@ -25,7 +25,9 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 	m_model = newModel;
 
 	if (m_model)
+	{
 		RenderManager::instance()->GenerateFromPipeline<BasicSubPipeline>(this);
+	}
 	else
 		RemoveModel();
 }
