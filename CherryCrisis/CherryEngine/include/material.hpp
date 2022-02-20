@@ -18,11 +18,11 @@ class Material : public Resource
 private:
 	Vector4 m_albedo;
 
-	std::shared_ptr<Texture> ambientTexture;
-
 	//materialName = modelPath\name
 	Material(const char* materialName) : Resource(materialName) {}
 public:
+	std::shared_ptr<Texture> ambientTexture;
+	std::shared_ptr<Texture> albedoTexture;
 
 	~Material();
 

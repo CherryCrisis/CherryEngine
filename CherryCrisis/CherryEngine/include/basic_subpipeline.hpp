@@ -4,22 +4,26 @@
 
 #include "model_renderer.hpp"
 #include "transform.hpp"
+#include "texture.hpp"
 #include "model.hpp"
 #include "maths.hpp"
 #include "mesh.hpp"
 
 #include <glad/gl.h>
 
-struct GPUMeshBasic : GPUMesh
-{
-	GLuint VAO = 0u;
-	GLuint VBO = 0u;
-	GLuint EBO = 0u;
-};
-
 class BasicSubPipeline : public ASubPipeline
 {
 public:
+	struct GPUMeshBasic : GPUMesh
+	{
+		GLuint VAO = 0u, VBO = 0u, EBO = 0u;
+	};
+
+	struct GPUTextureBasic : GPUTexture
+	{
+		GLuint ID;
+	};
+
 	BasicSubPipeline(const char* name);
 
 	template <typename RendererT>
