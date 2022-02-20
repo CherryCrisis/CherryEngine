@@ -12,7 +12,6 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
-
         for (size_t i = 0; i < m_displayedScene->m_entities.size(); i++)
         {
             Entity& entity = m_displayedScene->m_entities[i];

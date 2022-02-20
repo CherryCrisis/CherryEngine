@@ -13,8 +13,11 @@ private:
 	unsigned int m_FBO     = 0u;
 	unsigned int m_RBO     = 0u;
 
-	void Init();
+	float m_width  = 0;
+	float m_height = 0;
 
+	void Init();
+	void UpdateTextureSize(float x, float y);
 protected:
 
 	bool m_isActive = false;

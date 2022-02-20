@@ -168,14 +168,13 @@ void EditorManager::HandleMenuBar()
 
             ImGui::EndMenu();
         }
+        
         if (ImGui::BeginMenu("Edit"))
         {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+            if (ImGui::MenuItem("Project Settings")) { }
+            if (ImGui::MenuItem("Preferences"))      { }
             ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+            if (ImGui::MenuItem("Build")) {}
             ImGui::EndMenu();
         }
 
@@ -183,12 +182,12 @@ void EditorManager::HandleMenuBar()
         {
             if (ImGui::BeginMenu("Open"))
             {
-                if (ImGui::MenuItem("Browser")) { m_browser.Toggle(true); }
+                if (ImGui::MenuItem("Browser"))   { m_browser.Toggle(true); }
                 if (ImGui::MenuItem("Hierarchy")) { isHierarchyOpened = true; }
-                if (ImGui::MenuItem("Log")) { m_logDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Log"))       { m_logDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Inspector")) { m_inspector.Toggle(true); }
-                if (ImGui::MenuItem("Game")) { isGameOpened = true; }
-                if (ImGui::MenuItem("Scene")) { isSceneOpened = true; }
+                if (ImGui::MenuItem("Game"))      { m_gameDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Scene"))     { m_sceneDisplayer.Toggle(true); }
 
                 ImGui::EndMenu();
             }

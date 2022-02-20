@@ -12,6 +12,8 @@ void SceneDisplayer::Render()
 
     if (ImGui::Begin("Scene", &m_isOpened))
     {
+        m_isActive = !ImGui::IsWindowCollapsed();
+
         ImGui::BeginChild("SceneFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
 

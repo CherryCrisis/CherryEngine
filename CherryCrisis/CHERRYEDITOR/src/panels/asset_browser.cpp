@@ -8,6 +8,8 @@ static const std::filesystem::path AssetPath = "../Assets";
 AssetBrowser::AssetBrowser() 
 {
     m_currentDirectory = AssetPath;
+
+    // Load Icons
 }
 
 void AssetBrowser::QuerryBrowser() 

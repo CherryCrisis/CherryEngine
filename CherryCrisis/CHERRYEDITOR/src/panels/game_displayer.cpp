@@ -10,6 +10,9 @@ void GameDisplayer::Render()
 
     if (ImGui::Begin("Game", &m_isOpened))
     {
+        m_isActive = !ImGui::IsWindowCollapsed();
+            
+
         FrameDisplayer::Render();
         ImGui::BeginChild("GameFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();

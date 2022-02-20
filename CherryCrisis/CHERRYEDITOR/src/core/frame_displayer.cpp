@@ -14,6 +14,9 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height)
 {
 	if (!m_isInit) Init();
 
+    if (width != m_width && height != m_height)
+        UpdateTextureSize(width, height);
+
     glViewport(0, 0, width, height);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
     RenderManager::DrawScene();
@@ -46,5 +49,13 @@ void FrameDisplayer::Init()
 
 void FrameDisplayer::Render()
 {
+
+}
+
+void FrameDisplayer::UpdateTextureSize(float width, float height)
+{
+    glBindTexture(GL_TEXTURE_2D, m_ViewTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
 }
