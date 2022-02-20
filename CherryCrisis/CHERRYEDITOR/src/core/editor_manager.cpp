@@ -75,7 +75,6 @@ EditorManager::EditorManager()
     }
 }
 
-
 void EditorManager::LinkEngine(Engine* engine) 
 {
     m_engine = engine;

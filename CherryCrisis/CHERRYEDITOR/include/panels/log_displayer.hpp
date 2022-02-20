@@ -22,4 +22,8 @@ private:
 	bool m_isClearOnPlay    = true;
 	bool m_isAutoScrolling  = true;
 	bool m_isCollapsing     = true;
+
+
+	bool m_isScrollingTop = false;
+	bool m_isScrollingBot = false;
 };
