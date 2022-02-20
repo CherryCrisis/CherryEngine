@@ -5,5 +5,4 @@ x64
 *.o
 *.d
 
-imgui.ini
 .vscode

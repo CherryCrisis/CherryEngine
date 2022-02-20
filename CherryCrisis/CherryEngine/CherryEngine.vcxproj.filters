@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers externes">
+      <UniqueIdentifier>{d5068aa5-9e77-4aaa-824c-10d5a7ee44a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Maths">
+      <UniqueIdentifier>{1b5ae55a-0d2e-4521-be4d-4a7344f2421b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Core">
+      <UniqueIdentifier>{7a436cae-e879-46ef-9fcb-f79eb11300d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Resource">
+      <UniqueIdentifier>{0c7791f0-5a6a-4f5e-8bbf-0831279eb3a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Components">
+      <UniqueIdentifier>{095d4814-acc8-4a66-b96b-70ea16749db4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Component">
+      <UniqueIdentifier>{d07d4011-4beb-45aa-a98b-b11df0116bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core">
+      <UniqueIdentifier>{4481fdbd-e6da-4623-ba34-f111bdea7e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Resource">
+      <UniqueIdentifier>{73a9758d-d866-4adc-8244-e11e0e82c818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers externes\Assimp">
+      <UniqueIdentifier>{86cf7f2c-3c86-4dd3-bb93-e9aa81105b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering">
+      <UniqueIdentifier>{634c2c81-51b5-4f0b-b4e2-1625dbd80036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Rendering">
+      <UniqueIdentifier>{4c3ee403-c5ce-4c26-bf4f-00e0404f094a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\entity.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths\matrix3.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths\matrix4.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths\quaternion.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths\vector2.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths\vector3.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths\vector4.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\maths.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CherryHeader.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\framework.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pch.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\material.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mesh.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modelBase.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\modelLoader.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\resource.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\resourceManager.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shader.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\texture.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\debug.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\transform.hpp">
+      <Filter>Fichiers d%27en-tête\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\aabb.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\ai_assert.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\anim.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Base64.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\BaseImporter.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Bitmap.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\BlobIOSystem.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\ByteSwapper.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\camera.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\cexport.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\cfileio.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\cimport.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\ColladaMetaData.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\color4.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\commonMetaData.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\config.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\CreateAnimMesh.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\DefaultIOStream.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\DefaultIOSystem.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\DefaultLogger.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\defs.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Exceptional.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Exporter.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\fast_atof.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\GenericProperty.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\GltfMaterial.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Hash.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Importer.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\importerdesc.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\IOStream.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\IOStreamBuffer.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\IOSystem.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\light.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\LineSplitter.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\LogAux.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Logger.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\LogStream.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\material.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\MathFunctions.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\matrix3x3.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\matrix4x4.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\MemoryIOWrapper.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\mesh.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\metadata.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\NullLogger.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\ParsingUtils.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\pbrmaterial.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\postprocess.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Profiler.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\ProgressHandler.hpp">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\qnan.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\quaternion.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\RemoveComments.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\scene.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\SceneCombiner.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\SGSpatialSort.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\SkeletonMeshBuilder.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\SmallVector.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\SmoothingGroups.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\SpatialSort.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\StandardShapes.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\StreamReader.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\StreamWriter.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\StringComparison.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\StringUtils.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Subdivision.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\texture.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\TinyFormatter.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\types.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\vector2.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\vector3.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\version.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\Vertex.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\XmlParser.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\XMLTools.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shaderProgram.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scene.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\singleton.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gl_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basic_subpipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model_renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\render_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\subpipeline_interface.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CherryMacros.h">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\maths\matrix3.inl">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </None>
+    <None Include="include\maths\matrix4.inl">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </None>
+    <None Include="include\maths\quaternion.inl">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </None>
+    <None Include="include\maths\vector2.inl">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </None>
+    <None Include="include\maths\vector3.inl">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </None>
+    <None Include="include\maths\vector4.inl">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </None>
+    <None Include="include\resourceManager.inl">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </None>
+    <None Include="externals\include\assimp\color4.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="externals\include\assimp\material.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="externals\include\assimp\matrix3x3.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="externals\include\assimp\matrix4x4.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="externals\include\assimp\quaternion.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="externals\include\assimp\SmoothingGroups.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="externals\include\assimp\vector2.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="externals\include\assimp\vector3.inl">
+      <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="include\renderer_manager.inl">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </None>
+    <None Include="..\Assets\basicShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\Assets\basicShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\entity.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transform.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debug.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dllmain.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\material.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mesh.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modelBase.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modelLoader.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resourceManager.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\stb_image.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\gl.c">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shaderProgram.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model_renderer.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render_manager.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\basic_subpipeline.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
