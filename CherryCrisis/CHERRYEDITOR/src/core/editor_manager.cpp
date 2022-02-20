@@ -60,6 +60,8 @@ EditorManager::EditorManager()
 {
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
 
+    m_hierarchyDisplayer.SetScene(scene.get());
+    
     int null = 0;
 
     if (!LoadTextureFromFile("../Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
@@ -78,28 +80,6 @@ EditorManager::EditorManager()
     {
         std::cout << "failed to load Stop icon" << std::endl;
     }
-
-
-    glGenFramebuffers(1, &m_gameViewFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_gameViewFBO);
-
-    glGenTextures(1, &m_gameViewTex);
-    glBindTexture(GL_TEXTURE_2D, m_gameViewTex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_gameViewTex, 0);
-
-    // attach it to currently bound framebuffer object
-
-    glGenRenderbuffers(1, &m_gameViewRBO);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_gameViewRBO);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_gameViewRBO);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void EditorManager::LinkEngine(Engine* engine) 
@@ -112,18 +92,17 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
 {
     HandleDocking();
 
+    HandleMenuBar();
     m_browser.Render();
     m_logDisplayer.Render();
     m_inspector.Render();
-    HandleMenuBar();
-    HandleGameWindow();
-    HandleEditorWindow();
-    HandleGraphWindow(window);
+    m_sceneDisplayer.Render();
+    m_gameDisplayer.Render();
+    m_hierarchyDisplayer.Render();
 
     HandleNotifications();
 
-    if (isDemoOpened)
-        ImGui::ShowDemoWindow(&isDemoOpened);
+    if (isDemoOpened)   ImGui::ShowDemoWindow(&isDemoOpened);
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -248,73 +227,11 @@ void EditorManager::HandleMenuBar()
     }
 }
 
-void EditorManager::HandleGameWindow() 
-{
-    if (!isGameOpened)
-        return;
-
-    ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Game", &isGameOpened))
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_gameViewFBO);
-        RenderManager::DrawScene();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-        for (size_t i = 0; i < scene->m_entities.size(); i++)
-        {
-            Entity& entity = scene->m_entities[i];
-
-            if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
-            {
-                Vector3 position = entity.m_transform->GetPosition();
-
-                if (ImGui::DragFloat3("Position", position.data))
-                    entity.m_transform->SetPosition(position);
-
-                ImGui::TreePop();
-            }
-        }
-
-        // Using a Child allow to fill all the space of the window.
-        // It also alows customization
-        ImGui::BeginChild("GameRender");
-        // Get the size of the child (i.e. the whole draw size of the windows).
-        ImVec2 wsize = ImGui::GetWindowSize();
-        // Because I use the texture from OpenGL, I need to invert the V from the UV.
-        ImGui::Image((ImTextureID)m_gameViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
-        ImGui::EndChild();
-
-    }
-    ImGui::End();
-}
-
-void EditorManager::HandleEditorWindow(unsigned int fbo) 
-{
-    if (!isSceneOpened)
-        return;
-
-    ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
-    if (ImGui::Begin("Scene", &isSceneOpened))
-    {
-        // Using a Child allow to fill all the space of the window.
-        // It also alows customization
-        ImGui::BeginChild("SceneRender");
-        // Get the size of the child (i.e. the whole draw size of the windows).
-        ImVec2 wsize = ImGui::GetWindowSize();
-        // Because I use the texture from OpenGL, I need to invert the V from the UV.
-        ImGui::Image((ImTextureID)fbo, wsize, ImVec2(0, 1), ImVec2(1, 0));
-        ImGui::EndChild();
-    }
-    ImGui::End();
-}
-
 void EditorManager::HandleGraphWindow(GLFWwindow* window)
 {
     if (!isHierarchyOpened)
         return;
 
-    ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Hierarchy", &isHierarchyOpened))
     {
         if (ImGui::Button("Close.."))
