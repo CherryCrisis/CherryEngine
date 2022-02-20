@@ -21,7 +21,7 @@ Resource* ShaderProgram::Create(const char* programName, const char* vxFilepath,
 	std::shared_ptr<Shader> fragmentShader;
 
 	if (fgFilepath != "")
-		fragmentShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::FRAGMENT);
+		fragmentShader = resourceManager->AddResource<Shader>(fgFilepath, true, EShader::FRAGMENT);
 
 	return Create(programName, vertexShader, fragmentShader);
 }
@@ -52,7 +52,7 @@ Resource* ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>
 
 	glAttachShader(shaderProgram->m_shaderProgram, vx->GetShaderID());
 
-	if (!fg)
+	if (fg)
 		glAttachShader(shaderProgram->m_shaderProgram, fg->GetShaderID());
 
 	glLinkProgram(shaderProgram->m_shaderProgram);

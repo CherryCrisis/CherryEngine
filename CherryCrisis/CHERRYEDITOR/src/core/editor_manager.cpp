@@ -116,8 +116,6 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_logDisplayer.Render();
     m_inspector.Render();
     HandleMenuBar();
-    HandleToolsWindow();
-    //HandleToolBar();
     HandleGameWindow();
     HandleEditorWindow();
     HandleGraphWindow(window);
@@ -170,49 +168,6 @@ void EditorManager::HandleDocking()
 
     ImGui::End();
 }
-void EditorManager::HandleToolBar() 
-{
-    ImGuiViewportP* viewport = (ImGuiViewportP*)(void*)ImGui::GetMainViewport();
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
-    float height = ImGui::GetFrameHeight();
-
-    if (ImGui::BeginViewportSideBar("##SecondaryMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
-        if (ImGui::BeginMenuBar()) {
-            ImGui::Text("Happy secondary menu bar");
-            ImGui::EndMenuBar();
-        }
-        ImGui::End();
-    }
-    /*
-    if (ImGui::BeginSecondMenuBar())
-    {
-        float size = ImGui::GetWindowHeight() - 4.f;
-
-        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f));
-
-        if (ImGui::ImageButton(engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
-        {
-            if (engine->isPlaying)
-            {
-                engine->Stop();
-            }
-            else
-            {
-                engine->Launch();
-            }
-        } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
-        {
-
-        } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
-        {
-
-        }
-        ImGui::EndMainMenuBar();
-    }
-    */
-}
 
 void EditorManager::HandleMenuBar() 
 {
@@ -261,24 +216,13 @@ void EditorManager::HandleMenuBar()
 
             ImGui::EndMenu();
         }
-        ImGui::EndMainMenuBar();
-    }
-}
-
-void EditorManager::HandleToolsWindow() 
-{
-    ImGuiWindowClass window_class;
-    window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_NoDockingOverMe;
-    ImGui::SetNextWindowClass(&window_class);
-    ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiCond_FirstUseEver);
-
-    if (ImGui::Begin("Tools", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus))
-    {
-        float size = ImGui::GetWindowHeight() / 2.f;
-        ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * .5f) - (size * 3 * .5f));
 
 
-        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
+        float size = ImGui::GetWindowHeight() - 4.f;
+
+        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f * 3.f));
+
+        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
             if (m_engine->isPlaying)
             {
@@ -289,18 +233,19 @@ void EditorManager::HandleToolsWindow()
                 m_logDisplayer.TryClearOnPlay();
                 m_engine->Launch();
             }
+
         } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
+        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
+        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         }
-    }
 
-    ImGui::End();
+        ImGui::EndMainMenuBar();
+    }
 }
 
 void EditorManager::HandleGameWindow() 

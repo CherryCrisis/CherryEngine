@@ -36,16 +36,12 @@ private:
     unsigned int m_gameViewTex = 0u;
 
     void HandleDocking();
-    void HandleToolsWindow();
     void HandleGameWindow();
     void HandleEditorWindow(unsigned int fbo = 0);
     void HandleGraphWindow(GLFWwindow* window);
     void HandleNotifications();
     
     void HandleMenuBar();
-
-    // !! WIP -- ISSUE #40
-    void HandleToolBar();
 
     void SendNotifiction(const char* title, const char* content, ImGuiToastType_ type, float displayTime = 3.f);
 
