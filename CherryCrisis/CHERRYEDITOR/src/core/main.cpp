@@ -7,7 +7,7 @@
 #include <imgui_impl_opengl3.h>
 #include "tahoma.h"
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 
 #define GLFW_INCLUDE_NONE
@@ -17,7 +17,6 @@
 #include "core/imgui_style.hpp"
 
 #include "stb_image.h"
-
 
 int main()
 {
@@ -38,7 +37,7 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
-    if (gladLoadGL() == 0)
+    if (gladLoaderLoadGL() == 0)
     {
         printf("gladLoaderLoadGL failed\n");
         return -1;

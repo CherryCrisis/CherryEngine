@@ -3,7 +3,9 @@
 #include "imgui_notify.h"
 #include <filesystem>
 
+#include <memory>
 #include <CherryHeader.h>
+#include "scene.hpp"
 
 #include "panels/asset_browser.hpp"
 #include "panels/log_displayer.hpp"
@@ -14,10 +16,9 @@ static const std::filesystem::path AssetPath = "../Assets";
 class EditorManager 
 {
 public:
-
+    std::shared_ptr<Scene> scene;
     EditorManager();
 	void DisplayEditorUI(GLFWwindow* window);
-
 
     void LinkEngine(Engine* engine);
 private:
@@ -30,17 +31,17 @@ private:
     
     Engine* m_engine;
 
+    unsigned int m_gameViewFBO = 0u;
+    unsigned int m_gameViewRBO = 0u;
+    unsigned int m_gameViewTex = 0u;
+
     void HandleDocking();
-    void HandleToolsWindow();
-    void HandleGameWindow(unsigned int fbo = 0);
+    void HandleGameWindow();
     void HandleEditorWindow(unsigned int fbo = 0);
     void HandleGraphWindow(GLFWwindow* window);
     void HandleNotifications();
     
     void HandleMenuBar();
-
-    // !! WIP -- ISSUE #40
-    void HandleToolBar();
 
     void SendNotifiction(const char* title, const char* content, ImGuiToastType_ type, float displayTime = 3.f);
 

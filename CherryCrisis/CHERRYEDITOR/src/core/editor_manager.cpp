@@ -9,7 +9,7 @@
 
 #include <imgui_impl_opengl3.h>
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <tchar.h>
 
 #define GLFW_INCLUDE_NONE
@@ -17,6 +17,9 @@
 
 #include <CherryHeader.h>
 #include "printer.hpp"
+#include "scene.hpp"
+#include "resourceManager.hpp"
+#include "render_manager.hpp"
 
 bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
 {
@@ -55,6 +58,8 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 
 EditorManager::EditorManager() 
 {
+    scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
+
     int null = 0;
 
     if (!LoadTextureFromFile("../Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
@@ -73,6 +78,28 @@ EditorManager::EditorManager()
     {
         std::cout << "failed to load Stop icon" << std::endl;
     }
+
+
+    glGenFramebuffers(1, &m_gameViewFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_gameViewFBO);
+
+    glGenTextures(1, &m_gameViewTex);
+    glBindTexture(GL_TEXTURE_2D, m_gameViewTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 800, 600, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_gameViewTex, 0);
+
+    // attach it to currently bound framebuffer object
+
+    glGenRenderbuffers(1, &m_gameViewRBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_gameViewRBO);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_gameViewRBO);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void EditorManager::LinkEngine(Engine* engine) 
@@ -89,8 +116,6 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_logDisplayer.Render();
     m_inspector.Render();
     HandleMenuBar();
-    HandleToolsWindow();
-    //HandleToolBar();
     HandleGameWindow();
     HandleEditorWindow();
     HandleGraphWindow(window);
@@ -143,49 +168,6 @@ void EditorManager::HandleDocking()
 
     ImGui::End();
 }
-void EditorManager::HandleToolBar() 
-{
-    ImGuiViewportP* viewport = (ImGuiViewportP*)(void*)ImGui::GetMainViewport();
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
-    float height = ImGui::GetFrameHeight();
-
-    if (ImGui::BeginViewportSideBar("##SecondaryMenuBar", viewport, ImGuiDir_Up, height, window_flags)) {
-        if (ImGui::BeginMenuBar()) {
-            ImGui::Text("Happy secondary menu bar");
-            ImGui::EndMenuBar();
-        }
-        ImGui::End();
-    }
-    /*
-    if (ImGui::BeginSecondMenuBar())
-    {
-        float size = ImGui::GetWindowHeight() - 4.f;
-
-        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f));
-
-        if (ImGui::ImageButton(engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
-        {
-            if (engine->isPlaying)
-            {
-                engine->Stop();
-            }
-            else
-            {
-                engine->Launch();
-            }
-        } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
-        {
-
-        } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
-        {
-
-        }
-        ImGui::EndMainMenuBar();
-    }
-    */
-}
 
 void EditorManager::HandleMenuBar() 
 {
@@ -234,24 +216,13 @@ void EditorManager::HandleMenuBar()
 
             ImGui::EndMenu();
         }
-        ImGui::EndMainMenuBar();
-    }
-}
-
-void EditorManager::HandleToolsWindow() 
-{
-    ImGuiWindowClass window_class;
-    window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar | ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_NoDockingOverMe;
-    ImGui::SetNextWindowClass(&window_class);
-    ImGui::SetNextWindowSize(ImVec2(500, 50), ImGuiCond_FirstUseEver);
-
-    if (ImGui::Begin("Tools", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBringToFrontOnFocus))
-    {
-        float size = ImGui::GetWindowHeight() / 2.f;
-        ImGui::SameLine((ImGui::GetWindowContentRegionMax().x * .5f) - (size * 3 * .5f));
 
 
-        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
+        float size = ImGui::GetWindowHeight() - 4.f;
+
+        ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f * 3.f));
+
+        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
             if (m_engine->isPlaying)
             {
@@ -259,23 +230,25 @@ void EditorManager::HandleToolsWindow()
             }
             else
             {
+                m_logDisplayer.TryClearOnPlay();
                 m_engine->Launch();
             }
+
         } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
+        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         } ImGui::SameLine();
-        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, 0))
+        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         }
-    }
 
-    ImGui::End();
+        ImGui::EndMainMenuBar();
+    }
 }
 
-void EditorManager::HandleGameWindow(unsigned int fbo) 
+void EditorManager::HandleGameWindow() 
 {
     if (!isGameOpened)
         return;
@@ -283,14 +256,35 @@ void EditorManager::HandleGameWindow(unsigned int fbo)
     ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Game", &isGameOpened))
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_gameViewFBO);
+        RenderManager::DrawScene();
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+        for (size_t i = 0; i < scene->m_entities.size(); i++)
+        {
+            Entity& entity = scene->m_entities[i];
+
+            if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
+            {
+                Vector3 position = entity.m_transform->GetPosition();
+
+                if (ImGui::DragFloat3("Position", position.data))
+                    entity.m_transform->SetPosition(position);
+
+                ImGui::TreePop();
+            }
+        }
+
         // Using a Child allow to fill all the space of the window.
         // It also alows customization
         ImGui::BeginChild("GameRender");
         // Get the size of the child (i.e. the whole draw size of the windows).
         ImVec2 wsize = ImGui::GetWindowSize();
         // Because I use the texture from OpenGL, I need to invert the V from the UV.
-        ImGui::Image((ImTextureID)fbo, wsize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID)m_gameViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::EndChild();
+
     }
     ImGui::End();
 }

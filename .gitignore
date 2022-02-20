@@ -1,3 +1,5 @@
+!x64/Debug/imgui.ini
+!x64/Release/imgui.ini
 x64
 *.user
 .vs
@@ -5,5 +7,6 @@ x64
 *.o
 *.d
 
-imgui.ini
 .vscode
+
+
