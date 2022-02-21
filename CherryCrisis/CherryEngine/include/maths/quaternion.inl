@@ -1,5 +1,6 @@
 #include <cmath>
 
+
 namespace CCMaths
 {
 	inline Quaternion Quaternion::operator+(const Quaternion& rhs) const
@@ -184,7 +185,7 @@ namespace CCMaths
 
 	inline Matrix4 Quaternion::ToMatrix(const Quaternion& in)
 	{
-		Matrix4 result = Matrix4::Identity();
+		Matrix4 result = Matrix4::Identity;
 
 		float x2 = 2 * in.x * in.x;
 		float y2 = 2 * in.y * in.y;
@@ -232,7 +233,7 @@ namespace CCMaths
 		else
 		{
 			// Angle is 0
-			outAxis =  Vector3::XAxis();
+			outAxis =  Vector3::XAxis;
 		}
 	}
 
@@ -256,7 +257,7 @@ namespace CCMaths
 
 	inline Quaternion Quaternion::FromEuler(const Vector3& eulerAngles)
 	{
-		return Quaternion::FromEuler(eulerAngles.z, eulerAngles.x, eulerAngles.y);
+		return Quaternion::FromEuler(eulerAngles.roll, eulerAngles.pitch, eulerAngles.yaw);
 	}
 
 	inline Quaternion Quaternion::FromAxisAngle(const Vector3& inAxis, const float inAngle)

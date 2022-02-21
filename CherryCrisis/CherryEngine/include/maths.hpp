@@ -9,6 +9,7 @@ namespace CCMaths
     constexpr static float tau = 6.283185307f;
     constexpr static float pi = 3.141592653f;
 
+    //! Function
     inline float ToRadians(float angle) { return angle * CCMaths::pi / 180.f; }
     inline float ToDegrees(float angle) { return angle * 180.f / CCMaths::pi; }
     inline float Cos(float rad) { return std::cos(rad); }
