@@ -32,7 +32,7 @@ std::vector<Entity> ModelBase::GenerateEntities(Entity& rootEntity)
     if (m_models.size() != 0 && m_rootNode != nullptr)
         GenerateEntitiesRecursive(m_rootNode, rootEntity, entities);
 
-    return std::move(entities);
+    return entities;
 }
 
 void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity, std::vector<Entity>& entities)

@@ -14,12 +14,12 @@ Scene* Scene::Create(const char* filePath)
 	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../Assets/backpack.obj", true);
 
 	Entity root;
-	std::vector<Entity> children = modelBase->GenerateEntities(root);
+	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
 
-	for (Entity& child : children)
+	for (const Entity& child : children)
 		root.m_transform->AddChildren(child.m_transform);
 
-	scene->m_entities.push_back(root);
+	scene->m_entities.push_back(std::move(root));
 
 	return scene;
 }

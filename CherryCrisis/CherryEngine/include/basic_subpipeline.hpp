@@ -36,8 +36,17 @@ public:
 		static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
 	}
 
+	template <typename RendererT>
+	void Remove(RendererT* toGenerate)
+	{
+		static_assert(false, "RendererT deletion is not implemented in BasicSubPipeline");
+	}
+
 	template <>
 	void Generate(ModelRenderer* toGenerate);
+
+	template <>
+	void Remove(ModelRenderer* toGenerate);
 
 	void Execute() override;
 };

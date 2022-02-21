@@ -14,7 +14,7 @@ ModelRenderer::ModelRenderer()
 
 ModelRenderer::~ModelRenderer()
 {
-	RemoveModel();
+//	RemoveModel();
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
@@ -32,7 +32,7 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 void ModelRenderer::RemoveModel()
 {
 	// TODO: Add pipeline remove
-	//RenderManager::instance()->UnsubscribeRenderer(this);
+	RenderManager::instance()->RemoveFromPipeline<BasicSubPipeline>(this);
 }
 
 void ModelRenderer::Draw()

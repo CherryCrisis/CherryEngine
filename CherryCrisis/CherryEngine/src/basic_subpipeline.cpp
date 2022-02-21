@@ -78,7 +78,8 @@ void BasicSubPipeline::Generate(ModelRenderer* toGenerate)
 		if (!albedoTexture)
 			return;
 
-		if (albedoTexture->m_gpuTexture) return;
+		if (albedoTexture->m_gpuTexture)
+			return;
 
 		// Albedo texture
 		GPUTextureBasic gpuTexture;
@@ -101,10 +102,19 @@ void BasicSubPipeline::Generate(ModelRenderer* toGenerate)
 
 }
 
+template <>
+void BasicSubPipeline::Remove(ModelRenderer* toGenerate)
+{
+	m_modelRenderers.erase(toGenerate);
+}
+
 void BasicSubPipeline::Execute()
 {
 	glEnable(GL_DEPTH_TEST);
 	glUseProgram(m_program->m_shaderProgram);
+
+	CCMaths::Matrix4 viewProj = Matrix4::Perspective(CCMaths::ToRadians(60.f), 4.f / 3.f, 0.001f, 1000.f);
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, false, viewProj.data);
 
 	for (ModelRenderer* modelRdr : m_modelRenderers)
 	{
@@ -114,26 +124,35 @@ void BasicSubPipeline::Execute()
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, false, modelMat.data);
 
-		CCMaths::Matrix4 viewProj = Matrix4::Perspective(CCMaths::ToRadians(60.f), 4.f / 3.f, 0.001f, 1000.f);
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, false, viewProj.data);
-
 		float albedo[3] = { 1.0f, 1.0f, 1.0f };
 		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoColor"), 1, albedo);
 
 		Model* model = modelRdr->m_model.get();
 
-		Material* material = model->m_material.get();
+		if (!model)
+			continue;
 
-		Texture* albedoTexture = material->albedoTexture.get();
-
-		auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, gpuAlbedoTexture->ID);
+		if (Material* material = model->m_material.get(); material)
+		{
+			if (Texture* albedoTexture = material->albedoTexture.get(); albedoTexture)
+			{
+				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture); gpuAlbedoTexture)
+				{
+					glActiveTexture(GL_TEXTURE0);
+					glBindTexture(GL_TEXTURE_2D, gpuAlbedoTexture->ID);
+				}
+			}
+		}
 
 		Mesh* mesh = model->m_mesh.get();
 
+		if (!mesh)
+			continue;
+
 		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(modelRdr->m_gpuMesh);
+
+		if (!gpuMesh)
+			continue;
 
 		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);

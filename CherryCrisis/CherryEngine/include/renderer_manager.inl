@@ -1,23 +1,39 @@
 #pragma once
 
+template <class SubPipelineT>
+constexpr SubPipelineT* RenderManager::GetSubpipeline()
+{
+	static_assert(std::is_base_of_v<ASubPipeline, SubPipelineT>, "SubPipelineT is not inherited of ASubPipeline");
+
+	const std::type_index typeID = typeid(SubPipelineT);
+
+	const auto& pipelineIt = m_existingSubpipelines.find(typeID);
+
+	if (pipelineIt == m_existingSubpipelines.end())
+		return nullptr;
+
+	return static_cast<SubPipelineT*>(pipelineIt->second);
+}
+
 template <class SubPipelineT, class RendererT>
 void RenderManager::GenerateFromPipeline(RendererT* renderer)
 {
-	static_assert(std::is_base_of_v<ASubPipeline, SubPipelineT>, "SubPipelineT is not of inherited of ASubPipeline");
+	SubPipelineT* subPipeline = GetSubpipeline<SubPipelineT>();
 
-	std::type_index typeID = typeid(RendererT);
-
-	const auto& pipelineIt = m_subpipelines.find(typeID);
-
-	SubPipelineT* currentPipeline = nullptr;
-
-	if (pipelineIt == m_subpipelines.end())
+	if (!subPipeline)
 	{
-		currentPipeline = new SubPipelineT(typeID.name());
-		m_subpipelines[typeID] = currentPipeline;
-	}
-	else
-		currentPipeline = static_cast<SubPipelineT*>(pipelineIt->second);
+		const std::type_index typeID = typeid(SubPipelineT);
 
-	currentPipeline->Generate(renderer);
+		subPipeline = new SubPipelineT(typeID.name());
+		m_existingSubpipelines[typeID] = subPipeline;
+	}
+
+	subPipeline->Generate(renderer);
+}
+
+template <class SubPipelineT, class RendererT>
+void RenderManager::RemoveFromPipeline(RendererT* renderer)
+{
+	if (SubPipelineT* subPipeline = GetSubpipeline<SubPipelineT>(); subPipeline)
+		subPipeline->Remove(renderer);
 }

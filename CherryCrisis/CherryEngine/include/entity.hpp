@@ -15,5 +15,6 @@ public:
 
 	//En attendant l'ECS !
 	Transform*		m_transform = new Transform();
-	ModelRenderer*  m_modelRenderer = new ModelRenderer();
+	// TODO: REMOVE THIS
+	std::shared_ptr<ModelRenderer>  m_modelRenderer = std::make_shared<ModelRenderer>();
 };
