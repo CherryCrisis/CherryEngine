@@ -21,22 +21,22 @@ namespace CCModelLoader
         ModelNode* modelNode = new ModelNode();
         modelNode->m_parentNode = parentModelNode;
 
+        aiVector3D trs[3];
+        node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
+
+        for (int i = 0; i < 3; ++i)
+        {
+            for (int comp = 0; comp < 3; ++comp)
+            {
+                modelNode->m_baseTRS[i].data[comp] = trs[i][comp];
+            }
+        }
+
         std::shared_ptr<Model> model;
         if (scene->mRootNode != node)
         {
-            aiVector3D trs[3];
-            node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
-
             model = resourceManager->AddResource<Model>(filepath, false, scene, node);
             models.push_back(model);
-
-            for (int i = 0; i < 3; ++i)
-            {
-                for (int comp = 0; comp < 3; ++comp)
-                {
-                    modelNode->m_baseTRS[i].data[comp] = trs[i][comp];
-                }
-            }
         }
 
         modelNode->m_model = model;

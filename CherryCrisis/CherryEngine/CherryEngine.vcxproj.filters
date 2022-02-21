@@ -500,7 +500,7 @@
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\maths.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
