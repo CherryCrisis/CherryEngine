@@ -499,5 +499,8 @@
     <ClCompile Include="src\basic_subpipeline.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\maths.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

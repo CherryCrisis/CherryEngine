@@ -17,7 +17,7 @@ private:
 	Transform* m_parent = nullptr;
 	std::vector<Transform*> m_children;
 
-	Matrix4 m_worldMatrix = Matrix4::Identity();
+	Matrix4 m_worldMatrix = Matrix4::Identity;
 
 	bool m_isDirty = true;
 
