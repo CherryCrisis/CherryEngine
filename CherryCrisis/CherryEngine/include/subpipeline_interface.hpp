@@ -16,5 +16,7 @@ public:
 		m_program = ResourceManager::GetInstance()->AddResource<ShaderProgram>(pipelineName, true, vert, frag);
 	}
 
+	virtual void Execute() = 0;
+
 	virtual ~ASubPipeline() = default;
 };

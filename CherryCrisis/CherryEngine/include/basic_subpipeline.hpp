@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_set>
+
 #include "subpipeline_interface.hpp"
 
 #include "model_renderer.hpp"
@@ -13,6 +15,8 @@
 
 class BasicSubPipeline : public ASubPipeline
 {
+	std::unordered_set<ModelRenderer*>	m_modelRenderers;
+
 public:
 	struct GPUMeshBasic : GPUMesh
 	{
@@ -32,15 +36,8 @@ public:
 		static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
 	}
 
-	template <typename RendererT>
-	void Consume(RendererT* toGenerate)
-	{
-		static_assert(false, "RendererT consumption is not implemented in BasicSubPipeline");
-	}
-
 	template <>
 	void Generate(ModelRenderer* toGenerate);
 
-	template <>
-	void Consume(ModelRenderer* toGenerate);
+	void Execute() override;
 };
