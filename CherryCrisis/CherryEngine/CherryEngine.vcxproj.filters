@@ -378,6 +378,12 @@
     <ClInclude Include="include\CherryMacros.h">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
+    <ClInclude Include="include\input_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\keyboard_context.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">

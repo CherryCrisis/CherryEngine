@@ -104,6 +104,8 @@
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\gl_manager.hpp" />
+    <ClInclude Include="include\input_manager.hpp" />
+    <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
     <ClInclude Include="include\maths\matrix3.hpp" />
