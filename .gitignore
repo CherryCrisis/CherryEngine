@@ -11,3 +11,4 @@ x64
 
 doc/*
 !doc/Doxyfile
+!doc/CCLogo.png

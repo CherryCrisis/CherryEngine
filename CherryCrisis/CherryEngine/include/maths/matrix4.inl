@@ -147,7 +147,7 @@ namespace CCMaths
 		};
 	}
 
-	inline Matrix4 Matrix4::Rotate(const Vector3& eulerAngles)
+	inline Matrix4 Matrix4::RotateZXY(const Vector3& eulerAngles)
 	{
 		return RotateZ(eulerAngles.roll) *
 			   RotateX(eulerAngles.pitch) *
@@ -159,6 +159,27 @@ namespace CCMaths
 		float cos = std::cos(rad);
 		float sin = std::sin(rad);
 
+		return Matrix4::RotateX(cos, sin);
+	}
+
+	inline Matrix4 Matrix4::RotateY(const float rad)
+	{
+		float cos = std::cos(rad);
+		float sin = std::sin(rad);
+
+		return Matrix4::RotateY(cos, sin);
+	}
+
+	inline Matrix4 Matrix4::RotateZ(const float rad)
+	{
+		float cos = std::cos(rad);
+		float sin = std::sin(rad);
+
+		return Matrix4::RotateZ(cos, sin);
+	}
+
+	inline Matrix4 Matrix4::RotateX(const float cos, const float sin)
+	{
 		return
 		{
 			1.f, 0.f, 0.f, 0.f,
@@ -168,11 +189,8 @@ namespace CCMaths
 		};
 	}
 
-	inline Matrix4 Matrix4::RotateY(const float rad)
+	inline Matrix4 Matrix4::RotateY(const float cos, const float sin)
 	{
-		float cos = std::cos(rad);
-		float sin = std::sin(rad);
-
 		return
 		{
 			cos, 0.f,-sin, 0.f,
@@ -182,11 +200,8 @@ namespace CCMaths
 		};
 	}
 
-	inline Matrix4 Matrix4::RotateZ(const float rad)
+	inline Matrix4 Matrix4::RotateZ(const float cos, const float sin)
 	{
-		float cos = std::cos(rad);
-		float sin = std::sin(rad);
-
 		return
 		{
 			cos, sin, 0.f, 0.f,
