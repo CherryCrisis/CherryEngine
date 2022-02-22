@@ -42,14 +42,8 @@ void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity,
 
     entity.m_transform->SetPosition(node->m_baseTRS[0]);
     entity.m_transform->SetRotation(node->m_baseTRS[1]);
+    entity.m_transform->SetScale(node->m_baseTRS[2]);
 
-    Vector3 aiScale = node->m_baseTRS[2];
-
-    // TO DO: find a way to remove this
-    if (aiScale.SquareLength() == 0.f)
-        aiScale = Vector3(1.f, 1.f, 1.f);
-
-    entity.m_transform->SetScale(aiScale);
     entity.m_transform->SetParent(parentEntity.m_transform);
 
     entities.push_back(entity);
