@@ -17,7 +17,10 @@ Scene* Scene::Create(const char* filePath)
 	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
 
 	for (const Entity& child : children)
+	{
+		scene->m_entities.push_back(std::move(child));
 		root.m_transform->AddChildren(child.m_transform);
+	}
 
 	scene->m_entities.push_back(std::move(root));
 

@@ -26,6 +26,4 @@ public:
 	void RemoveModel();
 
 	void Draw() override;
-
-	GPUMesh* m_gpuMesh = nullptr;
 };

@@ -30,6 +30,8 @@ private :
 	Mesh(const char* meshName) : Resource(meshName) {}
 
 public:
+	GPUMesh* m_gpuMesh = nullptr;
+
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
 

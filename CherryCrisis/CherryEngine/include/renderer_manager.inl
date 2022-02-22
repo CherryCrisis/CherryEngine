@@ -15,20 +15,26 @@ constexpr SubPipelineT* RenderManager::GetSubpipeline()
 	return static_cast<SubPipelineT*>(pipelineIt->second);
 }
 
-template <class SubPipelineT, class RendererT>
-void RenderManager::GenerateFromPipeline(RendererT* renderer)
+template <class SubPipelineT>
+constexpr SubPipelineT* RenderManager::LoadSubpipeline()
 {
 	SubPipelineT* subPipeline = GetSubpipeline<SubPipelineT>();
 
-	if (!subPipeline)
-	{
-		const std::type_index typeID = typeid(SubPipelineT);
+	if (subPipeline)
+		return subPipeline;
 
-		subPipeline = new SubPipelineT(typeID.name());
-		m_existingSubpipelines[typeID] = subPipeline;
-	}
+	const std::type_index typeID = typeid(SubPipelineT);
 
-	subPipeline->Generate(renderer);
+	subPipeline = new SubPipelineT(typeID.name());
+	m_existingSubpipelines[typeID] = subPipeline;
+
+	return subPipeline;
+}
+
+template <class SubPipelineT, class RendererT>
+void RenderManager::GenerateFromPipeline(RendererT* renderer)
+{
+	LoadSubpipeline<SubPipelineT>()->Generate(renderer);
 }
 
 template <class SubPipelineT, class RendererT>

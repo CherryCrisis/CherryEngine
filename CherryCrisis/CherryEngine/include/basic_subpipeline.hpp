@@ -2,16 +2,15 @@
 
 #include <unordered_set>
 
+#include <glad/gl.h>
+
 #include "subpipeline_interface.hpp"
 
-#include "model_renderer.hpp"
-#include "transform.hpp"
 #include "texture.hpp"
-#include "model.hpp"
-#include "maths.hpp"
 #include "mesh.hpp"
 
-#include <glad/gl.h>
+class ModelRenderer;
+class Material;
 
 class BasicSubPipeline : public ASubPipeline
 {
@@ -25,13 +24,13 @@ public:
 
 	struct GPUTextureBasic : GPUTexture
 	{
-		GLuint ID;
+		GLuint ID = 0u;
 	};
 
 	BasicSubPipeline(const char* name);
 
 	template <typename RendererT>
-	void Generate(RendererT* toGenerate)
+	int Generate(RendererT* toGenerate)
 	{
 		static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
 	}
@@ -43,7 +42,16 @@ public:
 	}
 
 	template <>
-	void Generate(ModelRenderer* toGenerate);
+	int Generate(ModelRenderer* toGenerate);
+
+	template <>
+	int Generate(Mesh* toGenerate);
+
+	template <>
+	int Generate(Material* toGenerate);
+
+	template <>
+	int Generate(Texture* toGenerate);
 
 	template <>
 	void Remove(ModelRenderer* toGenerate);

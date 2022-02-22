@@ -24,6 +24,9 @@ private:
 	template <class SubPipelineT>
 	constexpr SubPipelineT* GetSubpipeline();
 
+	template <class SubPipelineT>
+	constexpr SubPipelineT* LoadSubpipeline();
+
 public:
 	RenderManager();
 
