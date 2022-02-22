@@ -8,9 +8,9 @@ namespace CCMaths
 	{
 		union
 		{
-			struct { float x, y, z; };				//!< Struct of the four components of the Vector3
-			struct { float r, g, b; };				//!< Struct of the four components of the Vector3
-			struct { float roll, pitch, yaw; };		//!< Struct of the four components of the Vector3
+			struct { float x, y, z; };				//!< Struct of the three components of the Vector3
+			struct { float r, g, b; };				//!< Struct of the three components of the Vector3
+			struct { float roll, pitch, yaw; };		//!< Struct of the three components of the Vector3
 
 			float data[3];							//!< Pointer on the Vector3's data
 
@@ -30,11 +30,11 @@ namespace CCMaths
 		Vector3()
 			:x(0.f), y(0.f), z(0.f) {}
 
-		//! Construct the Vector3 with the four components equal to the given value
+		//! Construct the Vector3 with the three components equal to the given value
 		Vector3(const float value)
 			:x(value), y(value), z(value) {}
 
-		//! Construct the Vector3 with the four given members
+		//! Construct the Vector3 with the three given members
 		Vector3(const float x, const float y, const float z)
 			: x(x), y(y), z(z) {}
 
