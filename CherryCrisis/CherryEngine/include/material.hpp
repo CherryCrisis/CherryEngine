@@ -17,7 +17,7 @@ class Material : public Resource
 {
 private:
 	Vector4 m_albedo;
-	float	m_shininess;
+	float	m_shininess = 0.f;
 
 	//materialName = modelPath\name
 	Material(const char* materialName) : Resource(materialName) {}

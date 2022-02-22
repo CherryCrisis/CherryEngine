@@ -387,6 +387,12 @@
     <ClInclude Include="include\light_component.hpp">
       <Filter>Fichiers d%27en-tête\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\camera_component.hpp">
+      <Filter>Fichiers d%27en-tête\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\camera.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -515,6 +521,9 @@
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\light_component.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera_component.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>

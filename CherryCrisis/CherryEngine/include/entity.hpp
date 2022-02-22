@@ -7,6 +7,7 @@
 #include "transform.hpp"
 #include "model_renderer.hpp"
 #include "light_component.hpp"
+#include "camera_component.hpp"
 
 class CCENGINE_API Entity
 {
@@ -15,8 +16,10 @@ public:
 	~Entity();
 
 	//En attendant l'ECS !
+	// TODO: systeme de components
 	Transform*				m_transform = new Transform();
-	LightComponent*			m_light = nullptr;
+	CameraComponent*		m_cameraComp = nullptr;
+	LightComponent*			m_lightComp = nullptr;
 	// TODO: REMOVE THIS
 	std::shared_ptr<ModelRenderer>  m_modelRenderer = std::make_shared<ModelRenderer>();
 };

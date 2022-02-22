@@ -11,7 +11,6 @@ out vec2 vUV;
 out vec3 vNormal;
 out vec3 vFragPosition;
 
-
 void main()
 {
     vUV = aUV;
@@ -19,9 +18,9 @@ void main()
 
 	vNormal = transpose(inverse(mat3(uModel))) * aNormal;
 
-    vec4 pos4 = uModel * vec4(aPosition, 1.0);
+    vec4 fragPos = uModel * vec4(aPosition, 1.0);
 
-	vFragPosition = vec3(pos4);
+	vFragPosition = vec3(fragPos);
 
-    gl_Position = uViewProjection * pos4;
+    gl_Position = uViewProjection * fragPos;
 }

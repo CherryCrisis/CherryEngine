@@ -31,7 +31,20 @@ namespace CCMaths
 		Matrix4 rhsT = Transpose(rhs);
 		Matrix4 out = {};
 
-		for (int i = 0; i < 4; ++i)
+		for (int c = 0; c < 4; ++c)
+		{
+			for (int r = 0; r < 4; ++r)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					out.row[c].data[r] += this->row[i].data[r] * rhs.row[c].data[i];
+				}
+			}
+		}
+
+		return out;
+
+		/*for (int i = 0; i < 4; ++i)
 		{
 			for (int j = 0; j < 4; ++j)
 			{
@@ -39,7 +52,7 @@ namespace CCMaths
 			}
 		}
 
-		return out;
+		return out;*/
 	}
 
 	inline Matrix4& Matrix4::operator*=(const float rhs)
@@ -149,9 +162,12 @@ namespace CCMaths
 
 	inline Matrix4 Matrix4::RotateZXY(const Vector3& eulerAngles)
 	{
-		return RotateZ(eulerAngles.roll) *
-			   RotateX(eulerAngles.pitch) *
-			   RotateY(eulerAngles.yaw);
+		return RotateZ(eulerAngles.yaw) * RotateX(eulerAngles.roll) * RotateY(eulerAngles.pitch);
+	}
+
+	inline Matrix4 Matrix4::RotateYXZ(const Vector3& eulerAngles)
+	{
+		return RotateY(eulerAngles.pitch) * RotateX(eulerAngles.roll) * RotateZ(eulerAngles.yaw);
 	}
 
 	inline Matrix4 Matrix4::RotateX(const float rad)
@@ -216,7 +232,7 @@ namespace CCMaths
 		return
 		{
 			(Near * 2.f) / (Right - Left),   0.f,                              0.f,                               0.f,
-			0.f,                             (Near * 2.f) / (Top - Bottom),  0.f,                               0.f,
+			0.f,                             (Near * 2.f) / (Top - Bottom),    0.f,                               0.f,
 			(Right + Left) / (Right - Left), (Top + Bottom) / (Top - Bottom), -(Far + Near) / (Far - Near),      -1.f,
 			0.f,                             0.f,                             -(Far * Near * 2.f) / (Far - Near), 0.f
 		};

@@ -59,11 +59,7 @@ Matrix4 Transform::GetWorldMatrix()
 
 	m_isDirty = false;
 
-	Matrix4 rot = Matrix4::RotateZ(m_rotation.yaw)*
-				  Matrix4::RotateX(m_rotation.roll) *
-	Matrix4::RotateY(m_rotation.pitch);
-
-	m_worldMatrix = Matrix4::Scale(m_scale) * rot * Matrix4::Translate(m_position);
+	m_worldMatrix = Matrix4::Translate(m_position) * Matrix4::RotateZXY(m_rotation) * Matrix4::Scale(m_scale);
 
 	if (!m_parent)
 		return m_worldMatrix;

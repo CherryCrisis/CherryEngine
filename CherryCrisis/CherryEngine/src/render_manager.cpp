@@ -71,7 +71,8 @@ void RenderManager::DrawScene()
 {
 	RenderManager* RM = instance();
 	
-	if (RM->m_existingSubpipelines.size() > 0)
+    // TODO: Move this
+	if (RM->m_orderedPipeline.size() == 0 && RM->m_existingSubpipelines.size() > 0)
 		InitializePipeline(DefaultRenderingPipeline());
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);

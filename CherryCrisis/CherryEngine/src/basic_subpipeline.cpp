@@ -1,5 +1,6 @@
 #include "basic_subpipeline.hpp"
 
+#include "camera_component.hpp"
 #include "model_renderer.hpp"
 #include "transform.hpp"
 #include "model.hpp"
@@ -13,9 +14,21 @@ BasicSubPipeline::BasicSubPipeline(const char* name)
 template <>
 int BasicSubPipeline::Generate(Light* toGenerate)
 {
+	if (!toGenerate)
+		return -1;
+
 	m_lights.insert(toGenerate);
 
 	return 1;
+}
+
+template <>
+int BasicSubPipeline::Generate(CameraComponent* toGenerate)
+{
+	if (!toGenerate)
+		return -1;
+
+	m_camera = toGenerate;
 }
 
 template <>
@@ -153,13 +166,25 @@ void BasicSubPipeline::Remove(Light* toGenerate)
 	m_lights.erase(toGenerate);
 }
 
+template <>
+void BasicSubPipeline::Remove(CameraComponent* toGenerate)
+{
+	m_camera = nullptr;
+}
+
 void BasicSubPipeline::Execute()
 {
 	glEnable(GL_DEPTH_TEST);
 	glUseProgram(m_program->m_shaderProgram);
 
-	CCMaths::Matrix4 viewProj = Matrix4::Perspective(CCMaths::ToRadians(60.f), 4.f / 3.f, 0.1f, 100.f);
-	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, false, viewProj.data);
+	if (m_camera)
+	{
+		CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera->m_camera.fovY, m_camera->m_camera.aspect, m_camera->m_camera.near, m_camera->m_camera.far);
+		CCMaths::Matrix4 view = Matrix4::RotateYXZ(-m_camera->m_transform->GetRotation()) * Matrix4::Translate(m_camera->m_transform->GetPosition());
+
+		CCMaths::Matrix4 viewProjection = projection * view;
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
+	}
 
 	size_t lightID = 0u;
 	for (Light* light : m_lights)
@@ -167,9 +192,13 @@ void BasicSubPipeline::Execute()
 		std::string count = "[" + std::to_string(lightID) + "]";
 		std::string lightIdentifier = "uLights" + count;
 
+		std::string pointString = lightIdentifier + ".isPoint";
+		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, pointString.c_str());
+		glUniform1i(pointLoc, light->m_isPoint);
+
 		std::string posString = lightIdentifier + ".position";
 		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, posString.c_str());
-		glUniform4fv(posLoc, 1, light->m_position.data);
+		glUniform3fv(posLoc, 1, light->m_position.data);
 
 		std::string diffuseString = lightIdentifier + ".diffuse";
 		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, diffuseString.c_str());
@@ -184,7 +213,7 @@ void BasicSubPipeline::Execute()
 			continue;
 
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, false, modelMat.data);
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		float albedo[3] = { 1.0f, 1.0f, 1.0f };
 		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoColor"), 1, albedo);
@@ -194,11 +223,11 @@ void BasicSubPipeline::Execute()
 		if (!model)
 			continue;
 
-		if (Material* material = model->m_material.get(); material)
+		if (Material* material = model->m_material.get())
 		{
-			if (Texture* albedoTexture = material->albedoTex.get(); albedoTexture)
+			if (Texture* albedoTexture = material->albedoTex.get())
 			{
-				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture); gpuAlbedoTexture)
+				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture))
 					glBindTextureUnit(0, gpuAlbedoTexture->ID);
 			}
 		}

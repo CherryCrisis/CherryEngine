@@ -10,6 +10,7 @@
 #include "light.hpp"
 #include "mesh.hpp"
 
+class CameraComponent;
 class ModelRenderer;
 class Material;
 
@@ -17,6 +18,8 @@ class BasicSubPipeline : public ASubPipeline
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
+	
+	CameraComponent* m_camera = nullptr;
 
 public:
 	struct GPUMeshBasic : GPUMesh
@@ -47,6 +50,9 @@ public:
 	int Generate(Light* toGenerate);
 
 	template <>
+	int Generate(CameraComponent* toGenerate);
+
+	template <>
 	int Generate(ModelRenderer* toGenerate);
 
 	template <>
@@ -57,6 +63,9 @@ public:
 
 	template <>
 	int Generate(Texture* toGenerate);
+
+	template <>
+	void Remove(CameraComponent* toGenerate);
 
 	template <>
 	void Remove(ModelRenderer* toGenerate);

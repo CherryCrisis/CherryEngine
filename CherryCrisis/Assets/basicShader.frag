@@ -16,10 +16,11 @@ struct Material
 
 struct Light
 {
-	vec4	position;
-	vec3	ambient;
-	vec3	diffuse;
-	vec3	specular;
+	bool isPoint;
+	vec3 position;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
 };
 
 #define NBR_LIGHTS 8
@@ -40,8 +41,10 @@ void getLightColor(out vec3 ambient, out vec3 diffuse, out vec3 specular)
 
 	for (int i = 0; i < NBR_LIGHTS; i++)
 	{
+		Light light = uLights[i];
+
 		// Get light direction, if the light is a point light or a directionnal light
-		vec3 lightDir = uLights[i].position.xyz - vFragPosition * uLights[i].position.w;
+		vec3 lightDir = light.position.xyz - float(light.isPoint) * vFragPosition;
 	
 		// Compute the light direction and the distance between the fragment and the light
 		float distance = length(lightDir);
@@ -56,11 +59,20 @@ void getLightColor(out vec3 ambient, out vec3 diffuse, out vec3 specular)
 		ambient += uLights[i].ambient;
 
 		// Compute diffuse
-		diffuse += max(NdotL, 0.0) * uLights[i].diffuse;
+		diffuse += max(NdotL, 0.0) * light.diffuse;
 
 		// Compute specular
-		vec3 reflectDir = 2.0 * NdotL * normal - lightDir;  
-		specular += pow(max(dot(viewDir, reflectDir), 0.0), uMaterial.shininess) * uLights[i].specular;
+		#ifdef BLINN_PHONG
+			// Blinn phong
+			vec3 halfwayDir = normalize(lightDir - viewDir);
+			float dotValue = dot(normal, halfwayDir);
+		#else
+			// Phong
+			vec3 reflectDir = lightDir - 2.0 * NdotL * normal; 
+			float dotValue = dot(viewDir, reflectDir);
+		#endif
+
+		specular += pow(max(dot(viewDir, reflectDir), 0.0), uMaterial.shininess) * light.specular;
 	}
 }
 

@@ -23,11 +23,12 @@ Scene* Scene::Create(const char* filePath)
 		root.m_transform->AddChildren(child.m_transform);
 	}
 
-	Entity light;
-	light.m_light = new LightComponent();
-	scene->m_entities.push_back(std::move(light));
+	Entity& light = scene->m_entities.emplace_back();
+	light.m_lightComp = new LightComponent();
 
-
+	Entity& camera = scene->m_entities.emplace_back();
+	camera.m_cameraComp = new CameraComponent();
+	camera.m_cameraComp->m_transform = camera.m_transform;
 
 	return scene;
 }
