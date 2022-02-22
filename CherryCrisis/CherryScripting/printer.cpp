@@ -13,5 +13,6 @@ void Printer::Update()
 {
 	Debug* debug = Debug::GetInstance();
 
-	debug->Log("Printer is running ...");
+	if (InputManager::instance()->GetKey(Keycode::E)) 
+		debug->Log("Printer is running ...");
 }
