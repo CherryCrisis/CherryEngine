@@ -8,6 +8,8 @@
 #include "maths/matrix4.hpp"
 #include "maths/quaternion.hpp"
 
+
+//! \brief #include <maths.hpp>
 namespace CCMaths
 {
     constexpr static float TAU = 6.283185307f;

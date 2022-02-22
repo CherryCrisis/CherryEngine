@@ -45,7 +45,7 @@ namespace CCMaths
 		*	\return Matrix4 \b out
 		* 
 		*	\sa operator*=(const Matrix4&)
-		*	\sa operator*(const float&) const
+		*	\sa operator*(const float) const
 		*	\sa operator*=(const float)
 		*/
 		inline Matrix4 operator*(const Matrix4& rhs) const;
