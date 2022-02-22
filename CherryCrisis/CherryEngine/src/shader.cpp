@@ -50,6 +50,4 @@ unsigned int Shader::CompileShader(EShader shaderType, const char** shaderStr)
 	}
 
 	return shader;
-
-	return 0;
 }

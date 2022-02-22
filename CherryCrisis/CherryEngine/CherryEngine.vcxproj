@@ -99,11 +99,14 @@
     <ClInclude Include="include\CherryHeader.h" />
     <ClInclude Include="include\CherryMacros.h" />
     <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\cubemap.hpp" />
     <ClInclude Include="include\debug.hpp" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\gl_manager.hpp" />
+    <ClInclude Include="include\light.hpp" />
+    <ClInclude Include="include\light_component.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
     <ClInclude Include="include\maths\matrix3.hpp" />
@@ -154,10 +157,12 @@
     <ClCompile Include="externals\src\gl.c" />
     <ClCompile Include="externals\src\stb_image.cpp" />
     <ClCompile Include="src\basic_subpipeline.cpp" />
+    <ClCompile Include="src\cubemap.cpp" />
     <ClCompile Include="src\debug.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\light_component.cpp" />
     <ClCompile Include="src\material.cpp" />
     <ClCompile Include="src\maths.cpp" />
     <ClCompile Include="src\mesh.cpp" />

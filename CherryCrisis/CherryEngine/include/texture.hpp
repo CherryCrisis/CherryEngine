@@ -9,9 +9,9 @@ class Texture : public Resource
 private:
     Texture(const char* texturePath);
 
-    int     m_width;
-    int     m_height;
-    void*   m_data;
+    int     m_width = 0;
+    int     m_height = 0;
+    void*   m_data = nullptr;
 
 public:
     GPUTexture* m_gpuTexture = nullptr;

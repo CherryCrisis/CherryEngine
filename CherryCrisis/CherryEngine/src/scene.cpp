@@ -15,6 +15,7 @@ Scene* Scene::Create(const char* filePath)
 
 	Entity root;
 	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
+	scene->m_entities.push_back(std::move(root));
 
 	for (const Entity& child : children)
 	{
@@ -22,7 +23,11 @@ Scene* Scene::Create(const char* filePath)
 		root.m_transform->AddChildren(child.m_transform);
 	}
 
-	scene->m_entities.push_back(std::move(root));
+	Entity light;
+	light.m_light = new LightComponent();
+	scene->m_entities.push_back(std::move(light));
+
+
 
 	return scene;
 }

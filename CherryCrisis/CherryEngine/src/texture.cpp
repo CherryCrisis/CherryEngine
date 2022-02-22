@@ -3,7 +3,7 @@
 #include <stb_image.h>
 
 Texture::Texture(const char* texturePath)
-    : Resource(texturePath), m_width(0), m_height(0), m_data(0)
+    : Resource(texturePath)
 {
 
 }

@@ -17,12 +17,16 @@ class Material : public Resource
 {
 private:
 	Vector4 m_albedo;
+	float	m_shininess;
 
 	//materialName = modelPath\name
 	Material(const char* materialName) : Resource(materialName) {}
 public:
-	std::shared_ptr<Texture> ambientTexture;
-	std::shared_ptr<Texture> albedoTexture;
+	std::shared_ptr<Texture> ambientTex;
+	std::shared_ptr<Texture> albedoTex;
+	std::shared_ptr<Texture> specuarTex;
+	std::shared_ptr<Texture> emissiveTex;
+	std::shared_ptr<Texture> normalMap;
 
 	~Material();
 

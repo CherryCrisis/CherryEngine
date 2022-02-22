@@ -11,6 +11,14 @@ BasicSubPipeline::BasicSubPipeline(const char* name)
 }
 
 template <>
+int BasicSubPipeline::Generate(Light* toGenerate)
+{
+	m_lights.insert(toGenerate);
+
+	return 1;
+}
+
+template <>
 int BasicSubPipeline::Generate(ModelRenderer* toGenerate)
 {
 	Model* model = toGenerate->m_model.get();
@@ -96,7 +104,7 @@ int BasicSubPipeline::Generate(Material* toGenerate)
 		return -1;
 
 	// Albedo texture
-	if (Texture* albedoTexture = toGenerate->albedoTexture.get())
+	if (Texture* albedoTexture = toGenerate->albedoTex.get())
 		Generate(albedoTexture);
 
 	return 1;
@@ -139,6 +147,12 @@ void BasicSubPipeline::Remove(ModelRenderer* toGenerate)
 	m_modelRenderers.erase(toGenerate);
 }
 
+template <>
+void BasicSubPipeline::Remove(Light* toGenerate)
+{
+	m_lights.erase(toGenerate);
+}
+
 void BasicSubPipeline::Execute()
 {
 	glEnable(GL_DEPTH_TEST);
@@ -146,6 +160,23 @@ void BasicSubPipeline::Execute()
 
 	CCMaths::Matrix4 viewProj = Matrix4::Perspective(CCMaths::ToRadians(60.f), 4.f / 3.f, 0.1f, 100.f);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, false, viewProj.data);
+
+	size_t lightID = 0u;
+	for (Light* light : m_lights)
+	{
+		std::string count = "[" + std::to_string(lightID) + "]";
+		std::string lightIdentifier = "uLights" + count;
+
+		std::string posString = lightIdentifier + ".position";
+		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, posString.c_str());
+		glUniform4fv(posLoc, 1, light->m_position.data);
+
+		std::string diffuseString = lightIdentifier + ".diffuse";
+		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, diffuseString.c_str());
+		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
+
+		lightID++;
+	}
 
 	for (ModelRenderer* modelRdr : m_modelRenderers)
 	{
@@ -165,7 +196,7 @@ void BasicSubPipeline::Execute()
 
 		if (Material* material = model->m_material.get(); material)
 		{
-			if (Texture* albedoTexture = material->albedoTexture.get(); albedoTexture)
+			if (Texture* albedoTexture = material->albedoTex.get(); albedoTexture)
 			{
 				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture); gpuAlbedoTexture)
 					glBindTextureUnit(0, gpuAlbedoTexture->ID);

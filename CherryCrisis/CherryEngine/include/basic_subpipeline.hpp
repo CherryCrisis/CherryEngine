@@ -7,6 +7,7 @@
 #include "subpipeline_interface.hpp"
 
 #include "texture.hpp"
+#include "light.hpp"
 #include "mesh.hpp"
 
 class ModelRenderer;
@@ -15,6 +16,7 @@ class Material;
 class BasicSubPipeline : public ASubPipeline
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
+	std::unordered_set<Light*> m_lights;
 
 public:
 	struct GPUMeshBasic : GPUMesh
@@ -42,6 +44,9 @@ public:
 	}
 
 	template <>
+	int Generate(Light* toGenerate);
+
+	template <>
 	int Generate(ModelRenderer* toGenerate);
 
 	template <>
@@ -55,6 +60,9 @@ public:
 
 	template <>
 	void Remove(ModelRenderer* toGenerate);
+
+	template <>
+	void Remove(Light* toGenerate);
 
 	void Execute() override;
 };

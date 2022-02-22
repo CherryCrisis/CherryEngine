@@ -22,19 +22,29 @@ void HierarchyDisplayer::Render()
 
             if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
             {
+                if (entity.m_light)
+                {
+                    Light& light = entity.m_light->m_light;
+                    ImGui::DragFloat3("LightPosition", light.m_position.data, 0.5f);
+                    ImGui::DragFloat3("LightAmbient", light.m_ambient.data, 0.5f);
+                    ImGui::DragFloat3("LightDiffuse", light.m_diffuse.data, 0.5f);
+                    ImGui::DragFloat3("LightSpecular", light.m_specular.data, 0.5f);
+
+                }
+
                 Vector3 position = entity.m_transform->GetPosition();
 
-                if (ImGui::DragFloat3("Position", position.data))
+                if (ImGui::DragFloat3("Position", position.data, 0.5f))
                     entity.m_transform->SetPosition(position);
 
-                Vector3 rotation = entity.m_transform->GetRotation();
+                Vector3 rotation = entity.m_transform->GetRotation() * CCMaths::RAD2DEG;
 
-                if (ImGui::DragFloat3("Rotation", rotation.data))
-                    entity.m_transform->SetRotation(rotation);
+                if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
+                    entity.m_transform->SetRotation(rotation * CCMaths::DEG2RAD);
 
                 Vector3 scale = entity.m_transform->GetScale();
 
-                if (ImGui::DragFloat3("Scale", scale.data))
+                if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
                     entity.m_transform->SetScale(scale);
 
 
