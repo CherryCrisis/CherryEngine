@@ -8,7 +8,7 @@ public:
 	Resource(const std::string& filepath)
 		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
 
-	virtual ~Resource() {};
+	virtual ~Resource() = default;
 
 	const size_t GetHashId() const { return hashId; }
 	const std::string GetFilepath() const { return filepath; }

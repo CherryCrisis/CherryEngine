@@ -5,6 +5,7 @@
 #include "resourceManager.hpp"
 
 #include "basic_subpipeline.hpp"
+#include "skybox_pipeline.hpp"
 
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
@@ -65,6 +66,10 @@ RenderManager::RenderManager()
 	glDebugMessageCallback(debugCallback, NULL);
 
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+
+
+    // TODO: Remove this
+    LoadSubpipeline<SkyboxSubPipeline>();
 }
 
 void RenderManager::DrawScene()
@@ -98,5 +103,8 @@ RenderManager::PipelineDesc RenderManager::DefaultRenderingPipeline()
 	{
         ASubPipeline* lit = pipelines.find(typeid(BasicSubPipeline))->second;
         orderedPipelines.push_back(lit);
+
+        ASubPipeline* skybox = pipelines.find(typeid(SkyboxSubPipeline))->second;
+        orderedPipelines.push_back(skybox);
 	};
 }

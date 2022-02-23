@@ -393,6 +393,15 @@
     <ClInclude Include="include\camera.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\skybox_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skybox.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\element_mesh_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -447,6 +456,15 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="..\Assets\basicShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="include\mesh.inl">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </None>
+    <None Include="..\Assets\skyboxShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\Assets\skyboxShader.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
@@ -525,6 +543,15 @@
     </ClCompile>
     <ClCompile Include="src\camera_component.cpp">
       <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\element_mesh_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

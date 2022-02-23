@@ -4,7 +4,7 @@
 
 #include <glad/gl.h>
 
-#include "subpipeline_interface.hpp"
+#include "element_mesh_pipeline.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -14,7 +14,7 @@ class CameraComponent;
 class ModelRenderer;
 class Material;
 
-class BasicSubPipeline : public ASubPipeline
+class BasicSubPipeline : public ElementMeshPipeline
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
@@ -22,11 +22,6 @@ class BasicSubPipeline : public ASubPipeline
 	CameraComponent* m_camera = nullptr;
 
 public:
-	struct GPUMeshBasic : GPUMesh
-	{
-		GLuint VAO = 0u, VBO = 0u, EBO = 0u;
-	};
-
 	struct GPUTextureBasic : GPUTexture
 	{
 		GLuint ID = 0u;
@@ -54,9 +49,6 @@ public:
 
 	template <>
 	int Generate(ModelRenderer* toGenerate);
-
-	template <>
-	int Generate(Mesh* toGenerate);
 
 	template <>
 	int Generate(Material* toGenerate);

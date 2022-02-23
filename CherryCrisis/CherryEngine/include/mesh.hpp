@@ -21,6 +21,13 @@ struct Vertex
 	Vector3 bitangent;
 };
 
+enum class EMeshShape
+{
+	PLANE,
+	CUBE,
+	SPHERE,
+};
+
 struct GPUMesh { };
 
 class Mesh : public Resource
@@ -36,4 +43,13 @@ public:
 	std::vector<unsigned int>	m_indices;
 
 	static Resource* Create(const char* modelPath, const aiMesh* assimpMesh);
+
+	static Resource* CreateCube(const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes);
+
+	template <typename... Args>
+	static Resource* Create(const char* shapeName, EMeshShape shapeType, Args... args);
+
+	static Resource* Create(const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 };
+
+#include "mesh.inl"

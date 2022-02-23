@@ -6,6 +6,13 @@ struct GPUCubemap { };
 
 class Cubemap : public Resource
 {
-    static Resource* Create(const char* texturePath);
+private:
+    Cubemap(const char* name)
+        : Resource(name)
+    {
 
+    }
+
+public:
+    static Resource* Create(const char* texturePath);
 };
