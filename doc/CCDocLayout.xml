@@ -3,7 +3,7 @@
   <!-- Navigation index tabs for HTML output -->
   <navindex>
     <tab type="mainpage" visible="no" title=""/>
-	<tab type="user" url="https://bmarin00.wixsite.com/cherrycrisis" title="Cherry Crisis"/>
+	<tab type="user" url="https://bmarin00.wixsite.com/cherrycrisis" title="Cherry Crisis Website"/>
     <tab type="pages" visible="yes" title="" intro=""/>
     <tab type="modules" visible="yes" title="" intro=""/>
     <tab type="namespaces" visible="no" title="">
