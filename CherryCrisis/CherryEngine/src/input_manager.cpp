@@ -6,25 +6,26 @@
 
 #include <debug.hpp>
 #include <string>
-
+#include <iostream>
 
 
 template <>
 InputManager* Singleton<InputManager>::currentInstance = nullptr;
 
+
 bool InputManager::GetKey(Keycode key)
 {
-	return m_keys[key].m_isPressed;
+	return m_keys[key].m_isDown;
 }
 
 bool InputManager::GetKeyDown(Keycode key)
 {
-	return false;
+	return m_keys[key].m_isDown && !m_keys[key].m_wasPressed;
 }
 
 bool InputManager::GetKeyUp(Keycode key)
 {
-	return false;
+	return !m_keys[key].m_isDown && m_keys[key].m_wasPressed;
 }
 
 float InputManager::GetAxis(const char* axisName) 
@@ -39,13 +40,20 @@ void InputManager::SetContext(KeyboardContext* context)
 
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {
+	if (key == 2)	return;
 	// action = 1 if pressed and 0 if released 
 	//Input input = m_keys[key];
-	m_keys[(Keycode)key].m_isPressed = action;
+	Input& input = m_keys[(Keycode)key];
 
-	std::string str = std::to_string(key);
+	input.m_isDown = action;
+}
 
-	if (action)
-		Debug::GetInstance()->Log(str.c_str());
-	//Add Event Broadcast
+void InputManager::UpdateKeys() 
+{
+	for (auto& key : m_keys) 
+	{
+		Input& input = key.second;
+
+		input.m_wasPressed = input.m_isDown;
+	}
 }

@@ -89,6 +89,7 @@ int main()
 
     while (glfwWindowShouldClose(window) == false)
     {
+        InputManager::instance()->UpdateKeys();
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

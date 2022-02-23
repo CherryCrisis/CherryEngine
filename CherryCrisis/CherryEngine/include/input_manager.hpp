@@ -23,8 +23,9 @@ private:
 	class Input 
 	{
 	public:
-		bool   m_isPressed     = false;
-		bool   m_wasPressed    = false;
+		bool   m_isDown        = false;
+		bool   m_wasPressed	   = false;
+
 		Event* m_callbackEvent = nullptr;
 	};
 
@@ -45,6 +46,9 @@ private:
 	//list of axis (can be added by the user via the editor (internally modifying game keyboard context))
 	std::unordered_map<const char*, Axis> m_axes; //<const char* = axisName, Axis = axis class>
 	
+	//lsit of keys just pressed
+	std::unordered_map<Keycode, bool> m_framePressedKeys;
+
 	// Context (presets of differents callbacks and axes)
 	KeyboardContext* m_context = nullptr;
 public:
@@ -57,6 +61,7 @@ public:
 	void SetContext(KeyboardContext* context);
 
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	void UpdateKeys();
 	/*
 	void InputCallback(GLFWWindow int) 
 	{
