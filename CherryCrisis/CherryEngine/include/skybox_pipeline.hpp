@@ -4,12 +4,21 @@
 
 #include "element_mesh_pipeline.hpp"
 
-#include "skybox.hpp"
+#include "cubemap.hpp"
+
+struct Skybox;
+struct CameraComponent;
 
 class SkyboxSubPipeline : public ElementMeshPipeline
 {
 private:
 	Skybox* m_skybox = nullptr;
+	CameraComponent* m_cameraComp = nullptr;
+
+	struct GPUSkyboxCubemap : GPUCubemap
+	{
+		GLuint ID = 0u;
+	};
 
 public:
 	SkyboxSubPipeline(const char* name);
@@ -31,6 +40,12 @@ public:
 
 	template <>
 	void Remove(Skybox* toGenerate);
+
+	template <>
+	int Generate(CameraComponent* toGenerate);
+
+	template <>
+	void Remove(CameraComponent* toGenerate);
 
 	void Execute() override;
 };

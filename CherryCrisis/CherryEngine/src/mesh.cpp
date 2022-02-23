@@ -67,42 +67,47 @@ Resource* Mesh::CreateCube(const char* cubeName, float xHalfRes, float yHalfRes,
     std::vector<Vertex> vertices;
     vertices.reserve(8);
 
-    vertices.push_back(Vertex({-xHalfRes, yHalfRes,-zHalfRes}));//Point A 0
-    vertices.push_back(Vertex({-xHalfRes, yHalfRes, zHalfRes}));//Point B 1
-    vertices.push_back(Vertex({ xHalfRes, yHalfRes,-zHalfRes}));//Point C 2
-    vertices.push_back(Vertex({ xHalfRes, yHalfRes, zHalfRes}));//Point D 3
-
-    vertices.push_back(Vertex({-xHalfRes,-yHalfRes,-zHalfRes}));//Point E 4
-    vertices.push_back(Vertex({-xHalfRes,-yHalfRes, zHalfRes}));//Point F 5
-    vertices.push_back(Vertex({ xHalfRes,-yHalfRes,-zHalfRes}));//Point G 6
-    vertices.push_back(Vertex({ xHalfRes,-yHalfRes, zHalfRes}));//Point H 7
+    for (int i = 0; i < 8; i++)
+    {
+        Vertex vertex;
+        vertex.position.x = BoolSign(BoolPattern(i, 2)) * xHalfRes;
+        vertex.position.y = BoolSign(BoolPattern(i, 4)) *-yHalfRes;
+        vertex.position.z = BoolSign(BoolPattern(i, 1)) * zHalfRes;
+        vertices.push_back(vertex);
+    }
 
     std::vector<unsigned int> indices;
     indices.reserve(36);
 
     /*Above ABC,BCD*/
     indices.push_back(0); indices.push_back(1); indices.push_back(2);
-    indices.push_back(1); indices.push_back(2); indices.push_back(3);
+    //indices.push_back(1); indices.push_back(2); indices.push_back(3);
+    indices.push_back(3); indices.push_back(2); indices.push_back(1);
 
     /*Following EFG,FGH*/
-    indices.push_back(4); indices.push_back(5); indices.push_back(6);
+    //indices.push_back(4); indices.push_back(5); indices.push_back(6);
+    indices.push_back(6); indices.push_back(5); indices.push_back(4);
     indices.push_back(5); indices.push_back(6); indices.push_back(7);
 
     /*Left ABF,AEF*/
-    indices.push_back(0); indices.push_back(1); indices.push_back(5);
+    //indices.push_back(0); indices.push_back(1); indices.push_back(5);
+    indices.push_back(5); indices.push_back(1); indices.push_back(0);
     indices.push_back(0); indices.push_back(4); indices.push_back(5);
 
     /*Right side CDH,CGH*/
     indices.push_back(2); indices.push_back(3); indices.push_back(7);
-    indices.push_back(2); indices.push_back(6); indices.push_back(7);
+    //indices.push_back(2); indices.push_back(6); indices.push_back(7);
+    indices.push_back(7); indices.push_back(6); indices.push_back(2);
 
     /*ACG,AEG*/
     indices.push_back(0); indices.push_back(2); indices.push_back(6);
-    indices.push_back(0); indices.push_back(4); indices.push_back(6);
+    //indices.push_back(0); indices.push_back(4); indices.push_back(6);
+    indices.push_back(6); indices.push_back(4); indices.push_back(0);
 
     /*Behind BFH,BDH*/
     indices.push_back(1); indices.push_back(5); indices.push_back(7);
-    indices.push_back(1); indices.push_back(3); indices.push_back(7);
+    //indices.push_back(1); indices.push_back(3); indices.push_back(7);
+    indices.push_back(7); indices.push_back(3); indices.push_back(1);
 
     return Mesh::Create(cubeName, vertices, indices);
 }

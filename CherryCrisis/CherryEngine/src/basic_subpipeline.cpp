@@ -41,12 +41,10 @@ int BasicSubPipeline::Generate(ModelRenderer* toGenerate)
 
 	// Generate GPU mesh
 	{
-		if (Mesh* mesh = model->m_mesh.get())
-		{
-			ElementMeshPipeline::Generate(mesh);
+		if (ElementMeshPipeline::Generate(model->m_mesh.get()) == -1)
+			return -1;
 
-			m_modelRenderers.insert(toGenerate);
-		}
+		m_modelRenderers.insert(toGenerate);
 	}
 
 	// Generate GPU textures
@@ -123,6 +121,10 @@ void BasicSubPipeline::Remove(CameraComponent* toGenerate)
 void BasicSubPipeline::Execute()
 {
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	glCullFace(GL_BACK);
+
 	glUseProgram(m_program->m_shaderProgram);
 
 	if (m_camera)
