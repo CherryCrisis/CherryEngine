@@ -28,31 +28,18 @@ namespace CCMaths
 
 	inline Matrix4 Matrix4::operator*(const Matrix4& rhs) const
 	{
-		Matrix4 rhsT = Transpose(rhs);
+		Matrix4 lhsT = Transpose(*this);
 		Matrix4 out = {};
 
-		for (int c = 0; c < 4; ++c)
+		for (int i = 0; i < 4; ++i)
 		{
-			for (int r = 0; r < 4; ++r)
+			for (int j = 0; j < 4; ++j)
 			{
-				for (int i = 0; i < 4; ++i)
-				{
-					out.row[c].data[r] += this->row[i].data[r] * rhs.row[c].data[i];
-				}
+				out.row[i].data[j] = Vector4::Dot(lhsT.row[j], rhs.row[i]);
 			}
 		}
 
 		return out;
-
-		/*for (int i = 0; i < 4; ++i)
-		{
-			for (int j = 0; j < 4; ++j)
-			{
-				out.row[i].data[j] = Vector4::Dot(this->row[i], rhsT.row[j]);
-			}
-		}
-
-		return out;*/
 	}
 
 	inline Matrix4& Matrix4::operator*=(const float rhs)
