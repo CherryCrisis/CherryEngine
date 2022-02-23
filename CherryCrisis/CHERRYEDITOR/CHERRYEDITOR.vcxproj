@@ -32,10 +32,13 @@
     <ClCompile Include="src\core\frame_displayer.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\panels\asset_browser.cpp" />
+    <ClCompile Include="src\panels\build_displayer.cpp" />
     <ClCompile Include="src\panels\game_displayer.cpp" />
     <ClCompile Include="src\panels\hierarchy_displayer.cpp" />
     <ClCompile Include="src\panels\inspector.cpp" />
     <ClCompile Include="src\panels\log_displayer.cpp" />
+    <ClCompile Include="src\panels\preferences_displayer.cpp" />
+    <ClCompile Include="src\panels\project_settings_displayer.cpp" />
     <ClCompile Include="src\panels\scene_displayer.cpp" />
     <ClCompile Include="src\panels\toolbar.cpp" />
   </ItemGroup>
@@ -46,10 +49,13 @@
     <ClInclude Include="include\core\imgui_style.hpp" />
     <ClInclude Include="include\core\panel.hpp" />
     <ClInclude Include="include\panels\asset_browser.hpp" />
+    <ClInclude Include="include\panels\build_displayer.hpp" />
     <ClInclude Include="include\panels\game_displayer.hpp" />
     <ClInclude Include="include\panels\hierarchy_displayer.hpp" />
     <ClInclude Include="include\panels\inspector.hpp" />
     <ClInclude Include="include\panels\log_displayer.hpp" />
+    <ClInclude Include="include\panels\preferences_displayer.hpp" />
+    <ClInclude Include="include\panels\project_settings_displayer.hpp" />
     <ClInclude Include="include\panels\scene_displayer.hpp" />
     <ClInclude Include="include\panels\toolbar.hpp" />
   </ItemGroup>

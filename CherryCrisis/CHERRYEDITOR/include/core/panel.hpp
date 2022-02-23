@@ -8,6 +8,7 @@ public:
 
 	void Toggle(bool state) { m_isOpened = state; }
 
+	Panel(bool spawnOpened = true) : m_isOpened(spawnOpened) {}
 protected:
 
 	bool m_isOpened = true;

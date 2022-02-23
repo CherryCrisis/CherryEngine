@@ -6,5 +6,4 @@ class SceneDisplayer : public FrameDisplayer
 {
 public:
 	void Render() override;
-
 };

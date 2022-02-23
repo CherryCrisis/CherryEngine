@@ -87,6 +87,15 @@
     <ClCompile Include="src\panels\asset_browser.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\panels\preferences_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\project_settings_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\build_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -123,6 +132,15 @@
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\panels\hierarchy_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\preferences_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\project_settings_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\build_displayer.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
   </ItemGroup>
