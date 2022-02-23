@@ -11,10 +11,8 @@
 
 class KeyboardContext;
 class Event;
-struct GLFWwindow
-{
 
-};
+struct GLFWwindow {};
 
 class CCENGINE_API InputManager : public Singleton<InputManager>
 {
@@ -23,31 +21,36 @@ private:
 	class Input 
 	{
 	public:
-		bool   m_isDown        = false;
-		bool   m_wasPressed	   = false;
+		bool	m_isDown	= false;
+		bool	m_isUp		= false;
+		bool	m_isHeld	= false;
 
-		Event* m_callbackEvent = nullptr;
+		Event*	m_callbackEvent = nullptr;
 	};
 
 	class Axis 
 	{
 	public:
-		float m_value = 0.f;
-		const char* name = "";
-
 		Keycode m_negativeInput = {};
 		Keycode m_positiveInput = {};
 	};
 
+	class KeyboardContext
+	{
+	private:
+
+	public:
+		std::unordered_map<Keycode, Event> m_inputPreset;
+
+		//list of axis (can be added by the user via the editor (internally modifying game keyboard context))
+		std::unordered_map<std::string, Axis> m_axis; //<const char* = axisName, Axis = axis class>
+	};
 
 	//list of keys (intern glfw callback update key statut)
 	std::unordered_map<Keycode, Input> m_keys;
-
-	//list of axis (can be added by the user via the editor (internally modifying game keyboard context))
-	std::unordered_map<const char*, Axis> m_axes; //<const char* = axisName, Axis = axis class>
 	
-	//lsit of keys just pressed
-	std::unordered_map<Keycode, bool> m_framePressedKeys;
+	//list of keys just pressed
+	std::vector<Keycode> m_framePressedKeys;
 
 	// Context (presets of differents callbacks and axes)
 	KeyboardContext* m_context = nullptr;

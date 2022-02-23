@@ -13,6 +13,6 @@ void Printer::Update()
 {
 	Debug* debug = Debug::GetInstance();
 
-	if (InputManager::instance()->GetKeyDown(Keycode::E)) 
-		debug->Log("Printer is running ...");
+	if (InputManager::instance()->GetKeyUp(Keycode::E)) 
+		debug->Log("Printer will run ...");
 }
