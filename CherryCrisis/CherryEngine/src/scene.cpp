@@ -5,7 +5,7 @@
 
 #include "modelBase.hpp"
 
-Scene* Scene::Create(const char* filePath)
+Resource::Ref<Scene> Scene::Create(const char* filePath)
 {
 	Scene* scene = new Scene(filePath);
 
@@ -30,7 +30,7 @@ Scene* Scene::Create(const char* filePath)
 	camera.m_cameraComp = new CameraComponent();
 	camera.m_cameraComp->m_transform = camera.m_transform;
 
-	return scene;
+	return Ref<Scene>(scene);
 }
 
 void Scene::Draw()

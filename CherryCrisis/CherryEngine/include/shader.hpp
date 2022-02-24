@@ -24,7 +24,7 @@ private:
 public:
 	~Shader();
 
-	static Resource* Create(const char* filepath, EShader shaderType);
+	static Ref<Shader> Create(const char* filepath, EShader shaderType);
 
 	const unsigned int GetShaderID() { return m_shaderID; }
 };

@@ -32,8 +32,16 @@ int SkyboxSubPipeline::Generate(Skybox* toGenerate)
 	glTextureParameteri(gpuCubemap.ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTextureParameteri(gpuCubemap.ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	if (cubemap->GetWidth() <= 0 || cubemap->GetHeight() <= 0)
+		return -1;
+
 	for (int faceID = 0; faceID < 6; faceID++)
+	{
+		if (!cubemap->GetData()[faceID])
+			return -1;
+
 		glTextureSubImage3D(gpuCubemap.ID, 0, 0, 0, faceID, cubemap->GetWidth(), cubemap->GetHeight(), 1, GL_RGBA, GL_UNSIGNED_BYTE, cubemap->GetData()[faceID]);
+	}
 
 	cubemap->m_gpuCubemap = new GPUSkyboxCubemap(gpuCubemap);
 
@@ -67,7 +75,7 @@ void SkyboxSubPipeline::Execute()
 	if (m_cameraComp)
 	{
 		CCMaths::Matrix4 projection = Matrix4::Perspective(m_cameraComp->m_camera.fovY, m_cameraComp->m_camera.aspect, m_cameraComp->m_camera.near, m_cameraComp->m_camera.far);
-		CCMaths::Matrix4 view = Matrix4::RotateYXZ(-m_cameraComp->m_transform->GetRotation()) * Matrix4::Translate(m_cameraComp->m_transform->GetPosition());
+		CCMaths::Matrix4 view = Matrix4::RotateYXZ(-m_cameraComp->m_transform->GetRotation());
 
 		CCMaths::Matrix4 viewProjection = projection * view;
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
@@ -78,17 +86,14 @@ void SkyboxSubPipeline::Execute()
 	if (!mesh)
 		return;
 
-	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh);
-
-	if (gpuMesh)
+	if (GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh))
 	{
 		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 		glDrawElements(GL_TRIANGLES, mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
 	}
 
-	Cubemap* skyTexture = m_skybox->m_cubemap.get();
-	if (skyTexture)
+	if (Cubemap* skyTexture = m_skybox->m_cubemap.get())
 	{
 		if (auto gpuCubemap = static_cast<GPUSkyboxCubemap*>(skyTexture->m_gpuCubemap))
 			glBindTextureUnit(0, gpuCubemap->ID);

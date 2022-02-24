@@ -1,7 +1,7 @@
 #pragma once
 
 template <typename ... Args>
-static Resource* Mesh::Create(const char* shapeName, EMeshShape shapeType, Args... args)
+static Resource::Ref<Mesh> Mesh::Create(const char* shapeName, EMeshShape shapeType, Args... args)
 {
 	switch (shapeType)
 	{
@@ -10,5 +10,6 @@ static Resource* Mesh::Create(const char* shapeName, EMeshShape shapeType, Args.
 
 	default:
 		return nullptr;
+
 	}
 }

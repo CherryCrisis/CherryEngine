@@ -3,12 +3,12 @@
 #include "modelLoader.hpp"
 #include "entity.hpp"
 
-Resource* ModelBase::Create(const char* filepath)
+Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
 {
 	ModelBase* modelBase = new ModelBase(filepath);
 	CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
 
-	return modelBase;
+	return Ref<ModelBase>(modelBase);
 }
 
 ModelBase::~ModelBase()

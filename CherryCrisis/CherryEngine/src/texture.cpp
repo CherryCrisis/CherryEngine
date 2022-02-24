@@ -13,7 +13,7 @@ Texture::~Texture()
 
 }
 
-Resource* Texture::Create(const char* texturePath)
+Resource::Ref<Texture> Texture::Create(const char* texturePath)
 {
 	Texture* texture = new Texture(texturePath);
 
@@ -33,5 +33,5 @@ Resource* Texture::Create(const char* texturePath)
         //std::cout << "Failed to load image. " << filename << std::endl;
     }
 
-	return texture;
+	return Ref<Texture>(texture);
 }

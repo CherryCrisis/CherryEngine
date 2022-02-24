@@ -36,7 +36,7 @@ private:
 public:
 	~ModelBase();
 
-	static Resource* Create(const char* filepath);
+	static Ref<ModelBase> Create(const char* filepath);
 
 	//Generate entities with modelBase (model instance)
 	std::vector<Entity> GenerateEntities(Entity& rootEntity);

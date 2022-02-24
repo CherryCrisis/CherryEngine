@@ -4,8 +4,8 @@
 
 #include "renderer.hpp"
 
-struct Mesh;
-struct Cubemap;
+#include "cubemap.hpp"
+#include "mesh.hpp"
 
 struct Skybox : public ARenderer
 {

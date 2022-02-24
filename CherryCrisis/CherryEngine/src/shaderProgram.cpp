@@ -12,7 +12,7 @@ ShaderProgram::~ShaderProgram()
 	glDeleteProgram(m_shaderProgram);
 }
 
-Resource* ShaderProgram::Create(const char* programName, const char* vxFilepath, const char* fgFilepath)
+Resource::Ref<ShaderProgram> ShaderProgram::Create(const char* programName, const char* vxFilepath, const char* fgFilepath)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -26,7 +26,7 @@ Resource* ShaderProgram::Create(const char* programName, const char* vxFilepath,
 	return Create(programName, vertexShader, fragmentShader);
 }
 
-Resource* ShaderProgram::Create(const char* programName, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath)
+Resource::Ref<ShaderProgram> ShaderProgram::Create(const char* programName, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -44,7 +44,7 @@ Resource* ShaderProgram::Create(const char* programName, const char* vxFilepath,
 	return Create(programName, vertexShader, fragmentShader, geometryShader);
 }
 
-Resource* ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg)
+Resource::Ref<ShaderProgram> ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg)
 {
 	ShaderProgram* shaderProgram = new ShaderProgram(programName);
 
@@ -66,10 +66,10 @@ Resource* ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>
 		fprintf(stderr, "Program link error: %s\n", infolog);
 	}
 
-	return shaderProgram;
+	return Ref<ShaderProgram>(shaderProgram);
 }
 
-Resource* ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm)
+Resource::Ref<ShaderProgram> ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm)
 {
 	ShaderProgram* shaderProgram = new ShaderProgram(programName);
 
@@ -94,6 +94,6 @@ Resource* ShaderProgram::Create(const char* programName, std::shared_ptr<Shader>
 		fprintf(stderr, "Program link error: %s\n", infolog);
 	}
 
-	return shaderProgram;
+	return Ref<ShaderProgram>(shaderProgram);
 }
 

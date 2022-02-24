@@ -16,7 +16,7 @@ private:
 public:
 	Skybox m_skybox;
 
-	static Scene* Create(const char* filePath);
+	static Ref<Scene> Create(const char* filePath);
 
 	std::vector<Entity> m_entities;
 

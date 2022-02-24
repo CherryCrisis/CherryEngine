@@ -24,6 +24,6 @@ public:
 
     const std::array<void*, 6>& GetData() { return m_data; }
 
-    static Resource* Create(const char* cubemapName, const char* textures[6]);
-    static Resource* Create(const char* cubemapName, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack);
+    static Ref<Cubemap> Create(const char* cubemapName, const char* textures[6]);
+    static Ref<Cubemap> Create(const char* cubemapName, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack);
 };

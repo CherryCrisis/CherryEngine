@@ -24,5 +24,5 @@ public:
 
 	~Model();
 
-	static Resource* Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode);
+	static Ref<Model> Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode);
 };

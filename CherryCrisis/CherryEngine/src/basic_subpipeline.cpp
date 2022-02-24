@@ -63,7 +63,7 @@ int BasicSubPipeline::Generate(Material* toGenerate)
 		return -1;
 
 	// Albedo texture
-	if (Texture* albedoTexture = toGenerate->albedoTex.get())
+	if (Texture* albedoTexture = toGenerate->textures["albedo"].get())
 		Generate(albedoTexture);
 
 	return 1;
@@ -175,7 +175,7 @@ void BasicSubPipeline::Execute()
 
 		if (Material* material = model->m_material.get())
 		{
-			if (Texture* albedoTexture = material->albedoTex.get())
+			if (Texture* albedoTexture = material->textures["albedo"].get())
 			{
 				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture))
 					glBindTextureUnit(0, gpuAlbedoTexture->ID);

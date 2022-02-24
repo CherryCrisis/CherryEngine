@@ -23,5 +23,5 @@ public:
 
     const void* GetData() { return m_data; }
 
-    static Resource* Create(const char* texturePath);
+    static Ref<Texture> Create(const char* texturePath);
 };

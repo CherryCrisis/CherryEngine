@@ -12,17 +12,16 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 			return findedResource;
 	}
 
-	Resource* resource = T::Create(filepath, args...);
+	Resource::Ref<T> resourcePtr = T::Create(filepath, args...);
 
-	if (resource == nullptr)
+	if (!resourcePtr)
 		return nullptr;
 
-	auto resourceMap = std::make_pair<std::type_index, std::shared_ptr<Resource>>
-		(typeid(T), std::shared_ptr<Resource>(resource));
+	auto resourceMap = std::make_pair<std::type_index, std::shared_ptr<Resource>>(typeid(T), resourcePtr);
 
 	m_resources.insert(resourceMap);
 
-	return std::dynamic_pointer_cast<T>(resourceMap.second);
+	return resourcePtr;
 }
 
 template<class T>
