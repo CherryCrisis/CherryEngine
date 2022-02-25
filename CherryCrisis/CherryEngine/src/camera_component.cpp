@@ -1,17 +1,19 @@
+#include "pch.hpp"
+
 #include "camera_component.hpp"
 
-#include "basic_subpipeline.hpp"
-#include "skybox_pipeline.hpp"
+#include "basic_renderpass.hpp"
+#include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
 CameraComponent::CameraComponent()
 {
-	RenderManager::instance()->GenerateFromPipeline<BasicSubPipeline>(this);
-	RenderManager::instance()->GenerateFromPipeline<SkyboxSubPipeline>(this);
+	RenderManager::instance()->GenerateFromPipeline<BasicRenderPass>(this);
+	RenderManager::instance()->GenerateFromPipeline<SkyboxRenderPass>(this);
 }
 
 CameraComponent::~CameraComponent()
 {
-	RenderManager::instance()->RemoveFromPipeline<BasicSubPipeline>(this);
-	RenderManager::instance()->RemoveFromPipeline<SkyboxSubPipeline>(this);
+	RenderManager::instance()->RemoveFromPipeline<BasicRenderPass>(this);
+	RenderManager::instance()->RemoveFromPipeline<SkyboxRenderPass>(this);
 }

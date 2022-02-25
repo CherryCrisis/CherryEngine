@@ -2,14 +2,14 @@
 
 #include <glad/gl.h>
 
-#include "element_mesh_pipeline.hpp"
+#include "element_mesh_renderpass.hpp"
 
 #include "cubemap.hpp"
 
 struct Skybox;
 struct CameraComponent;
 
-class SkyboxSubPipeline : public ElementMeshPipeline
+class SkyboxRenderPass : public ElementMeshRenderPass
 {
 private:
 	Skybox* m_skybox = nullptr;
@@ -21,7 +21,7 @@ private:
 	};
 
 public:
-	SkyboxSubPipeline(const char* name);
+	SkyboxRenderPass(const char* name);
 
 	template <typename RendererT>
 	int Generate(RendererT* toGenerate)

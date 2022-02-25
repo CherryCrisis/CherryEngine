@@ -1,17 +1,19 @@
-#include "skybox_pipeline.hpp"
+#include "pch.hpp"
+
+#include "skybox_renderpass.hpp"
 
 #include "skybox.hpp"
 #include "camera_component.hpp"
 
-SkyboxSubPipeline::SkyboxSubPipeline(const char* name)
+SkyboxRenderPass::SkyboxRenderPass(const char* name)
 // TODO: Set real path
-	: ElementMeshPipeline(name, "../assets/skyboxShader.vert", "../assets/skyboxShader.frag")
+	: ElementMeshRenderPass(name, "../assets/skyboxShader.vert", "../assets/skyboxShader.frag")
 {
 
 }
 
 template <>
-int SkyboxSubPipeline::Generate(Skybox* toGenerate)
+int SkyboxRenderPass::Generate(Skybox* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -45,7 +47,7 @@ int SkyboxSubPipeline::Generate(Skybox* toGenerate)
 
 	cubemap->m_gpuCubemap = new GPUSkyboxCubemap(gpuCubemap);
 
-	if (ElementMeshPipeline::Generate(toGenerate->m_mesh.get()) == -1)
+	if (ElementMeshRenderPass::Generate(toGenerate->m_mesh.get()) == -1)
 		return -1;
 
 	m_skybox = toGenerate;
@@ -54,13 +56,13 @@ int SkyboxSubPipeline::Generate(Skybox* toGenerate)
 }
 
 template <>
-void SkyboxSubPipeline::Remove(Skybox* toGenerate)
+void SkyboxRenderPass::Remove(Skybox* toGenerate)
 {
 	if (m_skybox == toGenerate)
 		m_skybox = nullptr;
 }
 
-void SkyboxSubPipeline::Execute()
+void SkyboxRenderPass::Execute()
 {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
@@ -106,7 +108,7 @@ void SkyboxSubPipeline::Execute()
 }
 
 template <>
-int SkyboxSubPipeline::Generate(CameraComponent* toGenerate)
+int SkyboxRenderPass::Generate(CameraComponent* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -115,7 +117,7 @@ int SkyboxSubPipeline::Generate(CameraComponent* toGenerate)
 }
 
 template <>
-void SkyboxSubPipeline::Remove(CameraComponent* toGenerate)
+void SkyboxRenderPass::Remove(CameraComponent* toGenerate)
 {
 	m_cameraComp = nullptr;
 }

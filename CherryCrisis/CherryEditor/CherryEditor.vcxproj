@@ -71,9 +71,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{b01f048a-6bf8-44fd-b23e-321b43c55dd9}</ProjectGuid>
-    <RootNamespace>PommeEditor</RootNamespace>
+    <RootNamespace>CherryEditor</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>PommeEditor</ProjectName>
+    <ProjectName>CherryEditor</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

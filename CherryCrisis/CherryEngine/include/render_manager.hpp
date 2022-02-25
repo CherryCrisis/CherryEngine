@@ -8,18 +8,18 @@
 
 #include "singleton.hpp"
 
-#include "subpipeline_interface.hpp"
+#include "renderpass_interface.hpp"
 
 class CCENGINE_API RenderManager : public Singleton<RenderManager>
 {
 	friend class Singleton<RenderManager>;
 
 public:
-	using PipelineDesc = std::function<void(const std::unordered_map<std::type_index, ASubPipeline*>&, std::vector<ASubPipeline*>&)>;
+	using PipelineDesc = std::function<void(const std::unordered_map<std::type_index, ARenderPass*>&, std::vector<ARenderPass*>&)>;
 
 private:
-	std::unordered_map<std::type_index, ASubPipeline*>	m_existingSubpipelines;
-	std::vector<ASubPipeline*> m_orderedPipeline;
+	std::unordered_map<std::type_index, ARenderPass*>	m_existingSubpipelines;
+	std::vector<ARenderPass*> m_orderedPipeline;
 
 	template <class SubPipelineT>
 	constexpr SubPipelineT* GetSubpipeline();

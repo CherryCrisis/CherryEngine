@@ -360,7 +360,7 @@
     <ClInclude Include="include\gl_manager.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\basic_subpipeline.hpp">
+    <ClInclude Include="include\basic_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\model_renderer.hpp">
@@ -372,19 +372,19 @@
     <ClInclude Include="include\renderer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\subpipeline_interface.hpp">
+    <ClInclude Include="include\renderpass_interface.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\cherry_macros.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\element_mesh_pipeline.hpp">
+    <ClInclude Include="include\element_mesh_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\skybox.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\skybox_pipeline.hpp">
+    <ClInclude Include="include\skybox_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\camera_component.hpp">
@@ -532,19 +532,19 @@
     <ClCompile Include="src\render_manager.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\basic_subpipeline.cpp">
+    <ClCompile Include="src\basic_renderpass.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\maths.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\element_mesh_pipeline.cpp">
+    <ClCompile Include="src\element_mesh_renderpass.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\skybox.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\skybox_pipeline.cpp">
+    <ClCompile Include="src\skybox_renderpass.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\camera_component.cpp">

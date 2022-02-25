@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include "skybox.hpp"
 
 #include "resource_manager.hpp"
@@ -5,7 +7,7 @@
 #include "cubemap.hpp"
 #include "mesh.hpp"
 
-#include "skybox_pipeline.hpp"
+#include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
 Skybox::Skybox()
@@ -17,5 +19,5 @@ Skybox::Skybox()
 
 	m_cubemap = ResourceManager::GetInstance()->AddResource<Cubemap>("skyCubemap", true, textures);
 
-	RenderManager::instance()->GenerateFromPipeline<SkyboxSubPipeline>(this);
+	RenderManager::instance()->GenerateFromPipeline<SkyboxRenderPass>(this);
 }

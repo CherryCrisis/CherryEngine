@@ -1,8 +1,8 @@
+#include "pch.hpp"
+
 #include "cubemap.hpp"
 
 #include <stb_image.h>
-
-#include <iostream>
 
 Cubemap::~Cubemap()
 {

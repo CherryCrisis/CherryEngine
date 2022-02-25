@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include "texture.hpp"
 
 #include <stb_image.h>

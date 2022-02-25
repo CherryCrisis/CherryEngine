@@ -3,7 +3,7 @@
 template <class SubPipelineT>
 constexpr SubPipelineT* RenderManager::GetSubpipeline()
 {
-	static_assert(std::is_base_of_v<ASubPipeline, SubPipelineT>, "SubPipelineT is not inherited of ASubPipeline");
+	static_assert(std::is_base_of_v<ARenderPass, SubPipelineT>, "SubPipelineT is not inherited of ASubPipeline");
 
 	const std::type_index typeID = typeid(SubPipelineT);
 

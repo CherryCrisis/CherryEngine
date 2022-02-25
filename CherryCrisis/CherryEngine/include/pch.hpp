@@ -8,12 +8,22 @@
 #define PCH_H
 
 // ajouter les en-têtes à précompiler ici
-#include "framework.hpp"
 
+#include <map>
+#include <cmath>
+#include <array>
+#include <atomic>
 #include <vector>
 #include <string>
+#include <memory>
+#include <fstream>
+#include <typeinfo>
 #include <iostream>
+#include <typeindex>
+#include <functional>
 #include <unordered_map>
 #include <unordered_set>
+
+#include "maths.hpp"
 
 #endif //PCH_H

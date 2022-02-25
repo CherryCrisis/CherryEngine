@@ -1,6 +1,6 @@
 #pragma once
 
-#include "maths.hpp"
+#include "pch.hpp"
 
 namespace CCMaths
 {

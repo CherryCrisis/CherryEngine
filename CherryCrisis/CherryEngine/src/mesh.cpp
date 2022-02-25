@@ -1,6 +1,6 @@
-#include "mesh.hpp"
+#include "pch.hpp"
 
-#include <string>
+#include "mesh.hpp"
 
 #include <assimp/mesh.h>
 

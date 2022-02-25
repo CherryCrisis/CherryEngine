@@ -17,7 +17,7 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height)
     if (width != m_width && height != m_height)
         UpdateTextureSize(width, height);
 
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, (GLsizei)width, (GLsizei)height);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
     RenderManager::DrawScene();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -4,7 +4,7 @@
 
 #include <glad/gl.h>
 
-#include "element_mesh_pipeline.hpp"
+#include "element_mesh_renderpass.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -14,7 +14,7 @@ class CameraComponent;
 class ModelRenderer;
 class Material;
 
-class BasicSubPipeline : public ElementMeshPipeline
+class BasicRenderPass : public ElementMeshRenderPass
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
@@ -27,7 +27,7 @@ public:
 		GLuint ID = 0u;
 	};
 
-	BasicSubPipeline(const char* name);
+	BasicRenderPass(const char* name);
 
 	template <typename RendererT>
 	int Generate(RendererT* toGenerate)

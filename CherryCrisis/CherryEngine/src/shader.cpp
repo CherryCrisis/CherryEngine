@@ -1,6 +1,6 @@
-#include "shader.hpp"
+#include "pch.hpp"
 
-#include <fstream>
+#include "shader.hpp"
 
 #include <glad/gl.h>
 

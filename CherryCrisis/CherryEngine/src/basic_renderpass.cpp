@@ -1,18 +1,20 @@
-#include "basic_subpipeline.hpp"
+#include "pch.hpp"
+
+#include "basic_renderpass.hpp"
 
 #include "camera_component.hpp"
 #include "model_renderer.hpp"
 #include "transform.hpp"
 #include "model.hpp"
 
-BasicSubPipeline::BasicSubPipeline(const char* name)
-	: ElementMeshPipeline(name, "../assets/basicShader.vert", "../assets/basicShader.frag")
+BasicRenderPass::BasicRenderPass(const char* name)
+	: ElementMeshRenderPass(name, "../assets/basicShader.vert", "../assets/basicShader.frag")
 {
 
 }
 
 template <>
-int BasicSubPipeline::Generate(Light* toGenerate)
+int BasicRenderPass::Generate(Light* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -23,7 +25,7 @@ int BasicSubPipeline::Generate(Light* toGenerate)
 }
 
 template <>
-int BasicSubPipeline::Generate(CameraComponent* toGenerate)
+int BasicRenderPass::Generate(CameraComponent* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -32,7 +34,7 @@ int BasicSubPipeline::Generate(CameraComponent* toGenerate)
 }
 
 template <>
-int BasicSubPipeline::Generate(ModelRenderer* toGenerate)
+int BasicRenderPass::Generate(ModelRenderer* toGenerate)
 {
 	Model* model = toGenerate->m_model.get();
 
@@ -41,7 +43,7 @@ int BasicSubPipeline::Generate(ModelRenderer* toGenerate)
 
 	// Generate GPU mesh
 	{
-		if (ElementMeshPipeline::Generate(model->m_mesh.get()) == -1)
+		if (ElementMeshRenderPass::Generate(model->m_mesh.get()) == -1)
 			return -1;
 
 		m_modelRenderers.insert(toGenerate);
@@ -57,7 +59,7 @@ int BasicSubPipeline::Generate(ModelRenderer* toGenerate)
 }
 
 template <>
-int BasicSubPipeline::Generate(Material* toGenerate)
+int BasicRenderPass::Generate(Material* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -70,7 +72,7 @@ int BasicSubPipeline::Generate(Material* toGenerate)
 }
 
 template <>
-int BasicSubPipeline::Generate(Texture* toGenerate)
+int BasicRenderPass::Generate(Texture* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -101,24 +103,24 @@ int BasicSubPipeline::Generate(Texture* toGenerate)
 }
 
 template <>
-void BasicSubPipeline::Remove(ModelRenderer* toGenerate)
+void BasicRenderPass::Remove(ModelRenderer* toGenerate)
 {
 	m_modelRenderers.erase(toGenerate);
 }
 
 template <>
-void BasicSubPipeline::Remove(Light* toGenerate)
+void BasicRenderPass::Remove(Light* toGenerate)
 {
 	m_lights.erase(toGenerate);
 }
 
 template <>
-void BasicSubPipeline::Remove(CameraComponent* toGenerate)
+void BasicRenderPass::Remove(CameraComponent* toGenerate)
 {
 	m_camera = nullptr;
 }
 
-void BasicSubPipeline::Execute()
+void BasicRenderPass::Execute()
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);

@@ -1,7 +1,8 @@
+#include "pch.hpp"
+
 #include "shader_program.hpp"
 
 #include <glad/gl.h>
-#include <assert.h>
 
 #include "resource_manager.hpp"
 
@@ -16,7 +17,6 @@ Resource::Ref<ShaderProgram> ShaderProgram::Create(const char* programName, cons
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
-	assert(vxFilepath != "");
 	std::shared_ptr<Shader> vertexShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::VERTEX);
 	std::shared_ptr<Shader> fragmentShader;
 
@@ -29,9 +29,6 @@ Resource::Ref<ShaderProgram> ShaderProgram::Create(const char* programName, cons
 Resource::Ref<ShaderProgram> ShaderProgram::Create(const char* programName, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
-
-	assert(vxFilepath != "");
-	assert(fgFilepath != "");
 
 	std::shared_ptr<Shader> vertexShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::VERTEX);
 	std::shared_ptr<Shader> fragmentShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::FRAGMENT);

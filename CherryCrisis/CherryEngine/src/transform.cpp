@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include "transform.hpp"
 
 void Transform::SetDirty()

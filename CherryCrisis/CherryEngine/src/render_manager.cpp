@@ -1,11 +1,13 @@
+#include "pch.hpp"
+
 #include "render_manager.hpp"
 
 #include <glad/gl.h>
 
 #include "resource_manager.hpp"
 
-#include "basic_subpipeline.hpp"
-#include "skybox_pipeline.hpp"
+#include "basic_renderpass.hpp"
+#include "skybox_renderpass.hpp"
 
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
@@ -69,7 +71,7 @@ RenderManager::RenderManager()
 
 
     // TODO: Remove this
-    LoadSubpipeline<SkyboxSubPipeline>();
+    LoadSubpipeline<SkyboxRenderPass>();
 }
 
 void RenderManager::DrawScene()
@@ -83,7 +85,7 @@ void RenderManager::DrawScene()
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (ASubPipeline* pipeline : RM->m_orderedPipeline)
+	for (ARenderPass* pipeline : RM->m_orderedPipeline)
 		pipeline->Execute();
 
 	glUseProgram(0);
@@ -98,13 +100,13 @@ void RenderManager::InitializePipeline(const PipelineDesc& pipelineDesc)
 
 RenderManager::PipelineDesc RenderManager::DefaultRenderingPipeline()
 {
-	return [](const std::unordered_map<std::type_index, ASubPipeline*>& pipelines,
-		std::vector<ASubPipeline*>& orderedPipelines)
+	return [](const std::unordered_map<std::type_index, ARenderPass*>& pipelines,
+		std::vector<ARenderPass*>& orderedPipelines)
 	{
-        ASubPipeline* lit = pipelines.find(typeid(BasicSubPipeline))->second;
+        ARenderPass* lit = pipelines.find(typeid(BasicRenderPass))->second;
         orderedPipelines.push_back(lit);
 
-        ASubPipeline* skybox = pipelines.find(typeid(SkyboxSubPipeline))->second;
+        ARenderPass* skybox = pipelines.find(typeid(SkyboxRenderPass))->second;
         orderedPipelines.push_back(skybox);
 	};
 }

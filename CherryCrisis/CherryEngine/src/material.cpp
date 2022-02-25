@@ -1,6 +1,6 @@
-#include "material.hpp"
+#include "pch.hpp"
 
-#include <iostream>
+#include "material.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

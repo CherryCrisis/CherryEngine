@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include "model_loader.hpp"
 
 #include <assimp/Importer.hpp>

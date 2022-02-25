@@ -1,6 +1,8 @@
-#include "element_mesh_pipeline.hpp"
+#include "pch.hpp"
 
-int ElementMeshPipeline::Generate(Mesh* toGenerate)
+#include "element_mesh_renderpass.hpp"
+
+int ElementMeshRenderPass::Generate(Mesh* toGenerate)
 {
 	if (!toGenerate)
 		return -1;

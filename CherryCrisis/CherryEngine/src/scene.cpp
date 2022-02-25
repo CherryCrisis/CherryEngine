@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include "scene.hpp"
 
 #include "resource_manager.hpp"

@@ -57,9 +57,9 @@ void LogDisplayer::RenderMenuBar()
 {
     if(ImGui::BeginMenuBar())
     {
-        if (ImGui::Checkbox("Clear on play", &m_isClearOnPlay));
-        if (ImGui::Checkbox("AutoScroll", &m_isAutoScrolling));   
-        if (ImGui::Checkbox("Collapse", &m_isCollapsing));
+        ImGui::Checkbox("Clear on play", &m_isClearOnPlay);
+        ImGui::Checkbox("AutoScroll", &m_isAutoScrolling);
+        ImGui::Checkbox("Collapse", &m_isCollapsing);
 
         if (ImGui::Button("Clear"))         { Clear(); }
         if (ImGui::Button("Scroll Top"))    { m_isScrollingTop = true; }

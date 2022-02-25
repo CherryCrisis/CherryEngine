@@ -1,3 +1,5 @@
+#include "pch.hpp"
+
 #include "model.hpp"
 
 #include <assimp/mesh.h>

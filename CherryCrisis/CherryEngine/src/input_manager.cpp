@@ -1,3 +1,4 @@
+#include "pch.hpp"
 
 #include <input_manager.hpp>
 
@@ -5,8 +6,6 @@
 //#include <GLFW/glfw3.h>
 
 #include <debug.hpp>
-#include <string>
-#include <iostream>
 
 
 template <>

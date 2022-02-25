@@ -97,7 +97,7 @@
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h" />
     <ClInclude Include="externals\include\GLFW\glfw3.h" />
     <ClInclude Include="externals\include\GLFW\glfw3native.h" />
-    <ClInclude Include="include\basic_subpipeline.hpp" />
+    <ClInclude Include="include\basic_renderpass.hpp" />
     <ClInclude Include="include\camera.hpp" />
     <ClInclude Include="include\camera_component.hpp" />
     <ClInclude Include="include\cherry_header.hpp" />
@@ -105,7 +105,7 @@
     <ClInclude Include="include\component.hpp" />
     <ClInclude Include="include\cubemap.hpp" />
     <ClInclude Include="include\debug.hpp" />
-    <ClInclude Include="include\element_mesh_pipeline.hpp" />
+    <ClInclude Include="include\element_mesh_renderpass.hpp" />
     <ClInclude Include="include\engine.hpp" />
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\framework.hpp" />
@@ -137,8 +137,8 @@
     <ClInclude Include="include\shader_program.hpp" />
     <ClInclude Include="include\singleton.hpp" />
     <ClInclude Include="include\skybox.hpp" />
-    <ClInclude Include="include\skybox_pipeline.hpp" />
-    <ClInclude Include="include\subpipeline_interface.hpp" />
+    <ClInclude Include="include\skybox_renderpass.hpp" />
+    <ClInclude Include="include\renderpass_interface.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
@@ -163,9 +163,19 @@
     <None Include="include\renderer_manager.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="externals\src\gl.c" />
-    <ClCompile Include="externals\src\stb_image.cpp" />
-    <ClCompile Include="src\basic_subpipeline.cpp" />
+    <ClCompile Include="externals\src\gl.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\src\stb_image.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\basic_renderpass.cpp" />
     <ClCompile Include="src\camera_component.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.hpp</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.hpp</PrecompiledHeaderFile>
@@ -175,7 +185,7 @@
     <ClCompile Include="src\cubemap.cpp" />
     <ClCompile Include="src\debug.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
-    <ClCompile Include="src\element_mesh_pipeline.cpp" />
+    <ClCompile Include="src\element_mesh_renderpass.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\input_manager.cpp" />
@@ -187,14 +197,19 @@
     <ClCompile Include="src\model_base.cpp" />
     <ClCompile Include="src\model_loader.cpp" />
     <ClCompile Include="src\model_renderer.cpp" />
-    <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\render_manager.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shader_program.cpp" />
     <ClCompile Include="src\skybox.cpp" />
-    <ClCompile Include="src\skybox_pipeline.cpp" />
+    <ClCompile Include="src\skybox_renderpass.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
@@ -316,7 +331,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CCENGINE_EXPORTS;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -339,7 +354,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CCENGINE_EXPORTS;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
