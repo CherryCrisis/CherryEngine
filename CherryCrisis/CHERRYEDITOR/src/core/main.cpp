@@ -9,7 +9,6 @@
 
 #include <glad/gl.h>
 
-
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
@@ -17,11 +16,19 @@
 #include "core/imgui_style.hpp"
 
 #include "stb_image.h"
+#include "input_manager.hpp"
+
+/*void KeyCallbackWrapper(GLFWwindow* w, int k, int s, int a, int m)
+{
+    void* userPointer = glfwGetWindowUserPointer(w);
+    InputManager* IM = static_cast<InputManager*>(userPointer);
+
+    IM->KeyCallback(w, k, s, a, m);
+}
+*/
 
 int main()
 {
-
-
     int screenWidth = 1200;
     int screenHeight = 1000;
 
@@ -47,17 +54,31 @@ int main()
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
 
+    InputManager* IM = InputManager::instance();
+    glfwSetWindowUserPointer(window, IM);
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     SetDarkStyle();
+
+
+    auto func = [](GLFWwindow* w, int k, int s, int a, int m)
+    {
+        static_cast<InputManager*>(glfwGetWindowUserPointer(w))->KeyCallback(w, k, s, a, m);
+    };
+
+    glfwSetKeyCallback(window, func);
+
+
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
     ImFontConfig font_cfg;
     font_cfg.FontDataOwnedByAtlas = false;
     io.Fonts->AddFontFromMemoryTTF((void*)tahoma, sizeof(tahoma), 17.f, &font_cfg);
     ImGui::MergeIconsWithLatestFont(16.f, false);
+
 
     EditorManager editor{};
     Engine engine{};
@@ -68,6 +89,7 @@ int main()
 
     while (glfwWindowShouldClose(window) == false)
     {
+        InputManager::instance()->UpdateKeys();
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

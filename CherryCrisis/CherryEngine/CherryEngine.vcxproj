@@ -95,6 +95,8 @@
     <ClInclude Include="externals\include\assimp\XmlParser.h" />
     <ClInclude Include="externals\include\assimp\XMLTools.h" />
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h" />
+    <ClInclude Include="externals\include\GLFW\glfw3.h" />
+    <ClInclude Include="externals\include\GLFW\glfw3native.h" />
     <ClInclude Include="include\basic_subpipeline.hpp" />
     <ClInclude Include="include\CherryHeader.h" />
     <ClInclude Include="include\CherryMacros.h" />
@@ -104,6 +106,9 @@
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\gl_manager.hpp" />
+    <ClInclude Include="include\input_manager.hpp" />
+    <ClInclude Include="include\keyboard_context.hpp" />
+    <ClInclude Include="include\keycode.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
     <ClInclude Include="include\maths\matrix3.hpp" />
@@ -158,6 +163,7 @@
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\input_manager.cpp" />
     <ClCompile Include="src\material.cpp" />
     <ClCompile Include="src\maths.cpp" />
     <ClCompile Include="src\mesh.cpp" />
@@ -304,7 +310,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mtd.lib;zlibstaticd.lib;alut.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mtd.lib;zlibstaticd.lib;alut.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
