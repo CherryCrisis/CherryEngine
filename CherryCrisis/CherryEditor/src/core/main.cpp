@@ -1,6 +1,5 @@
 
 #include "cherry_header.hpp"
-#include "printer.hpp"
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
