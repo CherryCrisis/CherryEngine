@@ -97,6 +97,9 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_sceneDisplayer.Render();
     m_gameDisplayer.Render();
     m_hierarchyDisplayer.Render();
+    m_preferencesDisplayer.Render();
+    m_projSettingsDisplayer.Render();
+    m_buildDisplayer.Render();
     HandleFeaturerWindow(window);
 
     HandleNotifications();
@@ -170,10 +173,11 @@ void EditorManager::HandleMenuBar()
         
         if (ImGui::BeginMenu("Edit"))
         {
-            if (ImGui::MenuItem("Project Settings")) { }
-            if (ImGui::MenuItem("Preferences"))      { }
+            if (ImGui::MenuItem("Project Settings")) { m_projSettingsDisplayer.Toggle(true); }
+            if (ImGui::MenuItem("Preferences"))      { m_preferencesDisplayer.Toggle(true); }
             ImGui::Separator();
-            if (ImGui::MenuItem("Build")) {}
+            if (ImGui::MenuItem("Build")) { m_buildDisplayer.Toggle(true); } // Open Build Menu 
+            if (ImGui::MenuItem("Build And Run")) {} // If first time, open build menu then just run the build + starts it
             ImGui::EndMenu();
         }
 
