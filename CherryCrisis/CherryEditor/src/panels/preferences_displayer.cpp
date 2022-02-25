@@ -9,7 +9,7 @@ void PreferencesDisplayer::Render()
         return;
 
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-    ImGui::SetNextWindowPos(center, ImGuiCond_Always, ImVec2(.5f, .5f));
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(.5f, .5f));
     if (ImGui::Begin("Preferences", &m_isOpened)) 
     {
         if (ImGui::Button("Close")) { m_isOpened = false; }
