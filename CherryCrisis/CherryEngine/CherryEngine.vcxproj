@@ -95,15 +95,25 @@
     <ClInclude Include="externals\include\assimp\XmlParser.h" />
     <ClInclude Include="externals\include\assimp\XMLTools.h" />
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h" />
-    <ClInclude Include="include\basic_subpipeline.hpp" />
-    <ClInclude Include="include\CherryHeader.h" />
-    <ClInclude Include="include\CherryMacros.h" />
-    <ClInclude Include="include\Component.h" />
+    <ClInclude Include="externals\include\GLFW\glfw3.h" />
+    <ClInclude Include="externals\include\GLFW\glfw3native.h" />
+    <ClInclude Include="include\basic_renderpass.hpp" />
+    <ClInclude Include="include\camera.hpp" />
+    <ClInclude Include="include\camera_component.hpp" />
+    <ClInclude Include="include\cherry_header.hpp" />
+    <ClInclude Include="include\cherry_macros.hpp" />
+    <ClInclude Include="include\component.hpp" />
+    <ClInclude Include="include\cubemap.hpp" />
     <ClInclude Include="include\debug.hpp" />
-    <ClInclude Include="include\engine.h" />
+    <ClInclude Include="include\element_mesh_renderpass.hpp" />
+    <ClInclude Include="include\engine.hpp" />
     <ClInclude Include="include\entity.hpp" />
-    <ClInclude Include="include\framework.h" />
+    <ClInclude Include="include\framework.hpp" />
     <ClInclude Include="include\gl_manager.hpp" />
+    <ClInclude Include="include\input_manager.hpp" />
+    <ClInclude Include="include\keyboard_context.hpp" />
+    <ClInclude Include="include\keycode.hpp" />
+    <ClInclude Include="include\light_component.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
     <ClInclude Include="include\maths\matrix3.hpp" />
@@ -114,19 +124,21 @@
     <ClInclude Include="include\maths\vector4.hpp" />
     <ClInclude Include="include\mesh.hpp" />
     <ClInclude Include="include\model.hpp" />
-    <ClInclude Include="include\modelBase.hpp" />
-    <ClInclude Include="include\modelLoader.hpp" />
+    <ClInclude Include="include\model_base.hpp" />
+    <ClInclude Include="include\model_loader.hpp" />
     <ClInclude Include="include\model_renderer.hpp" />
-    <ClInclude Include="include\pch.h" />
+    <ClInclude Include="include\pch.hpp" />
     <ClInclude Include="include\renderer.hpp" />
     <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
-    <ClInclude Include="include\resourceManager.hpp" />
+    <ClInclude Include="include\resource_manager.hpp" />
     <ClInclude Include="include\scene.hpp" />
     <ClInclude Include="include\shader.hpp" />
-    <ClInclude Include="include\shaderProgram.hpp" />
+    <ClInclude Include="include\shader_program.hpp" />
     <ClInclude Include="include\singleton.hpp" />
-    <ClInclude Include="include\subpipeline_interface.hpp" />
+    <ClInclude Include="include\skybox.hpp" />
+    <ClInclude Include="include\skybox_renderpass.hpp" />
+    <ClInclude Include="include\renderpass_interface.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
@@ -147,29 +159,57 @@
     <None Include="include\maths\vector2.inl" />
     <None Include="include\maths\vector3.inl" />
     <None Include="include\maths\vector4.inl" />
-    <None Include="include\resourceManager.inl" />
+    <None Include="include\resource_manager.inl" />
     <None Include="include\renderer_manager.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="externals\src\gl.c" />
-    <ClCompile Include="externals\src\stb_image.cpp" />
-    <ClCompile Include="src\basic_subpipeline.cpp" />
+    <ClCompile Include="externals\src\gl.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="externals\src\stb_image.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\basic_renderpass.cpp" />
+    <ClCompile Include="src\camera_component.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.hpp</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\cubemap.cpp" />
     <ClCompile Include="src\debug.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\element_mesh_renderpass.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\input_manager.cpp" />
+    <ClCompile Include="src\light_component.cpp" />
     <ClCompile Include="src\material.cpp" />
+    <ClCompile Include="src\maths.cpp" />
     <ClCompile Include="src\mesh.cpp" />
     <ClCompile Include="src\model.cpp" />
-    <ClCompile Include="src\modelBase.cpp" />
-    <ClCompile Include="src\modelLoader.cpp" />
+    <ClCompile Include="src\model_base.cpp" />
+    <ClCompile Include="src\model_loader.cpp" />
     <ClCompile Include="src\model_renderer.cpp" />
-    <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\render_manager.cpp" />
-    <ClCompile Include="src\resourceManager.cpp" />
+    <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\shader.cpp" />
-    <ClCompile Include="src\shaderProgram.cpp" />
+    <ClCompile Include="src\shader_program.cpp" />
+    <ClCompile Include="src\skybox.cpp" />
+    <ClCompile Include="src\skybox_renderpass.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
@@ -177,7 +217,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{44848127-f19f-415f-ac56-21890b376c5b}</ProjectGuid>
-    <RootNamespace>CHERRYDLL</RootNamespace>
+    <RootNamespace>CherryEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -249,10 +289,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;CHERRYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CCENGINE_EXPORTS;WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -269,10 +309,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;CHERRYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CCENGINE_EXPORTS;WIN32;NDEBUG_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -289,10 +329,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;CHERRYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CCENGINE_EXPORTS;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
@@ -303,7 +343,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mtd.lib;zlibstaticd.lib;alut.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;zlibstaticd.lib;alut.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -312,10 +352,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;CHERRYDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CCENGINE_EXPORTS;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)externals\include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -327,7 +367,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mt.lib;zlibstatic.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc142-mt.lib;zlibstatic.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

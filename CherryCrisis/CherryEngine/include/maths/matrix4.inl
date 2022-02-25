@@ -2,18 +2,7 @@
 
 namespace CCMaths
 {
-	inline const Matrix4 Matrix4::Identity()
-	{
-		return
-		{
-			1.f, 0.f, 0.f, 0.f,
-			0.f, 1.f, 0.f, 0.f,
-			0.f, 0.f, 1.f, 0.f,
-			0.f, 0.f, 0.f, 1.f,
-		};
-	}
-
-	inline Matrix4 Matrix4::operator*(const float rhs)
+	inline Matrix4 Matrix4::operator*(const float rhs) const
 	{
 		Matrix4 out = *this;
 		
@@ -25,7 +14,7 @@ namespace CCMaths
 		return out;
 	}
 
-	inline Vector4 Matrix4::operator*(const Vector4& rhs)
+	inline Vector4 Matrix4::operator*(const Vector4& rhs) const
 	{
 		Vector4 out;
 
@@ -37,16 +26,16 @@ namespace CCMaths
 		return out;
 	}
 
-	inline Matrix4 Matrix4::operator*(const Matrix4& rhs)
+	inline Matrix4 Matrix4::operator*(const Matrix4& rhs) const
 	{
-		Matrix4 rhsT = Transpose(rhs);
+		Matrix4 lhsT = Transpose(*this);
 		Matrix4 out = {};
 
 		for (int i = 0; i < 4; ++i)
 		{
 			for (int j = 0; j < 4; ++j)
 			{
-				out.row[i].data[j] = Vector4::Dot(this->row[i], rhsT.row[j]);
+				out.row[i].data[j] = Vector4::Dot(lhsT.row[j], rhs.row[i]);
 			}
 		}
 
@@ -81,12 +70,12 @@ namespace CCMaths
 		};
 	}
 
-	inline Matrix4 Matrix4::Invert() const
+	inline Matrix4 Matrix4::Inverse() const
 	{
-		return Matrix4::Invert(*this);
+		return Matrix4::Inverse(*this);
 	}
 
-	inline Matrix4 Matrix4::Invert(const Matrix4& lhs)
+	inline Matrix4 Matrix4::Inverse(const Matrix4& lhs)
 	{
 		Matrix4 result = { 0 };
 
@@ -131,14 +120,14 @@ namespace CCMaths
 		return result * (1.0f / det);
 	}
 
-	inline Matrix4 Matrix4::Translate(const Vector3& rhs)
+	inline Matrix4 Matrix4::Translate(const Vector3& in)
 	{
 		return
 		{
-			1.f,   0.f,   0.f,   0.f,
-			0.f,   1.f,   0.f,   0.f,
-			0.f,   0.f,   1.f,   0.f,
-			rhs.x, rhs.y, rhs.z, 1.f,
+			1.f,  0.f,  0.f,  0.f,
+			0.f,  1.f,  0.f,  0.f,
+			0.f,  0.f,  1.f,  0.f,
+			in.x, in.y, in.z, 1.f,
 		};
 	}
 
@@ -147,22 +136,25 @@ namespace CCMaths
 		return Matrix4::Scale(Vector3(rhs));
 	}
 
-	inline Matrix4 Matrix4::Scale(const Vector3& rhs)
+	inline Matrix4 Matrix4::Scale(const Vector3& in)
 	{
 		return
 		{
-			rhs.x, 0.f,   0.f,   0.f,
-			0.f,   rhs.y, 0.f,   0.f,
-			0.f,   0.f,   rhs.z, 0.f,
-			0.f,   0.f,   0.f,   1.f,
+			in.x, 0.f,  0.f,  0.f,
+			0.f,  in.y, 0.f,  0.f,
+			0.f,  0.f,  in.z, 0.f,
+			0.f,  0.f,  0.f,  1.f,
 		};
 	}
 
-	inline Matrix4 Matrix4::Rotate(const Vector3& eulerAngles)
+	inline Matrix4 Matrix4::RotateZXY(const Vector3& eulerAngles)
 	{
-		return RotateZ(std::cos(eulerAngles.z), std::sin(eulerAngles.z)) *
-			   RotateX(std::cos(eulerAngles.x), std::sin(eulerAngles.x)) *
-			   RotateY(std::cos(eulerAngles.y), std::sin(eulerAngles.y));
+		return RotateZ(eulerAngles.yaw) * RotateX(eulerAngles.roll) * RotateY(eulerAngles.pitch);
+	}
+
+	inline Matrix4 Matrix4::RotateYXZ(const Vector3& eulerAngles)
+	{
+		return RotateY(eulerAngles.pitch) * RotateX(eulerAngles.roll) * RotateZ(eulerAngles.yaw);
 	}
 
 	inline Matrix4 Matrix4::RotateX(const float rad)
@@ -227,7 +219,7 @@ namespace CCMaths
 		return
 		{
 			(Near * 2.f) / (Right - Left),   0.f,                              0.f,                               0.f,
-			0.f,                             (Near * 2.f) / (Top - Bottom),  0.f,                               0.f,
+			0.f,                             (Near * 2.f) / (Top - Bottom),    0.f,                               0.f,
 			(Right + Left) / (Right - Left), (Top + Bottom) / (Top - Bottom), -(Far + Near) / (Far - Near),      -1.f,
 			0.f,                             0.f,                             -(Far * Near * 2.f) / (Far - Near), 0.f
 		};

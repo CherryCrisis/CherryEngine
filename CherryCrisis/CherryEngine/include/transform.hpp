@@ -3,7 +3,7 @@
 #include <vector>
 #include "maths.hpp"
 
-#include "CherryMacros.h"
+#include "cherry_macros.hpp"
 
 using namespace CCMaths;
 
@@ -17,13 +17,15 @@ private:
 	Transform* m_parent = nullptr;
 	std::vector<Transform*> m_children;
 
-	Matrix4 m_worldMatrix = Matrix4::Identity();
+	Matrix4 m_worldMatrix = Matrix4::Identity;
 
 	bool m_isDirty = true;
 
 	void SetDirty();
 
 public:
+	bool IsRoot() { return !m_parent; }
+
 	void SetParent(Transform* transform);
 	void UpdateMatrix();
 

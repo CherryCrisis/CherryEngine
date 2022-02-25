@@ -1,7 +1,6 @@
+#include "pch.hpp"
 
-#include "pch.h" // use stdafx.h in Visual Studio 2017 and earlier
-
-#include "engine.h"
+#include "engine.hpp"
 #include "al.h"
 #include "alc.h"
 #include "alut.h"

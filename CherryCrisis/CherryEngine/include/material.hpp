@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_map>
 #include <memory>
 
 #include "resource.hpp"
@@ -16,15 +17,15 @@ using namespace CCMaths;
 class Material : public Resource
 {
 private:
-	Vector4 m_albedo;
+	Vector3 m_albedo;
+	float	m_shininess = 0.f;
 
 	//materialName = modelPath\name
 	Material(const char* materialName) : Resource(materialName) {}
 public:
-	std::shared_ptr<Texture> ambientTexture;
-	std::shared_ptr<Texture> albedoTexture;
+	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
 	~Material();
 
-	static Resource* Create(const char* filepath, const aiMaterial* assimpMaterial);
+	static Ref<Material> Create(const char* filepath, const aiMaterial* assimpMaterial);
 };

@@ -2,15 +2,23 @@
 
 #include <cmath>
 
+#include "maths/vector2.hpp"
+#include "maths/vector3.hpp"
+#include "maths/vector4.hpp"
+#include "maths/matrix4.hpp"
 #include "maths/quaternion.hpp"
 
+
+//! \brief #include <maths.hpp>
 namespace CCMaths
 {
-    constexpr static float tau = 6.283185307f;
-    constexpr static float pi = 3.141592653f;
+    constexpr static float TAU = 6.283185307f;
+    constexpr static float PI = 3.141592653f;
+    constexpr static float DEG2RAD = CCMaths::PI / 180.f;
+    constexpr static float RAD2DEG = 180.f / CCMaths::PI;
 
-    inline float ToRadians(float angle) { return angle * CCMaths::pi / 180.f; }
-    inline float ToDegrees(float angle) { return angle * 180.f / CCMaths::pi; }
+    inline float ToRadians(float angle) { return angle * DEG2RAD; }
+    inline float ToDegrees(float angle) { return angle * RAD2DEG; }
     inline float Cos(float rad) { return std::cos(rad); }
     inline float Sin(float rad) { return std::sin(rad); }
     inline float Tan(float rad) { return std::tan(rad); }
@@ -18,18 +26,28 @@ namespace CCMaths
 
     inline float Sqrt(float value) { return std::sqrt(value); }
 
-    inline float Sign(float value) { return value < 0.f ? -1.f : 1.f; }
-    inline int Sign(int value) { return value < 0 ? -1 : 1; }
+    constexpr bool BoolPattern(int index, unsigned int pattern = 2u) { return index % (2 * pattern) < pattern; }
+
+    constexpr int BoolSign(bool flag) { return 1 - 2 * flag; }
 
     template<typename T>
-    inline T Min(T lhs, T rhs) { return lhs < rhs ? lhs : rhs; }
+    T Remap(const T& value, const T& oldMin, const T& oldMax, const T& newMin, const T& newMax)
+    {
+        return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
+    }
+
+    template <typename T>
+    int Sign(const T& value) { return (T(0) < value) - (value < T(0)); }
 
     template<typename T>
-    inline T Max(T lhs, T rhs) { return lhs > rhs ? lhs : rhs; }
+    T Min(const T& lhs, const T& rhs) { return lhs < rhs ? lhs : rhs; }
 
     template<typename T>
-    inline T Clamp(T X, T minValue, T maxValue) { return Min(Max(X, minValue), maxValue); }
+    T Max(const T& lhs, const T& rhs) { return lhs > rhs ? lhs : rhs; }
 
     template<typename T>
-    inline T Lerp(T lhs, T rhs, float A) { return (1.f - A) * lhs + A * rhs; }
+    T Clamp(const T& X, const T& minValue, const T& maxValue) { return Min(Max(X, minValue), maxValue); }
+
+    template<typename T, typename S>
+    T Lerp(const T& lhs, const T& rhs, const S& factor) { return (1.f - factor) * lhs + factor * rhs; }
 }
