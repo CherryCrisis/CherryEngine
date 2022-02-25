@@ -98,14 +98,20 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h" />
     <ClInclude Include="externals\include\GLFW\glfw3native.h" />
     <ClInclude Include="include\basic_subpipeline.hpp" />
+    <ClInclude Include="include\camera.hpp" />
+    <ClInclude Include="include\camera_component.hpp" />
     <ClInclude Include="include\CherryHeader.h" />
     <ClInclude Include="include\CherryMacros.h" />
     <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\cubemap.hpp" />
     <ClInclude Include="include\debug.hpp" />
+    <ClInclude Include="include\element_mesh_pipeline.hpp" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\gl_manager.hpp" />
+    <ClInclude Include="include\light.hpp" />
+    <ClInclude Include="include\light_component.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\keycode.hpp" />
@@ -131,6 +137,8 @@
     <ClInclude Include="include\shader.hpp" />
     <ClInclude Include="include\shaderProgram.hpp" />
     <ClInclude Include="include\singleton.hpp" />
+    <ClInclude Include="include\skybox.hpp" />
+    <ClInclude Include="include\skybox_pipeline.hpp" />
     <ClInclude Include="include\subpipeline_interface.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\transform.hpp" />
@@ -138,6 +146,8 @@
   <ItemGroup>
     <None Include="..\Assets\basicShader.frag" />
     <None Include="..\Assets\basicShader.vert" />
+    <None Include="..\Assets\skyboxShader.frag" />
+    <None Include="..\Assets\skyboxShader.vert" />
     <None Include="externals\include\assimp\color4.inl" />
     <None Include="externals\include\assimp\material.inl" />
     <None Include="externals\include\assimp\matrix3x3.inl" />
@@ -152,6 +162,7 @@
     <None Include="include\maths\vector2.inl" />
     <None Include="include\maths\vector3.inl" />
     <None Include="include\maths\vector4.inl" />
+    <None Include="include\mesh.inl" />
     <None Include="include\resourceManager.inl" />
     <None Include="include\renderer_manager.inl" />
   </ItemGroup>
@@ -159,10 +170,14 @@
     <ClCompile Include="externals\src\gl.c" />
     <ClCompile Include="externals\src\stb_image.cpp" />
     <ClCompile Include="src\basic_subpipeline.cpp" />
+    <ClCompile Include="src\camera_component.cpp" />
+    <ClCompile Include="src\cubemap.cpp" />
     <ClCompile Include="src\debug.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\element_mesh_pipeline.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\entity.cpp" />
+    <ClCompile Include="src\light_component.cpp" />
     <ClCompile Include="src\input_manager.cpp" />
     <ClCompile Include="src\material.cpp" />
     <ClCompile Include="src\maths.cpp" />
@@ -177,6 +192,8 @@
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shaderProgram.cpp" />
+    <ClCompile Include="src\skybox.cpp" />
+    <ClCompile Include="src\skybox_pipeline.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>

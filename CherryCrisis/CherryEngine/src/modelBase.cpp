@@ -3,12 +3,12 @@
 #include "modelLoader.hpp"
 #include "entity.hpp"
 
-Resource* ModelBase::Create(const char* filepath)
+Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
 {
 	ModelBase* modelBase = new ModelBase(filepath);
 	CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
 
-	return modelBase;
+	return Ref<ModelBase>(modelBase);
 }
 
 ModelBase::~ModelBase()
@@ -32,7 +32,7 @@ std::vector<Entity> ModelBase::GenerateEntities(Entity& rootEntity)
     if (m_models.size() != 0 && m_rootNode != nullptr)
         GenerateEntitiesRecursive(m_rootNode, rootEntity, entities);
 
-    return std::move(entities);
+    return entities;
 }
 
 void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity, std::vector<Entity>& entities)

@@ -21,6 +21,14 @@
   <ItemGroup>
     <ClCompile Include="CherryStandalone.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CherryEngine\CherryEngine.vcxproj">
+      <Project>{44848127-f19f-415f-ac56-21890b376c5b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\CherryScripting\CherryScripting.vcxproj">
+      <Project>{a8b73a9b-584b-4dc1-9bda-4a1f8d633dec}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

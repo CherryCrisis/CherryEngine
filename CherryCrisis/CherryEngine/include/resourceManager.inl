@@ -2,8 +2,6 @@
 
 #include "resourceManager.hpp"
 
-#include "mesh.hpp"
-
 template <class T, typename... Args>
 std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {
@@ -14,17 +12,16 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 			return findedResource;
 	}
 
-	Resource* resource = T::Create(filepath, args...);
+	Resource::Ref<T> resourcePtr = T::Create(filepath, args...);
 
-	if (resource == nullptr)
+	if (!resourcePtr)
 		return nullptr;
 
-	auto resourceMap = std::make_pair<std::type_index, std::shared_ptr<Resource>>
-		(typeid(T), std::shared_ptr<Resource>(resource));
+	auto resourceMap = std::make_pair<std::type_index, std::shared_ptr<Resource>>(typeid(T), resourcePtr);
 
 	m_resources.insert(resourceMap);
 
-	return std::dynamic_pointer_cast<T>(resourceMap.second);
+	return resourcePtr;
 }
 
 template<class T>
@@ -34,7 +31,7 @@ std::shared_ptr<T> ResourceManager::GetResource(const char* filepath) const
 
 	const size_t hashKey = std::hash<std::string>()(filepath);
 
-	for (auto it = resourceRange.first; it != resourceRange.second; ++it)
+	for (auto& it = resourceRange.first; it != resourceRange.second; ++it)
 	{
 		if (it->second->GetHashId() == hashKey)
 			return (std::dynamic_pointer_cast<T>(it->second));
@@ -48,12 +45,12 @@ void ResourceManager::GetAllResources(std::vector<std::shared_ptr<T>>& resources
 {
 	auto resourceRange = m_resources.equal_range(typeid(T));
 
-	auto firstIt = resourceRange.first;
-	auto lastIt = resourceRange.second;
+	auto& firstIt = resourceRange.first;
+	auto& lastIt = resourceRange.second;
 
 	resources.reserve(size_t(lastIt - firstIt));
 
-	for (auto it = firstIt; it != lastIt; ++it)
+	for (auto& it = firstIt; it != lastIt; ++it)
 	{
 		resources.push_back(std::dynamic_pointer_cast<T>(it->second));
 	}

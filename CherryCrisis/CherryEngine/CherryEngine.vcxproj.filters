@@ -395,6 +395,29 @@
     </ClInclude>
     <ClInclude Include="externals\include\GLFW\glfw3native.h">
       <Filter>Fichiers externes\GLFW</Filter>
+    <ClInclude Include="include\cubemap.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\light.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\light_component.hpp">
+      <Filter>Fichiers d%27en-tête\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\camera_component.hpp">
+      <Filter>Fichiers d%27en-tête\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\camera.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skybox_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skybox.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\element_mesh_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -450,6 +473,15 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="..\Assets\basicShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="include\mesh.inl">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </None>
+    <None Include="..\Assets\skyboxShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\Assets\skyboxShader.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
@@ -522,6 +554,23 @@
     </ClCompile>
     <ClCompile Include="src\input_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    <ClCompile Include="src\cubemap.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light_component.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera_component.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\element_mesh_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

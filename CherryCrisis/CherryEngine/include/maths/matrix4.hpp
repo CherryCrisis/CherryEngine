@@ -230,6 +230,20 @@ namespace CCMaths
 		*	\sa RotateZ(const float)
 		*/
 		inline static Matrix4 RotateZXY(const Vector3& eulerAngles);
+
+		//! Rotation Matrix
+		/*!
+		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*
+		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
+		inline static Matrix4 RotateYXZ(const Vector3& eulerAngles);
  
 		//! X-axis Rotation Matrix
 		/*!

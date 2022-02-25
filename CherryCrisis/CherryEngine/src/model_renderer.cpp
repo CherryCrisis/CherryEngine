@@ -14,14 +14,11 @@ ModelRenderer::ModelRenderer()
 
 ModelRenderer::~ModelRenderer()
 {
-	RemoveModel();
+//	RemoveModel();
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 {
-	if (!m_model)
-		RenderManager::instance()->SubscribeRenderer(this);
-
 	m_model = newModel;
 
 	if (m_model)
@@ -34,10 +31,11 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 void ModelRenderer::RemoveModel()
 {
-	RenderManager::instance()->UnsubscribeRenderer(this);
+	// TODO: Add pipeline remove
+	RenderManager::instance()->RemoveFromPipeline<BasicSubPipeline>(this);
 }
 
 void ModelRenderer::Draw()
 {
-	RenderManager::instance()->ConsumeFromPipeline<BasicSubPipeline>(this);
+	//RenderManager::instance()->ConsumeFromPipeline<BasicSubPipeline>(this);
 }

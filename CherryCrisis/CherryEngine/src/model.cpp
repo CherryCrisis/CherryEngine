@@ -8,7 +8,7 @@
 #include "mesh.hpp"
 #include "material.hpp"
 
-Resource* Model::Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode)
+Resource::Ref<Model> Model::Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -22,7 +22,7 @@ Resource* Model::Create(const char* filepath, const aiScene* assimpScene, const 
 	model->m_mesh = resourceManager->AddResource<Mesh>(filepath, false, assimpMesh);
 	model->m_material = resourceManager->AddResource<Material>(filepath, true, assimpMaterial);
 
-	return model;
+	return Ref<Model>(model);
 }
 
 Model::~Model()

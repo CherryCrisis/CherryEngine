@@ -1,46 +1,69 @@
 #pragma once
 
-#include "subpipeline_interface.hpp"
-
-#include "model_renderer.hpp"
-#include "transform.hpp"
-#include "texture.hpp"
-#include "model.hpp"
-#include "maths.hpp"
-#include "mesh.hpp"
+#include <unordered_set>
 
 #include <glad/gl.h>
 
-class BasicSubPipeline : public ASubPipeline
-{
-public:
-	struct GPUMeshBasic : GPUMesh
-	{
-		GLuint VAO = 0u, VBO = 0u, EBO = 0u;
-	};
+#include "element_mesh_pipeline.hpp"
 
+#include "texture.hpp"
+#include "light.hpp"
+#include "mesh.hpp"
+
+class CameraComponent;
+class ModelRenderer;
+class Material;
+
+class BasicSubPipeline : public ElementMeshPipeline
+{
+	std::unordered_set<ModelRenderer*>	m_modelRenderers;
+	std::unordered_set<Light*> m_lights;
+	
+	CameraComponent* m_camera = nullptr;
+
+public:
 	struct GPUTextureBasic : GPUTexture
 	{
-		GLuint ID;
+		GLuint ID = 0u;
 	};
 
 	BasicSubPipeline(const char* name);
 
 	template <typename RendererT>
-	void Generate(RendererT* toGenerate)
+	int Generate(RendererT* toGenerate)
 	{
 		static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
 	}
 
 	template <typename RendererT>
-	void Consume(RendererT* toGenerate)
+	void Remove(RendererT* toGenerate)
 	{
-		static_assert(false, "RendererT consumption is not implemented in BasicSubPipeline");
+		static_assert(false, "RendererT deletion is not implemented in BasicSubPipeline");
 	}
 
 	template <>
-	void Generate(ModelRenderer* toGenerate);
+	int Generate(Light* toGenerate);
 
 	template <>
-	void Consume(ModelRenderer* toGenerate);
+	int Generate(CameraComponent* toGenerate);
+
+	template <>
+	int Generate(ModelRenderer* toGenerate);
+
+	template <>
+	int Generate(Material* toGenerate);
+
+	template <>
+	int Generate(Texture* toGenerate);
+
+	template <>
+	void Remove(CameraComponent* toGenerate);
+
+	template <>
+	void Remove(ModelRenderer* toGenerate);
+
+	template <>
+	void Remove(Light* toGenerate);
+
+	void Execute() override;
 };

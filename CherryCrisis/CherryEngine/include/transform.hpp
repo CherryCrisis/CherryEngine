@@ -24,6 +24,8 @@ private:
 	void SetDirty();
 
 public:
+	bool IsRoot() { return !m_parent; }
+
 	void SetParent(Transform* transform);
 	void UpdateMatrix();
 

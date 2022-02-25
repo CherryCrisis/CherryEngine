@@ -3,7 +3,7 @@
 #include <stb_image.h>
 
 Texture::Texture(const char* texturePath)
-    : Resource(texturePath), m_width(0), m_height(0), m_data(0)
+    : Resource(texturePath)
 {
 
 }
@@ -13,8 +13,7 @@ Texture::~Texture()
 
 }
 
-
-Resource* Texture::Create(const char* texturePath)
+Resource::Ref<Texture> Texture::Create(const char* texturePath)
 {
 	Texture* texture = new Texture(texturePath);
 
@@ -34,5 +33,5 @@ Resource* Texture::Create(const char* texturePath)
         //std::cout << "Failed to load image. " << filename << std::endl;
     }
 
-	return texture;
+	return Ref<Texture>(texture);
 }

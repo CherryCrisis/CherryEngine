@@ -1,137 +1,203 @@
 #include "basic_subpipeline.hpp"
 
+#include "camera_component.hpp"
+#include "model_renderer.hpp"
+#include "transform.hpp"
+#include "model.hpp"
+
 BasicSubPipeline::BasicSubPipeline(const char* name)
-	: ASubPipeline(name, "../Assets/basicShader.vert", "../Assets/basicShader.frag")
+	: ElementMeshPipeline(name, "../Assets/basicShader.vert", "../Assets/basicShader.frag")
 {
 
 }
 
 template <>
-void BasicSubPipeline::Generate(ModelRenderer* toGenerate)
+int BasicSubPipeline::Generate(Light* toGenerate)
 {
-	if (toGenerate->m_gpuMesh)
-		return;
+	if (!toGenerate)
+		return -1;
 
+	m_lights.insert(toGenerate);
 
+	return 1;
+}
+
+template <>
+int BasicSubPipeline::Generate(CameraComponent* toGenerate)
+{
+	if (!toGenerate)
+		return -1;
+
+	m_camera = toGenerate;
+}
+
+template <>
+int BasicSubPipeline::Generate(ModelRenderer* toGenerate)
+{
 	Model* model = toGenerate->m_model.get();
 
 	if (!model)
-		return;
+		return -1;
 
 	// Generate GPU mesh
 	{
-		Mesh* mesh = model->m_mesh.get();
+		if (ElementMeshPipeline::Generate(model->m_mesh.get()) == -1)
+			return -1;
 
-		if (!mesh)
-			return;
-
-		GPUMeshBasic gpuMesh;
-
-		// Generate EBO
-		{
-			size_t indicesCount = mesh->m_indices.size();
-
-			glGenBuffers(1, &gpuMesh.EBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh.EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesCount * sizeof(unsigned int), mesh->m_indices.data(), GL_STATIC_DRAW);
-		}
-
-		// Generate VBO
-		{
-			size_t verticesCount = mesh->m_vertices.size();
-
-			glGenBuffers(1, &gpuMesh.VBO);
-			glBindBuffer(GL_ARRAY_BUFFER, gpuMesh.VBO);
-			glBufferData(GL_ARRAY_BUFFER, verticesCount * sizeof(Vertex), mesh->m_vertices.data(), GL_STATIC_DRAW);
-		}
-
-		// Generate VAO and link buffers
-		{
-			glGenVertexArrays(1, &gpuMesh.VAO);
-			glBindVertexArray(gpuMesh.VAO);
-
-			glBindBuffer(GL_ARRAY_BUFFER, gpuMesh.VBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh.EBO);
-
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-			glEnableVertexAttribArray(1);
-			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
-			glEnableVertexAttribArray(2);
-			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-		}
-
-		toGenerate->m_gpuMesh = new GPUMeshBasic(gpuMesh);
+		m_modelRenderers.insert(toGenerate);
 	}
 
 	// Generate GPU textures
 	{
-		Material* material = model->m_material.get();
-
-		if (!material)
-			return;
-
-		Texture* albedoTexture = material->albedoTexture.get();
-
-		if (!albedoTexture)
-			return;
-
-		if (albedoTexture->m_gpuTexture) return;
-
-		// Albedo texture
-		GPUTextureBasic gpuTexture;
-		glGenTextures(1, &gpuTexture.ID);
-		glBindTexture(GL_TEXTURE_2D, gpuTexture.ID);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, albedoTexture->GetWidth(), albedoTexture->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, albedoTexture->GetData());
-
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		albedoTexture->m_gpuTexture = new GPUTextureBasic(gpuTexture);
+		if (Material* material = model->m_material.get())
+			Generate(material);
 	}
+
+	return 1;
 }
 
 template <>
-void BasicSubPipeline::Consume(ModelRenderer* toGenerate)
+int BasicSubPipeline::Generate(Material* toGenerate)
+{
+	if (!toGenerate)
+		return -1;
+
+	// Albedo texture
+	if (Texture* albedoTexture = toGenerate->textures["albedo"].get())
+		Generate(albedoTexture);
+
+	return 1;
+}
+
+template <>
+int BasicSubPipeline::Generate(Texture* toGenerate)
+{
+	if (!toGenerate)
+		return -1;
+
+	if (toGenerate->m_gpuTexture)
+		return 0;
+
+	GPUTextureBasic gpuTexture;
+
+	glCreateTextures(GL_TEXTURE_2D, 1, &gpuTexture.ID);
+
+	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
+		return -1;
+
+	glTextureStorage2D(gpuTexture.ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
+	glTextureSubImage2D(gpuTexture.ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
+
+	glGenerateTextureMipmap(gpuTexture.ID);
+
+	toGenerate->m_gpuTexture = new GPUTextureBasic(gpuTexture);
+
+	return 1;
+}
+
+template <>
+void BasicSubPipeline::Remove(ModelRenderer* toGenerate)
+{
+	m_modelRenderers.erase(toGenerate);
+}
+
+template <>
+void BasicSubPipeline::Remove(Light* toGenerate)
+{
+	m_lights.erase(toGenerate);
+}
+
+template <>
+void BasicSubPipeline::Remove(CameraComponent* toGenerate)
+{
+	m_camera = nullptr;
+}
+
+void BasicSubPipeline::Execute()
 {
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	glCullFace(GL_BACK);
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	CCMaths::Matrix4 modelMat = toGenerate->m_transform->GetWorldMatrix();
-	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, false, modelMat.data);
+	if (m_camera)
+	{
+		CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera->m_camera.fovY, m_camera->m_camera.aspect, m_camera->m_camera.near, m_camera->m_camera.far);
+		CCMaths::Matrix4 view = Matrix4::RotateYXZ(-m_camera->m_transform->GetRotation()) * Matrix4::Translate(m_camera->m_transform->GetPosition());
 
-	CCMaths::Matrix4 viewProj = Matrix4::Perspective(CCMaths::ToRadians(60.f), 4.f / 3.f, 0.001f, 1000.f);
-	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, false, viewProj.data);
+		CCMaths::Matrix4 viewProjection = projection * view;
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
+	}
 
-	float albedo[3] = { 1.0f, 1.0f, 1.0f };
-	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoColor"), 1, albedo);
+	size_t lightID = 0u;
+	for (Light* light : m_lights)
+	{
+		std::string count = "[" + std::to_string(lightID) + "]";
+		std::string lightIdentifier = "uLights" + count;
 
-	Model* model = toGenerate->m_model.get();
+		std::string pointString = lightIdentifier + ".isPoint";
+		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, pointString.c_str());
+		glUniform1i(pointLoc, light->m_isPoint);
 
-	Material* material = model->m_material.get();
+		std::string posString = lightIdentifier + ".position";
+		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, posString.c_str());
+		glUniform3fv(posLoc, 1, light->m_position.data);
 
-	Texture* albedoTexture = material->albedoTexture.get();
+		std::string diffuseString = lightIdentifier + ".diffuse";
+		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, diffuseString.c_str());
+		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
 
-	auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture);
+		lightID++;
+	}
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, gpuAlbedoTexture->ID);
+	for (ModelRenderer* modelRdr : m_modelRenderers)
+	{
+		if (!modelRdr->m_isVisible)
+			continue;
 
-	Mesh* mesh = model->m_mesh.get();
+		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(toGenerate->m_gpuMesh);
+		float albedo[3] = { 1.0f, 1.0f, 1.0f };
+		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoColor"), 1, albedo);
 
-	glBindVertexArray(gpuMesh->VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-	glDrawElements(GL_TRIANGLES, mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+		Model* model = modelRdr->m_model.get();
+
+		if (!model)
+			continue;
+
+		if (Material* material = model->m_material.get())
+		{
+			if (Texture* albedoTexture = material->textures["albedo"].get())
+			{
+				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture))
+					glBindTextureUnit(0, gpuAlbedoTexture->ID);
+			}
+		}
+
+		Mesh* mesh = model->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
+		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh);
+
+		if (!gpuMesh)
+			continue;
+
+		glBindVertexArray(gpuMesh->VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+		glDrawElements(GL_TRIANGLES, mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+	}
+
+	glUseProgram(0);
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
