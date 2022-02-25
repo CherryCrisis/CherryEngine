@@ -10,7 +10,7 @@ Texture::Texture(const char* texturePath)
 
 Texture::~Texture()
 {
-
+    stbi_image_free(m_data);
 }
 
 Resource::Ref<Texture> Texture::Create(const char* texturePath)

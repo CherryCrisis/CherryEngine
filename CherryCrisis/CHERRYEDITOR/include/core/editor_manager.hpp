@@ -4,7 +4,7 @@
 #include <filesystem>
 
 #include <memory>
-#include <CherryHeader.h>
+#include "cherry_header.hpp"
 #include "scene.hpp"
 
 #include "panels/asset_browser.hpp"

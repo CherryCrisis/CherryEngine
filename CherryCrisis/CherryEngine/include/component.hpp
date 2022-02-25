@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CherryMacros.h>
+#include <cherry_macros.hpp>
 
 class CCENGINE_API Behaviour
 {

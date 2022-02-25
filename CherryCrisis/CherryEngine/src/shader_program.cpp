@@ -1,9 +1,9 @@
-#include "shaderProgram.hpp"
+#include "shader_program.hpp"
 
 #include <glad/gl.h>
 #include <assert.h>
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 
 #include "shader.hpp"
 

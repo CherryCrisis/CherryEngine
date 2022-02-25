@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <CherryMacros.h>
+#include "cherry_header.hpp"
 
 #include "keycode.hpp"
 

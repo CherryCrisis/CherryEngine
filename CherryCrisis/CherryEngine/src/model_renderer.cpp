@@ -1,7 +1,7 @@
 #include "model_renderer.hpp"
 
 #include "render_manager.hpp"
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 
 #include "basic_subpipeline.hpp"
 

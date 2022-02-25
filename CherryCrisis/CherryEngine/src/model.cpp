@@ -4,7 +4,7 @@
 #include <assimp/material.h>
 #include <assimp/scene.h>
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 #include "mesh.hpp"
 #include "material.hpp"
 

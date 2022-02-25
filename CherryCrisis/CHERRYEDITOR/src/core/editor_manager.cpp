@@ -15,10 +15,10 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
-#include <CherryHeader.h>
+#include <cherry_header.hpp>
 #include "printer.hpp"
 #include "scene.hpp"
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 #include "render_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling

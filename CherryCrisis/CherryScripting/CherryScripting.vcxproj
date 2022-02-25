@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\CherryEngine\include\framework.h" />
+    <ClInclude Include="..\CherryEngine\include\framework.hpp" />
     <ClInclude Include="..\CherryEngine\include\pch.h" />
     <ClInclude Include="printer.hpp" />
   </ItemGroup>

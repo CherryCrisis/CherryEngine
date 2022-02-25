@@ -16,8 +16,11 @@ private:
     Cubemap(const char* name)
         : Resource(name) { }
 
+
 public:
     GPUCubemap* m_gpuCubemap = nullptr;
+
+    ~Cubemap();
 
     int GetWidth()  { return m_width; }
     int GetHeight() { return m_height; }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Component.h"
+#include "component.hpp"
 #include "debug.hpp"
-#include "engine.h"
+#include "engine.hpp"
 #include "model_renderer.hpp"
 #include "maths.hpp"
 #include "input_manager.hpp"

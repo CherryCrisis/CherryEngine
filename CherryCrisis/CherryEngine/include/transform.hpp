@@ -3,7 +3,7 @@
 #include <vector>
 #include "maths.hpp"
 
-#include "CherryMacros.h"
+#include "cherry_macros.hpp"
 
 using namespace CCMaths;
 

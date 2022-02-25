@@ -1,7 +1,5 @@
 #pragma once
 
-#include "resourceManager.hpp"
-
 template <class T, typename... Args>
 std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {

@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "engine.h"
+#include "engine.hpp"
 
 #include "resource.hpp"
 #include "entity.hpp"

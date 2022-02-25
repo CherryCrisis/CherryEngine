@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/cimport.h>
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 
 #include "texture.hpp"
 

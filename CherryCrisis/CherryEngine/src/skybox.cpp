@@ -1,6 +1,6 @@
 #include "skybox.hpp"
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 
 #include "cubemap.hpp"
 #include "mesh.hpp"

@@ -72,13 +72,13 @@
     <ClInclude Include="include\maths.hpp">
       <Filter>Fichiers d%27en-tête\Maths</Filter>
     </ClInclude>
-    <ClInclude Include="include\CherryHeader.h">
+    <ClInclude Include="include\cherry_header.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\Component.h">
+    <ClInclude Include="include\component.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\framework.h">
+    <ClInclude Include="include\framework.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\pch.h">
@@ -93,16 +93,16 @@
     <ClInclude Include="include\model.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="include\modelBase.hpp">
+    <ClInclude Include="include\model_base.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="include\modelLoader.hpp">
+    <ClInclude Include="include\model_loader.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
     <ClInclude Include="include\resource.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="include\resourceManager.hpp">
+    <ClInclude Include="include\resource_manager.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
     <ClInclude Include="include\shader.hpp">
@@ -114,7 +114,7 @@
     <ClInclude Include="include\debug.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine.h">
+    <ClInclude Include="include\engine.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\transform.hpp">
@@ -348,7 +348,7 @@
     <ClInclude Include="externals\include\assimp\ZipArchiveIOSystem.h">
       <Filter>Fichiers externes\Assimp</Filter>
     </ClInclude>
-    <ClInclude Include="include\shaderProgram.hpp">
+    <ClInclude Include="include\shader_program.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
     <ClInclude Include="include\scene.hpp">
@@ -375,7 +375,7 @@
     <ClInclude Include="include\subpipeline_interface.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\CherryMacros.h">
+    <ClInclude Include="include\cherry_macros.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\element_mesh_pipeline.hpp">
@@ -434,7 +434,7 @@
     <None Include="include\maths\vector4.inl">
       <Filter>Fichiers d%27en-tête\Maths</Filter>
     </None>
-    <None Include="include\resourceManager.inl">
+    <None Include="include\resource_manager.inl">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </None>
     <None Include="externals\include\assimp\color4.inl">
@@ -496,13 +496,13 @@
     <ClCompile Include="src\mesh.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\modelBase.cpp">
+    <ClCompile Include="src\model_base.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\modelLoader.cpp">
+    <ClCompile Include="src\model_loader.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\resourceManager.cpp">
+    <ClCompile Include="src\resource_manager.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\shader.cpp">
@@ -520,7 +520,7 @@
     <ClCompile Include="externals\src\gl.c">
       <Filter>Fichiers externes</Filter>
     </ClCompile>
-    <ClCompile Include="src\shaderProgram.cpp">
+    <ClCompile Include="src\shader_program.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\scene.cpp">

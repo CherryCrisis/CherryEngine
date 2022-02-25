@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <CherryHeader.h>
+#include "cherry_header.hpp"
 
 #include "transform.hpp"
 #include "model_renderer.hpp"

@@ -1,9 +1,9 @@
 #include "scene.hpp"
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 #include "render_manager.hpp"
 
-#include "modelBase.hpp"
+#include "model_base.hpp"
 
 Resource::Ref<Scene> Scene::Create(const char* filePath)
 {

@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "shaderProgram.hpp"
-#include "resourceManager.hpp"
+#include "shader_program.hpp"
+#include "resource_manager.hpp"
 
 class ASubPipeline
 {

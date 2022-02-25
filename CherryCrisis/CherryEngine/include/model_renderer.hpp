@@ -1,12 +1,12 @@
 #pragma once
 
-#include <CherryMacros.h>
+#include "cherry_header.hpp"
 
-#include "Component.h"
+#include "component.hpp"
 
 #include "renderer.hpp"
 
-#include "modelBase.hpp"
+#include "model_base.hpp"
 
 struct GPUMesh;
 

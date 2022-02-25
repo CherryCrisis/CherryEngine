@@ -1,14 +1,14 @@
-#include "modelLoader.hpp"
+#include "model_loader.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/matrix4x4.h>
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 
 #include "mesh.hpp"
-#include "modelBase.hpp"
+#include "model_base.hpp"
 #include "model.hpp"
 
 

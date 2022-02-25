@@ -4,6 +4,12 @@
 
 #include <iostream>
 
+Cubemap::~Cubemap()
+{
+    for (int i = 0; i < 6; i++)
+        stbi_image_free(m_data[i]);
+}
+
 Resource::Ref<Cubemap> Cubemap::Create(const char* texturePath, const char* textures[6])
 {
     Cubemap* cubemap = new Cubemap(texturePath);

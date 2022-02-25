@@ -1,9 +1,9 @@
 #pragma once
 
-#include <CherryMacros.h>
+#include <cherry_macros.hpp>
 
 #include <vector>
-#include "Component.h"
+#include "component.hpp"
 #include "debug.hpp"
 
 class CCENGINE_API Engine

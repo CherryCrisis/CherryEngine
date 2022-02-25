@@ -2,7 +2,7 @@
 
 #include <glad/gl.h>
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 
 #include "basic_subpipeline.hpp"
 #include "skybox_pipeline.hpp"

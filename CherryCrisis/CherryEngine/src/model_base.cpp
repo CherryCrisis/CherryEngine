@@ -1,6 +1,6 @@
-#include "modelBase.hpp"
+#include "model_base.hpp"
 
-#include "modelLoader.hpp"
+#include "model_loader.hpp"
 #include "entity.hpp"
 
 Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)

@@ -5,7 +5,7 @@
 #include <typeindex>
 #include <functional>
 
-#include "engine.h"
+#include "engine.hpp"
 
 #include "resource.hpp"
 
@@ -30,4 +30,4 @@ public:
 	size_t GetResourceCount() const { return m_resources.size(); }
 };
 
-#include "resourceManager.inl"
+#include "resource_manager.inl"
