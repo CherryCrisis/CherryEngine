@@ -46,9 +46,6 @@
     <Filter Include="Fichiers sources\Rendering">
       <UniqueIdentifier>{4c3ee403-c5ce-4c26-bf4f-00e0404f094a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers externes\GLFW">
-      <UniqueIdentifier>{fb15fc9a-31bc-4813-b345-123dfdf8db1e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -381,28 +378,14 @@
     <ClInclude Include="include\CherryMacros.h">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\input_manager.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\keyboard_context.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\keycode.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\include\GLFW\glfw3.h">
-      <Filter>Fichiers externes\GLFW</Filter>
-    </ClInclude>
-    <ClInclude Include="externals\include\GLFW\glfw3native.h">
-      <Filter>Fichiers externes\GLFW</Filter>
-    <ClInclude Include="include\cubemap.hpp">
-      <Filter>Fichiers d%27en-tête\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="include\light.hpp">
+    <ClInclude Include="include\element_mesh_pipeline.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\light_component.hpp">
-      <Filter>Fichiers d%27en-tête\Components</Filter>
+    <ClInclude Include="include\skybox.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skybox_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\camera_component.hpp">
       <Filter>Fichiers d%27en-tête\Components</Filter>
@@ -410,14 +393,26 @@
     <ClInclude Include="include\camera.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\skybox_pipeline.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    <ClInclude Include="include\cubemap.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="include\skybox.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    <ClInclude Include="include\light_component.hpp">
+      <Filter>Fichiers d%27en-tête\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\element_mesh_pipeline.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    <ClInclude Include="include\input_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\keycode.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\keyboard_context.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\GLFW\glfw3native.h">
+      <Filter>Fichiers externes</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\GLFW\glfw3.h">
+      <Filter>Fichiers externes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -473,15 +468,6 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="..\Assets\basicShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="include\mesh.inl">
-      <Filter>Fichiers d%27en-tête\Resource</Filter>
-    </None>
-    <None Include="..\Assets\skyboxShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\Assets\skyboxShader.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
@@ -552,25 +538,26 @@
     <ClCompile Include="src\maths.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\input_manager.cpp">
-      <Filter>Fichiers sources\Core</Filter>
+    <ClCompile Include="src\element_mesh_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera_component.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
     <ClCompile Include="src\cubemap.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\light_component.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\camera_component.cpp">
-      <Filter>Fichiers sources\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="src\skybox_pipeline.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\skybox.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\element_mesh_pipeline.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
+    <ClCompile Include="src\input_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

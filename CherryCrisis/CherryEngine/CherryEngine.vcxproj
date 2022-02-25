@@ -110,11 +110,10 @@
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\framework.h" />
     <ClInclude Include="include\gl_manager.hpp" />
-    <ClInclude Include="include\light.hpp" />
-    <ClInclude Include="include\light_component.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\keycode.hpp" />
+    <ClInclude Include="include\light_component.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
     <ClInclude Include="include\maths\matrix3.hpp" />
@@ -146,8 +145,6 @@
   <ItemGroup>
     <None Include="..\Assets\basicShader.frag" />
     <None Include="..\Assets\basicShader.vert" />
-    <None Include="..\Assets\skyboxShader.frag" />
-    <None Include="..\Assets\skyboxShader.vert" />
     <None Include="externals\include\assimp\color4.inl" />
     <None Include="externals\include\assimp\material.inl" />
     <None Include="externals\include\assimp\matrix3x3.inl" />
@@ -162,7 +159,6 @@
     <None Include="include\maths\vector2.inl" />
     <None Include="include\maths\vector3.inl" />
     <None Include="include\maths\vector4.inl" />
-    <None Include="include\mesh.inl" />
     <None Include="include\resourceManager.inl" />
     <None Include="include\renderer_manager.inl" />
   </ItemGroup>
@@ -177,8 +173,8 @@
     <ClCompile Include="src\element_mesh_pipeline.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\entity.cpp" />
-    <ClCompile Include="src\light_component.cpp" />
     <ClCompile Include="src\input_manager.cpp" />
+    <ClCompile Include="src\light_component.cpp" />
     <ClCompile Include="src\material.cpp" />
     <ClCompile Include="src\maths.cpp" />
     <ClCompile Include="src\mesh.cpp" />
