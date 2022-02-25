@@ -3,7 +3,7 @@
 
 #include <imgui.h>
 
-static const std::filesystem::path AssetPath = "../Assets";
+static const std::filesystem::path AssetPath = "../assets";
 
 AssetBrowser::AssetBrowser() 
 {

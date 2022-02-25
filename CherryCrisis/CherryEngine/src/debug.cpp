@@ -1,9 +1,7 @@
 // debug.cpp : Defines the exported functions for the DLL.
-#include "pch.h" // use stdafx.h in Visual Studio 2017 and earlier
+#include "pch.hpp" // use stdafx.h in Visual Studio 2017 and earlier
 
 #include "debug.hpp"
-
-#include <iostream>
 
 Debug* Debug::instance = nullptr;
 

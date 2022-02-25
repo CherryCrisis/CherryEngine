@@ -18,7 +18,7 @@
 #include "panels/build_displayer.hpp"
 
 // not sure about this
-static const std::filesystem::path AssetPath = "../Assets";
+static const std::filesystem::path AssetPath = "../assets";
  
 class EditorManager 
 {

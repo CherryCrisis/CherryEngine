@@ -10,4 +10,10 @@
 // ajouter les en-têtes à précompiler ici
 #include "framework.hpp"
 
+#include <vector>
+#include <string>
+#include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+
 #endif //PCH_H

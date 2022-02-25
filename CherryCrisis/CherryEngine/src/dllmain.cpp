@@ -1,5 +1,5 @@
 // dllmain.cpp : Définit le point d'entrée de l'application DLL.
-#include "pch.h"
+#include "pch.hpp"
 
 #define CHERRYGP_EXPORTS
 

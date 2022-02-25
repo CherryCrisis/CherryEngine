@@ -5,7 +5,7 @@
 
 SkyboxSubPipeline::SkyboxSubPipeline(const char* name)
 // TODO: Set real path
-	: ElementMeshPipeline(name, "../Assets/skyboxShader.vert", "../Assets/skyboxShader.frag")
+	: ElementMeshPipeline(name, "../assets/skyboxShader.vert", "../assets/skyboxShader.frag")
 {
 
 }

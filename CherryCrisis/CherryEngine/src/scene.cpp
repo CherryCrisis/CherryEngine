@@ -11,7 +11,7 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 
 	auto RM = ResourceManager::GetInstance();
 
-	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../Assets/backpack.obj", true);
+	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../assets/backpack.obj", true);
 
 	Entity root;
 	const std::vector<Entity>& children = modelBase->GenerateEntities(root);

@@ -66,16 +66,16 @@ EditorManager::EditorManager()
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
 
-        if (!LoadTextureFromFile("../Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
+        if (!LoadTextureFromFile("../internal/icons/play_icon.png", &PlayIcon, &null, &null))
             std::cout << "failed to load Play icon" << std::endl;
 
-        if (!LoadTextureFromFile("../Internal/Icons/pause_icon.png", &PauseIcon, &null, &null))
+        if (!LoadTextureFromFile("../internal/icons/pause_icon.png", &PauseIcon, &null, &null))
             std::cout << "failed to load Pause icon" << std::endl;
 
-        if (!LoadTextureFromFile("../Internal/Icons/replay_icon.png", &ReplayIcon, &null, &null))
+        if (!LoadTextureFromFile("../internal/icons/replay_icon.png", &ReplayIcon, &null, &null))
             std::cout << "failed to load Replay icon" << std::endl;
 
-        if (!LoadTextureFromFile("../Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
+        if (!LoadTextureFromFile("../internal/icons/stop_icon.png", &StopIcon, &null, &null))
             std::cout << "failed to load Stop icon" << std::endl;
     }
 }

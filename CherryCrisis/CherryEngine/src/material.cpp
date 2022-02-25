@@ -40,7 +40,7 @@ Resource::Ref<Material> Material::Create(const char* modelFilepath, const aiMate
 		if (assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS)
 		{
 			// TODO: Remove this
-			std::string path = "../Assets/" + std::string(texturePath.C_Str());
+			std::string path = "../assets/" + std::string(texturePath.C_Str());
 			material->textures["albedo"] = resourceManager->AddResource<Texture>(path.c_str(), true);
 		}
 	}

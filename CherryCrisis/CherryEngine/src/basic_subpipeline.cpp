@@ -6,7 +6,7 @@
 #include "model.hpp"
 
 BasicSubPipeline::BasicSubPipeline(const char* name)
-	: ElementMeshPipeline(name, "../Assets/basicShader.vert", "../Assets/basicShader.frag")
+	: ElementMeshPipeline(name, "../assets/basicShader.vert", "../assets/basicShader.frag")
 {
 
 }

@@ -33,7 +33,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{cc32da17-fa71-4568-89ff-10a9a068bdc0}</ProjectGuid>
-    <RootNamespace>CHERRYGAME</RootNamespace>
+    <RootNamespace>CherryStandalone</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>CherryStandalone</ProjectName>
   </PropertyGroup>
