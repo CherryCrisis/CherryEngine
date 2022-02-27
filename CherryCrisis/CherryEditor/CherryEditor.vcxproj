@@ -31,6 +31,7 @@
     <ClCompile Include="src\core\editor_manager.cpp" />
     <ClCompile Include="src\core\frame_displayer.cpp" />
     <ClCompile Include="src\core\main.cpp" />
+    <ClCompile Include="src\core\panel.cpp" />
     <ClCompile Include="src\panels\asset_browser.cpp" />
     <ClCompile Include="src\panels\build_displayer.cpp" />
     <ClCompile Include="src\panels\game_displayer.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="include\panels\project_settings_displayer.hpp" />
     <ClInclude Include="include\panels\scene_displayer.hpp" />
     <ClInclude Include="include\panels\toolbar.hpp" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CherryEngine\CherryEngine.vcxproj">
@@ -66,6 +68,12 @@
     <ProjectReference Include="..\CherryScripting\CherryScripting.vcxproj">
       <Project>{a8b73a9b-584b-4dc1-9bda-4a1f8d633dec}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CherryEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\crisis-min (1).ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

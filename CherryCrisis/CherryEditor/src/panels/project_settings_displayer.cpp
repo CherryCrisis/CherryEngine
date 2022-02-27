@@ -3,14 +3,24 @@
 
 #include <imgui.h>
 
+#define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
+
 ProjectSettingsDisplayer::ProjectSettingsDisplayer(bool spawnOpened = true) : Panel(spawnOpened) 
 {
-    m_categories[0] = "Generals";
-    m_categories[1] = "Audio";
-    m_categories[2] = "Physics";
-    m_categories[3] = "Inputs";
-    m_categories[4] = "Tags / Layers";
-    m_categories[5] = "Render Pass";
+    m_categories[0] = new General( "Generals" );
+    m_categories[1] = new Audio("Audio");
+    m_categories[2] = new Physics("Physics");
+    m_categories[3] = new Input("Inputs");
+    m_categories[4] = new TagLayer("Tags / Layers");
+    m_categories[5] = new RenderPass("Render Pass");
+}
+
+ProjectSettingsDisplayer::~ProjectSettingsDisplayer() 
+{
+    for (PanelCategory* category : m_categories)
+    {
+        delete category;
+    }
 }
 
 void ProjectSettingsDisplayer::Render() 
@@ -27,53 +37,67 @@ void ProjectSettingsDisplayer::Render()
         static char name[32] = "";
         ImGui::InputText("Search", name, IM_ARRAYSIZE(name));
         ImGui::EndMenuBar();
-
+        
         {
             ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar;
             ImGui::BeginChild("CategoryList", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().y), false, window_flags);
-            for (const std::string& name : m_categories ) 
+            
+            int i = 0;
+            for (PanelCategory* category : m_categories )
             {
-                ImGui::Text(name.c_str());
+                if (category->DisplayLabel())
+                    m_selectedCategory = i;
+
+                i++;
             }
 
             ImGui::EndChild();
         }
-
         ImGui::SameLine();
 
-        {
-            ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-
-            ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-            ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
-            if (ImGui::BeginTable("split", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    ImGui::Text("Key");
-                    ImGui::Button("value", ImVec2(-FLT_MIN, 0.0f));
-                    ImGui::TableNextColumn();
-                }
-                ImGui::EndTable();
-            }
-            ImGui::EndChild();
-            ImGui::PopStyleVar();
-        }
-
-
-        ImGui::Columns(2, "Categories");
-        if (ImGui::Button("Inputs")) {}
-        ImGui::NextColumn();
-        ImGui::TextUnformatted("YE");
-        ImGui::Columns();
-
-
-
-        
-        if (ImGui::Button("Close")) { m_isOpened = false; }
-        ImGui::SameLine();
-        if (ImGui::Button("Save")) {}
+        m_categories[m_selectedCategory]->DisplayCategory();
 
         ImGui::End();
     }
+}
+
+
+void ProjectSettingsDisplayer::General::Fill() 
+{
+    static char name[32] = "Cherry Template";
+    IMGUI_LEFT_LABEL(ImGui::InputText, "Game Name :", name, IM_ARRAYSIZE(name));
+    static char version[32] = "0.0.1";
+    IMGUI_LEFT_LABEL(ImGui::InputText, "Version :", version, IM_ARRAYSIZE(version));
+    static char company[32] = "Cherry";
+    IMGUI_LEFT_LABEL(ImGui::InputText, "Company :", company, IM_ARRAYSIZE(company));
+    ImGui::Separator();
+    static char idk[32] = "";
+    IMGUI_LEFT_LABEL(ImGui::InputText, "IDK :", idk, IM_ARRAYSIZE(idk));
+    static char smth[32] = "";
+    IMGUI_LEFT_LABEL(ImGui::InputText, "More and more:", smth, IM_ARRAYSIZE(smth));
+}
+
+void ProjectSettingsDisplayer::Input::Fill()
+{
+    ImGui::Text("Input things");
+}
+
+void ProjectSettingsDisplayer::Audio::Fill()
+{
+    ImGui::Text("Audio things");
+}
+
+void ProjectSettingsDisplayer::Physics::Fill()
+{
+    ImGui::Text("Physics things");
+}
+
+void ProjectSettingsDisplayer::TagLayer::Fill()
+{
+    ImGui::Text("Tag and Layer things");
+}
+
+void ProjectSettingsDisplayer::RenderPass::Fill()
+{
+    ImGui::Text("Render things");
 }

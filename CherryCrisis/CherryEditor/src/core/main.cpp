@@ -18,15 +18,6 @@
 #include "stb_image.h"
 #include "input_manager.hpp"
 
-/*void KeyCallbackWrapper(GLFWwindow* w, int k, int s, int a, int m)
-{
-    void* userPointer = glfwGetWindowUserPointer(w);
-    InputManager* IM = static_cast<InputManager*>(userPointer);
-
-    IM->KeyCallback(w, k, s, a, m);
-}
-*/
-
 int main()
 {
     int screenWidth = 1200;
@@ -37,7 +28,7 @@ int main()
         printf("glfwInit failed\n");
         return -1;
     }
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "GLFW test", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Cherry Crisis", nullptr, nullptr);
     if (window == nullptr)
     {
         printf("glfwCreateWindow failed\n");
