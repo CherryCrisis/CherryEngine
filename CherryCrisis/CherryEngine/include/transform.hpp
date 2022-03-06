@@ -1,13 +1,15 @@
 #pragma once
 
 #include <vector>
-#include "maths.hpp"
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
+
+#include "behaviour.hpp"
+#include "maths.hpp"
 
 using namespace CCMaths;
 
-class CCENGINE_API Transform
+class CCENGINE_API Transform : public Behaviour
 {
 private:
 	Vector3 m_position = Vector3(0.f, 0.f, 0.f);
@@ -24,6 +26,8 @@ private:
 	void SetDirty();
 
 public:
+	Transform(Entity& owner);
+
 	bool IsRoot() { return !m_parent; }
 
 	void SetParent(Transform* transform);
@@ -40,7 +44,7 @@ public:
 	void SetScale(const Vector3& scale);
 	Vector3 GetScale() { return m_scale; }
 
-	void GetChildren(std::vector<Transform*>& transformChildren);
+	std::vector<Transform*> GetChildren() { return m_children; }
 	void AddChildren(Transform* transform);
 
 	Matrix4 GetWorldMatrix();

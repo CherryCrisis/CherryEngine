@@ -19,6 +19,7 @@
 #include "scene.hpp"
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
+#include "scene_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
 bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
@@ -58,8 +59,9 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 
 EditorManager::EditorManager() 
 {
-    // To Replace
+    // TODO: Remove this
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
+    SceneManager::GetInstance()->SetCurrentScene(scene);
     m_hierarchyDisplayer.SetScene(scene.get());
     
     { // To Replace with Resource Manager Texture Handler

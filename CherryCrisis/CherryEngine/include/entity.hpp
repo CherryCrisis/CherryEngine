@@ -1,25 +1,44 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
-#include "cherry_header.hpp"
+#include <cherry_macros.hpp>
 
-#include "transform.hpp"
-#include "model_renderer.hpp"
-#include "light_component.hpp"
-#include "camera_component.hpp"
+class Behaviour;
 
 class CCENGINE_API Entity
 {
-public:
-	Entity();
-	~Entity();
+private:
+	std::string m_name = "Entity";
+	std::vector<Behaviour*> m_behaviours;
 
-	//En attendant l'ECS !
-	// TODO: systeme de components
-	Transform*				m_transform = new Transform();
-	CameraComponent*		m_cameraComp = nullptr;
-	LightComponent*			m_lightComp = nullptr;
-	// TODO: REMOVE THIS
-	std::shared_ptr<ModelRenderer>  m_modelRenderer = std::make_shared<ModelRenderer>();
+public:
+	Entity() = default;
+	Entity(const std::string& name);
+	virtual ~Entity();
+
+	template <class CompT>
+	CompT* AddBehaviour();
+
+	template <class CompT>
+	CompT* GetBehaviour();
+
+	template <class CompT>
+	bool HasBehaviour();
+
+	template <class CompT>
+	bool TryGetBehaviour(CompT*& componentToReturn);
+
+	template <class CompT>
+	CompT* GetOrAddBehaviour();
+
+	void Start();
+	void Update();
+	void Destroy();
+
+	std::string GetName() { return m_name; }
 };
+
+#include "entity.inl"

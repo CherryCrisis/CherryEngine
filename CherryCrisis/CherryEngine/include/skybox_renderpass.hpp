@@ -7,7 +7,7 @@
 #include "cubemap.hpp"
 
 struct Skybox;
-struct CameraComponent;
+class CameraComponent;
 
 class SkyboxRenderPass : public ElementMeshRenderPass
 {

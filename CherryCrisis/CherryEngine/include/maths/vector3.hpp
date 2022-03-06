@@ -16,15 +16,6 @@ namespace CCMaths
 
 			Vector2 xy;
 		};
-
-		const static Vector3 XAxis;					//!< { x = 1, y = 0, z = 0 }
-		const static Vector3 YAxis;					//!< { x = 0, y = 1, z = 0 }
-		const static Vector3 ZAxis;					//!< { x = 0, y = 0, z = 1 }
-		const static Vector3 Forward;				//!< { x = 1, y = 0, z = 0 }
-		const static Vector3 Up;					//!< { x = 0, y = 1, z = 0 }
-		const static Vector3 Right;					//!< { x = 0, y = 0, z = 1 }
-		const static Vector3 Zero;					//!< { x = 0, y = 0, z = 0 }
-		const static Vector3 One;					//!< { x = 1, y = 1, z = 1 }
 							
 		//! Construct the Vector3 as the \b Zero Vector3
 		Vector3()
@@ -465,6 +456,15 @@ namespace CCMaths
 		*	\sa Normalize()
 		*/
 		inline static Vector3 Normalized(const Vector3& inVector);
+
+		static const Vector3 XAxis;					//!< { x = 1, y = 0, z = 0 }
+		static const Vector3 YAxis;					//!< { x = 0, y = 1, z = 0 }
+		static const Vector3 ZAxis;					//!< { x = 0, y = 0, z = 1 }
+		static const Vector3 Forward;				//!< { x = 1, y = 0, z = 0 }
+		static const Vector3 Up;					//!< { x = 0, y = 1, z = 0 }
+		static const Vector3 Right;					//!< { x = 0, y = 0, z = 1 }
+		static const Vector3 Zero;					//!< { x = 0, y = 0, z = 0 }
+		static const Vector3 One;					//!< { x = 1, y = 1, z = 1 }
 	};
 }
 

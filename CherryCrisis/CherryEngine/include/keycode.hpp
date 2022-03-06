@@ -1,6 +1,6 @@
 #pragma once
 
-enum class Keycode 
+enum class CCENGINE_API Keycode
 {
  	UNKNOWN     = -1,
  	

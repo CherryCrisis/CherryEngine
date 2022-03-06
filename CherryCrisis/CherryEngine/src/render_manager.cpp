@@ -76,7 +76,7 @@ RenderManager::RenderManager()
 
 void RenderManager::DrawScene()
 {
-	RenderManager* RM = instance();
+	RenderManager* RM = GetInstance();
 	
     // TODO: Move this
 	if (RM->m_orderedPipeline.size() == 0 && RM->m_existingSubpipelines.size() > 0)
@@ -93,7 +93,7 @@ void RenderManager::DrawScene()
 
 void RenderManager::InitializePipeline(const PipelineDesc& pipelineDesc)
 {
-	RenderManager* RM = instance();
+	RenderManager* RM = GetInstance();
 
 	pipelineDesc(RM->m_existingSubpipelines, RM->m_orderedPipeline);
 }

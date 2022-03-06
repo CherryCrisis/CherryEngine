@@ -17,13 +17,6 @@ namespace CCMaths
 			Vector3 rgb;
 		};
 
-		const static Vector4 XAxis;			//!< { x = 1, y = 0, z = 0, w = 0 }
-		const static Vector4 YAxis;			//!< { x = 0, y = 1, z = 0, w = 0 }
-		const static Vector4 ZAxis;			//!< { x = 0, y = 0, z = 1, w = 0 }
-		const static Vector4 WAxis;			//!< { x = 0, y = 0, z = 0, w = 1 }
-		const static Vector4 Zero;			//!< { x = 0, y = 0, z = 0, w = 0 }
-		const static Vector4 One;			//!< { x = 1, y = 1, z = 1, w = 1 }
-
 		//! Construct the Vector4 as the \b Zero Vector4
 		Vector4()
 			: x(0.f), y(0.f), z(0.f), w(0.f) {}
@@ -411,6 +404,13 @@ namespace CCMaths
 		*	\sa Normalize()
 		*/
 		inline static Vector4 Normalized(const Vector4& inVector);
+
+		static const Vector4 XAxis;			//!< { x = 1, y = 0, z = 0, w = 0 }
+		static const Vector4 YAxis;			//!< { x = 0, y = 1, z = 0, w = 0 }
+		static const Vector4 ZAxis;			//!< { x = 0, y = 0, z = 1, w = 0 }
+		static const Vector4 WAxis;			//!< { x = 0, y = 0, z = 0, w = 1 }
+		static const Vector4 Zero;			//!< { x = 0, y = 0, z = 0, w = 0 }
+		static const Vector4 One;			//!< { x = 1, y = 1, z = 1, w = 1 }
 	};
 }
 

@@ -53,7 +53,7 @@ int main()
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
 
-    InputManager* IM = InputManager::instance();
+    InputManager* IM = InputManager::GetInstance();
     glfwSetWindowUserPointer(window, IM);
 
     // Setup Dear ImGui context
@@ -88,7 +88,7 @@ int main()
 
     while (glfwWindowShouldClose(window) == false)
     {
-        InputManager::instance()->UpdateKeys();
+        InputManager::GetInstance()->UpdateKeys();
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();
