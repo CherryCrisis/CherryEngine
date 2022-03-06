@@ -10,7 +10,7 @@
 #include "keycode.hpp"
 
 class KeyboardContext;
-class Event;
+//class Event;
 
 struct GLFWwindow {};
 
@@ -25,7 +25,7 @@ private:
 		bool	m_isUp		= false;
 		bool	m_isHeld	= false;
 
-		Event*	m_callbackEvent = nullptr;
+		//Event*	m_callbackEvent = nullptr;
 	};
 
 	class Axis 
@@ -40,7 +40,7 @@ private:
 	private:
 
 	public:
-		std::unordered_map<Keycode, Event> m_inputPreset;
+		//std::unordered_map<Keycode, Event> m_inputPreset;
 
 		//list of axis (can be added by the user via the editor (internally modifying game keyboard context))
 		std::unordered_map<std::string, Axis> m_axis; //<const char* = axisName, Axis = axis class>

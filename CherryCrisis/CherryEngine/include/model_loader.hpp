@@ -3,11 +3,13 @@
 #include <vector>
 #include <memory>
 
-class Model;
-struct ModelNode;
+#include "model.hpp"
+#include "model_base.hpp"
+//class Model;
+//struct ModelNode;
 
-namespace CCModelLoader
-{
+//namespace CCModelLoader
+//{
 	void LoadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);
-}
+//}
 

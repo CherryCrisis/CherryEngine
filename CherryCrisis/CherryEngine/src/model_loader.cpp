@@ -14,8 +14,8 @@
 #include "model.hpp"
 
 
-namespace CCModelLoader
-{
+//namespace CCModelLoader
+//{
     ModelNode* ProcessDataRecursive(const aiNode* node, ModelNode* parentModelNode, const aiScene* scene,
         std::vector<std::shared_ptr<Model>>& models,
         ResourceManager* resourceManager, const char* filepath)
@@ -85,7 +85,7 @@ namespace CCModelLoader
             return;
         }
     }
-}
+//}
 
 
 

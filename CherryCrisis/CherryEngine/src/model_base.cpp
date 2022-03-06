@@ -5,10 +5,20 @@
 #include "model_loader.hpp"
 #include "entity.hpp"
 
+#include "threadpool.hpp"
+#include "model.hpp"
+
 Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
 {
+    ThreadPool* threadpool = ThreadPool::GetInstance();
+
 	ModelBase* modelBase = new ModelBase(filepath);
-	CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
+
+    std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(LoadModel, filepath, &modelBase->m_rootNode, modelBase->m_models);
+
+    threadpool->CreateTask(std::move(function), EChannelTask::Multithread);
+
+	//CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
 
 	return Ref<ModelBase>(modelBase);
 }
