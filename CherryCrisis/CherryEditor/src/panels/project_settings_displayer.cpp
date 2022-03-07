@@ -66,38 +66,45 @@ void ProjectSettingsDisplayer::General::Fill()
 {
     static char name[32] = "Cherry Template";
     IMGUI_LEFT_LABEL(ImGui::InputText, "Game Name :", name, IM_ARRAYSIZE(name));
+
     static char version[32] = "0.0.1";
     IMGUI_LEFT_LABEL(ImGui::InputText, "Version :", version, IM_ARRAYSIZE(version));
+
     static char company[32] = "Cherry";
     IMGUI_LEFT_LABEL(ImGui::InputText, "Company :", company, IM_ARRAYSIZE(company));
-    ImGui::Separator();
-    static char idk[32] = "";
-    IMGUI_LEFT_LABEL(ImGui::InputText, "IDK :", idk, IM_ARRAYSIZE(idk));
-    static char smth[32] = "";
-    IMGUI_LEFT_LABEL(ImGui::InputText, "More and more:", smth, IM_ARRAYSIZE(smth));
 }
 
 void ProjectSettingsDisplayer::Input::Fill()
 {
-    ImGui::Text("Input things");
+    ImGui::Text("Inputs ");
 }
 
 void ProjectSettingsDisplayer::Audio::Fill()
 {
-    ImGui::Text("Audio things");
+    IMGUI_LEFT_LABEL(ImGui::Checkbox, "3D Spatialization :", &m_isUsingSpatialization);
+    IMGUI_LEFT_LABEL(ImGui::SliderFloat, "Global Volume :", &m_globalVolume, 0.f, 100.f);
 }
 
 void ProjectSettingsDisplayer::Physics::Fill()
 {
-    ImGui::Text("Physics things");
+    static char gravity[32] = "9.81";
+    IMGUI_LEFT_LABEL(ImGui::InputText, "Gravity :", gravity, IM_ARRAYSIZE(gravity));
+    
+    m_gravity = std::stof(gravity);
+
+
+    ImGui::Separator();
+    ImGui::Text("Layer Matrix");
 }
 
 void ProjectSettingsDisplayer::TagLayer::Fill()
 {
-    ImGui::Text("Tag and Layer things");
+    ImGui::Text("Tag List");
+    ImGui::Separator();
+    ImGui::Text("Layers List");
 }
 
 void ProjectSettingsDisplayer::RenderPass::Fill()
 {
-    ImGui::Text("Render things");
+    ImGui::Text("Pass Order");
 }

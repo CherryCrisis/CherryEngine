@@ -33,6 +33,9 @@ private:
 	public:
 		Audio(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
+
+		bool m_isUsingSpatialization = true;
+		float m_globalVolume = 100.f;
 	};
 
 	class Physics : public PanelCategory
@@ -40,6 +43,8 @@ private:
 	public:
 		Physics(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
+
+		float m_gravity = 9.81f;
 	};
 
 	class TagLayer : public PanelCategory
