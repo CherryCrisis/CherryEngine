@@ -8,18 +8,23 @@ namespace CherryScripting
 { 
 	public class MyComponent : Behaviour
 	{
+
+		Vector3 vec = Vector3.Zero;
+
 		public MyComponent(Entity owner) 
 			: base(owner)
 		{
+			Console.WriteLine("MyComponent()");
 			Console.WriteLine(owner);
 		}
-			
+
 		int i = 5;
 
 		public void Update()
 		{
-			i++;
-			
+			Console.WriteLine("Update");
+			Console.WriteLine(host);
+
 			//Console.WriteLine(host);
 		}
 	}

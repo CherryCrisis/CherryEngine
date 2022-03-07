@@ -16,6 +16,7 @@ public class Entity : global::System.IDisposable {
 
   internal Entity(global::System.IntPtr cPtr, bool cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
+            System.Console.WriteLine($"Entity() {cPtr}, {cMemoryOwn}");
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 

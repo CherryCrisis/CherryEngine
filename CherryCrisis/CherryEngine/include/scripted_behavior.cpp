@@ -8,55 +8,29 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	// TODO: Move this in the proper files
 	mono_set_dirs(".\\lib", ".\\externals\\etc");
 
-	/*static const char* options[] = {
-		  "--soft-breakpoints",
-		  "--debugger-agent=transport=dt_socket,address=127.0.0.1:55555"
-	};
+	mono::ManagedScriptSystemSettings_t settings("TestDomain");
+	settings.configIsFile = false,
+	settings.configData = nullptr,
 
-	mono_jit_parse_options(sizeof(options) / sizeof(char*), (char**)options);
-	mono_debug_init(MONO_DEBUG_FORMAT_MONO);*/
-
-	settings = std::make_shared<ManagedScriptSettings>("CsProject");
-
-	script = std::make_shared<ManagedScript>(*settings);
+	script = std::make_shared<mono::ManagedScriptSystem>(settings);
 
 	context = script->CreateContext("../x64/Debug/CherryScripting.dll");
 
-	behaviourClass = mono_class_from_name((*context->m_loadedAssemblies.begin())->m_image, "CherryScripting", "MyComponent");
+	managedClass = context->FindClass("CherryScripting", "MyComponent");
 
-	MonoClass* entityClass = mono_class_from_name((*context->m_loadedAssemblies.begin())->m_image, "CCEngine", "Entity");
-	MonoObject* entityInst = mono_object_new(context->m_domain, entityClass);
+	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
+	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
 
-	behaviourInst = mono_object_new(context->m_domain, behaviourClass);
+	mono::ManagedClass* entClass = context->FindClass("CCEngine", "Entity");
 
-	MonoMethod* currMethod;
-	void* iter = nullptr;
-	while (currMethod = mono_class_get_methods(behaviourClass, &iter)) {
-		if (strcmp(mono_method_get_name(currMethod), ".ctor") == 0) {
-			ctor = currMethod;
-			break;
-		}
-	}
+	bool value = false;
+	void* params[] = { &GetHost(), &value };
+	mono::ManagedObject* entObj = entClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, params);
 
-	MonoMethod* entCtor = nullptr;
-	iter = currMethod = nullptr;
-	while (currMethod = mono_class_get_methods(entityClass, &iter)) {
-		if (strcmp(mono_method_get_name(currMethod), ".ctor") == 0) {
-			entCtor = currMethod;
-		}
-	}
-	bool memOwn = true;
-	void* entArgs[2] = { &GetHost(), &memOwn };
-	mono_runtime_invoke(entCtor, entityInst, entArgs, nullptr);
+	update = managedClass->FindMethod("Update");
 
-
-	int num = 50;
-	void* args[2] = { &num, entityInst };
-	mono_runtime_invoke(ctor, behaviourInst, args, nullptr);
-
-
-	updateDesc = mono_method_desc_new(":Update()", false);
-	updateMethod = mono_method_desc_search_in_class(updateDesc, behaviourClass);
+	void* args[] = { entObj->RawObject() };
+	behaviourInst = managedClass->CreateInstance({ entClass->RawType() }, args);
 }
 
 void ScriptedBehaviour::SetupInterface()
@@ -71,5 +45,5 @@ void ScriptedBehaviour::Start()
 
 void ScriptedBehaviour::Update()
 {
-	mono_runtime_invoke(updateMethod, behaviourInst, nullptr, nullptr);
+	update->Invoke(behaviourInst, nullptr);
 }

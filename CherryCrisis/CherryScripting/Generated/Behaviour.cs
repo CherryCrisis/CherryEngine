@@ -16,6 +16,7 @@ public class Behaviour : global::System.IDisposable {
 
   internal Behaviour(global::System.IntPtr cPtr, bool cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
+            System.Console.WriteLine($"Behaviour() {cPtr}, {cMemoryOwn}");
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
