@@ -2,7 +2,9 @@
 #include "panels/asset_browser.hpp"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 
+//To Clean
 static const std::filesystem::path AssetPath = "../assets";
 
 AssetBrowser::AssetBrowser() 
@@ -70,7 +72,24 @@ void AssetBrowser::Render()
             path_iterator = path_iterator.parent_path();
         }
 
+        if (ImGui::BeginPopupContextItem("context"))
+        {
+            ImGui::Text("I am a Popup");
+            ImGui::Button("New");
+            ImGui::EndPopup();
+        }
+
+        if (ImGui::IsWindowFocused() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
+        {
+            ImGui::OpenPopup("context");
+        }
+
         QuerryBrowser();
     }
     ImGui::End();
+}
+
+void AssetBrowser::AssetNode::Render() 
+{
+
 }

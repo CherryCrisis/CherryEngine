@@ -7,6 +7,16 @@
 class AssetBrowser : public Panel
 {
 private :
+	class AssetNode 
+	{
+	private:
+		unsigned int m_icon = 0;
+	
+	public:
+		void Render();
+	};
+
+
 	// Control Variables
 	float m_padding = 16.f;
 	float m_thumbnailSize = 128.f;

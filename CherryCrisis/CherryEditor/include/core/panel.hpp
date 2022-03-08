@@ -15,6 +15,7 @@ protected:
 public:
 
 	virtual void Render() = 0;
+	virtual void ContextCallback() {};
 
 	void Toggle(bool state) { m_isOpened = state; }
 
