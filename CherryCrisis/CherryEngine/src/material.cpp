@@ -15,14 +15,11 @@ Material::~Material()
 
 }
 
-Resource::Ref<Material> Material::Create(const char* modelFilepath, const aiMaterial* assimpMaterial)
+Resource::Ref<Material> Material::Create(const char* filepath, const aiMaterial* assimpMaterial)
 {
     ResourceManager* resourceManager = ResourceManager::GetInstance();
 
-	aiString name = assimpMaterial->GetName();
-	std::string materialPath = modelFilepath + std::string("/") + std::string(name.C_Str());
-
-	Material* material = new Material(materialPath.c_str());
+	Material* material = new Material(filepath);
 
 	//Material Color
 	aiColor3D color(0.f, 0.f, 0.f);

@@ -5,6 +5,28 @@
 
 namespace CCFunction
 {
+	//template <class T>
+	//struct unwrap_refwrapper
+	//{
+	//	using type = T;
+	//};
+	//
+	//template <class T>
+	//struct unwrap_refwrapper<std::reference_wrapper<T>>
+	//{
+	//	using type = T&;
+	//};
+
+	//template <class T>
+	//using unwrap_decay_t = typename unwrap_refwrapper<typename std::decay<T>::type>::type;
+	//std::unwrap_ref_decay_t;
+
+	//template <class... Args>
+	//constexpr std::tuple<std::unwrap_ref_decay_t<Args>...> make_tuple(Args... args)
+	//{
+	//	return std::tuple<std::unwrap_ref_decay_t<Args>...>(std::forward<Args>(args)...);
+	//}
+
 	class AFunction
 	{
 	public:
@@ -19,14 +41,15 @@ namespace CCFunction
 		std::tuple<Args&&...> m_args;
 
 	public:
-		NonMemberFunction(void (*f)(Args... type), std::tuple<Args...> args)
-			: m_f(f), m_args(args)
+		constexpr NonMemberFunction(void (*f)(Args... type), Args&&... args)
+			: m_f(f), m_args(std::forward<Args>(args)...)
 		{
 		}
 
 		virtual void Invoke() const override
 		{
-			(m_f)(std::get<Args>(m_args)...);
+			std::tuple<Args...> tupleArgs(std::get<Args&&>(m_args)...);
+			(m_f)(std::get<Args>(tupleArgs)...);
 		}
 	};
 
@@ -50,21 +73,19 @@ namespace CCFunction
 		}
 	};
 
-	template<class T, class... Args>
-	std::unique_ptr<AFunction> BindFunction(void (T::* f)(Args... type), T* c, Args&&... args)
-	{
-		std::unique_ptr<MemberFunction<T, Args...>> function =
-			std::make_unique<MemberFunction<T, Args...>>(MemberFunction(f, c, std::forward_as_tuple<Args>(args)...));
-
-		return std::move(function);
-	}
+	//template<class T, class... Args>
+	//std::unique_ptr<AFunction> BindFunction(void (T::* f)(Args... type), T* c, Args&&... args)
+	//{
+	//	std::unique_ptr<MemberFunction<T, Args...>> function =
+	//		std::make_unique<MemberFunction<T, Args...>>(MemberFunction(f, c, std::forward_as_tuple<Args>(args)...));
+	//
+	//	return std::move(function);
+	//}
 
 	template<class... Args>
-	constexpr std::unique_ptr<AFunction> BindFunction(void (*f)(Args... type), Args&&... args)
+	constexpr std::unique_ptr<AFunction> BindFunction(void (*f)(Args...), Args&&... args)
 	{
-		std::unique_ptr<NonMemberFunction<Args...>> function =
-			std::make_unique<NonMemberFunction<Args...>>(NonMemberFunction(f, std::forward_as_tuple<Args>(args)...));
-
-		return std::move(function);
+		return std::make_unique<NonMemberFunction<Args...>>
+			(NonMemberFunction<Args...>(f, std::forward<Args>(args)...));
 	}
 }

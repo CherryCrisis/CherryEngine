@@ -43,7 +43,7 @@ public:
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
 
-	static Ref<Mesh> Create(const char* modelPath, const aiMesh* assimpMesh);
+	static Ref<Mesh> Create(const char* filepath, const aiMesh* assimpMesh);
 
 	static Ref<Mesh> CreateCube(const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes);
 

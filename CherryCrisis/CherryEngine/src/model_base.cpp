@@ -8,19 +8,27 @@
 #include "threadpool.hpp"
 #include "model.hpp"
 
+//void test(const int& cint)
+//{
+//    
+//}
+#include <functional>
+
 Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
 {
+    Ref<ModelBase> modelBase(new ModelBase(filepath));
+
     ThreadPool* threadpool = ThreadPool::GetInstance();
 
-	ModelBase* modelBase = new ModelBase(filepath);
+    //std::unique_ptr<CCFunction::AFunction> function = 
+    //    CCFunction::BindFunction(LoadModel, modelBase->filepath.c_str(), &modelBase->m_rootNode, modelBase->m_models);
 
-    std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(LoadModel, filepath, &modelBase->m_rootNode, modelBase->m_models);
+    threadpool->CreateTask(CCFunction::BindFunction(LoadModel, modelBase->filepath.c_str(), &modelBase->m_rootNode, modelBase->m_models), EChannelTask::Multithread);
 
-    threadpool->CreateTask(std::move(function), EChannelTask::Multithread);
+    //system("pause");
+    //LoadModel(&test, &modelBase->m_rootNode, modelBase->m_models);
 
-	//CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
-
-	return Ref<ModelBase>(modelBase);
+    return modelBase;
 }
 
 ModelBase::~ModelBase()

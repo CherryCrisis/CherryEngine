@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_map>
+#include <map>
 #include <memory>
 #include <typeindex>
 
@@ -12,7 +12,7 @@ class Event
 private:
 	using ACallback = std::unique_ptr<CCCallback::ACallback<Args...>>;
 
-	std::unordered_map<const std::type_index, ACallback> m_callbacks;
+	std::map<const std::type_index, ACallback> m_callbacks;
 
 public:
 	Event() = default;
@@ -46,7 +46,7 @@ public:
 	void Unbind(const std::type_index& funcId)
 	{
 		auto callback = m_callbacks.find(funcId);
-
+		
 		if (callback != m_callbacks.end())
 			m_callbacks.erase(funcId);
 		//else

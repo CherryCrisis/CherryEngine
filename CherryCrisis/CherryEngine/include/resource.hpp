@@ -3,12 +3,10 @@
 #include <string>
 #include <memory>
 
-#include <iostream>
-
 
 class Resource
 {
-private:
+protected:
 	const size_t hashId;
 	const std::string filepath;
 
@@ -22,6 +20,6 @@ public:
 	virtual ~Resource() = default;
 
 	const size_t GetHashId() const { return hashId; }
-	const std::string GetFilepath() const { return filepath; }
+	const char* GetFilepath() const { return filepath.c_str(); }
 };
 

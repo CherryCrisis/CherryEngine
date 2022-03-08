@@ -4,7 +4,7 @@
 
 #include <assimp/mesh.h>
 
-Resource::Ref<Mesh> Mesh::Create(const char* modelFilepath, const aiMesh* assimpMesh)
+Resource::Ref<Mesh> Mesh::Create(const char* filepath, const aiMesh* assimpMesh)
 {
     std::vector<Vertex> vertices;
     vertices.reserve(assimpMesh->mNumVertices);
@@ -46,10 +46,7 @@ Resource::Ref<Mesh> Mesh::Create(const char* modelFilepath, const aiMesh* assimp
         }
     }
 
-    // TODO: Change with string view
-    std::string meshPath = modelFilepath + std::string("/") + std::string(assimpMesh->mName.C_Str());
-
-	return Mesh::Create(meshPath.c_str(), vertices, indices);
+	return Mesh::Create(filepath, vertices, indices);
 }
 
 Resource::Ref<Mesh> Mesh::Create(const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)

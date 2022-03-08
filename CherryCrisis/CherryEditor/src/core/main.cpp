@@ -18,6 +18,8 @@
 #include "stb_image.h"
 #include "input_manager.hpp"
 
+#include "resource_manager.hpp"
+
 /*void KeyCallbackWrapper(GLFWwindow* w, int k, int s, int a, int m)
 {
     void* userPointer = glfwGetWindowUserPointer(w);
@@ -87,9 +89,11 @@ int main()
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+    ResourceManager* RM = ResourceManager::GetInstance();
+
     while (glfwWindowShouldClose(window) == false)
     {
-        InputManager::instance()->UpdateKeys();
+        //InputManager::instance()->UpdateKeys();
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

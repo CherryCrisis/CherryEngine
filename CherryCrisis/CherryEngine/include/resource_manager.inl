@@ -26,9 +26,9 @@ template<class T>
 std::shared_ptr<T> ResourceManager::GetResource(const char* filepath) const
 {
 	auto resourceRange = m_resources.equal_range(typeid(T));
-
+	
 	const size_t hashKey = std::hash<std::string>()(filepath);
-
+	
 	for (auto& it = resourceRange.first; it != resourceRange.second; ++it)
 	{
 		if (it->second->GetHashId() == hashKey)

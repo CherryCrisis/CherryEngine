@@ -21,8 +21,12 @@ Resource::Ref<Model> Model::Create(const char* filepath, const aiScene* assimpSc
 	const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
 	const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
 	
-	model->m_mesh = resourceManager->AddResource<Mesh>(filepath, false, assimpMesh);
-	model->m_material = resourceManager->AddResource<Material>(filepath, true, assimpMaterial);
+	std::string meshPath = filepath + std::string("/") + std::string(assimpMesh->mName.C_Str());
+	model->m_mesh = resourceManager->AddResource<Mesh>(meshPath.c_str(), false, assimpMesh);
+
+	aiString name = assimpMaterial->GetName();
+	std::string materialPath = filepath + std::string("/") + std::string(name.C_Str());
+	model->m_material = resourceManager->AddResource<Material>(materialPath.c_str(), true, assimpMaterial);
 
 	return Ref<Model>(model);
 }

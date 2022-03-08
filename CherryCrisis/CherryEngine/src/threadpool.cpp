@@ -1,3 +1,4 @@
+#include "pch.hpp"
 #include "threadpool.hpp"
 
 ThreadPool* ThreadPool::m_instance = nullptr;
@@ -66,12 +67,13 @@ void ThreadPool::Update(EChannelTask channelTask)
 				task = std::move(m_multiThreadsTasks.front());
 				m_multiThreadsTasks.pop();
 			}
+
 			task->m_func->Invoke();
 
 			//Add invoke event in mainthead queue
-			std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
-			task->m_func = CCFunction::BindFunction(&Event<>::Invoke, &task->m_onFinished);
-			m_mainThreadTasks.push(task);
+			//std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
+			//task->m_func = CCFunction::BindFunction(&Event<>::Invoke, &task->m_onFinished);
+			//m_mainThreadTasks.push(task);
 		}
 	}
 	else
