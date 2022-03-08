@@ -1,14 +1,18 @@
 %{
 	#include "behaviour.hpp"
+	#include "component.hpp"
 %}
 
-class Behaviour
+%include component.i
+
+%feature("director") Behaviour;
+
+class Behaviour : public Component
 {
 private:
 	Entity& m_owner;
 
 public:
-	Behaviour(Entity& owner);
 	virtual ~Behaviour() = default;
 
 	Entity& GetHost();

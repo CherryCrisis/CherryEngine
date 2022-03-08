@@ -10,20 +10,20 @@
 
 namespace CCEngine {
 
-public class Entity : global::System.IDisposable {
+public class Component : global::System.IDisposable {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
   protected bool swigCMemOwn;
 
-  internal Entity(global::System.IntPtr cPtr, bool cMemoryOwn) {
+  internal Component(global::System.IntPtr cPtr, bool cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
-  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(Entity obj) {
+  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(Component obj) {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~Entity() {
+  ~Component() {
     Dispose(false);
   }
 
@@ -37,37 +37,14 @@ public class Entity : global::System.IDisposable {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          CherryEnginePINVOKE.delete_Entity(swigCPtr);
+          CherryEnginePINVOKE.delete_Component(swigCPtr);
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
     }
   }
 
-  public Entity() : this(CherryEnginePINVOKE.new_Entity__SWIG_0(), true) {
-  }
-
-  public Entity(string name) : this(CherryEnginePINVOKE.new_Entity__SWIG_1(name), true) {
-    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
-  }
-
-  public void Destroy() {
-    CherryEnginePINVOKE.Entity_Destroy(swigCPtr);
-  }
-
-  private string GetName() {
-    string ret = CherryEnginePINVOKE.Entity_GetName(swigCPtr);
-    return ret;
-  }
-
-		public string name => GetName();
-
-		public override string ToString() => name;
-	
-  public Transform GetTransform() {
-    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetTransform(swigCPtr);
-    Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
-    return ret;
+  public Component() : this(CherryEnginePINVOKE.new_Component(), true) {
   }
 
 }

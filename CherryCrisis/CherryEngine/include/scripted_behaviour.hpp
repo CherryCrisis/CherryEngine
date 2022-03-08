@@ -13,10 +13,11 @@ class ScriptedBehaviour : public Behaviour
 
 	mono::ManagedClass* managedClass;
 	mono::ManagedObject* behaviourInst;
-	mono::ManagedMethod* update;
+	mono::ManagedMethod* managedUpdate;
+	mono::ManagedMethod* managedStart;
 
-
-	void SetupInterface();
+	std::function <void(MonoObject* _this, MonoException** _excep)> csUpdate;
+	std::function <void(MonoObject* _this, MonoException** _excep)> csStart;
 
 public:
 	ScriptedBehaviour(Entity& owner);

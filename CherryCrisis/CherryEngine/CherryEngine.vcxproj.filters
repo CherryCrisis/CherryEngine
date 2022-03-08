@@ -518,6 +518,12 @@
     <None Include="interface\behaviour.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
+    <None Include="interface\transform.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\component.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entity.cpp">
@@ -610,7 +616,7 @@
     <ClCompile Include="src\monowrapper.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="include\scripted_behavior.cpp">
+    <ClCompile Include="src\scripted_behaviour.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="interface\ccengine_wrap.cxx">

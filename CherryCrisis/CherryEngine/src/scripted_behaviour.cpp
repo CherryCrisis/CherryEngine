@@ -21,29 +21,26 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
 	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
 
-	mono::ManagedClass* entClass = context->FindClass("CCEngine", "Entity");
+	managedUpdate = managedClass->FindMethod("Update");
+	managedStart = managedClass->FindMethod("Start");
 
-	bool value = false;
-	void* params[] = { &GetHost(), &value };
-	mono::ManagedObject* entObj = entClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, params);
+	csUpdate = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedUpdate->RawMethod());
+	csStart = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedStart->RawMethod());
 
-	update = managedClass->FindMethod("Update");
-
-	void* args[] = { entObj->RawObject() };
-	behaviourInst = managedClass->CreateInstance({ entClass->RawType() }, args);
-}
-
-void ScriptedBehaviour::SetupInterface()
-{
-
+	bool value = true;
+	int* ptr = (int*)this;
+	void* args[] = { &ptr, &value };
+	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
 }
 
 void ScriptedBehaviour::Start()
 {
-	SetupInterface();
+	MonoException* excep = nullptr;
+	csStart(behaviourInst->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Update()
 {
-	update->Invoke(behaviourInst, nullptr);
+	MonoException* excep = nullptr;
+	csUpdate(behaviourInst->RawObject(), &excep);
 }

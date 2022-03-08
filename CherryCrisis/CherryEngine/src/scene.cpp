@@ -44,10 +44,11 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 
 	auto RM = ResourceManager::GetInstance();
 
-	/*std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../assets/backpack.obj", true);
+	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../assets/backpack.obj", true);
 
 	Entity* root = new Entity("Root");
 	std::vector<Entity*> children = modelBase->GenerateEntities(root);
+	root->AddBehaviour<ScriptedBehaviour>();
 
 	scene->AddEntity(root);
 
@@ -56,12 +57,10 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
-	scene->AddEntity(light);*/
+	scene->AddEntity(light);
 
 	Entity* camera = new Entity("Camera");
 	camera->AddBehaviour<CameraComponent>()->m_transform = camera->AddBehaviour<Transform>();
-
-	camera->AddBehaviour<ScriptedBehaviour>();
 
 	scene->AddEntity(camera);
 

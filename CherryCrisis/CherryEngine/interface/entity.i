@@ -4,7 +4,6 @@
 
 %include std_string.i
 
-
 class Entity
 {
 	%csmethodmodifiers GetName() "private";
@@ -43,5 +42,8 @@ public:
 
 		public override string ToString() => name;
 	%}
+
+
+	%template(GetTransform) GetBehaviour<Transform>;
 };
 

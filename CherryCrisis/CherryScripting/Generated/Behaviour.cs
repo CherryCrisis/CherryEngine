@@ -10,13 +10,10 @@
 
 namespace CCEngine {
 
-public class Behaviour : global::System.IDisposable {
+public class Behaviour : Component {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
-  protected bool swigCMemOwn;
 
-  internal Behaviour(global::System.IntPtr cPtr, bool cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
-            System.Console.WriteLine($"Behaviour() {cPtr}, {cMemoryOwn}");
+  internal Behaviour(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.Behaviour_SWIGUpcast(cPtr), cMemoryOwn) {
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
@@ -24,16 +21,7 @@ public class Behaviour : global::System.IDisposable {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~Behaviour() {
-    Dispose(false);
-  }
-
-  public void Dispose() {
-    Dispose(true);
-    global::System.GC.SuppressFinalize(this);
-  }
-
-  protected virtual void Dispose(bool disposing) {
+  protected override void Dispose(bool disposing) {
     lock(this) {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
@@ -42,11 +30,8 @@ public class Behaviour : global::System.IDisposable {
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
+      base.Dispose(disposing);
     }
-  }
-
-  public Behaviour(Entity owner) : this(CherryEnginePINVOKE.new_Behaviour(Entity.getCPtr(owner)), true) {
-    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
   public Entity GetHost() {
@@ -58,6 +43,13 @@ public class Behaviour : global::System.IDisposable {
 
 		public override string ToString() => System.String.Format("{0} ({1})", base.ToString(), host);
 	
+  public Behaviour() : this(CherryEnginePINVOKE.new_Behaviour(), true) {
+    SwigDirectorConnect();
+  }
+
+  private void SwigDirectorConnect() {
+    CherryEnginePINVOKE.Behaviour_director_connect(swigCPtr);
+  }
 }
 
 }

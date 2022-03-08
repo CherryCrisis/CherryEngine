@@ -13,6 +13,7 @@
 #define SWIGCSHARP
 #endif
 
+#define SWIG_DIRECTORS
 
 
 #ifdef __cplusplus
@@ -298,8 +299,77 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_CherryEngine(SWIG_CSharpS
 
 #define SWIG_contract_assert(nullreturn, expr, msg) if (!(expr)) {SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, msg, ""); return nullreturn; } else
 
+/* -----------------------------------------------------------------------------
+ * director_common.swg
+ *
+ * This file contains support for director classes which is common between
+ * languages.
+ * ----------------------------------------------------------------------------- */
+
+/*
+  Use -DSWIG_DIRECTOR_STATIC if you prefer to avoid the use of the
+  'Swig' namespace. This could be useful for multi-modules projects.
+*/
+#ifdef SWIG_DIRECTOR_STATIC
+/* Force anonymous (static) namespace */
+#define Swig
+#endif
+/* -----------------------------------------------------------------------------
+ * director.swg
+ *
+ * This file contains support for director classes so that C# proxy
+ * methods can be called from C++.
+ * ----------------------------------------------------------------------------- */
+
+#if defined(DEBUG_DIRECTOR_OWNED)
+#include <iostream>
+#endif
+#include <string>
+#include <exception>
+
+namespace Swig {
+  /* Director base class - not currently used in C# directors */
+  class Director {
+  };
+
+  /* Base class for director exceptions */
+  class DirectorException : public std::exception {
+  protected:
+    std::string swig_msg;
+
+  public:
+    DirectorException(const char *msg) : swig_msg(msg) {
+    }
+
+    DirectorException(const std::string &msg) : swig_msg(msg) {
+    }
+
+    virtual ~DirectorException() throw() {
+    }
+
+    const char *what() const throw() {
+      return swig_msg.c_str();
+    }
+  };
+
+  /* Pure virtual method exception */
+  class DirectorPureVirtualException : public DirectorException {
+  public:
+    DirectorPureVirtualException(const char *msg) : DirectorException(std::string("Attempt to invoke pure virtual method ") + msg) {
+    }
+
+    static void raise(const char *msg) {
+      throw DirectorPureVirtualException(msg);
+    }
+  };
+}
+
 
 	#include "behaviour.hpp"
+	#include "component.hpp"
+
+
+	#include "component.hpp"
 
 
 	#include "entity.hpp"
@@ -322,23 +392,55 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_CherryEngine(SWIG_CSharpS
 	#include "maths/vector4.hpp"
 
 
+	#include "transform.hpp"
+	#include "behaviour.hpp"
+	#include "maths.hpp"
+
+
+
+/* ---------------------------------------------------
+ * C++ director class methods
+ * --------------------------------------------------- */
+
+#include "ccengine_wrap.h"
+
+SwigDirector_Behaviour::SwigDirector_Behaviour() : Behaviour(), Swig::Director() {
+  swig_init_callbacks();
+}
+
+SwigDirector_Behaviour::~SwigDirector_Behaviour() {
+  
+}
+
+
+void SwigDirector_Behaviour::swig_connect_director() {
+  
+}
+
+void SwigDirector_Behaviour::swig_init_callbacks() {
+  
+}
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Behaviour(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Component() {
   void * jresult ;
-  Entity *arg1 = 0 ;
-  Behaviour *result = 0 ;
+  Component *result = 0 ;
   
-  arg1 = (Entity *)jarg1;
-  if (!arg1) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Entity & type is null", 0);
-    return 0;
-  } 
-  result = (Behaviour *)new Behaviour(*arg1);
+  result = (Component *)new Component();
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Component(void * jarg1) {
+  Component *arg1 = (Component *) 0 ;
+  
+  arg1 = (Component *)jarg1; 
+  delete arg1;
 }
 
 
@@ -359,6 +461,23 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Behaviour_GetHost(void * jarg1) {
   result = (Entity *) &(arg1)->GetHost();
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Behaviour() {
+  void * jresult ;
+  Behaviour *result = 0 ;
+  
+  result = (Behaviour *)new SwigDirector_Behaviour();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Behaviour_director_connect(void *objarg) {
+  Behaviour *obj = (Behaviour *)objarg;
+  SwigDirector_Behaviour *director = static_cast<SwigDirector_Behaviour *>(obj);
+  director->swig_connect_director();
 }
 
 
@@ -413,6 +532,18 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_Entity_GetName(void * jarg1) {
   arg1 = (Entity *)jarg1; 
   result = (arg1)->GetName();
   jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetTransform(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (Transform *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< Transform >();
+  jresult = (void *)result; 
   return jresult;
 }
 
@@ -1974,6 +2105,100 @@ SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_BoolSign(unsigned int jarg1) {
   return jresult;
 }
 
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetPosition(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetPosition((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetPosition(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->GetPosition();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetRotation(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetRotation((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetRotation(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->GetRotation();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetScale(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetScale((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetScale(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->GetScale();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Transform(void * jarg1) {
+  Transform *arg1 = (Transform *) 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT Component * SWIGSTDCALL CSharp_CCEngine_Behaviour_SWIGUpcast(Behaviour *jarg1) {
+    return (Component *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_Transform_SWIGUpcast(Transform *jarg1) {
+    return (Behaviour *)jarg1;
+}
 
 #ifdef __cplusplus
 }

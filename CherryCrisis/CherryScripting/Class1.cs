@@ -8,24 +8,23 @@ namespace CherryScripting
 { 
 	public class MyComponent : Behaviour
 	{
+		public MyComponent(System.IntPtr cPtr, bool cMemoryOwn) : base(cPtr, cMemoryOwn) {  }
 
-		Vector3 vec = Vector3.Zero;
+		float i = 0.5f;
 
-		public MyComponent(Entity owner) 
-			: base(owner)
-		{
-			Console.WriteLine("MyComponent()");
-			Console.WriteLine(owner);
+		Transform transform;
+
+		public void Start()
+        {
+			transform = host.GetTransform();
+
+			transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
 		}
-
-		int i = 5;
 
 		public void Update()
 		{
-			Console.WriteLine("Update");
-			Console.WriteLine(host);
-
-			//Console.WriteLine(host);
+			i += 0.1f;
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, i, transform.eulerAngles.z);
 		}
 	}
 }
