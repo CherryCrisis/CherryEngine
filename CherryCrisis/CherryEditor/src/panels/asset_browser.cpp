@@ -5,11 +5,18 @@
 #include <imgui_internal.h>
 #include <stdio.h>
 
+#include <windows.h>
+#undef far
+#undef near
+#include <ShellAPI.h>
+
 #include "core/editor_manager.hpp"
 
 AssetBrowser::AssetBrowser() 
 {
-    m_currentDirectory = AssetPath;
+    //Set Full Path to Assets
+    m_currentDirectory = std::filesystem::current_path();
+    m_currentDirectory /= AssetPath;
 
     // Load Icons
     QuerryBrowser();
@@ -17,6 +24,7 @@ AssetBrowser::AssetBrowser()
 
 void AssetBrowser::QuerryBrowser() 
 {
+    //To change, 
     m_nodes.clear();
 
     namespace fs = std::filesystem;
@@ -24,7 +32,7 @@ void AssetBrowser::QuerryBrowser()
     for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
     {
         AssetNode node;
-        node.m_isDirectory = entry.is_directory(); // ? m_browserIcon : m_fileIcon;
+        node.m_isDirectory = entry.is_directory(); 
         node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
         node.m_path = entry.path();
         node.m_filename = entry.path().filename().string();
@@ -38,7 +46,6 @@ void AssetBrowser::Render()
     if (!m_isOpened)
         return;
 
-
     ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
@@ -48,10 +55,9 @@ void AssetBrowser::Render()
                 m_currentDirectory = m_currentDirectory.parent_path();
                 QuerryBrowser();
             }
-
-
-        std::filesystem::path path_iterator = m_currentDirectory;
-
+        
+        std::filesystem::path path_iterator = m_currentDirectory.relative_path();
+        std::filesystem::path path = AssetPath.parent_path();
         while (path_iterator != AssetPath.parent_path())
         {
             ImGui::SameLine(); ImGui::Text("/"); ImGui::SameLine();
@@ -110,16 +116,33 @@ void AssetBrowser::ContextCallback()
         if (m_focusedNode) 
         {
             ImGui::Separator();
+            if (ImGui::MenuItem("Open")) { ShellExecuteA(NULL, NULL, m_focusedNode->m_path.string().c_str(), NULL, NULL, 10); }
             if (ImGui::MenuItem("Rename")) {}
             std::string str = AssetPath.string();
             str = str + "/" + m_focusedNode->m_filename;
             if (ImGui::MenuItem("Delete")) 
             {
                 remove(str.c_str()); 
+                QuerryBrowser();
             }
+
             ImGui::Separator();
         }
-        ImGui::MenuItem("Open In Explorer");
+        if (ImGui::MenuItem("Open In Explorer")) 
+        {
+            if (m_focusedNode)
+            {
+                std::string str = "/select,";
+                str += m_focusedNode->m_path.string();
+                
+                ShellExecuteA(NULL, "open", "explorer.exe", str.c_str(), NULL, 10);
+            }
+            else
+            {
+                ShellExecuteA(NULL, NULL, m_currentDirectory.string().c_str() , NULL, NULL, 10);
+            }
+        }
+
         ImGui::EndPopup();
     }
 }

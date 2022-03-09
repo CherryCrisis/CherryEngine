@@ -18,6 +18,7 @@ private:
 
 	void Init();
 	void UpdateTextureSize(float x, float y);
+
 protected:
 
 	bool m_isActive = false;
