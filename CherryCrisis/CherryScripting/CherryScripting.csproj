@@ -41,12 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BackpackBehaviour.cs" />
+    <Compile Include="CameraController.cs" />
     <Compile Include="Generated\Behaviour.cs" />
+    <Compile Include="Generated\CameraComponent.cs" />
     <Compile Include="Generated\CherryEngine.cs" />
     <Compile Include="Generated\CherryEnginePINVOKE.cs" />
     <Compile Include="Generated\Component.cs" />
     <Compile Include="Generated\Entity.cs" />
+    <Compile Include="Generated\InputManager.cs" />
+    <Compile Include="Generated\Keycode.cs" />
+    <Compile Include="Generated\SingletonInput.cs" />
+    <Compile Include="Generated\SWIGTYPE_p_Camera.cs" />
     <Compile Include="Generated\SWIGTYPE_p_float.cs" />
     <Compile Include="Generated\Transform.cs" />
     <Compile Include="Generated\Vector2.cs" />

@@ -10,14 +10,14 @@
 
 namespace CCEngine {
 
-public class Behaviour : Component {
+public class InputManager : SingletonInput {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
 
-  internal Behaviour(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.Behaviour_SWIGUpcast(cPtr), cMemoryOwn) {
+  internal InputManager(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.InputManager_SWIGUpcast(cPtr), cMemoryOwn) {
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
-  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(Behaviour obj) {
+  internal static global::System.Runtime.InteropServices.HandleRef getCPtr(InputManager obj) {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
@@ -26,7 +26,7 @@ public class Behaviour : Component {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          CherryEnginePINVOKE.delete_Behaviour(swigCPtr);
+          CherryEnginePINVOKE.delete_InputManager(swigCPtr);
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
@@ -34,28 +34,29 @@ public class Behaviour : Component {
     }
   }
 
-  public Entity GetHost() {
-    Entity ret = new Entity(CherryEnginePINVOKE.Behaviour_GetHost(swigCPtr), false);
+  public bool GetKey(Keycode key) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKey(swigCPtr, (int)key);
     return ret;
   }
 
-		public Entity host { get => GetHost(); }
-
-		public override string ToString() => System.String.Format("{0} ({1})", base.ToString(), host);
-
-		public Component GetComponent(System.Type type) => host.GetComponent(type);
-		public T GetComponent<T>() where T : Component => host.GetComponent<T>();
-
-		public Component AddComponent(System.Type type) => host.GetComponent(type);
-		public T AddComponent<T>() where T : Component => host.GetComponent<T>();
-	
-  public Behaviour() : this(CherryEnginePINVOKE.new_Behaviour(), true) {
-    SwigDirectorConnect();
+  public bool GetKeyDown(Keycode key) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown(swigCPtr, (int)key);
+    return ret;
   }
 
-  private void SwigDirectorConnect() {
-    CherryEnginePINVOKE.Behaviour_director_connect(swigCPtr);
+  public bool GetKeyUp(Keycode key) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp(swigCPtr, (int)key);
+    return ret;
   }
+
+  public float GetAxis(string axisName) {
+    float ret = CherryEnginePINVOKE.InputManager_GetAxis(swigCPtr, axisName);
+    return ret;
+  }
+
+  public InputManager() : this(CherryEnginePINVOKE.new_InputManager(), true) {
+  }
+
 }
 
 }

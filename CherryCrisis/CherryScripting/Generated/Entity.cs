@@ -60,16 +60,60 @@ public class Entity : global::System.IDisposable {
     return ret;
   }
 
-		public string name => GetName();
+  private CameraComponent GetCameraComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetCameraComponent(swigCPtr);
+    CameraComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new CameraComponent(cPtr, false);
+    return ret;
+  }
 
-		public override string ToString() => name;
-	
-  public Transform GetTransform() {
+  private CameraComponent AddCameraComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddCameraComponent(swigCPtr);
+    CameraComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new CameraComponent(cPtr, false);
+    return ret;
+  }
+
+  private Transform GetTransform() {
     global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetTransform(swigCPtr);
     Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
     return ret;
   }
 
+  private Transform AddTransform() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddTransform(swigCPtr);
+    Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
+    return ret;
+  }
+
+		public string name => GetName();
+
+		public override string ToString() => name;
+
+		public Component AddComponent(System.Type type)
+		{
+			if (type == typeof(Transform))
+				return AddTransform();
+
+			if (type == typeof(CameraComponent))
+				return AddCameraComponent();
+
+			return null;
+		}
+
+		public T AddComponent<T>() where T : Component => AddComponent(typeof(T)) as T;
+
+		public Component GetComponent(System.Type type)
+		{
+			if (type == typeof(Transform))
+				return GetTransform();
+
+			if (type == typeof(CameraComponent))
+				return GetCameraComponent();
+
+			return null;
+		}
+
+		public T GetComponent<T>() where T : Component => GetComponent(typeof(T)) as T;
+	
 }
 
 }

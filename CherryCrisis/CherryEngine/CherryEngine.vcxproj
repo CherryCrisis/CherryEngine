@@ -196,11 +196,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </CustomBuild>
     <None Include="interface\behaviour.i" />
+    <None Include="interface\camera_comp.i" />
     <None Include="interface\component.i" />
     <None Include="interface\entity.i" />
+    <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
     <None Include="interface\matrix3.i" />
-    <None Include="interface\transform.i" />
+    <None Include="interface\singleton.i" />
+    <None Include="interface\transform_comp.i" />
     <None Include="interface\vector.i" />
     <None Include="interface\vector2.i" />
     <None Include="interface\vector3.i" />

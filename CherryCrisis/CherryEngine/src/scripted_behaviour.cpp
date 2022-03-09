@@ -16,7 +16,7 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 
 	context = script->CreateContext("../x64/Debug/CherryScripting.dll");
 
-	managedClass = context->FindClass("CherryScripting", "MyComponent");
+	managedClass = context->FindClass("CherryScripting", "CameraController");
 
 	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
 	MonoClass* boolType = context->FindSystemClass("System", "Boolean");

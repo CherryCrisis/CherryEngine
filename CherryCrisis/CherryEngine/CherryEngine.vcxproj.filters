@@ -518,10 +518,19 @@
     <None Include="interface\behaviour.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
-    <None Include="interface\transform.i">
+    <None Include="interface\transform_comp.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
     <None Include="interface\component.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\camera_comp.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\input_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\singleton.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>

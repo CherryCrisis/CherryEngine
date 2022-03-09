@@ -365,6 +365,15 @@ namespace Swig {
 }
 
 
+	#include "keycode.hpp"
+
+	#include "singleton.hpp"
+	#include "input_manager.hpp"
+
+
+	#include "singleton.hpp"
+
+
 	#include "behaviour.hpp"
 	#include "component.hpp"
 
@@ -397,6 +406,9 @@ namespace Swig {
 	#include "maths.hpp"
 
 
+	#include "camera_component.hpp"
+
+
 
 /* ---------------------------------------------------
  * C++ director class methods
@@ -425,6 +437,103 @@ void SwigDirector_Behaviour::swig_init_callbacks() {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_SingletonInput_GetInstance() {
+  void * jresult ;
+  InputManager *result = 0 ;
+  
+  result = (InputManager *)Singleton< InputManager >::SWIGTEMPLATEDISAMBIGUATOR GetInstance();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SingletonInput_Kill() {
+  Singleton< InputManager >::SWIGTEMPLATEDISAMBIGUATOR Kill();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_SingletonInput(void * jarg1) {
+  Singleton< InputManager > *arg1 = (Singleton< InputManager > *) 0 ;
+  
+  arg1 = (Singleton< InputManager > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey(void * jarg1, int jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  Keycode arg2 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (Keycode)jarg2; 
+  result = (bool)(arg1)->GetKey(arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown(void * jarg1, int jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  Keycode arg2 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (Keycode)jarg2; 
+  result = (bool)(arg1)->GetKeyDown(arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp(void * jarg1, int jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  Keycode arg2 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (Keycode)jarg2; 
+  result = (bool)(arg1)->GetKeyUp(arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_InputManager_GetAxis(void * jarg1, char * jarg2) {
+  float jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  char *arg2 = (char *) 0 ;
+  float result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (float)(arg1)->GetAxis((char const *)arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_InputManager() {
+  void * jresult ;
+  InputManager *result = 0 ;
+  
+  result = (InputManager *)new InputManager();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_InputManager(void * jarg1) {
+  InputManager *arg1 = (InputManager *) 0 ;
+  
+  arg1 = (InputManager *)jarg1; 
+  delete arg1;
+}
+
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Component() {
   void * jresult ;
@@ -536,6 +645,30 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_Entity_GetName(void * jarg1) {
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetCameraComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  CameraComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (CameraComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< CameraComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddCameraComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  CameraComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (CameraComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< CameraComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetTransform(void * jarg1) {
   void * jresult ;
   Entity *arg1 = (Entity *) 0 ;
@@ -543,6 +676,18 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetTransform(void * jarg1) 
   
   arg1 = (Entity *)jarg1; 
   result = (Transform *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< Transform >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddTransform(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (Transform *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< Transform >();
   jresult = (void *)result; 
   return jresult;
 }
@@ -2192,11 +2337,93 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Transform(void * jarg1) {
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CameraComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = 0 ;
+  CameraComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Entity & type is null", 0);
+    return 0;
+  } 
+  result = (CameraComponent *)new CameraComponent(*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_CameraComponent(void * jarg1) {
+  CameraComponent *arg1 = (CameraComponent *) 0 ;
+  
+  arg1 = (CameraComponent *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_camera_set(void * jarg1, void * jarg2) {
+  CameraComponent *arg1 = (CameraComponent *) 0 ;
+  Camera arg2 ;
+  Camera *argp2 ;
+  
+  arg1 = (CameraComponent *)jarg1; 
+  argp2 = (Camera *)jarg2; 
+  if (!argp2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Camera", 0);
+    return ;
+  }
+  arg2 = *argp2; 
+  if (arg1) (arg1)->m_camera = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_camera_get(void * jarg1) {
+  void * jresult ;
+  CameraComponent *arg1 = (CameraComponent *) 0 ;
+  Camera result;
+  
+  arg1 = (CameraComponent *)jarg1; 
+  result =  ((arg1)->m_camera);
+  jresult = new Camera((const Camera &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_transform_set(void * jarg1, void * jarg2) {
+  CameraComponent *arg1 = (CameraComponent *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (CameraComponent *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_transform_get(void * jarg1) {
+  void * jresult ;
+  CameraComponent *arg1 = (CameraComponent *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (CameraComponent *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT Singleton< InputManager > * SWIGSTDCALL CSharp_CCEngine_InputManager_SWIGUpcast(InputManager *jarg1) {
+    return (Singleton< InputManager > *)jarg1;
+}
+
 SWIGEXPORT Component * SWIGSTDCALL CSharp_CCEngine_Behaviour_SWIGUpcast(Behaviour *jarg1) {
     return (Component *)jarg1;
 }
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_Transform_SWIGUpcast(Transform *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_CameraComponent_SWIGUpcast(CameraComponent *jarg1) {
     return (Behaviour *)jarg1;
 }
 

@@ -1,6 +1,8 @@
 #pragma once
 
-enum class CCENGINE_API Keycode
+#include <cherry_macros.hpp>
+
+enum class Keycode
 {
  	UNKNOWN     = -1,
  	
