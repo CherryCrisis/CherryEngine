@@ -2,33 +2,28 @@
 
 #include "model_base.hpp"
 
-#include "model_loader.hpp"
-#include "entity.hpp"
-
 #include "threadpool.hpp"
-#include "model.hpp"
 
-//void test(const int& cint)
-//{
-//    
-//}
-#include <functional>
+#include "model_loader.hpp"
+#include "scene.hpp"
 
 Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
 {
-    Ref<ModelBase> modelBase(new ModelBase(filepath));
+    ModelBase* modelBase = new ModelBase(filepath);
 
     ThreadPool* threadpool = ThreadPool::GetInstance();
 
-    //std::unique_ptr<CCFunction::AFunction> function = 
-    //    CCFunction::BindFunction(LoadModel, modelBase->filepath.c_str(), &modelBase->m_rootNode, modelBase->m_models);
+    std::unique_ptr<CCFunction::AFunction> function = 
+        CCFunction::BindFunction(LoadModel, modelBase->filepath.c_str(), &modelBase->m_rootNode, modelBase->m_models);
 
-    threadpool->CreateTask(CCFunction::BindFunction(LoadModel, modelBase->filepath.c_str(), &modelBase->m_rootNode, modelBase->m_models), EChannelTask::Multithread);
+    std::unique_ptr<CCFunction::AFunction> onFinished =
+        CCFunction::BindFunction(&ResourceMultithread::ResourceLoaded, (ResourceMultithread*)modelBase);
 
-    //system("pause");
+    threadpool->CreateTask(function, onFinished, EChannelTask::Multithread);
+
     //LoadModel(&test, &modelBase->m_rootNode, modelBase->m_models);
 
-    return modelBase;
+    return Ref<ModelBase>(modelBase);
 }
 
 ModelBase::~ModelBase()

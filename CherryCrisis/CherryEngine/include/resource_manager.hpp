@@ -8,6 +8,7 @@
 #include "engine.hpp"
 
 #include "resource.hpp"
+#include "callback.hpp"
 
 class CCENGINE_API ResourceManager
 {
@@ -18,8 +19,15 @@ private:
 public:
 	static ResourceManager* GetInstance();
 
+	template<class T = Resource, class CallbackType, typename... Args>
+	std::shared_ptr<T> AddResourceMultiThreads(const char* filepath, bool verifIsExist,
+		std::unique_ptr<CCCallback::ACallback<CallbackType>> callback, Args... args);
+
 	template<class T = Resource, typename... Args>
-	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
+	std::shared_ptr<T> AddResourceMonoThreads(const char* filepath, bool verifIsExist, Args... args);
+
+	template<class T = Resource, typename... Args>
+	std::shared_ptr<T> AddResource(Args... args);
 
 	template<class T = Resource>
 	std::shared_ptr<T> GetResource(const char* filepath) const;

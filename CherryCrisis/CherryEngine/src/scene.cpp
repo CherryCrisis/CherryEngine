@@ -4,8 +4,22 @@
 
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
+#include "callback.hpp"
 
 #include "model_base.hpp"
+
+void Scene::GenerateEntities(ModelBase* modelBase)
+{
+	Entity root;
+	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
+	m_entities.push_back(std::move(root));
+
+	for (const Entity& child : children)
+	{
+		m_entities.push_back(std::move(child));
+		root.m_transform->AddChildren(child.m_transform);
+	}
+}
 
 Resource::Ref<Scene> Scene::Create(const char* filePath)
 {
@@ -13,17 +27,8 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 
 	auto RM = ResourceManager::GetInstance();
 
-	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../assets/backpack.obj", true);
-
-	Entity root;
-	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
-	scene->m_entities.push_back(std::move(root));
-
-	for (const Entity& child : children)
-	{
-		scene->m_entities.push_back(std::move(child));
-		root.m_transform->AddChildren(child.m_transform);
-	}
+	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene);
+	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../assets/backpack.obj", true, std::move(callback));
 
 	Entity& light = scene->m_entities.emplace_back();
 	light.m_lightComp = new LightComponent();

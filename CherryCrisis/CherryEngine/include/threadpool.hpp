@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "function.hpp"
+#include "callback.hpp"
 #include "event.hpp"
 
 enum class EChannelTask
@@ -20,11 +21,13 @@ enum class EChannelTask
 class Task
 {
 public:
-	std::unique_ptr<CCFunction::AFunction> m_func;
-	Event<> m_onFinished = {};
+	using AFunction = std::unique_ptr<CCFunction::AFunction>;
+
+	AFunction m_func;
+	AFunction m_onFinished;
 
 	Task() = default;
-	Task(std::unique_ptr<CCFunction::AFunction>& func) : m_func(std::move(func)) {}
+	Task(AFunction& func, AFunction& onFinished) : m_func(std::move(func)), m_onFinished(std::move(onFinished)) {}
 };
 
 class ThreadPool
@@ -47,7 +50,9 @@ public:
 	~ThreadPool();
 
 	static ThreadPool* GetInstance();
+	
+	using AFunction = std::unique_ptr<CCFunction::AFunction>;
 
-	void CreateTask(std::unique_ptr<CCFunction::AFunction> function, EChannelTask channelTask);
+	void CreateTask(AFunction& function, AFunction& onFinished, EChannelTask channelTask);
 	void Update(EChannelTask channelTask);
 };

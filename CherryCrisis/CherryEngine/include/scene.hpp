@@ -8,6 +8,8 @@
 #include "entity.hpp"
 #include "skybox.hpp"
 
+class ModelBase;
+
 class CCENGINE_API Scene : public Resource
 {
 private:
@@ -17,6 +19,8 @@ public:
 	Skybox m_skybox;
 
 	static Ref<Scene> Create(const char* filePath);
+
+	void GenerateEntities(ModelBase* modelBase);
 
 	std::vector<Entity> m_entities;
 

@@ -31,18 +31,18 @@ ThreadPool::~ThreadPool()
 	}
 }
 
-void ThreadPool::CreateTask(std::unique_ptr<CCFunction::AFunction> function, EChannelTask channelTask)
+void ThreadPool::CreateTask(AFunction& task, AFunction& onFinished, EChannelTask channelTask)
 {
 	if (channelTask == EChannelTask::Multithread)
 	{
 		std::unique_lock<std::mutex> queueLock(m_multiThreadsQueueLock);
-		m_multiThreadsTasks.push(std::make_unique<Task>(Task(function)));
+		m_multiThreadsTasks.push(std::make_unique<Task>(Task(task, onFinished)));
 		m_condition.notify_one();
 	}
 	else
 	{
 		std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
-		m_mainThreadTasks.push(std::make_unique<Task>(Task(function)));
+		m_mainThreadTasks.push(std::make_unique<Task>(Task(task, onFinished)));
 	}
 }
 
@@ -70,10 +70,11 @@ void ThreadPool::Update(EChannelTask channelTask)
 
 			task->m_func->Invoke();
 
-			//Add invoke event in mainthead queue
-			//std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
-			//task->m_func = CCFunction::BindFunction(&Event<>::Invoke, &task->m_onFinished);
-			//m_mainThreadTasks.push(task);
+			if (task->m_onFinished != nullptr)
+			{
+				std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
+				m_mainThreadTasks.push(std::move(task));
+			}
 		}
 	}
 	else
@@ -90,7 +91,9 @@ void ThreadPool::Update(EChannelTask channelTask)
 			m_mainThreadTasks.pop();
 		}
 
-		task->m_func->Invoke();
+		task->m_onFinished->Invoke();
+
+		
 	}
 }
 

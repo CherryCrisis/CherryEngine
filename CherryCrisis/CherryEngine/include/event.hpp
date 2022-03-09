@@ -20,14 +20,19 @@ public:
 	template<typename T>
 	void Bind(void (T::* func)(Args... type), T* member)
 	{
-		ACallback callback = std::make_unique<CCCallback::MemberCallback<T, Args&&...>>(func, member);
+		ACallback callback = CCCallback::BindCallback(func, member);
 		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback>(typeid(func), std::move(callback)));
 	}
 
 	void Bind(void (*func)(Args... type))
 	{
-		ACallback callback = std::make_unique<CCCallback::NonMemberCallback<Args&&...>>(func);
+		ACallback callback = CCCallback::BindCallback(func);
 		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback>(typeid(func), std::move(callback)));
+	}
+
+	void Bind(ACallback& callback, const std::type_index& typeID)
+	{
+		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback>(typeID, std::move(callback)));
 	}
 
 	template<typename T>
@@ -58,7 +63,7 @@ public:
 	{
 		for (std::pair<const std::type_index, ACallback>& callback : m_callbacks)
 		{
-			callback.second->Invoke(args...);
+			callback.second->Invoke(std::forward<Args>(args)...);
 		}
 	}
 };

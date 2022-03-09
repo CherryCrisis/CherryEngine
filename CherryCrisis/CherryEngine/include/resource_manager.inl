@@ -1,7 +1,7 @@
 #pragma once
 
 template <class T, typename... Args>
-std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
+std::shared_ptr<T> ResourceManager::AddResourceMonoThreads(const char* filepath, bool verifIsExist, Args... args)
 {
 	if (verifIsExist)
 	{
@@ -20,6 +20,38 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 	m_resources.insert(resourceMap);
 
 	return resourcePtr;
+}
+
+template<class T, class CallbackType, typename... Args>
+	std::shared_ptr<T> ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIsExist,
+	std::unique_ptr<CCCallback::ACallback<CallbackType>> callback, Args... args)
+{
+		if (verifIsExist)
+		{
+			std::shared_ptr<T> findedResource = GetResource<T>(filepath);
+			if (findedResource.get() != nullptr)
+				return findedResource;
+		}
+
+		Resource::Ref<T> resourcePtr = T::Create(filepath, callback, args...);
+
+		if (!resourcePtr)
+			return nullptr;
+
+		auto resourceMap = std::make_pair<std::type_index, std::shared_ptr<Resource>>(typeid(T), resourcePtr);
+
+		m_resources.insert(resourceMap);
+
+		return resourcePtr;
+}
+
+template<class T, typename... Args>
+std::shared_ptr<T> ResourceManager::AddResource(Args... args)
+{
+	if (std::is_base_of_v<ResourceMultithread, T>)
+		AddResourceMultiThreads<T>(args...);
+	else
+		AddResourceMonoThreads<T>(args...);
 }
 
 template<class T>

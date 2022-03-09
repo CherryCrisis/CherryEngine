@@ -1,6 +1,8 @@
 #pragma once
 
 #include <tuple>
+#include <memory>
+#include <typeindex>
 
 namespace CCCallback
 {
@@ -8,6 +10,7 @@ namespace CCCallback
 	class ACallback
 	{
 	public:
+		std::type_index m_typeIndex;
 		virtual void Invoke(Args&&...) const = 0;
 	};
 
@@ -20,7 +23,7 @@ namespace CCCallback
 
 	public:
 		MemberCallback(void (T::* func)(Args... type), T* c)
-			: m_func(func), m_member(c)
+			: m_func(func), m_member(c), ACallback<Args...>::m_typeIndex(typeid(func))
 		{
 		}
 
@@ -38,7 +41,7 @@ namespace CCCallback
 
 	public:
 		NonMemberCallback(void (*func)(Args... type))
-			: m_func(func)
+			: m_func(func), CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))
 		{
 		}
 
@@ -47,4 +50,16 @@ namespace CCCallback
 			(*m_func)(args...);
 		}
 	};
+
+	template<class T, class... Args>
+	std::unique_ptr<ACallback<Args...>> BindCallback(void (T::* func)(Args... type), T* member)
+	{
+		return std::make_unique<CCCallback::MemberCallback<T, Args...>>(func, member);
+	}
+
+	template<class... Args>
+	std::unique_ptr<ACallback<Args...>> BindCallback(void (*func)(Args...))
+	{
+		return std::make_unique<CCCallback::NonMemberCallback<Args...>>(func);
+	}
 }
