@@ -10,10 +10,12 @@
 
 namespace CCEngine {
 
-public class InputManager : SingletonInput {
+public class InputManager : global::System.IDisposable {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
+  protected bool swigCMemOwn;
 
-  internal InputManager(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.InputManager_SWIGUpcast(cPtr), cMemoryOwn) {
+  internal InputManager(global::System.IntPtr cPtr, bool cMemoryOwn) {
+    swigCMemOwn = cMemoryOwn;
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
@@ -21,7 +23,16 @@ public class InputManager : SingletonInput {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  protected override void Dispose(bool disposing) {
+  ~InputManager() {
+    Dispose(false);
+  }
+
+  public void Dispose() {
+    Dispose(true);
+    global::System.GC.SuppressFinalize(this);
+  }
+
+  protected virtual void Dispose(bool disposing) {
     lock(this) {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
@@ -30,8 +41,13 @@ public class InputManager : SingletonInput {
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
-      base.Dispose(disposing);
     }
+  }
+
+  public static InputManager GetInstance() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.InputManager_GetInstance();
+    InputManager ret = (cPtr == global::System.IntPtr.Zero) ? null : new InputManager(cPtr, false);
+    return ret;
   }
 
   public bool GetKey(Keycode key) {
@@ -52,9 +68,6 @@ public class InputManager : SingletonInput {
   public float GetAxis(string axisName) {
     float ret = CherryEnginePINVOKE.InputManager_GetAxis(swigCPtr, axisName);
     return ret;
-  }
-
-  public InputManager() : this(CherryEnginePINVOKE.new_InputManager(), true) {
   }
 
 }

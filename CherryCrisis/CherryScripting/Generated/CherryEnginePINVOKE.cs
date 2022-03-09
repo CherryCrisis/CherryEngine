@@ -193,14 +193,8 @@ class CherryEnginePINVOKE {
   }
 
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_SingletonInput_GetInstance")]
-  public static extern global::System.IntPtr SingletonInput_GetInstance();
-
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_SingletonInput_Kill")]
-  public static extern void SingletonInput_Kill();
-
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_SingletonInput")]
-  public static extern void delete_SingletonInput(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetInstance")]
+  public static extern global::System.IntPtr InputManager_GetInstance();
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKey")]
   public static extern bool InputManager_GetKey(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
@@ -213,9 +207,6 @@ class CherryEnginePINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetAxis")]
   public static extern float InputManager_GetAxis(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
-
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_InputManager")]
-  public static extern global::System.IntPtr new_InputManager();
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_InputManager")]
   public static extern void delete_InputManager(global::System.Runtime.InteropServices.HandleRef jarg1);
@@ -699,9 +690,6 @@ class CherryEnginePINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_CameraComponent_m_transform_get")]
   public static extern global::System.IntPtr CameraComponent_m_transform_get(global::System.Runtime.InteropServices.HandleRef jarg1);
-
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_SWIGUpcast")]
-  public static extern global::System.IntPtr InputManager_SWIGUpcast(global::System.IntPtr jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Behaviour_SWIGUpcast")]
   public static extern global::System.IntPtr Behaviour_SWIGUpcast(global::System.IntPtr jarg1);

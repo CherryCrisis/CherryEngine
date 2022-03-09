@@ -4,14 +4,14 @@
 
 %include std_string.i
 
-%define COMP_TEMPLATE_WRAP(COMPT)
-COMP_PREFIX_WRAP(Get, COMPT, GetBehaviour)
-COMP_PREFIX_WRAP(Add, COMPT, AddBehaviour)
+%define COMP_TEMPLATE_WRAP(COMP_T)
+COMP_PREFIX_WRAP(Get, COMP_T, GetBehaviour)
+COMP_PREFIX_WRAP(Add, COMP_T, AddBehaviour)
 %enddef
 
-%define COMP_PREFIX_WRAP(prefix, COMPT, funcSignature)
-%csmethodmodifiers funcSignature<COMPT> "private";
-%template(prefix ## COMPT) funcSignature<COMPT>;
+%define COMP_PREFIX_WRAP(prefix, COMP_T, funcSignature)
+%csmethodmodifiers funcSignature<COMP_T> "private";
+%template(prefix ## COMP_T) funcSignature<COMP_T>;
 %enddef
 
 class Entity

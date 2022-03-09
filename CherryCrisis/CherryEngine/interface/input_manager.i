@@ -9,13 +9,22 @@
 
 %include keycode.hpp
 
-%include singleton.i
+%nodefaultctor InputManager;
 
-%template(SingletonInput) Singleton<InputManager>;
-
-class InputManager : public Singleton<InputManager>
+class InputManager
 {
 public:
+	static InputManager* GetInstance()
+	{
+		if (!instantiateFlag.test_and_set())
+		{
+			if (!currentInstance)
+				currentInstance = new T();
+		}
+
+		return currentInstance;
+	}
+
 	bool GetKey(Keycode key);
 	bool GetKeyDown(Keycode key);
 	bool GetKeyUp(Keycode key);

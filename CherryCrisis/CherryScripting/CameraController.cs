@@ -22,6 +22,7 @@ namespace CCScripting
 
 		public void Update()
 		{
+
 			i += 0.01f;
 			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(i), transform.eulerAngles.z);
 
@@ -38,8 +39,7 @@ namespace CCScripting
 				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 2f);
 
 			Debug.GetInstance().Log(" / ", transform.position, transform.eulerAngles);
-			Debug.GetInstance().Log(transform.position, transform.eulerAngles);
-		
+			Debug.GetInstance().Log(transform.position, transform.eulerAngles, transform.scale);
 		}
 	}
 }

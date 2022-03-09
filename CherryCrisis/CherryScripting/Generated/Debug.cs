@@ -50,8 +50,8 @@ public class Debug : global::System.IDisposable {
     return ret;
   }
 
-  public void Log(string string_) {
-    CherryEnginePINVOKE.Debug_Log(swigCPtr, string_);
+  public void Log(string message) {
+    CherryEnginePINVOKE.Debug_Log(swigCPtr, message);
   }
 
 	public void Log(object message) => Log(message.ToString());

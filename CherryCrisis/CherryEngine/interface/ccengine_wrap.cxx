@@ -371,9 +371,6 @@ namespace Swig {
 	#include "input_manager.hpp"
 
 
-	#include "singleton.hpp"
-
-
 	#include "debug.hpp"
 
 
@@ -442,26 +439,13 @@ void SwigDirector_Behaviour::swig_init_callbacks() {
 extern "C" {
 #endif
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_SingletonInput_GetInstance() {
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetInstance() {
   void * jresult ;
   InputManager *result = 0 ;
   
-  result = (InputManager *)Singleton< InputManager >::SWIGTEMPLATEDISAMBIGUATOR GetInstance();
+  result = (InputManager *)InputManager::GetInstance();
   jresult = (void *)result; 
   return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SingletonInput_Kill() {
-  Singleton< InputManager >::SWIGTEMPLATEDISAMBIGUATOR Kill();
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_SingletonInput(void * jarg1) {
-  Singleton< InputManager > *arg1 = (Singleton< InputManager > *) 0 ;
-  
-  arg1 = (Singleton< InputManager > *)jarg1; 
-  delete arg1;
 }
 
 
@@ -517,16 +501,6 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_InputManager_GetAxis(void * jarg1, 
   arg2 = (char *)jarg2; 
   result = (float)(arg1)->GetAxis((char const *)arg2);
   jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_InputManager() {
-  void * jresult ;
-  InputManager *result = 0 ;
-  
-  result = (InputManager *)new InputManager();
-  jresult = (void *)result; 
   return jresult;
 }
 
@@ -2442,10 +2416,6 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_transform_get(vo
   return jresult;
 }
 
-
-SWIGEXPORT Singleton< InputManager > * SWIGSTDCALL CSharp_CCEngine_InputManager_SWIGUpcast(InputManager *jarg1) {
-    return (Singleton< InputManager > *)jarg1;
-}
 
 SWIGEXPORT Component * SWIGSTDCALL CSharp_CCEngine_Behaviour_SWIGUpcast(Behaviour *jarg1) {
     return (Component *)jarg1;

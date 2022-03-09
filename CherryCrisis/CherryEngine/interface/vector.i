@@ -1,5 +1,3 @@
-%typemap(cstype) TVector "$csclassname"
-
 %typemap(cscode) TVector %{
 	public static $csclassname operator +($csclassname lhs, $csclassname rhs) => lhs.operator_add(rhs);
 	public static $csclassname operator +($csclassname lhs, float rhs) => lhs.operator_add(rhs);
