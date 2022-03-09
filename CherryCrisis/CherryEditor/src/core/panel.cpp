@@ -21,13 +21,7 @@ void PanelCategory::DisplayCategory()
     ImGui::Text(m_name.c_str());
 
     Fill();
-    /*
-    if (ImGui::BeginTable("split", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
-    {
 
-        ImGui::EndTable();
-    }
-    */
     ImGui::EndChild();
     ImGui::PopStyleVar();
 }

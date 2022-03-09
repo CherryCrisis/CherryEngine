@@ -3,48 +3,34 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <stdio.h>
 
-//To Clean
-static const std::filesystem::path AssetPath = "../assets";
+#include "core/editor_manager.hpp"
 
 AssetBrowser::AssetBrowser() 
 {
     m_currentDirectory = AssetPath;
 
     // Load Icons
+    QuerryBrowser();
 }
 
 void AssetBrowser::QuerryBrowser() 
 {
+    m_nodes.clear();
+
     namespace fs = std::filesystem;
-
-    float width = ImGui::GetContentRegionAvail().x;
-
-
-    float cellSize = m_thumbnailSize + m_padding;
-    int columnCount = (int)(width / cellSize);    if (columnCount < 1) columnCount = 1;
-
-    ImGui::Columns(columnCount, 0, false);
-
+    int i = 0;
     for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
     {
-
-        unsigned int icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
-
-        ImGui::ImageButton((void*)(intptr_t)icon, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
-
-        // Double Click Callback
-        if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) >= 2)
-        {
-            if (entry.is_directory())
-                m_currentDirectory /= entry.path().filename();
-        }
-
-        ImGui::Text(entry.path().filename().string().c_str());
-
-        ImGui::NextColumn();
+        AssetNode node;
+        node.m_isDirectory = entry.is_directory(); // ? m_browserIcon : m_fileIcon;
+        node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
+        node.m_path = entry.path();
+        node.m_filename = entry.path().filename().string();
+        m_nodes[i] = node;
+        i++;
     }
-    ImGui::Columns(1);
 }
 
 void AssetBrowser::Render()
@@ -57,8 +43,11 @@ void AssetBrowser::Render()
     if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
         if (m_currentDirectory != AssetPath)
-            if (ImGui::Button("<-"))
+            if (ImGui::Button("<-")) 
+            {
                 m_currentDirectory = m_currentDirectory.parent_path();
+                QuerryBrowser();
+            }
 
 
         std::filesystem::path path_iterator = m_currentDirectory;
@@ -72,19 +61,17 @@ void AssetBrowser::Render()
             path_iterator = path_iterator.parent_path();
         }
 
-        if (ImGui::BeginPopupContextItem("context"))
-        {
-            ImGui::Text("I am a Popup");
-            ImGui::Button("New");
-            ImGui::EndPopup();
-        }
+        ContextCallback();
 
-        if (ImGui::IsWindowFocused() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
+        if (ImGui::IsWindowHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
         {
             ImGui::OpenPopup("context");
+
+            CheckThings();
         }
 
-        QuerryBrowser();
+
+        RenderNodes();
     }
     ImGui::End();
 }
@@ -92,4 +79,108 @@ void AssetBrowser::Render()
 void AssetBrowser::AssetNode::Render() 
 {
 
+}
+
+void AssetBrowser::ContextCallback() 
+{
+    if (ImGui::BeginPopupContextItem("context"))
+    {
+        ImGui::Text("Actions ...");
+        ImGui::Separator();
+        if (ImGui::BeginMenu("New")) 
+        {
+            if (ImGui::MenuItem("Folder")) 
+            {
+                std::filesystem::path newPath = m_currentDirectory;
+                newPath /= "New Folder";
+                std::filesystem::create_directory(newPath);
+                QuerryBrowser();
+            }
+
+            ImGui::Separator();
+
+            if (ImGui::MenuItem("C# Script"))   {}
+            if (ImGui::MenuItem("Material"))    {}
+            if (ImGui::MenuItem("Texture"))     {}
+            if (ImGui::MenuItem("Scene"))       {}
+            if (ImGui::MenuItem("Prefab"))      {}
+
+            ImGui::EndMenu();
+        }
+        if (m_focusedNode) 
+        {
+            ImGui::Separator();
+            if (ImGui::MenuItem("Rename")) {}
+            std::string str = AssetPath.string();
+            str = str + "/" + m_focusedNode->m_filename;
+            if (ImGui::MenuItem("Delete")) 
+            {
+                remove(str.c_str()); 
+            }
+            ImGui::Separator();
+        }
+        ImGui::MenuItem("Open In Explorer");
+        ImGui::EndPopup();
+    }
+}
+
+void AssetBrowser::CheckThings()
+{
+    for (auto& couple : m_nodes)
+    {
+        AssetNode& node = couple.second;
+        unsigned int id = ImGui::GetHoveredID();
+        if (id == node.m_ImGuiID)
+        {
+            m_focusedNode = &couple.second;
+            return;
+        }
+    }
+    m_focusedNode = nullptr;
+}
+
+
+void AssetBrowser::RenderNodes() 
+{
+    float width = ImGui::GetContentRegionAvail().x;
+
+
+    float cellSize = m_thumbnailSize + m_padding;
+    int columnCount = (int)(width / cellSize);    if (columnCount < 1) columnCount = 1;
+
+    ImGui::Columns(columnCount, 0, false);
+    int i = 0;
+    for (auto& couple : m_nodes) 
+    {
+        i++;
+        AssetNode& node = couple.second;
+
+        ImGui::PushID(i);
+        ImGui::ImageButton((void*)(intptr_t)node.m_icon, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
+
+        node.m_ImGuiID = ImGui::GetItemID();
+        
+        ImGui::PopID();
+        // Double Click Callback
+        if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) >= 2)
+        {
+            if (node.m_isDirectory)
+            {
+                m_currentDirectory /= node.m_filename;
+                QuerryBrowser();
+                return;
+            }
+        }
+
+        // Need to set double click callback rename
+        ImGui::Text(node.m_filename.c_str());
+
+        if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2) 
+        {
+            EditorManager::SendNotification("Outch it hurts", ImGuiToastType_Warning);
+        }
+
+        ImGui::NextColumn();
+    }
+    ImGui::Columns(1);
 }

@@ -18,6 +18,8 @@
 #include "stb_image.h"
 #include "input_manager.hpp"
 
+#include <iostream>
+
 int main()
 {
     int screenWidth = 1200;
@@ -45,9 +47,6 @@ int main()
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
 
-    InputManager* IM = InputManager::instance();
-    glfwSetWindowUserPointer(window, IM);
-
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -55,12 +54,7 @@ int main()
     SetDarkStyle();
 
 
-    auto func = [](GLFWwindow* w, int k, int s, int a, int m)
-    {
-        static_cast<InputManager*>(glfwGetWindowUserPointer(w))->KeyCallback(w, k, s, a, m);
-    };
 
-    glfwSetKeyCallback(window, func);
 
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -73,6 +67,21 @@ int main()
 
     EditorManager editor{};
     Engine engine{};
+
+    auto func = [](GLFWwindow* w, int k, int s, int a, int m)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->KeyCallback(w, k, s, a, m);
+    };
+
+    auto funcF = [](GLFWwindow* w, int i)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->FocusCallback(w, i);
+    };
+
+    glfwSetWindowUserPointer(window, &editor);
+
+    glfwSetKeyCallback(window, func);
+    glfwSetWindowFocusCallback(window, funcF);
 
     editor.LinkEngine(&engine);
 

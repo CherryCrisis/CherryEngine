@@ -59,6 +59,7 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 
 EditorManager::EditorManager() 
 {
+    inputs = InputManager::instance();
     // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
     m_hierarchyDisplayer.SetScene(scene.get());
@@ -263,19 +264,19 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
         }
 
         if (ImGui::Button("Success"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Success, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Success, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Warning"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Warning, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Warning, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Error"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Error, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Error, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Info"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Info, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Info, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("None"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_None, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_None, 3.f);
         ImGui::SameLine();
 
         if (ImGui::Button("Show Demo"))
@@ -294,7 +295,12 @@ void EditorManager::HandleNotifications()
 }
 
 //Display time in seconds
-void EditorManager::SendNotifiction(const char* title, const char* content, ImGuiToastType_ type, float displayTime)
+void EditorManager::SendNotification(const char* title, ImGuiToastType_ type, float displayTime)
 {
-    ImGui::InsertNotification({ type, displayTime, title, content});
+    ImGui::InsertNotification({ type, displayTime, title, ""});
+}
+
+void EditorManager::FocusCallback(GLFWwindow* window, int focused)
+{
+    m_browser.QuerryBrowser();
 }
