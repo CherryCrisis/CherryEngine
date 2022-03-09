@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using CCEngine;
 
-
 namespace CCScripting
 {
 	public class CameraController : Behaviour
@@ -37,6 +36,10 @@ namespace CCScripting
 
 			if (InputManager.GetInstance().GetKey(Keycode.S))
 				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 2f);
+
+			Debug.GetInstance().Log(" / ", transform.position, transform.eulerAngles);
+			Debug.GetInstance().Log(transform.position, transform.eulerAngles);
+		
 		}
 	}
 }

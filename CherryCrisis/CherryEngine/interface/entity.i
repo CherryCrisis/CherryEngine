@@ -49,36 +49,35 @@ public:
 	COMP_TEMPLATE_WRAP(CameraComponent)
 	COMP_TEMPLATE_WRAP(Transform)
 
-	%proxycode
-	%{
-		public string name => GetName();
+	%proxycode %{
+	public string name => GetName();
 
-		public override string ToString() => name;
+	public override string ToString() => name;
 
-		public Component AddComponent(System.Type type)
-		{
-			if (type == typeof(Transform))
-				return AddTransform();
+	public Component AddComponent(System.Type type)
+	{
+		if (type == typeof(Transform))
+			return AddTransform();
 
-			if (type == typeof(CameraComponent))
-				return AddCameraComponent();
+		if (type == typeof(CameraComponent))
+			return AddCameraComponent();
 
-			return null;
-		}
+		return null;
+	}
 
-		public T AddComponent<T>() where T : Component => AddComponent(typeof(T)) as T;
+	public T AddComponent<T>() where T : Component => AddComponent(typeof(T)) as T;
 
-		public Component GetComponent(System.Type type)
-		{
-			if (type == typeof(Transform))
-				return GetTransform();
+	public Component GetComponent(System.Type type)
+	{
+		if (type == typeof(Transform))
+			return GetTransform();
 
-			if (type == typeof(CameraComponent))
-				return GetCameraComponent();
+		if (type == typeof(CameraComponent))
+			return GetCameraComponent();
 
-			return null;
-		}
+		return null;
+	}
 
-		public T GetComponent<T>() where T : Component => GetComponent(typeof(T)) as T;
+	public T GetComponent<T>() where T : Component => GetComponent(typeof(T)) as T;
 	%}
 };

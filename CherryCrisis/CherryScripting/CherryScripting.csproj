@@ -48,6 +48,7 @@
     <Compile Include="Generated\CherryEngine.cs" />
     <Compile Include="Generated\CherryEnginePINVOKE.cs" />
     <Compile Include="Generated\Component.cs" />
+    <Compile Include="Generated\Debug.cs" />
     <Compile Include="Generated\Entity.cs" />
     <Compile Include="Generated\InputManager.cs" />
     <Compile Include="Generated\Keycode.cs" />

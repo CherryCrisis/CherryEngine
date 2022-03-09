@@ -198,6 +198,7 @@
     <None Include="interface\behaviour.i" />
     <None Include="interface\camera_comp.i" />
     <None Include="interface\component.i" />
+    <None Include="interface\debug.i" />
     <None Include="interface\entity.i" />
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />

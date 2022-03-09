@@ -374,6 +374,10 @@ namespace Swig {
 	#include "singleton.hpp"
 
 
+	#include "debug.hpp"
+
+
+
 	#include "behaviour.hpp"
 	#include "component.hpp"
 
@@ -531,6 +535,34 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_InputManager(void * jarg1) {
   InputManager *arg1 = (InputManager *) 0 ;
   
   arg1 = (InputManager *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Debug_GetInstance() {
+  void * jresult ;
+  Debug *result = 0 ;
+  
+  result = (Debug *)Debug::GetInstance();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Debug_Log(void * jarg1, char * jarg2) {
+  Debug *arg1 = (Debug *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  arg1 = (Debug *)jarg1; 
+  arg2 = (char *)jarg2; 
+  (arg1)->Log((char const *)arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Debug(void * jarg1) {
+  Debug *arg1 = (Debug *) 0 ;
+  
+  arg1 = (Debug *)jarg1; 
   delete arg1;
 }
 

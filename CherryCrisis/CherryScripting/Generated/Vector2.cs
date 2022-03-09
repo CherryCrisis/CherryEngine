@@ -182,7 +182,7 @@ public class Vector2 : global::System.IDisposable {
     } 
   }
 
-		public override string ToString() => System.String.Format("Vector2({0}, {1})", x, y);
+		public override string ToString() => $"Vector2({x}, {y})";
 	
 }
 

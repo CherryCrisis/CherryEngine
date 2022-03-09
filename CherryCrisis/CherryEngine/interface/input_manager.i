@@ -21,4 +21,3 @@ public:
 	bool GetKeyUp(Keycode key);
 	float GetAxis(const char* axisName);
 };
-

@@ -9,7 +9,7 @@ WRAP_VECTOR(CCMaths::Vector2)
 %extend CCMaths::Vector2
 {
 	%proxycode %{
-		public override string ToString() => System.String.Format("Vector2({0}, {1})", x, y);
+		public override string ToString() => $"Vector2({x}, {y})";
 	%}
 };
 
