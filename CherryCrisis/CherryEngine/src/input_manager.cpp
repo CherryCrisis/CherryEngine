@@ -1,3 +1,4 @@
+#include "pch.hpp"
 
 #include <input_manager.hpp>
 
@@ -5,8 +6,6 @@
 //#include <GLFW/glfw3.h>
 
 #include <debug.hpp>
-#include <string>
-#include <iostream>
 
 
 template <>
@@ -70,8 +69,16 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 	m_framePressedKeys.push_back((Keycode)key);
 }
 
+void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	m_mouseWheel.x = xoffset; 
+	m_mouseWheel.y = yoffset;
+}
+
 void InputManager::UpdateKeys() 
 {
+	m_mouseWheel = CCMaths::Vector2::Zero;
+
 	for (auto& key : m_framePressedKeys) 
 	{
 		Input& input = m_keys[key];

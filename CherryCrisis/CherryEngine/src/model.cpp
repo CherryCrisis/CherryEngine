@@ -1,14 +1,16 @@
+#include "pch.hpp"
+
 #include "model.hpp"
 
 #include <assimp/mesh.h>
 #include <assimp/material.h>
 #include <assimp/scene.h>
 
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 #include "mesh.hpp"
 #include "material.hpp"
 
-Resource* Model::Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode)
+Resource::Ref<Model> Model::Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -22,7 +24,7 @@ Resource* Model::Create(const char* filepath, const aiScene* assimpScene, const 
 	model->m_mesh = resourceManager->AddResource<Mesh>(filepath, false, assimpMesh);
 	model->m_material = resourceManager->AddResource<Material>(filepath, true, assimpMaterial);
 
-	return model;
+	return Ref<Model>(model);
 }
 
 Model::~Model()

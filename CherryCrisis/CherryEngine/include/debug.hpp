@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <CherryMacros.h>
+#include "cherry_macros.hpp"
 
 class CCENGINE_API LogMessage
 {

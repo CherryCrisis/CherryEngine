@@ -5,8 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include <CherryMacros.h>
-
+#include "cherry_header.hpp"
 #include "keycode.hpp"
 
 class KeyboardContext;
@@ -54,6 +53,9 @@ private:
 
 	// Context (presets of differents callbacks and axes)
 	KeyboardContext* m_context = nullptr;
+	
+	CCMaths::Vector2 m_mouseWheel {};
+
 public:
 
 	bool GetKey(Keycode key);
@@ -61,9 +63,12 @@ public:
 	bool GetKeyUp(Keycode key);
 	float GetAxis(const char* axisName);
 
+	CCMaths::Vector2 GetMouseWheel() { return m_mouseWheel; }
+
 	void SetContext(KeyboardContext* context);
 
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	void MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset);
 	void UpdateKeys();
 	/*
 	void InputCallback(GLFWWindow int) 

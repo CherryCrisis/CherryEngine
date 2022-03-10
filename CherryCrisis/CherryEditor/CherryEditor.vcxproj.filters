@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers externes">
+      <UniqueIdentifier>{0771e16c-a627-4f58-af34-aca76fc7ca47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Panels">
+      <UniqueIdentifier>{40766637-2ab9-441f-bee6-9d8902bf2044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Core">
+      <UniqueIdentifier>{e6900ade-468f-47bc-8bc8-6d9033ed9398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Core">
+      <UniqueIdentifier>{7d1d8d0e-f4e3-4463-99e0-8bb542ad4f27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Panels">
+      <UniqueIdentifier>{59b07fc1-1ec1-46b5-9eb9-6aea75cbf1db}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\main.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\editor_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_demo.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_draw.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_impl_glfw.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_impl_opengl3.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_tables.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\imgui_widgets.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\stb_image.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\log_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\toolbar.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\inspector.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\src\gl.c">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\scene_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\game_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\frame_displayer.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\hierarchy_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\asset_browser.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\preferences_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\project_settings_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\panels\build_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\panel.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\core\editor_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\imgui_style.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\imgui_notify.h">
+      <Filter>Fichiers externes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\panel.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\asset_browser.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\log_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\toolbar.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\inspector.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\game_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\scene_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\frame_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\hierarchy_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\preferences_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\project_settings_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\build_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CherryEditor.rc">
+      <Filter>Fichiers de ressources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\crisis-min (1).ico">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

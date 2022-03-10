@@ -45,7 +45,7 @@ namespace CCMaths
 		*	\return Matrix4 \b out
 		* 
 		*	\sa operator*=(const Matrix4&)
-		*	\sa operator*(const float&) const
+		*	\sa operator*(const float) const
 		*	\sa operator*=(const float)
 		*/
 		inline Matrix4 operator*(const Matrix4& rhs) const;
@@ -229,7 +229,21 @@ namespace CCMaths
 		*	\sa RotateY(const float)
 		*	\sa RotateZ(const float)
 		*/
-		inline static Matrix4 Rotate(const Vector3& eulerAngles);
+		inline static Matrix4 RotateZXY(const Vector3& eulerAngles);
+
+		//! Rotation Matrix
+		/*!
+		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*
+		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
+		inline static Matrix4 RotateYXZ(const Vector3& eulerAngles);
  
 		//! X-axis Rotation Matrix
 		/*!
@@ -238,20 +252,10 @@ namespace CCMaths
 		*	Create a new Matrix4 \b out with the rotation around X-axis
 		* 
 		*	With the \b cos and \b sin of the angle
-		* 
-		*	\return Matrix4 \b out
-		*	```
-		*	{
-		*		1.f, 0.f, 0.f, 0.f,
-		*		0.f, cos, sin, 0.f,
-		*		0.f,-sin, cos, 0.f,
-		*		0.f, 0.f, 0.f, 1.f,
-		*	}
-		*	```
 		*
-		*	\sa Rotate(const Vector3&)
-		*	\sa RotateY(const float)
-		*	\sa RotateZ(const float)
+		*	\sa RotateX(const float, const float)
+		*	\sa RotateZXY(const Vector3&)
+		*	\sa RotateY(const float) ; RotateZ(const float)
 		*/
 		inline static Matrix4 RotateX(const float rad);
 
@@ -264,18 +268,10 @@ namespace CCMaths
 		*	With the \b cos and \b sin of the angle
 		*
 		*	\return Matrix4 \b out
-		*	```
-		*	{
-		*		cos, 0.f,-sin, 0.f,
-		*		0.f, 1.f, 0.f, 0.f,
-		*		sin, 0.f, cos, 0.f,
-		*		0.f, 0.f, 0.f, 1.f,
-		*	}
-		*	```
 		* 
-		*	\sa Rotate(const Vector3&)
-		*	\sa RotateX(const float)
-		*	\sa RotateZ(const float)
+		*	\sa	RotateY(const float, const float)
+		*	\sa RotateZXY(const Vector3&)
+		*	\sa RotateX(const float) ; RotateZ(const float)
 		*/
 		inline static Matrix4 RotateY(const float rad);
 
@@ -288,6 +284,73 @@ namespace CCMaths
 		*	With the \b cos and \b sin of the angle
 		*
 		*	\return Matrix4 \b out
+		* 
+		*	\sa RotateZ(const float, const float)
+		*	\sa RotateZXY(const Vector3&)
+		*	\sa RotateX(const float) ; RotateY(const float)
+		*/
+		inline static Matrix4 RotateZ(const float rad);
+
+		//! X-axis Rotation Matrix
+		/*!
+		*	\param cos: float cos of the angle of the rotation in radians (yaw)
+		*	\param sin: float sin of the angle of the rotation in radians (yaw)
+		*
+		*	Create a new Matrix4 \b out with the rotation around X-axis
+		*
+		*	With the \b cos and \b sin of the angle
+		*
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		1.f, 0.f, 0.f, 0.f,
+		*		0.f, cos, sin, 0.f,
+		*		0.f,-sin, cos, 0.f,
+		*		0.f, 0.f, 0.f, 1.f,
+		*	}
+		*	```
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateZXY(const Vector3&)
+		*	\sa RotateY(const float, const float) ; RotateZ(const float, const float)
+		*/
+		inline static Matrix4 RotateX(const float cos, const float sin);
+
+		//! Y-axis Rotation Matrix
+		/*!
+		*	\param cos: float cos of the angle of the rotation in radians (pitch)
+		*	\param sin: float sin of the angle of the rotation in radians (pitch)
+		*
+		*	Create a new Matrix4 \b out with the rotation around Y-axis
+		*
+		*	With the \b cos and \b sin of the angle
+		*
+		*	\return Matrix4 \b out
+		*	```
+		*	{
+		*		cos, 0.f,-sin, 0.f,
+		*		0.f, 1.f, 0.f, 0.f,
+		*		sin, 0.f, cos, 0.f,
+		*		0.f, 0.f, 0.f, 1.f,
+		*	}
+		*	```
+		*
+		*	\sa RotateY(const float)
+		*	\sa RotateZXY(const Vector3&)
+		*	\sa RotateX(const float const float) ; RotateZ(const float, const float)
+		*/
+		inline static Matrix4 RotateY(const float cos, const float sin);
+
+		//! Z-axis Rotation Matrix
+		/*!
+		*	\param cos: float cos of the angle of the rotation in radians (roll)
+		*	\param sin: float sin of the angle of the rotation in radians (roll)
+		*
+		*	Create a new Matrix4 \b out with the rotation around Z-axis
+		*
+		*	With the \b cos and \b sin of the angle
+		*
+		*	\return Matrix4 \b out
 		*	```
 		*	{
 		*		cos, sin, 0.f, 0.f,
@@ -296,12 +359,12 @@ namespace CCMaths
 		*		0.f, 0.f, 0.f, 1.f,
 		*	}
 		*	```
-		* 
-		*	\sa Rotate(const Vector3&)
-		*	\sa RotateX(const float)
-		*	\sa RotateY(const float)
+		*
+		*	\sa RotateZ(const float)
+		*	\sa RotateZXY(const Vector3&)
+		*	\sa RotateX(const float, const float) ; RotateZ(const float, const float)
 		*/
-		inline static Matrix4 RotateZ(const float rad);
+		inline static Matrix4 RotateZ(const float cos, const float sin);
 
 		//! \hiderefs
 		inline static Matrix4 Perspective(const float FovY, const float Aspect, const float Near, const float Far);

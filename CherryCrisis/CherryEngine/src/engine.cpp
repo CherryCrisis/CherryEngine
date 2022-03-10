@@ -1,7 +1,6 @@
+#include "pch.hpp"
 
-#include "pch.h" // use stdafx.h in Visual Studio 2017 and earlier
-
-#include "engine.h"
+#include "engine.hpp"
 #include "al.h"
 #include "alc.h"
 #include "alut.h"
@@ -54,11 +53,11 @@ void Engine::PlayFile(const char* fileName)
 	}
 	
 	/* Check every 0.1 seconds if the sound is still playing. */
-	do
+	/*do
 	{
 		alutSleep(0.1f);
 		alGetSourcei(source, AL_SOURCE_STATE, &status);
-	} while (status == AL_PLAYING);
+	} while (status == AL_PLAYING);*/
 }
 
 void Engine::Tick() 

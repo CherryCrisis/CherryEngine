@@ -323,7 +323,7 @@ namespace CCMaths
 		*
 		*	\sa Norm() const
 		*/
-		inline virtual float SquareNorm() const;
+		inline float SquareNorm() const;
 
 		//! Norm of the specific Quaternion
 		/*!
@@ -337,7 +337,7 @@ namespace CCMaths
 		* 
 		*	\sa SquareNorm() const
 		*/
-		inline virtual float Norm() const;
+		inline float Norm() const;
 
 		//! Normalize the Quaternion
 		/*!

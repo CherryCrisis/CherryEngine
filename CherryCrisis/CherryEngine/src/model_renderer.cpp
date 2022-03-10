@@ -1,9 +1,11 @@
+#include "pch.hpp"
+
 #include "model_renderer.hpp"
 
 #include "render_manager.hpp"
-#include "resourceManager.hpp"
+#include "resource_manager.hpp"
 
-#include "basic_subpipeline.hpp"
+#include "basic_renderpass.hpp"
 
 #include "entity.hpp"
 
@@ -14,19 +16,16 @@ ModelRenderer::ModelRenderer()
 
 ModelRenderer::~ModelRenderer()
 {
-	RemoveModel();
+//	RemoveModel();
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 {
-	if (!m_model)
-		RenderManager::instance()->SubscribeRenderer(this);
-
 	m_model = newModel;
 
 	if (m_model)
 	{
-		RenderManager::instance()->GenerateFromPipeline<BasicSubPipeline>(this);
+		RenderManager::instance()->GenerateFromPipeline<BasicRenderPass>(this);
 	}
 	else
 		RemoveModel();
@@ -34,10 +33,11 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 void ModelRenderer::RemoveModel()
 {
-	RenderManager::instance()->UnsubscribeRenderer(this);
+	// TODO: Add pipeline remove
+	RenderManager::instance()->RemoveFromPipeline<BasicRenderPass>(this);
 }
 
 void ModelRenderer::Draw()
 {
-	RenderManager::instance()->ConsumeFromPipeline<BasicSubPipeline>(this);
+	//RenderManager::instance()->ConsumeFromPipeline<BasicSubPipeline>(this);
 }

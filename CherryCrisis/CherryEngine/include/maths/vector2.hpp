@@ -6,7 +6,7 @@ namespace CCMaths
 	{
 		union
 		{
-			struct { float x, y; };		//!< Struct of the four components of the Vector2
+			struct { float x, y; };		//!< Struct of the two components of the Vector2
 
 			float data[2];				//!< Pointer on the Vector2's data
 		};
@@ -20,11 +20,11 @@ namespace CCMaths
 		Vector2()
 			:x(0.f), y(0.f) {}
 
-		//! Construct the Vector2 with the four components equal to the given value
+		//! Construct the Vector2 with the two components equal to the given value
 		Vector2(const float value)
 			:x(value), y(value) {}
 
-		//! Construct the Vector2 with the four given members
+		//! Construct the Vector2 with the two given members
 		Vector2(const float x, const float y)
 			: x(x), y(y) {}
 
