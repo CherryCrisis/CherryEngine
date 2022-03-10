@@ -39,11 +39,6 @@ private :
 	//Display the asset list
 	void RenderNodes();
 
-	//DEPRECATED : Replace with resource manager references
-	unsigned int m_fileIcon = 0;
-	unsigned int m_browserIcon = 0;
-	//-------------------
-
 	
 public:
 
@@ -55,4 +50,9 @@ public:
 	void QuerryBrowser();
 
 	AssetBrowser();
+
+	//DEPRECATED : Replace with resource manager references
+	unsigned int m_fileIcon = 0u;
+	unsigned int m_browserIcon = 0u;
+	//-------------------
 };

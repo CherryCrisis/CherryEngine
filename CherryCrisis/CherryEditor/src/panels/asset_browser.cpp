@@ -17,6 +17,13 @@ AssetBrowser::AssetBrowser()
     //Set Full Path to Assets
     m_currentDirectory = std::filesystem::current_path();
     m_currentDirectory /= AssetPath;
+    int null = 0;
+
+    if (!EditorManager::LoadTextureFromFile("internal/icons/file_icon.png", &m_fileIcon, &null, &null))
+        std::cout << "failed to load file icon" << std::endl;
+
+    if (!EditorManager::LoadTextureFromFile("internal/icons/folder_icon.png", &m_browserIcon, &null, &null))
+        std::cout << "failed to load folder icon" << std::endl;
 
     // Load Icons
     QuerryBrowser();
@@ -75,7 +82,11 @@ void AssetBrowser::Render()
 
             CheckThings();
         }
-
+        //TODO : Change sensibility in editor preferences
+        if (InputManager::instance()->GetKey(Keycode::LEFT_CONTROL) && InputManager::instance()->GetMouseWheel().y != 0)
+        {
+            m_thumbnailSize += InputManager::instance()->GetMouseWheel().y  * 2;
+        }
 
         RenderNodes();
     }

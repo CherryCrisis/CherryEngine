@@ -22,7 +22,7 @@
 #include "render_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
-bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
+bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height)
 {
     // Load from file
     stbi_set_flip_vertically_on_load(true);
@@ -59,6 +59,7 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 
 EditorManager::EditorManager() 
 {
+    // To Replace too
     inputs = InputManager::instance();
     // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
