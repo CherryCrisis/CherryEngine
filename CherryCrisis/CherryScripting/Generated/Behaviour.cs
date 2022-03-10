@@ -10,7 +10,7 @@
 
 namespace CCEngine {
 
-public class Behaviour : Component {
+public abstract class Behaviour : Component {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
 
   internal Behaviour(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.Behaviour_SWIGUpcast(cPtr), cMemoryOwn) {

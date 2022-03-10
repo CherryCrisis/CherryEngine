@@ -10,23 +10,47 @@ namespace CCScripting
 {
 	class BackpackBehaviour : Behaviour
 	{
-		public BackpackBehaviour(System.IntPtr cPtr, bool cMemoryOwn) : base(cPtr, cMemoryOwn) { }
-
-		float i = 0.5f;
-
 		Transform transform;
+
+		BackpackBehaviour(System.IntPtr cPtr, bool cMemoryOwn)
+			: base(cPtr, cMemoryOwn)
+		{
+			transform = GetComponent<Transform>();
+		}
 
 		public void Start()
 		{
-			transform = GetComponent<Transform>();
-
-			transform.position = new Vector3(transform.position.x, transform.position.y, -50f);
 		}
 
+		float deltaTime = 0.01f;
+		float time = 0f;
 		public void Update()
 		{
-			i += 0.1f;
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, i, transform.eulerAngles.z);
+			time += 0.01f;
+
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+
+			float timeScaledSpeed = deltaTime * 2f;
+
+			if (InputManager.GetInstance().GetKey(Keycode.SPACE))
+				transform.position = new Vector3(transform.position.x, transform.position.y + timeScaledSpeed, transform.position.z);
+
+			if (InputManager.GetInstance().GetKey(Keycode.LEFT_CONTROL))
+				transform.position = new Vector3(transform.position.x, transform.position.y - timeScaledSpeed, transform.position.z);
+
+			if (InputManager.GetInstance().GetKey(Keycode.Z))
+				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + timeScaledSpeed);
+
+			if (InputManager.GetInstance().GetKey(Keycode.S))
+				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - timeScaledSpeed);
+
+			if (InputManager.GetInstance().GetKeyDown(Keycode.ESCAPE))
+				Debug.GetInstance().Log(transform.position, transform.eulerAngles, transform.scale);
+
+			transform.position.x = 5f;
+
+			if (InputManager.GetInstance().GetKeyUp(Keycode.ESCAPE))
+				Debug.GetInstance().Log(this);
 
 		}
 	}

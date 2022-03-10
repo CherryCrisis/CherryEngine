@@ -576,7 +576,8 @@ class ManagedScriptContext
 {
 public:
 	std::list<ManagedAssembly*> m_loadedAssemblies;
-	MonoDomain* m_domain;
+	std::string m_domainName;
+	MonoDomain* m_domain = nullptr;
 	std::string m_baseImage;
 	bool m_initialized = false;
 
@@ -596,17 +597,21 @@ protected:
 
 	friend class ManagedScriptSystem;
 
-	explicit ManagedScriptContext(const std::string& baseImage);
+	explicit ManagedScriptContext(char* domainName, const std::string& baseImage);
 	~ManagedScriptContext();
 
 	void PopulateReflectionInfo();
 
 public:
+	bool Reload();
+
 	bool LoadAssembly(const char* path);
 
 	bool UnloadAssembly(const std::string& name);
 
 	bool Init();
+
+	bool Unload();
 
 	/* Performs a class search in all loaded assemblies */
 	/* If you have the assembly name, please use the alternative version of this
@@ -716,7 +721,7 @@ public:
 	ManagedScriptSystem(ManagedScriptSystem&&) = delete;
 	ManagedScriptSystem() = delete;
 
-	ManagedScriptContext* CreateContext(const char* image);
+	ManagedScriptContext* CreateContext(char* domainName, const char* image);
 
 	void DestroyContext(ManagedScriptContext* ctx);
 

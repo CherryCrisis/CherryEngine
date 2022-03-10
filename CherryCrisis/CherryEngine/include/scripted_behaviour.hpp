@@ -2,11 +2,12 @@
 
 #include <memory>
 
-#include "behaviour.hpp"
+#include <cherry_macros.hpp>
 
+#include "behaviour.hpp"
 #include "monowrapper.hpp"
 
-class ScriptedBehaviour : public Behaviour
+class CCENGINE_API ScriptedBehaviour : public Behaviour
 {
 	std::shared_ptr<mono::ManagedScriptSystem> script;
 	mono::ManagedScriptContext* context;
@@ -24,4 +25,6 @@ public:
 
 	void Start() override;
 	void Update() override;
+
+	void Reload();
 };

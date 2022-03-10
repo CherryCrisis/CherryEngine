@@ -7,6 +7,8 @@
 
 %feature("director") Behaviour;
 
+%typemap(csclassmodifiers) Behaviour "public abstract class";
+
 class Behaviour : public Component
 {
 private:

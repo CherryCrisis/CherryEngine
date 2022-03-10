@@ -658,8 +658,8 @@ MonoObject* ManagedObject::Invoke(struct ManagedMethod* method, void** params) {
 //
 //================================================================//
 
-ManagedScriptContext::ManagedScriptContext(const std::string& baseImage) : m_baseImage(baseImage) {
-}
+ManagedScriptContext::ManagedScriptContext(char* domainName, const std::string& baseImage)
+	: m_domainName(domainName), m_baseImage(baseImage) { }
 
 ManagedScriptContext::~ManagedScriptContext() {
 	for (auto& a : m_loadedAssemblies) {
@@ -671,25 +671,35 @@ ManagedScriptContext::~ManagedScriptContext() {
 }
 
 bool ManagedScriptContext::Init() {
-	// m_domain = mono_domain_create_appdomain("abcd", nullptr);
-	m_domain = g_jitDomain;
+	m_domain = mono_domain_create_appdomain(&m_domainName[0], nullptr);
 
-	MonoAssembly* ass = mono_domain_assembly_open(m_domain, m_baseImage.c_str());
-	if (!ass) {
+	if (!m_domain)
 		return false;
-	}
 
-	MonoImage* img = mono_assembly_get_image(ass);
+	mono_domain_set(m_domain, 0);
 
-	if (!img) {
-		return false;
-	}
-	ManagedAssembly* newass = new ManagedAssembly(this, m_baseImage, img, ass);
-	m_loadedAssemblies.push_back(newass);
-	newass->PopulateReflectionInfo();
+	LoadAssembly(m_baseImage.c_str());
 
 	m_initialized = true;
 	return true;
+}
+
+bool ManagedScriptContext::Unload()
+{
+	if (m_domain == g_jitDomain)
+		return false;
+
+	mono_domain_set(g_jitDomain, 0);
+	mono_domain_unload(m_domain);
+	return true;
+}
+
+bool ManagedScriptContext::Reload()
+{
+	if (!Unload())
+		return false;
+
+	return Init();
 }
 
 bool ManagedScriptContext::LoadAssembly(const char* path) {
@@ -954,12 +964,7 @@ ManagedScriptSystem::ManagedScriptSystem(ManagedScriptSystemSettings_t settings)
 	mono_set_allocator_vtable(&m_allocator);
 
 	// Create a SINGLE jit environment!
-	g_jitDomain = mono_jit_init("abcd");
-	if (!g_jitDomain) {
-		printf("Failure while creating mono jit!\n");
-		ASSERT(0);
-		abort();
-	}
+	g_jitDomain = mono_jit_init("RootDomain");
 }
 
 ManagedScriptSystem::~ManagedScriptSystem() {
@@ -969,8 +974,8 @@ ManagedScriptSystem::~ManagedScriptSystem() {
 	mono_jit_cleanup(g_jitDomain);
 }
 
-ManagedScriptContext* ManagedScriptSystem::CreateContext(const char* image) {
-	ManagedScriptContext* ctx = new ManagedScriptContext(image);
+ManagedScriptContext* ManagedScriptSystem::CreateContext(char* domainName, const char* image) {
+	ManagedScriptContext* ctx = new ManagedScriptContext(domainName, image);
 
 	if (!ctx->Init()) {
 		delete ctx;

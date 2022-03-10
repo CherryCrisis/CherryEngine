@@ -2,6 +2,8 @@
 
 #include "scripted_behaviour.hpp"
 
+#include "input_manager.hpp"
+
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
@@ -14,9 +16,10 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 
 	script = std::make_shared<mono::ManagedScriptSystem>(settings);
 
-	context = script->CreateContext("../x64/Debug/CherryScripting.dll");
+	char domainName[16] = "ScriptingDomain";
+	context = script->CreateContext(domainName, "../x64/Debug/CherryScripting.dll");
 
-	managedClass = context->FindClass("CCScripting", "CameraController");
+	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
 
 	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
 	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
@@ -43,4 +46,12 @@ void ScriptedBehaviour::Update()
 {
 	MonoException* excep = nullptr;
 	csUpdate(behaviourInst->RawObject(), &excep);
+
+	if (InputManager::GetInstance()->GetKeyDown(Keycode::R))
+		Reload();
+}
+
+void ScriptedBehaviour::Reload()
+{
+	//context->Reload();
 }
