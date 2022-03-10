@@ -57,7 +57,7 @@ int main()
 
 
 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
+
     ImGui_ImplOpenGL3_Init("#version 330");
     ImFontConfig font_cfg;
     font_cfg.FontDataOwnedByAtlas = false;
@@ -78,10 +78,18 @@ int main()
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->FocusCallback(w, i);
     };
 
+    auto funcW = [](GLFWwindow* w, double x, double y)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
+    };
+
     glfwSetWindowUserPointer(window, &editor);
 
     glfwSetKeyCallback(window, func);
     glfwSetWindowFocusCallback(window, funcF);
+    glfwSetScrollCallback(window, funcW);
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
 
     editor.LinkEngine(&engine);
 

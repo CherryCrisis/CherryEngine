@@ -68,5 +68,7 @@ public:
 
     void FocusCallback(GLFWwindow* window, int focused);
 
+    static bool LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height);
+
     InputManager* inputs;
 };
