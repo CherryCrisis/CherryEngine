@@ -119,6 +119,8 @@ void AssetBrowser::ContextCallback()
                 newPath /= "New Folder";
                 std::filesystem::create_directory(newPath);
                 QuerryBrowser();
+                m_renaming = true;
+                m_focusedNode = GetNodeByPath(newPath);
             }
 
             ImGui::Separator();
@@ -135,16 +137,10 @@ void AssetBrowser::ContextCallback()
         {
             ImGui::Separator();
             if (ImGui::MenuItem("Open")) { ShellExecuteA(NULL, NULL, m_focusedNode->m_path.string().c_str(), NULL, NULL, 10); }
+            
             if (ImGui::MenuItem("Rename"))
-            {
                 m_renaming = true;
-                // Begin Rename entry
-                // When Rename entry inputed, process the rename
 
-                std::string oldstr = m_focusedNode->m_path.string();
-
-                //rename(oldstr.c_str(), newstr.c_str());
-            }
             if (ImGui::MenuItem("Delete"))
                 m_deleting = true;
 
@@ -182,6 +178,19 @@ void AssetBrowser::CheckThings()
         }
     }
     m_focusedNode = nullptr;
+}
+
+AssetBrowser::AssetNode* AssetBrowser::GetNodeByPath(std::filesystem::path path)
+{
+    for (auto& couple : m_nodes)
+    {
+        AssetNode& node = couple.second;
+        if (path == node.m_path)
+        {
+            return &node;
+        }
+    }
+    return nullptr;
 }
 
 

@@ -24,7 +24,7 @@ private :
 	};
 
 	void CheckThings();
-
+	AssetNode* GetNodeByPath(std::filesystem::path path);
 
 	// Control Variables
 	float m_padding = 16.f;
