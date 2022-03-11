@@ -30,7 +30,7 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	csUpdate = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedUpdate->RawMethod());
 	csStart = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedStart->RawMethod());
 
-	bool value = true;
+	bool value = false;
 	int* ptr = (int*)this;
 	void* args[] = { &ptr, &value };
 	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
@@ -39,19 +39,33 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 void ScriptedBehaviour::Start()
 {
 	MonoException* excep = nullptr;
-	csStart(behaviourInst->RawObject(), &excep);
+	//csStart(behaviourInst->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Update()
 {
 	MonoException* excep = nullptr;
-	csUpdate(behaviourInst->RawObject(), &excep);
+	//csUpdate(behaviourInst->RawObject(), &excep);
 
-	if (InputManager::GetInstance()->GetKeyDown(Keycode::R))
-		Reload();
+	//if (InputManager::GetInstance()->GetKeyDown(Keycode::R))
+	//	Reload();
 }
 
 void ScriptedBehaviour::Reload()
 {
-	//context->Reload();
+	auto csDispose = (void(*)(MonoObject*, bool, MonoException**))mono_method_get_unmanaged_thunk(managedClass->FindMethod("Dispose")->RawMethod());
+
+	MonoException* excep = nullptr;
+	csDispose(behaviourInst->RawObject(), true, &excep);
+
+	context->Reload();
+
+	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
+	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
+
+	bool value = false;
+	int* ptr = (int*)this;
+	void* args[] = { &ptr, &value };
+	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
+
 }
