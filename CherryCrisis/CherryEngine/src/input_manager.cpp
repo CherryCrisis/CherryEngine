@@ -7,10 +7,36 @@
 
 #include <debug.hpp>
 
-
 template <>
 InputManager* Singleton<InputManager>::currentInstance = nullptr;
 
+
+InputManager::Input* InputManager::GetInputRef(Keycode key)
+{
+	return &m_keys[key];
+}
+
+InputManager::Input* InputManager::GetInputRef(const char* inputName)
+{
+	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
+	{
+		Debug* debug = Debug::GetInstance();
+
+		std::string errorLog = "Key ";
+		errorLog += inputName;
+		errorLog += " is not set up.";
+
+		debug->Log(errorLog.c_str());
+
+		return nullptr;
+	}
+	else
+	{
+		Keycode& current = m_context->m_namedKeys[inputName];
+
+		return GetInputRef(current);
+	}
+}
 
 bool InputManager::GetKey(Keycode key)
 {
@@ -27,9 +53,79 @@ bool InputManager::GetKeyUp(Keycode key)
 	return m_keys[key].m_isUp;
 }
 
+float InputManager::GetAxis(Keycode posKey, Keycode negKey)
+{
+	return GetKey(posKey) - GetKey(negKey);
+}
+
+bool InputManager::GetKey(const char* inputName)
+{
+	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
+	{
+		Debug* debug = Debug::GetInstance();
+
+		std::string errorLog = "Key ";
+		errorLog += inputName;
+		errorLog += " is not set up.";
+
+		debug->Log(errorLog.c_str());
+
+		return 0.f;
+	}
+	else
+	{
+		Keycode& current = m_context->m_namedKeys[inputName];
+
+		return GetKey(current);
+	}
+}
+
+bool InputManager::GetKeyDown(const char* inputName)
+{
+	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
+	{
+		Debug* debug = Debug::GetInstance();
+
+		std::string errorLog = "Key ";
+		errorLog += inputName;
+		errorLog += " is not set up.";
+
+		debug->Log(errorLog.c_str());
+
+		return 0.f;
+	}
+	else
+	{
+		Keycode& current = m_context->m_namedKeys[inputName];
+
+		return GetKeyDown(current);
+	}
+}
+
+bool InputManager::GetKeyUp(const char* inputName)
+{
+	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
+	{
+		Debug* debug = Debug::GetInstance();
+
+		std::string errorLog = "Key ";
+		errorLog += inputName;
+		errorLog += " is not set up.";
+
+		debug->Log(errorLog.c_str());
+
+		return 0.f;
+	}
+	else
+	{
+		Keycode& current = m_context->m_namedKeys[inputName];
+
+		return GetKeyUp(current);
+	}
+}
+
 float InputManager::GetAxis(const char* axisName) 
 {
-
 	if (m_context->m_axis.empty() || !m_context->m_axis.count(axisName))
 	{
 		Debug* debug = Debug::GetInstance();
@@ -62,15 +158,23 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 	//Input input = m_keys[key];
 	Input& input = m_keys[(Keycode)key];
 
-	input.m_isDown = action;
 	input.m_isHeld = action;
+	input.m_isDown = action;
 	input.m_isUp   = !action;
 
 	m_framePressedKeys.push_back((Keycode)key);
 }
 
+void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	m_mouseWheel.x = xoffset; 
+	m_mouseWheel.y = yoffset;
+}
+
 void InputManager::UpdateKeys() 
 {
+	m_mouseWheel = CCMaths::Vector2::Zero;
+
 	for (auto& key : m_framePressedKeys) 
 	{
 		Input& input = m_keys[key];

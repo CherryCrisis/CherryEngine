@@ -1,14 +1,10 @@
 #pragma once
 
-#include "cherry_header.hpp"
-
-#include "component.hpp"
+#include "behaviour.hpp"
 
 #include "renderer.hpp"
 
 #include "model_base.hpp"
-
-struct GPUMesh;
 
 class Transform;
 
@@ -19,11 +15,9 @@ public:
 	Transform* m_transform = nullptr;
 	std::shared_ptr<Model> m_model;
 
-	ModelRenderer();
+	ModelRenderer(Entity& owner);
 	~ModelRenderer();
 
 	void SetModel(std::shared_ptr<Model> newModel);
 	void RemoveModel();
-
-	void Draw() override;
 };

@@ -6,14 +6,19 @@
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
-CameraComponent::CameraComponent()
+CameraComponent::CameraComponent(Entity& owner)
+	: Behaviour(owner)
 {
-	RenderManager::instance()->GenerateFromPipeline<BasicRenderPass>(this);
-	RenderManager::instance()->GenerateFromPipeline<SkyboxRenderPass>(this);
+	auto RM = RenderManager::GetInstance();
+
+	RM->GenerateFromPipeline<BasicRenderPass>(this);
+	RM->GenerateFromPipeline<SkyboxRenderPass>(this);
 }
 
 CameraComponent::~CameraComponent()
 {
-	RenderManager::instance()->RemoveFromPipeline<BasicRenderPass>(this);
-	RenderManager::instance()->RemoveFromPipeline<SkyboxRenderPass>(this);
+	auto RM = RenderManager::GetInstance();
+
+	RM->RemoveFromPipeline<BasicRenderPass>(this);
+	RM->RemoveFromPipeline<SkyboxRenderPass>(this);
 }

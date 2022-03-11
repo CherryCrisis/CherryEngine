@@ -8,7 +8,7 @@
 #include "model.hpp"
 
 BasicRenderPass::BasicRenderPass(const char* name)
-	: ElementMeshRenderPass(name, "../assets/basicShader.vert", "../assets/basicShader.frag")
+	: ElementMeshRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
 {
 
 }

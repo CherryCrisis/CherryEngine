@@ -1,6 +1,5 @@
 
 #include "cherry_header.hpp"
-#include "printer.hpp"
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -18,14 +17,7 @@
 #include "stb_image.h"
 #include "input_manager.hpp"
 
-/*void KeyCallbackWrapper(GLFWwindow* w, int k, int s, int a, int m)
-{
-    void* userPointer = glfwGetWindowUserPointer(w);
-    InputManager* IM = static_cast<InputManager*>(userPointer);
-
-    IM->KeyCallback(w, k, s, a, m);
-}
-*/
+#include <iostream>
 
 int main()
 {
@@ -37,7 +29,7 @@ int main()
         printf("glfwInit failed\n");
         return -1;
     }
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "GLFW test", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Cherry Crisis", nullptr, nullptr);
     if (window == nullptr)
     {
         printf("glfwCreateWindow failed\n");
@@ -54,25 +46,11 @@ int main()
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
 
-    InputManager* IM = InputManager::instance();
-    glfwSetWindowUserPointer(window, IM);
-
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     SetDarkStyle();
-
-
-    auto func = [](GLFWwindow* w, int k, int s, int a, int m)
-    {
-        static_cast<InputManager*>(glfwGetWindowUserPointer(w))->KeyCallback(w, k, s, a, m);
-    };
-
-    glfwSetKeyCallback(window, func);
-
-
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
     ImFontConfig font_cfg;
     font_cfg.FontDataOwnedByAtlas = false;
@@ -83,13 +61,44 @@ int main()
     EditorManager editor{};
     Engine engine{};
 
+    auto func = [](GLFWwindow* w, int k, int s, int a, int m)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->KeyCallback(w, k, s, a, m);
+    };
+
+    auto funcF = [](GLFWwindow* w, int i)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->FocusCallback(w, i);
+    };
+
+    auto funcW = [](GLFWwindow* w, double x, double y)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
+    };
+
+    glfwSetWindowUserPointer(window, &editor);
+
+    glfwSetKeyCallback(window, func);
+    glfwSetWindowFocusCallback(window, funcF);
+    glfwSetScrollCallback(window, funcW);
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+
     editor.LinkEngine(&engine);
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+
+    //glfwRequestWindowAttention(window);
+    stbi_set_flip_vertically_on_load(false);
+    GLFWimage icon[1];
+    icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
+    glfwSetWindowIcon(window, 1 , icon);
+    stbi_image_free(icon[0].pixels);
+
     while (glfwWindowShouldClose(window) == false)
     {
-        InputManager::instance()->UpdateKeys();
+        InputManager::GetInstance()->UpdateKeys();
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

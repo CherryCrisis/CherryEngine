@@ -25,9 +25,6 @@
     <Filter Include="Fichiers d%27en-tête\Resource">
       <UniqueIdentifier>{0c7791f0-5a6a-4f5e-8bbf-0831279eb3a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Components">
-      <UniqueIdentifier>{095d4814-acc8-4a66-b96b-70ea16749db4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Component">
       <UniqueIdentifier>{d07d4011-4beb-45aa-a98b-b11df0116bad}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,18 @@
     </Filter>
     <Filter Include="Fichiers sources\Rendering">
       <UniqueIdentifier>{4c3ee403-c5ce-4c26-bf4f-00e0404f094a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Component">
+      <UniqueIdentifier>{095d4814-acc8-4a66-b96b-70ea16749db4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Interface">
+      <UniqueIdentifier>{324b38eb-add6-41cc-b2ac-a4bbf89c7b4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\CSGenerated">
+      <UniqueIdentifier>{7345006b-0b31-4718-8917-eafda2e01f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Interface\Maths">
+      <UniqueIdentifier>{eee4fb74-d9e3-477a-b235-761c3b3df1c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,9 +82,6 @@
       <Filter>Fichiers d%27en-tête\Maths</Filter>
     </ClInclude>
     <ClInclude Include="include\cherry_header.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\component.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\framework.hpp">
@@ -118,7 +124,7 @@
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\transform.hpp">
-      <Filter>Fichiers d%27en-tête\Components</Filter>
+      <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="externals\include\assimp\aabb.h">
       <Filter>Fichiers externes\Assimp</Filter>
@@ -364,7 +370,7 @@
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\model_renderer.hpp">
-      <Filter>Fichiers d%27en-tête\Components</Filter>
+      <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\render_manager.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
@@ -388,7 +394,7 @@
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\camera_component.hpp">
-      <Filter>Fichiers d%27en-tête\Components</Filter>
+      <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\camera.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
@@ -397,7 +403,7 @@
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
     <ClInclude Include="include\light_component.hpp">
-      <Filter>Fichiers d%27en-tête\Components</Filter>
+      <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\input_manager.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
@@ -413,6 +419,21 @@
     </ClInclude>
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\monowrapper.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\component.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\behaviour.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scripted_behaviour.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scene_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -469,6 +490,51 @@
     </None>
     <None Include="..\Assets\basicShader.frag">
       <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="include\entity.inl">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </None>
+    <None Include="interface\entity.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\maths.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\vector2.i">
+      <Filter>Fichiers sources\Interface\Maths</Filter>
+    </None>
+    <None Include="interface\vector3.i">
+      <Filter>Fichiers sources\Interface\Maths</Filter>
+    </None>
+    <None Include="interface\vector4.i">
+      <Filter>Fichiers sources\Interface\Maths</Filter>
+    </None>
+    <None Include="interface\matrix3.i">
+      <Filter>Fichiers sources\Interface\Maths</Filter>
+    </None>
+    <None Include="interface\vector.i">
+      <Filter>Fichiers sources\Interface\Maths</Filter>
+    </None>
+    <None Include="interface\behaviour.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\transform_comp.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\component.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\camera_comp.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\input_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\singleton.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\debug.i">
+      <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -559,5 +625,22 @@
     <ClCompile Include="src\input_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\monowrapper.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scripted_behaviour.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\ccengine_wrap.cxx">
+      <Filter>Fichiers sources\CSGenerated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="interface\ccengine.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

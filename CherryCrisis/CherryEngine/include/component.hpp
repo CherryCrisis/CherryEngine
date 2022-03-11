@@ -2,11 +2,8 @@
 
 #include <cherry_macros.hpp>
 
-class CCENGINE_API Behaviour
+class CCENGINE_API Component
 {
 public:
-
-	Behaviour() {}
-	virtual void Start() {};
-	virtual void Update() {};
+	virtual ~Component() = default;
 };

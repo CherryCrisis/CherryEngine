@@ -1,13 +1,13 @@
 #pragma once
 
-#include "component.hpp"
+#include "behaviour.hpp"
 
 #include "light.hpp"
 
 class LightComponent : public Behaviour
 {
 public:
-	LightComponent();
+	LightComponent(Entity& owner);
 	~LightComponent();
 
 	Light m_light;

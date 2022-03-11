@@ -5,6 +5,8 @@
 #include "alc.h"
 #include "alut.h"
 
+#include "scene_manager.hpp"
+
 Engine::Engine() 
 {
 	SoundInit();
@@ -53,27 +55,21 @@ void Engine::PlayFile(const char* fileName)
 	}
 	
 	/* Check every 0.1 seconds if the sound is still playing. */
-	do
+	/*do
 	{
 		alutSleep(0.1f);
 		alGetSourcei(source, AL_SOURCE_STATE, &status);
-	} while (status == AL_PLAYING);
+	} while (status == AL_PLAYING);*/
 }
 
 void Engine::Tick() 
 {
-	for (Behaviour* behaviour : behaviours)
-	{
-		behaviour->Update();
-	}
+	SceneManager::GetInstance()->Update();
 }
 
 void Engine::Launch() 
 {
 	isPlaying = true;
 
-	for (Behaviour* behaviour : behaviours) 
-	{
-		behaviour->Start();
-	}
+	SceneManager::GetInstance()->Start();
 }

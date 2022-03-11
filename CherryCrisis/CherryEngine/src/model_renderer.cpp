@@ -9,8 +9,8 @@
 
 #include "entity.hpp"
 
-ModelRenderer::ModelRenderer()
-	: Behaviour()
+ModelRenderer::ModelRenderer(Entity& owner)
+	: Behaviour(owner)
 {
 }
 
@@ -25,7 +25,7 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 	if (m_model)
 	{
-		RenderManager::instance()->GenerateFromPipeline<BasicRenderPass>(this);
+		RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
 	}
 	else
 		RemoveModel();
@@ -34,10 +34,5 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 void ModelRenderer::RemoveModel()
 {
 	// TODO: Add pipeline remove
-	RenderManager::instance()->RemoveFromPipeline<BasicRenderPass>(this);
-}
-
-void ModelRenderer::Draw()
-{
-	//RenderManager::instance()->ConsumeFromPipeline<BasicSubPipeline>(this);
+	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
 }

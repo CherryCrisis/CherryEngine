@@ -30,7 +30,7 @@ private:
 	ModelNode* m_rootNode;
 	std::vector<std::shared_ptr<Model>>	m_models;
 
-	void GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity, std::vector<Entity>& entities);
+	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities);
 	void DeleteModelNode(ModelNode* modelNode);
 
 public:
@@ -39,5 +39,5 @@ public:
 	static Ref<ModelBase> Create(const char* filepath);
 
 	//Generate entities with modelBase (model instance)
-	std::vector<Entity> GenerateEntities(Entity& rootEntity);
+	std::vector<Entity*>& GenerateEntities(Entity* rootEntity);
 };

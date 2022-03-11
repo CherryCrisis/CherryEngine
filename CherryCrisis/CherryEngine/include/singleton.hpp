@@ -14,7 +14,7 @@ protected:
 	static T* currentInstance;
 
 public:
-	static T* instance()
+	static T* GetInstance()
 	{
 		if (!instantiateFlag.test_and_set())
 		{
@@ -25,7 +25,7 @@ public:
 		return currentInstance;
 	}
 
-	static void kill()
+	static void Kill()
 	{
 		delete currentInstance;
 		currentInstance = nullptr;
