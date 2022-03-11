@@ -50,7 +50,7 @@ namespace CCFunction
 		}
 	};
 
-	template<class T, class... Args>
+	template<class T, typename... Args>
 	std::unique_ptr<AFunction> BindFunction(void (T::* f)(Args... type), T* c, Args&&... args)
 	{
 		return std::make_unique<MemberFunction<T, Args...>>
@@ -58,7 +58,7 @@ namespace CCFunction
 	}
 
 	template<class... Args>
-	std::unique_ptr<AFunction> BindFunction(void (*f)(Args...), Args&&... args)
+	std::unique_ptr<AFunction> BindFunction(void (*f)(Args...), Args... args)
 	{
 		return std::make_unique<NonMemberFunction<Args...>>
 			(NonMemberFunction<Args...>(f, std::forward<Args>(args)...));

@@ -13,15 +13,15 @@ Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
 
     ThreadPool* threadpool = ThreadPool::GetInstance();
 
-    std::unique_ptr<CCFunction::AFunction> function = 
+    /*std::unique_ptr<CCFunction::AFunction> function = 
         CCFunction::BindFunction(LoadModel, modelBase->filepath.c_str(), &modelBase->m_rootNode, modelBase->m_models);
 
     std::unique_ptr<CCFunction::AFunction> onFinished =
-        CCFunction::BindFunction(&ResourceMultithread::ResourceLoaded, (ResourceMultithread*)modelBase);
+        CCFunction::BindFunction(&ResourceMultithread::ResourceLoaded, (ResourceMultithread*)modelBase);*/
 
-    threadpool->CreateTask(function, onFinished, EChannelTask::Multithread);
+    //threadpool->CreateTask(function, onFinished, EChannelTask::Multithread);
 
-    //LoadModel(&test, &modelBase->m_rootNode, modelBase->m_models);
+    LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
 
     return Ref<ModelBase>(modelBase);
 }

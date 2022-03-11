@@ -1,12 +1,12 @@
 #pragma once
 
 template <class T, typename... Args>
-std::shared_ptr<T> ResourceManager::AddResourceMonoThreads(const char* filepath, bool verifIsExist, Args... args)
+std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {
 	if (verifIsExist)
 	{
 		std::shared_ptr<T> findedResource = GetResource<T>(filepath);
-		if (findedResource.get() != nullptr)
+		if (findedResource != nullptr)
 			return findedResource;
 	}
 
@@ -19,39 +19,22 @@ std::shared_ptr<T> ResourceManager::AddResourceMonoThreads(const char* filepath,
 
 	m_resources.insert(resourceMap);
 
+	//resourcePtr->m_onLoaded->Invoke(resourcePtr);
+
 	return resourcePtr;
 }
 
 template<class T, class CallbackType, typename... Args>
-	std::shared_ptr<T> ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIsExist,
-	std::unique_ptr<CCCallback::ACallback<CallbackType>> callback, Args... args)
+void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIsExist,
+	std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args... args)
 {
-		if (verifIsExist)
-		{
-			std::shared_ptr<T> findedResource = GetResource<T>(filepath);
-			if (findedResource.get() != nullptr)
-				return findedResource;
-		}
+	/*std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::TestResource<T, CallbackType, Args...>, this,
+		filepath, verifIsExist, std::move(callback), args...);*/
 
-		Resource::Ref<T> resourcePtr = T::Create(filepath, callback, args...);
+	std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::AddResource<T, Args...>, this,
+		join<filepath, verifIsExist, args...>);
 
-		if (!resourcePtr)
-			return nullptr;
-
-		auto resourceMap = std::make_pair<std::type_index, std::shared_ptr<Resource>>(typeid(T), resourcePtr);
-
-		m_resources.insert(resourceMap);
-
-		return resourcePtr;
-}
-
-template<class T, typename... Args>
-std::shared_ptr<T> ResourceManager::AddResource(Args... args)
-{
-	if (std::is_base_of_v<ResourceMultithread, T>)
-		AddResourceMultiThreads<T>(args...);
-	else
-		AddResourceMonoThreads<T>(args...);
+	threadpool->CreateTask(function, EChannelTask::Multithread);
 }
 
 template<class T>

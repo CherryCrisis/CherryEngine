@@ -23,10 +23,10 @@ struct ModelNode
 	Vector3					m_baseTRS[3];
 };
 
-class ModelBase : public ResourceMultithread
+class ModelBase : public Resource
 {
 private:
-	ModelBase(const char* filepath) : ResourceMultithread(filepath), m_rootNode(nullptr) {}
+	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
 
 	ModelNode* m_rootNode;
 	std::vector<std::shared_ptr<Model>>	m_models;

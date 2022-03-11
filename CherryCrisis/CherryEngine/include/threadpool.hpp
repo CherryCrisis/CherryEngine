@@ -24,10 +24,9 @@ public:
 	using AFunction = std::unique_ptr<CCFunction::AFunction>;
 
 	AFunction m_func;
-	AFunction m_onFinished;
 
 	Task() = default;
-	Task(AFunction& func, AFunction& onFinished) : m_func(std::move(func)), m_onFinished(std::move(onFinished)) {}
+	Task(AFunction& func) : m_func(std::move(func)) {}
 };
 
 class ThreadPool
@@ -53,6 +52,6 @@ public:
 	
 	using AFunction = std::unique_ptr<CCFunction::AFunction>;
 
-	void CreateTask(AFunction& function, AFunction& onFinished, EChannelTask channelTask);
+	void CreateTask(AFunction& function, EChannelTask channelTask);
 	void Update(EChannelTask channelTask);
 };

@@ -11,3 +11,13 @@ ResourceManager* ResourceManager::GetInstance()
 
 	return m_instance;
 }
+
+ResourceManager::ResourceManager()
+	: threadpool(ThreadPool::GetInstance())
+{
+}
+
+ResourceManager::~ResourceManager()
+{
+
+}

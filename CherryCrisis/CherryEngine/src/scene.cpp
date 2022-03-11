@@ -26,9 +26,8 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 	Scene* scene = new Scene(filePath);
 
 	auto RM = ResourceManager::GetInstance();
-
 	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene);
-	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("../assets/backpack.obj", true, std::move(callback));
+	RM->AddResourceMultiThreads<ModelBase>("../assets/backpack.obj", true, callback);
 
 	Entity& light = scene->m_entities.emplace_back();
 	light.m_lightComp = new LightComponent();
