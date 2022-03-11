@@ -98,6 +98,7 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h" />
     <ClInclude Include="externals\include\GLFW\glfw3native.h" />
     <ClInclude Include="include\basic_renderpass.hpp" />
+    <ClInclude Include="include\callback.hpp" />
     <ClInclude Include="include\camera.hpp" />
     <ClInclude Include="include\camera_component.hpp" />
     <ClInclude Include="include\cherry_header.hpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="include\element_mesh_renderpass.hpp" />
     <ClInclude Include="include\engine.hpp" />
     <ClInclude Include="include\entity.hpp" />
+    <ClInclude Include="include\event.hpp" />
     <ClInclude Include="include\framework.hpp" />
     <ClInclude Include="include\gl_manager.hpp" />
     <ClInclude Include="include\input_manager.hpp" />

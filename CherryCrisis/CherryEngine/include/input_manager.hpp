@@ -5,47 +5,70 @@
 #include <unordered_map>
 #include <vector>
 
+#include "event.hpp"
 #include "cherry_header.hpp"
 #include "keycode.hpp"
 
 class KeyboardContext;
-class Event;
 
 struct GLFWwindow {};
 
 class CCENGINE_API InputManager : public Singleton<InputManager>
 {
 public:
-	class Input
+	struct Input
 	{
-	public:
 		bool	m_isDown = false;
 		bool	m_isUp = false;
 		bool	m_isHeld = false;
+	};
 
-		Event* m_callbackEvent = nullptr;
+	struct Axis
+	{
+		Keycode m_negativeInput = {};
+		Keycode m_positiveInput = {};
+
+		float m_value = 0;
+
+		Axis(Keycode neg, Keycode pos)
+			: m_negativeInput(neg), m_positiveInput(pos) {}
+	};
+
+	struct NamedInput
+	{
+		Input* m_input;
+
+		Event<> m_pressed;
+		Event<> m_held;
+		Event<> m_released;
+
+		void AddInput(Keycode newInput);
+		void InvokeEvents();
+	};
+
+	struct NamedAxis
+	{
+		std::vector<Axis*> m_axis;
+		Event<float> m_event;
+
+		int m_oldValue = 0.f;
+
+		void AddAxis(Axis* newInput);
+		void InvokeEvents();
 	};
 
 private:
-	//Nested Classes
-
-	class Axis 
-	{
-	public:
-		Keycode m_negativeInput = {};
-		Keycode m_positiveInput = {};
-	};
 
 	class KeyboardContext
 	{
-	private:
-
 	public:
-		std::unordered_map<std::string, Keycode> m_namedKeys;
-		std::unordered_map<Keycode, Event> m_inputPreset;
+		std::unordered_map<std::string, NamedAxis> m_axis;
+		std::unordered_map<std::string, NamedInput> m_namedKeys;
 
-		//list of axis (can be added by the user via the editor (internally modifying game keyboard context))
-		std::unordered_map<std::string, Axis> m_axis;		//<const char* = axisName, Axis = axis class>
+		void AddAxisPreset(std::string name, Keycode neg, Keycode pos);
+		void AddButtonPreset(std::string name, Keycode key);
+
+		void Update();
 	};
 
 	//list of keys (intern glfw callback update key statut)

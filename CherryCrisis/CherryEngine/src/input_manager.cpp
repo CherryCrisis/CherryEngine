@@ -2,9 +2,6 @@
 
 #include <input_manager.hpp>
 
-//#define GLFW_INCLUDE_NONE
-//#include <GLFW/glfw3.h>
-
 #include <debug.hpp>
 
 template <>
@@ -32,9 +29,9 @@ InputManager::Input* InputManager::GetInputRef(const char* inputName)
 	}
 	else
 	{
-		Keycode& current = m_context->m_namedKeys[inputName];
+		NamedInput& current = m_context->m_namedKeys[inputName];
 
-		return GetInputRef(current);
+		return current.m_input;
 	}
 }
 
@@ -74,9 +71,9 @@ bool InputManager::GetKey(const char* inputName)
 	}
 	else
 	{
-		Keycode& current = m_context->m_namedKeys[inputName];
+		NamedInput& current = m_context->m_namedKeys[inputName];
 
-		return GetKey(current);
+		return current.m_input->m_isHeld;
 	}
 }
 
@@ -96,9 +93,9 @@ bool InputManager::GetKeyDown(const char* inputName)
 	}
 	else
 	{
-		Keycode& current = m_context->m_namedKeys[inputName];
+		NamedInput& current = m_context->m_namedKeys[inputName];
 
-		return GetKeyDown(current);
+		return current.m_input->m_isDown;
 	}
 }
 
@@ -118,9 +115,9 @@ bool InputManager::GetKeyUp(const char* inputName)
 	}
 	else
 	{
-		Keycode& current = m_context->m_namedKeys[inputName];
+		NamedInput& current = m_context->m_namedKeys[inputName];
 
-		return GetKeyUp(current);
+		return current.m_input->m_isUp;
 	}
 }
 
@@ -140,9 +137,14 @@ float InputManager::GetAxis(const char* axisName)
 	}
 	else
 	{
-		Axis& current = m_context->m_axis[axisName];
+		float totalValue = 0.f;
+		NamedAxis& axis = m_context->m_axis[axisName];
+		for (auto& input : axis.m_axis)
+		{
+			totalValue += input->m_value;
+		}
 
-		return GetKey(current.m_positiveInput) - GetKey(current.m_negativeInput);
+		return totalValue;
 	}
 }
 
@@ -154,6 +156,7 @@ void InputManager::SetContext(KeyboardContext* context)
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {
 	if (action == 2)	return;
+
 	// action = 1 if pressed and 0 if released 
 	//Input input = m_keys[key];
 	Input& input = m_keys[(Keycode)key];
@@ -175,6 +178,9 @@ void InputManager::UpdateKeys()
 {
 	m_mouseWheel = CCMaths::Vector2::Zero;
 
+	if (m_context)
+		m_context->Update();
+
 	for (auto& key : m_framePressedKeys) 
 	{
 		Input& input = m_keys[key];
@@ -184,4 +190,69 @@ void InputManager::UpdateKeys()
 	}
 
 	m_framePressedKeys.clear();
+}
+
+
+void InputManager::NamedInput::InvokeEvents()
+{
+	if (m_input->m_isDown)
+		m_pressed.Invoke();
+
+	else if (m_input->m_isHeld)
+		m_held.Invoke();
+
+	else if (m_input->m_isUp)
+		m_released.Invoke();
+}
+
+void InputManager::NamedInput::AddInput(Keycode newInput)
+{
+	InputManager* inputManager = InputManager::instance();
+
+	m_input = inputManager->GetInputRef(newInput);
+}
+
+void InputManager::NamedAxis::AddAxis(Axis* newAxis)
+{
+	m_axis.push_back(newAxis);
+}
+
+void InputManager::NamedAxis::InvokeEvents()
+{
+	float totalValue = 0.f;
+	for (auto& input : m_axis)
+	{
+		totalValue += input->m_value;
+	}
+	
+	if (m_oldValue != totalValue)
+	{
+		m_oldValue = totalValue;
+		m_event.Invoke(m_oldValue);
+	}
+}
+
+void InputManager::KeyboardContext::Update()
+{
+	for (auto& key : m_axis)
+	{
+		key.second.InvokeEvents();
+	}
+
+	for (auto& key : m_namedKeys)
+	{
+		key.second.InvokeEvents();
+	}
+}
+
+void InputManager::KeyboardContext::AddAxisPreset(std::string name, Keycode neg, Keycode pos)
+{
+	if (!m_namedKeys.count(name))
+		m_axis[name] = NamedAxis();
+}
+
+void InputManager::KeyboardContext::AddButtonPreset(std::string name, Keycode key)
+{
+	if (!m_namedKeys.count(name))
+		m_namedKeys[name] = NamedInput();
 }
