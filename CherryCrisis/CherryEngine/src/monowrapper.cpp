@@ -388,6 +388,22 @@ void ManagedClass::PopulateReflectionInfo() {
 		m_methods.push_back(new ManagedMethod(method, this));
 	}
 
+	void* parentIter = nullptr;
+
+	MonoClass* currentClass = m_class;
+	while (MonoClass* parent = mono_class_get_parent(currentClass))
+	{
+		while ((method = mono_class_get_methods(parent, &parentIter))) {
+			if (strcmp(mono_method_get_name(method), ".ctor") == 0)
+				continue;
+
+			m_methods.push_back(new ManagedMethod(method, this));
+		}
+
+		parentIter = nullptr;
+		currentClass = parent;
+	}
+
 	MonoClassField* field;
 	iter = nullptr;
 	while ((field = mono_class_get_fields(m_class, &iter))) {
