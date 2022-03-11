@@ -18,20 +18,27 @@ private :
 	
 		std::filesystem::path m_path;
 		std::string m_filename;
+		std::string m_extension;
 
 		void Render();
 	};
 
 	void CheckThings();
-
+	AssetNode* GetNodeByPath(std::filesystem::path path);
 
 	// Control Variables
 	float m_padding = 16.f;
 	float m_thumbnailSize = 128.f;
 
-	std::filesystem::path m_currentDirectory;
+	//not clean at all but anyway imgui internal logic problem solving
+	bool m_deleting = false;
+	bool m_renaming = false;
+	std::string m_renamingName = "";
 
-	std::unordered_map<int,  AssetNode> m_nodes;
+	std::filesystem::path m_currentDirectory;
+	std::filesystem::path m_solutionDirectory;
+
+	std::unordered_map<int, AssetNode> m_nodes;
 	//-------------------
 
 	AssetNode* m_focusedNode = nullptr;

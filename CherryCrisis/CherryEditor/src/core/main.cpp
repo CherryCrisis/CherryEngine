@@ -52,12 +52,6 @@ int main()
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     SetDarkStyle();
-
-
-
-
-
-
     ImGui_ImplOpenGL3_Init("#version 330");
     ImFontConfig font_cfg;
     font_cfg.FontDataOwnedByAtlas = false;
@@ -94,6 +88,14 @@ int main()
     editor.LinkEngine(&engine);
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+
+    //glfwRequestWindowAttention(window);
+    stbi_set_flip_vertically_on_load(false);
+    GLFWimage icon[1];
+    icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
+    glfwSetWindowIcon(window, 1 , icon);
+    stbi_image_free(icon[0].pixels);
 
     while (glfwWindowShouldClose(window) == false)
     {
