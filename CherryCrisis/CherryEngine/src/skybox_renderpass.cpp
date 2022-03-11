@@ -7,7 +7,7 @@
 
 SkyboxRenderPass::SkyboxRenderPass(const char* name)
 // TODO: Set real path
-	: ElementMeshRenderPass(name, "../assets/skyboxShader.vert", "../assets/skyboxShader.frag")
+	: ElementMeshRenderPass(name, "Assets/skyboxShader.vert", "Assets/skyboxShader.frag")
 {
 
 }

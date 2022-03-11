@@ -55,11 +55,11 @@ void Engine::PlayFile(const char* fileName)
 	}
 	
 	/* Check every 0.1 seconds if the sound is still playing. */
-	do
+	/*do
 	{
 		alutSleep(0.1f);
 		alGetSourcei(source, AL_SOURCE_STATE, &status);
-	} while (status == AL_PLAYING);
+	} while (status == AL_PLAYING);*/
 }
 
 void Engine::Tick() 

@@ -22,7 +22,7 @@
 #include "scene_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
-bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
+bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height)
 {
     // Load from file
     stbi_set_flip_vertically_on_load(true);
@@ -60,6 +60,8 @@ bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_wid
 EditorManager::EditorManager() 
 {
     // TODO: Remove this
+    inputs = InputManager::GetInstance();
+    // TODO: Remove this too
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
     SceneManager::GetInstance()->SetCurrentScene(scene);
     m_hierarchyDisplayer.SetScene(scene.get());
@@ -67,16 +69,16 @@ EditorManager::EditorManager()
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
 
-        if (!LoadTextureFromFile("../internal/icons/play_icon.png", &PlayIcon, &null, &null))
+        if (!LoadTextureFromFile("internal/icons/play_icon.png", &PlayIcon, &null, &null))
             std::cout << "failed to load Play icon" << std::endl;
 
-        if (!LoadTextureFromFile("../internal/icons/pause_icon.png", &PauseIcon, &null, &null))
+        if (!LoadTextureFromFile("internal/icons/pause_icon.png", &PauseIcon, &null, &null))
             std::cout << "failed to load Pause icon" << std::endl;
 
-        if (!LoadTextureFromFile("../internal/icons/replay_icon.png", &ReplayIcon, &null, &null))
+        if (!LoadTextureFromFile("internal/icons/replay_icon.png", &ReplayIcon, &null, &null))
             std::cout << "failed to load Replay icon" << std::endl;
 
-        if (!LoadTextureFromFile("../internal/icons/stop_icon.png", &StopIcon, &null, &null))
+        if (!LoadTextureFromFile("internal/icons/stop_icon.png", &StopIcon, &null, &null))
             std::cout << "failed to load Stop icon" << std::endl;
     }
 }
@@ -258,19 +260,19 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
         }
 
         if (ImGui::Button("Success"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Success, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Success, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Warning"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Warning, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Warning, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Error"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Error, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Error, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Info"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_Info, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_Info, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("None"))
-            SendNotifiction("I am the Title ! %s", "and I am the content", ImGuiToastType_None, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType_None, 3.f);
         ImGui::SameLine();
 
         if (ImGui::Button("Show Demo"))
@@ -289,7 +291,12 @@ void EditorManager::HandleNotifications()
 }
 
 //Display time in seconds
-void EditorManager::SendNotifiction(const char* title, const char* content, ImGuiToastType_ type, float displayTime)
+void EditorManager::SendNotification(const char* title, ImGuiToastType_ type, float displayTime)
 {
-    ImGui::InsertNotification({ type, displayTime, title, content});
+    ImGui::InsertNotification({ type, displayTime, title, ""});
+}
+
+void EditorManager::FocusCallback(GLFWwindow* window, int focused)
+{
+    m_browser.QuerryBrowser();
 }

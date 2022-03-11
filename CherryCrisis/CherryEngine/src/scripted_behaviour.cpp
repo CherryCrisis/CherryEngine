@@ -8,7 +8,7 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
 	// TODO: Move this in the proper files
-	mono_set_dirs(".\\lib", ".\\externals\\etc");
+	mono_set_dirs("CherryEditor\\lib", "CherryEditor\\externals\\etc");
 
 	mono::ManagedScriptSystemSettings_t settings("TestDomain");
 	settings.configIsFile = false,
@@ -17,7 +17,7 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	script = std::make_shared<mono::ManagedScriptSystem>(settings);
 
 	char domainName[16] = "ScriptingDomain";
-	context = script->CreateContext(domainName, "../x64/Debug/CherryScripting.dll");
+	context = script->CreateContext(domainName, "x64/Debug/CherryScripting.dll");
 
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
 

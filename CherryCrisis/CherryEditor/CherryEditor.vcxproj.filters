@@ -96,6 +96,9 @@
     <ClCompile Include="src\panels\build_displayer.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\panel.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -143,5 +146,18 @@
     <ClInclude Include="include\panels\build_displayer.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CherryEditor.rc">
+      <Filter>Fichiers de ressources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\..\Downloads\crisis-min (1).ico">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

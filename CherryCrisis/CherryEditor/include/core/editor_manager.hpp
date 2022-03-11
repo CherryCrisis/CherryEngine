@@ -18,8 +18,9 @@
 #include "panels/build_displayer.hpp"
 
 // not sure about this
-static const std::filesystem::path AssetPath = "../assets";
+static const std::filesystem::path AssetPath = "Assets";
  
+class GLFWwindow;
 class EditorManager 
 {
 private:
@@ -44,7 +45,6 @@ private:
     
     void HandleMenuBar();
 
-    void SendNotifiction(const char* title, const char* content, ImGuiToastType_ type, float displayTime = 3.f);
 
     bool m_isDemoOpened     = false;
     bool m_isFeaturerOpened = false;
@@ -59,9 +59,16 @@ public:
     // TODO: Temporary, to replace with scene engine handling
     std::shared_ptr<Scene> scene;
 
+    static void SendNotification(const char* title, ImGuiToastType_ type, float displayTime = 3.f);
+    
     EditorManager();
     void DisplayEditorUI(GLFWwindow* window);
 
     void LinkEngine(Engine* engine);
 
+    void FocusCallback(GLFWwindow* window, int focused);
+
+    static bool LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height);
+
+    InputManager* inputs;
 };

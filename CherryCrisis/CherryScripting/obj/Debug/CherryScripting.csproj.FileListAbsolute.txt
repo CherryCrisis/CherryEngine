@@ -1,0 +1,6 @@
+C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\bin\Debug\CherryScripting.dll
+C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\bin\Debug\CherryScripting.pdb
+C:\Users\r.giner\CherryCrisis\CherryCrisis\x64\Debug\CherryScripting.dll
+C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.csproj.AssemblyReference.cache
+C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.csproj.CoreCompileInputs.cache
+C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.dll
