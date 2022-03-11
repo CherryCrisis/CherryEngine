@@ -1,11 +1,14 @@
 #pragma once
 
-#include "singleton.hpp"
+#include <cherry_macros.hpp>
 
 #include <unordered_map>
 #include <vector>
 
-#include "cherry_header.hpp"
+#include "singleton.hpp"
+
+#include "maths.hpp"
+
 #include "keycode.hpp"
 
 class KeyboardContext;

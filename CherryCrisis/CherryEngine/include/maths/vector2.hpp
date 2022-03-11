@@ -10,11 +10,6 @@ namespace CCMaths
 
 			float data[2];				//!< Pointer on the Vector2's data
 		};
-
-		const static Vector2 XAxis;		//!< { x = 1, y = 0 }
-		const static Vector2 YAxis;		//!< { x = 0, y = 1 }
-		const static Vector2 Zero;		//!< { x = 0, y = 0 }
-		const static Vector2 One;		//!< { x = 1, y = 1 }
 		
 		//! Construct the Vector2 as the \b Zero Vector2
 		Vector2()
@@ -396,6 +391,11 @@ namespace CCMaths
 		*	\sa Normalize()
 		*/
 		inline static Vector2 Normalized(const Vector2& inVector);
+
+		static const Vector2 XAxis;		//!< { x = 1, y = 0 }
+		static const Vector2 YAxis;		//!< { x = 0, y = 1 }
+		static const Vector2 Zero;		//!< { x = 0, y = 0 }
+		static const Vector2 One;		//!< { x = 1, y = 1 }
 	};
 }
 

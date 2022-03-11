@@ -5,12 +5,13 @@
 #include "basic_renderpass.hpp"
 #include "render_manager.hpp"
 
-LightComponent::LightComponent()
+LightComponent::LightComponent(Entity& owner)
+	: Behaviour(owner)
 {
-	RenderManager::instance()->GenerateFromPipeline<BasicRenderPass>(&m_light);
+	RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(&m_light);
 }
 
 LightComponent::~LightComponent()
 {
-	RenderManager::instance()->RemoveFromPipeline<BasicRenderPass>(&m_light);
+	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(&m_light);
 }

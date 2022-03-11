@@ -2,6 +2,13 @@
 
 #include "transform.hpp"
 
+Transform::Transform(Entity& owner)
+	: Behaviour(owner)
+{
+
+}
+
+
 void Transform::SetDirty()
 {
 	m_isDirty = true;
@@ -85,12 +92,6 @@ void Transform::SetScale(const Vector3& scale)
 {
 	m_scale = scale;
 	SetDirty();
-}
-
-void Transform::GetChildren(std::vector<Transform*>& transformChildren)
-{
-	transformChildren.resize(m_children.size());
-	std::copy(m_children.begin(), m_children.end(), transformChildren.data());
 }
 
 void Transform::AddChildren(Transform* transform)

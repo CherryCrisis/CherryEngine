@@ -5,6 +5,8 @@
 #include "alc.h"
 #include "alut.h"
 
+#include "scene_manager.hpp"
+
 Engine::Engine() 
 {
 	SoundInit();
@@ -62,18 +64,12 @@ void Engine::PlayFile(const char* fileName)
 
 void Engine::Tick() 
 {
-	for (Behaviour* behaviour : behaviours)
-	{
-		behaviour->Update();
-	}
+	SceneManager::GetInstance()->Update();
 }
 
 void Engine::Launch() 
 {
 	isPlaying = true;
 
-	for (Behaviour* behaviour : behaviours) 
-	{
-		behaviour->Start();
-	}
+	SceneManager::GetInstance()->Start();
 }

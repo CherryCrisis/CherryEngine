@@ -35,7 +35,7 @@ AssetBrowser::AssetBrowser()
 
 void AssetBrowser::QuerryBrowser()
 {
-    //To change, 
+    //TODO: change, 
     m_nodes.clear();
 
     namespace fs = std::filesystem;
@@ -90,9 +90,9 @@ void AssetBrowser::Render()
             CheckThings();
         }
         //TODO : Change sensibility in editor preferences
-        if (InputManager::instance()->GetKey(Keycode::LEFT_CONTROL) && InputManager::instance()->GetMouseWheel().y != 0)
+        if (InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL) && InputManager::GetInstance()->GetMouseWheel().y != 0)
         {
-            m_thumbnailSize += InputManager::instance()->GetMouseWheel().y * 2;
+            m_thumbnailSize += InputManager::GetInstance()->GetMouseWheel().y * 2;
         }
 
         RenderNodes();

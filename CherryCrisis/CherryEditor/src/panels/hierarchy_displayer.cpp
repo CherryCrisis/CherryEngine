@@ -5,6 +5,8 @@
 
 #include "scene.hpp"
 #include "transform.hpp"
+#include "light_component.hpp"
+#include "camera_component.hpp"
 
 void HierarchyDisplayer::Render() 
 {
@@ -13,26 +15,29 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
-        for (size_t i = 0; i < m_displayedScene->m_entities.size(); i++)
+        int count = 0;
+        for (auto& [entityName, entity] : m_displayedScene->m_entities)
         {
-            Entity& entity = m_displayedScene->m_entities[i];
-
-            if (!entity.m_transform->IsRoot())
+            Transform* transform;
+            
+            if (!entity->TryGetBehaviour<Transform>(transform) || !transform->IsRoot())
                 continue;
 
-            if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
+            if (ImGui::TreeNode((void*)(intptr_t)count, "Instance %i", count))
             {
-                if (entity.m_cameraComp)
+                CameraComponent* cameraComponent;
+                if (entity->TryGetBehaviour<CameraComponent>(cameraComponent))
                 {
-                    Camera& cam = entity.m_cameraComp->m_camera;
+                    Camera& cam = cameraComponent->m_camera;
                     ImGui::DragFloat("Near", &cam.near);
                     ImGui::DragFloat("Far", &cam.far);
                     ImGui::DragFloat("Fov", &cam.fovY);
                 }
 
-                if (entity.m_lightComp)
+                LightComponent* lightComponent;
+                if (entity->TryGetBehaviour<LightComponent>(lightComponent))
                 {
-                    Light& light = entity.m_lightComp->m_light;
+                    Light& light = lightComponent->m_light;
                     ImGui::Checkbox("LightIsPoint", &light.m_isPoint);
                     ImGui::DragFloat3("LightPosition", light.m_position.data, 0.5f);
                     ImGui::DragFloat3("LightAmbient", light.m_ambient.data, 0.5f);
@@ -40,24 +45,28 @@ void HierarchyDisplayer::Render()
                     ImGui::DragFloat3("LightSpecular", light.m_specular.data, 0.5f);
                 }
 
-                Vector3 position = entity.m_transform->GetPosition();
+                if (transform)
+                {
+                    Vector3 position = transform->GetPosition();
 
-                if (ImGui::DragFloat3("Position", position.data, 0.5f))
-                    entity.m_transform->SetPosition(position);
+                    if (ImGui::DragFloat3("Position", position.data, 0.5f))
+                        transform->SetPosition(position);
 
-                Vector3 rotation = entity.m_transform->GetRotation() * CCMaths::RAD2DEG;
+                    Vector3 rotation = transform->GetRotation() * CCMaths::RAD2DEG;
 
-                if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
-                    entity.m_transform->SetRotation(rotation * CCMaths::DEG2RAD);
+                    if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
+                        transform->SetRotation(rotation * CCMaths::DEG2RAD);
 
-                Vector3 scale = entity.m_transform->GetScale();
+                    Vector3 scale = transform->GetScale();
 
-                if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
-                    entity.m_transform->SetScale(scale);
-
+                    if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
+                        transform->SetScale(scale);
+                }
 
                 ImGui::TreePop();
             }
+
+            count++;
         }
     }
     ImGui::End();

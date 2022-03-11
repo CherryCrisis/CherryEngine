@@ -10,3 +10,6 @@ x64
 .vscode
 
 doc/html
+
+CherryCrisis/CherryScripting/bin
+CherryCrisis/CherryScripting/obj

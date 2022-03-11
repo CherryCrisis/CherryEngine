@@ -49,14 +49,14 @@ private:
     bool m_isDemoOpened     = false;
     bool m_isFeaturerOpened = false;
 
-    // To Replace with Resource Manager Texture Handling
+    // TODO: To Replace with Resource Manager Texture Handling
     unsigned int PlayIcon = 0;
     unsigned int PauseIcon = 0;
     unsigned int ReplayIcon = 0;
     unsigned int StopIcon = 0;
 
 public:
-    // Temporary, to replace with scene engine handling
+    // TODO: Temporary, to replace with scene engine handling
     std::shared_ptr<Scene> scene;
 
     static void SendNotification(const char* title, ImGuiToastType_ type, float displayTime = 3.f);

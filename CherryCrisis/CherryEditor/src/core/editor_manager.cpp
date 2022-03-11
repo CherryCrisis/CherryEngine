@@ -16,10 +16,10 @@
 #include <GLFW/glfw3.h> 
 
 #include <cherry_header.hpp>
-#include "printer.hpp"
 #include "scene.hpp"
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
+#include "scene_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
 bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height)
@@ -59,10 +59,11 @@ bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_
 
 EditorManager::EditorManager() 
 {
-    // To Replace too
-    inputs = InputManager::instance();
-    // To Replace
+    // TODO: Remove this
+    inputs = InputManager::GetInstance();
+    // TODO: Remove this too
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
+    SceneManager::GetInstance()->SetCurrentScene(scene);
     m_hierarchyDisplayer.SetScene(scene.get());
     
     { // To Replace with Resource Manager Texture Handler
@@ -256,12 +257,6 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
             ImGui::SameLine();
             if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
             ImGui::EndPopup();
-        }
-
-        if (ImGui::Button("Add Printer"))
-        {
-            Printer* printer = new Printer();
-            m_engine->behaviours.push_back(printer);
         }
 
         if (ImGui::Button("Success"))

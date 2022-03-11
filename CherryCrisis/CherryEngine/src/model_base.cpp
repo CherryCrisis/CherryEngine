@@ -5,6 +5,9 @@
 #include "model_loader.hpp"
 #include "entity.hpp"
 
+#include "model_renderer.hpp"
+#include "transform.hpp"
+
 Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
 {
 	ModelBase* modelBase = new ModelBase(filepath);
@@ -27,9 +30,9 @@ void ModelBase::DeleteModelNode(ModelNode* modelNode)
 	delete modelNode;
 }
 
-std::vector<Entity> ModelBase::GenerateEntities(Entity& rootEntity)
+std::vector<Entity*>& ModelBase::GenerateEntities(Entity* rootEntity)
 {
-    std::vector<Entity> entities;
+    std::vector<Entity*> entities;
 
     if (m_models.size() != 0 && m_rootNode != nullptr)
         GenerateEntitiesRecursive(m_rootNode, rootEntity, entities);
@@ -37,21 +40,27 @@ std::vector<Entity> ModelBase::GenerateEntities(Entity& rootEntity)
     return entities;
 }
 
-void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity& parentEntity, std::vector<Entity>& entities)
+void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities)
 {
-    Entity entity;
-    entity.m_modelRenderer->SetModel(node->m_model);
+    Entity* entity = new Entity();
+    ModelRenderer* modelRdr = entity->AddBehaviour<ModelRenderer>();
+    Transform* entityTransform = entity->AddBehaviour<Transform>();
 
-    entity.m_transform->SetPosition(node->m_baseTRS[0]);
-    entity.m_transform->SetRotation(node->m_baseTRS[1]);
-    entity.m_transform->SetScale(node->m_baseTRS[2]);
+    modelRdr->m_transform = entityTransform;
+    modelRdr->SetModel(node->m_model);
 
-    entity.m_transform->SetParent(parentEntity.m_transform);
+    entityTransform->SetPosition(node->m_baseTRS[0]);
+    entityTransform->SetRotation(node->m_baseTRS[1]);
+    entityTransform->SetScale(node->m_baseTRS[2]);
+
+    Transform* parentTransform = parentEntity->GetOrAddBehaviour<Transform>();
+
+    entityTransform->SetParent(parentTransform);
 
     entities.push_back(entity);
 
     for (ModelNode* childNode : node->m_childrenNode)
         GenerateEntitiesRecursive(childNode, entity, entities);
 
-    parentEntity.m_transform->AddChildren(entity.m_transform);
+    //parentTransform->AddChildren(entityTransform);
 }

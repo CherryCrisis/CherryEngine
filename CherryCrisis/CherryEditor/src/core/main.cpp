@@ -1,6 +1,5 @@
 
 #include "cherry_header.hpp"
-#include "printer.hpp"
 
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -99,7 +98,7 @@ int main()
 
     while (glfwWindowShouldClose(window) == false)
     {
-        InputManager::instance()->UpdateKeys();
+        InputManager::GetInstance()->UpdateKeys();
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

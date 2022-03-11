@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component.hpp"
+#include "behaviour.hpp"
 
 #include "camera.hpp"
 #include "transform.hpp"
@@ -8,7 +8,7 @@
 class CameraComponent : public Behaviour
 {
 public:
-	CameraComponent();
+	CameraComponent(Entity& owner);
 	~CameraComponent();
 
 	Camera		m_camera;

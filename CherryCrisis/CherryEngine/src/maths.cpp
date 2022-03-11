@@ -6,8 +6,8 @@ namespace CCMaths
 {
 	const Vector2 Vector2::XAxis	= { 1.f, 0.f };
 	const Vector2 Vector2::YAxis	= { 0.f, 1.f };
-	const Vector2 Vector2::Zero		= { 0.f };
-	const Vector2 Vector2::One		= { 1.f };
+	const Vector2 Vector2::Zero		= { 0.f, 0.f };
+	const Vector2 Vector2::One		= { 1.f, 1.f };
 
 	const Vector3 Vector3::XAxis	= { 1.f, 0.f, 0.f };
 	const Vector3 Vector3::YAxis	= { 0.f, 1.f, 0.f };

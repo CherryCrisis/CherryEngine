@@ -98,6 +98,7 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h" />
     <ClInclude Include="externals\include\GLFW\glfw3native.h" />
     <ClInclude Include="include\basic_renderpass.hpp" />
+    <ClInclude Include="include\behaviour.hpp" />
     <ClInclude Include="include\camera.hpp" />
     <ClInclude Include="include\camera_component.hpp" />
     <ClInclude Include="include\cherry_header.hpp" />
@@ -127,12 +128,15 @@
     <ClInclude Include="include\model_base.hpp" />
     <ClInclude Include="include\model_loader.hpp" />
     <ClInclude Include="include\model_renderer.hpp" />
+    <ClInclude Include="include\monowrapper.hpp" />
     <ClInclude Include="include\pch.hpp" />
     <ClInclude Include="include\renderer.hpp" />
     <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
     <ClInclude Include="include\resource_manager.hpp" />
     <ClInclude Include="include\scene.hpp" />
+    <ClInclude Include="include\scene_manager.hpp" />
+    <ClInclude Include="include\scripted_behaviour.hpp" />
     <ClInclude Include="include\shader.hpp" />
     <ClInclude Include="include\shader_program.hpp" />
     <ClInclude Include="include\singleton.hpp" />
@@ -153,6 +157,7 @@
     <None Include="externals\include\assimp\SmoothingGroups.inl" />
     <None Include="externals\include\assimp\vector2.inl" />
     <None Include="externals\include\assimp\vector3.inl" />
+    <None Include="include\entity.inl" />
     <None Include="include\maths\matrix3.inl" />
     <None Include="include\maths\matrix4.inl" />
     <None Include="include\maths\quaternion.inl" />
@@ -161,6 +166,49 @@
     <None Include="include\maths\vector4.inl" />
     <None Include="include\resource_manager.inl" />
     <None Include="include\renderer_manager.inl" />
+    <CustomBuild Include="interface\ccengine.i">
+      <FileType>Document</FileType>
+      <Command>swig -c++ -python -I..\include -outdir $(OutDir) %(Identity)</Command>
+      <Message>Creating SWIG-generated files...</Message>
+      <Outputs>$(Filename)_wrap.cxx;$(Outdir)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig -c++ -csharp -Iinclude -namespace CCEngine -outdir $(CsOutDir) %(Identity)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Creating SWIG-generated files</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig -c++ -csharp -Iinclude -namespace CCEngine -outdir $(CsOutDir) %(Identity)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Creating SWIG-generated files</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">swig -c++ -csharp -Iinclude -namespace CCEngine -outdir $(CsOutDir) %(Identity)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Creating SWIG-generated files</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">swig -c++ -csharp -Iinclude -namespace CCEngine -outdir $(CsOutDir) %(Identity)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Creating SWIG-generated files</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </CustomBuild>
+    <None Include="interface\behaviour.i" />
+    <None Include="interface\camera_comp.i" />
+    <None Include="interface\component.i" />
+    <None Include="interface\debug.i" />
+    <None Include="interface\entity.i" />
+    <None Include="interface\input_manager.i" />
+    <None Include="interface\maths.i" />
+    <None Include="interface\matrix3.i" />
+    <None Include="interface\singleton.i" />
+    <None Include="interface\transform_comp.i" />
+    <None Include="interface\vector.i" />
+    <None Include="interface\vector2.i" />
+    <None Include="interface\vector3.i" />
+    <None Include="interface\vector4.i" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\src\gl.c">
@@ -170,6 +218,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="externals\src\stb_image.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\scripted_behaviour.cpp" />
+    <ClCompile Include="interface\ccengine_wrap.cxx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -197,6 +252,7 @@
     <ClCompile Include="src\model_base.cpp" />
     <ClCompile Include="src\model_loader.cpp" />
     <ClCompile Include="src\model_renderer.cpp" />
+    <ClCompile Include="src\monowrapper.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -206,6 +262,7 @@
     <ClCompile Include="src\render_manager.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\scene_manager.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shader_program.cpp" />
     <ClCompile Include="src\skybox.cpp" />
@@ -254,22 +311,28 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="CCPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="CCPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="CCPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="CCPropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -301,6 +364,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>mono-2.0-sgen.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -323,6 +387,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>mono-2.0-sgen.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -343,7 +408,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mtd.lib;zlibstaticd.lib;alut.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;alut.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -367,7 +432,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Release</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc142-mt.lib;zlibstatic.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;assimp-vc142-mt.lib;zlibstatic.lib;alut.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -19,5 +19,5 @@ Skybox::Skybox()
 
 	m_cubemap = ResourceManager::GetInstance()->AddResource<Cubemap>("skyCubemap", true, textures);
 
-	RenderManager::instance()->GenerateFromPipeline<SkyboxRenderPass>(this);
+	RenderManager::GetInstance()->GenerateFromPipeline<SkyboxRenderPass>(this);
 }
