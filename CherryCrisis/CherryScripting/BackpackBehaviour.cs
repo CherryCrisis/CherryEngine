@@ -22,13 +22,21 @@ namespace CCScripting
 		{
 		}
 
+		void SetRotation()
+        {
+			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
+
+		}
+
 		float deltaTime = 0.01f;
 		float time = 0f;
 		public void Update()
 		{
 			time += 0.01f;
 
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			SetRotation();
+
 
 			float timeScaledSpeed = deltaTime * 2f;
 

@@ -694,6 +694,13 @@ bool ManagedScriptContext::Init() {
 
 	mono_domain_set(m_domain, 0);
 
+	for (auto& a : m_loadedAssemblies)
+	{
+		a->m_assembly = mono_domain_assembly_open(m_domain, a->m_path.c_str());
+		a->m_image = mono_assembly_get_image(a->m_assembly);
+		a->m_classes.clear();
+	}
+
 	LoadAssembly(m_baseImage.c_str());
 
 	m_initialized = true;
