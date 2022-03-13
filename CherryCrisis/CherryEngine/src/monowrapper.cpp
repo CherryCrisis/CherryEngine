@@ -108,9 +108,6 @@ bool ManagedAssembly::ValidateAgainstWhitelist(const std::vector<std::string>& w
 }
 
 void ManagedAssembly::DisposeReflectionInfo() {
-	for (auto& kvPair : m_classes) {
-		delete kvPair.second;
-	}
 	m_classes.clear();
 }
 
@@ -124,6 +121,15 @@ void ManagedAssembly::InvalidateHandle() {
 	for (auto& kv : m_classes) {
 		kv.second->InvalidateHandle();
 	}
+}
+
+void ManagedAssembly::Reload()
+{
+	m_assembly = mono_domain_assembly_open(m_ctx->m_domain, m_path.c_str());
+	m_image = mono_assembly_get_image(m_assembly);
+
+	for (auto& [className, mClass] : m_classes)
+		mClass->Reload();
 }
 
 void ManagedAssembly::ReportException(MonoObject* exc) {
@@ -338,7 +344,7 @@ ManagedClass::ManagedClass(ManagedAssembly* assembly, const std::string& ns, con
 			auto obj = mono_custom_attrs_get_attr(m_attrInfo, m_class);
 			if (!obj)
 				return;
-			m_attributes.push_back(new ManagedObject(obj, *this));
+			m_attributes.push_back(std::make_shared<ManagedObject>(obj, *this));
 		}
 	}
 
@@ -356,7 +362,7 @@ ManagedClass::ManagedClass(ManagedAssembly* assembly, MonoClass* _cls, const std
 			auto obj = mono_custom_attrs_get_attr(m_attrInfo, m_class);
 			if (!obj)
 				return;
-			m_attributes.push_back(new ManagedObject(obj, *this));
+			m_attributes.push_back(std::make_shared<ManagedObject>(obj, *this));
 		}
 	}
 
@@ -385,7 +391,7 @@ void ManagedClass::PopulateReflectionInfo() {
 	while ((method = mono_class_get_methods(m_class, &iter))) {
 		if (strcmp(mono_method_get_name(method), ".ctor") == 0)
 			m_numConstructors++;
-		m_methods.push_back(new ManagedMethod(method, this));
+		m_methods.push_back(std::make_shared<ManagedMethod>(method, this));
 	}
 
 	void* parentIter = nullptr;
@@ -397,7 +403,7 @@ void ManagedClass::PopulateReflectionInfo() {
 			if (strcmp(mono_method_get_name(method), ".ctor") == 0)
 				continue;
 
-			m_methods.push_back(new ManagedMethod(method, this));
+			m_methods.push_back(std::make_shared<ManagedMethod>(method, this));
 		}
 
 		parentIter = nullptr;
@@ -407,13 +413,13 @@ void ManagedClass::PopulateReflectionInfo() {
 	MonoClassField* field;
 	iter = nullptr;
 	while ((field = mono_class_get_fields(m_class, &iter))) {
-		m_fields.push_back(new ManagedField(*field, *this));
+		m_fields.push_back(std::make_shared<ManagedField>(*field, *this));
 	}
 
 	MonoProperty* props;
 	iter = nullptr;
 	while ((props = mono_class_get_properties(m_class, &iter))) {
-		m_properties.push_back(new ManagedProperty(*props, *this));
+		m_properties.push_back(std::make_shared<ManagedProperty>(*props, *this));
 	}
 
 	m_populated = true;
@@ -428,9 +434,15 @@ void ManagedClass::InvalidateHandle() {
 	}
 }
 
+void ManagedClass::Reload()
+{
+	
+}
+
+
 // TODO: Investigate perf of this, maybe use a hashmap? Might just be faster to
 // not though.
-ManagedMethod* ManagedClass::FindMethod(const std::string& name) {
+Ref<ManagedMethod> ManagedClass::FindMethod(const std::string& name) {
 	for (auto m : m_methods) {
 		if (m->m_name == name)
 			return m;
@@ -438,7 +450,7 @@ ManagedMethod* ManagedClass::FindMethod(const std::string& name) {
 	return nullptr;
 }
 
-ManagedField* ManagedClass::FindField(const std::string& name) {
+Ref<ManagedField> ManagedClass::FindField(const std::string& name) {
 	for (auto& f : m_fields) {
 		if (f->m_name == name)
 			return f;
@@ -446,7 +458,7 @@ ManagedField* ManagedClass::FindField(const std::string& name) {
 	return nullptr;
 }
 
-ManagedProperty* ManagedClass::FindProperty(const std::string& prop) {
+Ref<ManagedProperty> ManagedClass::FindProperty(const std::string& prop) {
 	for (auto& p : m_properties) {
 		if (p->m_name == prop)
 			return p;
@@ -455,7 +467,7 @@ ManagedProperty* ManagedClass::FindProperty(const std::string& prop) {
 }
 
 /* Creates an instance of a this class */
-ManagedObject* ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params) {
+Ref<ManagedObject> ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params) {
 	for (auto& method : m_methods) {
 		if (method->m_name == ".ctor" && method->MatchSignature(signature)) {
 			MonoObject* exception = nullptr;
@@ -473,7 +485,7 @@ ManagedObject* ManagedClass::CreateInstance(std::vector<MonoType*> signature, vo
 				m_assembly->m_ctx->ReportException(*obj, *m_assembly);
 				return nullptr;
 			}
-			return new ManagedObject(obj, *this);
+			return std::make_shared<ManagedObject>(obj, *this);
 		}
 	}
 
@@ -695,11 +707,7 @@ bool ManagedScriptContext::Init() {
 	mono_domain_set(m_domain, 0);
 
 	for (auto& a : m_loadedAssemblies)
-	{
-		a->m_assembly = mono_domain_assembly_open(m_domain, a->m_path.c_str());
-		a->m_image = mono_assembly_get_image(a->m_assembly);
-		a->m_classes.clear();
-	}
+		a->Reload();
 
 	LoadAssembly(m_baseImage.c_str());
 
@@ -736,9 +744,9 @@ bool ManagedScriptContext::LoadAssembly(const char* path) {
 	if (!img) {
 		return false;
 	}
-	ManagedAssembly* newass = new ManagedAssembly(this, path, img, ass);
-	m_loadedAssemblies.push_back(newass);
-	newass->PopulateReflectionInfo();
+	Ref<ManagedAssembly> newAss = std::make_shared<ManagedAssembly>(this, path, img, ass);
+	m_loadedAssemblies.push_back(newAss);
+	newAss->PopulateReflectionInfo();
 	return true;
 }
 
@@ -759,19 +767,22 @@ bool ManagedScriptContext::UnloadAssembly(const std::string& name) {
 /* Performs a class search in all loaded assemblies */
 /* If you have the assembly name, please use the alternative version of this
  * function */
-ManagedClass* ManagedScriptContext::FindClass(const std::string& ns, const std::string& cls) {
+Ref<ManagedClass> ManagedScriptContext::FindClass(const std::string& ns, const std::string& cls) {
 	/* Try to find the managed class in each of the assemblies. if found, create
 	 * the managed class and return */
 	/* Also check the hashmap we have setup */
 	for (auto& a : m_loadedAssemblies) {
-		ManagedClass* _cls = nullptr;
-		if (a && (_cls = FindClass(*a, ns, cls)))
+		if (!a)
+			continue;
+
+		if (Ref<ManagedClass> _cls = FindClass(*a, ns, cls))
 			return _cls;
 	}
+
 	return nullptr;
 }
 
-ManagedClass* ManagedScriptContext::FindClass(ManagedAssembly& assembly, const std::string& ns,
+Ref<ManagedClass> ManagedScriptContext::FindClass(ManagedAssembly& assembly, const std::string& ns,
 											  const std::string& cls) {
 	auto itpair = assembly.m_classes.equal_range(ns);
 	for (auto it = itpair.first; it != itpair.second; ++it) {
@@ -783,7 +794,7 @@ ManagedClass* ManagedScriptContext::FindClass(ManagedAssembly& assembly, const s
 	 * managed class */
 	MonoClass* monoClass = mono_class_from_name(assembly.m_image, ns.c_str(), cls.c_str());
 	if (monoClass) {
-		ManagedClass* _class = new ManagedClass(&assembly, monoClass, ns, cls);
+		auto _class = std::make_shared<ManagedClass>(&assembly, monoClass, ns, cls);
 		assembly.m_classes.insert({ns, _class});
 		return _class;
 	}
@@ -835,7 +846,7 @@ MonoClass* ManagedScriptContext::FindSystemClass(const std::string& ns, const st
 	return pvt.result;
 }
 
-ManagedAssembly* ManagedScriptContext::FindAssembly(const std::string& path) {
+Ref<ManagedAssembly> ManagedScriptContext::FindAssembly(const std::string& path) {
 	for (auto& a : m_loadedAssemblies) {
 		if (a->m_path == path) {
 			return a;
@@ -848,9 +859,6 @@ ManagedAssembly* ManagedScriptContext::FindAssembly(const std::string& path) {
 /* WARNING: this will invalidate your handles! */
 void ManagedScriptContext::ClearReflectionInfo() {
 	for (auto& a : m_loadedAssemblies) {
-		for (auto& kvPair : a->m_classes) {
-			delete kvPair.second;
-		}
 		a->m_classes.clear();
 	}
 }
@@ -987,7 +995,7 @@ ManagedScriptSystem::ManagedScriptSystem(ManagedScriptSystemSettings_t settings)
 	mono_set_allocator_vtable(&m_allocator);
 
 	// Create a SINGLE jit environment!
-	g_jitDomain = mono_jit_init("RootDomain");
+	g_jitDomain = mono_jit_init(settings.scriptSystemDomainName);
 }
 
 ManagedScriptSystem::~ManagedScriptSystem() {

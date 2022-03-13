@@ -12,10 +12,10 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	std::shared_ptr<mono::ManagedScriptSystem> script;
 	mono::ManagedScriptContext* context;
 
-	mono::ManagedClass* managedClass;
-	mono::ManagedObject* behaviourInst;
-	mono::ManagedMethod* managedUpdate;
-	mono::ManagedMethod* managedStart;
+	mono::Ref<mono::ManagedClass> managedClass;
+	mono::Ref<mono::ManagedObject> behaviourInst;
+	mono::Ref<mono::ManagedMethod> managedUpdate;
+	mono::Ref<mono::ManagedMethod> managedStart;
 
 	std::function <void(MonoObject* _this, MonoException** _excep)> csUpdate;
 	std::function <void(MonoObject* _this, MonoException** _excep)> csStart;

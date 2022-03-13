@@ -4,3 +4,7 @@ C:\Users\r.giner\CherryCrisis\CherryCrisis\x64\Debug\CherryScripting.dll
 C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.csproj.AssemblyReference.cache
 C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.csproj.CoreCompileInputs.cache
 C:\Users\r.giner\CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.dll
+C:\Users\remig\gp2025_CherryCrisis\CherryCrisis\x64\Debug\CherryScripting.dll
+C:\Users\remig\gp2025_CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.csprojAssemblyReference.cache
+C:\Users\remig\gp2025_CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.csproj.CoreCompileInputs.cache
+C:\Users\remig\gp2025_CherryCrisis\CherryCrisis\CherryScripting\obj\Debug\CherryScripting.dll

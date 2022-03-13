@@ -25,9 +25,9 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	context = script->CreateContext(domainName, to.generic_string().c_str());
 
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
-
-	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
-	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
+	
+	MonoClass* intPtrType = mono_get_intptr_class();
+	MonoClass* boolType = mono_get_boolean_class();
 
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");
@@ -62,8 +62,6 @@ void ScriptedBehaviour::Reload()
 
 	MonoException* excep = nullptr;
 	csDispose(behaviourInst->RawObject(), true, &excep);
-
-	delete behaviourInst;
 
 	if (!context->Unload())
 		return;
