@@ -16,7 +16,7 @@ void Engine::SoundInit()
 	{
 		ALenum error = alutGetError();
 		fprintf(stderr, "%s\n", alutGetErrorString(error));
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
 	}
 }
 

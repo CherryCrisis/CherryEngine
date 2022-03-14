@@ -61,9 +61,12 @@ public:
 	template<class... Args>
 	void Invoke(Args&&... args)
 	{
-		for (std::pair<const std::type_index, ACallback>& callback : m_callbacks)
+		if (m_callbacks.empty())
 		{
-			callback.second->Invoke(std::forward<Args>(args)...);
+			for (std::pair<const std::type_index, ACallback>& callback : m_callbacks)
+			{
+				callback.second->Invoke(std::forward<Args>(args)...);
+			}
 		}
 	}
 };

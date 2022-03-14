@@ -24,15 +24,26 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 	return resourcePtr;
 }
 
+//template<class T, class... Args>
+//constexpr void AddTest(ResourceManager* RM, const char* filepath, bool verifIsExist, Args... args)
+//{
+//	RM->PrintIntDebug(args...);
+//	RM->AddResource<T>(filepath, verifIsExist);
+//}
+
 template<class T, class CallbackType, typename... Args>
 void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIsExist,
-	std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args... args)
+	std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args&&... args)
 {
-	/*std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::TestResource<T, CallbackType, Args...>, this,
-		filepath, verifIsExist, std::move(callback), args...);*/
+	std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::TestResource<T, CallbackType, Args...>, this,
+		filepath, verifIsExist, callback, args...);
 
-	std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::AddResource<T, Args...>, this,
-		join<filepath, verifIsExist, args...>);
+	/*std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::TestResource<T, Args...>, this,
+		filepath, verifIsExist, std::forward<Args>(args)...);*/
+
+	/*int testArgs = 5;
+	std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(AddTest<T, int>, this,
+		filepath, verifIsExist, testArgs);*/
 
 	threadpool->CreateTask(function, EChannelTask::Multithread);
 }

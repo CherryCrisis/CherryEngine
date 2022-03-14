@@ -34,6 +34,9 @@ ModelBase::~ModelBase()
 
 void ModelBase::DeleteModelNode(ModelNode* modelNode)
 {
+    if (!modelNode)
+        return;
+
 	for (int i = 0; i < modelNode->m_childrenNode.size(); ++i)
 		DeleteModelNode(modelNode->m_childrenNode[i]);
 

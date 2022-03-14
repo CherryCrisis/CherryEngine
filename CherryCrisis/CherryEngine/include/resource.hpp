@@ -15,10 +15,10 @@ public:
 	template <typename ResourceT>
 	using Ref = std::shared_ptr<ResourceT>;
 
-	std::shared_ptr<Event<Ref<Resource>>> m_onLoaded;
+	std::shared_ptr<Event<Ref<Resource>>> m_onLoaded {};
 
 	Resource(const std::string& filepath)
-		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
+		: hashId(std::hash<std::string>()(filepath)), filepath(filepath), m_onLoaded(new Event<Ref<Resource>>) {}
 
 	virtual ~Resource() = default;
 

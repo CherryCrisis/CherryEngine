@@ -20,7 +20,7 @@ public:
 
 	static Ref<Scene> Create(const char* filePath);
 
-	void GenerateEntities(ModelBase* modelBase);
+	void GenerateEntities(std::shared_ptr<Resource> modelBase);
 
 	std::vector<Entity> m_entities;
 

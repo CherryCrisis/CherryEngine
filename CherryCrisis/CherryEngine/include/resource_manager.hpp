@@ -5,6 +5,8 @@
 #include <typeindex>
 #include <functional>
 
+#include <iostream>
+
 #include "engine.hpp"
 
 #include "resource.hpp"
@@ -29,19 +31,25 @@ public:
 	template<class T = Resource, typename... Args>
 	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
 
+
+	void PrintIntDebug(int i)
+	{
+		std::cout << i << std::endl;
+	}
+
 	template<class T = Resource, class CallbackType, typename... Args>
 	void TestResource(const char* filepath, bool verifIsExist,
-		std::unique_ptr<CCCallback::ACallback<CallbackType>> callback, Args... args)
+		std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args... args)
 	{
-		Resource::Ref<T> resource = AddResource(filepath, verifIsExist, std::forward<Args>(args)...);
+		Resource::Ref<T> resource = AddResource<T>(filepath, verifIsExist, std::forward<Args>(args)...);
 
-		resource->m_loaded->Bind(callback);
+		//resource->m_onLoaded->Bind(callback);
 		resource->m_onLoaded->Invoke(resource);
 	}
 
 	template<class T = Resource, class CallbackType, typename... Args>
 	void AddResourceMultiThreads(const char* filepath, bool verifIsExist,
-		std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args... args);
+		std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args&&... args);
 
 	template<class T = Resource>
 	std::shared_ptr<T> GetResource(const char* filepath) const;

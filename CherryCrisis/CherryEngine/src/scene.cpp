@@ -8,9 +8,9 @@
 
 #include "model_base.hpp"
 
-void Scene::GenerateEntities(ModelBase* modelBase)
+void Scene::GenerateEntities(std::shared_ptr<Resource> modelBase)
 {
-	Entity root;
+	/*Entity root;
 	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
 	m_entities.push_back(std::move(root));
 
@@ -18,7 +18,7 @@ void Scene::GenerateEntities(ModelBase* modelBase)
 	{
 		m_entities.push_back(std::move(child));
 		root.m_transform->AddChildren(child.m_transform);
-	}
+	}*/
 }
 
 Resource::Ref<Scene> Scene::Create(const char* filePath)

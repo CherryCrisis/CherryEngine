@@ -10,7 +10,7 @@ namespace CCCallback
 	class ACallback
 	{
 	public:
-		std::type_index m_typeIndex;
+		//std::type_index m_typeIndex;
 		virtual void Invoke(Args&&...) const = 0;
 	};
 
@@ -23,7 +23,7 @@ namespace CCCallback
 
 	public:
 		MemberCallback(void (T::* func)(Args... type), T* c)
-			: m_func(func), m_member(c), ACallback<Args...>::m_typeIndex(typeid(func))
+			: m_func(func), m_member(c)/*, CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))*/
 		{
 		}
 
@@ -41,7 +41,7 @@ namespace CCCallback
 
 	public:
 		NonMemberCallback(void (*func)(Args... type))
-			: m_func(func), CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))
+			: m_func(func)/*, CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))*/
 		{
 		}
 
