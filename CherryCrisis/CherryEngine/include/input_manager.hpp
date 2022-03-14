@@ -30,31 +30,37 @@ public:
 
 		float m_value = 0;
 
+		Event<const float&> m_isUpdated;
+
+		void Update(Input* input);
+
 		Axis(Keycode neg, Keycode pos)
 			: m_negativeInput(neg), m_positiveInput(pos) {}
 	};
 
 	struct NamedInput
 	{
-		Input* m_input;
+		std::unordered_map<Keycode, Input*> m_inputs = {};
 
 		Event<> m_pressed;
 		Event<> m_held;
 		Event<> m_released;
 
+		void Update(Input* input);
+
 		void AddInput(Keycode newInput);
-		void InvokeEvents();
 	};
 
 	struct NamedAxis
 	{
 		std::vector<Axis*> m_axis;
-		Event<float> m_event;
+		Event<const float&> m_event;
 
-		int m_oldValue = 0.f;
+		float m_oldValue = 0.f;
+
+		void Update(const float& value);
 
 		void AddAxis(Axis* newInput);
-		void InvokeEvents();
 	};
 
 private:
@@ -65,11 +71,11 @@ private:
 		std::unordered_map<std::string, NamedAxis> m_axis;
 		std::unordered_map<std::string, NamedInput> m_namedKeys;
 
-		void AddAxisPreset(std::string name, Keycode neg, Keycode pos);
-		void AddButtonPreset(std::string name, Keycode key);
-
-		void Update();
+		void AddAxisPreset(std::string name);
+		void AddButtonPreset(std::string name);
 	};
+
+	//std::unordered_map<std::string, KeyboardContext> m_contexts;
 
 	//list of keys (intern glfw callback update key statut)
 	std::unordered_map<Keycode, Input> m_keys;
@@ -78,14 +84,15 @@ private:
 	std::vector<Keycode> m_framePressedKeys;
 
 	// Context (presets of differents callbacks and axes)
-	KeyboardContext* m_context = nullptr;
+	KeyboardContext* m_activeContext = nullptr;
 	
 	CCMaths::Vector2 m_mouseWheel {};
 
 public:
 
+	void Error(const char* Name);
+
 	Input* GetInputRef(Keycode key);
-	Input* GetInputRef(const char* inputName);
 
 	bool GetKey(Keycode key);
 	bool GetKeyDown(Keycode key);
