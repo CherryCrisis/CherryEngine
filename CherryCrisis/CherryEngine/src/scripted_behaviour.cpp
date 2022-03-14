@@ -39,6 +39,11 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	int* ptr = (int*)this;
 	void* args[] = { &ptr, &value };
 	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
+
+	const char* nameptr = &name[0];
+	behaviourInst->GetField("name", &(nameptr));
+
+	behaviourInst->GetField("num", &num);
 }
 
 void ScriptedBehaviour::Start()

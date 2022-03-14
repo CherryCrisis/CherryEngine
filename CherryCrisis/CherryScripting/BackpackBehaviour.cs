@@ -29,6 +29,9 @@ namespace CCScripting
 
 		}
 
+		public string name = "Je suis un nom";
+		public int num = 5;
+
 		float deltaTime = 0.01f;
 		float time = 0f;
 		public void Update()

@@ -20,6 +20,9 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	std::function <void(MonoObject* _this, MonoException** _excep)> csUpdate;
 	std::function <void(MonoObject* _this, MonoException** _excep)> csStart;
 
+	std::string name;
+	int num;
+
 public:
 	ScriptedBehaviour(Entity& owner);
 
