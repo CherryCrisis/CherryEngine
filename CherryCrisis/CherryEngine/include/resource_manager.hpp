@@ -31,19 +31,14 @@ public:
 	template<class T = Resource, typename... Args>
 	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
 
-
-	void PrintIntDebug(int i)
-	{
-		std::cout << i << std::endl;
-	}
-
 	template<class T = Resource, class CallbackType, typename... Args>
 	void TestResource(const char* filepath, bool verifIsExist,
-		std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args... args)
+		CCCallback::AWrapCallback* wrappedCallback, Args... args)
 	{
 		Resource::Ref<T> resource = AddResource<T>(filepath, verifIsExist, std::forward<Args>(args)...);
 
-		//resource->m_onLoaded->Bind(callback);
+		CCCallback::ACallback<CallbackType>* callback = static_cast<CCCallback::ACallback<CallbackType>*>(wrappedCallback);
+		resource->m_onLoaded->Bind(std::unique_ptr<CCCallback::ACallback<CallbackType>>(callback), callback->m_typeIndex);
 		resource->m_onLoaded->Invoke(resource);
 	}
 

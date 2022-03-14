@@ -64,6 +64,13 @@ namespace CCFunction
 			(MemberFunction(f, c, std::forward<Args>(args)...));
 	}
 
+	/*template<class T, auto Args, typename... TArgs>
+	std::unique_ptr<AFunction> BindFunction(void (T::* f)(Args... type), T* c, TArgs&&... args)
+	{
+		return std::make_unique<MemberFunction<T, Args...>>
+			(MemberFunction(f, c, std::forward<Args>(args)...));
+	}*/
+
 	template<class... Args>
 	std::unique_ptr<AFunction> BindFunction(void (*f)(Args...), Args&&... args)
 	{
@@ -71,7 +78,7 @@ namespace CCFunction
 			(NonMemberFunction<Args...>(f, std::forward<Args>(args)...));
 	}
 
-	template< typename... Args, typename... TArgs>
+	template<typename... Args,  typename... TArgs>
 	std::unique_ptr<AFunction> BindFunction(void (*f)(Args...), TArgs&&... args)
 	{
 		return std::make_unique<NonMemberFunction<Args...>>

@@ -6,11 +6,17 @@
 
 namespace CCCallback
 {
+	class AWrapCallback
+	{
+		template<class... Args>
+		void Invoke(Args&&... args);
+	};
+
 	template<class... Args>
-	class ACallback
+	class ACallback : public AWrapCallback
 	{
 	public:
-		//std::type_index m_typeIndex;
+		std::type_index m_typeIndex;
 		virtual void Invoke(Args&&...) const = 0;
 	};
 
@@ -23,7 +29,7 @@ namespace CCCallback
 
 	public:
 		MemberCallback(void (T::* func)(Args... type), T* c)
-			: m_func(func), m_member(c)/*, CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))*/
+			: m_func(func), m_member(c), CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))
 		{
 		}
 
@@ -41,7 +47,7 @@ namespace CCCallback
 
 	public:
 		NonMemberCallback(void (*func)(Args... type))
-			: m_func(func)/*, CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))*/
+			: m_func(func), CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))
 		{
 		}
 
@@ -50,6 +56,13 @@ namespace CCCallback
 			(*m_func)(args...);
 		}
 	};
+
+	template<typename... Args>
+	void AWrapCallback::Invoke(Args&&... args)
+	{
+		ACallback<Args...> unwrapCallback = dynamic_cast<ACallback<Args...>>(this);
+		unwrapCallback.Invoke(std::forward<Args>(args)...);
+	}
 
 	template<class T, class... Args>
 	std::unique_ptr<ACallback<Args...>> BindCallback(void (T::* func)(Args... type), T* member)

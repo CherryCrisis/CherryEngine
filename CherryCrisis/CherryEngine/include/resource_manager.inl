@@ -35,9 +35,10 @@ template<class T, class CallbackType, typename... Args>
 void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIsExist,
 	std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args&&... args)
 {
-	std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::TestResource<T, CallbackType, Args...>, this,
-		filepath, verifIsExist, callback, args...);
+	CCCallback::AWrapCallback* wrapedCallback(static_cast<CCCallback::AWrapCallback*>(callback.get()));
 
+	std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::TestResource<T, CallbackType, Args...>, this,
+		filepath, verifIsExist, wrapedCallback, args...);
 	/*std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&ResourceManager::TestResource<T, Args...>, this,
 		filepath, verifIsExist, std::forward<Args>(args)...);*/
 
