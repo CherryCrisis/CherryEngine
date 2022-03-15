@@ -4,17 +4,12 @@
 #include "scripted_behaviour.hpp"
 
 #include "input_manager.hpp"
+#include "csscripting_system.hpp"
 
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
 	// TODO: Move this in the proper files
-	mono_set_dirs("CherryEditor\\lib", "CherryEditor\\externals\\etc");
-
-	mono::ManagedScriptSystemSettings_t settings("TestDomain");
-
-	script = std::make_shared<mono::ManagedScriptSystem>(settings);
-
 	std::filesystem::path to("x64/Debug/CherryScripting.dll");
 	std::filesystem::path from = to;
 	to.replace_extension("copy.dll");
@@ -22,7 +17,9 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	copy(from, to, std::filesystem::copy_options::update_existing);
 
 	char domainName[16] = "ScriptingDomain";
-	context = script->CreateContext(domainName, to.generic_string().c_str());
+	context = CsScriptingSystem::GetInstance()->m_scriptSystem->CreateContext(domainName, to.generic_string().c_str());
+
+	CsScriptingSystem::GetInstance()->m_scriptSystem->DestroyContext(context.get());
 
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
 	

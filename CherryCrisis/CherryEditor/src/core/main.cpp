@@ -58,8 +58,8 @@ int main()
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
 
-    EditorManager editor{};
     Engine engine{};
+    EditorManager editor{};
 
     auto func = [](GLFWwindow* w, int k, int s, int a, int m)
     {

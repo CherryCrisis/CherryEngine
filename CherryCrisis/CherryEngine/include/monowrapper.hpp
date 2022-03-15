@@ -18,9 +18,26 @@
 #include <mono/metadata/mono-config.h>
 #include <mono/metadata/mono-gc.h>
 #include <mono/metadata/object.h>
+#include <mono/metadata/profiler.h>
 
 namespace mono
 {
+	class ManagedScriptSystem;
+}
+
+struct _MonoProfiler
+{
+	MonoProfilerHandle handle;
+	uint64_t totalAllocs;
+	uint64_t totalMoves;
+	uint64_t bytesMoved;
+	uint64_t bytesAlloc;
+	mono::ManagedScriptSystem* scriptsys;
+};
+
+namespace mono
+{
+
 	template <class T>
 	class ManagedBase;
 
@@ -143,12 +160,12 @@ namespace mono
 		typedef ManagedHandle<ManagedAssembly>* HandleT;
 
 	private:
-		MonoAssembly* m_assembly;
-		MonoImage* m_image;
+		MonoAssembly* m_assembly = nullptr;
+		MonoImage* m_image = nullptr;
 		std::string m_path;
 		std::unordered_multimap<std::string, Ref<class ManagedClass>> m_classes;
-		bool m_populated;
-		class ManagedScriptContext* m_ctx;
+		bool m_populated = false;
+		class ManagedScriptContext* m_ctx = nullptr;
 
 	protected:
 		friend class ManagedScriptContext;
@@ -159,7 +176,7 @@ namespace mono
 		void DisposeReflectionInfo();
 
 	public:
-		ManagedAssembly(class ManagedScriptContext* ctx, const std::string& path, MonoImage* img, MonoAssembly* ass);
+		ManagedAssembly(class ManagedScriptContext* ctx, const char* path, MonoImage* img, MonoAssembly* ass);
 		virtual ~ManagedAssembly() = default;
 
 		void GetReferencedTypes(std::vector<std::string>& refList);
@@ -309,7 +326,7 @@ namespace mono
 		ManagedObject(MonoObject* obj, class ManagedClass& cls, EManagedObjectHandleType type = EManagedObjectHandleType::HANDLE_PINNED);
 		~ManagedObject();
 
-		const ManagedClass& Class() const { return *m_class; }
+		const ManagedClass* Class() const { return m_class; }
 
 		const MonoObject* RawObject() const { return m_getObject(); }
 		MonoObject* RawObject() { return m_getObject(); }
@@ -319,14 +336,14 @@ namespace mono
 		EManagedObjectHandleType GCHandleType() { return m_handleType; }
 
 		bool SetProperty(class ManagedProperty* prop, void* value);
-		bool SetField(class ManagedField* prop, void* value);
+		bool SetField(class ManagedField* field, void* value);
 		bool GetProperty(class ManagedProperty* prop, void** outValue);
-		bool GetField(class ManagedField* prop, void* outValue);
+		bool GetField(class ManagedField* field, void* outValue);
 
-		bool SetProperty(const std::string& p, void* value);
-		bool SetField(const std::string& p, void* value);
-		bool GetProperty(const std::string& p, void** outValue);
-		bool GetField(const std::string& p, void* outValue);
+		bool SetProperty(const char* p, void* value);
+		bool SetField(const char* p, void* value);
+		bool GetProperty(const char* p, void** outValue);
+		bool GetField(const char* p, void* outValue);
 
 		MonoObject* Invoke(class ManagedMethod* method, void** params);
 	};
@@ -368,7 +385,7 @@ namespace mono
 
 		ManagedAssembly& Assembly() const;
 
-		ManagedClass& Class() const;
+		ManagedClass* Class() const { return m_class; }
 
 		const std::vector<ManagedObject*>& Attributes() const { return m_attributes; }
 
@@ -395,13 +412,13 @@ namespace mono
 	private:
 		MonoClassField* m_field;
 		ManagedType m_type = nullptr;
-		class ManagedClass& m_class;
+		class ManagedClass* m_class;
 		std::string m_name;
 
 	public:
 		inline ManagedType* Type() { return &m_type; }
 
-		inline ManagedClass& Class() const { return m_class; }
+		inline ManagedClass* Class() const { return m_class; }
 
 		inline MonoClassField* RawField() const { return m_field; }
 
@@ -413,7 +430,7 @@ namespace mono
 		friend class ManagedObject;
 
 	public:
-		ManagedField(MonoClassField* fld, class ManagedClass& cls, const char* name);
+		ManagedField(MonoClassField* fld, class ManagedClass* cls, const char* name);
 		virtual ~ManagedField() = default;
 	};
 
@@ -425,7 +442,7 @@ namespace mono
 	{
 	private:
 		MonoProperty* m_property = nullptr;
-		class ManagedClass& m_class;
+		class ManagedClass* m_class;
 		std::string m_name;
 		MonoMethod* m_getMethod = nullptr;
 		MonoMethod* m_setMethod = nullptr;
@@ -436,12 +453,12 @@ namespace mono
 		friend class ManagedObject;
 
 	public:
-		ManagedProperty(MonoProperty& prop, ManagedClass& cls, const char* name);
+		ManagedProperty(MonoProperty* prop, ManagedClass* cls, const char* name);
 		virtual ~ManagedProperty() = default;
 
 		const MonoProperty* RawProperty() const { return m_property; }
 
-		const ManagedClass& Class() const { return m_class; }
+		const ManagedClass* Class() const { return m_class; }
 	};
 
 	//==============================================================================================//
@@ -517,7 +534,7 @@ namespace mono
 
 		const std::vector<Ref<ManagedMethod>>& Methods() const { return m_methods; }
 		const std::unordered_map<std::string, Ref<ManagedField>>& Fields() const { return m_fields; }
-		const std::unordered_map< std::string, Ref<ManagedProperty>>& Properties() const { return m_properties; }
+		const std::unordered_map<std::string, Ref<ManagedProperty>>& Properties() const { return m_properties; }
 		const std::vector<Ref<ManagedObject>>& Attributes() const { return m_attributes; }
 
 		uint32_t DataSize() const { return m_size; }
@@ -529,9 +546,9 @@ namespace mono
 
 		mono_byte NumConstructors() const;
 
-		Ref<ManagedMethod> FindMethod(const std::string& name);
-		Ref<ManagedField> FindField(const std::string& name);
-		Ref<ManagedProperty> FindProperty(const std::string& prop);
+		Ref<ManagedMethod> FindMethod(const char* name);
+		Ref<ManagedField> FindField(const char* name);
+		Ref<ManagedProperty> FindProperty(const char* prop);
 
 		Ref<ManagedObject> CreateInstance(std::vector<MonoType*> signature, void** params);
 
@@ -605,17 +622,17 @@ namespace mono
 
 		friend class ManagedScriptSystem;
 
-		explicit ManagedScriptContext(char* domainName, const std::string& baseImage);
-		~ManagedScriptContext();
-
 		void PopulateReflectionInfo();
 
 	public:
+		ManagedScriptContext(char* domainName, const char* baseImage);
+		~ManagedScriptContext();
+
 		bool Reload();
 
 		bool LoadAssembly(const char* path);
 
-		bool UnloadAssembly(const std::string& name);
+		bool UnloadAssembly(const char* name);
 
 		bool Init();
 
@@ -624,17 +641,17 @@ namespace mono
 		/* Performs a class search in all loaded assemblies */
 		/* If you have the assembly name, please use the alternative version of this
 		 * function */
-		Ref<ManagedClass> FindClass(const std::string& ns, const std::string& cls);
+		Ref<ManagedClass> FindClass(const char* ns, const char* cls);
 
-		Ref<ManagedClass> FindClass(ManagedAssembly& assembly, const std::string& ns, const std::string& cls);
+		Ref<ManagedClass> FindClass(ManagedAssembly& assembly, const char* ns, const char* cls);
 
 		/* Returns a pointer to a raw MonoClass object corresponding to the
 		 * specified class */
 		/* This doesn't cache the class in a lookup table. You'll need to save the
 		 * class yourself */
-		MonoClass* FindSystemClass(const std::string& ns, const std::string& cls);
+		MonoClass* FindSystemClass(const char*, const char* cls);
 
-		Ref<ManagedAssembly> FindAssembly(const std::string& path);
+		Ref<ManagedAssembly> FindAssembly(const char* path);
 
 		ManagedException_t GetExceptionDescriptor(MonoObject* exception);
 
@@ -711,16 +728,19 @@ namespace mono
 	class ManagedScriptSystem
 	{
 	private:
-		std::vector<ManagedScriptContext*> m_contexts;
+		MonoProfiler m_monoProfiler;
+		MonoDomain* m_rootDomain;
+
+		std::unordered_map<std::string, Ref<ManagedScriptContext>> m_contexts;
 		std::stack<ManagedProfilingData_t> m_profilingData;
 		MonoAllocatorVTable m_allocator;
 		ManagedScriptSystemSettings_t m_settings;
-		ManagedProfilingData_t* m_curFrame = nullptr;;
+		ManagedProfilingData_t* m_curFrame = nullptr;
 		bool m_debugEnabled;
 		ManagedProfilingSettings_t m_profilingSettings;
 
 	public:
-		explicit ManagedScriptSystem(ManagedScriptSystemSettings_t settings);
+		ManagedScriptSystem(ManagedScriptSystemSettings_t settings);
 		~ManagedScriptSystem();
 
 		/* NO COPIES! */
@@ -728,7 +748,7 @@ namespace mono
 		ManagedScriptSystem(ManagedScriptSystem&&) = delete;
 		ManagedScriptSystem() = delete;
 
-		ManagedScriptContext* CreateContext(char* domainName, const char* image);
+		Ref<ManagedScriptContext> CreateContext(char* domainName, const char* image);
 
 		void DestroyContext(ManagedScriptContext* ctx);
 

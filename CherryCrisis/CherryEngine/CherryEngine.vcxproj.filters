@@ -55,6 +55,12 @@
     <Filter Include="Fichiers sources\Interface\Maths">
       <UniqueIdentifier>{eee4fb74-d9e3-477a-b235-761c3b3df1c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Scripting">
+      <UniqueIdentifier>{4342f067-4dd9-4d0a-ac57-e5ababf0dfa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Scripting">
+      <UniqueIdentifier>{b78a84d0-de51-409b-b972-b9b37b74b414}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -420,9 +426,6 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
-    <ClInclude Include="include\monowrapper.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="include\component.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
@@ -434,6 +437,12 @@
     </ClInclude>
     <ClInclude Include="include\scene_manager.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\monowrapper.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\csscripting_system.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -625,9 +634,6 @@
     <ClCompile Include="src\input_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\monowrapper.cpp">
-      <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\scripted_behaviour.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
@@ -636,6 +642,12 @@
     </ClCompile>
     <ClCompile Include="src\scene_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\monowrapper.cpp">
+      <Filter>Fichiers sources\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\csscripting_system.cpp">
+      <Filter>Fichiers sources\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

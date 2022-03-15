@@ -6,10 +6,13 @@
 #include "alut.h"
 
 #include "scene_manager.hpp"
+#include "csscripting_system.hpp"
 
 Engine::Engine() 
 {
 	SoundInit();
+
+	CsScriptingSystem::GetInstance()->Init(mono::ManagedScriptSystemSettings_t("RootDomain"));
 }
 
 void Engine::SoundInit()

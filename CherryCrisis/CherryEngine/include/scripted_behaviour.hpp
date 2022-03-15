@@ -9,8 +9,8 @@
 
 class CCENGINE_API ScriptedBehaviour : public Behaviour
 {
-	std::shared_ptr<mono::ManagedScriptSystem> script;
-	mono::ManagedScriptContext* context;
+	mono::Ref<mono::ManagedScriptSystem> script;
+	mono::Ref<mono::ManagedScriptContext> context;
 
 	mono::Ref<mono::ManagedClass> managedClass;
 	mono::Ref<mono::ManagedObject> behaviourInst;

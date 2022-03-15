@@ -15,27 +15,12 @@
 
 #include "monowrapper.hpp"
 
-#include <assert.h>
-#include <string.h>
-
-#ifndef ASSERT
-#define ASSERT(x) assert(x)
-#endif
+#include <string>
 
 using namespace mono;
 
-struct _MonoProfiler
+namespace mono
 {
-	MonoProfilerHandle handle;
-	uint64_t totalAllocs;
-	uint64_t totalMoves;
-	uint64_t bytesMoved;
-	uint64_t bytesAlloc;
-	mono::ManagedScriptSystem* scriptsys;
-};
-
-namespace mono {
-
 	UniqueRef<ManagedType> ManagedType::int16Type = nullptr;
 	UniqueRef<ManagedType> ManagedType::int32Type = nullptr;
 	UniqueRef<ManagedType> ManagedType::int64Type = nullptr;
@@ -78,10 +63,6 @@ namespace mono {
 	UniqueRef<ManagedClass> ManagedClass::sbyteClass = nullptr;
 	UniqueRef<ManagedClass> ManagedClass::voidClass = nullptr;
 
-	MonoDomain* g_jitDomain;
-
-	MonoProfiler g_monoProfiler;
-
 	/* Profiler methods */
 	static void Profiler_RuntimeInit(MonoProfiler* prof);
 	static void Profiler_RuntimeShutdownStart(MonoProfiler* prof);
@@ -97,8 +78,8 @@ namespace mono {
 	// Managed Assembly
 	//
 	//================================================================//
-	ManagedAssembly::ManagedAssembly(ManagedScriptContext* ctx, const std::string& name, MonoImage* img, MonoAssembly* ass)
-		: m_ctx(ctx), m_path(name), m_image(img), m_assembly(ass), m_populated(false) { }
+	ManagedAssembly::ManagedAssembly(ManagedScriptContext* ctx, const char* name, MonoImage* img, MonoAssembly* ass)
+		: m_ctx(ctx), m_path(name), m_image(img), m_assembly(ass) { }
 
 	void ManagedAssembly::PopulateReflectionInfo()
 	{
@@ -119,6 +100,7 @@ namespace mono {
 			const char* c = mono_metadata_string_heap(m_image, cols[MONO_TYPEDEF_NAME]);
 
 			m_ctx->FindClass(ns, c);
+
 		}
 	}
 
@@ -295,11 +277,6 @@ namespace mono {
 		return *m_class->m_assembly;
 	}
 
-	ManagedClass& ManagedMethod::Class() const
-	{
-		return *m_class;
-	}
-
 	void ManagedMethod::InvalidateHandle()
 	{
 		ManagedBase::InvalidateHandle();
@@ -402,7 +379,7 @@ namespace mono {
 	//
 	//================================================================//
 
-	ManagedField::ManagedField(MonoClassField* fld, ManagedClass& cls, const char* name)
+	ManagedField::ManagedField(MonoClassField* fld, ManagedClass* cls, const char* name)
 		: m_class(cls), m_field(fld), m_name(name), m_type(mono_field_get_type(fld))
 	{
 	}
@@ -413,8 +390,8 @@ namespace mono {
 	//
 	//================================================================//
 
-	ManagedProperty::ManagedProperty(MonoProperty& prop, ManagedClass& cls, const char* name)
-		: m_class(cls), m_property(&prop), m_name(name)
+	ManagedProperty::ManagedProperty(MonoProperty* prop, ManagedClass* cls, const char* name)
+		: m_class(cls), m_property(prop), m_name(name)
 	{
 		m_getMethod = mono_property_get_get_method(m_property);
 		m_setMethod = mono_property_get_set_method(m_property);
@@ -430,7 +407,6 @@ namespace mono {
 	{
 		m_className = mono_class_get_name(cls);
 		m_namespaceName = mono_class_get_namespace(cls);
-
 		m_attrInfo = mono_custom_attrs_from_class(cls);
 
 		if (!m_attrInfo || !mono_custom_attrs_has_attr(m_attrInfo, cls))
@@ -523,7 +499,7 @@ namespace mono {
 		while ((field = mono_class_get_fields(m_class, &iter)))
 		{
 			const char* fieldName = mono_field_get_name(field);
-			m_fields[fieldName] = std::make_shared<ManagedField>(field, *this, fieldName);
+			m_fields[fieldName] = std::make_shared<ManagedField>(field, this, fieldName);
 		}
 
 		MonoProperty* props;
@@ -532,7 +508,7 @@ namespace mono {
 		{
 			const char* propName = mono_property_get_name(props);
 
-			m_properties[propName] = std::make_shared<ManagedProperty>(*props, *this, propName);
+			m_properties[propName] = std::make_shared<ManagedProperty>(props, this, propName);
 
 		}
 
@@ -556,16 +532,16 @@ namespace mono {
 
 	// TODO: Investigate perf of this, maybe use a hashmap? Might just be faster to
 	// not though.
-	Ref<ManagedMethod> ManagedClass::FindMethod(const std::string& name)
+	Ref<ManagedMethod> ManagedClass::FindMethod(const char* name)
 	{
-		for (auto m : m_methods)
+		for (auto& m : m_methods)
 			if (m->m_name == name)
 				return m;
 
 		return nullptr;
 	}
 
-	Ref<ManagedField> ManagedClass::FindField(const std::string& name)
+	Ref<ManagedField> ManagedClass::FindField(const char* name)
 	{
 		auto fieldIt = m_fields.find(name);
 
@@ -575,7 +551,7 @@ namespace mono {
 		return fieldIt->second;
 	}
 
-	Ref<ManagedProperty> ManagedClass::FindProperty(const std::string& prop)
+	Ref<ManagedProperty> ManagedClass::FindProperty(const char* prop)
 	{
 		auto propIt = m_properties.find(prop);
 
@@ -742,30 +718,30 @@ namespace mono {
 		return true;
 	}
 
-	bool ManagedObject::GetProperty(ManagedProperty* prop, void** outValue) {
-		MonoObject* exception = nullptr;
-		void* params[] = {outValue};
-
+	bool ManagedObject::GetProperty(ManagedProperty* prop, void** outValue)
+	{
 		if (!prop->m_getMethod)
 			return false;
 
+		MonoObject* exception = nullptr;
+		void* params[] = {outValue};
+
 		MonoObject* res = mono_runtime_invoke(prop->m_getMethod, RawObject(), NULL, &exception);
 
-		if (!res || exception) {
+		if (!res || exception)
 			return false;
-		}
 
 		*outValue = mono_object_unbox(res);
 		return true;
 	}
 
-	bool ManagedObject::GetField(ManagedField* prop, void* outValue)
+	bool ManagedObject::GetField(ManagedField* field, void* outValue)
 	{
-		mono_field_get_value(RawObject(), prop->RawField(), outValue);
+		mono_field_get_value(RawObject(), field->RawField(), outValue);
 		return true;
 	}
 
-	bool ManagedObject::SetProperty(const std::string& p, void* value)
+	bool ManagedObject::SetProperty(const char* p, void* value)
 	{
 		auto propIt = m_class->m_properties.find(p);
 
@@ -775,7 +751,7 @@ namespace mono {
 		return SetProperty(propIt->second.get(), value);
 	}
 
-	bool ManagedObject::SetField(const std::string& p, void* value)
+	bool ManagedObject::SetField(const char* p, void* value)
 	{
 		auto fieldIt = m_class->m_fields.find(p);
 
@@ -785,7 +761,7 @@ namespace mono {
 		return SetField(fieldIt->second.get(), value);
 	}
 
-	bool ManagedObject::GetProperty(const std::string& p, void** outValue)
+	bool ManagedObject::GetProperty(const char* p, void** outValue)
 	{
 		auto propIt = m_class->m_properties.find(p);
 
@@ -795,14 +771,12 @@ namespace mono {
 		return GetProperty(propIt->second.get(), outValue);
 	}
 
-	bool ManagedObject::GetField(const std::string& p, void* outValue)
+	bool ManagedObject::GetField(const char* p, void* outValue)
 	{
-		auto fieldIt = m_class->m_fields.find(p);
+		if (Ref<ManagedField> field = m_class->FindField(p))
+			return GetField(field.get(), outValue);
 
-		if (fieldIt == m_class->m_fields.end())
-			return false;
-
-		return GetField(fieldIt->second.get(), outValue);
+		return false;
 	}
 
 	MonoObject* ManagedObject::Invoke(struct ManagedMethod* method, void** params) {
@@ -815,7 +789,7 @@ namespace mono {
 	//
 	//================================================================//
 
-	ManagedScriptContext::ManagedScriptContext(char* domainName, const std::string& baseImage)
+	ManagedScriptContext::ManagedScriptContext(char* domainName, const char* baseImage)
 		: m_domainName(domainName), m_baseImage(baseImage) { }
 
 	ManagedScriptContext::~ManagedScriptContext()
@@ -850,10 +824,11 @@ namespace mono {
 
 	bool ManagedScriptContext::Unload()
 	{
-		if (m_domain == g_jitDomain)
+		MonoDomain* rootDomain = mono_get_root_domain();
+		if (m_domain == rootDomain)
 			return false;
 
-		mono_domain_set(g_jitDomain, 0);
+		mono_domain_set(rootDomain, 0);
 		mono_domain_unload(m_domain);
 		return true;
 	}
@@ -875,16 +850,16 @@ namespace mono {
 			return false;
 
 		MonoImage* img = mono_assembly_get_image(ass);
-		if (!img) {
+		if (!img)
 			return false;
-		}
+
 		Ref<ManagedAssembly> newAss = std::make_shared<ManagedAssembly>(this, path, img, ass);
 		m_loadedAssemblies.push_back(newAss);
 		newAss->PopulateReflectionInfo();
 		return true;
 	}
 
-	bool ManagedScriptContext::UnloadAssembly(const std::string& name)
+	bool ManagedScriptContext::UnloadAssembly(const char* name)
 	{
 		for (auto it = m_loadedAssemblies.begin(); it != m_loadedAssemblies.end(); ++it)
 		{
@@ -906,12 +881,13 @@ namespace mono {
 	/* Performs a class search in all loaded assemblies */
 	/* If you have the assembly name, please use the alternative version of this
 	 * function */
-	Ref<ManagedClass> ManagedScriptContext::FindClass(const std::string& ns, const std::string& cls)
+	Ref<ManagedClass> ManagedScriptContext::FindClass(const char* ns, const char* cls)
 	{
 		/* Try to find the managed class in each of the assemblies. if found, create
 		 * the managed class and return */
 		/* Also check the hashmap we have setup */
-		for (auto& a : m_loadedAssemblies) {
+		for (auto& a : m_loadedAssemblies)
+		{
 			if (!a)
 				continue;
 
@@ -922,7 +898,7 @@ namespace mono {
 		return nullptr;
 	}
 
-	Ref<ManagedClass> ManagedScriptContext::FindClass(ManagedAssembly& assembly, const std::string& ns, const std::string& cls)
+	Ref<ManagedClass> ManagedScriptContext::FindClass(ManagedAssembly& assembly, const char* ns, const char* cls)
 	{
 		auto itpair = assembly.m_classes.equal_range(ns);
 
@@ -934,7 +910,7 @@ namespace mono {
 
 		/* Have mono perform the class lookup. If it's there, create and add a new
 		 * managed class */
-		MonoClass* monoClass = mono_class_from_name(assembly.m_image, ns.c_str(), cls.c_str());
+		MonoClass* monoClass = mono_class_from_name(assembly.m_image, ns, cls);
 
 		if (!monoClass)
 			return nullptr;
@@ -949,7 +925,7 @@ namespace mono {
 	 * user */
 	/* These assemblies are usually going to be system assemblies or members of the
 	 * C# standard library */
-	MonoClass* ManagedScriptContext::FindSystemClass(const std::string& ns, const std::string& cls)
+	MonoClass* ManagedScriptContext::FindSystemClass(const char* ns, const char* cls)
 	{
 		struct pvt_t
 		{
@@ -960,8 +936,8 @@ namespace mono {
 			MonoClass* result;
 		} pvt;
 
-		pvt.cls = cls.c_str();
-		pvt.ns = ns.c_str();
+		pvt.cls = cls;
+		pvt.ns = ns;
 		pvt._this = this;
 		pvt.result = nullptr;
 		pvt.isdone = false;
@@ -991,7 +967,8 @@ namespace mono {
 		return pvt.result;
 	}
 
-	Ref<ManagedAssembly> ManagedScriptContext::FindAssembly(const std::string& path) {
+	Ref<ManagedAssembly> ManagedScriptContext::FindAssembly(const char* path)
+	{
 		for (auto& a : m_loadedAssemblies)
 		{
 			if (a->m_path == path)
@@ -1025,7 +1002,8 @@ namespace mono {
 		return true;
 	}
 
-	void ManagedScriptContext::ReportException(MonoObject& obj, ManagedAssembly& ass) {
+	void ManagedScriptContext::ReportException(MonoObject& obj, ManagedAssembly& ass)
+	{
 		auto exc = GetExceptionDescriptor(&obj);
 
 		for (auto& c : m_callbacks)
@@ -1100,7 +1078,7 @@ namespace mono {
 	//
 	//================================================================//
 	ManagedScriptSystem::ManagedScriptSystem(ManagedScriptSystemSettings_t settings)
-		: m_settings(settings), m_curFrame(nullptr)
+		: m_settings(settings)
 	{
 		/* Basically just a guard to ensure we dont have multiple per process */
 		static bool g_managedScriptSystemExists = false;
@@ -1122,23 +1100,23 @@ namespace mono {
 		PushProfilingContext();
 
 		/* Create and register the new profiler */
-		g_monoProfiler.handle = mono_profiler_create(&g_monoProfiler);
-		g_monoProfiler.scriptsys = this;
-		mono_profiler_set_runtime_initialized_callback(g_monoProfiler.handle, Profiler_RuntimeInit);
-		mono_profiler_set_runtime_shutdown_begin_callback(g_monoProfiler.handle, Profiler_RuntimeShutdownStart);
-		mono_profiler_set_runtime_shutdown_end_callback(g_monoProfiler.handle, Profiler_RuntimeShutdownEnd);
-		mono_profiler_set_gc_allocation_callback(g_monoProfiler.handle, Profiler_GCAlloc);
-		mono_profiler_set_gc_event_callback(g_monoProfiler.handle, Profiler_GCEvent);
-		mono_profiler_set_gc_resize_callback(g_monoProfiler.handle, Profiler_GCResize);
-		mono_profiler_set_context_loaded_callback(g_monoProfiler.handle, Profiler_ContextLoaded);
-		mono_profiler_set_context_unloaded_callback(g_monoProfiler.handle, Profiler_ContextUnloaded);
+		m_monoProfiler.handle = mono_profiler_create(&m_monoProfiler);
+		m_monoProfiler.scriptsys = this;
+		mono_profiler_set_runtime_initialized_callback(m_monoProfiler.handle, Profiler_RuntimeInit);
+		mono_profiler_set_runtime_shutdown_begin_callback(m_monoProfiler.handle, Profiler_RuntimeShutdownStart);
+		mono_profiler_set_runtime_shutdown_end_callback(m_monoProfiler.handle, Profiler_RuntimeShutdownEnd);
+		mono_profiler_set_gc_allocation_callback(m_monoProfiler.handle, Profiler_GCAlloc);
+		mono_profiler_set_gc_event_callback(m_monoProfiler.handle, Profiler_GCEvent);
+		mono_profiler_set_gc_resize_callback(m_monoProfiler.handle, Profiler_GCResize);
+		mono_profiler_set_context_loaded_callback(m_monoProfiler.handle, Profiler_ContextLoaded);
+		mono_profiler_set_context_unloaded_callback(m_monoProfiler.handle, Profiler_ContextUnloaded);
 
 		/* Register our memory allocator for mono */
 		m_allocator = {MONO_ALLOCATOR_VTABLE_VERSION, settings._malloc, settings._realloc, settings._free, settings._calloc};
 		mono_set_allocator_vtable(&m_allocator);
 
 		// Create a SINGLE jit environment!
-		g_jitDomain = mono_jit_init(settings.scriptSystemDomainName);
+		m_rootDomain = mono_jit_init(settings.scriptSystemDomainName);
 
 		ManagedClass::InitializeStatics();
 		ManagedType::InitializeStatics();
@@ -1146,37 +1124,23 @@ namespace mono {
 
 	ManagedScriptSystem::~ManagedScriptSystem()
 	{
-		for (auto c : m_contexts)
-			delete (c);
-
-		mono_jit_cleanup(g_jitDomain);
+		mono_jit_cleanup(m_rootDomain);
 	}
 
-	ManagedScriptContext* ManagedScriptSystem::CreateContext(char* domainName, const char* image)
+	Ref<ManagedScriptContext> ManagedScriptSystem::CreateContext(char* domainName, const char* image)
 	{
-		ManagedScriptContext* ctx = new ManagedScriptContext(domainName, image);
+		Ref<ManagedScriptContext> ctx = std::make_shared<ManagedScriptContext>(domainName, image);
 
 		if (!ctx->Init())
-		{
-			delete ctx;
 			return nullptr;
-		}
 
-		m_contexts.push_back(ctx);
+		m_contexts[domainName] = (ctx);
 		return ctx;
 	}
 
 	void ManagedScriptSystem::DestroyContext(ManagedScriptContext* ctx)
 	{
-		for (auto it = m_contexts.begin(); it != m_contexts.end(); ++it)
-		{
-			if ((*it) != ctx)
-				continue;
-
-			m_contexts.erase(it);
-			delete ctx;
-			return;
-		}
+		m_contexts.erase(ctx->m_domainName);
 	}
 
 	uint64_t ManagedScriptSystem::HeapSize() const
@@ -1196,7 +1160,7 @@ namespace mono {
 
 	void ManagedScriptSystem::ReportProfileStats()
 	{
-		MonoProfiler* prof = &g_monoProfiler;
+		MonoProfiler* prof = &m_monoProfiler;
 		printf("---- MONO PROFILE REPORT ----\n");
 		printf("Total Allocations: %lu\nBytes Allocated: %lu\nTotal Moves: "
 			   "%lu\nBytes Moved: %lu\n",
