@@ -7,23 +7,10 @@
 #include "model_loader.hpp"
 #include "scene.hpp"
 
-Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
+void ModelBase::Load(Ref<ModelBase> modelBase, const char* filepath)
 {
-    ModelBase* modelBase = new ModelBase(filepath);
-
     ThreadPool* threadpool = ThreadPool::GetInstance();
-
-    /*std::unique_ptr<CCFunction::AFunction> function = 
-        CCFunction::BindFunction(LoadModel, modelBase->filepath.c_str(), &modelBase->m_rootNode, modelBase->m_models);
-
-    std::unique_ptr<CCFunction::AFunction> onFinished =
-        CCFunction::BindFunction(&ResourceMultithread::ResourceLoaded, (ResourceMultithread*)modelBase);*/
-
-    //threadpool->CreateTask(function, onFinished, EChannelTask::Multithread);
-
-    LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
-
-    return Ref<ModelBase>(modelBase);
+    CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
 }
 
 ModelBase::~ModelBase()

@@ -18,6 +18,23 @@ enum class EChannelTask
 	MainThread
 };
 
+class LockGuard
+{
+	std::shared_ptr<std::mutex> m_mutex;
+
+public :
+	LockGuard(std::shared_ptr<std::mutex>& mutex)
+		: m_mutex(mutex) 
+	{
+		m_mutex->lock();
+	}
+
+	~LockGuard()
+	{
+		m_mutex->unlock();
+	}
+};
+
 class Task
 {
 public:

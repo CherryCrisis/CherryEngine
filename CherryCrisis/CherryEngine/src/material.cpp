@@ -15,11 +15,9 @@ Material::~Material()
 
 }
 
-Resource::Ref<Material> Material::Create(const char* filepath, const aiMaterial* assimpMaterial)
+void Material::Load(Ref<Material> material, const char* filepath, const aiMaterial* assimpMaterial)
 {
     ResourceManager* resourceManager = ResourceManager::GetInstance();
-
-	Material* material = new Material(filepath);
 
 	//Material Color
 	aiColor3D color(0.f, 0.f, 0.f);
@@ -41,6 +39,4 @@ Resource::Ref<Material> Material::Create(const char* filepath, const aiMaterial*
 			material->textures["albedo"] = resourceManager->AddResource<Texture>(path.c_str(), true);
 		}
 	}
-
-	return Ref<Material>(material);
 }

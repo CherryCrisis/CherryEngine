@@ -4,6 +4,7 @@
 #include "al.h"
 #include "alc.h"
 #include "alut.h"
+#include "threadpool.hpp"
 
 Engine::Engine() 
 {
@@ -60,8 +61,14 @@ void Engine::PlayFile(const char* fileName)
 	} while (status == AL_PLAYING);
 }
 
+void Engine::TickEngine()
+{
+	ThreadPool::GetInstance()->Update(EChannelTask::MainThread); //TODO: stock threadpool in engine class
+}
+
 void Engine::Tick() 
 {
+
 	for (Behaviour* behaviour : behaviours)
 	{
 		behaviour->Update();

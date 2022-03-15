@@ -15,26 +15,16 @@ public:
 	template <typename ResourceT>
 	using Ref = std::shared_ptr<ResourceT>;
 
-	std::shared_ptr<Event<Ref<Resource>>> m_onLoaded {};
+	Event<std::shared_ptr<Resource>> m_onLoaded {};
 
 	Resource(const std::string& filepath)
-		: hashId(std::hash<std::string>()(filepath)), filepath(filepath), m_onLoaded(new Event<Ref<Resource>>) {}
+		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
 
 	virtual ~Resource() = default;
 
 	const size_t GetHashId() const { return hashId; }
 	const char* GetFilepath() const { return filepath.c_str(); }
-};
 
-//class ResourceMultithread : public Resource
-//{
-//protected:
-//	Event<ResourceMultithread*>* m_onLoaded;
-//
-//public :
-//	ResourceMultithread(const std::string& filepath)
-//		: Resource(filepath) {}
-//
-//	void ResourceLoaded() { m_onLoaded->Invoke(this); }
-//};
+	void IsLoaded(std::shared_ptr<Resource> resource) { m_onLoaded.Invoke(resource); }
+};
 

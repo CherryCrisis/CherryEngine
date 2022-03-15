@@ -13,7 +13,7 @@ ResourceManager* ResourceManager::GetInstance()
 }
 
 ResourceManager::ResourceManager()
-	: threadpool(ThreadPool::GetInstance())
+	: threadpool(ThreadPool::GetInstance()), lockRM(std::make_shared<std::mutex>())
 {
 }
 

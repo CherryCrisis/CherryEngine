@@ -9,16 +9,12 @@ Shader::~Shader()
 	glDeleteShader(m_shaderID);
 }
 
-Resource::Ref<Shader> Shader::Create(const char* filepath, EShader shaderType)
+void Shader::Load(Ref<Shader> shader, const char* filepath, EShader shaderType)
 {
-	Shader* shader = new Shader(filepath);
-
 	const std::string shaderStr = ParseShaderFromFile(filepath);
 	const char* shaderCstr = shaderStr.c_str();
 
 	shader->m_shaderID = CompileShader(shaderType, &shaderCstr);
-
-	return Ref<Shader>(shader);
 }
 
 std::string Shader::ParseShaderFromFile(const char* filepath)

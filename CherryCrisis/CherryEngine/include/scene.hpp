@@ -13,12 +13,13 @@ class ModelBase;
 class CCENGINE_API Scene : public Resource
 {
 private:
-	Scene(const char* filePath) : Resource(filePath) { }
 
 public:
+	Scene(const char* filePath) : Resource(filePath) { }
+
 	Skybox m_skybox;
 
-	static Ref<Scene> Create(const char* filePath);
+	static void Load(Ref<Scene> scene, const char* filePath);
 
 	void GenerateEntities(std::shared_ptr<Resource> modelBase);
 

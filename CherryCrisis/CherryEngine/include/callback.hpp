@@ -10,13 +10,17 @@ namespace CCCallback
 	{
 		template<class... Args>
 		void Invoke(Args&&... args);
+	public:
+		AWrapCallback(const std::type_index& typeIndex) : m_typeIndex(typeIndex) {}
+
+		const std::type_index& m_typeIndex;
 	};
 
 	template<class... Args>
 	class ACallback : public AWrapCallback
 	{
 	public:
-		std::type_index m_typeIndex;
+		ACallback(const std::type_index& typeIndex) : AWrapCallback(typeIndex) {}
 		virtual void Invoke(Args&&...) const = 0;
 	};
 
@@ -29,7 +33,7 @@ namespace CCCallback
 
 	public:
 		MemberCallback(void (T::* func)(Args... type), T* c)
-			: m_func(func), m_member(c), CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))
+			: m_func(func), m_member(c), ACallback<Args...>(typeid(func))
 		{
 		}
 
@@ -47,7 +51,7 @@ namespace CCCallback
 
 	public:
 		NonMemberCallback(void (*func)(Args... type))
-			: m_func(func), CCCallback::ACallback<Args...>::m_typeIndex(typeid(func))
+			: m_func(func), ACallback<Args...>(typeid(func))
 		{
 		}
 

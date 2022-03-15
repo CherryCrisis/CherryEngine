@@ -4,7 +4,7 @@
 
 #include <assimp/mesh.h>
 
-Resource::Ref<Mesh> Mesh::Create(const char* filepath, const aiMesh* assimpMesh)
+void Mesh::Load(Ref<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh)
 {
     std::vector<Vertex> vertices;
     vertices.reserve(assimpMesh->mNumVertices);
@@ -46,20 +46,16 @@ Resource::Ref<Mesh> Mesh::Create(const char* filepath, const aiMesh* assimpMesh)
         }
     }
 
-	return Mesh::Create(filepath, vertices, indices);
+    Mesh::Load(mesh, filepath, vertices, indices);
 }
 
-Resource::Ref<Mesh> Mesh::Create(const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+void Mesh::Load(Ref<Mesh> mesh, const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
 {
-    Mesh* mesh = new Mesh(modelName);
-
     mesh->m_vertices = std::move(vertices);
     mesh->m_indices = std::move(indices);
-
-    return Ref<Mesh>(mesh);
 }
 
-Resource::Ref<Mesh> Mesh::CreateCube(const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes)
+void Mesh::CreateCube(Ref<Mesh> mesh, const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes)
 {
     std::vector<Vertex> vertices;
     vertices.reserve(8);
@@ -106,5 +102,5 @@ Resource::Ref<Mesh> Mesh::CreateCube(const char* cubeName, float xHalfRes, float
     //indices.push_back(1); indices.push_back(3); indices.push_back(7);
     indices.push_back(7); indices.push_back(3); indices.push_back(1);
 
-    return Mesh::Create(cubeName, vertices, indices);
+   Load(mesh, cubeName, vertices, indices);
 }

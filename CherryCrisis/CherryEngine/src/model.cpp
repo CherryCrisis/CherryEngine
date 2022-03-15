@@ -10,11 +10,9 @@
 #include "mesh.hpp"
 #include "material.hpp"
 
-Resource::Ref<Model> Model::Create(const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode)
+void Model::Load(Ref<Model> model, const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
-
-	Model* model = new Model(filepath);
 
 	size_t meshId = (size_t)assimpNode->mMeshes[0];
 
@@ -27,8 +25,6 @@ Resource::Ref<Model> Model::Create(const char* filepath, const aiScene* assimpSc
 	aiString name = assimpMaterial->GetName();
 	std::string materialPath = filepath + std::string("/") + std::string(name.C_Str());
 	model->m_material = resourceManager->AddResource<Material>(materialPath.c_str(), true, assimpMaterial);
-
-	return Ref<Model>(model);
 }
 
 Model::~Model()

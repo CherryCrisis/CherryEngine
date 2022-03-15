@@ -96,6 +96,7 @@ int main()
         //InputManager::instance()->UpdateKeys();
         glfwPollEvents();
 
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -104,6 +105,8 @@ int main()
         glClearColor(0.f, 0.f, 0.f, 1.f);
 
         editor.DisplayEditorUI(window);
+
+        engine.TickEngine();
 
         if (engine.isPlaying)
             engine.Tick();

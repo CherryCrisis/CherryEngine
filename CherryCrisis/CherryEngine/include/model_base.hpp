@@ -37,7 +37,7 @@ public:
 	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
 	~ModelBase();
 
-	static Ref<ModelBase> Create(const char* filepath);
+	static void Load(Ref<ModelBase> modelBase, const char* filepath);
 
 	//Generate entities with modelBase (model instance)
 	std::vector<Entity> GenerateEntities(Entity& rootEntity);

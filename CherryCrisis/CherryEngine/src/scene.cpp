@@ -8,9 +8,11 @@
 
 #include "model_base.hpp"
 
-void Scene::GenerateEntities(std::shared_ptr<Resource> modelBase)
+void Scene::GenerateEntities(std::shared_ptr<Resource> resource)
 {
-	/*Entity root;
+	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
+
+	Entity root;
 	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
 	m_entities.push_back(std::move(root));
 
@@ -18,16 +20,21 @@ void Scene::GenerateEntities(std::shared_ptr<Resource> modelBase)
 	{
 		m_entities.push_back(std::move(child));
 		root.m_transform->AddChildren(child.m_transform);
-	}*/
+	}
+
+	std::cout << "entities generated : " << resource->GetFilepath() << std::endl;
 }
 
-Resource::Ref<Scene> Scene::Create(const char* filePath)
+void Scene::Load(Ref<Scene> scene, const char* filePath)
 {
-	Scene* scene = new Scene(filePath);
-
 	auto RM = ResourceManager::GetInstance();
-	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene);
-	RM->AddResourceMultiThreads<ModelBase>("../assets/backpack.obj", true, callback);
+
+	auto callback_1 = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
+	auto callback_2 = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
+	auto callback_3 = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
+	RM->AddResourceMultiThreads<ModelBase>("../assets/Backpack-1/backpack.obj", true, callback_1);
+	RM->AddResourceMultiThreads<ModelBase>("../assets/Backpack-1/backpack.obj", true, callback_2);
+	RM->AddResourceMultiThreads<ModelBase>("../assets/Backpack-1/backpack.obj", true, callback_3);
 
 	Entity& light = scene->m_entities.emplace_back();
 	light.m_lightComp = new LightComponent();
@@ -35,8 +42,6 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 	Entity& camera = scene->m_entities.emplace_back();
 	camera.m_cameraComp = new CameraComponent();
 	camera.m_cameraComp->m_transform = camera.m_transform;
-
-	return Ref<Scene>(scene);
 }
 
 void Scene::Draw()

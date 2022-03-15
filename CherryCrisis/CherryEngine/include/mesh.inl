@@ -1,15 +1,14 @@
 #pragma once
 
 template <typename ... Args>
-static Resource::Ref<Mesh> Mesh::Create(const char* shapeName, EMeshShape shapeType, Args... args)
+static void Mesh::Load(Ref<Mesh> mesh, const char* shapeName, EMeshShape shapeType, Args... args)
 {
 	switch (shapeType)
 	{
 	case EMeshShape::CUBE:
-		return CreateCube(shapeName, args...);
+		CreateCube(mesh, shapeName, args...);
 
 	default:
-		return nullptr;
-
+		return;
 	}
 }
