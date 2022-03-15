@@ -36,6 +36,19 @@ struct _MonoProfiler
 
 namespace mono {
 
+	UniqueRef<ManagedType> ManagedType::int16Type = nullptr;
+	UniqueRef<ManagedType> ManagedType::int32Type = nullptr;
+	UniqueRef<ManagedType> ManagedType::int64Type = nullptr;
+	UniqueRef<ManagedType> ManagedType::stringType = nullptr;
+	UniqueRef<ManagedType> ManagedType::booleanType = nullptr;
+
+	UniqueRef<ManagedClass> ManagedClass::int16Class = nullptr;
+	UniqueRef<ManagedClass> ManagedClass::int32Class = nullptr;
+	UniqueRef<ManagedClass> ManagedClass::int64Class = nullptr;
+	UniqueRef<ManagedClass> ManagedClass::stringClass = nullptr;
+	UniqueRef<ManagedClass> ManagedClass::booleanClass = nullptr;
+
+
 MonoDomain* g_jitDomain;
 
 MonoProfiler g_monoProfiler;
@@ -159,7 +172,8 @@ void ManagedAssembly::ReportException(MonoObject* exc)
 //
 //================================================================//
 
-ManagedType::ManagedType(MonoType* type) : m_type(type)
+ManagedType::ManagedType(MonoType* type)
+	: m_type(type)
 {
 	m_isVoid = mono_type_is_void(type);
 	m_isStruct = mono_type_is_struct(type);
@@ -167,19 +181,29 @@ ManagedType::ManagedType(MonoType* type) : m_type(type)
 	m_isPtr = mono_type_is_pointer(type);
 }
 
+void ManagedType::InitializeStatics()
+{
+	int16Type = std::make_unique<ManagedType>(ManagedClass::GetInt16()->RawType());
+	int32Type = std::make_unique<ManagedType>(ManagedClass::GetInt32()->RawType());
+	int64Type = std::make_unique<ManagedType>(ManagedClass::GetInt64()->RawType());
+	stringType = std::make_unique<ManagedType>(ManagedClass::GetString()->RawType());
+	booleanType = std::make_unique<ManagedType>(ManagedClass::GetBoolean()->RawType());
+}
+
 bool ManagedType::Equals(const ManagedType* other) const
 {
 	return mono_type_get_type(m_type) == mono_type_get_type(other->m_type);
 }
 
-const std::string& ManagedType::Name() const
+const std::string& ManagedType::Name()
 {
-	if (m_name.empty())
-	{
-		char* c = mono_type_get_name(m_type);
-		m_name.copy(c, strlen(c));
-		mono_free(c);
-	}
+	if (!m_name.empty())
+		return m_name;
+
+	char* c = mono_type_get_name(m_type);
+	m_name = c;
+	mono_free(c);
+
 	return m_name;
 }
 
@@ -206,18 +230,19 @@ ManagedMethod::ManagedMethod(MonoMethod* method, ManagedClass* cls)
 	m_name = mono_method_get_name(m_method);
 	m_paramCount = mono_signature_get_param_count(m_signature);
 
-	m_returnType = new ManagedType(mono_signature_get_return_type(m_signature));
+	m_returnType = std::make_shared<ManagedType>(mono_signature_get_return_type(m_signature));
+
+	void* paramIter = nullptr;
+	while (MonoType* paramType = mono_signature_get_params(m_signature, &paramIter))
+		m_params.push_back(std::make_shared<ManagedType>(paramType));
 }
 
 ManagedMethod::~ManagedMethod()
 {
 	if (m_attrInfo)
 		mono_custom_attrs_free(m_attrInfo);
-	if (m_returnType)
-		delete m_returnType;
-	for (auto x : m_params)
-		delete x;
 
+	m_returnType = nullptr;
 	m_params.clear();
 }
 
@@ -240,7 +265,6 @@ void ManagedMethod::InvalidateHandle()
 
 	for (auto& a : m_attributes)
 		a->InvalidateHandle();
-
 }
 
 bool ManagedMethod::MatchSignature(MonoType* returnval, std::vector<MonoType*> params)
@@ -335,9 +359,8 @@ MonoObject* ManagedMethod::InvokeStatic(void** params, MonoObject** _exc)
 //================================================================//
 
 ManagedField::ManagedField(MonoClassField* fld, ManagedClass& cls, const char* name)
-	: m_class(cls), m_field(fld), m_name(name)
+	: m_class(cls), m_field(fld), m_name(name), m_type(mono_field_get_type(fld))
 {
-	m_type = mono_field_get_type(fld);
 }
 
 //================================================================//
@@ -358,56 +381,43 @@ ManagedProperty::ManagedProperty(MonoProperty& prop, ManagedClass& cls, const ch
 // Managed Class
 //
 //================================================================//
-
-ManagedClass::ManagedClass(ManagedAssembly* assembly, const std::string& ns, const std::string& cls)
-	: m_assembly(assembly), m_className(cls), m_namespaceName(ns), m_populated(false), m_numConstructors(0)
+ManagedClass::ManagedClass(MonoClass* cls)
+	: m_class(cls)
 {
-	m_class = mono_class_from_name(m_assembly->m_image, ns.c_str(), cls.c_str());
+	m_className = mono_class_get_name(cls);
+	m_namespaceName = mono_class_get_namespace(cls);
 
-	if (!m_class)
+	m_attrInfo = mono_custom_attrs_from_class(cls);
+
+	if (!m_attrInfo || !mono_custom_attrs_has_attr(m_attrInfo, cls))
 		return;
-	
-	m_attrInfo = mono_custom_attrs_from_class(m_class);
 
-	/* If there is no class name or namespace, something is fucky */
-	if (!cls.empty() && m_attrInfo)
-	{
-		if (mono_custom_attrs_has_attr(m_attrInfo, m_class))
-		{
-			auto obj = mono_custom_attrs_get_attr(m_attrInfo, m_class);
-			if (!obj)
-				return;
-			m_attributes.push_back(std::make_shared<ManagedObject>(obj, *this));
-		}
-	}
-
-	PopulateReflectionInfo();
+	if (MonoObject* obj = mono_custom_attrs_get_attr(m_attrInfo, cls))
+		m_attributes.push_back(std::make_shared<ManagedObject>(obj, *this));
 }
 
-ManagedClass::ManagedClass(ManagedAssembly* assembly, MonoClass* _cls, const std::string& ns, const std::string& cls)
-	: m_className(cls), m_class(_cls), m_namespaceName(ns), m_populated(false), m_assembly(assembly), m_numConstructors(0)
+ManagedClass::ManagedClass(ManagedAssembly* assembly, MonoClass* cls)
+	: ManagedClass(cls)
 {
-	m_attrInfo = mono_custom_attrs_from_class(m_class);
+	m_assembly = assembly;
 
-	/* If there is no class name or namespace, something is fucky */
-	if (!cls.empty() && m_attrInfo)
-	{
-		if (mono_custom_attrs_has_attr(m_attrInfo, m_class))
-		{
-			auto obj = mono_custom_attrs_get_attr(m_attrInfo, m_class);
-			if (!obj)
-				return;
-			m_attributes.push_back(std::make_shared<ManagedObject>(obj, *this));
-		}
-	}
-
-	PopulateReflectionInfo();
+	if (m_assembly)
+		PopulateReflectionInfo();
 }
 
 ManagedClass::~ManagedClass()
 {
 	if (m_attrInfo)
 		mono_custom_attrs_free(m_attrInfo);
+}
+
+void ManagedClass::InitializeStatics()
+{
+	int64Class = std::make_unique<ManagedClass>(mono_get_int64_class());
+	int16Class = std::make_unique<ManagedClass>(mono_get_int16_class());
+	int32Class = std::make_unique<ManagedClass>(mono_get_int32_class());
+	stringClass = std::make_unique<ManagedClass>(mono_get_string_class());
+	booleanClass = std::make_unique<ManagedClass>(mono_get_boolean_class());
 }
 
 void ManagedClass::PopulateReflectionInfo()
@@ -500,7 +510,7 @@ Ref<ManagedField> ManagedClass::FindField(const std::string& name)
 {
 	auto fieldIt = m_fields.find(name);
 
-	if (fieldIt == m_fields.end());
+	if (fieldIt == m_fields.end())
 		return nullptr;
 
 	return fieldIt->second;
@@ -517,7 +527,11 @@ Ref<ManagedProperty> ManagedClass::FindProperty(const std::string& prop)
 }
 
 /* Creates an instance of a this class */
-Ref<ManagedObject> ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params) {
+Ref<ManagedObject> ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params)
+{
+	if (!m_assembly)
+		return nullptr;
+
 	for (auto& method : m_methods) {
 		if (method->m_name == ".ctor" && method->MatchSignature(signature)) {
 			MonoObject* exception = nullptr;
@@ -649,34 +663,34 @@ ManagedObject::~ManagedObject() {
 	mono_gchandle_free(m_gcHandle);
 }
 
-bool ManagedObject::SetProperty(ManagedProperty& prop, void* value) {
+bool ManagedObject::SetProperty(ManagedProperty* prop, void* value) {
 	MonoObject* exception = nullptr;
 	void* params[] = {value};
 
-	if (!prop.m_setMethod)
+	if (!prop->m_setMethod)
 		return false;
 
-	MonoObject* res = mono_runtime_invoke(prop.m_setMethod, RawObject(), params, &exception);
+	MonoObject* res = mono_runtime_invoke(prop->m_setMethod, RawObject(), params, &exception);
 
 	if (exception)
 		return false;
 	return true;
 }
 
-bool ManagedObject::SetField(ManagedField& prop, void* value)
+bool ManagedObject::SetField(ManagedField* prop, void* value)
 {
-	mono_field_set_value(RawObject(), prop.RawField(), value);
+	mono_field_set_value(RawObject(), prop->RawField(), value);
 	return true;
 }
 
-bool ManagedObject::GetProperty(ManagedProperty& prop, void** outValue) {
+bool ManagedObject::GetProperty(ManagedProperty* prop, void** outValue) {
 	MonoObject* exception = nullptr;
 	void* params[] = {outValue};
 
-	if (!prop.m_getMethod)
+	if (!prop->m_getMethod)
 		return false;
 
-	MonoObject* res = mono_runtime_invoke(prop.m_getMethod, RawObject(), NULL, &exception);
+	MonoObject* res = mono_runtime_invoke(prop->m_getMethod, RawObject(), NULL, &exception);
 
 	if (!res || exception) {
 		return false;
@@ -686,9 +700,9 @@ bool ManagedObject::GetProperty(ManagedProperty& prop, void** outValue) {
 	return true;
 }
 
-bool ManagedObject::GetField(ManagedField& prop, void* outValue)
+bool ManagedObject::GetField(ManagedField* prop, void* outValue)
 {
-	mono_field_get_value(RawObject(), prop.RawField(), outValue);
+	mono_field_get_value(RawObject(), prop->RawField(), outValue);
 	return true;
 }
 
@@ -699,7 +713,7 @@ bool ManagedObject::SetProperty(const std::string& p, void* value)
 	if (propIt == m_class->m_properties.end())
 		return false;
 
-	return SetProperty(*propIt->second, value);
+	return SetProperty(propIt->second.get(), value);
 }
 
 bool ManagedObject::SetField(const std::string& p, void* value)
@@ -709,7 +723,7 @@ bool ManagedObject::SetField(const std::string& p, void* value)
 	if (fieldIt == m_class->m_fields.end())
 		return false;
 
-	return SetField(*fieldIt->second, value);
+	return SetField(fieldIt->second.get(), value);
 }
 
 bool ManagedObject::GetProperty(const std::string& p, void** outValue)
@@ -719,7 +733,7 @@ bool ManagedObject::GetProperty(const std::string& p, void** outValue)
 	if (propIt == m_class->m_properties.end())
 		return false;
 
-	return GetProperty(*propIt->second, outValue);
+	return GetProperty(propIt->second.get(), outValue);
 }
 
 bool ManagedObject::GetField(const std::string& p, void* outValue)
@@ -729,7 +743,7 @@ bool ManagedObject::GetField(const std::string& p, void* outValue)
 	if (fieldIt == m_class->m_fields.end())
 		return false;
 
-	return GetField(*fieldIt->second, outValue);
+	return GetField(fieldIt->second.get(), outValue);
 }
 
 MonoObject* ManagedObject::Invoke(struct ManagedMethod* method, void** params) {
@@ -863,14 +877,13 @@ Ref<ManagedClass> ManagedScriptContext::FindClass(ManagedAssembly& assembly, con
 	 * managed class */
 	MonoClass* monoClass = mono_class_from_name(assembly.m_image, ns.c_str(), cls.c_str());
 
-	if (monoClass)
-	{
-		auto _class = std::make_shared<ManagedClass>(&assembly, monoClass, ns, cls);
-		assembly.m_classes.insert({ns, _class});
-		return _class;
-	}
+	if (!monoClass)
+		return nullptr;
 
-	return nullptr;
+	Ref<ManagedClass> classRef = std::make_shared<ManagedClass>(&assembly, monoClass);
+	assembly.m_classes.insert(std::make_pair(classRef->ClassName(), classRef));
+
+	return classRef;
 }
 
 /* Used to locate a class not added by any assemblies explicitly loaded by the
@@ -1067,6 +1080,9 @@ ManagedScriptSystem::ManagedScriptSystem(ManagedScriptSystemSettings_t settings)
 
 	// Create a SINGLE jit environment!
 	g_jitDomain = mono_jit_init(settings.scriptSystemDomainName);
+
+	ManagedClass::InitializeStatics();
+	ManagedType::InitializeStatics();
 }
 
 ManagedScriptSystem::~ManagedScriptSystem()

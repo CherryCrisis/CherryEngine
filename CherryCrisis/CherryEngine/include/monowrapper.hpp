@@ -125,6 +125,9 @@ namespace mono
 	//      Represents a Reference to an object
 	//==============================================================================================//
 	template <typename T>
+	using UniqueRef = std::unique_ptr<T>;
+
+	template <typename T>
 	using Ref = std::shared_ptr<T>;
 
 	template <typename T>
@@ -187,23 +190,41 @@ namespace mono
 		bool m_isPtr : 1;
 		std::string m_name;
 
-	protected:
-		ManagedType(MonoType* type);
+		int m_typeindex = 0;
 
+		static UniqueRef<ManagedType> int16Type;
+		static UniqueRef<ManagedType> int32Type;
+		static UniqueRef<ManagedType> int64Type;
+		static UniqueRef<ManagedType> stringType;
+		static UniqueRef<ManagedType> booleanType;
+
+		static void InitializeStatics();
+
+	protected:
 		friend class ManagedMethod;
+		friend class ManagedScriptSystem;
 		friend class ManagedObject;
 
 	public:
+		ManagedType(MonoType* type);
+
 		bool IsStruct() const { return m_isStruct; }
-		bool IsVoid() const { return m_isVoid; }
-		bool IsRef() const { return m_isRef; }
-		bool IsPtr() const { return m_isPtr; }
+		bool IsVoid()	const { return m_isVoid; }
+		bool IsRef()	const { return m_isRef; }
+		bool IsPtr()	const { return m_isPtr; }
 
 		bool Equals(const ManagedType* other) const;
 
-		const std::string& Name() const;
+		const std::string& Name();
+		int TypeIndex() { return m_typeindex != 0 ? m_typeindex : m_typeindex = mono_type_get_type(m_type); }
 
 		inline MonoType* RawType() const { return m_type; }
+
+		static const ManagedType* GetInt16() { return int16Type.get(); }
+		static const ManagedType* GetInt32() { return int32Type.get(); }
+		static const ManagedType* GetInt64() { return int64Type.get(); }
+		static const ManagedType* GetString() { return stringType.get(); }
+		static const ManagedType* GetBoolean() { return booleanType.get(); }
 	};
 
 	//==============================================================================================//
@@ -267,10 +288,10 @@ namespace mono
 
 		EManagedObjectHandleType GCHandleType() { return m_handleType; }
 
-		bool SetProperty(class ManagedProperty& prop, void* value);
-		bool SetField(class ManagedField& prop, void* value);
-		bool GetProperty(class ManagedProperty& prop, void** outValue);
-		bool GetField(class ManagedField& prop, void* outValue);
+		bool SetProperty(class ManagedProperty* prop, void* value);
+		bool SetField(class ManagedField* prop, void* value);
+		bool GetProperty(class ManagedProperty* prop, void** outValue);
+		bool GetField(class ManagedField* prop, void* outValue);
 
 		bool SetProperty(const std::string& p, void* value);
 		bool SetField(const std::string& p, void* value);
@@ -298,8 +319,8 @@ namespace mono
 		std::string m_fullyQualifiedName;
 		int m_paramCount;
 
-		ManagedType* m_returnType = nullptr;
-		std::vector<ManagedType*> m_params;
+		Ref<ManagedType> m_returnType = nullptr;
+		std::vector<Ref<ManagedType>> m_params;
 
 		friend class ManagedClass;
 		friend ManagedHandle<ManagedMethod>;
@@ -343,11 +364,13 @@ namespace mono
 	{
 	private:
 		MonoClassField* m_field;
-		MonoType* m_type = nullptr;
+		ManagedType m_type = nullptr;
 		class ManagedClass& m_class;
 		std::string m_name;
 
 	public:
+		inline ManagedType* Type() { return &m_type; }
+
 		inline ManagedClass& Class() const { return m_class; }
 
 		inline MonoClassField* RawField() const { return m_field; }
@@ -408,10 +431,10 @@ namespace mono
 		std::string m_className;
 		MonoClass* m_class;
 		ManagedAssembly* m_assembly;
-		mono_byte m_numConstructors;
+		mono_byte m_numConstructors = 0;
 		mono_byte m_alignment;
 
-		bool m_populated : 1;
+		bool m_populated : 1 = false;
 		bool m_valueClass : 1;
 		bool m_delegateClass : 1;
 		bool m_enumClass : 1;
@@ -419,19 +442,27 @@ namespace mono
 
 		uint32_t m_size; // Size in bytes
 
+		static UniqueRef<ManagedClass> int16Class;
+		static UniqueRef<ManagedClass> int32Class;
+		static UniqueRef<ManagedClass> int64Class;
+		static UniqueRef<ManagedClass> stringClass;
+		static UniqueRef<ManagedClass> booleanClass;
+
+		static void InitializeStatics();
+
 		friend class ManagedScriptContext;
+		friend class ManagedScriptSystem;
 		friend class ManagedMethod;
 		friend class ManagedAssembly;
 		friend class ManagedObject;
-
 	protected:
 		void PopulateReflectionInfo();
 
 		void InvalidateHandle() override;
 
 	public:
-		ManagedClass(ManagedAssembly* assembly, const std::string& ns, const std::string& cls);
-		ManagedClass(ManagedAssembly* assembly, MonoClass* _cls, const std::string& ns, const std::string& cls);
+		ManagedClass(MonoClass* cls);
+		ManagedClass(ManagedAssembly* assembly, MonoClass* cls);
 		virtual ~ManagedClass();
 
 		void Reload();
@@ -480,6 +511,12 @@ namespace mono
 		inline bool IsUInt64();
 		inline bool IsUIntptr();
 		inline bool IsBool();
+
+		static const ManagedClass* GetInt16() { return int16Class.get(); }
+		static const ManagedClass* GetInt32() { return int32Class.get(); }
+		static const ManagedClass* GetInt64() { return int64Class.get(); }
+		static const ManagedClass* GetString() { return stringClass.get(); }
+		static const ManagedClass* GetBoolean() { return booleanClass.get(); }
 	};
 
 	/* NOTE: this class cannot have a handle pointed at it */

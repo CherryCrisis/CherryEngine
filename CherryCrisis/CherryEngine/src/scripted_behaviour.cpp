@@ -44,6 +44,31 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	behaviourInst->GetField("name", &(nameptr));
 
 	behaviourInst->GetField("num", &num);
+
+	MonoClass* int16Class = mono_get_int16_class();
+	MonoClass* int16Classbis = mono_get_int16_class();
+	MonoType* int16Type = mono_class_get_type(int16Class);
+	MonoType* int16Typebis = mono_class_get_type(int16Classbis);
+
+	MonoClass* int32Class = mono_get_int32_class();
+	MonoType* int32Type = mono_class_get_type(int32Class);
+
+	MonoClass* int64Class = mono_get_int64_class();
+	MonoType* int64Type = mono_class_get_type(int64Class);
+
+	MonoClass* stringClass = mono_get_string_class();
+	MonoType* stringType = mono_class_get_type(stringClass);
+
+	std::string ns = mono_class_get_namespace(mono_get_int16_class());
+
+	auto numFieldRef = managedClass->FindField("num");
+	mono::ManagedType* numType = numFieldRef->Type();
+
+	auto nameFieldRef = managedClass->FindField("name");
+	mono::ManagedType* nameType = nameFieldRef->Type();
+
+	bool isEqual = nameType->Equals(mono::ManagedType::GetString());
+
 }
 
 void ScriptedBehaviour::Start()
