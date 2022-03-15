@@ -21,6 +21,8 @@ public:
 		bool	m_isDown = false;
 		bool	m_isUp = false;
 		bool	m_isHeld = false;
+
+		Event<Input*> m_isUpdated;
 	};
 
 	struct Axis
@@ -63,19 +65,14 @@ public:
 		void AddAxis(Axis* newInput);
 	};
 
-private:
-
-	class KeyboardContext
+	struct KeyboardContext
 	{
-	public:
 		std::unordered_map<std::string, NamedAxis> m_axis;
 		std::unordered_map<std::string, NamedInput> m_namedKeys;
-
-		void AddAxisPreset(std::string name);
-		void AddButtonPreset(std::string name);
 	};
 
-	//std::unordered_map<std::string, KeyboardContext> m_contexts;
+private:
+	std::unordered_map<std::string, KeyboardContext> m_contexts;
 
 	//list of keys (intern glfw callback update key statut)
 	std::unordered_map<Keycode, Input> m_keys;
@@ -108,9 +105,18 @@ public:
 
 	CCMaths::Vector2 GetMouseWheel() { return m_mouseWheel; }
 
+	KeyboardContext* AddContext(std::string name);
 	void SetContext(KeyboardContext* context);
 
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset);
 	void UpdateKeys();
+
+	void AddKeyToPreset(std::string name, Keycode key);
+	void AddKeyToPreset(NamedInput* preset, Keycode key);
+	void AddAxisToPreset(std::string name, Axis* axis);
+	void AddAxisToPreset(NamedAxis* preset, Axis* axis);
+
+	NamedAxis* AddAxisPreset(std::string name);
+	NamedInput* AddButtonPreset(std::string name);
 };

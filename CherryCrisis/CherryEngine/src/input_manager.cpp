@@ -1,12 +1,11 @@
 #include "pch.hpp"
 
-#include <input_manager.hpp>
+#include "input_manager.hpp"
 
 #include <debug.hpp>
 
 template <>
 InputManager* Singleton<InputManager>::currentInstance = nullptr;
-
 
 InputManager::Input* InputManager::GetInputRef(Keycode key)
 {
@@ -46,6 +45,9 @@ void InputManager::Error(const char* name)
 
 bool InputManager::GetKey(const char* inputName)
 {
+	if (!m_activeContext)
+		return false;
+
 	if (m_activeContext->m_namedKeys.empty() || !m_activeContext->m_namedKeys.count(inputName))
 	{
 		Error(inputName);
@@ -67,6 +69,9 @@ bool InputManager::GetKey(const char* inputName)
 
 bool InputManager::GetKeyDown(const char* inputName)
 {
+	if (!m_activeContext)
+		return false;
+
 	if (m_activeContext->m_namedKeys.empty() || !m_activeContext->m_namedKeys.count(inputName))
 	{
 		Error(inputName);
@@ -88,6 +93,9 @@ bool InputManager::GetKeyDown(const char* inputName)
 
 bool InputManager::GetKeyUp(const char* inputName)
 {
+	if (!m_activeContext)
+		return false;
+
 	if (m_activeContext->m_namedKeys.empty() || !m_activeContext->m_namedKeys.count(inputName))
 	{
 		Error(inputName);
@@ -109,6 +117,9 @@ bool InputManager::GetKeyUp(const char* inputName)
 
 float InputManager::GetAxis(const char* axisName)
 {
+	if (!m_activeContext)
+		return 0.f;
+
 	if (m_activeContext->m_axis.empty() || !m_activeContext->m_axis.count(axisName))
 	{
 		Error(axisName);
@@ -146,7 +157,7 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 	input.m_isDown = action;
 	input.m_isUp   = !action;
 
-	//input.m_isUpdated.Invoke(&input);
+	input.m_isUpdated.Invoke(&input);
 
 	m_framePressedKeys.push_back((Keycode)key);
 }
@@ -198,7 +209,7 @@ void InputManager::NamedInput::AddInput(Keycode newInput)
 	
 	m_inputs[newInput] = inputManager->GetInputRef(newInput);
 
-	//m_inputs[newInput]->m_isUpdated.Bind(&NamedInput::Update, this);
+	m_inputs[newInput]->m_isUpdated.Bind(&NamedInput::Update, this);
 }
 
 void InputManager::NamedAxis::AddAxis(Axis* newAxis)
@@ -218,14 +229,64 @@ void InputManager::NamedAxis::Update(const float& value)
 	m_event.Invoke(m_oldValue);
 }
 
-void InputManager::KeyboardContext::AddAxisPreset(std::string name)
+InputManager::NamedAxis* InputManager::AddAxisPreset(std::string name)
 {
-	if (!m_namedKeys.count(name))
-		m_axis[name] = NamedAxis();
+	if (!m_activeContext)
+		return nullptr;
+
+	if (!m_activeContext->m_axis.count(name))
+		m_activeContext->m_axis[name] = NamedAxis();
+
+	return &m_activeContext->m_axis[name];
 }
 
-void InputManager::KeyboardContext::AddButtonPreset(std::string name)
+void InputManager::AddAxisToPreset(std::string name, Axis* axis)
 {
-	if (!m_namedKeys.count(name))
-		m_namedKeys[name] = NamedInput();
+	if (!m_activeContext || !m_activeContext->m_axis.count(name))
+		return;
+
+	m_activeContext->m_axis[name].AddAxis(axis);
+}
+
+void InputManager::AddAxisToPreset(NamedAxis* preset, Axis* axis)
+{
+	if (!m_activeContext)
+		return;
+
+	preset->AddAxis(axis);
+}
+
+InputManager::NamedInput* InputManager::AddButtonPreset(std::string name)
+{
+	if (!m_activeContext)
+		return nullptr;
+
+	if (!m_activeContext->m_namedKeys.count(name))
+		m_activeContext->m_namedKeys[name] = NamedInput();
+
+	return &m_activeContext->m_namedKeys[name];
+}
+
+void InputManager::AddKeyToPreset(std::string name, Keycode key)
+{
+	if (!m_activeContext || !m_activeContext->m_namedKeys.count(name))
+		return;
+
+	m_activeContext->m_namedKeys[name].AddInput(key);
+}
+
+void InputManager::AddKeyToPreset(NamedInput* preset, Keycode key)
+{
+	if (!m_activeContext)
+		return;
+
+	preset->AddInput(key);
+}
+
+InputManager::KeyboardContext* InputManager::AddContext(std::string name)
+{
+	if (!m_contexts.count(name))
+		m_contexts[name] = KeyboardContext();
+	
+	return &m_contexts[name];
 }

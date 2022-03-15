@@ -10,30 +10,34 @@ template<class... Args>
 class Event
 {
 private:
-	using ACallback = std::unique_ptr<CCCallback::ACallback<Args...>>;
+	using ACallback = CCCallback::ACallback<Args...>;
 
-	std::map<const std::type_index, ACallback> m_callbacks;
+	std::map<const std::type_index, ACallback*> m_callbacks;
+
+public :
+	virtual ~Event() = default;
 
 public:
 	Event() = default;
 
+	void Bind(std::unique_ptr<ACallback>& callback, const std::type_index& typeID)
+	{
+		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback*>(typeID, std::move(callback.release())));
+	}
+
 	template<typename T>
 	void Bind(void (T::* func)(Args... type), T* member)
 	{
-		ACallback callback = CCCallback::BindCallback(func, member);
-		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback>(typeid(func), std::move(callback)));
+		std::unique_ptr<ACallback> callback = CCCallback::BindCallback(func, member);
+		Bind(callback, typeid(func));
 	}
 
 	void Bind(void (*func)(Args... type))
 	{
-		ACallback callback = CCCallback::BindCallback(func);
-		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback>(typeid(func), std::move(callback)));
+		std::unique_ptr <ACallback> callback = CCCallback::BindCallback(func);
+		Bind(callback, typeid(func));
 	}
 
-	void Bind(ACallback& callback, const std::type_index& typeID)
-	{
-		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback>(typeID, std::move(callback)));
-	}
 
 	template<typename T>
 	void Unbind(void (T::* func)(Args... type))
@@ -53,7 +57,10 @@ public:
 		auto callback = m_callbacks.find(funcId);
 		
 		if (callback != m_callbacks.end())
+		{
+			delete callback.second;
 			m_callbacks.erase(funcId);
+		}
 		//else
 		//TODO: add debug log
 	}
@@ -61,7 +68,7 @@ public:
 	template<class... Args>
 	void Invoke(Args&&... args)
 	{
-		for (std::pair<const std::type_index, ACallback>& callback : m_callbacks)
+		for (std::pair<const std::type_index, ACallback*>& callback : m_callbacks)
 		{
 			callback.second->Invoke(std::forward<Args>(args)...);
 		}
