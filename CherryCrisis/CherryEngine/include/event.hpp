@@ -58,7 +58,7 @@ public:
 		
 		if (callback != m_callbacks.end())
 		{
-			delete callback.second;
+			delete callback->second;
 			m_callbacks.erase(funcId);
 		}
 		//else

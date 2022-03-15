@@ -55,7 +55,7 @@ void FrameDisplayer::Render()
 void FrameDisplayer::UpdateTextureSize(float width, float height)
 {
     glBindTexture(GL_TEXTURE_2D, m_ViewTex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei)width, (GLsizei)height, 0, GL_RGB, GL_UNSIGNED_INT, NULL);
     glBindTexture(GL_TEXTURE_2D, 0);
 
 }

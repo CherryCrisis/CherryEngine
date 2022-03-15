@@ -20,7 +20,7 @@
 // not sure about this
 static const std::filesystem::path AssetPath = "Assets";
  
-class GLFWwindow;
+struct GLFWwindow;
 class Entity;
 
 class EditorManager 

@@ -3,7 +3,8 @@
 #include <unordered_map>
 #include <functional>
 
-#include <core/panel.hpp>
+#include "core/panel.hpp"
+
 class Engine;
 class EditorManager;
 

@@ -138,6 +138,8 @@ public:
 			return { 255, 0, 0, 255 }; // Error
 		case ImGuiToastType_Info:
 			return { 0, 157, 255, 255 }; // Blue
+		default:
+			return { 255, 255, 255, 255 }; // White
 		}
 	}
 
@@ -155,6 +157,8 @@ public:
 			return ICON_FA_TIMES_CIRCLE;
 		case ImGuiToastType_Info:
 			return ICON_FA_INFO_CIRCLE;
+		default:
+			return NULL;
 		}
 	}
 
@@ -166,15 +170,15 @@ public:
 	{
 		const auto elapsed = get_elapsed_time();
 
-		if (elapsed > NOTIFY_FADE_IN_OUT_TIME + this->dismiss_time + NOTIFY_FADE_IN_OUT_TIME)
+		if (elapsed > (double)NOTIFY_FADE_IN_OUT_TIME + (double)this->dismiss_time + (double)NOTIFY_FADE_IN_OUT_TIME)
 		{
 			return ImGuiToastPhase_Expired;
 		}
-		else if (elapsed > NOTIFY_FADE_IN_OUT_TIME + this->dismiss_time)
+		else if (elapsed > (double)NOTIFY_FADE_IN_OUT_TIME + (double)this->dismiss_time)
 		{
 			return ImGuiToastPhase_FadeOut;
 		}
-		else if (elapsed > NOTIFY_FADE_IN_OUT_TIME)
+		else if (elapsed > (double)NOTIFY_FADE_IN_OUT_TIME)
 		{
 			return ImGuiToastPhase_Wait;
 		}
