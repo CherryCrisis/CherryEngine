@@ -195,8 +195,23 @@ namespace mono
 		static UniqueRef<ManagedType> int16Type;
 		static UniqueRef<ManagedType> int32Type;
 		static UniqueRef<ManagedType> int64Type;
+		static UniqueRef<ManagedType> uint16Type;
+		static UniqueRef<ManagedType> uint32Type;
+		static UniqueRef<ManagedType> uint64Type;
 		static UniqueRef<ManagedType> stringType;
 		static UniqueRef<ManagedType> booleanType;
+		static UniqueRef<ManagedType> threadType;
+		static UniqueRef<ManagedType> singleType;
+		static UniqueRef<ManagedType> byteType;
+		static UniqueRef<ManagedType> arrayType;
+		static UniqueRef<ManagedType> charType;
+		static UniqueRef<ManagedType> doubleType;
+		static UniqueRef<ManagedType> enumType;
+		static UniqueRef<ManagedType> exceptionType;
+		static UniqueRef<ManagedType> intptrType;
+		static UniqueRef<ManagedType> uintptrType;
+		static UniqueRef<ManagedType> sbyteType;
+		static UniqueRef<ManagedType> voidType;
 
 		static void InitializeStatics();
 
@@ -220,11 +235,26 @@ namespace mono
 
 		inline MonoType* RawType() const { return m_type; }
 
-		static const ManagedType* GetInt16() { return int16Type.get(); }
-		static const ManagedType* GetInt32() { return int32Type.get(); }
-		static const ManagedType* GetInt64() { return int64Type.get(); }
-		static const ManagedType* GetString() { return stringType.get(); }
-		static const ManagedType* GetBoolean() { return booleanType.get(); }
+		inline static const ManagedType* GetInt16()		{ return int16Type.get(); }
+		inline static const ManagedType* GetInt32()		{ return int32Type.get(); }
+		inline static const ManagedType* GetInt64()		{ return int64Type.get(); }
+		inline static const ManagedType* GetUint16()	{ return uint16Type.get(); }
+		inline static const ManagedType* GetUint32()	{ return uint32Type.get(); }
+		inline static const ManagedType* GetUint64()	{ return uint64Type.get(); }
+		inline static const ManagedType* GetString()	{ return stringType.get(); }
+		inline static const ManagedType* GetBoolean()	{ return booleanType.get(); }
+		inline static const ManagedType* GetThread()	{ return threadType.get(); }
+		inline static const ManagedType* GetSingle()	{ return singleType.get(); }
+		inline static const ManagedType* GetByte()		{ return byteType.get(); }
+		inline static const ManagedType* GetArray()		{ return arrayType.get(); }
+		inline static const ManagedType* GetChar()		{ return charType.get(); }
+		inline static const ManagedType* GetDouble()	{ return doubleType.get(); }
+		inline static const ManagedType* GetEnum()		{ return enumType.get(); }
+		inline static const ManagedType* GetException()	{ return exceptionType.get(); }
+		inline static const ManagedType* GetIntptr()	{ return intptrType.get(); }
+		inline static const ManagedType* GetUintptr()	{ return uintptrType.get(); }
+		inline static const ManagedType* GetSbyte()		{ return sbyteType.get(); }
+		inline static const ManagedType* GetVoid()		{ return voidType.get(); }
 	};
 
 	//==============================================================================================//
@@ -445,8 +475,23 @@ namespace mono
 		static UniqueRef<ManagedClass> int16Class;
 		static UniqueRef<ManagedClass> int32Class;
 		static UniqueRef<ManagedClass> int64Class;
+		static UniqueRef<ManagedClass> uint16Class;
+		static UniqueRef<ManagedClass> uint32Class;
+		static UniqueRef<ManagedClass> uint64Class;
 		static UniqueRef<ManagedClass> stringClass;
 		static UniqueRef<ManagedClass> booleanClass;
+		static UniqueRef<ManagedClass> threadClass;
+		static UniqueRef<ManagedClass> singleClass;
+		static UniqueRef<ManagedClass> byteClass;
+		static UniqueRef<ManagedClass> arrayClass;
+		static UniqueRef<ManagedClass> charClass;
+		static UniqueRef<ManagedClass> doubleClass;
+		static UniqueRef<ManagedClass> enumClass;
+		static UniqueRef<ManagedClass> exceptionClass;
+		static UniqueRef<ManagedClass> intptrClass;
+		static UniqueRef<ManagedClass> uintptrClass;
+		static UniqueRef<ManagedClass> sbyteClass;
+		static UniqueRef<ManagedClass> voidClass;
 
 		static void InitializeStatics();
 
@@ -512,11 +557,26 @@ namespace mono
 		inline bool IsUIntptr();
 		inline bool IsBool();
 
-		static const ManagedClass* GetInt16() { return int16Class.get(); }
-		static const ManagedClass* GetInt32() { return int32Class.get(); }
-		static const ManagedClass* GetInt64() { return int64Class.get(); }
-		static const ManagedClass* GetString() { return stringClass.get(); }
-		static const ManagedClass* GetBoolean() { return booleanClass.get(); }
+		inline static const ManagedClass* GetInt16()		{ return int16Class.get(); }
+		inline static const ManagedClass* GetInt32()		{ return int32Class.get(); }
+		inline static const ManagedClass* GetInt64()		{ return int64Class.get(); }
+		inline static const ManagedClass* GetUint16()		{ return uint16Class.get(); } 
+		inline static const ManagedClass* GetUint32()		{ return uint32Class.get(); } 
+		inline static const ManagedClass* GetUint64()		{ return uint64Class.get(); } 
+		inline static const ManagedClass* GetString()		{ return stringClass.get(); } 
+		inline static const ManagedClass* GetBoolean()		{ return booleanClass.get(); } 
+		inline static const ManagedClass* GetThread()		{ return threadClass.get(); } 
+		inline static const ManagedClass* GetSingle()		{ return singleClass.get(); } 
+		inline static const ManagedClass* GetByte()			{ return byteClass.get(); } 
+		inline static const ManagedClass* GetArray()		{ return arrayClass.get(); } 
+		inline static const ManagedClass* GetChar()			{ return charClass.get(); } 
+		inline static const ManagedClass* GetDouble()		{ return doubleClass.get(); } 
+		inline static const ManagedClass* GetEnum()			{ return enumClass.get(); } 
+		inline static const ManagedClass* GetException()	{ return exceptionClass.get(); } 
+		inline static const ManagedClass* GetIntptr()		{ return intptrClass.get(); } 
+		inline static const ManagedClass* GetUintptr()		{ return uintptrClass.get(); } 
+		inline static const ManagedClass* GetSbyte()		{ return sbyteClass.get(); } 
+		inline static const ManagedClass* GetVoid()			{ return voidClass.get(); } 
 	};
 
 	/* NOTE: this class cannot have a handle pointed at it */

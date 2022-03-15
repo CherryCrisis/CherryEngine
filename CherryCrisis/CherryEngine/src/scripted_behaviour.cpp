@@ -68,7 +68,7 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	mono::ManagedType* nameType = nameFieldRef->Type();
 
 	bool isEqual = nameType->Equals(mono::ManagedType::GetString());
-
+	bool isEqual2 = nameType->Equals(mono::ManagedType::GetEnum());
 }
 
 void ScriptedBehaviour::Start()
