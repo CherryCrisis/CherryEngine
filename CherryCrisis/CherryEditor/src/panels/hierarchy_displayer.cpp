@@ -5,6 +5,20 @@
 
 #include "scene.hpp"
 #include "transform.hpp"
+#include "core/editor_manager.hpp"
+
+#include<algorithm>
+
+template <typename T>
+bool contains(std::vector<T> vec, const T& elem)
+{
+    bool result = false;
+    if (find(vec.begin(), vec.end(), elem) != vec.end())
+    {
+        result = true;
+    }
+    return result;
+}
 
 void HierarchyDisplayer::Render() 
 {
@@ -20,7 +34,18 @@ void HierarchyDisplayer::Render()
             if (!entity.m_transform->IsRoot())
                 continue;
 
-            if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
+            std::string name = "Instance " + std::to_string(i);
+
+            if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, &entity)))
+            {
+                if (!ImGui::GetIO().KeyCtrl)    // Clear selection when CTRL is not held
+                    m_manager->m_selectedEntities.clear();
+
+                if (!contains(m_manager->m_selectedEntities, &entity))
+                    m_manager->m_selectedEntities.push_back(&entity);
+            }
+
+            /*if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
             {
                 if (entity.m_cameraComp)
                 {
@@ -57,7 +82,7 @@ void HierarchyDisplayer::Render()
 
 
                 ImGui::TreePop();
-            }
+            }*/
         }
     }
 
