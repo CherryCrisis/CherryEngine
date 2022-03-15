@@ -1,16 +1,16 @@
 #include "pch.hpp"
 
-#include <input_manager.hpp>
-
-//#define GLFW_INCLUDE_NONE
-//#include <GLFW/glfw3.h>
+#include "input_manager.hpp"
 
 #include <debug.hpp>
-
 
 template <>
 InputManager* Singleton<InputManager>::currentInstance = nullptr;
 
+InputManager::Input* InputManager::GetInputRef(Keycode key)
+{
+	return &m_keys[key];
+}
 
 bool InputManager::GetKey(Keycode key)
 {
@@ -27,52 +27,145 @@ bool InputManager::GetKeyUp(Keycode key)
 	return m_keys[key].m_isUp;
 }
 
-float InputManager::GetAxis(const char* axisName) 
+float InputManager::GetAxis(Keycode posKey, Keycode negKey)
 {
+	return (float)GetKey(posKey) - (float)GetKey(negKey);
+}
 
-	if (m_context->m_axis.empty() || !m_context->m_axis.count(axisName))
+void InputManager::Error(const char* name)
+{
+	static Debug* debug = Debug::GetInstance();
+
+	std::string errorLog = "Action ";
+	errorLog += name;
+	errorLog += " is not set up.";
+
+	debug->Log(errorLog.c_str());
+}
+
+bool InputManager::GetKey(const char* inputName)
+{
+	if (!m_activeContext)
+		return false;
+
+	if (m_activeContext->m_namedKeys.empty() || !m_activeContext->m_namedKeys.count(inputName))
 	{
-		Debug* debug = Debug::GetInstance();
+		Error(inputName);
 
-		std::string errorLog = "Axis ";
-		errorLog += axisName;
-		errorLog += " is not set up.";
+		return false;
+	}
+	else
+	{
+		NamedInput& current = m_activeContext->m_namedKeys[inputName];
+		for (auto& input : current.m_inputs)
+		{
+			if (input.second->m_isHeld)
+				return true;
+		}
 
-		debug->Log(errorLog.c_str());
+		return false;
+	}
+}
+
+bool InputManager::GetKeyDown(const char* inputName)
+{
+	if (!m_activeContext)
+		return false;
+
+	if (m_activeContext->m_namedKeys.empty() || !m_activeContext->m_namedKeys.count(inputName))
+	{
+		Error(inputName);
 
 		return 0.f;
 	}
 	else
 	{
-		Axis& current = m_context->m_axis[axisName];
+		NamedInput& current = m_activeContext->m_namedKeys[inputName];
+		for (auto& input : current.m_inputs)
+		{
+			if (input.second->m_isDown)
+				return true;
+		}
 
-		return GetKey(current.m_positiveInput) - GetKey(current.m_negativeInput);
+		return false;
+	}
+}
+
+bool InputManager::GetKeyUp(const char* inputName)
+{
+	if (!m_activeContext)
+		return false;
+
+	if (m_activeContext->m_namedKeys.empty() || !m_activeContext->m_namedKeys.count(inputName))
+	{
+		Error(inputName);
+
+		return 0.f;
+	}
+	else
+	{
+		NamedInput& current = m_activeContext->m_namedKeys[inputName];
+		for (auto& input : current.m_inputs)
+		{
+			if (input.second->m_isUp)
+				return true;
+		}
+
+		return false;
+	}
+}
+
+float InputManager::GetAxis(const char* axisName)
+{
+	if (!m_activeContext)
+		return 0.f;
+
+	if (m_activeContext->m_axis.empty() || !m_activeContext->m_axis.count(axisName))
+	{
+		Error(axisName);
+
+		return 0.f;
+	}
+	else
+	{
+		float totalValue = 0.f;
+		NamedAxis& axis = m_activeContext->m_axis[axisName];
+		for (auto& input : axis.m_axis)
+		{
+			totalValue += input->m_value;
+			CCMaths::Clamp(totalValue, -1.f, 1.f);
+		}
+
+		return totalValue;
 	}
 }
 
 void InputManager::SetContext(KeyboardContext* context) 
 {
-	m_context = context;
+	m_activeContext = context;
 }
 
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) 
 {
 	if (action == 2)	return;
-	// action = 1 if pressed and 0 if released 
-	//Input input = m_keys[key];
+
+	// action = 1 if pressed and 0 if released
+
 	Input& input = m_keys[(Keycode)key];
 
-	input.m_isDown = action;
 	input.m_isHeld = action;
+	input.m_isDown = action;
 	input.m_isUp   = !action;
+
+	input.m_isUpdated.Invoke(&input);
 
 	m_framePressedKeys.push_back((Keycode)key);
 }
 
 void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	m_mouseWheel.x = xoffset; 
-	m_mouseWheel.y = yoffset;
+	m_mouseWheel.x = (float)xoffset; 
+	m_mouseWheel.y = (float)yoffset;
 }
 
 void InputManager::UpdateKeys() 
@@ -88,4 +181,112 @@ void InputManager::UpdateKeys()
 	}
 
 	m_framePressedKeys.clear();
+}
+
+void InputManager::Axis::Update(Input* input)
+{
+	InputManager* inputManager = InputManager::instance();
+	m_value = inputManager->GetAxis(this->m_positiveInput, this->m_negativeInput);
+
+	m_isUpdated.Invoke(m_value);
+}
+
+void InputManager::NamedInput::Update(Input* input)
+{
+	if (input->m_isDown)
+		m_pressed.Invoke();
+
+	else if (input->m_isHeld)
+		m_held.Invoke();
+
+	else if (input->m_isUp)
+		m_released.Invoke();
+}
+
+void InputManager::NamedInput::AddInput(Keycode newInput)
+{
+	InputManager* inputManager = InputManager::instance();
+	
+	m_inputs[newInput] = inputManager->GetInputRef(newInput);
+
+	m_inputs[newInput]->m_isUpdated.Bind(&NamedInput::Update, this);
+}
+
+void InputManager::NamedAxis::AddAxis(Axis* newAxis)
+{
+	newAxis->m_isUpdated.Bind(&NamedAxis::Update, this);
+
+	m_axis.push_back(newAxis);
+}
+
+void InputManager::NamedAxis::Update(const float& value)
+{
+	for (auto& input : m_axis)
+	{
+		m_oldValue += input->m_value;
+	}
+	
+	m_event.Invoke(m_oldValue);
+}
+
+InputManager::NamedAxis* InputManager::AddAxisPreset(std::string name)
+{
+	if (!m_activeContext)
+		return nullptr;
+
+	if (!m_activeContext->m_axis.count(name))
+		m_activeContext->m_axis[name] = NamedAxis();
+
+	return &m_activeContext->m_axis[name];
+}
+
+void InputManager::AddAxisToPreset(std::string name, Axis* axis)
+{
+	if (!m_activeContext || !m_activeContext->m_axis.count(name))
+		return;
+
+	m_activeContext->m_axis[name].AddAxis(axis);
+}
+
+void InputManager::AddAxisToPreset(NamedAxis* preset, Axis* axis)
+{
+	if (!m_activeContext)
+		return;
+
+	preset->AddAxis(axis);
+}
+
+InputManager::NamedInput* InputManager::AddButtonPreset(std::string name)
+{
+	if (!m_activeContext)
+		return nullptr;
+
+	if (!m_activeContext->m_namedKeys.count(name))
+		m_activeContext->m_namedKeys[name] = NamedInput();
+
+	return &m_activeContext->m_namedKeys[name];
+}
+
+void InputManager::AddKeyToPreset(std::string name, Keycode key)
+{
+	if (!m_activeContext || !m_activeContext->m_namedKeys.count(name))
+		return;
+
+	m_activeContext->m_namedKeys[name].AddInput(key);
+}
+
+void InputManager::AddKeyToPreset(NamedInput* preset, Keycode key)
+{
+	if (!m_activeContext)
+		return;
+
+	preset->AddInput(key);
+}
+
+InputManager::KeyboardContext* InputManager::AddContext(std::string name)
+{
+	if (!m_contexts.count(name))
+		m_contexts[name] = KeyboardContext();
+	
+	return &m_contexts[name];
 }
