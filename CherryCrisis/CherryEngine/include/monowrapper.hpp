@@ -246,9 +246,10 @@ namespace mono
 		bool IsPtr()	const { return m_isPtr; }
 
 		bool Equals(const ManagedType* other) const;
+		bool operator==(const ManagedType* other) const { return Equals(other); }
 
 		const std::string& Name();
-		int TypeIndex() { return m_typeindex != 0 ? m_typeindex : m_typeindex = mono_type_get_type(m_type); }
+		int TypeIndex() const { return m_typeindex; }
 
 		inline MonoType* RawType() const { return m_type; }
 
@@ -382,6 +383,18 @@ namespace mono
 	public:
 		ManagedMethod(MonoMethod* method, ManagedClass* cls);
 		virtual ~ManagedMethod();
+
+		template <typename RetT, typename ...Args>
+		std::function<RetT(MonoObject*, Args..., MonoException**)> GetMemberUnmanagedThunk()
+		{
+			return (RetT(*)(MonoObject*, Args..., MonoException**))mono_method_get_unmanaged_thunk(RawMethod());
+		}
+
+		template <typename RetT, typename ...Args>
+		std::function<RetT(Args..., MonoException**)> GetStaticUnmanagedThunk()
+		{
+			return (RetT(*)(Args..., MonoException**))mono_method_get_unmanaged_thunk(RawMethod());
+		}
 
 		ManagedAssembly& Assembly() const;
 
@@ -551,6 +564,7 @@ namespace mono
 		Ref<ManagedProperty> FindProperty(const char* prop);
 
 		Ref<ManagedObject> CreateInstance(std::vector<MonoType*> signature, void** params);
+		Ref<ManagedObject> CreateUnmanagedInstance(void* cPtr, bool ownMemory);
 
 		inline MonoType* RawType() const { return mono_class_get_type(m_class);	}
 

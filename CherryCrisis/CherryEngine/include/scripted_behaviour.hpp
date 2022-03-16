@@ -17,8 +17,8 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	mono::Ref<mono::ManagedMethod> managedUpdate;
 	mono::Ref<mono::ManagedMethod> managedStart;
 
-	std::function <void(MonoObject* _this, MonoException** _excep)> csUpdate;
-	std::function <void(MonoObject* _this, MonoException** _excep)> csStart;
+	std::function<void(MonoObject* _this, MonoException** _excep)> csUpdate;
+	std::function<void(MonoObject* _this, MonoException** _excep)> csStart;
 
 	std::string name;
 	int num;

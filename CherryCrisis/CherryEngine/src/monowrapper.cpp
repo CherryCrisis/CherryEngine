@@ -190,6 +190,7 @@ namespace mono
 		m_isStruct = mono_type_is_struct(type);
 		m_isRef = mono_type_is_reference(type);
 		m_isPtr = mono_type_is_pointer(type);
+		m_typeindex = mono_type_get_type(type);
 	}
 
 	void ManagedType::InitializeStatics()
@@ -218,7 +219,7 @@ namespace mono
 
 	bool ManagedType::Equals(const ManagedType* other) const
 	{
-		return mono_type_get_type(m_type) == mono_type_get_type(other->m_type);
+		return m_typeindex == other->m_typeindex;
 	}
 
 	const std::string& ManagedType::Name()
@@ -591,6 +592,12 @@ namespace mono
 		return nullptr;
 	}
 
+	Ref<ManagedObject> ManagedClass::CreateUnmanagedInstance(void* cPtr, bool ownMemory)
+	{
+		void* args[] = { &cPtr, &ownMemory };
+		return CreateInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
+	}
+
 	mono_byte ManagedClass::NumConstructors() const {
 		return m_numConstructors;
 	}
@@ -724,8 +731,6 @@ namespace mono
 			return false;
 
 		MonoObject* exception = nullptr;
-		void* params[] = {outValue};
-
 		MonoObject* res = mono_runtime_invoke(prop->m_getMethod, RawObject(), NULL, &exception);
 
 		if (!res || exception)

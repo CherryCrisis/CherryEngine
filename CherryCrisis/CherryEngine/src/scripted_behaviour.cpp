@@ -22,50 +22,37 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	CsScriptingSystem::GetInstance()->m_scriptSystem->DestroyContext(context.get());
 
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
-	
-	MonoClass* intPtrType = mono_get_intptr_class();
-	MonoClass* boolType = mono_get_boolean_class();
+	auto managedVector = context->FindClass("CCEngine", "Vector3");
+	auto handleRefClass = context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
+	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
+	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
+	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
 
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");
 
-	csUpdate = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedUpdate->RawMethod());
-	csStart = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedStart->RawMethod());
+	csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
+	csStart = managedStart->GetMemberUnmanagedThunk<void>();
+	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
 
-	bool value = false;
-	int* ptr = (int*)this;
-	void* args[] = { &ptr, &value };
-	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
+	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
+	
+	MonoObject* managedVec = nullptr;
+	behaviourInst->GetField("pos", &managedVec);
 
-	const char* nameptr = &name[0];
-	behaviourInst->GetField("name", &(nameptr));
+	MonoException* excep = nullptr;
+	MonoObject* ptrHandle = getCPtr(managedVec, &excep);
 
-	behaviourInst->GetField("num", &num);
+	void* unboxedHandle = mono_object_unbox(ptrHandle);
 
-	MonoClass* int16Class = mono_get_int16_class();
-	MonoClass* int16Classbis = mono_get_int16_class();
-	MonoType* int16Type = mono_class_get_type(int16Class);
-	MonoType* int16Typebis = mono_class_get_type(int16Classbis);
+	MonoObject* exception = nullptr;
+	MonoObject* res = mono_runtime_invoke(getHandleMethod, unboxedHandle, nullptr, &exception);
 
-	MonoClass* int32Class = mono_get_int32_class();
-	MonoType* int32Type = mono_class_get_type(int32Class);
+	if (!res || exception)
+		return;
 
-	MonoClass* int64Class = mono_get_int64_class();
-	MonoType* int64Type = mono_class_get_type(int64Class);
-
-	MonoClass* stringClass = mono_get_string_class();
-	MonoType* stringType = mono_class_get_type(stringClass);
-
-	std::string ns = mono_class_get_namespace(mono_get_int16_class());
-
-	auto numFieldRef = managedClass->FindField("num");
-	mono::ManagedType* numType = numFieldRef->Type();
-
-	auto nameFieldRef = managedClass->FindField("name");
-	mono::ManagedType* nameType = nameFieldRef->Type();
-
-	bool isEqual = nameType->Equals(mono::ManagedType::GetString());
-	bool isEqual2 = nameType->Equals(mono::ManagedType::GetEnum());
+	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
+	vecPtr->y = 90.f;
 }
 
 void ScriptedBehaviour::Start()
