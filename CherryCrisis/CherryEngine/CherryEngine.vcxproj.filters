@@ -435,6 +435,12 @@
     <ClInclude Include="include\scene_manager.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
+    <ClInclude Include="include\sound_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sound.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -636,6 +642,12 @@
     </ClCompile>
     <ClCompile Include="src\scene_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

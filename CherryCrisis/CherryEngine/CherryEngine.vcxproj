@@ -143,6 +143,8 @@
     <ClInclude Include="include\skybox.hpp" />
     <ClInclude Include="include\skybox_renderpass.hpp" />
     <ClInclude Include="include\renderpass_interface.hpp" />
+    <ClInclude Include="include\sound.hpp" />
+    <ClInclude Include="include\sound_manager.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
@@ -194,6 +196,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="interface\behaviour.i" />
     <None Include="interface\camera_comp.i" />
@@ -267,6 +270,8 @@
     <ClCompile Include="src\shader_program.cpp" />
     <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\skybox_renderpass.cpp" />
+    <ClCompile Include="src\sound.cpp" />
+    <ClCompile Include="src\sound_manager.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
