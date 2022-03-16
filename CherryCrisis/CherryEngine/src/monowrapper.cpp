@@ -794,8 +794,8 @@ namespace mono
 	//
 	//================================================================//
 
-	ManagedScriptContext::ManagedScriptContext(char* domainName, const char* baseImage)
-		: m_domainName(domainName), m_baseImage(baseImage) { }
+	ManagedScriptContext::ManagedScriptContext(char* domainName, const char* path, const char* baseImage)
+		: m_domainName(domainName), m_path(path), m_baseImage(baseImage) { }
 
 	ManagedScriptContext::~ManagedScriptContext()
 	{
@@ -823,7 +823,6 @@ namespace mono
 
 		LoadAssembly(m_baseImage.c_str());
 
-		m_initialized = true;
 		return true;
 	}
 
@@ -1132,14 +1131,13 @@ namespace mono
 		mono_jit_cleanup(m_rootDomain);
 	}
 
-	Ref<ManagedScriptContext> ManagedScriptSystem::CreateContext(char* domainName, const char* image)
+	Ref<ManagedScriptContext> ManagedScriptSystem::CreateContext(char* domainName, const char* path, const char* image)
 	{
-		Ref<ManagedScriptContext> ctx = std::make_shared<ManagedScriptContext>(domainName, image);
+		Ref<ManagedScriptContext> ctx = std::make_shared<ManagedScriptContext>(domainName, path, image);
 
 		if (!ctx->Init())
 			return nullptr;
-
-		m_contexts[domainName] = (ctx);
+		m_contexts[domainName] = ctx;
 		return ctx;
 	}
 

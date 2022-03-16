@@ -20,7 +20,6 @@ public class Vector3 : global::System.IDisposable {
   }
 
   internal static global::System.Runtime.InteropServices.HandleRef getCPtr(Vector3 obj) {
-            System.Console.WriteLine(obj.swigCPtr.Handle);
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 

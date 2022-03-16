@@ -620,16 +620,15 @@ namespace mono
 	public:
 		std::list<Ref<ManagedAssembly>> m_loadedAssemblies;
 		std::string m_domainName;
+		std::string m_path;
 		MonoDomain* m_domain = nullptr;
 		std::string m_baseImage;
-		bool m_initialized = false;
 
 	public:
 		friend class ManagedCompiler;
 		friend class ManagedClass;
 
-		using ExceptionCallbackT =
-			std::function<void(ManagedScriptContext*, ManagedAssembly*, MonoObject*, ManagedException_t)>;
+		using ExceptionCallbackT = std::function<void(ManagedScriptContext*, ManagedAssembly*, MonoObject*, ManagedException_t)>;
 
 	protected:
 		std::vector<ExceptionCallbackT> m_callbacks;
@@ -639,8 +638,11 @@ namespace mono
 		void PopulateReflectionInfo();
 
 	public:
-		ManagedScriptContext(char* domainName, const char* baseImage);
+		ManagedScriptContext(char* domainName, const char* path, const char* baseImage);
 		~ManagedScriptContext();
+
+		const std::string& GetImagePath() { return m_baseImage; }
+		const std::string& GetPath() { return m_path; }
 
 		bool Reload();
 
@@ -762,8 +764,10 @@ namespace mono
 		ManagedScriptSystem(ManagedScriptSystem&&) = delete;
 		ManagedScriptSystem() = delete;
 
-		Ref<ManagedScriptContext> CreateContext(char* domainName, const char* image);
+		Ref<ManagedScriptContext> CreateContext(char* domainName, const char* path, const char* image);
 
+		std::unordered_map<std::string, Ref<ManagedScriptContext>>& GetContextes() { return m_contexts; }
+			
 		void DestroyContext(ManagedScriptContext* ctx);
 
 		size_t NumActiveContexts() const { return m_contexts.size(); }

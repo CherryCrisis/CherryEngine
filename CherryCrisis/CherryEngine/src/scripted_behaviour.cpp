@@ -1,6 +1,5 @@
 #include "pch.hpp"
 
-#include <filesystem>
 #include "scripted_behaviour.hpp"
 
 #include "input_manager.hpp"
@@ -9,17 +8,9 @@
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
-	// TODO: Move this in the proper files
-	std::filesystem::path to("x64/Debug/CherryScripting.dll");
-	std::filesystem::path from = to;
-	to.replace_extension("copy.dll");
-
-	copy(from, to, std::filesystem::copy_options::update_existing);
-
 	char domainName[16] = "ScriptingDomain";
-	context = CsScriptingSystem::GetInstance()->m_scriptSystem->CreateContext(domainName, to.generic_string().c_str());
-
-	CsScriptingSystem::GetInstance()->m_scriptSystem->DestroyContext(context.get());
+	// TODO: Change path
+	context = CsScriptingSystem::GetInstance()->CreateContext(domainName, "x64/Debug/CherryScripting.dll");
 
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
 	auto managedVector = context->FindClass("CCEngine", "Vector3");
@@ -77,16 +68,7 @@ void ScriptedBehaviour::Reload()
 	MonoException* excep = nullptr;
 	csDispose(behaviourInst->RawObject(), true, &excep);
 
-	if (!context->Unload())
-		return;
-
-	std::filesystem::path to("x64/Debug/CherryScripting.dll");
-	std::filesystem::path from = to;
-	to.replace_extension("copy.dll");
-	copy(from, to, std::filesystem::copy_options::update_existing);
-
-	if (!context->Init())
-		return;
+	CsScriptingSystem::GetInstance()->ReloadContextes();
 
 	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
 	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
@@ -96,11 +78,8 @@ void ScriptedBehaviour::Reload()
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");
 
-	csUpdate = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedUpdate->RawMethod());
-	csStart = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedStart->RawMethod());
+	csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
+	csStart = managedStart->GetMemberUnmanagedThunk<void>();
 
-	bool value = false;
-	int* ptr = (int*)this;
-	void* args[] = { &ptr, &value };
-	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
+	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
 }
