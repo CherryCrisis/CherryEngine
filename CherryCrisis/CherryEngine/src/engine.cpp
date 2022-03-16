@@ -63,7 +63,7 @@ void Engine::PlayFile(const char* fileName)
 
 void Engine::TickEngine()
 {
-	ThreadPool::GetInstance()->Update(EChannelTask::MainThread); //TODO: stock threadpool in engine class
+	ThreadPool::GetInstance()->Update(EChannelTask::MAINTHREAD); //TODO: stock threadpool in engine class
 }
 
 void Engine::Tick() 

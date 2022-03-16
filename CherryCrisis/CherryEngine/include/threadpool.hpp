@@ -8,45 +8,29 @@
 #include <vector>
 #include <memory>
 
+#include "cherry_macros.hpp"
 #include "function.hpp"
 #include "callback.hpp"
 #include "event.hpp"
 
 enum class EChannelTask
 {
-	Multithread,
-	MainThread
-};
-
-class LockGuard
-{
-	std::shared_ptr<std::mutex> m_mutex;
-
-public :
-	LockGuard(std::shared_ptr<std::mutex>& mutex)
-		: m_mutex(mutex) 
-	{
-		m_mutex->lock();
-	}
-
-	~LockGuard()
-	{
-		m_mutex->unlock();
-	}
+	MULTITHREAD,
+	MAINTHREAD
 };
 
 class Task
 {
 public:
-	using AFunction = std::unique_ptr<CCFunction::AFunction>;
-
-	AFunction m_func;
+	std::unique_ptr<CCFunction::AFunction> m_func;
 
 	Task() = default;
-	Task(AFunction& func) : m_func(std::move(func)) {}
+	Task(std::unique_ptr<CCFunction::AFunction>& func) : m_func(std::move(func)) {}
+
+	virtual ~Task() = default;
 };
 
-class ThreadPool
+class CCENGINE_API ThreadPool
 {
 private:
 	std::queue<std::unique_ptr<Task>>	m_multiThreadsTasks;
@@ -63,12 +47,11 @@ private:
 public:
 
 	ThreadPool();
-	~ThreadPool();
+	virtual ~ThreadPool();
 
 	static ThreadPool* GetInstance();
-	
-	using AFunction = std::unique_ptr<CCFunction::AFunction>;
 
-	void CreateTask(AFunction& function, EChannelTask channelTask);
+	void RethrowExceptions(std::exception_ptr exeption);
+	void CreateTask(std::unique_ptr<CCFunction::AFunction>& function, EChannelTask channelTask);
 	void Update(EChannelTask channelTask);
 };

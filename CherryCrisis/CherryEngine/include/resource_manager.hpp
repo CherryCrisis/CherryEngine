@@ -21,9 +21,8 @@ class CCENGINE_API ResourceManager
 {
 private:
 	std::unordered_multimap<std::type_index, std::shared_ptr<Resource>> m_resources;
-	std::unordered_map<std::type_index, std::shared_ptr<std::mutex>> m_resourceLocks;
 
-	std::shared_ptr<std::mutex> lockRM;
+	std::mutex m_lockResources;
 
 	static ResourceManager* m_instance;
 
@@ -33,6 +32,9 @@ private:
 	void AddResourceWithCallback(const char* filepath, bool verifIsExist,
 		CCCallback::AWrapCallback* wrappedCallback, Args... args);
 
+	template<class T>
+	Resource::Ref<T> CreateResource(const char* filepath);
+
 public:
 	static ResourceManager* GetInstance();
 
@@ -41,7 +43,6 @@ public:
 
 	template<class T = Resource, typename... Args>
 	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
-
 
 	template<class T = Resource, class CallbackType, typename... Args>
 	void AddResourceMultiThreads(const char* filepath, bool verifIsExist,

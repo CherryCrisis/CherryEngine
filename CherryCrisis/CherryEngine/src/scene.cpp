@@ -29,12 +29,8 @@ void Scene::Load(Ref<Scene> scene, const char* filePath)
 {
 	auto RM = ResourceManager::GetInstance();
 
-	auto callback_1 = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
-	auto callback_2 = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
-	auto callback_3 = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
-	RM->AddResourceMultiThreads<ModelBase>("../assets/Backpack-1/backpack.obj", true, callback_1);
-	RM->AddResourceMultiThreads<ModelBase>("../assets/Backpack-1/backpack.obj", true, callback_2);
-	RM->AddResourceMultiThreads<ModelBase>("../assets/Backpack-1/backpack.obj", true, callback_3);
+	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
+	RM->AddResourceMultiThreads<ModelBase>("../assets/Backpack-1/backpack.obj", true, callback);
 
 	Entity& light = scene->m_entities.emplace_back();
 	light.m_lightComp = new LightComponent();

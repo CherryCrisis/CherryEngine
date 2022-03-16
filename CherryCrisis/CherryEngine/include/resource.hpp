@@ -3,13 +3,18 @@
 #include <string>
 #include <memory>
 
+#include "cherry_macros.hpp"
 #include "event.hpp"
 
-class Resource
+class ThreadPool;
+
+class CCENGINE_API Resource
 {
 protected:
 	const size_t hashId;
 	const std::string filepath;
+	
+	void OnLoaded(std::shared_ptr<Resource> resource) { m_onLoaded.Invoke(resource); }
 
 public:
 	template <typename ResourceT>
@@ -25,6 +30,7 @@ public:
 	const size_t GetHashId() const { return hashId; }
 	const char* GetFilepath() const { return filepath.c_str(); }
 
-	void IsLoaded(std::shared_ptr<Resource> resource) { m_onLoaded.Invoke(resource); }
+	void IsLoaded(std::shared_ptr<Resource> resource, ThreadPool* threadpool);
+
 };
 

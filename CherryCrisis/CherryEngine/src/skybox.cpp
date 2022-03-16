@@ -9,8 +9,15 @@
 
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
+#include "threadpool.hpp"
 
 Skybox::Skybox()
+{
+	auto function = CCFunction::BindFunction(&Skybox::Load, this);
+	ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
+}
+
+void Skybox::Load()
 {
 	m_mesh = ResourceManager::GetInstance()->AddResource<Mesh>("CC_normalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <set>
 #include <memory>
 #include <typeindex>
 
@@ -12,65 +12,76 @@ class Event
 private:
 	using ACallback = CCCallback::ACallback<Args...>;
 
-	std::map<const std::type_index, ACallback*> m_callbacks;
-
-public :
-	virtual ~Event() = default;
-
+	std::set<ACallback*> m_callbacks;
 public:
 	Event() = default;
-
-	void Bind(std::unique_ptr<ACallback>& callback, const std::type_index& typeID)
+	virtual ~Event()
 	{
-		m_callbacks.insert(std::make_pair<const std::type_index&, ACallback*>(typeID, std::move(callback.release())));
+		for (ACallback* callback : m_callbacks)
+		{
+			m_callbacks.erase(callback);
+			delete callback;
+		}
+	}
+
+	void Bind(std::unique_ptr<ACallback>& callback)
+	{
+		m_callbacks.insert(callback.release());
 	}
 
 	template<typename T>
 	void Bind(void (T::* func)(Args... type), T* member)
 	{
 		std::unique_ptr<ACallback> callback = CCCallback::BindCallback(func, member);
-		Bind(callback, typeid(func));
+		Bind(callback);
 	}
 
 	void Bind(void (*func)(Args... type))
 	{
 		std::unique_ptr<ACallback> callback = CCCallback::BindCallback(func);
-		Bind(callback, typeid(func));
+		Bind(callback);
 	}
 
-
 	template<typename T>
-	void Unbind(void (T::* func)(Args... type))
+	void Unbind(void (T::* func)(Args... type), T* member)
 	{
-		const std::type_index id = typeid(func);
-		Unbind(id);
+		for (ACallback* callback : m_callbacks)
+		{
+			if (auto memberCallback = static_cast<CCCallback::MemberCallback<T, Args...>*>(callback))
+			{
+				if (memberCallback->m_func == func && memberCallback->m_member == member)
+				{
+					m_callbacks.erase(callback);
+					delete callback;
+
+					return;
+				}
+			}
+		}
 	}
 
 	void Unbind(void (*func)(Args... type))
 	{
-		const std::type_index id = typeid(func);
-		Unbind(id);
-	}
-
-	void Unbind(const std::type_index& funcId)
-	{
-		auto callback = m_callbacks.find(funcId);
-		
-		if (callback != m_callbacks.end())
+		for (ACallback* callback : m_callbacks)
 		{
-			delete callback.second;
-			m_callbacks.erase(funcId);
+			if (auto nonMemberCallback = static_cast<CCCallback::NonMemberCallback<Args...>*>(callback))
+			{
+				if (nonMemberCallback->m_func == func)
+				{
+					m_callbacks.erase(callback);
+					delete callback;
+					return;
+				}
+			}
 		}
-		//else
-		//TODO: add debug log
 	}
 
 	template<class... Args>
 	void Invoke(Args... args)
 	{
-		for (std::pair<const std::type_index, ACallback*>& callback : m_callbacks)
+		for (ACallback* callback : m_callbacks)
 		{
-			callback.second->Invoke(std::forward<Args>(args)...);
+			callback->Invoke(std::forward<Args>(args)...);
 		}
 	}
 };

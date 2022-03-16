@@ -16,7 +16,7 @@ ThreadPool::ThreadPool()
 	const int threadCount = std::thread::hardware_concurrency() - 1;
 	for (int i = 0; i < threadCount; ++i)
 	{
-		std::thread slave(&ThreadPool::Update, this, EChannelTask::Multithread);
+		std::thread slave(&ThreadPool::Update, this, EChannelTask::MULTITHREAD);
 		m_threads.push_back(std::move(slave));
 	}
 }
@@ -31,24 +31,24 @@ ThreadPool::~ThreadPool()
 	}
 }
 
-void ThreadPool::CreateTask(AFunction& task, EChannelTask channelTask)
+void ThreadPool::CreateTask(std::unique_ptr<CCFunction::AFunction>& task, EChannelTask channelTask)
 {
-	if (channelTask == EChannelTask::Multithread)
+	if (channelTask == EChannelTask::MULTITHREAD)
 	{
 		std::unique_lock<std::mutex> queueLock(m_multiThreadsQueueLock);
-		m_multiThreadsTasks.push(std::make_unique<Task>(Task(task)));
+		m_multiThreadsTasks.push(std::make_unique<Task>(task));
 		m_condition.notify_one();
 	}
 	else
 	{
 		std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
-		m_mainThreadTasks.push(std::make_unique<Task>(Task(task)));
+		m_mainThreadTasks.push(std::make_unique<Task>(task));
 	}
 }
 
 void ThreadPool::Update(EChannelTask channelTask)
 {
-	if (channelTask == EChannelTask::Multithread)
+	if (channelTask == EChannelTask::MULTITHREAD)
 	{
 		while (!m_stopThreads)
 		{
@@ -68,13 +68,16 @@ void ThreadPool::Update(EChannelTask channelTask)
 				m_multiThreadsTasks.pop();
 			}
 
-			task->m_func->Invoke();
-
-			/*if (task->m_onFinished != nullptr)
+			try
 			{
-				std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
-				m_mainThreadTasks.push(std::move(task));
-			}*/
+				task->m_func->Invoke();
+			}
+			catch (...)
+			{
+				std::exception_ptr exception = std::current_exception();
+				auto exeptionFunc = CCFunction::BindFunctionUnsafe(&ThreadPool::RethrowExceptions, this, exception);
+				CreateTask(exeptionFunc, EChannelTask::MAINTHREAD);
+			}
 		}
 	}
 	else
@@ -94,6 +97,11 @@ void ThreadPool::Update(EChannelTask channelTask)
 		task->m_func->Invoke();
 		
 	}
+}
+
+void ThreadPool::RethrowExceptions(std::exception_ptr exception)
+{
+	std::rethrow_exception(exception);
 }
 
 
