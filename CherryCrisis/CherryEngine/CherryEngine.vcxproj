@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\csscripting_system.hpp" />
     <ClInclude Include="externals\include\assimp\aabb.h" />
     <ClInclude Include="externals\include\assimp\ai_assert.h" />
     <ClInclude Include="externals\include\assimp\anim.h" />
@@ -126,6 +127,7 @@
     <ClInclude Include="include\maths\vector3.hpp" />
     <ClInclude Include="include\maths\vector4.hpp" />
     <ClInclude Include="include\mesh.hpp" />
+    <ClInclude Include="include\metadata.hpp" />
     <ClInclude Include="include\model.hpp" />
     <ClInclude Include="include\model_base.hpp" />
     <ClInclude Include="include\model_loader.hpp" />
@@ -217,6 +219,7 @@
     <None Include="interface\vector4.i" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\csscripting_system.cpp" />
     <ClCompile Include="externals\src\gl.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

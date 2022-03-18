@@ -20,7 +20,20 @@ namespace CCScripting
 
 		public void Start()
 		{
+			Debug.GetInstance().Log(pos);
 		}
+
+		void SetRotation()
+        {
+			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
+
+		}
+
+		Vector3 pos = new Vector3(5f, 3f, 7f);
+
+		public string name = "Je suis un nom";
+		public int num = 5;
 
 		float deltaTime = 0.01f;
 		float time = 0f;
@@ -28,7 +41,8 @@ namespace CCScripting
 		{
 			time += 0.01f;
 
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			SetRotation();
+
 
 			float timeScaledSpeed = deltaTime * 2f;
 
