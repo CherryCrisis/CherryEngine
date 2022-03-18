@@ -19,7 +19,7 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height)
 
     glViewport(0, 0, (GLsizei)width, (GLsizei)height);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-    RenderManager::DrawScene();
+    RenderManager::DrawScene(width, height);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

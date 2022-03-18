@@ -120,7 +120,7 @@ void BasicRenderPass::Remove(CameraComponent* toGenerate)
 	m_camera = nullptr;
 }
 
-void BasicRenderPass::Execute()
+void BasicRenderPass::Execute(const float x, const float y)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -131,6 +131,7 @@ void BasicRenderPass::Execute()
 
 	if (m_camera)
 	{
+		m_camera->m_camera.aspect = x / y;
 		CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera->m_camera.fovY, m_camera->m_camera.aspect, m_camera->m_camera.near, m_camera->m_camera.far);
 		CCMaths::Matrix4 view = Matrix4::RotateYXZ(-m_camera->m_transform->GetRotation()) * Matrix4::Translate(m_camera->m_transform->GetPosition());
 
