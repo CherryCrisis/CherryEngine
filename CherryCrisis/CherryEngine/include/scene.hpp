@@ -31,6 +31,4 @@ public:
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void AddEntity(Entity* toAdd);
-
-	static Ref<Scene> Create(const char* filePath);
 };

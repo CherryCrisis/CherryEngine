@@ -36,7 +36,7 @@ int main()
     {
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
-    InputManager* IM = InputManager::instance();
+    InputManager* IM = InputManager::GetInstance();
     Engine engine{};
 
     auto func = [](GLFWwindow* w, int k, int s, int a, int m)
@@ -56,7 +56,7 @@ int main()
 
     while (glfwWindowShouldClose(window) == false)
     {
-        InputManager::instance()->UpdateKeys();
+        InputManager::GetInstance()->UpdateKeys();
         glfwPollEvents();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

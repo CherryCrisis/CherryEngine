@@ -39,22 +39,12 @@ void Scene::AddEntity(Entity* toAdd)
 	m_entities[GetUniqueEntityName(toAdd->GetName())] = toAdd;
 }
 
-Resource::Ref<Scene> Scene::Create(const char* filePath)
+void Scene::Load(Resource::Ref<Scene> scene, const char* filePath)
 {
-	Scene* scene = new Scene(filePath);
-
 	auto RM = ResourceManager::GetInstance();
 
-	std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("Assets/backpack.obj", true);
-
-	Entity* root = new Entity("Root");
-	std::vector<Entity*> children = modelBase->GenerateEntities(root);
-	root->AddBehaviour<ScriptedBehaviour>();
-
-	scene->AddEntity(root);
-
-	for (Entity* child : children)
-		scene->AddEntity(child);
+	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
+	RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
@@ -64,24 +54,20 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 	camera->AddBehaviour<CameraComponent>()->m_transform = camera->AddBehaviour<Transform>();
 
 	scene->AddEntity(camera);
+}
 
-	return Ref<Scene>(scene);
 void Scene::GenerateEntities(std::shared_ptr<Resource> resource)
 {
 	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
 
-	Entity root;
-	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
-	m_entities.push_back(std::move(root));
+	Entity* root = new Entity("Root");
+	std::vector<Entity*> children = modelBase->GenerateEntities(root);
+	root->AddBehaviour<ScriptedBehaviour>();
 
-	for (const Entity& child : children)
-	{
-		m_entities.push_back(std::move(child));
-		root.m_transform->AddChildren(child.m_transform);
-	}
+	AddEntity(root);
 
-	std::cout << "entities generated : " << resource->GetFilepath() << std::endl;
-}
+	for (Entity* child : children)
+		AddEntity(child);
 }
 
 void Scene::Start()

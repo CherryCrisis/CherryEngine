@@ -15,8 +15,8 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
-#include "printer.hpp"
 #include "resource_manager.hpp"
+#include "scene_manager.hpp"
 #include "render_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
@@ -58,10 +58,11 @@ bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_
 EditorManager::EditorManager() 
 {
     // To Replace too
-    inputs = InputManager::instance();
+    inputs = InputManager::GetInstance();
 
     // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
+    SceneManager::GetInstance()->SetCurrentScene(scene);
     m_hierarchyDisplayer.SetScene(scene.get());
     
     { // To Replace with Resource Manager Texture Handler
@@ -255,12 +256,6 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
             ImGui::SameLine();
             if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
             ImGui::EndPopup();
-        }
-
-        if (ImGui::Button("Add Printer"))
-        {
-            Printer* printer = new Printer();
-            m_engine->behaviours.push_back(printer);
         }
 
         if (ImGui::Button("Success"))

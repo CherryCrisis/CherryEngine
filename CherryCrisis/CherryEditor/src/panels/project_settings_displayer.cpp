@@ -78,12 +78,12 @@ void ProjectSettingsDisplayer::General::Fill()
 
 ProjectSettingsDisplayer::Input::Input(std::string name) : PanelCategory(name)
 {
-    userContext = InputManager::instance()->AddContext("user Context");
+    userContext = InputManager::GetInstance()->AddContext("user Context");
 }
 
 void ProjectSettingsDisplayer::Input::Fill()
 {
-    InputManager* IM = InputManager::instance();
+    InputManager* IM = InputManager::GetInstance();
 
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 

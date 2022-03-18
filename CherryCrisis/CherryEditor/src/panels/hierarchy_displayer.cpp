@@ -27,22 +27,23 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
-        for (size_t i = 0; i < m_displayedScene->m_entities.size(); i++)
+        int count = 0;
+        for (auto& [entityName, entityRef] : m_displayedScene->m_entities)
         {
-            Entity& entity = m_displayedScene->m_entities[i];
+            Transform* entityTransform = entityRef->GetBehaviour<Transform>();
 
-            if (!entity.m_transform->IsRoot())
+            if (!entityTransform || !entityTransform->IsRoot())
                 continue;
 
-            std::string name = "Instance " + std::to_string(i);
+            std::string name = "Instance " + std::to_string(count);
 
-            if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, &entity)))
+            if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, entityRef)))
             {
                 if (!ImGui::GetIO().KeyCtrl)    // Clear selection when CTRL is not held
                     m_manager->m_selectedEntities.clear();
 
-                if (!contains(m_manager->m_selectedEntities, &entity))
-                    m_manager->m_selectedEntities.push_back(&entity);
+                if (!contains(m_manager->m_selectedEntities, entityRef))
+                    m_manager->m_selectedEntities.push_back(entityRef);
             }
 
             /*if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
@@ -83,6 +84,7 @@ void HierarchyDisplayer::Render()
 
                 ImGui::TreePop();
             }*/
+            count++;
         }
     }
 

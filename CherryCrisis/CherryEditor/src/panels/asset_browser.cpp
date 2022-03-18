@@ -3,7 +3,8 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <stdio.h>
+#include <cstdio>
+#include <iostream>
 
 #include <windows.h>
 #undef far

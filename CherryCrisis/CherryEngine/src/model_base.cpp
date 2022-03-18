@@ -2,6 +2,8 @@
 
 #include "model_base.hpp"
 
+#include "model_renderer.hpp"
+#include "transform.hpp"
 #include "threadpool.hpp"
 
 #include "model_loader.hpp"

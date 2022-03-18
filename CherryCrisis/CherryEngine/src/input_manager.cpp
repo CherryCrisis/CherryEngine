@@ -333,7 +333,7 @@ int InputManager::ChangeInputInAction(ActionButtons* action, Keycode oldKey, Key
 
 void InputManager::ActionButtons::AddInput(Keycode newInput)
 {
-	InputManager* inputManager = InputManager::instance();
+	InputManager* inputManager = InputManager::GetInstance();
 
 	m_inputs[newInput] = inputManager->GetInputRef(newInput);
 
@@ -348,7 +348,7 @@ int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
 	if (m_inputs.contains(newKey))
 		return 0;
 
-	m_inputs[oldKey]->m_isUpdated.Unbind(&ActionButtons::Update);
+	m_inputs[oldKey]->m_isUpdated.Unbind(&ActionButtons::Update, this);
 	
 	m_inputs.erase(oldKey);
 	AddInput(newKey);
@@ -441,17 +441,17 @@ void InputManager::SetNegativeKey(Axis* axis, Keycode key)
 
 void InputManager::Axis::BindUpdate()
 {
-	InputManager* inputManager = InputManager::instance();
+	InputManager* inputManager = InputManager::GetInstance();
 	inputManager->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
 	inputManager->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
 }
 
 void InputManager::Axis::SetPositiveKey(Keycode key)
 {
-	InputManager* inputManager = InputManager::instance();
+	InputManager* inputManager = InputManager::GetInstance();
 
 	// TODO: Unbind old key update
-	inputManager->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update);
+	inputManager->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
 
 	m_positiveKey = key;
 	inputManager->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
@@ -459,10 +459,10 @@ void InputManager::Axis::SetPositiveKey(Keycode key)
 
 void InputManager::Axis::SetNegativeKey(Keycode key)
 {
-	InputManager* inputManager = InputManager::instance();
+	InputManager* inputManager = InputManager::GetInstance();
 
 	// TODO: Unbind old key update
-	inputManager->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update);
+	inputManager->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
 
 	m_negativeKey = key;
 	inputManager->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
@@ -477,7 +477,7 @@ void InputManager::Axis::Update(Input* input)
 
 float InputManager::Axis::Value()
 {
-	InputManager* inputManager = InputManager::instance();
+	InputManager* inputManager = InputManager::GetInstance();
 	m_value = inputManager->GetAxis(this->m_positiveKey, this->m_negativeKey);
 
 	return m_value;
