@@ -62,7 +62,7 @@ void SkyboxRenderPass::Remove(Skybox* toGenerate)
 		m_skybox = nullptr;
 }
 
-void SkyboxRenderPass::Execute()
+void SkyboxRenderPass::Execute(const float x, const float y)
 {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);

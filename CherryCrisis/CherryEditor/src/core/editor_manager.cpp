@@ -15,11 +15,9 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
-#include <cherry_header.hpp>
-#include "scene.hpp"
+#include "printer.hpp"
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
-#include "scene_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
 bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height)
@@ -59,26 +57,26 @@ bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_
 
 EditorManager::EditorManager() 
 {
-    // TODO: Remove this
-    inputs = InputManager::GetInstance();
-    // TODO: Remove this too
+    // To Replace too
+    inputs = InputManager::instance();
+
+    // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
-    SceneManager::GetInstance()->SetCurrentScene(scene);
     m_hierarchyDisplayer.SetScene(scene.get());
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
 
-        if (!LoadTextureFromFile("internal/icons/play_icon.png", &PlayIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
             std::cout << "failed to load Play icon" << std::endl;
 
-        if (!LoadTextureFromFile("internal/icons/pause_icon.png", &PauseIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/pause_icon.png", &PauseIcon, &null, &null))
             std::cout << "failed to load Pause icon" << std::endl;
 
-        if (!LoadTextureFromFile("internal/icons/replay_icon.png", &ReplayIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/replay_icon.png", &ReplayIcon, &null, &null))
             std::cout << "failed to load Replay icon" << std::endl;
 
-        if (!LoadTextureFromFile("internal/icons/stop_icon.png", &StopIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
             std::cout << "failed to load Stop icon" << std::endl;
     }
 }
@@ -257,6 +255,12 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
             ImGui::SameLine();
             if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
             ImGui::EndPopup();
+        }
+
+        if (ImGui::Button("Add Printer"))
+        {
+            Printer* printer = new Printer();
+            m_engine->behaviours.push_back(printer);
         }
 
         if (ImGui::Button("Success"))

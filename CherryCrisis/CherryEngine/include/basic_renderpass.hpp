@@ -65,5 +65,5 @@ public:
 	template <>
 	void Remove(Light* toGenerate);
 
-	void Execute() override;
+	void Execute(const float x = 0, const float y = 0) override;
 };

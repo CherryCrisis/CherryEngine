@@ -5,8 +5,20 @@
 
 #include "scene.hpp"
 #include "transform.hpp"
-#include "light_component.hpp"
-#include "camera_component.hpp"
+#include "core/editor_manager.hpp"
+
+#include<algorithm>
+
+template <typename T>
+bool contains(std::vector<T> vec, const T& elem)
+{
+    bool result = false;
+    if (find(vec.begin(), vec.end(), elem) != vec.end())
+    {
+        result = true;
+    }
+    return result;
+}
 
 void HierarchyDisplayer::Render() 
 {
@@ -15,29 +27,37 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
-        int count = 0;
-        for (auto& [entityName, entity] : m_displayedScene->m_entities)
+        for (size_t i = 0; i < m_displayedScene->m_entities.size(); i++)
         {
-            Transform* transform;
-            
-            if (!entity->TryGetBehaviour<Transform>(transform) || !transform->IsRoot())
+            Entity& entity = m_displayedScene->m_entities[i];
+
+            if (!entity.m_transform->IsRoot())
                 continue;
 
-            if (ImGui::TreeNode((void*)(intptr_t)count, "Instance %i", count))
+            std::string name = "Instance " + std::to_string(i);
+
+            if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, &entity)))
             {
-                CameraComponent* cameraComponent;
-                if (entity->TryGetBehaviour<CameraComponent>(cameraComponent))
+                if (!ImGui::GetIO().KeyCtrl)    // Clear selection when CTRL is not held
+                    m_manager->m_selectedEntities.clear();
+
+                if (!contains(m_manager->m_selectedEntities, &entity))
+                    m_manager->m_selectedEntities.push_back(&entity);
+            }
+
+            /*if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
+            {
+                if (entity.m_cameraComp)
                 {
-                    Camera& cam = cameraComponent->m_camera;
+                    Camera& cam = entity.m_cameraComp->m_camera;
                     ImGui::DragFloat("Near", &cam.near);
                     ImGui::DragFloat("Far", &cam.far);
                     ImGui::DragFloat("Fov", &cam.fovY);
                 }
 
-                LightComponent* lightComponent;
-                if (entity->TryGetBehaviour<LightComponent>(lightComponent))
+                if (entity.m_lightComp)
                 {
-                    Light& light = lightComponent->m_light;
+                    Light& light = entity.m_lightComp->m_light;
                     ImGui::Checkbox("LightIsPoint", &light.m_isPoint);
                     ImGui::DragFloat3("LightPosition", light.m_position.data, 0.5f);
                     ImGui::DragFloat3("LightAmbient", light.m_ambient.data, 0.5f);
@@ -45,28 +65,24 @@ void HierarchyDisplayer::Render()
                     ImGui::DragFloat3("LightSpecular", light.m_specular.data, 0.5f);
                 }
 
-                if (transform)
-                {
-                    Vector3 position = transform->GetPosition();
+                Vector3 position = entity.m_transform->GetPosition();
 
-                    if (ImGui::DragFloat3("Position", position.data, 0.5f))
-                        transform->SetPosition(position);
+                if (ImGui::DragFloat3("Position", position.data, 0.5f))
+                    entity.m_transform->SetPosition(position);
 
-                    Vector3 rotation = transform->GetRotation() * CCMaths::RAD2DEG;
+                Vector3 rotation = entity.m_transform->GetRotation() * CCMaths::RAD2DEG;
 
-                    if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
-                        transform->SetRotation(rotation * CCMaths::DEG2RAD);
+                if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
+                    entity.m_transform->SetRotation(rotation * CCMaths::DEG2RAD);
 
-                    Vector3 scale = transform->GetScale();
+                Vector3 scale = entity.m_transform->GetScale();
 
-                    if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
-                        transform->SetScale(scale);
-                }
+                if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
+                    entity.m_transform->SetScale(scale);
+
 
                 ImGui::TreePop();
-            }
-
-            count++;
+            }*/
         }
     }
 

@@ -20,7 +20,9 @@
 // not sure about this
 static const std::filesystem::path AssetPath = "Assets";
  
-class GLFWwindow;
+struct GLFWwindow;
+class Entity;
+
 class EditorManager 
 {
 private:
@@ -28,10 +30,10 @@ private:
     //Panel's Classes
     AssetBrowser             m_browser               {};
     LogDisplayer             m_logDisplayer          {};
-    Inspector                m_inspector             {};
+    Inspector                m_inspector             {true, this};
     GameDisplayer            m_gameDisplayer         {};
     SceneDisplayer           m_sceneDisplayer        {};
-    HierarchyDisplayer       m_hierarchyDisplayer    {};
+    HierarchyDisplayer       m_hierarchyDisplayer    {true, this};
     PreferencesDisplayer     m_preferencesDisplayer  {false};
     ProjectSettingsDisplayer m_projSettingsDisplayer {false};
     BuildDisplayer           m_buildDisplayer        {false};
@@ -71,4 +73,7 @@ public:
     static bool LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height);
 
     InputManager* inputs;
+
+    //Selected Entities in hierarchy
+    std::vector<Entity*> m_selectedEntities;
 };

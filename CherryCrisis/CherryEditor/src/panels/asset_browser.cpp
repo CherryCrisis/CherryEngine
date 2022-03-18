@@ -23,10 +23,10 @@ AssetBrowser::AssetBrowser()
 
     int null = 0;
 
-    if (!EditorManager::LoadTextureFromFile("internal/icons/file_icon.png", &m_fileIcon, &null, &null))
+    if (!EditorManager::LoadTextureFromFile("Internal/Icons/file_icon.png", &m_fileIcon, &null, &null))
         std::cout << "failed to load file icon" << std::endl;
-
-    if (!EditorManager::LoadTextureFromFile("internal/icons/folder_icon.png", &m_browserIcon, &null, &null))
+     
+    if (!EditorManager::LoadTextureFromFile("Internal/Icons/folder_icon.png", &m_browserIcon, &null, &null))
         std::cout << "failed to load folder icon" << std::endl;
 
     // Load Icons

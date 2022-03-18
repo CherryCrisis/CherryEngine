@@ -74,7 +74,7 @@ RenderManager::RenderManager()
     LoadSubpipeline<SkyboxRenderPass>();
 }
 
-void RenderManager::DrawScene()
+void RenderManager::DrawScene(const float x, const float y)
 {
 	RenderManager* RM = GetInstance();
 	
@@ -86,7 +86,7 @@ void RenderManager::DrawScene()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (ARenderPass* pipeline : RM->m_orderedPipeline)
-		pipeline->Execute();
+		pipeline->Execute(x, y);
 
 	glUseProgram(0);
 }
