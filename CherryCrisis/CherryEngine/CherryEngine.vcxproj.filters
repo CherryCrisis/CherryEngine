@@ -420,6 +420,9 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
+    <ClInclude Include="include\time_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
     <ClInclude Include="include\monowrapper.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>

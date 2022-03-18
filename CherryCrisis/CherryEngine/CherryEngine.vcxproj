@@ -144,6 +144,7 @@
     <ClInclude Include="include\skybox_renderpass.hpp" />
     <ClInclude Include="include\renderpass_interface.hpp" />
     <ClInclude Include="include\texture.hpp" />
+    <ClInclude Include="include\time_manager.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +269,7 @@
     <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\skybox_renderpass.cpp" />
     <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\time_manager.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
