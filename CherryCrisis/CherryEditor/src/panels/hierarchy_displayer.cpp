@@ -68,10 +68,9 @@ void HierarchyDisplayer::Render()
                 ScriptedBehaviour* scriptedBehaviour;
                 if (entity->TryGetBehaviour<ScriptedBehaviour>(scriptedBehaviour))
                 {
-                    Metadata& metadatas = scriptedBehaviour->m_metadatas;
-                    std::vector<Field>& fields = metadatas.m_fields;
+                    std::vector<Field>& fields = scriptedBehaviour->GetFields();
 
-                    for (int i = 0; i < metadatas.m_fields.size(); i++)
+                    for (int i = 0; i < fields.size(); i++)
                     {
                         Field& field = fields[i];
 
@@ -80,8 +79,14 @@ void HierarchyDisplayer::Render()
                         case DescriptorType::VECTOR3:
                             if (field.m_isRef)
                             {
-                                CCMaths::Vector3* vec = (CCMaths::Vector3*)field.m_ptr;
+                                CCMaths::Vector3* vec = std::any_cast<CCMaths::Vector3*>(field.value);
                                 ImGui::DragFloat3(field.m_name.c_str(), vec->data, 0.5f);
+                            }
+                        case DescriptorType::INT:
+                            if (!field.m_isRef)
+                            {
+                                int num = std::any_cast<int>(field.value);
+                                ImGui::DragInt(field.m_name.c_str(), &num, 0.5f);
                             }
                         }
                     }

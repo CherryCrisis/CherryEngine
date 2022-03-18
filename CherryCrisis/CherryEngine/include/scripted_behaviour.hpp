@@ -7,8 +7,6 @@
 
 #include "behaviour.hpp"
 
-#include "metadata.hpp"
-
 namespace mono
 {
 	class ManagedScriptSystem;
@@ -34,13 +32,10 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	std::function<void(_MonoObject* _this, _MonoException** _excep)> csUpdate;
 	std::function<void(_MonoObject* _this, _MonoException** _excep)> csStart;
 
-	std::string name;
-	int num;
+	void PopulateMetadatas() override;
 
 public:
 	ScriptedBehaviour(Entity& owner);
-
-	Metadata m_metadatas;
 
 	void Start() override;
 	void Update() override;
