@@ -7,6 +7,7 @@
 #include "transform.hpp"
 #include "light_component.hpp"
 #include "camera_component.hpp"
+#include "core/editor_manager.hpp"
 
 void HierarchyDisplayer::Render() 
 {
@@ -19,7 +20,7 @@ void HierarchyDisplayer::Render()
         for (auto& [entityName, entity] : m_displayedScene->m_entities)
         {
             Transform* transform;
-            
+
             if (!entity->TryGetBehaviour<Transform>(transform) || !transform->IsRoot())
                 continue;
 
@@ -68,6 +69,19 @@ void HierarchyDisplayer::Render()
 
             count++;
         }
+        if (ImGui::Button("Save")) 
+        { 
+            if (m_displayedScene->Serialize(m_displayedScene->GetFilepath().c_str())) 
+            {
+                EditorManager::SendNotification("Scene  Saved !", ImGuiToastType_Success, 2.f);
+            } 
+            else 
+            {
+                EditorManager::SendNotification("Scene failed to save.", ImGuiToastType_Error, 2.f);
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Load")) { }
     }
     ImGui::End();
 }

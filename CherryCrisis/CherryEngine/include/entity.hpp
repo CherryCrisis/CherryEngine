@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <cherry_macros.hpp>
 
@@ -39,6 +40,7 @@ public:
 	void Destroy();
 
 	std::string GetName() { return m_name; }
+	std::string Serialized();
 };
 
 #include "entity.inl"

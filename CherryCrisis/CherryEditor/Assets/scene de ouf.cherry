@@ -1,0 +1,17 @@
+Entity:
+	m_name: Root
+	m_components: 
+	-: class Transform
+	-: class ScriptedBehaviour
+
+Entity:
+	m_name: Light
+	m_components: 
+	-: class LightComponent
+
+Entity:
+	m_name: Camera
+	m_components: 
+	-: class Transform
+	-: class CameraComponent
+

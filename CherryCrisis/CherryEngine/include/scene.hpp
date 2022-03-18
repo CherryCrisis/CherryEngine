@@ -30,4 +30,6 @@ public:
 	void AddEntity(Entity* toAdd);
 
 	static Ref<Scene> Create(const char* filePath);
+
+	bool Serialize(const char* filePath);
 };

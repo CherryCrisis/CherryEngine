@@ -5,6 +5,7 @@
 #include "behaviour.hpp"
 #include "transform.hpp"
 
+#include <typeinfo>
 Entity::Entity(const std::string& name)
 	: m_name(name)
 {
@@ -39,4 +40,18 @@ void Entity::Destroy()
 
 	for (int i = 0; i < children.size(); i++)
 		children[i]->GetHost().Destroy();
+}
+
+std::string Entity::Serialized() 
+{
+	std::string value;
+	value += "Entity:\n";
+	value += "	m_name: "+m_name+"\n";
+	value += "	m_components: \n";
+	for (Behaviour* behaviour : m_behaviours) 
+	{
+		value += "	-: "+std::string(typeid(*behaviour).name())+"\n";
+	}
+
+	return value.c_str();
 }
