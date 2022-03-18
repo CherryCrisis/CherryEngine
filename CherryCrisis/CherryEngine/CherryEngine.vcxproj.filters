@@ -61,6 +61,9 @@
     <Filter Include="Fichiers sources\Scripting">
       <UniqueIdentifier>{b78a84d0-de51-409b-b972-b9b37b74b414}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Serialization">
+      <UniqueIdentifier>{0ab9216f-9eb4-42d4-b253-2a60dfee6753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -443,6 +446,9 @@
     </ClInclude>
     <ClInclude Include="include\csscripting_system.hpp">
       <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\metadata.hpp">
+      <Filter>Fichiers sources\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,13 +5,14 @@
 #include "input_manager.hpp"
 #include "csscripting_system.hpp"
 
+#include "monowrapper.hpp"
+
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
 	char domainName[16] = "ScriptingDomain";
 	// TODO: Change path
 	context = CsScriptingSystem::GetInstance()->CreateContext(domainName, "x64/Debug/CherryScripting.dll");
-
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
 	auto managedVector = context->FindClass("CCEngine", "Vector3");
 	auto handleRefClass = context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
@@ -44,6 +45,8 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 
 	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
 	vecPtr->y = 90.f;
+
+	m_metadatas.m_fields.push_back({ "pos", DescriptorType::VECTOR3, vecPtr, true });
 }
 
 void ScriptedBehaviour::Start()

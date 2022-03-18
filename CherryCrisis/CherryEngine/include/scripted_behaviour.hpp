@@ -1,30 +1,46 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 
 #include <cherry_macros.hpp>
 
 #include "behaviour.hpp"
-#include "monowrapper.hpp"
+
+#include "metadata.hpp"
+
+namespace mono
+{
+	class ManagedScriptSystem;
+	class ManagedScriptContext;
+	class ManagedClass;
+	class ManagedObject;
+	class ManagedMethod;
+}
+
+struct _MonoObject;
+struct _MonoException;
 
 class CCENGINE_API ScriptedBehaviour : public Behaviour
 {
-	mono::Ref<mono::ManagedScriptSystem> script;
-	mono::Ref<mono::ManagedScriptContext> context;
+	std::shared_ptr<mono::ManagedScriptSystem> script;
+	std::shared_ptr<mono::ManagedScriptContext> context;
 
-	mono::Ref<mono::ManagedClass> managedClass;
-	mono::Ref<mono::ManagedObject> behaviourInst;
-	mono::Ref<mono::ManagedMethod> managedUpdate;
-	mono::Ref<mono::ManagedMethod> managedStart;
+	std::shared_ptr<mono::ManagedClass> managedClass;
+	std::shared_ptr<mono::ManagedObject> behaviourInst;
+	std::shared_ptr<mono::ManagedMethod> managedUpdate;
+	std::shared_ptr<mono::ManagedMethod> managedStart;
 
-	std::function<void(MonoObject* _this, MonoException** _excep)> csUpdate;
-	std::function<void(MonoObject* _this, MonoException** _excep)> csStart;
+	std::function<void(_MonoObject* _this, _MonoException** _excep)> csUpdate;
+	std::function<void(_MonoObject* _this, _MonoException** _excep)> csStart;
 
 	std::string name;
 	int num;
 
 public:
 	ScriptedBehaviour(Entity& owner);
+
+	Metadata m_metadatas;
 
 	void Start() override;
 	void Update() override;

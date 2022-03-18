@@ -125,6 +125,7 @@
     <ClInclude Include="include\maths\vector3.hpp" />
     <ClInclude Include="include\maths\vector4.hpp" />
     <ClInclude Include="include\mesh.hpp" />
+    <ClInclude Include="include\metadata.hpp" />
     <ClInclude Include="include\model.hpp" />
     <ClInclude Include="include\model_base.hpp" />
     <ClInclude Include="include\model_loader.hpp" />

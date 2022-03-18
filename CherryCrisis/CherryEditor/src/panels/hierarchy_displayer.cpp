@@ -7,6 +7,7 @@
 #include "transform.hpp"
 #include "light_component.hpp"
 #include "camera_component.hpp"
+#include "scripted_behaviour.hpp"
 
 void HierarchyDisplayer::Render() 
 {
@@ -61,6 +62,29 @@ void HierarchyDisplayer::Render()
 
                     if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
                         transform->SetScale(scale);
+                }
+
+
+                ScriptedBehaviour* scriptedBehaviour;
+                if (entity->TryGetBehaviour<ScriptedBehaviour>(scriptedBehaviour))
+                {
+                    Metadata& metadatas = scriptedBehaviour->m_metadatas;
+                    std::vector<Field>& fields = metadatas.m_fields;
+
+                    for (int i = 0; i < metadatas.m_fields.size(); i++)
+                    {
+                        Field& field = fields[i];
+
+                        switch (field.m_type)
+                        {
+                        case DescriptorType::VECTOR3:
+                            if (field.m_isRef)
+                            {
+                                CCMaths::Vector3* vec = (CCMaths::Vector3*)field.m_ptr;
+                                ImGui::DragFloat3(field.m_name.c_str(), vec->data, 0.5f);
+                            }
+                        }
+                    }
                 }
 
                 ImGui::TreePop();
