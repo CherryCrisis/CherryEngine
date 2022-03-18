@@ -429,18 +429,6 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
-    <ClInclude Include="include\event.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\callback.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\time_manager.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\monowrapper.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="include\component.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
@@ -462,11 +450,20 @@
     <ClInclude Include="include\metadata.hpp">
       <Filter>Fichiers sources\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="include\sound_manager.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
+    <ClInclude Include="include\event.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\callback.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="include\sound.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sound_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\time_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -672,12 +669,15 @@
     </ClCompile>
     <ClCompile Include="src\csscripting_system.cpp">
       <Filter>Fichiers sources\Scripting</Filter>
-    </ClInclude>
+    </ClCompile>
     <ClCompile Include="src\sound_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\sound.cpp">
       <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\time_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
