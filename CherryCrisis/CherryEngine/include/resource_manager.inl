@@ -1,11 +1,12 @@
 #pragma once
 
 template<class T>
-Resource::Ref<T> ResourceManager::CreateResource(const char* filepath)
+std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
-	Resource::Ref<T> resourcePtr = std::make_shared<T>(filepath);
-	m_resources.emplace(typeid(T), resourcePtr);
+	std::shared_ptr<T> resourcePtr = std::make_shared<T>(filepath);
+	auto pair = std::make_pair< std::type_index, std::shared_ptr<Resource>>(typeid(T), resourcePtr);
+	m_resources.insert(pair);
 
 	return resourcePtr;
 }
@@ -20,11 +21,11 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 			return findedResource;
 	}
 
-	Resource::Ref<T> resourcePtr = CreateResource<T>(filepath);
+	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
 
 	T::Load(resourcePtr, filepath, args...);
 
-	resourcePtr->IsLoaded(resourcePtr, threadpool);
+	//resourcePtr->IsLoaded(resource, threadpool);
 
 	return resourcePtr;
 }
@@ -41,16 +42,27 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 		std::shared_ptr<T> findedResource = GetResource<T>(filepath);
 		if (findedResource != nullptr)
 		{
+			if (findedResource->GetIsLoaded())
+			{
+				/*auto function = CCFunction::BindFunctionUnsafe(&CCCallback::AWrapCallback::Invoke<std::shared_ptr<Resource>&>, 
+					wrappedCallback, findedResource);
+				
+				threadpool->CreateTask(function, EChannelTask::MAINTHREAD);*/
+			}
+
 			findedResource->m_onLoaded.Bind(uniqueCallback);
+			return;
 		}
 	}
 
-	Resource::Ref<T> resourcePtr = CreateResource<T>(filepath);
+	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
 
 	T::Load(resourcePtr, filepath, args...);
 
 	resourcePtr->m_onLoaded.Bind(uniqueCallback);
-	resourcePtr->IsLoaded(resourcePtr, threadpool);
+
+	//std::shared_ptr<Resource> resource = std::dynamic_pointer_cast<Resource>(resourcePtr);
+	//resourcePtr->IsLoaded(resource, threadpool);
 }
 
 template<class T, class CallbackType, typename... Args>
@@ -69,7 +81,7 @@ void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIs
 }
 
 template<class T>
-std::shared_ptr<T> ResourceManager::GetResource(const char* filepath)
+Resource::Ref<T> ResourceManager::GetResource(const char* filepath)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
 
@@ -79,7 +91,9 @@ std::shared_ptr<T> ResourceManager::GetResource(const char* filepath)
 	for (auto& it = resourceRange.first; it != resourceRange.second; ++it)
 	{
 		if (it->second->GetHashId() == hashKey)
+		{
 			return (std::dynamic_pointer_cast<T>(it->second));
+		}
 	}
 
 	return nullptr;

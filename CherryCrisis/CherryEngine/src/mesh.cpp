@@ -4,7 +4,7 @@
 
 #include <assimp/mesh.h>
 
-void Mesh::Load(Ref<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh)
+void Mesh::Load(std::shared_ptr<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh)
 {
     std::vector<Vertex> vertices;
     vertices.reserve(assimpMesh->mNumVertices);
@@ -49,13 +49,13 @@ void Mesh::Load(Ref<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh)
     Mesh::Load(mesh, filepath, vertices, indices);
 }
 
-void Mesh::Load(Ref<Mesh> mesh, const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+void Mesh::Load(std::shared_ptr<Mesh> mesh, const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
 {
     mesh->m_vertices = std::move(vertices);
     mesh->m_indices = std::move(indices);
 }
 
-void Mesh::CreateCube(Ref<Mesh> mesh, const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes)
+void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes)
 {
     std::vector<Vertex> vertices;
     vertices.reserve(8);

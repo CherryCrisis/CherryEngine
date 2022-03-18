@@ -574,8 +574,5 @@
     <ClCompile Include="src\threadpool.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\resource.cpp">
-      <Filter>Fichiers sources\Resource</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

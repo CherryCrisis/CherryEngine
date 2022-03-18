@@ -13,7 +13,7 @@ class Material;
 struct aiScene;
 struct aiNode;
 
-class Model : public Resource
+class Model : public Resource<Model>
 {
 
 public:

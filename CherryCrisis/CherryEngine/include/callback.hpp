@@ -58,11 +58,11 @@ namespace CCCallback
 		}
 	};
 
-	template<typename... Args>
+	template<class... Args>
 	void AWrapCallback::Invoke(Args&&... args)
 	{
-		ACallback<Args...> unwrapCallback = dynamic_cast<ACallback<Args...>>(this);
-		unwrapCallback.Invoke(std::forward<Args>(args)...);
+		ACallback<Args...>* unwrapCallback = static_cast<ACallback<Args...>*>(this);
+		unwrapCallback->Invoke(std::forward<Args>(args)...);
 	}
 
 	template<class T, class... Args>
@@ -77,3 +77,17 @@ namespace CCCallback
 		return std::make_unique<CCCallback::NonMemberCallback<Args...>>(func);
 	}
 }
+
+#include <iostream>
+
+//namespace CCTest
+//{
+//class TestStruct
+//{
+//public :
+//	void FooTest(const int& i)
+//	{
+//		std::cout << "TEST" << std::endl;
+//	}
+//};
+//}

@@ -6,7 +6,7 @@
 
 class Shader;
 
-class ShaderProgram : public Resource
+class ShaderProgram : public Resource<ShaderProgram>
 {
 public:
 	ShaderProgram(const char* programName) : Resource(programName) {}

@@ -14,7 +14,7 @@ class Texture;
 
 using namespace CCMaths;
 
-class Material : public Resource
+class Material : public Resource<Material>
 {
 private:
 	Vector3 m_albedo;

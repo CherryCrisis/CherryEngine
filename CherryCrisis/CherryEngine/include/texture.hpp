@@ -4,7 +4,7 @@
 
 struct GPUTexture { };
 
-class Texture : public Resource
+class Texture : public Resource<Texture>
 {
 private:
 

@@ -30,10 +30,10 @@ enum class EMeshShape
 
 struct GPUMesh { };
 
-class Mesh : public Resource
+class Mesh : public Resource<Mesh>
 {
 public:
-	Mesh(const char* meshName) : Resource(meshName) {}
+	Mesh(const char* meshName) : Resource<Mesh>(meshName) {}
 	~Mesh() {}
 	
 	GPUMesh* m_gpuMesh = nullptr;
@@ -41,14 +41,14 @@ public:
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
 
-	static void Load(Ref<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh);
+	static void Load(std::shared_ptr<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh);
 
-	static void CreateCube(Ref<Mesh> mesh, const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes);
+	static void CreateCube(std::shared_ptr<Mesh> mesh, const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes);
 
 	template <typename... Args>
-	static void Load(Ref<Mesh> mesh, const char* shapeName, EMeshShape shapeType, Args... args);
+	static void Load(std::shared_ptr<Mesh> mesh, const char* shapeName, EMeshShape shapeType, Args... args);
 
-	static void Load(Ref<Mesh> mesh, const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+	static void Load(std::shared_ptr<Mesh> mesh, const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 };
 
 #include "mesh.inl"

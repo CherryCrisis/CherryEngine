@@ -23,7 +23,7 @@ struct ModelNode
 	Vector3					m_baseTRS[3];
 };
 
-class ModelBase : public Resource
+class ModelBase : public Resource<ModelBase>
 {
 private:
 

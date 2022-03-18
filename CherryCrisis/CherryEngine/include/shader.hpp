@@ -11,7 +11,7 @@ enum class EShader
 	GEOMETRY = 0x8DD9
 };
 
-class Shader : public Resource
+class Shader : public Resource<Shader>
 {
 private:
 

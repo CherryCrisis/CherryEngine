@@ -10,18 +10,23 @@
 
 class ModelBase;
 
-class CCENGINE_API Scene : public Resource
+class CCENGINE_API Scene : public Resource<Scene>
 {
 private:
 
 public:
-	Scene(const char* filePath) : Resource(filePath) { }
+	Scene(const char* filePath) : Resource(filePath), m_int(std::make_shared<int>(5)) { }
 
 	Skybox m_skybox;
 
 	static void Load(Ref<Scene> scene, const char* filePath);
 
-	void GenerateEntities(std::shared_ptr<Resource> modelBase);
+	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);
+	
+	std::shared_ptr<int> m_int;
+	Event<std::shared_ptr<int>> m_eventCallback;
+
+	void GenerateEntitiesTest(std::shared_ptr<ModelBase> modelBase);
 
 	std::vector<Entity> m_entities;
 
