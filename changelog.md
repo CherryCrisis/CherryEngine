@@ -1,7 +1,16 @@
 Changelog
 ===
 
-*25-02-2002*
+*11-03-2022*
+-
+**[Adding]**:
+* Scripting system (using mon and Swig)
+* Input manager (Mouse callbacks)
+
+**[Improving]**
+* Content browser
+
+*25-02-2022*
 -
 **[Adding]**:
 * Editor (Content browser, scene and game viewer)
