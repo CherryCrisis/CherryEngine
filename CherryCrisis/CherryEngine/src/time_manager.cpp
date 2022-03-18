@@ -5,7 +5,7 @@
 template <>
 TimeManager* Singleton<TimeManager>::currentInstance = nullptr;
 
-void TimeManager::Update(const double time) 
+void TimeManager::Update(const float time) 
 {
 	m_lastTime = m_elapsedTime;
 	m_elapsedTime = time;

@@ -52,16 +52,16 @@ private:
     bool m_isFeaturerOpened = false;
 
     // TODO: To Replace with Resource Manager Texture Handling
-    unsigned int PlayIcon = 0;
-    unsigned int PauseIcon = 0;
-    unsigned int ReplayIcon = 0;
-    unsigned int StopIcon = 0;
+    uint64_t PlayIcon = 0;
+    uint64_t PauseIcon = 0;
+    uint64_t ReplayIcon = 0;
+    uint64_t StopIcon = 0;
 
 public:
     // TODO: Temporary, to replace with scene engine handling
     std::shared_ptr<Scene> scene;
 
-    static void SendNotification(const char* title, ImGuiToastType_ type, float displayTime = 3.f);
+    static void SendNotification(const char* title, ImGuiToastType type, float displayTime = 3.f);
     
     EditorManager();
     void DisplayEditorUI(GLFWwindow* window);
@@ -70,7 +70,7 @@ public:
 
     void FocusCallback(GLFWwindow* window, int focused);
 
-    static bool LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height);
+    static bool LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height);
 
     InputManager* inputs;
 

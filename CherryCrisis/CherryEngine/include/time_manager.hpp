@@ -12,7 +12,7 @@ private:
 	float m_fixedDeltaTime = 1.f/60.f;
 	float m_elapsedTime = 0.f;
 
-	double m_lastTime = 0.f;
+	float m_lastTime = 0.f;
 
 public:
 	
@@ -26,5 +26,5 @@ public:
 	void  SetFixedDeltaTime(float newTime) { m_fixedDeltaTime = newTime; }
     //
 
-	void  Update(const double time);
+	void  Update(const float time);
 };

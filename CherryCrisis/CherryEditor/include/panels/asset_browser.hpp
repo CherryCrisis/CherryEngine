@@ -13,7 +13,7 @@ private :
 	public:
 		bool         m_isDirectory = false;
 
-		unsigned int m_icon    = 0u;
+		uint64_t m_icon    = 0u;
 		unsigned int m_ImGuiID = 0u;
 	
 		std::filesystem::path m_path;
@@ -59,7 +59,7 @@ public:
 	AssetBrowser();
 
 	//DEPRECATED : Replace with resource manager references
-	unsigned int m_fileIcon = 0u;
-	unsigned int m_browserIcon = 0u;
+	uint64_t m_fileIcon = 0u;
+	uint64_t m_browserIcon = 0u;
 	//-------------------
 };

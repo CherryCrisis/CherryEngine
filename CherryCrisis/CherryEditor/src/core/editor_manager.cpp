@@ -20,7 +20,7 @@
 #include "render_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
-bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height)
+bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height)
 {
     // Load from file
     stbi_set_flip_vertically_on_load(true);
@@ -218,10 +218,12 @@ void EditorManager::HandleMenuBar()
             }
 
         } ImGui::SameLine();
+        
         if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         } ImGui::SameLine();
+        
         if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
@@ -259,19 +261,19 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
         }
 
         if (ImGui::Button("Success"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Success, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Success, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Warning"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Warning, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Warning, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Error"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Error, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Error, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Info"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Info, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Info, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("None"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_None, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::None, 3.f);
         ImGui::SameLine();
 
         if (ImGui::Button("Show Demo"))
@@ -290,7 +292,7 @@ void EditorManager::HandleNotifications()
 }
 
 //Display time in seconds
-void EditorManager::SendNotification(const char* title, ImGuiToastType_ type, float displayTime)
+void EditorManager::SendNotification(const char* title, ImGuiToastType type, float displayTime)
 {
     ImGui::InsertNotification({ type, displayTime, title, ""});
 }

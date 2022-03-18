@@ -1,10 +1,20 @@
 Changelog
 ===
 
+*18-03-2022*
+-
+**[Adding]**:
+* Input manager (Keyboard context, Axis)
+* Editor (Input management, Scene display aspect ratio)
+* Multithreading (Resource loading)
+* Scripting (Serialization debut)
+* Time manager (Deltatime and FixedDeltatime)
+* Sound manager
+
 *11-03-2022*
 -
 **[Adding]**:
-* Scripting system (using mon and Swig)
+* Scripting system (using mono and Swig)
 * Input manager (Mouse callbacks)
 
 **[Improving]**

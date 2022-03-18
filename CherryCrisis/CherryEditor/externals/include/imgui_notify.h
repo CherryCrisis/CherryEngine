@@ -36,45 +36,41 @@
 #define NOTIFY_NULL_OR_EMPTY(str)		(!str ||! strlen(str))
 #define NOTIFY_FORMAT(fn, format, ...)	if (format) { va_list args; va_start(args, format); fn(format, args, __VA_ARGS__); va_end(args); }
 
-typedef int ImGuiToastType;
-typedef int ImGuiToastPhase;
-typedef int ImGuiToastPos;
-
-enum ImGuiToastType_
+enum class ImGuiToastType
 {
-	ImGuiToastType_None,
-	ImGuiToastType_Success,
-	ImGuiToastType_Warning,
-	ImGuiToastType_Error,
-	ImGuiToastType_Info,
-	ImGuiToastType_COUNT
+	None,
+	Success,
+	Warning,
+	Error,
+	Info,
+	COUNT
 };
 
-enum ImGuiToastPhase_
+enum class ImGuiToastPhase
 {
-	ImGuiToastPhase_FadeIn,
-	ImGuiToastPhase_Wait,
-	ImGuiToastPhase_FadeOut,
-	ImGuiToastPhase_Expired,
-	ImGuiToastPhase_COUNT
+	FadeIn,
+	Wait,
+	FadeOut,
+	Expired,
+	COUNT
 };
 
-enum ImGuiToastPos_
+enum class ImGuiToastPos
 {
-	ImGuiToastPos_TopLeft,
-	ImGuiToastPos_TopCenter,
-	ImGuiToastPos_TopRight,
-	ImGuiToastPos_BottomLeft,
-	ImGuiToastPos_BottomCenter,
-	ImGuiToastPos_BottomRight,
-	ImGuiToastPos_Center,
-	ImGuiToastPos_COUNT
+	TopLeft,
+	TopCenter,
+	TopRight,
+	BottomLeft,
+	BottomCenter,
+	BottomRight,
+	Center,
+	COUNT
 };
 
 class ImGuiToast
 {
 private:
-	ImGuiToastType	type = ImGuiToastType_None;
+	ImGuiToastType	type = ImGuiToastType::None;
 	char			title[NOTIFY_MAX_MSG_LENGTH];
 	char			content[NOTIFY_MAX_MSG_LENGTH];
 	float			dismiss_time = NOTIFY_DEFAULT_DISMISS;
@@ -93,7 +89,7 @@ public:
 
 	NOTIFY_INLINE auto set_content(const char* format, ...) -> void { NOTIFY_FORMAT(this->set_content, format); }
 
-	NOTIFY_INLINE auto set_type(const ImGuiToastType& type) -> void { IM_ASSERT(type < ImGuiToastType_COUNT); this->type = type; };
+	NOTIFY_INLINE auto set_type(const ImGuiToastType& type) -> void { IM_ASSERT(type < ImGuiToastType::COUNT); this->type = type; };
 
 public:
 	// Getters
@@ -106,15 +102,15 @@ public:
 		{
 			switch (this->type)
 			{
-			case ImGuiToastType_None:
+			case ImGuiToastType::None:
 				return NULL;
-			case ImGuiToastType_Success:
+			case ImGuiToastType::Success:
 				return "Success";
-			case ImGuiToastType_Warning:
+			case ImGuiToastType::Warning:
 				return "Warning";
-			case ImGuiToastType_Error:
+			case ImGuiToastType::Error:
 				return "Error";
-			case ImGuiToastType_Info:
+			case ImGuiToastType::Info:
 				return "Info";
 			}
 		}
@@ -124,19 +120,19 @@ public:
 
 	NOTIFY_INLINE auto get_type() -> const ImGuiToastType& { return this->type; };
 
-	NOTIFY_INLINE auto get_color() -> const ImVec4&
+	NOTIFY_INLINE auto get_color() -> const ImVec4
 	{
 		switch (this->type)
 		{
-		case ImGuiToastType_None:
+		case ImGuiToastType::None:
 			return { 255, 255, 255, 255 }; // White
-		case ImGuiToastType_Success:
+		case ImGuiToastType::Success:
 			return { 0, 255, 0, 255 }; // Green
-		case ImGuiToastType_Warning:
+		case ImGuiToastType::Warning:
 			return { 255, 255, 0, 255 }; // Yellow
-		case ImGuiToastType_Error:
+		case ImGuiToastType::Error:
 			return { 255, 0, 0, 255 }; // Error
-		case ImGuiToastType_Info:
+		case ImGuiToastType::Info:
 			return { 0, 157, 255, 255 }; // Blue
 		default:
 			return { 255, 255, 255, 255 }; // White
@@ -147,15 +143,15 @@ public:
 	{
 		switch (this->type)
 		{
-		case ImGuiToastType_None:
+		case ImGuiToastType::None:
 			return NULL;
-		case ImGuiToastType_Success:
+		case ImGuiToastType::Success:
 			return ICON_FA_CHECK_CIRCLE;
-		case ImGuiToastType_Warning:
+		case ImGuiToastType::Warning:
 			return ICON_FA_EXCLAMATION_TRIANGLE;
-		case ImGuiToastType_Error:
+		case ImGuiToastType::Error:
 			return ICON_FA_TIMES_CIRCLE;
-		case ImGuiToastType_Info:
+		case ImGuiToastType::Info:
 			return ICON_FA_INFO_CIRCLE;
 		default:
 			return NULL;
@@ -166,25 +162,25 @@ public:
 
 	NOTIFY_INLINE auto get_elapsed_time() { return glfwGetTime() - this->creation_time; }
 
-	NOTIFY_INLINE auto get_phase() -> const ImGuiToastPhase&
+	NOTIFY_INLINE auto get_phase() -> const ImGuiToastPhase
 	{
 		const auto elapsed = get_elapsed_time();
 
 		if (elapsed > (double)NOTIFY_FADE_IN_OUT_TIME + (double)this->dismiss_time + (double)NOTIFY_FADE_IN_OUT_TIME)
 		{
-			return ImGuiToastPhase_Expired;
+			return ImGuiToastPhase::Expired;
 		}
 		else if (elapsed > (double)NOTIFY_FADE_IN_OUT_TIME + (double)this->dismiss_time)
 		{
-			return ImGuiToastPhase_FadeOut;
+			return ImGuiToastPhase::FadeOut;
 		}
 		else if (elapsed > (double)NOTIFY_FADE_IN_OUT_TIME)
 		{
-			return ImGuiToastPhase_Wait;
+			return ImGuiToastPhase::Wait;
 		}
 		else
 		{
-			return ImGuiToastPhase_FadeIn;
+			return ImGuiToastPhase::FadeIn;
 		}
 	}
 
@@ -193,11 +189,11 @@ public:
 		const auto phase = get_phase();
 		const auto elapsed = get_elapsed_time();
 
-		if (phase == ImGuiToastPhase_FadeIn)
+		if (phase == ImGuiToastPhase::FadeIn)
 		{
 			return ((float)elapsed / (float)NOTIFY_FADE_IN_OUT_TIME) * NOTIFY_OPACITY;
 		}
-		else if (phase == ImGuiToastPhase_FadeOut)
+		else if (phase == ImGuiToastPhase::FadeOut)
 		{
 			return (1.f - (((float)elapsed - (float)NOTIFY_FADE_IN_OUT_TIME - (float)this->dismiss_time) / (float)NOTIFY_FADE_IN_OUT_TIME)) * NOTIFY_OPACITY;
 		}
@@ -210,7 +206,7 @@ public:
 
 	ImGuiToast(ImGuiToastType type, float dismiss_time = NOTIFY_DEFAULT_DISMISS)
 	{
-		IM_ASSERT(type < ImGuiToastType_COUNT);
+		IM_ASSERT(type < ImGuiToastType::COUNT);
 
 		this->type = type;
 		this->dismiss_time = dismiss_time; 
@@ -260,7 +256,7 @@ namespace ImGui
 			auto* current_toast = &notifications[i];
 
 			// Remove toast if expired
-			if (current_toast->get_phase() == ImGuiToastPhase_Expired)
+			if (current_toast->get_phase() == ImGuiToastPhase::Expired)
 			{
 				RemoveNotification(i);
 				continue;
@@ -315,7 +311,7 @@ namespace ImGui
 					if (!NOTIFY_NULL_OR_EMPTY(icon))
 						SameLine();
 
-					Text(default_title); // Render default title text (ImGuiToastType_Success -> "Success", etc...)
+					Text(default_title); // Render default title text (ImGuiToastType::Success -> "Success", etc...)
 					was_title_rendered = true;
 				}
 

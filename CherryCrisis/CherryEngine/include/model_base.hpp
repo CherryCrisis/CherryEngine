@@ -40,5 +40,5 @@ public:
 	static void Load(Ref<ModelBase> modelBase, const char* filepath);
 
 	//Generate entities with modelBase (model instance)
-	std::vector<Entity*>& GenerateEntities(Entity* rootEntity);
+	std::vector<Entity*> GenerateEntities(Entity* rootEntity);
 };

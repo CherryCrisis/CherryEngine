@@ -32,7 +32,7 @@ void ModelBase::DeleteModelNode(ModelNode* modelNode)
 	delete modelNode;
 }
 
-std::vector<Entity*>& ModelBase::GenerateEntities(Entity* rootEntity)
+std::vector<Entity*> ModelBase::GenerateEntities(Entity* rootEntity)
 {
     std::vector<Entity*> entities;
 

@@ -227,12 +227,12 @@ void AssetBrowser::RenderNodes()
             }
         }
 
-        // Need to set double click callback rename
+        // TODO: Need to set double click callback rename
         ImGui::Text(node.m_filename.c_str());
 
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2)
         {
-            EditorManager::SendNotification("Outch it hurts", ImGuiToastType_Warning);
+            EditorManager::SendNotification("Outch it hurts", ImGuiToastType::Warning);
         }
 
         ImGui::NextColumn();
@@ -297,8 +297,9 @@ void AssetBrowser::RenderNodes()
             if (!newPath.has_extension())
                 newPath += m_focusedNode->m_extension;
             
-            rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str());
-            QuerryBrowser();
+            if (rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str()))
+                QuerryBrowser();
+
             m_renaming = false;
         }
         ImGui::SetItemDefaultFocus();

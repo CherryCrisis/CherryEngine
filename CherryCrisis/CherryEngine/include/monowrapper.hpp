@@ -361,11 +361,11 @@ namespace mono
 		std::vector<class ManagedObject*> m_attributes;
 		MonoCustomAttrInfo* m_attrInfo = nullptr;
 		MonoMethodSignature* m_signature = nullptr;
-		bool m_populated;
-		uint32_t m_token;
+		bool m_populated = false;
+		uint32_t m_token = 0;
 		std::string m_name;
 		std::string m_fullyQualifiedName;
-		int m_paramCount;
+		int m_paramCount = 0;
 
 		Ref<ManagedType> m_returnType = nullptr;
 		std::vector<Ref<ManagedType>> m_params;
@@ -677,7 +677,7 @@ namespace mono
 
 		bool ValidateAgainstWhitelist(const std::vector<std::string>& whitelist);
 
-		void ReportException(MonoObject& obj, ManagedAssembly& ass);
+		void ReportException(MonoObject* obj, ManagedAssembly& ass);
 
 		void RegisterExceptionCallback(ExceptionCallbackT callback)
 		{

@@ -10,9 +10,9 @@ namespace CCScripting
 {
 	class BackpackBehaviour : Behaviour
 	{
-		Transform transform;
+		public Transform transform;
 
-		BackpackBehaviour(System.IntPtr cPtr, bool cMemoryOwn)
+		public BackpackBehaviour(System.IntPtr cPtr, bool cMemoryOwn)
 			: base(cPtr, cMemoryOwn)
 		{
 			transform = GetComponent<Transform>();
@@ -30,12 +30,12 @@ namespace CCScripting
 
 		}
 
-		Vector3 pos = new Vector3(5f, 3f, 7f);
+		public Vector3 pos = new Vector3(5f, 3f, 7f);
 
 		public string name = "Je suis un nom";
 		public int num = 5;
 
-		float deltaTime = 0.01f;
+		public float deltaTime = 0.01f;
 		float time = 0f;
 		public void Update()
 		{

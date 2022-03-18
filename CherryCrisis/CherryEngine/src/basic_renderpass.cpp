@@ -31,6 +31,7 @@ int BasicRenderPass::Generate(CameraComponent* toGenerate)
 		return -1;
 
 	m_camera = toGenerate;
+	return 1;
 }
 
 template <>
@@ -197,7 +198,7 @@ void BasicRenderPass::Execute(const float x, const float y)
 
 		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-		glDrawElements(GL_TRIANGLES, mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, (GLsizei)mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	glUseProgram(0);
