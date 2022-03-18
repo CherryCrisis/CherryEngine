@@ -15,10 +15,8 @@ Texture::~Texture()
     stbi_image_free(m_data);
 }
 
-Resource::Ref<Texture> Texture::Create(const char* texturePath)
+void Texture::Load(Ref<Texture> texture, const char* texturePath)
 {
-	Texture* texture = new Texture(texturePath);
-
     stbi_set_flip_vertically_on_load(true);
     int nrComponents;
 
@@ -34,6 +32,4 @@ Resource::Ref<Texture> Texture::Create(const char* texturePath)
         //TODO: Debug ErrorLog
         //std::cout << "Failed to load image. " << filename << std::endl;
     }
-
-	return Ref<Texture>(texture);
 }

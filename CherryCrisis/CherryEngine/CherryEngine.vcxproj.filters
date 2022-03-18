@@ -429,6 +429,20 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\callback.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\event.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\function.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threadpool.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
     <ClInclude Include="include\component.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>

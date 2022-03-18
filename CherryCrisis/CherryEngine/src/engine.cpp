@@ -4,6 +4,7 @@
 #include "al.h"
 #include "alc.h"
 #include "alut.h"
+#include "threadpool.hpp"
 
 #include "scene_manager.hpp"
 #include "csscripting_system.hpp"
@@ -21,7 +22,7 @@ void Engine::SoundInit()
 	{
 		ALenum error = alutGetError();
 		fprintf(stderr, "%s\n", alutGetErrorString(error));
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
 	}
 }
 
@@ -63,6 +64,11 @@ void Engine::PlayFile(const char* fileName)
 		alutSleep(0.1f);
 		alGetSourcei(source, AL_SOURCE_STATE, &status);
 	} while (status == AL_PLAYING);*/
+}
+
+void Engine::TickEngine()
+{
+	ThreadPool::GetInstance()->Update(EChannelTask::MAINTHREAD); //TODO: stock threadpool in engine class
 }
 
 void Engine::Tick() 

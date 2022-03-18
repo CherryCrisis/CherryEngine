@@ -7,13 +7,14 @@ struct GPUTexture { };
 class Texture : public Resource
 {
 private:
-    Texture(const char* texturePath);
 
     int     m_width = 0;
     int     m_height = 0;
     void*   m_data = nullptr;
 
 public:
+    Texture(const char* texturePath);
+
     GPUTexture* m_gpuTexture = nullptr;
 
     ~Texture();
@@ -23,5 +24,5 @@ public:
 
     const void* GetData() { return m_data; }
 
-    static Ref<Texture> Create(const char* texturePath);
+    static void Load(Ref<Texture> texture, const char* texturePath);
 };

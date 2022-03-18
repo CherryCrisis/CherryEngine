@@ -4,6 +4,7 @@
 
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
+#include "callback.hpp"
 
 // TODO: Remove this
 #include "transform.hpp"
@@ -65,6 +66,22 @@ Resource::Ref<Scene> Scene::Create(const char* filePath)
 	scene->AddEntity(camera);
 
 	return Ref<Scene>(scene);
+void Scene::GenerateEntities(std::shared_ptr<Resource> resource)
+{
+	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
+
+	Entity root;
+	const std::vector<Entity>& children = modelBase->GenerateEntities(root);
+	m_entities.push_back(std::move(root));
+
+	for (const Entity& child : children)
+	{
+		m_entities.push_back(std::move(child));
+		root.m_transform->AddChildren(child.m_transform);
+	}
+
+	std::cout << "entities generated : " << resource->GetFilepath() << std::endl;
+}
 }
 
 void Scene::Start()

@@ -11,6 +11,7 @@
 
 class Model;
 class Entity;
+class Scene;
 
 using namespace CCMaths;
 
@@ -25,7 +26,6 @@ struct ModelNode
 class ModelBase : public Resource
 {
 private:
-	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
 
 	ModelNode* m_rootNode;
 	std::vector<std::shared_ptr<Model>>	m_models;
@@ -34,9 +34,10 @@ private:
 	void DeleteModelNode(ModelNode* modelNode);
 
 public:
+	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
 	~ModelBase();
 
-	static Ref<ModelBase> Create(const char* filepath);
+	static void Load(Ref<ModelBase> modelBase, const char* filepath);
 
 	//Generate entities with modelBase (model instance)
 	std::vector<Entity*>& GenerateEntities(Entity* rootEntity);

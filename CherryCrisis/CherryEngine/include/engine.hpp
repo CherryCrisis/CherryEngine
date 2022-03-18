@@ -18,4 +18,5 @@ public:
 	void SoundInit();
 
 	void Tick();
+	void TickEngine();
 };

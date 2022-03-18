@@ -113,6 +113,7 @@
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\event.hpp" />
     <ClInclude Include="include\framework.hpp" />
+    <ClInclude Include="include\function.hpp" />
     <ClInclude Include="include\gl_manager.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="include\sound_manager.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\time_manager.hpp" />
+    <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +271,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\render_manager.cpp" />
+    <ClCompile Include="src\resource.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\scene_manager.cpp" />
@@ -280,6 +283,7 @@
     <ClCompile Include="src\sound_manager.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\time_manager.cpp" />
+    <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

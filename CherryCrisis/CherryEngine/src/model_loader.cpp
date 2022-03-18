@@ -67,6 +67,7 @@ namespace CCModelLoader
 
     void LoadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models)
     {
+
         Assimp::Importer importer = Assimp::Importer();
 
         const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate |
@@ -77,13 +78,16 @@ namespace CCModelLoader
 
         if (scene)
         {
+            std::cout << "Model load processing" << std::endl;
             ProcessData(scene, models, rootModels, filepath);
         }
         else
         {
-            //printf("Error parsing : '%s'\n", importer.GetErrorString());
+            printf("Error parsing : '%s'\n", importer.GetErrorString());
             return;
         }
+
+        std::cout << "Parsing ended" << std::endl;
     }
 }
 

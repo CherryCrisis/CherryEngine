@@ -7,5 +7,5 @@ public:
 
 	virtual void Draw() { }
 
-	//virtual ~ARenderer() = default;
+	virtual ~ARenderer() = default;
 };
