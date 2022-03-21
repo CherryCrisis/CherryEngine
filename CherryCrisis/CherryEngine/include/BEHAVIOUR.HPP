@@ -24,6 +24,7 @@ public:
 	virtual void FixedUpdate() {}
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
+	virtual std::string Serialize() { return std::string(""); }
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }

@@ -51,6 +51,7 @@ std::string Entity::Serialized()
 	for (Behaviour* behaviour : m_behaviours) 
 	{
 		value += "	-: "+std::string(typeid(*behaviour).name())+"\n";
+		value += "		"+behaviour->Serialize()+"\n";
 	}
 
 	return value.c_str();

@@ -48,4 +48,6 @@ public:
 	void AddChildren(Transform* transform);
 
 	Matrix4 GetWorldMatrix();
+
+	std::string Serialize() override;
 };
