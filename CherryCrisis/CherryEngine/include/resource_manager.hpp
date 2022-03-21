@@ -20,7 +20,7 @@
 class CCENGINE_API ResourceManager
 {
 private:
-	std::unordered_multimap<std::type_index, std::shared_ptr<WrapResource>> m_resources;
+	std::unordered_multimap<std::type_index, std::shared_ptr<AResource>> m_resources;
 
 	std::mutex m_lockResources;
 

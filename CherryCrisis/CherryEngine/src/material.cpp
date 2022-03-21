@@ -15,7 +15,7 @@ Material::~Material()
 
 }
 
-void Material::Load(Ref<Material> material, const char* filepath, const aiMaterial* assimpMaterial)
+void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial)
 {
     ResourceManager* resourceManager = ResourceManager::GetInstance();
 

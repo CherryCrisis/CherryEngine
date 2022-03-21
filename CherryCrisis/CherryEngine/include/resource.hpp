@@ -8,45 +8,50 @@
 #include "event.hpp"
 #include "threadpool.hpp"
 
-class CCENGINE_API WrapResource
-{
-public :
-	WrapResource() = default;
-	virtual ~WrapResource() = default;
-};
-
-template<class T>
-class CCENGINE_API Resource : public WrapResource
+class CCENGINE_API AResource
 {
 protected:
 	const size_t hashId;
 	const std::string filepath;
 	std::atomic<bool> m_isLoaded;
-	
-	void OnLoaded(std::shared_ptr<T> resource)
+
+public:
+	AResource(const std::string& filepath)
+		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
+
+	virtual ~AResource() = default;
+
+	const size_t GetHashId() const { return hashId; }
+	const char* GetFilepath() const { return filepath.c_str(); }
+
+	bool GetIsLoaded() { return m_isLoaded.load(); }
+};
+
+template<class T>
+class Resource : public AResource
+{
+protected:
+	template<class ResourceT>
+	void OnLoaded(std::shared_ptr<ResourceT> resource)
 	{
 		m_isLoaded.store(true);
-		m_onLoaded.Invoke(resource);
+
+		std::shared_ptr<ResourceT> resourcePtrCopy = resource;
+		m_onLoaded.Invoke(std::move(resourcePtrCopy));
 	}
 
 public:
 	Event<std::shared_ptr<T>> m_onLoaded {};
 
 	Resource(const std::string& filepath)
-		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
+		: AResource(filepath) {}
 
 	virtual ~Resource() = default;
 
-	const size_t GetHashId() const { return hashId; }
-	const char* GetFilepath() const { return filepath.c_str(); }
-
 	void IsLoaded(std::shared_ptr<T> resource, ThreadPool* threadpool)
 	{
-		auto eventFunction = CCFunction::BindFunctionUnsafe(&Resource::OnLoaded, resource.get(), resource);
+		auto eventFunction = CCFunction::BindFunctionUnsafe(&Resource::OnLoaded<T>, this, resource);
 		threadpool->CreateTask(eventFunction, EChannelTask::MAINTHREAD);
 	}
-
-	bool GetIsLoaded() { return m_isLoaded.load(); }
-
 };
 

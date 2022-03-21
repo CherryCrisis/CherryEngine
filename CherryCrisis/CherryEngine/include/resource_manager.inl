@@ -5,7 +5,7 @@ std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
 	std::shared_ptr<T> resourcePtr = std::make_shared<T>(filepath);
-	auto pair = std::make_pair< std::type_index, std::shared_ptr<Resource>>(typeid(T), resourcePtr);
+	auto pair = std::make_pair< std::type_index, std::shared_ptr<AResource>>(typeid(T), resourcePtr);
 	m_resources.insert(pair);
 
 	return resourcePtr;
@@ -23,9 +23,9 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 
 	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
 
-	T::Load(resourcePtr, filepath, args...);
+	T::Load(resourcePtr, args...);
 
-	//resourcePtr->IsLoaded(resource, threadpool);
+	resourcePtr->IsLoaded(resourcePtr, threadpool);
 
 	return resourcePtr;
 }
@@ -44,8 +44,9 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 		{
 			if (findedResource->GetIsLoaded())
 			{
-				/*auto function = CCFunction::BindFunctionUnsafe(&CCCallback::AWrapCallback::Invoke<std::shared_ptr<Resource>&>, 
-					wrappedCallback, findedResource);
+				/*std::shared_ptr<T> resourcePtrCopy = findedResource;
+				auto function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke<std::shared_ptr<T>>, 
+					wrappedCallback, std::move(resourcePtrCopy));
 				
 				threadpool->CreateTask(function, EChannelTask::MAINTHREAD);*/
 			}
@@ -57,12 +58,10 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 
 	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
 
-	T::Load(resourcePtr, filepath, args...);
+	T::Load(resourcePtr, args...);
 
 	resourcePtr->m_onLoaded.Bind(uniqueCallback);
-
-	//std::shared_ptr<Resource> resource = std::dynamic_pointer_cast<Resource>(resourcePtr);
-	//resourcePtr->IsLoaded(resource, threadpool);
+	resourcePtr->IsLoaded(resourcePtr, threadpool);
 }
 
 template<class T, class CallbackType, typename... Args>
@@ -81,7 +80,7 @@ void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIs
 }
 
 template<class T>
-Resource::Ref<T> ResourceManager::GetResource(const char* filepath)
+std::shared_ptr<T> ResourceManager::GetResource(const char* filepath)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
 

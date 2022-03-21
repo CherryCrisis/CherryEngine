@@ -41,14 +41,14 @@ public:
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
 
-	static void Load(std::shared_ptr<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh);
+	static void Load(std::shared_ptr<Mesh> mesh, const aiMesh* assimpMesh);
 
-	static void CreateCube(std::shared_ptr<Mesh> mesh, const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes);
+	static void CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes, float zHalfRes);
 
 	template <typename... Args>
-	static void Load(std::shared_ptr<Mesh> mesh, const char* shapeName, EMeshShape shapeType, Args... args);
+	static void Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, Args... args);
 
-	static void Load(std::shared_ptr<Mesh> mesh, const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+	static void Load(std::shared_ptr<Mesh> mesh, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 };
 
 #include "mesh.inl"

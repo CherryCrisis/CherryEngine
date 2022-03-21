@@ -25,7 +25,7 @@ public:
 
 	~Shader();
 
-	static void Load(Ref<Shader> shader, const char* filepath, EShader shaderType);
+	static void Load(std::shared_ptr<Shader> shader, EShader shaderType);
 
 	const unsigned int GetShaderID() { return m_shaderID; }
 };

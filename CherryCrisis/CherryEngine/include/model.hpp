@@ -23,7 +23,5 @@ public:
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Material>	m_material;
 
-
-
-	static void Load(Ref<Model> model, const char* filepath, const aiScene* assimpScene, const aiNode* assimpNode);
+	static void Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const aiNode* assimpNode);
 };

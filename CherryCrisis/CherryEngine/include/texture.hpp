@@ -24,5 +24,5 @@ public:
 
     const void* GetData() { return m_data; }
 
-    static void Load(Ref<Texture> texture, const char* texturePath);
+    static void Load(std::shared_ptr<Texture> texture);
 };
