@@ -23,7 +23,7 @@ struct ModelNode
 	Vector3					m_baseTRS[3];
 };
 
-class ModelBase : public Resource
+class ModelBase : public Resource<ModelBase>
 {
 private:
 
@@ -37,7 +37,7 @@ public:
 	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
 	~ModelBase();
 
-	static void Load(Ref<ModelBase> modelBase, const char* filepath);
+	static void Load(std::shared_ptr<ModelBase> modelBase);
 
 	//Generate entities with modelBase (model instance)
 	std::vector<Entity*> GenerateEntities(Entity* rootEntity);

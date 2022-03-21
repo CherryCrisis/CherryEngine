@@ -13,7 +13,7 @@ ShaderProgram::~ShaderProgram()
 	glDeleteProgram(m_shaderProgram);
 }
 
-void ShaderProgram::Load(Ref<ShaderProgram> shaderProgram, const char* programName, const char* vxFilepath, const char* fgFilepath)
+void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, const char* vxFilepath, const char* fgFilepath)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -23,10 +23,10 @@ void ShaderProgram::Load(Ref<ShaderProgram> shaderProgram, const char* programNa
 	if (fgFilepath != "")
 		fragmentShader = resourceManager->AddResource<Shader>(fgFilepath, true, EShader::FRAGMENT);
 
-	Load(shaderProgram, programName, vertexShader, fragmentShader);
+	Load(shaderProgram, vertexShader, fragmentShader);
 }
 
-void ShaderProgram::Load(Ref<ShaderProgram> shaderProgram, const char* programName, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath)
+void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -34,14 +34,14 @@ void ShaderProgram::Load(Ref<ShaderProgram> shaderProgram, const char* programNa
 	std::shared_ptr<Shader> fragmentShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::FRAGMENT);
 
 	if (gmFilepath == "")
-		Load(shaderProgram, programName, vertexShader, fragmentShader);
+		Load(shaderProgram, vertexShader, fragmentShader);
 
 	std::shared_ptr<Shader> geometryShader = resourceManager->AddResource<Shader>(vxFilepath, true, EShader::GEOMETRY);
 
-	Load(shaderProgram, programName, vertexShader, fragmentShader, geometryShader);
+	Load(shaderProgram, vertexShader, fragmentShader, geometryShader);
 }
 
-void ShaderProgram::Load(Ref<ShaderProgram> shaderProgram, const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg)
+void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg)
 {
 	shaderProgram->m_shaderProgram = glCreateProgram();
 
@@ -62,7 +62,7 @@ void ShaderProgram::Load(Ref<ShaderProgram> shaderProgram, const char* programNa
 	}
 }
 
-void ShaderProgram::Load(Ref<ShaderProgram> shaderProgram, const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm)
+void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm)
 {
 	shaderProgram->m_shaderProgram = glCreateProgram();
 

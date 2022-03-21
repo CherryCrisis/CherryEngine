@@ -5,7 +5,7 @@
 template <>
 SceneManager* Singleton<SceneManager>::currentInstance = nullptr;
 
-void SceneManager::SetCurrentScene(Resource::Ref<Scene> scene)
+void SceneManager::SetCurrentScene(std::shared_ptr<Scene> scene)
 {
 	m_currentScene = scene;
 }

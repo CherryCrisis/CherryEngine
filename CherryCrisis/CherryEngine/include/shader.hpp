@@ -11,7 +11,7 @@ enum class EShader
 	GEOMETRY = 0x8DD9
 };
 
-class Shader : public Resource
+class Shader : public Resource<Shader>
 {
 private:
 
@@ -25,7 +25,7 @@ public:
 
 	~Shader();
 
-	static void Load(Ref<Shader> shader, const char* filepath, EShader shaderType);
+	static void Load(std::shared_ptr<Shader> shader, EShader shaderType);
 
 	const unsigned int GetShaderID() { return m_shaderID; }
 };

@@ -9,10 +9,10 @@
 #include "model_loader.hpp"
 #include "scene.hpp"
 
-void ModelBase::Load(Ref<ModelBase> modelBase, const char* filepath)
+void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 {
     ThreadPool* threadpool = ThreadPool::GetInstance();
-    CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
+    CCModelLoader::LoadModel(modelBase->GetFilepath(), &modelBase->m_rootNode, modelBase->m_models);
 }
 
 ModelBase::~ModelBase()

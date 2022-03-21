@@ -1,11 +1,12 @@
 #pragma once
 
 template<class T>
-Resource::Ref<T> ResourceManager::CreateResource(const char* filepath)
+std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
-	Resource::Ref<T> resourcePtr = std::make_shared<T>(filepath);
-	m_resources.emplace(typeid(T), resourcePtr);
+	std::shared_ptr<T> resourcePtr = std::make_shared<T>(filepath);
+	auto pair = std::make_pair< std::type_index, std::shared_ptr<AResource>>(typeid(T), resourcePtr);
+	m_resources.insert(pair);
 
 	return resourcePtr;
 }
@@ -20,9 +21,9 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 			return findedResource;
 	}
 
-	Resource::Ref<T> resourcePtr = CreateResource<T>(filepath);
+	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
 
-	T::Load(resourcePtr, filepath, args...);
+	T::Load(resourcePtr, args...);
 
 	resourcePtr->IsLoaded(resourcePtr, threadpool);
 
@@ -41,13 +42,23 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 		std::shared_ptr<T> findedResource = GetResource<T>(filepath);
 		if (findedResource != nullptr)
 		{
-			findedResource->m_onLoaded.Bind(uniqueCallback);
+			if (findedResource->GetIsLoaded())
+			{
+				/*std::shared_ptr<T> resourcePtrCopy = findedResource;
+				auto function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke<std::shared_ptr<T>>, 
+					wrappedCallback, std::move(resourcePtrCopy));
+				
+				threadpool->CreateTask(function, EChannelTask::MAINTHREAD);*/
+			}
+
+			//findedResource->m_onLoaded.Bind(uniqueCallback);
+			return;
 		}
 	}
 
-	Resource::Ref<T> resourcePtr = CreateResource<T>(filepath);
+	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
 
-	T::Load(resourcePtr, filepath, args...);
+	T::Load(resourcePtr, args...);
 
 	resourcePtr->m_onLoaded.Bind(uniqueCallback);
 	resourcePtr->IsLoaded(resourcePtr, threadpool);
@@ -79,7 +90,9 @@ std::shared_ptr<T> ResourceManager::GetResource(const char* filepath)
 	for (auto& it = resourceRange.first; it != resourceRange.second; ++it)
 	{
 		if (it->second->GetHashId() == hashKey)
+		{
 			return (std::dynamic_pointer_cast<T>(it->second));
+		}
 	}
 
 	return nullptr;
