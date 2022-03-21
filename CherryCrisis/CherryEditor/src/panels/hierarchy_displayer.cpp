@@ -30,9 +30,8 @@ void HierarchyDisplayer::Render()
         int count = 0;
         for (auto& [entityName, entityRef] : m_displayedScene->m_entities)
         {
-            Transform* entityTransform = entityRef->GetBehaviour<Transform>();
-
-            if (!entityTransform || !entityTransform->IsRoot())
+            if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
+                entityTransform && !entityTransform->IsRoot())
                 continue;
 
             std::string name = "Instance " + std::to_string(count);
@@ -46,70 +45,6 @@ void HierarchyDisplayer::Render()
                     m_manager->m_selectedEntities.push_back(entityRef);
             }
 
-            /*if (ImGui::TreeNode((void*)(intptr_t)i, "Instance %i", i))
-            {
-                if (entity.m_cameraComp)
-                {
-                    Camera& cam = entity.m_cameraComp->m_camera;
-                    ImGui::DragFloat("Near", &cam.near);
-                    ImGui::DragFloat("Far", &cam.far);
-                    ImGui::DragFloat("Fov", &cam.fovY);
-                }
-
-                if (entity.m_lightComp)
-                {
-                    Light& light = entity.m_lightComp->m_light;
-                    ImGui::Checkbox("LightIsPoint", &light.m_isPoint);
-                    ImGui::DragFloat3("LightPosition", light.m_position.data, 0.5f);
-                    ImGui::DragFloat3("LightAmbient", light.m_ambient.data, 0.5f);
-                    ImGui::DragFloat3("LightDiffuse", light.m_diffuse.data, 0.5f);
-                    ImGui::DragFloat3("LightSpecular", light.m_specular.data, 0.5f);
-                }
-
-                Vector3 position = entity.m_transform->GetPosition();
-
-                if (ImGui::DragFloat3("Position", position.data, 0.5f))
-                    entity.m_transform->SetPosition(position);
-
-                Vector3 rotation = entity.m_transform->GetRotation() * CCMaths::RAD2DEG;
-
-                if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
-                    entity.m_transform->SetRotation(rotation * CCMaths::DEG2RAD);
-
-                Vector3 scale = entity.m_transform->GetScale();
-
-                if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
-                    entity.m_transform->SetScale(scale);
-
-                ScriptedBehaviour* scriptedBehaviour;
-                if (entity->TryGetBehaviour<ScriptedBehaviour>(scriptedBehaviour))
-                {
-                    std::vector<Field>& fields = scriptedBehaviour->GetFields();
-
-                    for (int i = 0; i < fields.size(); i++)
-                    {
-                        Field& field = fields[i];
-
-                        switch (field.m_type)
-                        {
-                        case DescriptorType::VECTOR3:
-                            if (field.m_isRef)
-                            {
-                                CCMaths::Vector3* vec = std::any_cast<CCMaths::Vector3*>(field.value);
-                                ImGui::DragFloat3(field.m_name.c_str(), vec->data, 0.5f);
-                            }
-                        case DescriptorType::INT:
-                            if (!field.m_isRef)
-                            {
-                                int num = std::any_cast<int>(field.value);
-                                ImGui::DragInt(field.m_name.c_str(), &num, 0.5f);
-                            }
-                        }
-                    }
-                }
-
-                ImGui::TreePop();
-            }*/
             count++;
         }
     }

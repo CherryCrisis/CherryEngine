@@ -7,6 +7,9 @@
 
 class CameraComponent : public Behaviour
 {
+protected:
+	void PopulateMetadatas() override;
+
 public:
 	CameraComponent(Entity& owner);
 	~CameraComponent();

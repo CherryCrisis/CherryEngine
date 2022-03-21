@@ -23,76 +23,62 @@ Inspector::Inspector(bool spawnOpened, EditorManager* manager) : Panel(spawnOpen
 
 void InspectComponents(Entity* entity, int id)
 {
-        Transform* transform;
+    if (ImGui::TreeNode((void*)(intptr_t)id, "Instance %i", id))
+    {
+        std::vector<Behaviour*> behaviours = entity->GetBehaviours();
 
-        if (!entity->TryGetBehaviour<Transform>(transform) || !transform->IsRoot())
-            return;
-
-        if (ImGui::TreeNode((void*)(intptr_t)id, "Instance %i", id))
+        for (Behaviour* behaviour : behaviours)
         {
-            CameraComponent* cameraComponent;
-            if (entity->TryGetBehaviour<CameraComponent>(cameraComponent))
+            std::vector<Field>& fields = behaviour->GetFields();
+
+            for (Field& field : fields)
             {
-                Camera& cam = cameraComponent->m_camera;
-                ImGui::DragFloat("Near", &cam.near);
-                ImGui::DragFloat("Far", &cam.far);
-                ImGui::DragFloat("Fov", &cam.fovY);
-            }
+                const std::type_index type = field.m_value.type();
 
-            LightComponent* lightComponent;
-            if (entity->TryGetBehaviour<LightComponent>(lightComponent))
-            {
-                Light& light = lightComponent->m_light;
-                ImGui::Checkbox("LightIsPoint", &light.m_isPoint);
-                ImGui::DragFloat3("LightPosition", light.m_position.data, 0.5f);
-                ImGui::DragFloat3("LightAmbient", light.m_ambient.data, 0.5f);
-                ImGui::DragFloat3("LightDiffuse", light.m_diffuse.data, 0.5f);
-                ImGui::DragFloat3("LightSpecular", light.m_specular.data, 0.5f);
-            }
-
-            if (transform)
-            {
-                Vector3 position = transform->GetPosition();
-
-                if (ImGui::DragFloat3("Position", position.data, 0.5f))
-                    transform->SetPosition(position);
-
-                Vector3 rotation = transform->GetRotation() * CCMaths::RAD2DEG;
-
-                if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
-                    transform->SetRotation(rotation * CCMaths::DEG2RAD);
-
-                Vector3 scale = transform->GetScale();
-
-                if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
-                    transform->SetScale(scale);
-            }
-
-
-            ScriptedBehaviour* scriptedBehaviour;
-            if (entity->TryGetBehaviour<ScriptedBehaviour>(scriptedBehaviour))
-            {
-                Metadata& metadatas = scriptedBehaviour->m_metadatas;
-                std::vector<Field>& fields = metadatas.m_fields;
-
-                for (int i = 0; i < metadatas.m_fields.size(); i++)
+                if (type == typeid(CCMaths::Vector3*))
                 {
-                    Field& field = fields[i];
+                    CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(field.m_value);
+                    ImGui::DragFloat3(field.m_name.c_str(), val->data, 0.5f);
+                    continue;
+                }
 
-                    switch (field.m_type)
-                    {
-                    case DescriptorType::VECTOR3:
-                        if (field.m_isRef)
-                        {
-                            CCMaths::Vector3* vec = (CCMaths::Vector3*)field.m_ptr;
-                            ImGui::DragFloat3(field.m_name.c_str(), vec->data, 0.5f);
-                        }
-                    }
+                if (type == typeid(int))
+                {
+                    int val = std::any_cast<int>(field.m_value);
+                    ImGui::DragInt(field.m_name.c_str(), &val, 0.5f);
+                    continue;
+                }
+
+                if (type == typeid(std::string))
+                {
+                    std::string val = std::any_cast<std::string>(field.m_value);
+                    ImGui::InputText(field.m_name.c_str(), &val[0], val.size() + 1);
+                    continue;
                 }
             }
-
-            ImGui::TreePop();
         }
+
+        Transform* transform = nullptr;
+        if (entity->TryGetBehaviour<Transform>(transform))
+        {
+            Vector3 position = transform->GetPosition();
+
+            if (ImGui::DragFloat3("Position", position.data, 0.5f))
+                transform->SetPosition(position);
+
+            Vector3 rotation = transform->GetRotation() * CCMaths::RAD2DEG;
+
+            if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
+                transform->SetRotation(rotation * CCMaths::DEG2RAD);
+
+            Vector3 scale = transform->GetScale();
+
+            if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
+                transform->SetScale(scale);
+        }
+
+        ImGui::TreePop();
+    }
 }
 
 void Inspector::Render() 

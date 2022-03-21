@@ -18,9 +18,7 @@ enum class CCENGINE_API DescriptorType
 struct CCENGINE_API Field
 {
 	std::string m_name;
-    DescriptorType m_type = DescriptorType::UNDEFINED;
-    std::any value;
-    bool m_isRef = false;
+    std::any m_value;
 };
 
 struct CCENGINE_API Metadata

@@ -6,6 +6,9 @@
 
 class LightComponent : public Behaviour
 {
+protected:
+	void PopulateMetadatas() override;
+
 public:
 	LightComponent(Entity& owner);
 	~LightComponent();

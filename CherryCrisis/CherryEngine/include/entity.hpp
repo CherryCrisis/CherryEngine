@@ -25,6 +25,9 @@ public:
 	template <class CompT>
 	CompT* GetBehaviour();
 
+	std::vector<Behaviour*>& GetBehaviours() { return m_behaviours; }
+	const std::vector<Behaviour*>& GetBehaviours() const { return m_behaviours; }
+
 	template <class CompT>
 	bool HasBehaviour();
 

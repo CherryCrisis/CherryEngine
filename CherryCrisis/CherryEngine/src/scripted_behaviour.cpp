@@ -36,11 +36,29 @@ void ScriptedBehaviour::PopulateMetadatas()
 	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
 	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
 
-	int val;
-	behaviourInst->GetField("num", &val);
+	const auto& fields = managedClass->Fields();
 
-	MonoString* name;
-	behaviourInst->GetField("name", &name);
+	for (const auto& [fieldName, fieldRef] : fields)
+	{
+		if (fieldRef->Type()->Equals(mono::ManagedType::GetInt32()))
+		{
+			int val;
+			behaviourInst->GetField(fieldRef.get(), &val);
+			m_metadatas.m_fields.push_back({ fieldName, val });
+			continue;
+		}
+
+		if (fieldRef->Type()->Equals(mono::ManagedType::GetString()))
+		{
+			MonoString* managedVal;
+			behaviourInst->GetField(fieldRef.get(), &managedVal);
+			char* monoChar = mono_string_to_utf8(managedVal);
+			std::string stringVal = monoChar;
+			mono_free(monoChar);
+
+			m_metadatas.m_fields.push_back({ fieldName, stringVal });
+		}
+	}
 
 	MonoObject* managedVec = nullptr;
 	behaviourInst->GetField("pos", &managedVec);
@@ -57,9 +75,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 		return;
 
 	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
-
-	m_metadatas.m_fields.push_back({ "pos", DescriptorType::VECTOR3, vecPtr, true });
-	m_metadatas.m_fields.push_back({ "num", DescriptorType::INT, val, false });
+	m_metadatas.m_fields.push_back({ "pos", vecPtr });
 }
 
 void ScriptedBehaviour::Start()
