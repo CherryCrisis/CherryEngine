@@ -11,7 +11,7 @@ class CCENGINE_API Behaviour : public Component
 
 private:
 	Entity* m_owner = nullptr;
-
+	CCUUID m_uuid = {};
 public:
 	Behaviour() = default;
 	Behaviour(Entity& owner) : m_owner(&owner) { }
@@ -28,4 +28,5 @@ public:
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }
+	const uint64_t GetUUID() const { return (uint64_t)m_uuid; }
 };

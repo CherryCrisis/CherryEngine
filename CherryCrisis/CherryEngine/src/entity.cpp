@@ -45,12 +45,13 @@ void Entity::Destroy()
 std::string Entity::Serialized() 
 {
 	std::string value;
-	value += "Entity:\n";
+	value += "Entity: "+std::to_string(m_uuid)+"\n";
 	value += "	m_name: "+m_name+"\n";
 	value += "	m_components: \n";
 	for (Behaviour* behaviour : m_behaviours) 
 	{
-		value += "	-: "+std::string(typeid(*behaviour).name())+"\n";
+		value += "	-: " + std::to_string(behaviour->GetUUID())+ "\n";
+		value += "		m_type = "+ std::string(typeid(*behaviour).name()) + "\n";
 		value += "		"+behaviour->Serialize()+"\n";
 	}
 

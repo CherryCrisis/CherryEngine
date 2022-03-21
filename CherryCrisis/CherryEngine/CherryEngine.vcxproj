@@ -154,6 +154,7 @@
     <ClInclude Include="include\time_manager.hpp" />
     <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\transform.hpp" />
+    <ClInclude Include="include\uuid.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\basicShader.frag" />
@@ -285,6 +286,7 @@
     <ClCompile Include="src\time_manager.cpp" />
     <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />
+    <ClCompile Include="src\uuid.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

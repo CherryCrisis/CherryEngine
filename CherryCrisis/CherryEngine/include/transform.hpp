@@ -49,5 +49,5 @@ public:
 
 	Matrix4 GetWorldMatrix();
 
-	std::string Serialize() override;
+	std::string Serialize() override; 
 };
