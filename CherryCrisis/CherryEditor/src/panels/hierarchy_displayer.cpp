@@ -88,13 +88,13 @@ void HierarchyDisplayer::Render()
         }
         if (ImGui::Button("Save")) 
         { 
-            if (m_displayedScene->Serialize(m_displayedScene->GetFilepath().c_str())) 
+            if (m_displayedScene->Serialize(m_displayedScene->GetFilepath())) 
             {
-                EditorManager::SendNotification("Scene  Saved !", ImGuiToastType_Success, 2.f);
+                EditorManager::SendNotification("Scene  Saved !", ImGuiToastType::Success, 2.f);
             } 
             else 
             {
-                EditorManager::SendNotification("Scene failed to save.", ImGuiToastType_Error, 2.f);
+                EditorManager::SendNotification("Scene failed to save.", ImGuiToastType::Error, 2.f);
             }
         }
         ImGui::SameLine();
