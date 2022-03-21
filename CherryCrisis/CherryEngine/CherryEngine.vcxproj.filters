@@ -471,6 +471,9 @@
     <ClInclude Include="include\threadpool.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
+    <ClInclude Include="include\resources_container.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -571,6 +574,9 @@
     </None>
     <None Include="interface\debug.i">
       <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="include\resources_container.inl">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -684,9 +690,6 @@
     </ClCompile>
     <ClCompile Include="src\time_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resource.cpp">
-      <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\threadpool.cpp">
       <Filter>Fichiers sources\Core</Filter>
