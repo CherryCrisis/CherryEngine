@@ -6,7 +6,7 @@
 
 class Shader;
 
-class ShaderProgram : public Resource
+class ShaderProgram : public Resource<ShaderProgram>
 {
 public:
 	ShaderProgram(const char* programName) : Resource(programName) {}
@@ -15,8 +15,8 @@ public:
 
 	~ShaderProgram();
 
-	static void Load(Ref<ShaderProgram> shaderProgram, const char* programName, const char* vxFilepath, const char* fgFilepath);
-	static void Load(Ref<ShaderProgram> shaderProgram, const char* programName, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath);							
-	static void Load(Ref<ShaderProgram> shaderProgram, const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg);
-	static void Load(Ref<ShaderProgram> shaderProgram, const char* programName, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm);
+	static void Load(std::shared_ptr<ShaderProgram> shaderProgram, const char* vxFilepath, const char* fgFilepath);
+	static void Load(std::shared_ptr<ShaderProgram> shaderProgram, const char* vxFilepath, const char* fgFilepath, const char* gmFilepath);
+	static void Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg);
+	static void Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm);
 };

@@ -4,7 +4,7 @@
 
 struct GPUTexture { };
 
-class Texture : public Resource
+class Texture : public Resource<Texture>
 {
 private:
 
@@ -24,5 +24,5 @@ public:
 
     const void* GetData() { return m_data; }
 
-    static void Load(Ref<Texture> texture, const char* texturePath);
+    static void Load(std::shared_ptr<Texture> texture);
 };

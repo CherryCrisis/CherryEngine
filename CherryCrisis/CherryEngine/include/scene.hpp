@@ -9,7 +9,7 @@
 
 class ModelBase;
 
-class CCENGINE_API Scene : public Resource
+class CCENGINE_API Scene : public Resource<Scene>
 {
 private:
 
@@ -21,8 +21,8 @@ public:
 
 	// TODO: Switch to unique_ptr
 	std::unordered_map<std::string, Entity*> m_entities;
-	static void Load(Ref<Scene> scene, const char* filePath);
-	void GenerateEntities(std::shared_ptr<Resource> modelBase);
+	static void Load(std::shared_ptr<Scene> scene);
+	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);
 	void Start();
 	void Update();
 

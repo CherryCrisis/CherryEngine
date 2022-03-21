@@ -14,7 +14,7 @@ class Texture;
 
 using namespace CCMaths;
 
-class Material : public Resource
+class Material : public Resource<Material>
 {
 private:
 	Vector3 m_albedo;
@@ -26,5 +26,5 @@ public:
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
 
-	static void Load(Ref<Material> material,const char* filepath, const aiMaterial* assimpMaterial);
+	static void Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial);
 };

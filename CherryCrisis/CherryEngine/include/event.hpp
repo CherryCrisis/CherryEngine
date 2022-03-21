@@ -17,14 +17,11 @@ public:
 	Event() = default;
 	virtual ~Event()
 	{
-		for (ACallback* callback : m_callbacks)
-		{
-			m_callbacks.erase(callback);
-			delete callback;
-		}
+		for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
+			delete *it;
 	}
 
-	void Bind(std::unique_ptr<ACallback>& callback)
+	void Bind(std::unique_ptr<CCCallback::ACallback<Args...>>& callback)
 	{
 		m_callbacks.insert(callback.release());
 	}
@@ -76,8 +73,7 @@ public:
 		}
 	}
 
-	template<class... Args>
-	void Invoke(Args... args)
+	void Invoke(Args&&... args)
 	{
 		for (ACallback* callback : m_callbacks)
 		{

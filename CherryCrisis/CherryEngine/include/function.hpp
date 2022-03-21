@@ -34,7 +34,7 @@ namespace CCFunction
 	class MemberFunction : public AFunction
 	{
 	private:
-		void (T::* m_f)(Args... type);
+		void (T::* m_f)(Args... m_type);
 		T* m_member;
 		std::tuple<Args...> m_args;
 
@@ -54,14 +54,14 @@ namespace CCFunction
 	std::unique_ptr<AFunction> BindFunction(void (T::* f)(Args... type), T* c, Args&&... args)
 	{
 		return std::make_unique<MemberFunction<T, Args...>>
-			(MemberFunction(f, c, std::forward<Args>(args)...));
+			(f, c, std::forward<Args>(args)...);
 	}
 
 	template<class... Args>
 	std::unique_ptr<AFunction> BindFunction(void (*f)(Args...), Args&&... args)
 	{
 		return std::make_unique<NonMemberFunction<Args...>>
-			(NonMemberFunction<Args...>(f, std::forward<Args>(args)...));
+			(f, std::forward<Args>(args)...);
 	}
 
 	//Unsafe because args of the function is not verified
@@ -70,7 +70,7 @@ namespace CCFunction
 	std::unique_ptr<AFunction> BindFunctionUnsafe(void (*f)(Args...), TArgs&&... args)
 	{
 		return std::make_unique<NonMemberFunction<Args...>>
-			(NonMemberFunction<Args...>(f, std::forward<Args>(args)...));
+			(f, std::forward<Args>(args)...);
 	}
 
 	//Unsafe because args of the function is not verified
@@ -79,6 +79,6 @@ namespace CCFunction
 	std::unique_ptr<AFunction> BindFunctionUnsafe(void (T::* f)(Args... type), T* c, TArgs&&... args)
 	{
 		return std::make_unique<MemberFunction<T, Args...>>
-			(MemberFunction(f, c, std::forward<Args>(args)...));
+			(f, c, std::forward<Args>(args)...);
 	}
 }

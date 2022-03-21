@@ -20,7 +20,7 @@
 class CCENGINE_API ResourceManager
 {
 private:
-	std::unordered_multimap<std::type_index, std::shared_ptr<Resource>> m_resources;
+	std::unordered_multimap<std::type_index, std::shared_ptr<AResource>> m_resources;
 
 	std::mutex m_lockResources;
 
@@ -28,12 +28,12 @@ private:
 
 	ThreadPool* threadpool = nullptr;
 
-	template<class T = Resource, class CallbackType, typename... Args>
+	template<class T, class CallbackType, typename... Args>
 	void AddResourceWithCallback(const char* filepath, bool verifIsExist,
 		CCCallback::AWrapCallback* wrappedCallback, Args... args);
 
 	template<class T>
-	Resource::Ref<T> CreateResource(const char* filepath);
+	std::shared_ptr<T> CreateResource(const char* filepath);
 
 public:
 	static ResourceManager* GetInstance();
@@ -41,17 +41,17 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
-	template<class T = Resource, typename... Args>
+	template<class T, typename... Args>
 	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
 
-	template<class T = Resource, class CallbackType, typename... Args>
+	template<class T, class CallbackType, typename... Args>
 	void AddResourceMultiThreads(const char* filepath, bool verifIsExist,
 		std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args&&... args);
 
-	template<class T = Resource>
+	template<class T>
 	std::shared_ptr<T> GetResource(const char* filepath);
 
-	template<class T = Resource>
+	template<class T>
 	void GetAllResources(std::vector<std::shared_ptr<T>>& resources) const;
 
 	size_t GetResourceCount() const { return m_resources.size(); }

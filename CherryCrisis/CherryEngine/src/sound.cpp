@@ -4,14 +4,10 @@
 #include "resource_manager.hpp"
 #include "alut.h"
 
-Resource::Ref<Sound> Sound::Create(const char* filepath)
+void Sound::Load(std::shared_ptr<Sound> sound)
 {
-	ResourceManager* resourceManager = ResourceManager::GetInstance();
-
-	Sound* sound = new Sound(filepath);
-
 	//Load Sound
-	sound->m_buffer = alutCreateBufferFromFile(filepath);
+	sound->m_buffer = alutCreateBufferFromFile(sound->GetFilepath());
 	if (sound->m_buffer == AL_NONE)
 	{
 		unsigned int error = alutGetError();
@@ -22,6 +18,4 @@ Resource::Ref<Sound> Sound::Create(const char* filepath)
 	}
 	alGenSources(1, &(sound->m_source));
 	alSourcei(sound->m_source, AL_BUFFER, sound->m_buffer);
-
-	return Ref<Sound>(sound);
 }

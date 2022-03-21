@@ -3,12 +3,11 @@
 #include "resource.hpp"
 #include "cherry_macros.hpp"
 
-class CCENGINE_API Sound : public Resource 
+class CCENGINE_API Sound : public Resource<Sound>
 {
 private:
 
 	bool m_isLoop = false;
-
 
 protected:
 
@@ -23,5 +22,5 @@ public:
 
 	float m_volumeMultiplier = 1.f;
 
-	static Ref<Sound> Create(const char* filepath);
+	static void Load(std::shared_ptr<Sound> sound);
 };

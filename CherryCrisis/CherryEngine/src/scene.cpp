@@ -39,7 +39,7 @@ void Scene::AddEntity(Entity* toAdd)
 	m_entities[GetUniqueEntityName(toAdd->GetName())] = toAdd;
 }
 
-void Scene::Load(Resource::Ref<Scene> scene, const char* filePath)
+void Scene::Load(std::shared_ptr<Scene> scene)
 {
 	auto RM = ResourceManager::GetInstance();
 
@@ -56,7 +56,7 @@ void Scene::Load(Resource::Ref<Scene> scene, const char* filePath)
 	scene->AddEntity(camera);
 }
 
-void Scene::GenerateEntities(std::shared_ptr<Resource> resource)
+void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 {
 	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
 

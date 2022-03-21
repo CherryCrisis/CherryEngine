@@ -58,11 +58,11 @@ namespace CCCallback
 		}
 	};
 
-	template<typename... Args>
+	template<class... Args>
 	void AWrapCallback::Invoke(Args&&... args)
 	{
-		ACallback<Args...> unwrapCallback = dynamic_cast<ACallback<Args...>>(this);
-		unwrapCallback.Invoke(std::forward<Args>(args)...);
+		ACallback<Args...>* unwrapCallback = static_cast<ACallback<Args...>*>(this);
+		unwrapCallback->Invoke(std::forward<Args>(args)...);
 	}
 
 	template<class T, class... Args>
