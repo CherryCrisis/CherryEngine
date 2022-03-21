@@ -3,8 +3,10 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <cherry_macros.hpp>
+#include "uuid.hpp"
 
 class Behaviour;
 
@@ -13,7 +15,7 @@ class CCENGINE_API Entity
 private:
 	std::string m_name = "Entity";
 	std::vector<Behaviour*> m_behaviours;
-
+	CCUUID m_uuid = {};
 public:
 	Entity() = default;
 	Entity(const std::string& name);
@@ -42,6 +44,8 @@ public:
 	void Destroy();
 
 	std::string GetName() { return m_name; }
+	uint64_t GetUUID() { return (uint64_t)m_uuid; }
+	std::string Serialized();
 };
 
 #include "entity.inl"

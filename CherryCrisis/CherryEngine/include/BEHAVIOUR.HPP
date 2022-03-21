@@ -13,7 +13,8 @@ class CCENGINE_API Behaviour : public Component
 
 private:
 	Entity* m_owner = nullptr;
-
+	CCUUID m_uuid = {};
+	
 protected:
 	Metadata m_metadatas;
 
@@ -31,9 +32,11 @@ public:
 	virtual void FixedUpdate() {}
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
+	virtual std::string Serialize() { return std::string(""); }
 
 	std::vector<Field>& GetFields() { return m_metadatas.m_fields; }
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }
+	const uint64_t GetUUID() const { return (uint64_t)m_uuid; }
 };

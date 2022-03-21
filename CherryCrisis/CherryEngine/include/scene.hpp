@@ -31,4 +31,7 @@ public:
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void AddEntity(Entity* toAdd);
+
+
+	bool Serialize(const char* filePath);
 };

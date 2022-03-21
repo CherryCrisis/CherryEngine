@@ -2,6 +2,9 @@
 
 #include "scene.hpp"
 
+#include <iostream>
+#include <fstream>
+
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
 #include "callback.hpp"
@@ -85,4 +88,28 @@ void Scene::Update()
 void Scene::Draw()
 {
 	RenderManager::DrawScene();
+}
+
+bool Scene::Serialize(const char* filePath) 
+{
+	std::ofstream myfile;
+	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
+
+	bool opened = false;
+	myfile.open(fileName);
+	if (myfile.is_open()) 
+	{
+		for (const auto& m_entity : m_entities) 
+		{
+			myfile << m_entity.second->Serialized() << std::endl;
+		}
+		myfile.close();
+		opened = true;
+	}
+	else 
+	{
+		std::cout << "Unable to open file" << std::endl;
+	}
+
+	return opened;
 }
