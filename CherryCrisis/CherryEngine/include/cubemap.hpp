@@ -13,13 +13,13 @@ private:
     int     m_height = 0;
     std::array<void*, 6> m_data = { nullptr };
 
-    Cubemap(const char* name)
-        : Resource(name) { }
 
 
 public:
     GPUCubemap* m_gpuCubemap = nullptr;
 
+    Cubemap(const char* name)
+        : Resource(name) { }
     ~Cubemap();
 
     int GetWidth()  { return m_width; }
@@ -27,6 +27,6 @@ public:
 
     const std::array<void*, 6>& GetData() { return m_data; }
 
-    static Ref<Cubemap> Create(const char* cubemapName, const char* textures[6]);
-    static Ref<Cubemap> Create(const char* cubemapName, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack);
+    static void Load(Ref<Cubemap> cubemap, const char* cubemapName, const char* textures[6]);
+    static void Load(Ref<Cubemap> cubemap, const char* cubemapName, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack);
 };

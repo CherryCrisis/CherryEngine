@@ -174,7 +174,7 @@ namespace mono
 
 	void ManagedAssembly::ReportException(MonoObject* exc)
 	{
-		m_ctx->ReportException(*exc, *this);
+		m_ctx->ReportException(exc, *this);
 	}
 
 	//================================================================//
@@ -241,7 +241,6 @@ namespace mono
 	//================================================================//
 
 	ManagedMethod::ManagedMethod(MonoMethod* method, ManagedClass* cls)
-		: m_populated(false)
 	{
 		if (!method)
 			return;
@@ -581,8 +580,9 @@ namespace mono
 					mono_runtime_object_init(obj);				// Invoke default constructor
 				}
 
-				if (exception || !obj) {
-					m_assembly->m_ctx->ReportException(*obj, *m_assembly);
+				if (exception || !obj)
+				{
+					m_assembly->m_ctx->ReportException(obj, *m_assembly);
 					return nullptr;
 				}
 				return std::make_shared<ManagedObject>(obj, *this);
@@ -784,7 +784,7 @@ namespace mono
 		return false;
 	}
 
-	MonoObject* ManagedObject::Invoke(struct ManagedMethod* method, void** params) {
+	MonoObject* ManagedObject::Invoke(ManagedMethod* method, void** params) {
 		return method->Invoke(this, params);
 	}
 
@@ -1006,12 +1006,12 @@ namespace mono
 		return true;
 	}
 
-	void ManagedScriptContext::ReportException(MonoObject& obj, ManagedAssembly& ass)
+	void ManagedScriptContext::ReportException(MonoObject* obj, ManagedAssembly& ass)
 	{
-		auto exc = GetExceptionDescriptor(&obj);
+		auto exc = GetExceptionDescriptor(obj);
 
 		for (auto& c : m_callbacks)
-			c(this, &ass, &obj, exc);
+			c(this, &ass, obj, exc);
 	}
 
 	ManagedException_t ManagedScriptContext::GetExceptionDescriptor(MonoObject* exception)
@@ -1164,10 +1164,6 @@ namespace mono
 	void ManagedScriptSystem::ReportProfileStats()
 	{
 		MonoProfiler* prof = &m_monoProfiler;
-		printf("---- MONO PROFILE REPORT ----\n");
-		printf("Total Allocations: %lu\nBytes Allocated: %lu\nTotal Moves: "
-			   "%lu\nBytes Moved: %lu\n",
-			   prof->totalAllocs, prof->bytesAlloc, prof->totalMoves, prof->bytesMoved);
 	}
 
 	uint32_t ManagedScriptSystem::MaxGCGeneration()

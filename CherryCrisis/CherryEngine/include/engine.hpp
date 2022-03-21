@@ -12,10 +12,9 @@ public:
 
 	bool isPlaying = false;
 
-	static void PlayFile(const char* fileNam);
 	void Launch();
 	void Stop() { isPlaying = false; }
-	void SoundInit();
 
 	void Tick();
+	void TickEngine();
 };

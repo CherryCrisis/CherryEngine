@@ -10,7 +10,7 @@ CsScriptingSystem* Singleton<CsScriptingSystem>::currentInstance = nullptr;
 CsScriptingSystem::CsScriptingSystem()
 {
 	// TODO: Set generic pathes
-	mono_set_dirs("CherryEditor\\lib", "CherryEditor\\externals\\etc");
+	mono_set_dirs("lib", "externals\\etc");
 }
 
 void CsScriptingSystem::Init(const mono::ManagedScriptSystemSettings_t& settings)

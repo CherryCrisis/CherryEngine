@@ -110,6 +110,8 @@ int main()
 
         editor.DisplayEditorUI(window);
 
+        engine.TickEngine();
+
         if (engine.isPlaying)
             engine.Tick();
 

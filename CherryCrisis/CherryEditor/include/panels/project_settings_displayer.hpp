@@ -1,9 +1,11 @@
 
 #pragma once
 
-#include "core/panel.hpp"
 #include <array>
 #include <string>
+
+#include "core/panel.hpp"
+#include "input_manager.hpp"
 
 class ProjectSettingsDisplayer : public Panel
 {
@@ -23,9 +25,17 @@ private:
 
 	class Input : public PanelCategory
 	{
+	private:
+		std::vector<int> m_axisPosIndex;
+		std::vector<int> m_axisNegIndex;
+		std::vector<int> m_inputsIndex;
+
 	public:
-		Input(std::string name = "default") : PanelCategory(name) {}
+		Input(std::string name = "default");
 		void Fill() override;
+
+
+		InputManager::KeyboardContext* userContext = nullptr;
 	};
 
 	class Audio : public PanelCategory

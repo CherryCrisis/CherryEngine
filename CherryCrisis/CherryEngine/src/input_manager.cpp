@@ -1,187 +1,576 @@
 #include "pch.hpp"
 
-#include <input_manager.hpp>
-
-//#define GLFW_INCLUDE_NONE
-//#include <GLFW/glfw3.h>
+#include "input_manager.hpp"
 
 #include <debug.hpp>
 
 template <>
 InputManager* Singleton<InputManager>::currentInstance = nullptr;
 
-
-InputManager::Input* InputManager::GetInputRef(Keycode key)
+const char* InputManager::GetKeyname(int index)
 {
-	return &m_keys[key];
+	if (index >= 0 && index < 119)
+		return keynames[index];
+
+	return keynames[0];
 }
 
-InputManager::Input* InputManager::GetInputRef(const char* inputName)
+const char* InputManager::GetKeyname(Keycode code)
 {
-	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
+	for (int i = 0; i < 119; ++i)
 	{
-		Debug* debug = Debug::GetInstance();
-
-		std::string errorLog = "Key ";
-		errorLog += inputName;
-		errorLog += " is not set up.";
-
-		debug->Log(errorLog.c_str());
-
-		return nullptr;
+		if (keycodes[i] == code)
+			return keynames[i];
 	}
-	else
-	{
-		Keycode& current = m_context->m_namedKeys[inputName];
 
-		return GetInputRef(current);
-	}
+	return keynames[0];
 }
 
-bool InputManager::GetKey(Keycode key)
+int InputManager::GetKeynameIndex(const char* name)
 {
-	return m_keys[key].m_isHeld;
-}
-
-bool InputManager::GetKeyDown(Keycode key)
-{
-	return m_keys[key].m_isDown;
-}
-
-bool InputManager::GetKeyUp(Keycode key)
-{
-	return m_keys[key].m_isUp;
-}
-
-float InputManager::GetAxis(Keycode posKey, Keycode negKey)
-{
-	return GetKey(posKey) - GetKey(negKey);
-}
-
-bool InputManager::GetKey(const char* inputName)
-{
-	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
+	for (int i = 0; i < 119; ++i)
 	{
-		Debug* debug = Debug::GetInstance();
-
-		std::string errorLog = "Key ";
-		errorLog += inputName;
-		errorLog += " is not set up.";
-
-		debug->Log(errorLog.c_str());
-
-		return 0.f;
+		if (keynames[i] == name)
+			return i;
 	}
-	else
-	{
-		Keycode& current = m_context->m_namedKeys[inputName];
 
-		return GetKey(current);
-	}
+	return 0;
 }
 
-bool InputManager::GetKeyDown(const char* inputName)
+Keycode	InputManager::GetKeycode(int index)
 {
-	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
-	{
-		Debug* debug = Debug::GetInstance();
+	if (index >= 0 && index < 119)
+		return keycodes[index];
 
-		std::string errorLog = "Key ";
-		errorLog += inputName;
-		errorLog += " is not set up.";
-
-		debug->Log(errorLog.c_str());
-
-		return 0.f;
-	}
-	else
-	{
-		Keycode& current = m_context->m_namedKeys[inputName];
-
-		return GetKeyDown(current);
-	}
+	return keycodes[0];
 }
 
-bool InputManager::GetKeyUp(const char* inputName)
+Keycode	InputManager::GetKeycode(const char* name)
 {
-	if (m_context->m_namedKeys.empty() || !m_context->m_namedKeys.count(inputName))
+	for (int i = 0; i < 119; ++i)
 	{
-		Debug* debug = Debug::GetInstance();
-
-		std::string errorLog = "Key ";
-		errorLog += inputName;
-		errorLog += " is not set up.";
-
-		debug->Log(errorLog.c_str());
-
-		return 0.f;
+		if (keynames[i] == name)
+			return keycodes[i];
 	}
-	else
-	{
-		Keycode& current = m_context->m_namedKeys[inputName];
-
-		return GetKeyUp(current);
-	}
+	
+	return keycodes[0];
 }
 
-float InputManager::GetAxis(const char* axisName) 
+int InputManager::GetKeycodeIndex(Keycode code)
 {
-	if (m_context->m_axis.empty() || !m_context->m_axis.count(axisName))
+	for (int i = 0; i < 119; ++i)
 	{
-		Debug* debug = Debug::GetInstance();
-
-		std::string errorLog = "Axis ";
-		errorLog += axisName;
-		errorLog += " is not set up.";
-
-		debug->Log(errorLog.c_str());
-
-		return 0.f;
+		if (keycodes[i] == code)
+			return i;
 	}
-	else
-	{
-		Axis& current = m_context->m_axis[axisName];
 
-		return GetKey(current.m_positiveInput) - GetKey(current.m_negativeInput);
-	}
+	return 0;
 }
 
-void InputManager::SetContext(KeyboardContext* context) 
+
+#pragma region Errors
+void InputManager::ErrorButtons(const char* name)
 {
-	m_context = context;
+	static Debug* debug = Debug::GetInstance();
+
+	std::string errorLog = "Action Buttons ";
+	errorLog += name;
+	errorLog += " is not set up.";
+
+	debug->Log(errorLog.c_str());
 }
 
-void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) 
+void InputManager::ErrorAxes(const char* name)
+{
+	static Debug* debug = Debug::GetInstance();
+
+	std::string errorLog = "Action Axes ";
+	errorLog += name;
+	errorLog += " is not set up.";
+
+	debug->Log(errorLog.c_str());
+}
+#pragma endregion
+
+#pragma region Context
+InputManager::KeyboardContext* InputManager::AddContext(const std::string& name)
+{
+	if (!m_contexts.contains(name))
+		m_contexts[name] = KeyboardContext();
+
+	return &m_contexts[name];
+}
+
+void InputManager::SetContext(const std::string& name)
+{
+	if (m_contexts.empty() || !m_contexts.contains(name))
+		return;
+
+	m_activeContext = &m_contexts[name];
+}
+
+void InputManager::SetContext(KeyboardContext* context)
+{
+	m_activeContext = context;
+}
+#pragma endregion
+
+#pragma region Callbacks
+void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (action == 2)	return;
-	// action = 1 if pressed and 0 if released 
-	//Input input = m_keys[key];
+
+	// action = 1 if pressed and 0 if released
+
 	Input& input = m_keys[(Keycode)key];
 
-	input.m_isHeld = action;
-	input.m_isDown = action;
-	input.m_isUp   = !action;
+	input.Set(action, action, !action);
+
+	input.m_isUpdated.Invoke(&input);
 
 	m_framePressedKeys.push_back((Keycode)key);
 }
 
 void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	m_mouseWheel.x = xoffset; 
-	m_mouseWheel.y = yoffset;
+	m_mouseWheel.x = (float)xoffset;
+	m_mouseWheel.y = (float)yoffset;
 }
 
-void InputManager::UpdateKeys() 
+void debug()
 {
+	std::cout << "TEST" << std::endl;
+
+}
+
+void debug(const float& in)
+{
+	std::cout << "TEST " << in << std::endl;
+}
+
+void InputManager::UpdateKeys()
+{
+	static bool doOnce = true;
+	
+	if (doOnce)
+	{
+		int i = 0;
+		SetContext("user Context");
+		ActionButtons* button = AddActionButtons("Test", i);
+		//ActionAxes* axes= AddActionAxes("Test", i);
+
+		AddInputToAction("Test", Keycode::E);
+		//AddAxisToAction("Test", Axis(Keycode::W, Keycode::S), i);
+
+		button->m_pressed.Bind(debug);
+		//axes->m_event.Bind(debug);
+		
+		SetContext(nullptr);
+
+		doOnce = false;
+	}
+
+
 	m_mouseWheel = CCMaths::Vector2::Zero;
 
-	for (auto& key : m_framePressedKeys) 
+	for (auto& key : m_framePressedKeys)
 	{
 		Input& input = m_keys[key];
 
-		input.m_isDown = false;
-		input.m_isUp = false;
+		input.Set(false, input.Held(), false);
 	}
 
 	m_framePressedKeys.clear();
 }
+#pragma endregion
+
+#pragma region Input
+void InputManager::Input::Set(bool down, bool held, bool up)
+{
+	m_isDown = down;
+	m_isHeld = held;
+	m_isUp = up;
+}
+
+InputManager::Input* InputManager::GetInputRef(Keycode key)
+{
+	return &m_keys[key];
+}
+
+bool InputManager::GetKeyDown(Keycode key)
+{
+	return m_keys[key].Down();
+}
+
+bool InputManager::GetKey(Keycode key)
+{
+	return m_keys[key].Held();
+}
+
+bool InputManager::GetKeyUp(Keycode key)
+{
+	return m_keys[key].Up();
+}
+
+bool InputManager::GetKeyDown(const char* inputName)
+{
+	if (!m_activeContext)
+		return false;
+
+	if (m_activeContext->m_buttons.empty() || !m_activeContext->m_buttons.contains(inputName))
+	{
+		ErrorButtons(inputName);
+
+		return 0.f;
+	}
+	else
+	{
+		ActionButtons& current = m_activeContext->m_buttons[inputName];
+		current.CheckDown();
+
+		return false;
+	}
+}
+
+bool InputManager::GetKey(const char* inputName)
+{
+	if (!m_activeContext)
+		return false;
+
+	if (m_activeContext->m_buttons.empty() || !m_activeContext->m_buttons.contains(inputName))
+	{
+		ErrorButtons(inputName);
+
+		return false;
+	}
+	else
+	{
+		ActionButtons& current = m_activeContext->m_buttons[inputName];
+		current.CheckHeld();
+
+		return false;
+	}
+}
+
+bool InputManager::GetKeyUp(const char* inputName)
+{
+	if (!m_activeContext)
+		return false;
+
+	if (m_activeContext->m_buttons.empty() || !m_activeContext->m_buttons.contains(inputName))
+	{
+		ErrorButtons(inputName);
+
+		return 0.f;
+	}
+	else
+	{
+		ActionButtons& current = m_activeContext->m_buttons[inputName];
+		current.CheckUp();
+
+		return false;
+	}
+}
+#pragma endregion
+
+#pragma region ActionButtons
+InputManager::ActionButtons* InputManager::AddActionButtons(const std::string& name, int& success)
+{
+	if (!m_activeContext)
+	{
+		success = -1;
+		return nullptr;
+	}
+
+	if (!m_activeContext->m_buttons.contains(name))
+	{
+		m_activeContext->m_buttons[name] = ActionButtons();
+		success = 1;
+	}
+	else
+		success = 0;
+
+	return &m_activeContext->m_buttons[name];
+}
+
+int InputManager::RenameActionButtons(const std::string& oldName, const std::string& newName)
+{
+	if (!m_activeContext)
+		return -1;
+
+	if (m_activeContext->m_buttons.contains(newName))
+		return 0;
+
+	auto button = m_activeContext->m_buttons.extract(oldName);
+	button.key() = newName;
+	m_activeContext->m_buttons.insert(move(button));
+
+	return 1;
+}
+
+int InputManager::AddInputToAction(const std::string& name, Keycode key)
+{
+	if (!m_activeContext || !m_activeContext->m_buttons.contains(name))
+		return -1;
+
+	m_activeContext->m_buttons[name].AddInput(key);
+	return 1;
+}
+
+int InputManager::AddInputToAction(ActionButtons* preset, Keycode key)
+{
+	if (!m_activeContext)
+		return -1;
+
+	preset->AddInput(key);
+	return 1;
+}
+
+int InputManager::ChangeInputInAction(ActionButtons* action, Keycode oldKey, Keycode newKey)
+{
+	return action->ChangeInput(oldKey, newKey);
+}
+
+void InputManager::ActionButtons::AddInput(Keycode newInput)
+{
+	InputManager* inputManager = InputManager::GetInstance();
+
+	m_inputs[newInput] = inputManager->GetInputRef(newInput);
+
+	m_inputs[newInput]->m_isUpdated.Bind(&ActionButtons::Update, this);
+}
+
+int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
+{
+	if (m_inputs.empty() || !m_inputs.contains(oldKey))
+		return -1;
+
+	if (m_inputs.contains(newKey))
+		return 0;
+
+	m_inputs[oldKey]->m_isUpdated.Unbind(&ActionButtons::Update, this);
+	
+	m_inputs.erase(oldKey);
+	AddInput(newKey);
+
+	return 1;
+}
+
+
+void InputManager::ActionButtons::Update(Input* input)
+{
+	if (input->Down())
+		m_pressed.Invoke();
+
+	else if (input->Held())
+		m_held.Invoke();
+
+	else if (input->Up())
+		m_released.Invoke();
+}
+
+bool InputManager::ActionButtons::CheckDown()
+{
+	for (auto& input : m_inputs)
+	{
+		if (input.second->Down())
+			return true;
+	}
+
+	return false;
+}
+
+bool InputManager::ActionButtons::CheckHeld()
+{
+	for (auto& input : m_inputs)
+	{
+		if (input.second->Held())
+			return true;
+	}
+
+	return false;
+}
+
+bool InputManager::ActionButtons::CheckUp()
+{
+	for (auto& input : m_inputs)
+	{
+		if (input.second->Up())
+			return true;
+	}
+
+	return false;
+}
+#pragma endregion
+
+#pragma region Axis
+float InputManager::GetAxis(Keycode posKey, Keycode negKey)
+{
+	return (float)GetKey(posKey) - (float)GetKey(negKey);
+}
+
+float InputManager::GetAxis(const char* axisName)
+{
+	if (!m_activeContext)
+		return 0.f;
+
+	if (m_activeContext->m_axes.empty() || !m_activeContext->m_axes.contains(axisName))
+	{
+		ErrorAxes(axisName);
+
+		return 0.f;
+	}
+	else
+	{
+		float totalValue = 0.f;
+		ActionAxes& axis = m_activeContext->m_axes[axisName];
+
+		return axis.ComputeValue();
+	}
+}
+
+void InputManager::SetPositiveKey(Axis* axis, Keycode key)
+{
+	axis->SetPositiveKey(key);
+}
+
+void InputManager::SetNegativeKey(Axis* axis, Keycode key)
+{
+	axis->SetNegativeKey(key);
+}
+
+void InputManager::Axis::BindUpdate()
+{
+	InputManager* inputManager = InputManager::GetInstance();
+	inputManager->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
+	inputManager->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
+}
+
+void InputManager::Axis::SetPositiveKey(Keycode key)
+{
+	InputManager* inputManager = InputManager::GetInstance();
+
+	// TODO: Unbind old key update
+	inputManager->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
+
+	m_positiveKey = key;
+	inputManager->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
+}
+
+void InputManager::Axis::SetNegativeKey(Keycode key)
+{
+	InputManager* inputManager = InputManager::GetInstance();
+
+	// TODO: Unbind old key update
+	inputManager->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
+
+	m_negativeKey = key;
+	inputManager->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
+}
+
+void InputManager::Axis::Update(Input* input)
+{
+	Value();
+
+	m_isUpdated.Invoke();
+}
+
+float InputManager::Axis::Value()
+{
+	InputManager* inputManager = InputManager::GetInstance();
+	m_value = inputManager->GetAxis(this->m_positiveKey, this->m_negativeKey);
+
+	return m_value;
+}
+#pragma endregion
+
+#pragma region ActionAxes
+InputManager::ActionAxes* InputManager::AddActionAxes(const std::string& name, int& success)
+{
+	if (!m_activeContext)
+	{
+		success = -1;
+		return nullptr;
+	}
+
+	if (!m_activeContext->m_axes.contains(name))
+	{
+		m_activeContext->m_axes[name] = ActionAxes();
+		success = 1;
+	}
+	else
+		success = 0;
+
+	return &m_activeContext->m_axes[name];
+}
+
+int InputManager::RenameActionAxes(const std::string& oldName, const std::string& newName)
+{
+	if (!m_activeContext || !m_activeContext->m_axes.contains(oldName))
+		return -1;
+
+	if (m_activeContext->m_axes.contains(newName))
+	{
+		m_activeContext->m_axes[newName] = ActionAxes();
+		return 0;
+	}
+
+	auto button = m_activeContext->m_axes.extract(oldName);
+	button.key() = newName;
+	m_activeContext->m_axes.insert(move(button));
+
+	return 1;
+}
+
+int InputManager::AddAxisToAction(const std::string& name, Axis axis)
+{
+	if (!m_activeContext || !m_activeContext->m_axes.contains(name))
+		return -1;
+
+	m_activeContext->m_axes[name].AddAxis(new Axis(axis));
+	return 1;
+}
+
+int InputManager::AddAxisToAction(ActionAxes* preset, Axis axis)
+{
+	if (!m_activeContext)
+		return -1;
+
+	preset->AddAxis(new Axis(axis));
+	return 1;
+}
+
+InputManager::ActionAxes::~ActionAxes()
+{
+	for (auto& axis : m_axes)
+	{
+		delete axis;
+	}
+}
+
+void InputManager::ActionAxes::AddAxis(Axis* newAxis)
+{
+	newAxis->BindUpdate();
+
+	newAxis->m_isUpdated.Bind(&ActionAxes::Update, this);
+
+	m_axes.push_back(newAxis);
+}
+
+void InputManager::ActionAxes::Update()
+{
+	m_event.Invoke(ComputeValue());
+}
+
+float InputManager::ActionAxes::ComputeValue()
+{
+	m_value = 0.f;
+	for (auto& input : m_axes)
+	{
+		m_value += input->Value();
+		m_value = CCMaths::Clamp(m_value, -1.f, 1.f);
+	}
+
+	return m_value;
+}
+#pragma endregion

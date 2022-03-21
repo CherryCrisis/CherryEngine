@@ -15,14 +15,12 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 
-#include <cherry_header.hpp>
-#include "scene.hpp"
 #include "resource_manager.hpp"
-#include "render_manager.hpp"
 #include "scene_manager.hpp"
+#include "render_manager.hpp"
 
 //To Replace with Resource Manager Texture Handling
-bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_texture, int* out_width, int* out_height)
+bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height)
 {
     // Load from file
     stbi_set_flip_vertically_on_load(true);
@@ -59,9 +57,10 @@ bool EditorManager::LoadTextureFromFile(const char* filename, unsigned int* out_
 
 EditorManager::EditorManager() 
 {
-    // TODO: Remove this
+    // To Replace too
     inputs = InputManager::GetInstance();
-    // TODO: Remove this too
+
+    // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
     SceneManager::GetInstance()->SetCurrentScene(scene);
     m_hierarchyDisplayer.SetScene(scene.get());
@@ -69,16 +68,16 @@ EditorManager::EditorManager()
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
 
-        if (!LoadTextureFromFile("internal/icons/play_icon.png", &PlayIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
             std::cout << "failed to load Play icon" << std::endl;
 
-        if (!LoadTextureFromFile("internal/icons/pause_icon.png", &PauseIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/pause_icon.png", &PauseIcon, &null, &null))
             std::cout << "failed to load Pause icon" << std::endl;
 
-        if (!LoadTextureFromFile("internal/icons/replay_icon.png", &ReplayIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/replay_icon.png", &ReplayIcon, &null, &null))
             std::cout << "failed to load Replay icon" << std::endl;
 
-        if (!LoadTextureFromFile("internal/icons/stop_icon.png", &StopIcon, &null, &null))
+        if (!LoadTextureFromFile("Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
             std::cout << "failed to load Stop icon" << std::endl;
     }
 }
@@ -219,10 +218,12 @@ void EditorManager::HandleMenuBar()
             }
 
         } ImGui::SameLine();
+        
         if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         } ImGui::SameLine();
+        
         if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
@@ -260,19 +261,19 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
         }
 
         if (ImGui::Button("Success"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Success, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Success, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Warning"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Warning, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Warning, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Error"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Error, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Error, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Info"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_Info, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::Info, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("None"))
-            SendNotification("I am the Title ! %s", ImGuiToastType_None, 3.f);
+            SendNotification("I am the Title ! %s", ImGuiToastType::None, 3.f);
         ImGui::SameLine();
 
         if (ImGui::Button("Show Demo"))
@@ -291,7 +292,7 @@ void EditorManager::HandleNotifications()
 }
 
 //Display time in seconds
-void EditorManager::SendNotification(const char* title, ImGuiToastType_ type, float displayTime)
+void EditorManager::SendNotification(const char* title, ImGuiToastType type, float displayTime)
 {
     ImGui::InsertNotification({ type, displayTime, title, ""});
 }

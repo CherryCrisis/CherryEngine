@@ -12,7 +12,7 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 {
 	char domainName[16] = "ScriptingDomain";
 	// TODO: Change path
-	context = CsScriptingSystem::GetInstance()->CreateContext(domainName, "x64/Debug/CherryScripting.dll");
+	context = CsScriptingSystem::GetInstance()->CreateContext(domainName, "../x64/Debug/CherryScripting.dll");
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
 
 	managedUpdate = managedClass->FindMethod("Update");
