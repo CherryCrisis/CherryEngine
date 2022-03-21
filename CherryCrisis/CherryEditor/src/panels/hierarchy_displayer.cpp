@@ -80,7 +80,11 @@ void HierarchyDisplayer::ContextCallback()
         if (ImGui::BeginMenu("New"))
         {
 
-            if (ImGui::MenuItem("Empty")) {}
+            if (ImGui::MenuItem("Empty")) 
+            {
+                Entity* empty = new Entity("Empty");
+                m_displayedScene->AddEntity(empty);
+            }
             if (ImGui::MenuItem("ModelRenderer")) {}
             if (ImGui::MenuItem("Camera")) {}
             if (ImGui::MenuItem("Particle System")) {}

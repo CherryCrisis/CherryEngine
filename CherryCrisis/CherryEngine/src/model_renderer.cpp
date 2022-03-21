@@ -36,3 +36,13 @@ void ModelRenderer::RemoveModel()
 	// TODO: Add pipeline remove
 	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
 }
+
+/*
+void ModelRenderer::Deserialize(const char* filepath, const char* modelName) 
+{
+	ResourceManager* RM = ResourceManager::GetInstance();
+	RM->AddResource<ModelBase>(filepath, true);
+
+	std::shared_ptr<Model> model = RM->AddResource<Model>(modelName, true);
+
+}*/

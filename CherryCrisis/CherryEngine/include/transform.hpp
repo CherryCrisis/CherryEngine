@@ -25,6 +25,7 @@ private:
 
 	void SetDirty();
 
+	void PopulateMetadatas() override;
 public:
 	Transform(Entity& owner);
 
@@ -48,6 +49,4 @@ public:
 	void AddChildren(Transform* transform);
 
 	Matrix4 GetWorldMatrix();
-
-	std::string Serialize() override; 
 };

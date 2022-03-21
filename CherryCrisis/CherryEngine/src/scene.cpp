@@ -59,6 +59,11 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	scene->AddEntity(camera);
 }
 
+void Scene::Load(const char* filepath) 
+{
+	// do things
+}
+
 void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 {
 	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
@@ -103,6 +108,11 @@ bool Scene::Serialize(const char* filePath)
 		{
 			myfile << m_entity.second->Serialized() << std::endl;
 		}
+		for (const auto& m_entity : m_entities)
+		{
+			myfile << m_entity.second->SerializeBehaviours() << std::endl;
+		}
+
 		myfile.close();
 		opened = true;
 	}

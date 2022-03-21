@@ -32,7 +32,7 @@ public:
 	virtual void FixedUpdate() {}
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
-	virtual std::string Serialize() { return std::string(""); }
+	std::string Serialize();
 
 	std::vector<Field>& GetFields() { return m_metadatas.m_fields; }
 

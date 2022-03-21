@@ -46,6 +46,7 @@ public:
 	std::string GetName() { return m_name; }
 	uint64_t GetUUID() { return (uint64_t)m_uuid; }
 	std::string Serialized();
+	std::string SerializeBehaviours();
 };
 
 #include "entity.inl"

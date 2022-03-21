@@ -22,6 +22,7 @@ public:
 	// TODO: Switch to unique_ptr
 	std::unordered_map<std::string, Entity*> m_entities;
 	static void Load(std::shared_ptr<Scene> scene);
+	void Load(const char* filepath);
 	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);
 	void Start();
 	void Update();

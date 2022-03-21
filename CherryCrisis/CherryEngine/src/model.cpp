@@ -10,7 +10,8 @@
 #include "mesh.hpp"
 #include "material.hpp"
 
-void Model::Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const aiNode* assimpNode)
+void Model::Load(std::shared_ptr<Model> model, const aiScene* assimpScene, 
+	const aiNode* assimpNode, const char* modelBasePath)
 {
 	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -27,6 +28,8 @@ void Model::Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const
 	aiString name = assimpMaterial->GetName();
 	std::string materialPath = modelPath + std::string("/") + std::string(name.C_Str());
 	model->m_material = resourceManager->AddResource<Material>(materialPath.c_str(), true, assimpMaterial);
+	
+	model->m_modelBasePath = std::string(modelBasePath);
 }
 
 Model::~Model()

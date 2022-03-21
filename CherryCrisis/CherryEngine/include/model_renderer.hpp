@@ -22,4 +22,6 @@ public:
 
 	void SetModel(std::shared_ptr<Model> newModel);
 	void RemoveModel();
+
+	//void Deserialize();
 };
