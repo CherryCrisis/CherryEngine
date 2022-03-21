@@ -3,7 +3,10 @@
 #include "scripted_behaviour.hpp"
 
 #include "input_manager.hpp"
+#include "resource_manager.hpp"
 #include "csscripting_system.hpp"
+
+#include "csassembly.hpp"
 
 #include "monowrapper.hpp"
 
@@ -12,8 +15,12 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 {
 	char domainName[16] = "ScriptingDomain";
 	// TODO: Change path
-	context = CsScriptingSystem::GetInstance()->CreateContext(domainName, "../x64/Debug/CherryScripting.dll");
-	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
+	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, domainName);
+}
+
+void ScriptedBehaviour::SetScriptClass(const char* scriptName)
+{
+	managedClass = assembly->context->FindClass("CCScripting", scriptName);
 
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");
@@ -28,11 +35,11 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
-	auto handleRefClass = context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
+	auto handleRefClass = assembly->context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
 	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
 
-	auto managedVector = context->FindClass("CCEngine", "Vector3");
+	auto managedVector = assembly->context->FindClass("CCEngine", "Vector3");
 	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
 	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
 
@@ -88,24 +95,11 @@ void ScriptedBehaviour::Update()
 {
 	MonoException* excep = nullptr;
 	csUpdate(behaviourInst->RawObject(), &excep);
-
-	if (InputManager::GetInstance()->GetKeyDown(Keycode::R))
-		Reload();
 }
 
 void ScriptedBehaviour::Reload()
 {
-	auto csDispose = (void(*)(MonoObject*, bool, MonoException**))mono_method_get_unmanaged_thunk(managedClass->FindMethod("Dispose")->RawMethod());
-
-	MonoException* excep = nullptr;
-	csDispose(behaviourInst->RawObject(), true, &excep);
-
-	CsScriptingSystem::GetInstance()->ReloadContextes();
-
-	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
-	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
-
-	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
+	managedClass = assembly->context->FindClass("CCScripting", "BackpackBehaviour");
 
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");

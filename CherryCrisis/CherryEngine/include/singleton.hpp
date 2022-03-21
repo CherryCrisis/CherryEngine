@@ -12,6 +12,7 @@ private:
 
 protected:
 	Singleton() = default;
+	virtual ~Singleton() = default;
 
 	static T* currentInstance;
 

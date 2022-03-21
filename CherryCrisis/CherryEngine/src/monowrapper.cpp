@@ -172,6 +172,13 @@ namespace mono
 			mClass->Reload();
 	}
 
+	void ManagedAssembly::Clear()
+	{
+		for (auto& [className, classRef] : m_classes)
+			classRef->Clear();
+	}
+
+
 	void ManagedAssembly::ReportException(MonoObject* exc)
 	{
 		m_ctx->ReportException(exc, *this);
@@ -234,12 +241,20 @@ namespace mono
 		return m_name;
 	}
 
+	void ManagedType::Reload()
+	{
+		m_isVoid = mono_type_is_void(m_type);
+		m_isStruct = mono_type_is_struct(m_type);
+		m_isRef = mono_type_is_reference(m_type);
+		m_isPtr = mono_type_is_pointer(m_type);
+		m_typeindex = mono_type_get_type(m_type);
+	}
+
 	//================================================================//
 	//
 	// Managed Method
 	//
 	//================================================================//
-
 	ManagedMethod::ManagedMethod(MonoMethod* method, ManagedClass* cls)
 	{
 		if (!method)
@@ -286,6 +301,19 @@ namespace mono
 
 		for (auto& a : m_attributes)
 			a->InvalidateHandle();
+	}
+
+	bool ManagedMethod::MatchSignature(MonoMethod* method)
+	{
+		uint32_t token = mono_method_get_token(method);
+
+		if (!token)
+			return false;
+
+		if (MonoMethodSignature* signature = mono_method_get_signature(method, m_class->m_assembly->m_image, token))
+			return mono_metadata_signature_equal(m_signature, signature);
+
+		return false;
 	}
 
 	bool ManagedMethod::MatchSignature(MonoType* returnval, std::vector<MonoType*> params)
@@ -373,6 +401,32 @@ namespace mono
 		return o;
 	}
 
+	void ManagedMethod::Reload()
+	{
+		void* iter = nullptr;
+		MonoMethod* method;
+		while (method = mono_class_get_methods(m_class->m_class, &iter))
+		{
+			if (strcmp(mono_method_get_name(method), m_name.c_str()) != 0)
+				continue;
+
+			if (!MatchSignature(method))
+				continue;
+
+			m_method = method;
+			m_attrInfo = mono_custom_attrs_from_method(method);
+			m_token = mono_method_get_token(method);
+
+			break;
+		}
+
+		for (auto& parm : m_params)
+			parm->Reload();
+
+		for (auto& a : m_attributes)
+			a->Reload();
+	}
+
 	//================================================================//
 	//
 	// Managed Field
@@ -416,7 +470,7 @@ namespace mono
 			m_attributes.push_back(std::make_shared<ManagedObject>(obj, *this));
 	}
 
-	ManagedClass::ManagedClass(ManagedAssembly* assembly, MonoClass* cls)
+	ManagedClass::ManagedClass(Ref<ManagedAssembly> assembly, MonoClass* cls)
 		: ManagedClass(cls)
 	{
 		m_assembly = assembly;
@@ -429,6 +483,17 @@ namespace mono
 	{
 		if (m_attrInfo)
 			mono_custom_attrs_free(m_attrInfo);
+	}
+
+	Ref<ManagedMethod> ManagedClass::GetCtor(std::vector<MonoType*> signature)
+	{
+		for (auto& method : m_methods)
+		{
+			if (method->m_name == ".ctor" && method->MatchSignature(signature))
+				return method;
+		}
+
+		return nullptr;
 	}
 
 	void ManagedClass::InitializeStatics()
@@ -526,7 +591,33 @@ namespace mono
 
 	void ManagedClass::Reload()
 	{
-	
+		m_class = mono_class_from_name(m_assembly->m_image, m_namespaceName.c_str(), m_className.c_str());
+
+		if (!m_class)
+		{
+			m_methods.clear();
+			m_attributes.clear();
+			m_handledInstances.clear();
+			return;
+		}
+
+		for (auto& meth : m_methods)
+		{
+			meth->m_class = this;
+			meth->Reload();
+		}
+
+		for (auto& attr : m_attributes)
+			attr->Reload();
+
+		for (auto& instance : m_handledInstances)
+			instance->Reload();
+	}
+
+	void ManagedClass::Clear()
+	{
+		for (Ref<ManagedObject> instance : m_handledInstances)
+			instance->Dispose();
 	}
 
 
@@ -561,41 +652,58 @@ namespace mono
 		return propIt->second;
 	}
 
-	/* Creates an instance of a this class */
-	Ref<ManagedObject> ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params)
+	/* Creates a raw instance of a this class */
+	MonoObject* ManagedClass::CreateRawInstance(std::vector<MonoType*> signature, void** params)
 	{
 		if (!m_assembly)
 			return nullptr;
 
-		for (auto& method : m_methods) {
-			if (method->m_name == ".ctor" && method->MatchSignature(signature)) {
-				MonoObject* exception = nullptr;
-				MonoObject* obj = mono_object_new(m_assembly->m_ctx->m_domain,
-												  m_class); // Allocate storage
-				if (signature.size() > 0) {
-					mono_runtime_invoke(method->m_method, obj, params, &exception);
-				}
-				else
-				{
-					mono_runtime_object_init(obj);				// Invoke default constructor
-				}
+		Ref<ManagedMethod> ctor = GetCtor(signature);
 
-				if (exception || !obj)
-				{
-					m_assembly->m_ctx->ReportException(obj, *m_assembly);
-					return nullptr;
-				}
-				return std::make_shared<ManagedObject>(obj, *this);
-			}
+		if (!ctor)
+			return nullptr;
+
+		MonoObject* exception = nullptr;
+		MonoObject* obj = mono_object_new(m_assembly->m_ctx->m_domain, m_class); // Allocate storage
+		if (signature.size() > 0) {
+			mono_runtime_invoke(ctor->m_method, obj, params, &exception);
+		}
+		else
+		{
+			mono_runtime_object_init(obj);				// Invoke default constructor
 		}
 
+		if (exception || !obj)
+		{
+			m_assembly->m_ctx->ReportException(obj, *m_assembly);
+			return nullptr;
+		}
+
+		return obj;
+	}
+
+	/* Creates an instance of a this class */
+	Ref<ManagedObject> ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params)
+	{
+		if (MonoObject* obj = CreateRawInstance(signature, params))
+			return std::make_shared<ManagedObject>(obj, *this);
+
 		return nullptr;
+	}
+
+	MonoObject* ManagedClass::CreateUnmanagedRawInstance(void* cPtr, bool ownMemory)
+	{
+		void* args[] = { &cPtr, &ownMemory };
+		return CreateRawInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
 	}
 
 	Ref<ManagedObject> ManagedClass::CreateUnmanagedInstance(void* cPtr, bool ownMemory)
 	{
 		void* args[] = { &cPtr, &ownMemory };
-		return CreateInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
+		Ref<ManagedObject> instance = CreateInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
+		instance->m_handledPtr = cPtr;
+		m_handledInstances.push_back(instance);
+		return instance;
 	}
 
 	mono_byte ManagedClass::NumConstructors() const {
@@ -784,6 +892,20 @@ namespace mono
 		return false;
 	}
 
+	void ManagedObject::Dispose()
+	{
+		auto csDispose = (void(*)(MonoObject*, bool, MonoException**))mono_method_get_unmanaged_thunk(m_class->FindMethod("Dispose")->RawMethod());
+
+		// TODO: Add real excep
+		MonoException* excep = nullptr;
+		csDispose(RawObject(), true, &excep);
+	}
+
+	void ManagedObject::Reload()
+	{
+		m_obj = m_class->CreateUnmanagedRawInstance(m_handledPtr, false);
+	}
+
 	MonoObject* ManagedObject::Invoke(ManagedMethod* method, void** params) {
 		return method->Invoke(this, params);
 	}
@@ -818,8 +940,8 @@ namespace mono
 
 		mono_domain_set(m_domain, 0);
 
-		for (auto& a : m_loadedAssemblies)
-			a->Reload();
+		for (auto& assembly : m_loadedAssemblies)
+			assembly->Reload();
 
 		LoadAssembly(m_baseImage.c_str());
 
@@ -832,8 +954,12 @@ namespace mono
 		if (m_domain == rootDomain)
 			return false;
 
+		for (auto& assembly : m_loadedAssemblies)
+			assembly->Clear();
+
 		mono_domain_set(rootDomain, 0);
 		mono_domain_unload(m_domain);
+
 		return true;
 	}
 
@@ -895,16 +1021,16 @@ namespace mono
 			if (!a)
 				continue;
 
-			if (Ref<ManagedClass> _cls = FindClass(*a, ns, cls))
+			if (Ref<ManagedClass> _cls = FindClass(a, ns, cls))
 				return _cls;
 		}
 
 		return nullptr;
 	}
 
-	Ref<ManagedClass> ManagedScriptContext::FindClass(ManagedAssembly& assembly, const char* ns, const char* cls)
+	Ref<ManagedClass> ManagedScriptContext::FindClass(Ref<ManagedAssembly> assembly, const char* ns, const char* cls)
 	{
-		auto itpair = assembly.m_classes.equal_range(ns);
+		auto itpair = assembly->m_classes.equal_range(ns);
 
 		for (auto it = itpair.first; it != itpair.second; ++it)
 		{
@@ -914,13 +1040,13 @@ namespace mono
 
 		/* Have mono perform the class lookup. If it's there, create and add a new
 		 * managed class */
-		MonoClass* monoClass = mono_class_from_name(assembly.m_image, ns, cls);
+		MonoClass* monoClass = mono_class_from_name(assembly->m_image, ns, cls);
 
 		if (!monoClass)
 			return nullptr;
 
-		Ref<ManagedClass> classRef = std::make_shared<ManagedClass>(&assembly, monoClass);
-		assembly.m_classes.insert(std::make_pair(classRef->ClassName(), classRef));
+		Ref<ManagedClass> classRef = std::make_shared<ManagedClass>(assembly, monoClass);
+		assembly->m_classes.insert(std::make_pair(classRef->ClassName(), classRef));
 
 		return classRef;
 	}

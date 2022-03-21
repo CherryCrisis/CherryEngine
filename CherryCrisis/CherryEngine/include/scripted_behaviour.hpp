@@ -10,7 +10,6 @@
 namespace mono
 {
 	class ManagedScriptSystem;
-	class ManagedScriptContext;
 	class ManagedClass;
 	class ManagedObject;
 	class ManagedMethod;
@@ -21,8 +20,8 @@ struct _MonoException;
 
 class CCENGINE_API ScriptedBehaviour : public Behaviour
 {
+	std::shared_ptr<class CsAssembly> assembly;
 	std::shared_ptr<mono::ManagedScriptSystem> script;
-	std::shared_ptr<mono::ManagedScriptContext> context;
 
 	std::shared_ptr<mono::ManagedClass> managedClass;
 	std::shared_ptr<mono::ManagedObject> behaviourInst;
@@ -36,6 +35,8 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 public:
 	ScriptedBehaviour(Entity& owner);
+
+	void SetScriptClass(const char* scriptName);
 
 	void Start() override;
 	void Update() override;

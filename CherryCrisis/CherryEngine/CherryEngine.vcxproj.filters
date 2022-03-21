@@ -474,6 +474,9 @@
     <ClInclude Include="include\uuid.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
+    <ClInclude Include="include\csassembly.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -688,14 +691,14 @@
     <ClCompile Include="src\time_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\resource.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\threadpool.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\uuid.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\csassembly.cpp">
+      <Filter>Fichiers sources\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

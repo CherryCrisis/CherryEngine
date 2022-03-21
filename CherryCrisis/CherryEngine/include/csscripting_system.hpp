@@ -1,10 +1,16 @@
 #pragma once
 
+#include "cherry_macros.hpp"
+
 #include "singleton.hpp"
 
-#include "monowrapper.hpp"
+namespace mono
+{
+	class ManagedScriptSystem;
+	class ManagedScriptContext;
+}
 
-class CsScriptingSystem : public Singleton<CsScriptingSystem>
+class CCENGINE_API CsScriptingSystem : public Singleton<CsScriptingSystem>
 {
 	friend class Singleton<CsScriptingSystem>;
 
@@ -15,9 +21,10 @@ public:
 	std::unique_ptr<mono::ManagedScriptSystem> m_scriptSystem;
 
 	CsScriptingSystem();
+	virtual ~CsScriptingSystem();
 
-	void Init(const mono::ManagedScriptSystemSettings_t& settings);
+	void Init();
 
-	mono::Ref<mono::ManagedScriptContext> CreateContext(char* domainName, const char* contextPath);
+	std::shared_ptr<mono::ManagedScriptContext> CreateContext(char* domainName, const char* contextPath);
 	void ReloadContextes();
 };
