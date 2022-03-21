@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cherry_macros.hpp"
+
 #include "behaviour.hpp"
 
 #include "renderer.hpp"

@@ -13,4 +13,6 @@ struct Skybox : public ARenderer
 	std::shared_ptr<Cubemap>	m_cubemap;
 
 	Skybox();
+	
+	void Load();
 };

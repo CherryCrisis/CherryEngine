@@ -1,11 +1,13 @@
 #pragma once
 
-class ARenderer
+#include "cherry_macros.hpp"
+
+class CCENGINE_API ARenderer
 {
 public:
 	bool m_isVisible = true;
 
 	virtual void Draw() { }
 
-	//virtual ~ARenderer() = default;
+	virtual ~ARenderer() = default;
 };

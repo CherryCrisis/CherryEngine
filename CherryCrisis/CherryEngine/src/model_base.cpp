@@ -2,18 +2,17 @@
 
 #include "model_base.hpp"
 
-#include "model_loader.hpp"
-#include "entity.hpp"
-
 #include "model_renderer.hpp"
 #include "transform.hpp"
+#include "threadpool.hpp"
 
-Resource::Ref<ModelBase> ModelBase::Create(const char* filepath)
+#include "model_loader.hpp"
+#include "scene.hpp"
+
+void ModelBase::Load(Ref<ModelBase> modelBase, const char* filepath)
 {
-	ModelBase* modelBase = new ModelBase(filepath);
-	CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
-
-	return Ref<ModelBase>(modelBase);
+    ThreadPool* threadpool = ThreadPool::GetInstance();
+    CCModelLoader::LoadModel(filepath, &modelBase->m_rootNode, modelBase->m_models);
 }
 
 ModelBase::~ModelBase()
@@ -24,13 +23,16 @@ ModelBase::~ModelBase()
 
 void ModelBase::DeleteModelNode(ModelNode* modelNode)
 {
+    if (!modelNode)
+        return;
+
 	for (int i = 0; i < modelNode->m_childrenNode.size(); ++i)
 		DeleteModelNode(modelNode->m_childrenNode[i]);
 
 	delete modelNode;
 }
 
-std::vector<Entity*>& ModelBase::GenerateEntities(Entity* rootEntity)
+std::vector<Entity*> ModelBase::GenerateEntities(Entity* rootEntity)
 {
     std::vector<Entity*> entities;
 

@@ -3,7 +3,8 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <stdio.h>
+#include <cstdio>
+#include <iostream>
 
 #include <windows.h>
 #undef far
@@ -23,10 +24,10 @@ AssetBrowser::AssetBrowser()
 
     int null = 0;
 
-    if (!EditorManager::LoadTextureFromFile("internal/icons/file_icon.png", &m_fileIcon, &null, &null))
+    if (!EditorManager::LoadTextureFromFile("Internal/Icons/file_icon.png", &m_fileIcon, &null, &null))
         std::cout << "failed to load file icon" << std::endl;
-
-    if (!EditorManager::LoadTextureFromFile("internal/icons/folder_icon.png", &m_browserIcon, &null, &null))
+     
+    if (!EditorManager::LoadTextureFromFile("Internal/Icons/folder_icon.png", &m_browserIcon, &null, &null))
         std::cout << "failed to load folder icon" << std::endl;
 
     // Load Icons
@@ -226,12 +227,12 @@ void AssetBrowser::RenderNodes()
             }
         }
 
-        // Need to set double click callback rename
+        // TODO: Need to set double click callback rename
         ImGui::Text(node.m_filename.c_str());
 
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2)
         {
-            EditorManager::SendNotification("Outch it hurts", ImGuiToastType_Warning);
+            EditorManager::SendNotification("Outch it hurts", ImGuiToastType::Warning);
         }
 
         ImGui::NextColumn();
@@ -296,8 +297,9 @@ void AssetBrowser::RenderNodes()
             if (!newPath.has_extension())
                 newPath += m_focusedNode->m_extension;
             
-            rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str());
-            QuerryBrowser();
+            if (rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str()))
+                QuerryBrowser();
+
             m_renaming = false;
         }
         ImGui::SetItemDefaultFocus();

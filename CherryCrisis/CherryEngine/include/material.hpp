@@ -19,13 +19,12 @@ class Material : public Resource
 private:
 	Vector3 m_albedo;
 	float	m_shininess = 0.f;
-
-	//materialName = modelPath\name
-	Material(const char* materialName) : Resource(materialName) {}
 public:
-	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
-
+	Material(const char* materialName) : Resource(materialName) {}
 	~Material();
 
-	static Ref<Material> Create(const char* filepath, const aiMaterial* assimpMaterial);
+	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+
+
+	static void Load(Ref<Material> material,const char* filepath, const aiMaterial* assimpMaterial);
 };

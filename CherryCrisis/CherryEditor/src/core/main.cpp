@@ -58,8 +58,8 @@ int main()
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
 
-    EditorManager editor{};
     Engine engine{};
+    EditorManager editor{};
 
     auto func = [](GLFWwindow* w, int k, int s, int a, int m)
     {
@@ -109,6 +109,8 @@ int main()
         glClearColor(0.f, 0.f, 0.f, 1.f);
 
         editor.DisplayEditorUI(window);
+
+        engine.TickEngine();
 
         if (engine.isPlaying)
             engine.Tick();

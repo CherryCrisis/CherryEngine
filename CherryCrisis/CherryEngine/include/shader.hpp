@@ -14,7 +14,6 @@ enum class EShader
 class Shader : public Resource
 {
 private:
-	Shader(const char* filepath) : Resource(filepath), m_shaderID(0) {}
 
 	unsigned int m_shaderID;
 
@@ -22,9 +21,11 @@ private:
 	static unsigned int CompileShader(EShader shaderType, const char** shaderStr);
 
 public:
+	Shader(const char* filepath) : Resource(filepath), m_shaderID(0) {}
+
 	~Shader();
 
-	static Ref<Shader> Create(const char* filepath, EShader shaderType);
+	static void Load(Ref<Shader> shader, const char* filepath, EShader shaderType);
 
 	const unsigned int GetShaderID() { return m_shaderID; }
 };

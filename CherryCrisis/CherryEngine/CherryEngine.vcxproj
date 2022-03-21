@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\csscripting_system.hpp" />
     <ClInclude Include="externals\include\assimp\aabb.h" />
     <ClInclude Include="externals\include\assimp\ai_assert.h" />
     <ClInclude Include="externals\include\assimp\anim.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h" />
     <ClInclude Include="externals\include\GLFW\glfw3native.h" />
     <ClInclude Include="include\basic_renderpass.hpp" />
+    <ClInclude Include="include\callback.hpp" />
     <ClInclude Include="include\behaviour.hpp" />
     <ClInclude Include="include\camera.hpp" />
     <ClInclude Include="include\camera_component.hpp" />
@@ -109,7 +111,9 @@
     <ClInclude Include="include\element_mesh_renderpass.hpp" />
     <ClInclude Include="include\engine.hpp" />
     <ClInclude Include="include\entity.hpp" />
+    <ClInclude Include="include\event.hpp" />
     <ClInclude Include="include\framework.hpp" />
+    <ClInclude Include="include\function.hpp" />
     <ClInclude Include="include\gl_manager.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
@@ -124,6 +128,7 @@
     <ClInclude Include="include\maths\vector3.hpp" />
     <ClInclude Include="include\maths\vector4.hpp" />
     <ClInclude Include="include\mesh.hpp" />
+    <ClInclude Include="include\metadata.hpp" />
     <ClInclude Include="include\model.hpp" />
     <ClInclude Include="include\model_base.hpp" />
     <ClInclude Include="include\model_loader.hpp" />
@@ -143,7 +148,11 @@
     <ClInclude Include="include\skybox.hpp" />
     <ClInclude Include="include\skybox_renderpass.hpp" />
     <ClInclude Include="include\renderpass_interface.hpp" />
+    <ClInclude Include="include\sound.hpp" />
+    <ClInclude Include="include\sound_manager.hpp" />
     <ClInclude Include="include\texture.hpp" />
+    <ClInclude Include="include\time_manager.hpp" />
+    <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\transform.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +221,7 @@
     <None Include="interface\vector4.i" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\csscripting_system.cpp" />
     <ClCompile Include="externals\src\gl.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -261,6 +271,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\render_manager.cpp" />
+    <ClCompile Include="src\resource.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\scene_manager.cpp" />
@@ -268,7 +279,11 @@
     <ClCompile Include="src\shader_program.cpp" />
     <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\skybox_renderpass.cpp" />
+    <ClCompile Include="src\sound.cpp" />
+    <ClCompile Include="src\sound_manager.cpp" />
     <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\time_manager.cpp" />
+    <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

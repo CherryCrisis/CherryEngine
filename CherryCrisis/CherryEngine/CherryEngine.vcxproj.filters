@@ -55,6 +55,15 @@
     <Filter Include="Fichiers sources\Interface\Maths">
       <UniqueIdentifier>{eee4fb74-d9e3-477a-b235-761c3b3df1c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Scripting">
+      <UniqueIdentifier>{4342f067-4dd9-4d0a-ac57-e5ababf0dfa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Scripting">
+      <UniqueIdentifier>{b78a84d0-de51-409b-b972-b9b37b74b414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Serialization">
+      <UniqueIdentifier>{0ab9216f-9eb4-42d4-b253-2a60dfee6753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -420,9 +429,6 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
-    <ClInclude Include="include\monowrapper.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="include\component.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
@@ -433,6 +439,36 @@
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\scene_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\monowrapper.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\csscripting_system.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\metadata.hpp">
+      <Filter>Fichiers sources\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="include\event.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\callback.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sound.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sound_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\time_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\function.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\threadpool.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
@@ -625,9 +661,6 @@
     <ClCompile Include="src\input_manager.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\monowrapper.cpp">
-      <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\scripted_behaviour.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
@@ -635,6 +668,27 @@
       <Filter>Fichiers sources\CSGenerated</Filter>
     </ClCompile>
     <ClCompile Include="src\scene_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\monowrapper.cpp">
+      <Filter>Fichiers sources\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\csscripting_system.cpp">
+      <Filter>Fichiers sources\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\time_manager.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\threadpool.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
   </ItemGroup>

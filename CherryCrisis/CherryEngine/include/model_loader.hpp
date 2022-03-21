@@ -2,9 +2,12 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
-class Model;
-struct ModelNode;
+#include "model.hpp"
+#include "model_base.hpp"
+//class Model;
+//struct ModelNode;
 
 namespace CCModelLoader
 {

@@ -7,19 +7,22 @@
 #include "entity.hpp"
 #include "skybox.hpp"
 
+class ModelBase;
+
 class CCENGINE_API Scene : public Resource
 {
 private:
-	Scene(const char* filePath) : Resource(filePath) { }
 
 public:
+	Scene(const char* filePath) : Resource(filePath) { }
 	~Scene();
 
 	Skybox m_skybox;
 
 	// TODO: Switch to unique_ptr
 	std::unordered_map<std::string, Entity*> m_entities;
-
+	static void Load(Ref<Scene> scene, const char* filePath);
+	void GenerateEntities(std::shared_ptr<Resource> modelBase);
 	void Start();
 	void Update();
 
@@ -28,8 +31,4 @@ public:
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void AddEntity(Entity* toAdd);
-
-	static Ref<Scene> Create(const char* filePath);
-
-	bool Serialize(const char* filePath);
 };

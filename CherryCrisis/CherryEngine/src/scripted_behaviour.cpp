@@ -3,37 +3,50 @@
 #include "scripted_behaviour.hpp"
 
 #include "input_manager.hpp"
+#include "csscripting_system.hpp"
+
+#include "monowrapper.hpp"
 
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
-	// TODO: Move this in the proper files
-	mono_set_dirs("lib", "externals\\etc");
-
-	mono::ManagedScriptSystemSettings_t settings("TestDomain");
-	settings.configIsFile = false,
-	settings.configData = nullptr,
-
-	script = std::make_shared<mono::ManagedScriptSystem>(settings);
-
 	char domainName[16] = "ScriptingDomain";
-	context = script->CreateContext(domainName, "../x64/Debug/CherryScripting.dll");
-
+	// TODO: Change path
+	context = CsScriptingSystem::GetInstance()->CreateContext(domainName, "../x64/Debug/CherryScripting.dll");
 	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
-
-	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
-	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
+	auto managedVector = context->FindClass("CCEngine", "Vector3");
+	auto handleRefClass = context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
+	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
+	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
+	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
 
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");
 
-	csUpdate = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedUpdate->RawMethod());
-	csStart = (void(*)(MonoObject*, MonoException**))mono_method_get_unmanaged_thunk(managedStart->RawMethod());
+	csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
+	csStart = managedStart->GetMemberUnmanagedThunk<void>();
+	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
 
-	bool value = false;
-	int* ptr = (int*)this;
-	void* args[] = { &ptr, &value };
-	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
+	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
+	
+	MonoObject* managedVec = nullptr;
+	behaviourInst->GetField("pos", &managedVec);
+
+	MonoException* excep = nullptr;
+	MonoObject* ptrHandle = getCPtr(managedVec, &excep);
+
+	void* unboxedHandle = mono_object_unbox(ptrHandle);
+
+	MonoObject* exception = nullptr;
+	MonoObject* res = mono_runtime_invoke(getHandleMethod, unboxedHandle, nullptr, &exception);
+
+	if (!res || exception)
+		return;
+
+	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
+	vecPtr->y = 90.f;
+
+	m_metadatas.m_fields.push_back({ "pos", DescriptorType::VECTOR3, vecPtr, true });
 }
 
 void ScriptedBehaviour::Start()
@@ -47,8 +60,8 @@ void ScriptedBehaviour::Update()
 	MonoException* excep = nullptr;
 	csUpdate(behaviourInst->RawObject(), &excep);
 
-	//if (InputManager::GetInstance()->GetKeyDown(Keycode::R))
-	//	Reload();
+	if (InputManager::GetInstance()->GetKeyDown(Keycode::R))
+		Reload();
 }
 
 void ScriptedBehaviour::Reload()
@@ -58,14 +71,18 @@ void ScriptedBehaviour::Reload()
 	MonoException* excep = nullptr;
 	csDispose(behaviourInst->RawObject(), true, &excep);
 
-	context->Reload();
+	CsScriptingSystem::GetInstance()->ReloadContextes();
 
 	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
 	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
 
-	bool value = false;
-	int* ptr = (int*)this;
-	void* args[] = { &ptr, &value };
-	behaviourInst = managedClass->CreateInstance({ mono_class_get_type(intPtrType), mono_class_get_type(boolType) }, args);
+	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
 
+	managedUpdate = managedClass->FindMethod("Update");
+	managedStart = managedClass->FindMethod("Start");
+
+	csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
+	csStart = managedStart->GetMemberUnmanagedThunk<void>();
+
+	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
 }

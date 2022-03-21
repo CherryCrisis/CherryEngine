@@ -21,7 +21,9 @@ void GameDisplayer::Render()
         if (m_isActive)
             UpdateFramebuffer(wsize.x, wsize.y);
 
-        ImGui::Image((ImTextureID)m_ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+        uint64_t ViewTex = (uint64_t)m_ViewTex;
+
+        ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::EndChild();
     }
 

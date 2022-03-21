@@ -32,25 +32,23 @@ struct GPUMesh { };
 
 class Mesh : public Resource
 {
-private :
-	//meshName = filepath\name
-	Mesh(const char* meshName) : Resource(meshName) {}
-
 public:
+	Mesh(const char* meshName) : Resource(meshName) {}
 	~Mesh() {}
+	
 	GPUMesh* m_gpuMesh = nullptr;
 
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
 
-	static Ref<Mesh> Create(const char* modelPath, const aiMesh* assimpMesh);
+	static void Load(Ref<Mesh> mesh, const char* filepath, const aiMesh* assimpMesh);
 
-	static Ref<Mesh> CreateCube(const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes);
+	static void CreateCube(Ref<Mesh> mesh, const char* cubeName, float xHalfRes, float yHalfRes, float zHalfRes);
 
 	template <typename... Args>
-	static Ref<Mesh> Create(const char* shapeName, EMeshShape shapeType, Args... args);
+	static void Load(Ref<Mesh> mesh, const char* shapeName, EMeshShape shapeType, Args... args);
 
-	static Ref<Mesh> Create(const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
+	static void Load(Ref<Mesh> mesh, const char* modelName, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 };
 
 #include "mesh.inl"
