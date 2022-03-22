@@ -55,8 +55,7 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 
 	Entity* camera = new Entity("Camera");
 	camera->AddBehaviour<CameraComponent>()->m_transform = camera->AddBehaviour<Transform>();
-	ScriptedBehaviour* scripted1 = camera->AddBehaviour<ScriptedBehaviour>();
-	scripted1->SetScriptClass("CameraController");
+	camera->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("CameraController");
 
 	scene->AddEntity(camera);
 }

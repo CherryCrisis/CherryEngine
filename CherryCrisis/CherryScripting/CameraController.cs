@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CCEngine;
+﻿using CCEngine;
 
 namespace CCScripting
 {
 	public class CameraController : Behaviour
 	{
-		public CameraController(System.IntPtr cPtr, bool cMemoryOwn) : base(cPtr, cMemoryOwn) {  }
-
 		Transform transform;
+
+		public CameraController(System.IntPtr cPtr, bool cMemoryOwn) : base(cPtr, cMemoryOwn)
+		{
+			transform = GetComponent<Transform>();
+		}
 
 		public void Start()
         {
-			transform = GetComponent<Transform>();
+			
 		}
 
 		void SetRotation()

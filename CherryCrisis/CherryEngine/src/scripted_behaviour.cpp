@@ -38,14 +38,6 @@ void ScriptedBehaviour::SetScriptClass(const char* scriptName)
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
-	auto handleRefClass = assembly->context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
-	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
-	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
-
-	auto managedVector = assembly->context->FindClass("CCEngine", "Vector3");
-	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
-	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
-
 	const auto& fields = managedClass->Fields();
 
 	for (const auto& [fieldName, fieldRef] : fields)
@@ -70,6 +62,13 @@ void ScriptedBehaviour::PopulateMetadatas()
 		}
 	}
 
+	/*auto handleRefClass = assembly->context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
+	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
+	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
+
+	auto managedVector = assembly->context->FindClass("CCEngine", "Vector3");
+	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
+	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
 	MonoObject* managedVec = nullptr;
 	behaviourInst->GetField("pos", &managedVec);
 
@@ -84,7 +83,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 	if (!res || exception)
 		return;
 
-	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
+	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);*/
 }
 
 void ScriptedBehaviour::Start()
