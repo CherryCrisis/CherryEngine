@@ -239,7 +239,7 @@ bool Scene::Unserialize(const char* filePath)
 			if (found != std::string::npos)
 			{
 				isParsingComponent = false;
-				uint64_t value = ExtractUUID(line);
+				value = ExtractUUID(line);
 				Entity* empty = new Entity("Empty", CCUUID(value));
 				
 				AddEntity(empty);
@@ -307,7 +307,8 @@ bool Scene::Unserialize(const char* filePath)
 				if (info == typeid(Behaviour*))
 				{
 					uint64_t refUUID = ExtractUUID(line);
-					m_wrappedUUIDs[behaviour->GetUUID()].insert({key, refUUID});
+					if (refUUID != 0)
+						m_wrappedUUIDs[behaviour->GetUUID()].insert({key, refUUID});
 				}
 			}
 		}
@@ -327,7 +328,20 @@ bool Scene::Unserialize(const char* filePath)
 			{
 				if (fieldRef.m_value.type() == typeid(Behaviour*)) 
 				{
-					fieldRef.m_value = m_wrappedBehaviours[grave[fieldName]];
+					auto refIt = grave.find(fieldName);
+
+					if (refIt == grave.end())
+						continue;
+
+					uint64_t refUUID = refIt->second;
+
+					auto behaviourIt = m_wrappedBehaviours.find(refUUID);
+
+					if (behaviourIt == m_wrappedBehaviours.end())
+						continue;
+
+					Behaviour* bhave = behaviourIt->second;
+					fieldRef.m_value = bhave;
 				}
 			}
 			behaviourRef->ConsumeMetadatas();

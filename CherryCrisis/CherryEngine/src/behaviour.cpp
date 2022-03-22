@@ -48,12 +48,15 @@ std::string Behaviour::Serialize()
 			continue;
 		}
 
-		if (type == typeid(Behaviour**))
+		if (type == typeid(Behaviour*))
 		{
-			Behaviour** ptr= std::any_cast<Behaviour**>(fieldRef.m_value);
-			Behaviour* val = *ptr;
-			if (val)
-				value += std::to_string((uint64_t)val->GetUUID()) + "\n";
+			Behaviour* ptr = std::any_cast<Behaviour*>(fieldRef.m_value);
+			
+			if (ptr)
+				Behaviour val = *ptr;
+			
+			if (ptr)
+				value += std::to_string((uint64_t)ptr->GetUUID()) + "\n";
 			else
 				value += "none\n";
 			continue;
