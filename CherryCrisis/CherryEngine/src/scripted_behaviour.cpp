@@ -44,7 +44,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 		{
 			int val;
 			behaviourInst->GetField(fieldRef.get(), &val);
-			m_metadatas.m_fields.push_back({ fieldName, val });
+			m_metadatas.m_fields[fieldName] = { fieldName, val };
 			continue;
 		}
 
@@ -56,7 +56,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 			std::string stringVal = monoChar;
 			mono_free(monoChar);
 
-			m_metadatas.m_fields.push_back({ fieldName, stringVal });
+			m_metadatas.m_fields[fieldName] = { fieldName, stringVal };
 		}
 	}
 
@@ -75,7 +75,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 		return;
 
 	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
-	m_metadatas.m_fields.push_back({ "pos", vecPtr });
+	m_metadatas.m_fields["pos"] = {"pos", vecPtr};
 }
 
 void ScriptedBehaviour::Start()

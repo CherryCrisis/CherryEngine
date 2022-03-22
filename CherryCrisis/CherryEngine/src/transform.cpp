@@ -8,12 +8,29 @@ Transform::Transform(Entity& owner)
 	PopulateMetadatas();
 }
 
+Transform::Transform(CCUUID& owner)
+	: Behaviour(owner)
+{
+	PopulateMetadatas();
+}
+
 
 void Transform::PopulateMetadatas() 
 {
-	m_metadatas.m_fields.push_back({ "position", &m_position });
-	m_metadatas.m_fields.push_back({ "rotation",  &m_rotation});
-	m_metadatas.m_fields.push_back({ "scale",  &m_scale});
+	m_metadatas.m_fields["position"] = { "position", &m_position };
+	m_metadatas.m_fields["rotation"] = { "rotation",  &m_rotation};
+	m_metadatas.m_fields["scale"] = { "scale",  &m_scale};
+	m_metadatas.m_fields["parent"] = { "parent",  (Behaviour*)m_parent};
+}
+
+void Transform::ConsumeMetadatas()
+{
+	m_position = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["position"].m_value);
+	m_rotation = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["rotation"].m_value);
+	m_scale    = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["scale"].m_value);
+	Behaviour* b =  std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
+
+	m_parent   = (Transform*)std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
 }
 
 void Transform::SetDirty()

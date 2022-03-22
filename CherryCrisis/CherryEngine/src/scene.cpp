@@ -108,9 +108,10 @@ bool Scene::Serialize(const char* filePath)
 		{
 			myfile << m_entity.second->Serialized() << std::endl;
 		}
+
 		for (const auto& m_entity : m_entities)
 		{
-			myfile << m_entity.second->SerializeBehaviours() << std::endl;
+			myfile << m_entity.second->SerializeBehaviours();
 		}
 
 		myfile.close();
@@ -131,14 +132,73 @@ bool Find(const std::string& string)
 	return found;
 }
 
-uint64_t ExtractUUID(const std::string str) 
+Entity* Scene::FindEntity(uint64_t id) 
 {
-	std::string uuid = str.substr(str.find(':') + 1);
+	for (const auto& entity : m_entities)
+	{
+		if ((uint64_t)entity.second->GetUUID() == id)
+			return entity.second;
+
+	}
+	return nullptr;
+}
+
+std::string ExtractValue(std::string str, const char key = ':')
+{
+	return str.substr(str.find_first_of(key) + 1);
+}
+
+std::string ExtractKey(std::string& str, const char key = ':', bool erase = false)
+{
+	std::string strr = str.substr(0, str.find(key));
+
+	if (erase) 
+	{
+		std::string::size_type i = str.find(strr);
+
+		if (i != std::string::npos)
+			str.erase(i, strr.length() + 1);
+	}
+
+	return strr;
+}
+
+uint64_t ExtractUUID(const std::string& str) 
+{
+	std::string uuid = ExtractValue(str);
+
 	uint64_t value;
 	std::istringstream iss(uuid);
 	iss >> value;
 	return value;
 }
+
+float ExtractFloat(const std::string& str)
+{
+	std::string vector = ExtractValue(str);
+	return std::stof(vector);
+}
+
+int ExtractInt(const std::string& str)
+{
+	std::string vector = ExtractValue(str);
+	return std::stoi(vector);
+}
+
+//Send the value and it parses it
+CCMaths::Vector3 ExtractVector3(std::string str)
+{	
+	CCMaths::Vector3 value{};
+	std::string temp = ExtractKey(str, '/', true);
+	value.x = std::stof(temp);
+	temp = ExtractKey(str, '/', true);
+	value.y = std::stof(temp);
+	temp = ExtractKey(str, '/', true);
+	value.z = std::stof(temp);
+	return value;
+}
+
+
 
 
 bool Scene::Unserialize(const char* filePath) 
@@ -151,6 +211,7 @@ bool Scene::Unserialize(const char* filePath)
 	std::ifstream file(fileName);
 
 	std::unordered_map<uint64_t, Behaviour*> m_wrappedBehaviours;
+	std::unordered_map<uint64_t, std::unordered_map<std::string, uint64_t>> m_wrappedUUIDs;
 
 	bool opened = false;
 	if (file)
@@ -165,11 +226,19 @@ bool Scene::Unserialize(const char* filePath)
 		// operations on the buffer...
 		std::string line;
 		std::size_t found;
+		bool isParsingComponent = false;
+		Behaviour* behaviour = nullptr;
+
+		// need to get the actual serialized uuid 
+		uint64_t value;
+		uint64_t parent;
+
 		while (std::getline(buffer, line))
 		{
 			found = line.find("Entity:");
 			if (found != std::string::npos)
 			{
+				isParsingComponent = false;
 				uint64_t value = ExtractUUID(line);
 				Entity* empty = new Entity("Empty", CCUUID(value));
 				
@@ -180,18 +249,91 @@ bool Scene::Unserialize(const char* filePath)
 			found = line.find("Behaviour:");
 			if (found != std::string::npos)
 			{
-				Behaviour* behaviour = new Behaviour();
-				// need to get the actual serialized uuid 
-
-				uint64_t value = ExtractUUID(line);
-				m_wrappedBehaviours[value] = behaviour;
+				isParsingComponent = true;
+				value = ExtractUUID(line);
 			}
+			else if (isParsingComponent) 
+			{
+				found = line.find("Transform");
+				if (found != std::string::npos)
+				{
+					behaviour = new Transform();
+				}
+				found = line.find("LightComponent");
+				if (found != std::string::npos)
+				{
+					behaviour = new LightComponent();
+				}
+				
+				if (!behaviour)
+					continue;
+
+				std::string key   = ExtractKey(line);
+				std::string parsedValue = ExtractValue(line);
+				
+				if (line.size() == 0)
+				{
+					behaviour->m_uuid = value;
+					m_wrappedBehaviours[value] = behaviour;
+					behaviour = nullptr;
+					continue;
+				}
+
+				if (key == "m_owner")
+				{
+					if (behaviour)
+						behaviour->m_parentUuid = ExtractUUID(line);	
+				}
+
+				if (!behaviour->m_metadatas.m_fields.contains(key))
+					continue;
+
+				auto& info = behaviour->m_metadatas.m_fields[key].m_value.type();
+				if (info == typeid(CCMaths::Vector3*)) 
+				{
+					
+					Vector3* vec = new Vector3();
+					*vec = ExtractVector3(parsedValue);
+
+					behaviour->m_metadatas.m_fields[key] = { key, std::any(vec) };
+				}
+
+				if (info == typeid(CCMaths::Vector3))
+				{
+					Vector3 vec = {};
+					behaviour->m_metadatas.m_fields[key] = { key, std::any(vec) };
+				}
+
+				if (info == typeid(Behaviour*))
+				{
+					uint64_t refUUID = ExtractUUID(line);
+					m_wrappedUUIDs[behaviour->GetUUID()].insert({key, refUUID});
+				}
+			}
+		}
+		//Then loop over the wrapped component to add them into the entities
+		for (auto& wrappedBehaviour : m_wrappedBehaviours) 
+		{
+			Entity* entity = FindEntity(wrappedBehaviour.second->GetOwnerUUID());
+			if (entity)
+				entity->SubscribeComponent(wrappedBehaviour.second);
+		}
+
+		//Then loop over the wrapped component again to link the uuids
+		for (const auto& [UUID, behaviourRef] : m_wrappedBehaviours)
+		{
+			auto grave = m_wrappedUUIDs[UUID];
+			for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
+			{
+				if (fieldRef.m_value.type() == typeid(Behaviour*)) 
+				{
+					fieldRef.m_value = m_wrappedBehaviours[grave[fieldName]];
+				}
+			}
+			behaviourRef->ConsumeMetadatas();
 		}
 	}
 
-	//Then loop over the wrapped component to add them into the entities
-	// 
-	// 
-	//Then loop over the rapped component again to link the uuids
+
 	return opened;
 }

@@ -32,7 +32,7 @@ public:
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void AddEntity(Entity* toAdd);
-
+	Entity* FindEntity(uint64_t id);
 
 	bool Serialize(const char* filePath);
 	bool Unserialize(const char* filePath);

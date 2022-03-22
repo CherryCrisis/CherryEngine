@@ -26,9 +26,11 @@ private:
 	void SetDirty();
 
 	void PopulateMetadatas() override;
+	void ConsumeMetadatas() override;
 public:
 	Transform(Entity& owner);
-
+	Transform(CCUUID& owner);
+	Transform() { PopulateMetadatas(); }
 	bool IsRoot() { return !m_parent; }
 
 	void SetParent(Transform* transform);

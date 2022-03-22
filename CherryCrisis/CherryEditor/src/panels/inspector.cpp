@@ -29,30 +29,30 @@ void InspectComponents(Entity* entity, int id)
 
         for (Behaviour* behaviour : behaviours)
         {
-            std::vector<Field>& fields = behaviour->GetFields();
+            std::unordered_map <std::string, Field > & fields = behaviour->GetFields();
 
-            for (Field& field : fields)
+            for (const auto& [fieldName, fieldRef] : fields)
             {
-                const std::type_index type = field.m_value.type();
+                const std::type_index type = fieldRef.m_value.type();
 
                 if (type == typeid(CCMaths::Vector3*))
                 {
-                    CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(field.m_value);
-                    ImGui::DragFloat3(field.m_name.c_str(), val->data, 0.5f);
+                    CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+                    ImGui::DragFloat3(fieldRef.m_name.c_str(), val->data, 0.5f);
                     continue;
                 }
 
                 if (type == typeid(int))
                 {
-                    int val = std::any_cast<int>(field.m_value);
-                    ImGui::DragInt(field.m_name.c_str(), &val, 0.5f);
+                    int val = std::any_cast<int>(fieldRef.m_value);
+                    ImGui::DragInt(fieldRef.m_name.c_str(), &val, 0.5f);
                     continue;
                 }
 
                 if (type == typeid(std::string))
                 {
-                    std::string val = std::any_cast<std::string>(field.m_value);
-                    ImGui::InputText(field.m_name.c_str(), &val[0], val.size() + 1);
+                    std::string val = std::any_cast<std::string>(fieldRef.m_value);
+                    ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
                     continue;
                 }
             }

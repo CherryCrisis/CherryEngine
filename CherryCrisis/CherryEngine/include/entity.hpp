@@ -10,7 +10,7 @@
 
 class Behaviour;
 
-class CCENGINE_API Entity
+class CCENGINE_API Entity 
 {
 private:
 	std::string m_name = "Entity";
@@ -29,6 +29,8 @@ public:
 
 	std::vector<Behaviour*>& GetBehaviours() { return m_behaviours; }
 	const std::vector<Behaviour*>& GetBehaviours() const { return m_behaviours; }
+
+	void SubscribeComponent(Behaviour* behaviour);
 
 	template <class CompT>
 	bool HasBehaviour();
