@@ -18,7 +18,7 @@ private:
 	CCUUID m_uuid = {};
 public:
 	Entity() = default;
-	Entity(const std::string& name);
+	Entity(const std::string& name, CCUUID m_uuid = {});
 	virtual ~Entity();
 
 	template <class CompT>

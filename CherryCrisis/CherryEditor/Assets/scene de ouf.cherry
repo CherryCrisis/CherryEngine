@@ -1,17 +1,1332 @@
-Entity:
-	m_name: Root
+Entity: 10418766099237527875
+  m_name: Light
 	m_components: 
-	-: class Transform
-	-: class ScriptedBehaviour
+	-: 15167300826498402429
 
-Entity:
-	m_name: Light
+Entity: 13857210342834514686
+  m_name: Entity
 	m_components: 
-	-: class LightComponent
+	-: 5668837677408683065
+	-: 10753808091622504568
 
-Entity:
-	m_name: Camera
+Entity: 12042340572122128686
+  m_name: Entity
 	m_components: 
-	-: class Transform
-	-: class CameraComponent
+	-: 11819167951666740746
+	-: 13771411831654071972
+
+Entity: 5245253407226856156
+  m_name: Camera
+	m_components: 
+	-: 1329627289043281109
+	-: 9569046835630944815
+
+Entity: 5590967739508361253
+  m_name: Root
+	m_components: 
+	-: 4073431694429382362
+	-: 2494980866093401070
+
+Entity: 11521320121606575799
+  m_name: Entity
+	m_components: 
+	-: 15212407512259298245
+	-: 6098853015805923885
+
+Entity: 550087322021132564
+  m_name: Entity
+	m_components: 
+	-: 12196659884348966107
+	-: 7330582180791714975
+
+Entity: 95196349042752107
+  m_name: Entity
+	m_components: 
+	-: 9265817514749399680
+	-: 8944478971344573906
+
+Entity: 7657877810763111670
+  m_name: Entity
+	m_components: 
+	-: 9387446984569773693
+	-: 14255905250336207557
+
+Entity: 9857953756980481277
+  m_name: Entity
+	m_components: 
+	-: 15620535200202484685
+	-: 3927501050678353616
+
+Entity: 11072500092179740359
+  m_name: Entity
+	m_components: 
+	-: 17975483849102479393
+	-: 5830630136938963581
+
+Entity: 6504822474026893743
+  m_name: Entity
+	m_components: 
+	-: 6931285474290889447
+	-: 3372463543879143800
+
+Entity: 12269636985372247811
+  m_name: Entity
+	m_components: 
+	-: 18102512609115588146
+	-: 11890920425079387524
+
+Entity: 18054169463872511701
+  m_name: Entity
+	m_components: 
+	-: 2655619435138041010
+	-: 9598981118071801046
+
+Entity: 9866892700366942782
+  m_name: Entity
+	m_components: 
+	-: 9506856963520758389
+	-: 15471770647721229651
+
+Entity: 6891628878854302082
+  m_name: Entity
+	m_components: 
+	-: 5712414736734413614
+	-: 712438178455831382
+
+Entity: 15279867014331402098
+  m_name: Entity
+	m_components: 
+	-: 8569084516556003539
+	-: 6214550864767232843
+
+Entity: 14340676409126165791
+  m_name: Entity
+	m_components: 
+	-: 13552528008845998964
+	-: 18064095289023991993
+
+Entity: 13482593833224751588
+  m_name: Entity
+	m_components: 
+	-: 9830164597571528166
+	-: 8978445707938833162
+
+Entity: 461721605782929533
+  m_name: Entity
+	m_components: 
+	-: 3829593768057097547
+	-: 5901763752272516840
+
+Entity: 15699680236678138131
+  m_name: Entity
+	m_components: 
+	-: 885048076786852284
+	-: 9324259654953450853
+
+Entity: 17963655741514777863
+  m_name: Entity
+	m_components: 
+	-: 2743800922784815753
+	-: 17748244759381183627
+
+Entity: 17896825654054850670
+  m_name: Entity
+	m_components: 
+	-: 1360567576822970425
+	-: 9573259036797774953
+
+Entity: 1994318004045924000
+  m_name: Entity
+	m_components: 
+	-: 5331531000292122916
+	-: 6562257446017619231
+
+Entity: 2696041043384777135
+  m_name: Entity
+	m_components: 
+	-: 9363153333236715727
+	-: 16145968104226420077
+
+Entity: 16980857210765066983
+  m_name: Entity
+	m_components: 
+	-: 4764148207847689888
+	-: 17118956704927999912
+
+Entity: 13262916293257860464
+  m_name: Entity
+	m_components: 
+	-: 15245531300647431270
+	-: 4850191163691718605
+
+Entity: 3696841536984143733
+  m_name: Entity
+	m_components: 
+	-: 6670139796608390510
+	-: 11728138996305144064
+
+Entity: 6317515621868859165
+  m_name: Entity
+	m_components: 
+	-: 17966744752602062160
+	-: 11610822761581021019
+
+Entity: 7474357397172214348
+  m_name: Entity
+	m_components: 
+	-: 7360918341528352177
+	-: 2922727084269619357
+
+Entity: 12885887602518699729
+  m_name: Entity
+	m_components: 
+	-: 3352336987552478076
+	-: 16366882649966085282
+
+Entity: 11772760267164101876
+  m_name: Entity
+	m_components: 
+	-: 1711614562915423124
+	-: 17743052189222950190
+
+Entity: 11675892305995398828
+  m_name: Entity
+	m_components: 
+	-: 1142364367291234248
+	-: 4074558543161596519
+
+Entity: 13128113679889707155
+  m_name: Entity
+	m_components: 
+	-: 14458879797871052810
+	-: 17322338411282088260
+
+Entity: 4560953101297811327
+  m_name: Entity
+	m_components: 
+	-: 4948486006130118405
+	-: 6293000929417593815
+
+Entity: 911466526467795961
+  m_name: Entity
+	m_components: 
+	-: 10564171526866993693
+	-: 10462466849906432651
+
+Entity: 8805702403992987202
+  m_name: Entity
+	m_components: 
+	-: 3992837249062051327
+	-: 10891923724877021167
+
+Entity: 15428866382418535477
+  m_name: Entity
+	m_components: 
+	-: 9127631739524791028
+	-: 8210168710147501465
+
+Entity: 14013576265927793778
+  m_name: Entity
+	m_components: 
+	-: 18095919471517952309
+	-: 12210042992599815217
+
+Entity: 14043593509136190957
+  m_name: Entity
+	m_components: 
+	-: 14023288268184606393
+	-: 9092995602199228481
+
+Entity: 6476310520015981939
+  m_name: Entity
+	m_components: 
+	-: 14777365109859794480
+	-: 6737087888923592685
+
+Entity: 4182150809654519209
+  m_name: Entity
+	m_components: 
+	-: 306931442244591064
+	-: 5523913000982605910
+
+Entity: 2059218304384639847
+  m_name: Entity
+	m_components: 
+	-: 11495229101678933473
+	-: 6879847945235973249
+
+Entity: 11951579041560427054
+  m_name: Entity
+	m_components: 
+	-: 17264407823417802215
+	-: 8077719090663194463
+
+Entity: 17013937212273205755
+  m_name: Entity
+	m_components: 
+	-: 11754447190523863116
+	-: 8240951228690940741
+
+Entity: 15623994450645512881
+  m_name: Entity
+	m_components: 
+	-: 9149518854405378648
+	-: 3838972948742038170
+
+Entity: 10190577999324584572
+  m_name: Entity
+	m_components: 
+	-: 10448692150430035169
+	-: 4238046044390754827
+
+Entity: 17250278410496757258
+  m_name: Entity
+	m_components: 
+	-: 7801470121979800990
+	-: 11423325796164636109
+
+Entity: 7847948655620836134
+  m_name: Entity
+	m_components: 
+	-: 11192027575827944745
+	-: 13837915977522759689
+
+Entity: 5036795710997928885
+  m_name: Entity
+	m_components: 
+	-: 16499150738806006686
+	-: 5753611541562261492
+
+Entity: 15087275547807660724
+  m_name: Entity
+	m_components: 
+	-: 15873510822646008415
+	-: 5412448088332120065
+
+Entity: 6682885872894535089
+  m_name: Entity
+	m_components: 
+	-: 10402118256600051684
+	-: 6436871746747202630
+
+Entity: 15007837226547534037
+  m_name: Entity
+	m_components: 
+	-: 1461520947273440506
+	-: 9964084502453771032
+
+Entity: 15682518011967083344
+  m_name: Entity
+	m_components: 
+	-: 1717371923016910122
+	-: 7620119494084803209
+
+Entity: 17146546101440227479
+  m_name: Entity
+	m_components: 
+	-: 6447843022457264723
+	-: 11986064605097649117
+
+Entity: 17955075500475869936
+  m_name: Entity
+	m_components: 
+	-: 678535862767937324
+	-: 11877561462972715424
+
+Entity: 8683915638473106401
+  m_name: Entity
+	m_components: 
+	-: 1585154159092402668
+	-: 7657678591614900327
+
+Entity: 16912747712983122621
+  m_name: Entity
+	m_components: 
+	-: 7416670288310049446
+	-: 592345638347745542
+
+Entity: 17914415866256119358
+  m_name: Entity
+	m_components: 
+	-: 14425266411546011144
+	-: 8529075876228318813
+
+Entity: 2594054549477435893
+  m_name: Entity
+	m_components: 
+	-: 14789752909161850087
+	-: 8439599494901116072
+
+Entity: 11182700484771380082
+  m_name: Entity
+	m_components: 
+	-: 10515519952853403401
+	-: 7533861181945524690
+
+Entity: 11648921982036790457
+  m_name: Entity
+	m_components: 
+	-: 909347115367023090
+	-: 13770495379609554617
+
+Entity: 15599311160001831917
+  m_name: Entity
+	m_components: 
+	-: 13103345963720605373
+	-: 18324598106463918219
+
+Entity: 6292621888307321716
+  m_name: Entity
+	m_components: 
+	-: 17339963890777549476
+	-: 12657306330531284602
+
+Entity: 13348138926468594759
+  m_name: Entity
+	m_components: 
+	-: 9704810606980258482
+	-: 7248382354110251017
+
+Entity: 2088561030056873999
+  m_name: Entity
+	m_components: 
+	-: 14039317992644856671
+	-: 3363077871926756520
+
+Entity: 13908394519333932274
+  m_name: Entity
+	m_components: 
+	-: 2886748833515157520
+	-: 11403124932752621368
+
+Entity: 6259091579276931203
+  m_name: Entity
+	m_components: 
+	-: 5738671839985872972
+	-: 5941004100543668780
+
+Entity: 16441796008892760692
+  m_name: Entity
+	m_components: 
+	-: 3857119275168697915
+	-: 15001014577924420701
+
+Entity: 7675702112272313169
+  m_name: Entity
+	m_components: 
+	-: 10137659237101767357
+	-: 8358254450534778340
+
+Entity: 9267487860719281800
+  m_name: Entity
+	m_components: 
+	-: 10231452406288293977
+	-: 9366627507276693875
+
+Entity: 16788940142414263552
+  m_name: Entity
+	m_components: 
+	-: 12639625866838710692
+	-: 8729636942755381459
+
+Entity: 8080025719314620411
+  m_name: Entity
+	m_components: 
+	-: 9408922265202764801
+	-: 14698965975673530574
+
+Entity: 11244157958422919982
+  m_name: Entity
+	m_components: 
+	-: 689964555862074359
+	-: 5423706060410650099
+
+Entity: 8602246225415458171
+  m_name: Entity
+	m_components: 
+	-: 4846003229519411967
+	-: 16152293659514633185
+
+Entity: 13680428629719263795
+  m_name: Entity
+	m_components: 
+	-: 14122618586353939039
+	-: 13632143238058378305
+
+Entity: 18418081684582084125
+  m_name: Entity
+	m_components: 
+	-: 2534799552095677807
+	-: 17016883986999492031
+
+Entity: 6868990450593568604
+  m_name: Entity
+	m_components: 
+	-: 1345575799346730570
+	-: 14490914304335307875
+
+Entity: 1601542328079327907
+  m_name: Entity
+	m_components: 
+	-: 9482648473375581876
+	-: 12051360475844031839
+
+Entity: 8436117467650158402
+  m_name: Entity
+	m_components: 
+	-: 9528339785105926018
+	-: 6823161612782875811
+
+Entity: 2928937101279588124
+  m_name: Entity
+	m_components: 
+	-: 18431049935668596660
+	-: 14415576485539497441
+
+Entity: 9477878037650150445
+  m_name: Entity
+	m_components: 
+	-: 4790386939101500890
+	-: 5983969962530003683
+
+Entity: 18401628604370869289
+  m_name: Entity
+	m_components: 
+	-: 17528205773888147068
+	-: 15614199070804039996
+
+Behaviour:15167300826498402429
+  m_type = class LightComponent
+  position: 0.000000/0.000000/0.000000
+  ambient: 0.000000/0.000000/0.000000
+  diffuse: 1.000000/1.000000/1.000000
+  specular: 0.000000/0.000000/0.000000
+  attenuation: 1.000000/0.000000/0.000000
+
+
+Behaviour:5668837677408683065
+  m_type = class ModelRenderer
+
+Behaviour:10753808091622504568
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:11819167951666740746
+  m_type = class ModelRenderer
+
+Behaviour:13771411831654071972
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1329627289043281109
+  m_type = class Transform
+  position: 0.000000/0.000000/-10.500000
+  rotation: 0.000000/0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+Behaviour:9569046835630944815
+  m_type = class CameraComponent
+  aspect: : #ERROR# float * __ptr64 is not handled !
+  near: : #ERROR# float * __ptr64 is not handled !
+  far: : #ERROR# float * __ptr64 is not handled !
+  fovY: : #ERROR# float * __ptr64 is not handled !
+
+
+Behaviour:4073431694429382362
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+Behaviour:2494980866093401070
+  m_type = class ScriptedBehaviour
+  num: : #ERROR# int is not handled !
+  name:   pos: 5.000000/3.000000/7.000000
+
+
+Behaviour:15212407512259298245
+  m_type = class ModelRenderer
+
+Behaviour:6098853015805923885
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:12196659884348966107
+  m_type = class ModelRenderer
+
+Behaviour:7330582180791714975
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9265817514749399680
+  m_type = class ModelRenderer
+
+Behaviour:8944478971344573906
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9387446984569773693
+  m_type = class ModelRenderer
+
+Behaviour:14255905250336207557
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:15620535200202484685
+  m_type = class ModelRenderer
+
+Behaviour:3927501050678353616
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:17975483849102479393
+  m_type = class ModelRenderer
+
+Behaviour:5830630136938963581
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:6931285474290889447
+  m_type = class ModelRenderer
+
+Behaviour:3372463543879143800
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:18102512609115588146
+  m_type = class ModelRenderer
+
+Behaviour:11890920425079387524
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:2655619435138041010
+  m_type = class ModelRenderer
+
+Behaviour:9598981118071801046
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9506856963520758389
+  m_type = class ModelRenderer
+
+Behaviour:15471770647721229651
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:5712414736734413614
+  m_type = class ModelRenderer
+
+Behaviour:712438178455831382
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:8569084516556003539
+  m_type = class ModelRenderer
+
+Behaviour:6214550864767232843
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:13552528008845998964
+  m_type = class ModelRenderer
+
+Behaviour:18064095289023991993
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9830164597571528166
+  m_type = class ModelRenderer
+
+Behaviour:8978445707938833162
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:3829593768057097547
+  m_type = class ModelRenderer
+
+Behaviour:5901763752272516840
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:885048076786852284
+  m_type = class ModelRenderer
+
+Behaviour:9324259654953450853
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:2743800922784815753
+  m_type = class ModelRenderer
+
+Behaviour:17748244759381183627
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1360567576822970425
+  m_type = class ModelRenderer
+
+Behaviour:9573259036797774953
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:5331531000292122916
+  m_type = class ModelRenderer
+
+Behaviour:6562257446017619231
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9363153333236715727
+  m_type = class ModelRenderer
+
+Behaviour:16145968104226420077
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:4764148207847689888
+  m_type = class ModelRenderer
+
+Behaviour:17118956704927999912
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:15245531300647431270
+  m_type = class ModelRenderer
+
+Behaviour:4850191163691718605
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:6670139796608390510
+  m_type = class ModelRenderer
+
+Behaviour:11728138996305144064
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:17966744752602062160
+  m_type = class ModelRenderer
+
+Behaviour:11610822761581021019
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:7360918341528352177
+  m_type = class ModelRenderer
+
+Behaviour:2922727084269619357
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:3352336987552478076
+  m_type = class ModelRenderer
+
+Behaviour:16366882649966085282
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1711614562915423124
+  m_type = class ModelRenderer
+
+Behaviour:17743052189222950190
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1142364367291234248
+  m_type = class ModelRenderer
+
+Behaviour:4074558543161596519
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:14458879797871052810
+  m_type = class ModelRenderer
+
+Behaviour:17322338411282088260
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:4948486006130118405
+  m_type = class ModelRenderer
+
+Behaviour:6293000929417593815
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:10564171526866993693
+  m_type = class ModelRenderer
+
+Behaviour:10462466849906432651
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:3992837249062051327
+  m_type = class ModelRenderer
+
+Behaviour:10891923724877021167
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9127631739524791028
+  m_type = class ModelRenderer
+
+Behaviour:8210168710147501465
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:18095919471517952309
+  m_type = class ModelRenderer
+
+Behaviour:12210042992599815217
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:14023288268184606393
+  m_type = class ModelRenderer
+
+Behaviour:9092995602199228481
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:14777365109859794480
+  m_type = class ModelRenderer
+
+Behaviour:6737087888923592685
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:306931442244591064
+  m_type = class ModelRenderer
+
+Behaviour:5523913000982605910
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:11495229101678933473
+  m_type = class ModelRenderer
+
+Behaviour:6879847945235973249
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:17264407823417802215
+  m_type = class ModelRenderer
+
+Behaviour:8077719090663194463
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:11754447190523863116
+  m_type = class ModelRenderer
+
+Behaviour:8240951228690940741
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9149518854405378648
+  m_type = class ModelRenderer
+
+Behaviour:3838972948742038170
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:10448692150430035169
+  m_type = class ModelRenderer
+
+Behaviour:4238046044390754827
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:7801470121979800990
+  m_type = class ModelRenderer
+
+Behaviour:11423325796164636109
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:11192027575827944745
+  m_type = class ModelRenderer
+
+Behaviour:13837915977522759689
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:16499150738806006686
+  m_type = class ModelRenderer
+
+Behaviour:5753611541562261492
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:15873510822646008415
+  m_type = class ModelRenderer
+
+Behaviour:5412448088332120065
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:10402118256600051684
+  m_type = class ModelRenderer
+
+Behaviour:6436871746747202630
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1461520947273440506
+  m_type = class ModelRenderer
+
+Behaviour:9964084502453771032
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1717371923016910122
+  m_type = class ModelRenderer
+
+Behaviour:7620119494084803209
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:6447843022457264723
+  m_type = class ModelRenderer
+
+Behaviour:11986064605097649117
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:678535862767937324
+  m_type = class ModelRenderer
+
+Behaviour:11877561462972715424
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1585154159092402668
+  m_type = class ModelRenderer
+
+Behaviour:7657678591614900327
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:7416670288310049446
+  m_type = class ModelRenderer
+
+Behaviour:592345638347745542
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:14425266411546011144
+  m_type = class ModelRenderer
+
+Behaviour:8529075876228318813
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:14789752909161850087
+  m_type = class ModelRenderer
+
+Behaviour:8439599494901116072
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:10515519952853403401
+  m_type = class ModelRenderer
+
+Behaviour:7533861181945524690
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:909347115367023090
+  m_type = class ModelRenderer
+
+Behaviour:13770495379609554617
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:13103345963720605373
+  m_type = class ModelRenderer
+
+Behaviour:18324598106463918219
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:17339963890777549476
+  m_type = class ModelRenderer
+
+Behaviour:12657306330531284602
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9704810606980258482
+  m_type = class ModelRenderer
+
+Behaviour:7248382354110251017
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:14039317992644856671
+  m_type = class ModelRenderer
+
+Behaviour:3363077871926756520
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:2886748833515157520
+  m_type = class ModelRenderer
+
+Behaviour:11403124932752621368
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:5738671839985872972
+  m_type = class ModelRenderer
+
+Behaviour:5941004100543668780
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:3857119275168697915
+  m_type = class ModelRenderer
+
+Behaviour:15001014577924420701
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:10137659237101767357
+  m_type = class ModelRenderer
+
+Behaviour:8358254450534778340
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:10231452406288293977
+  m_type = class ModelRenderer
+
+Behaviour:9366627507276693875
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:12639625866838710692
+  m_type = class ModelRenderer
+
+Behaviour:8729636942755381459
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9408922265202764801
+  m_type = class ModelRenderer
+
+Behaviour:14698965975673530574
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:689964555862074359
+  m_type = class ModelRenderer
+
+Behaviour:5423706060410650099
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:4846003229519411967
+  m_type = class ModelRenderer
+
+Behaviour:16152293659514633185
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:14122618586353939039
+  m_type = class ModelRenderer
+
+Behaviour:13632143238058378305
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:2534799552095677807
+  m_type = class ModelRenderer
+
+Behaviour:17016883986999492031
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:1345575799346730570
+  m_type = class ModelRenderer
+
+Behaviour:14490914304335307875
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9482648473375581876
+  m_type = class ModelRenderer
+
+Behaviour:12051360475844031839
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:9528339785105926018
+  m_type = class ModelRenderer
+
+Behaviour:6823161612782875811
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:18431049935668596660
+  m_type = class ModelRenderer
+
+Behaviour:14415576485539497441
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:4790386939101500890
+  m_type = class ModelRenderer
+
+Behaviour:5983969962530003683
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
+
+Behaviour:17528205773888147068
+  m_type = class ModelRenderer
+
+Behaviour:15614199070804039996
+  m_type = class Transform
+  position: 0.000000/0.000000/0.000000
+  rotation: 0.000000/-0.000000/0.000000
+  scale: 1.000000/1.000000/1.000000
+
 

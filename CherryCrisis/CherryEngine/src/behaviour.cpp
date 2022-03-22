@@ -10,7 +10,7 @@ std::string Behaviour::Serialize()
 	{
 		const std::type_index type = field.m_value.type();
 		
-		value += field.m_name+": ";
+		value += "  " + field.m_name + ": ";
 
 		if (type == typeid(CCMaths::Vector3*))
 		{
@@ -32,7 +32,6 @@ std::string Behaviour::Serialize()
 			": " + val + "\n";
 			continue;
 		}
-
 
 		if (type == typeid(float))
 		{

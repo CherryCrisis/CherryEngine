@@ -6,10 +6,10 @@
 #include "transform.hpp"
 
 #include <typeinfo>
-Entity::Entity(const std::string& name)
+Entity::Entity(const std::string& name, CCUUID id)
 	: m_name(name)
 {
-
+	m_uuid = id;
 }
 
 Entity::~Entity()
@@ -62,7 +62,7 @@ std::string Entity::SerializeBehaviours()
 
 	for (Behaviour* behaviour : m_behaviours)
 	{
-		value += "Behaviour: "+std::to_string(behaviour->GetUUID()) + "\n";
+		value += "Behaviour:"+std::to_string(behaviour->GetUUID()) + "\n";
 		value += "  m_type = "+ std::string(typeid(*behaviour).name()) + "\n";
 		value += behaviour->Serialize()+"\n";
 	}

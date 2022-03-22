@@ -700,6 +700,9 @@
     <ClCompile Include="src\behaviour.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
+    <ClCompile Include="src\serializer.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="interface\ccengine.i">

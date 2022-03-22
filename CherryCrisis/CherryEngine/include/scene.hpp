@@ -35,4 +35,5 @@ public:
 
 
 	bool Serialize(const char* filePath);
+	bool Unserialize(const char* filePath);
 };

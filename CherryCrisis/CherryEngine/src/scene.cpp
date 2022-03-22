@@ -123,3 +123,75 @@ bool Scene::Serialize(const char* filePath)
 
 	return opened;
 }
+
+bool Find(const std::string& string) 
+{
+	bool found = false;
+
+	return found;
+}
+
+uint64_t ExtractUUID(const std::string str) 
+{
+	std::string uuid = str.substr(str.find(':') + 1);
+	uint64_t value;
+	std::istringstream iss(uuid);
+	iss >> value;
+	return value;
+}
+
+
+bool Scene::Unserialize(const char* filePath) 
+{
+	m_entities.clear();
+
+
+	//First read the file and populate the entities + a uuid map and the component wrapper list 
+	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
+	std::ifstream file(fileName);
+
+	std::unordered_map<uint64_t, Behaviour*> m_wrappedBehaviours;
+
+	bool opened = false;
+	if (file)
+	{
+		std::stringstream buffer;
+
+		buffer << file.rdbuf();
+
+		file.close();
+		opened = true;
+
+		// operations on the buffer...
+		std::string line;
+		std::size_t found;
+		while (std::getline(buffer, line))
+		{
+			found = line.find("Entity:");
+			if (found != std::string::npos)
+			{
+				uint64_t value = ExtractUUID(line);
+				Entity* empty = new Entity("Empty", CCUUID(value));
+				
+				AddEntity(empty);
+				continue;
+			}
+
+			found = line.find("Behaviour:");
+			if (found != std::string::npos)
+			{
+				Behaviour* behaviour = new Behaviour();
+				// need to get the actual serialized uuid 
+
+				uint64_t value = ExtractUUID(line);
+				m_wrappedBehaviours[value] = behaviour;
+			}
+		}
+	}
+
+	//Then loop over the wrapped component to add them into the entities
+	// 
+	// 
+	//Then loop over the rapped component again to link the uuids
+	return opened;
+}
