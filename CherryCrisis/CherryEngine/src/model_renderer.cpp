@@ -6,7 +6,7 @@
 #include "resource_manager.hpp"
 
 #include "basic_renderpass.hpp"
-
+#include "model.hpp"
 #include "entity.hpp"
 
 ModelRenderer::ModelRenderer(Entity& owner)
@@ -25,6 +25,7 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 	if (m_model)
 	{
+		m_model->m_onDestroyed.Bind(&ModelRenderer::RemoveModel, this);
 		RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
 	}
 	else
@@ -34,5 +35,9 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 void ModelRenderer::RemoveModel()
 {
 	// TODO: Add pipeline remove
+	if (m_model)
+		m_model->m_onDestroyed.Unbind(&ModelRenderer::RemoveModel, this);
+
 	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
+	m_model = nullptr;
 }

@@ -25,7 +25,7 @@ private:
 
 	static ResourceManager* m_instance;
 
-	ThreadPool* threadpool = nullptr;
+	ThreadPool* m_threadpool = nullptr;
 
 	template<class T, class CallbackType, typename... Args>
 	void AddResourceWithCallback(const char* filepath, bool verifIsExist,
@@ -47,14 +47,16 @@ public:
 	void AddResourceMultiThreads(const char* filepath, bool verifIsExist,
 		std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args&&... args);
 
-	//template<class T>
-	//std::shared_ptr<T> GetResource(const char* filepath);
-
-	//template<class T>
-	//void GetAllResources(std::vector<std::shared_ptr<T>>& resources) const;
+	template<class T>
+	std::shared_ptr<T> GetResource(const char* filepath);
 
 	size_t GetResourceCount() const { return m_resources.size(); }
 
+	//Unload unused resources
+	void Purge();
+
+	template<class T>
+	void Remove(const char* filepath);
 };
 
 

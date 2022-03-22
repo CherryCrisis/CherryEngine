@@ -44,7 +44,7 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 
 	T::Load(resourcePtr, args...);
 
-	resourcePtr->IsLoaded(resourcePtr, threadpool);
+	resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 
 	return resourcePtr;
 }
@@ -74,7 +74,7 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 						auto function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
 							wrappedCallback, (*findedResource));
 
-						threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
+						m_threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
 					}
 				}
 
@@ -91,7 +91,7 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 	T::Load(resourcePtr, args...);
 
 	resourcePtr->m_onLoaded.Bind(uniqueCallback);
-	resourcePtr->IsLoaded(resourcePtr, threadpool);
+	resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 }
 
 template<class T, class CallbackType, typename... Args>
@@ -106,44 +106,35 @@ void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIs
 			&ResourceManager::AddResourceWithCallback<T, CallbackType, Args...>, this,
 			filepath, verifIsExist, wrappedCallback, args...);
 
-	threadpool->CreateTask(function, EChannelTask::MULTITHREAD);
+	m_threadpool->CreateTask(function, EChannelTask::MULTITHREAD);
 }
 
-//template<class T>
-//std::shared_ptr<T> ResourceManager::GetResource(const char* filepath)
-//{
-//	std::lock_guard<std::mutex> lock(m_lockResources);
-//
-//	const size_t hashKey = std::hash<std::string>()(filepath);
-//	auto resourceRange = m_resources.equal_range(typeid(T));
-//
-//	for (auto& it = resourceRange.first; it != resourceRange.second; ++it)
-//	{
-//		if (it->second->GetHashId() == hashKey)
-//		{
-//			return (std::dynamic_pointer_cast<T>(it->second));
-//		}
-//	}
-//
-//	return nullptr;
-//}
-//
-//template<class T>
-//void ResourceManager::GetAllResources(std::vector<std::shared_ptr<T>>& resources) const
-//{
-//	std::lock_guard<std::mutex> lock(m_lockResources);
-//
-//	auto resourceRange = m_resources.equal_range(typeid(T));
-//
-//	auto& firstIt = resourceRange.first;
-//	auto& lastIt = resourceRange.second;
-//
-//	resources.reserve(size_t(lastIt - firstIt));
-//
-//	for (auto& it = firstIt; it != lastIt; ++it)
-//	{
-//		resources.push_back(std::dynamic_pointer_cast<T>(it->second));
-//	}
-//}
+template<class T>
+std::shared_ptr<T> ResourceManager::GetResource(const char* filepath)
+{
+	std::lock_guard<std::mutex> lock(m_lockResources);
+
+	auto resourceContainerIt = m_resources.find(typeid(T));
+	if (resourceContainerIt != m_resources.end())
+	{
+		std::shared_ptr<T>* findedResource = resourceContainerIt->second->GetResource<T>(filepath);
+		if (findedResource != nullptr)
+			return *findedResource;
+	}
+
+	return nullptr;
+}
+
+template<class T>
+void ResourceManager::Remove(const char* filepath)
+{
+	std::lock_guard<std::mutex> lock(m_lockResources);
+
+	auto resourceContainerIt = m_resources.find(typeid(T));
+	if (resourceContainerIt != m_resources.end())
+	{
+		resourceContainerIt->second->Remove(filepath);
+	}
+}
 
 
