@@ -25,8 +25,8 @@ namespace CCScripting
 
 		void SetRotation()
         {
-			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
 
 		}
 
@@ -39,7 +39,7 @@ namespace CCScripting
 		float time = 0f;
 		public void Update()
 		{
-			time += 0.01f;
+			time += 0.05f;
 
 			SetRotation();
 
@@ -62,10 +62,6 @@ namespace CCScripting
 				Debug.GetInstance().Log(transform.position, transform.eulerAngles, transform.scale);
 
 			transform.position.x = 5f;
-
-			if (InputManager.GetInstance().GetKeyUp(Keycode.ESCAPE))
-				Debug.GetInstance().Log(this);
-
 		}
 	}
 }

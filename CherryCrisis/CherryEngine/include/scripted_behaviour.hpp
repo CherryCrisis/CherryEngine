@@ -21,6 +21,10 @@ struct _MonoException;
 
 class CCENGINE_API ScriptedBehaviour : public Behaviour
 {
+	std::string m_scriptName;
+
+	bool m_linked = false;
+
 	std::shared_ptr<class CsAssembly> assembly;
 	std::shared_ptr<mono::ManagedScriptSystem> script;
 

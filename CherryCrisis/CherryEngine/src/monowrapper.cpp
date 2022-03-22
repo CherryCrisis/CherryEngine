@@ -345,13 +345,13 @@ namespace mono
 
 		void* iter = nullptr;
 		type = nullptr;
-		int i = 0;
-		while ((type = mono_signature_get_params(m_signature, &iter)))
+		auto paramIt = params.begin();
+		while ((type = mono_signature_get_params(m_signature, &iter)) && paramIt != params.end())
 		{
-			if (!mono_metadata_type_equal(type, params[i]))
+			if (!mono_metadata_type_equal(type, *paramIt))
 				return false;
 
-			i++;
+			paramIt++;
 		}
 		return true;
 	}
@@ -400,19 +400,12 @@ namespace mono
 
 		void* iter = nullptr;
 		MonoMethod* method;
-		while (method = mono_class_get_methods(m_class->m_class, &iter))
+		while ((method = mono_class_get_methods(m_class->m_class, &iter)) && !m_method)
 		{
-			if (strcmp(mono_method_get_name(method), m_name.c_str()) != 0)
-				continue;
-
-			if (!MatchSignature(method))
+			if (mono_method_full_name(method, true) != m_fullyQualifiedName)
 				continue;
 
 			m_method = method;
-			m_attrInfo = mono_custom_attrs_from_method(method);
-			m_token = mono_method_get_token(method);
-
-			break;
 		}
 
 		if (!m_method)
@@ -420,9 +413,10 @@ namespace mono
 			void* parentIter = nullptr;
 
 			MonoClass* currentClass = m_class->m_class;
-			while (MonoClass* parent = mono_class_get_parent(currentClass))
+			MonoClass* parent = nullptr;
+			while ((parent = mono_class_get_parent(currentClass)) && !m_method)
 			{
-				while (method = mono_class_get_methods(parent, &parentIter))
+				while ((method = mono_class_get_methods(parent, &parentIter)) && !m_method)
 				{
 					const char* methodName = mono_method_get_name(method);
 					if (strcmp(methodName, ".ctor") == 0)
@@ -432,8 +426,6 @@ namespace mono
 						continue;
 
 					m_method = method;
-					m_attrInfo = mono_custom_attrs_from_method(method);
-					m_token = mono_method_get_token(method);
 				}
 
 				parentIter = nullptr;
@@ -443,6 +435,10 @@ namespace mono
 			if (!m_method)
 				return false;
 		}
+
+		m_signature = mono_method_signature(m_method);
+		m_attrInfo = mono_custom_attrs_from_method(m_method);
+		m_token = mono_method_get_token(m_method);
 
 		for (auto& thunk : m_thunks)
 		{
@@ -739,6 +735,10 @@ namespace mono
 	{
 		void* args[] = { &cPtr, &ownMemory };
 		Ref<ManagedObject> instance = CreateInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
+
+		if (!instance)
+			return nullptr;
+
 		instance->m_handledPtr = cPtr;
 		m_handledInstances.push_back(instance);
 		return instance;

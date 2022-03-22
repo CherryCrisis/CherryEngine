@@ -19,6 +19,8 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 
 void ScriptedBehaviour::SetScriptClass(const char* scriptName)
 {
+	m_scriptName = scriptName;
+
 	managedClass = assembly->context->FindClass("CCScripting", scriptName);
 
 	managedUpdate = managedClass->FindMethod("Update");
@@ -30,6 +32,8 @@ void ScriptedBehaviour::SetScriptClass(const char* scriptName)
 	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
 
 	PopulateMetadatas();
+
+	m_linked = true;
 }
 
 void ScriptedBehaviour::PopulateMetadatas()
@@ -81,17 +85,22 @@ void ScriptedBehaviour::PopulateMetadatas()
 		return;
 
 	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
-	m_metadatas.m_fields.push_back({ "pos", vecPtr });
 }
 
 void ScriptedBehaviour::Start()
 {
+	if (!m_linked)
+		return;
+
 	MonoException* excep = nullptr;
 	csStart->Invoke(behaviourInst->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Update()
 {
+	if (!m_linked)
+		return;
+
 	MonoException* excep = nullptr;
 	csUpdate->Invoke(behaviourInst->RawObject(), &excep);
 }
