@@ -5,7 +5,8 @@
 
 #include "monowrapper.hpp"
 
-void CsAssembly::Load(std::shared_ptr<CsAssembly> csassembly, char* domainName)
+void CsAssembly::Load(std::shared_ptr<CsAssembly> csassembly, const char* domainName)
 {
-	csassembly->context = CsScriptingSystem::GetInstance()->CreateContext(domainName, csassembly->filepath.c_str());
+	char* name = (char*)&domainName[0];
+	csassembly->context = CsScriptingSystem::GetInstance()->CreateContext(name, csassembly->filepath.c_str());
 }

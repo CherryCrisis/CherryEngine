@@ -13,9 +13,8 @@
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
-	char domainName[16] = "ScriptingDomain";
 	// TODO: Change path
-	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, domainName);
+	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
 }
 
 void ScriptedBehaviour::SetScriptClass(const char* scriptName)
@@ -71,7 +70,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 	behaviourInst->GetField("pos", &managedVec);
 
 	MonoException* excep = nullptr;
-	MonoObject* ptrHandle = getCPtr(managedVec, &excep);
+	MonoObject* ptrHandle = getCPtr->Invoke(managedVec, &excep);
 
 	void* unboxedHandle = mono_object_unbox(ptrHandle);
 
@@ -88,13 +87,13 @@ void ScriptedBehaviour::PopulateMetadatas()
 void ScriptedBehaviour::Start()
 {
 	MonoException* excep = nullptr;
-	csStart(behaviourInst->RawObject(), &excep);
+	csStart->Invoke(behaviourInst->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Update()
 {
 	MonoException* excep = nullptr;
-	csUpdate(behaviourInst->RawObject(), &excep);
+	csUpdate->Invoke(behaviourInst->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Reload()

@@ -269,6 +269,7 @@ namespace mono
 			m_signature = mono_method_get_signature(m_method, m_class->m_assembly->m_image, m_token);
 
 		m_name = mono_method_get_name(m_method);
+		m_fullyQualifiedName = mono_method_full_name(m_method, true);
 		m_paramCount = mono_signature_get_param_count(m_signature);
 
 		m_returnType = std::make_shared<ManagedType>(mono_signature_get_return_type(m_signature));
@@ -305,15 +306,7 @@ namespace mono
 
 	bool ManagedMethod::MatchSignature(MonoMethod* method)
 	{
-		uint32_t token = mono_method_get_token(method);
-
-		if (!token)
-			return false;
-
-		if (MonoMethodSignature* signature = mono_method_get_signature(method, m_class->m_assembly->m_image, token))
-			return mono_metadata_signature_equal(m_signature, signature);
-
-		return false;
+		return mono_method_full_name(method, true) == m_fullyQualifiedName;
 	}
 
 	bool ManagedMethod::MatchSignature(MonoType* returnval, std::vector<MonoType*> params)
@@ -329,7 +322,7 @@ namespace mono
 		void* iter = nullptr;
 		type = nullptr;
 		int i = 0;
-		while ((type = mono_signature_get_params(m_signature, &iter)))
+		while (type = mono_signature_get_params(m_signature, &iter))
 		{
 			if (!mono_metadata_type_equal(type, params[i]))
 				return false;
@@ -401,8 +394,10 @@ namespace mono
 		return o;
 	}
 
-	void ManagedMethod::Reload()
+	bool ManagedMethod::Reload()
 	{
+		m_method = nullptr;
+
 		void* iter = nullptr;
 		MonoMethod* method;
 		while (method = mono_class_get_methods(m_class->m_class, &iter))
@@ -420,11 +415,48 @@ namespace mono
 			break;
 		}
 
+		if (!m_method)
+		{
+			void* parentIter = nullptr;
+
+			MonoClass* currentClass = m_class->m_class;
+			while (MonoClass* parent = mono_class_get_parent(currentClass))
+			{
+				while (method = mono_class_get_methods(parent, &parentIter))
+				{
+					const char* methodName = mono_method_get_name(method);
+					if (strcmp(methodName, ".ctor") == 0)
+						continue;
+
+					if (!MatchSignature(method))
+						continue;
+
+					m_method = method;
+					m_attrInfo = mono_custom_attrs_from_method(method);
+					m_token = mono_method_get_token(method);
+				}
+
+				parentIter = nullptr;
+				currentClass = parent;
+			}
+
+			if (!m_method)
+				return false;
+		}
+
+		for (auto& thunk : m_thunks)
+		{
+			thunk->m_method = RawMethod();
+			thunk->Reload();
+		}
+
 		for (auto& parm : m_params)
 			parm->Reload();
 
 		for (auto& a : m_attributes)
 			a->Reload();
+
+		return true;
 	}
 
 	//================================================================//
@@ -487,9 +519,12 @@ namespace mono
 
 	Ref<ManagedMethod> ManagedClass::GetCtor(std::vector<MonoType*> signature)
 	{
-		for (auto& method : m_methods)
+		auto itPair = m_methods.equal_range(".ctor");
+
+		for (auto& it = itPair.first; it != itPair.second; it++)
 		{
-			if (method->m_name == ".ctor" && method->MatchSignature(signature))
+			Ref<ManagedMethod> method = it->second;
+			if (method->MatchSignature(signature))
 				return method;
 		}
 
@@ -537,9 +572,11 @@ namespace mono
 		MonoMethod* method;
 		while ((method = mono_class_get_methods(m_class, &iter)))
 		{
-			if (strcmp(mono_method_get_name(method), ".ctor") == 0)
+			const char* methodName = mono_method_get_name(method);
+			if (strcmp(methodName, ".ctor") == 0)
 				m_numConstructors++;
-			m_methods.push_back(std::make_shared<ManagedMethod>(method, this));
+
+			m_methods.insert({ methodName, std::make_shared<ManagedMethod>(method, this) });
 		}
 
 		void* parentIter = nullptr;
@@ -549,10 +586,11 @@ namespace mono
 		{
 			while ((method = mono_class_get_methods(parent, &parentIter)))
 			{
-				if (strcmp(mono_method_get_name(method), ".ctor") == 0)
+				const char* methodName = mono_method_get_name(method);
+				if (strcmp(methodName, ".ctor") == 0)
 					continue;
 
-				m_methods.push_back(std::make_shared<ManagedMethod>(method, this));
+				m_methods.insert({ methodName, std::make_shared<ManagedMethod>(method, this) });
 			}
 
 			parentIter = nullptr;
@@ -585,8 +623,8 @@ namespace mono
 		for (auto& attr : m_attributes)
 			attr->InvalidateHandle();
 
-		for (auto& meth : m_methods)
-			meth->InvalidateHandle();
+		for (auto& [methodName, methodRef] : m_methods)
+			methodRef->InvalidateHandle();
 	}
 
 	void ManagedClass::Reload()
@@ -601,10 +639,15 @@ namespace mono
 			return;
 		}
 
-		for (auto& meth : m_methods)
+		for (auto methodIt = m_methods.begin(); methodIt != m_methods.end();)
 		{
-			meth->m_class = this;
-			meth->Reload();
+			Ref<ManagedMethod> method = methodIt->second;
+			method->m_class = this;
+
+			if (!method->Reload())
+				methodIt = m_methods.erase(methodIt);
+			else
+				methodIt++;
 		}
 
 		for (auto& attr : m_attributes)
@@ -620,16 +663,11 @@ namespace mono
 			instance->Dispose();
 	}
 
-
-	// TODO: Investigate perf of this, maybe use a hashmap? Might just be faster to
-	// not though.
 	Ref<ManagedMethod> ManagedClass::FindMethod(const char* name)
 	{
-		for (auto& m : m_methods)
-			if (m->m_name == name)
-				return m;
+		auto methodIt = m_methods.find(name);
 
-		return nullptr;
+		return methodIt->second;
 	}
 
 	Ref<ManagedField> ManagedClass::FindField(const char* name)

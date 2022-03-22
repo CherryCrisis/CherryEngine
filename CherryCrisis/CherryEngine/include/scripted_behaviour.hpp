@@ -13,9 +13,10 @@ namespace mono
 	class ManagedClass;
 	class ManagedObject;
 	class ManagedMethod;
+	template <typename RetT, typename ...Args>
+	class ManagedThunk;
 }
 
-struct _MonoObject;
 struct _MonoException;
 
 class CCENGINE_API ScriptedBehaviour : public Behaviour
@@ -28,8 +29,8 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	std::shared_ptr<mono::ManagedMethod> managedUpdate;
 	std::shared_ptr<mono::ManagedMethod> managedStart;
 
-	std::function<void(_MonoObject* _this, _MonoException** _excep)> csUpdate;
-	std::function<void(_MonoObject* _this, _MonoException** _excep)> csStart;
+	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
+	mono::ManagedThunk<void, struct _MonoObject*>* csStart;
 
 	void PopulateMetadatas() override;
 

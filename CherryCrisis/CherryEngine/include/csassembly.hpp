@@ -14,5 +14,5 @@ public:
 
 	std::shared_ptr<mono::ManagedScriptContext> context;
 
-	static void Load(std::shared_ptr<CsAssembly> csassembly, char* domainName);
+	static void Load(std::shared_ptr<CsAssembly> csassembly, const char* domainName);
 };
