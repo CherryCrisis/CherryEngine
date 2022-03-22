@@ -210,7 +210,9 @@ bool Scene::Unserialize(const char* filePath)
 	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
 	std::ifstream file(fileName);
 
+	// first is the uuid and the behaviour pointer 
 	std::unordered_map<uint64_t, Behaviour*> m_wrappedBehaviours;
+	// first is the behaviour uuidand the uuid to link in 
 	std::unordered_map<uint64_t, std::unordered_map<std::string, uint64_t>> m_wrappedUUIDs;
 
 	bool opened = false;
@@ -308,7 +310,7 @@ bool Scene::Unserialize(const char* filePath)
 				{
 					uint64_t refUUID = ExtractUUID(line);
 					if (refUUID != 0)
-						m_wrappedUUIDs[behaviour->GetUUID()].insert({key, refUUID});
+						m_wrappedUUIDs[value].insert({key, refUUID});
 				}
 			}
 		}
@@ -323,14 +325,17 @@ bool Scene::Unserialize(const char* filePath)
 		//Then loop over the wrapped component again to link the uuids
 		for (const auto& [UUID, behaviourRef] : m_wrappedBehaviours)
 		{
-			auto grave = m_wrappedUUIDs[UUID];
+			auto grave = m_wrappedUUIDs.find(UUID);
+			if (grave == m_wrappedUUIDs.end())
+				continue;
+
 			for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
 			{
 				if (fieldRef.m_value.type() == typeid(Behaviour*)) 
 				{
-					auto refIt = grave.find(fieldName);
+					auto refIt = grave->second.find(fieldName);
 
-					if (refIt == grave.end())
+					if (refIt == grave->second.end())
 						continue;
 
 					uint64_t refUUID = refIt->second;
