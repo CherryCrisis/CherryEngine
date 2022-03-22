@@ -12,10 +12,10 @@ class CCENGINE_API AResource
 {
 protected:
 	const size_t hashId;
-	const std::string filepath;
 	std::atomic<bool> m_isLoaded;
 
 public:
+	const std::string filepath;
 	AResource(const std::string& filepath)
 		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
 

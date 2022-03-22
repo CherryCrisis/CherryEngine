@@ -13,7 +13,9 @@ ThreadPool* ThreadPool::GetInstance()
 
 ThreadPool::ThreadPool()
 {
-	const int threadCount = std::thread::hardware_concurrency() - 1;
+	const int threadCount = (std::thread::hardware_concurrency()/2) - 1;
+	std::cout << std::to_string(threadCount) << std::endl;
+
 	for (int i = 0; i < threadCount; ++i)
 	{
 		std::thread slave(&ThreadPool::Update, this, EChannelTask::MULTITHREAD);
@@ -56,7 +58,7 @@ void ThreadPool::Update(EChannelTask channelTask)
 			{
 				std::unique_lock<std::mutex> queueLock(m_multiThreadsQueueLock);
 
-				if (!m_stopThreads && m_multiThreadsTasks.empty())
+				while (!m_stopThreads && m_multiThreadsTasks.empty())
 				{
 					m_condition.wait(queueLock);
 				}
@@ -67,6 +69,7 @@ void ThreadPool::Update(EChannelTask channelTask)
 				task = std::move(m_multiThreadsTasks.front());
 				m_multiThreadsTasks.pop();
 			}
+
 
 			try
 			{
