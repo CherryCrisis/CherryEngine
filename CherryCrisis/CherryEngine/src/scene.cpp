@@ -72,8 +72,8 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 	for (Entity* child : children)
 		AddEntity(child);
 
-	auto func = CCFunction::BindFunction(&ResourceManager::Remove<ModelBase>, ResourceManager::GetInstance(), resource->GetFilepath());
-	ThreadPool::GetInstance()->CreateTask(func, EChannelTask::MAINTHREAD);
+	//auto func = CCFunction::BindFunction(&ResourceManager::Remove<ModelBase>, ResourceManager::GetInstance(), resource->GetFilepath());
+	//ThreadPool::GetInstance()->CreateTask(func, EChannelTask::MAINTHREAD);
 }
 
 void Scene::Start()
