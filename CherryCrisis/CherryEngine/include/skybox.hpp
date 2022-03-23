@@ -9,10 +9,18 @@
 
 struct Skybox : public ARenderer
 {
+private:
+	void RemoveMesh();
+	void RemoveCubemap();
+
+public:
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Cubemap>	m_cubemap;
 
 	Skybox();
-	
+	~Skybox();
+
 	void Load();
+	void SubscribeToRenderPass();
+	void UnsubscribeToRenderPass();
 };

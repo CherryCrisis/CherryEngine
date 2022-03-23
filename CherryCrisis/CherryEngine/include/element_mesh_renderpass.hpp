@@ -6,7 +6,7 @@
 
 #include "mesh.hpp"
 
-class ElementMeshRenderPass : public ARenderPass
+class ElementMeshGenerator
 {
 protected:
 	struct GPUMeshBasic : GPUMesh
@@ -15,8 +15,5 @@ protected:
 	};
 
 public:
-	ElementMeshRenderPass(const char* pipelineName, const char* vert, const char* frag)
-		: ARenderPass(pipelineName, vert, frag) { }
-
 	int Generate(Mesh* toGenerate);
 };

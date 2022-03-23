@@ -9,7 +9,7 @@
 struct Skybox;
 class CameraComponent;
 
-class SkyboxRenderPass : public ElementMeshRenderPass
+class SkyboxRenderPass : public ARenderPass, ElementMeshGenerator
 {
 private:
 	Skybox* m_skybox = nullptr;
@@ -47,5 +47,5 @@ public:
 	template <>
 	void Remove(CameraComponent* toGenerate);
 
-	void Execute(const float x = 0, const float y = 0) override;
+	void Execute(const float& x = 0, const float& y = 0);
 };

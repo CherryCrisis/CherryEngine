@@ -16,20 +16,21 @@ ModelRenderer::ModelRenderer(Entity& owner)
 
 ModelRenderer::~ModelRenderer()
 {
-//	RemoveModel();
+	RemoveModel();
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 {
+	if (!newModel)
+	{
+		RemoveModel();
+		return;
+	}
+
 	m_model = newModel;
 
-	if (m_model)
-	{
-		m_model->m_onDestroyed.Bind(&ModelRenderer::RemoveModel, this);
-		RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
-	}
-	else
-		RemoveModel();
+	m_model->m_onDestroyed.Bind(&ModelRenderer::RemoveModel, this);
+	SubscribeToRenderPass();
 }
 
 void ModelRenderer::RemoveModel()
@@ -38,6 +39,16 @@ void ModelRenderer::RemoveModel()
 	if (m_model)
 		m_model->m_onDestroyed.Unbind(&ModelRenderer::RemoveModel, this);
 
-	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
+	UnsubscribeToRenderPass();
 	m_model = nullptr;
+}
+
+void ModelRenderer::SubscribeToRenderPass()
+{
+	RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
+}
+
+void ModelRenderer::UnsubscribeToRenderPass()
+{
+	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
 }

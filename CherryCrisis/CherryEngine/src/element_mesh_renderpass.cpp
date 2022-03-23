@@ -2,7 +2,7 @@
 
 #include "element_mesh_renderpass.hpp"
 
-int ElementMeshRenderPass::Generate(Mesh* toGenerate)
+int ElementMeshGenerator::Generate(Mesh* toGenerate)
 {
 	if (!toGenerate)
 		return -1;

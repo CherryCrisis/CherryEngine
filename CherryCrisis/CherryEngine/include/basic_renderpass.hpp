@@ -14,7 +14,7 @@ class CameraComponent;
 class ModelRenderer;
 class Material;
 
-class BasicRenderPass : public ElementMeshRenderPass
+class BasicRenderPass : public ARenderPass, ElementMeshGenerator
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
@@ -65,5 +65,5 @@ public:
 	template <>
 	void Remove(Light* toGenerate);
 
-	void Execute(const float x = 0, const float y = 0) override;
+	void Execute(const float& x = 0, const float& y = 0);
 };

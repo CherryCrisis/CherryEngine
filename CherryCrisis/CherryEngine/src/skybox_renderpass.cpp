@@ -7,9 +7,8 @@
 
 SkyboxRenderPass::SkyboxRenderPass(const char* name)
 // TODO: Set real path
-	: ElementMeshRenderPass(name, "Assets/skyboxShader.vert", "Assets/skyboxShader.frag")
+	: ARenderPass(name, "Assets/skyboxShader.vert", "Assets/skyboxShader.frag")
 {
-
 }
 
 template <>
@@ -47,10 +46,13 @@ int SkyboxRenderPass::Generate(Skybox* toGenerate)
 
 	cubemap->m_gpuCubemap = new GPUSkyboxCubemap(gpuCubemap);
 
-	if (ElementMeshRenderPass::Generate(toGenerate->m_mesh.get()) == -1)
+	if (ElementMeshGenerator::Generate(toGenerate->m_mesh.get()) == -1)
 		return -1;
 
 	m_skybox = toGenerate;
+
+	if (m_skybox && m_program)
+		m_callExecute = CCCallback::BindCallback(&SkyboxRenderPass::Execute, this);
 
 	return 1;
 }
@@ -59,10 +61,13 @@ template <>
 void SkyboxRenderPass::Remove(Skybox* toGenerate)
 {
 	if (m_skybox == toGenerate)
+	{
 		m_skybox = nullptr;
+		m_callExecute = nullptr;
+	}
 }
 
-void SkyboxRenderPass::Execute(const float x, const float y)
+void SkyboxRenderPass::Execute(const float& x, const float& y)
 {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
@@ -70,9 +75,6 @@ void SkyboxRenderPass::Execute(const float x, const float y)
 	glDepthFunc(GL_LEQUAL);
 
 	glUseProgram(m_program->m_shaderProgram);
-
-	if (!m_skybox)
-		return;
 
 	if (m_cameraComp)
 	{
@@ -85,21 +87,15 @@ void SkyboxRenderPass::Execute(const float x, const float y)
 
 	Mesh* mesh = m_skybox->m_mesh.get();
 
-	if (!mesh)
-		return;
+	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh);
+	glBindVertexArray(gpuMesh->VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+	glDrawElements(GL_TRIANGLES, (GLsizei)mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
 
-	if (GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh))
-	{
-		glBindVertexArray(gpuMesh->VAO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-		glDrawElements(GL_TRIANGLES, (GLsizei)mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
-	}
+	Cubemap* skyTexture = m_skybox->m_cubemap.get();
 
-	if (Cubemap* skyTexture = m_skybox->m_cubemap.get())
-	{
-		if (auto gpuCubemap = static_cast<GPUSkyboxCubemap*>(skyTexture->m_gpuCubemap))
-			glBindTextureUnit(0, gpuCubemap->ID);
-	}
+	auto gpuCubemap = static_cast<GPUSkyboxCubemap*>(skyTexture->m_gpuCubemap);
+	glBindTextureUnit(0, gpuCubemap->ID);
 
 	glUseProgram(0);
 
