@@ -8,21 +8,34 @@
 #include "event.hpp"
 #include "threadpool.hpp"
 
+
+enum class EResourceState
+{
+	EMPTY,
+	LOADING,
+	LOADED,
+	DESTROYED,
+};
+
 class CCENGINE_API AResource
 {
 protected:
 	const std::string m_filepath;
-	std::atomic<bool> m_isLoaded;
+	std::atomic<EResourceState> m_resourceState;
 
 public:
 	AResource(const std::string& filepath)
-		: m_filepath(filepath) {}
+		: m_filepath(filepath)
+	{
+		m_resourceState.store(EResourceState::EMPTY);
+	}
 
 	virtual ~AResource() = default;
 
 	const char* GetFilepath() const { return m_filepath.c_str(); }
 
-	bool GetIsLoaded() { return m_isLoaded.load(); }
+	EResourceState GetResourceState() { return m_resourceState.load(); }
+	void SetResourceState(EResourceState resourceState) { m_resourceState.store(resourceState); }
 };
 
 template<class T>
@@ -32,17 +45,13 @@ protected:
 	template<class ResourceT>
 	void OnLoaded(std::shared_ptr<ResourceT> resource)
 	{
-		m_isLoaded.store(true);
+		m_resourceState.store(EResourceState::LOADED);
 
 		std::shared_ptr<ResourceT> resourcePtrCopy = resource;
 		m_onLoaded.Invoke(std::move(resourcePtrCopy));
 	}
 
-	/*void OnDestroyed()
-	{
-		std::shared_ptr<ResourceT> resourcePtrCopy = resource;
-		m_onLoaded.Invoke(std::move(resourcePtrCopy));
-	}*/
+	
 
 public:
 	Event<std::shared_ptr<T>> m_onLoaded{};

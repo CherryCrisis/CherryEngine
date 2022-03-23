@@ -40,6 +40,9 @@ public:
 	ResourceManager();
 	~ResourceManager();
 
+	template<class T>
+	std::shared_ptr<T> AddResourceRef(const char* filepath, bool verifIsExist = true);
+
 	template<class T, typename... Args>
 	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
 
