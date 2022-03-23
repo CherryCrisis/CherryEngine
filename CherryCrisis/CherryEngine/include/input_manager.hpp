@@ -120,12 +120,17 @@ private:
 	//list of keys (intern glfw callback update key statut)
 	std::unordered_map<Keycode, Input> m_keys;
 	
+	//list of mouse keys (intern glfw callback update key statut)
+	std::unordered_map<Keycode, Input> m_mouseKeys;
+
 	//list of keys just pressed
 	std::vector<Keycode> m_framePressedKeys;
 	
 	CCMaths::Vector2 m_mouseWheel {};
+	CCMaths::Vector2 m_mousePos   {};
+	CCMaths::Vector2 m_mouseDelta {};
 
-	const char* keynames[119] =
+	const char* keynames[122] =
 	{
 		"NONE",
 		"SPACE",
@@ -255,7 +260,11 @@ private:
 		"RIGHT_ALT",
 		"RIGHT_SUPER",
 
-		"MENU"
+		"MENU",
+
+		"LEFT_CLICK",
+		"RIGHT_CLICK",
+		"MIDDLE_CLICK"
 	};
 
 	std::vector<Keycode> keycodes =
@@ -388,7 +397,11 @@ private:
 		Keycode::RIGHT_ALT,
 		Keycode::RIGHT_SUPER,
 
-		Keycode::MENU
+		Keycode::MENU,
+
+		Keycode::LEFT_CLICK,
+		Keycode::RIGHT_CLICK,
+		Keycode::MIDDLE_CLICK
 	};
 
 public:
@@ -406,6 +419,9 @@ public:
 	// Callbacks
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset);
+	void MousePosCallback(GLFWwindow* window, double xpos, double ypos);
+	void MouseClickCallback(GLFWwindow* window, int button, int action, int mods);
+	
 	void UpdateKeys();
 
 	// Input
@@ -445,8 +461,10 @@ public:
 
 	// Get
 	CCMaths::Vector2 GetMouseWheel() { return m_mouseWheel; }
+	CCMaths::Vector2 GetMousePos()   { return m_mousePos;   }
+	CCMaths::Vector2 GetMouseDelta() { return m_mouseDelta;   }
 
-	int			KeynamesSize() { return 119; }
+	int			KeynamesSize() { return 122; }
 
 	const char* GetKeyname(int index);
 	const char* GetKeyname(Keycode code);

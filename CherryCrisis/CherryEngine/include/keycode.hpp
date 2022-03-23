@@ -137,4 +137,8 @@ enum class Keycode
  	RIGHT_SUPER   = 347,
 
  	MENU = 348,
+
+    LEFT_CLICK   = 1000,
+    RIGHT_CLICK  = 1001,
+    MIDDLE_CLICK = 1002,
 };
