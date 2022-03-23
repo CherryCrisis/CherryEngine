@@ -15,7 +15,6 @@ struct aiNode;
 
 class Model : public Resource<Model>
 {
-
 public:
 	Model(const char* filepath) : Resource(filepath) {}
 	~Model();

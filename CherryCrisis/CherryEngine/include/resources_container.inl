@@ -6,6 +6,7 @@ ResourcesContainer<ResourceT>* AResourcesContainer::UnwrapResourcesContainer()
 	assert((std::type_index)typeid(ResourceT) == m_resourceType);
 	ResourcesContainer<ResourceT>* resourceContainer =  static_cast<ResourcesContainer<ResourceT>*>(this);
 	return resourceContainer;
+
 }
 
 template<class ResourceT>
@@ -41,4 +42,31 @@ std::shared_ptr<ResourceT>* ResourcesContainer<ResourceT>::ResourcesContainer::G
 
 	return nullptr;
 }
+
+template<class ResourceT>
+void ResourcesContainer<ResourceT>::Purge()
+{
+	for (auto& pair : m_resources)
+	{
+		if (pair.second.use_count() <= 1)
+		{
+			std::cout << pair.second->GetFilepath() << " " << std::to_string(pair.second.use_count()) << std::endl;
+			delete pair.second.get();
+			m_resources.erase(pair.first);
+		}
+	}
+}
+
+template<class ResourceT>
+void ResourcesContainer<ResourceT>::Remove(const char* filename)
+{
+	auto pair = m_resources.find(filename);
+	if (pair != m_resources.end())
+	{
+		std::cout << pair->second->GetFilepath() << " deleted " << std::endl;
+		pair->second.reset();
+		m_resources.erase(pair->first);
+	}
+}
+
 

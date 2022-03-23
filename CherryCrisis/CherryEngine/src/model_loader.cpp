@@ -78,7 +78,6 @@ namespace CCModelLoader
 
         if (scene)
         {
-            std::cout << "Model load processing" << std::endl;
             ProcessData(scene, models, rootModels, filepath);
         }
         else
@@ -86,8 +85,6 @@ namespace CCModelLoader
             printf("Error parsing : '%s'\n", importer.GetErrorString());
             return;
         }
-
-        std::cout << "Parsing ended" << std::endl;
     }
 }
 
