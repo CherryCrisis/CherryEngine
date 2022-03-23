@@ -15,4 +15,11 @@ struct CCENGINE_API Field
 struct CCENGINE_API Metadata
 {
 	std::unordered_map<std::string, Field> m_fields;
+
+	template <typename CastT, typename RefT>
+	void SetField(const char* fieldName, RefT& ref)
+	{
+		m_fields[fieldName] = { fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref))};
+	}
+
 };

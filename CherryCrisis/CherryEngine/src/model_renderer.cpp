@@ -8,15 +8,22 @@
 #include "basic_renderpass.hpp"
 
 #include "entity.hpp"
+#include "model.hpp"
 
 ModelRenderer::ModelRenderer(Entity& owner)
 	: Behaviour(owner)
 {
+	PopulateMetadatas();
 }
 
 ModelRenderer::~ModelRenderer()
 {
-//	RemoveModel();
+	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
+}
+
+void ModelRenderer::PopulateMetadatas() 
+{
+	m_metadatas.SetField<Behaviour*>("transform", m_transform);
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
@@ -25,6 +32,8 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 	if (m_model)
 	{
+		m_metadatas.SetField<std::string>("filepath", m_model->m_modelBasePath);
+
 		RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
 	}
 	else

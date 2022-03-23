@@ -17,10 +17,12 @@ Transform::Transform(CCUUID& owner)
 
 void Transform::PopulateMetadatas() 
 {
+	m_metadatas.SetField<Behaviour*>("parent", m_parent);
+
 	m_metadatas.m_fields["position"] = { "position", &m_position };
 	m_metadatas.m_fields["rotation"] = { "rotation",  &m_rotation};
 	m_metadatas.m_fields["scale"] = { "scale",  &m_scale};
-	m_metadatas.m_fields["parent"] = { "parent",  (Behaviour*)m_parent};
+	//m_metadatas.m_fields["parent"] = { "parent",  (Behaviour*)m_parent};
 }
 
 void Transform::ConsumeMetadatas()
@@ -65,7 +67,6 @@ void Transform::SetParent(Transform* transform)
 		}
 	}
 	m_parent = transform;
-	m_metadatas.m_fields["parent"] = { "parent", (Behaviour*)m_parent};
 }
 
 void Transform::UpdateMatrix()

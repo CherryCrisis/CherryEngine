@@ -203,8 +203,10 @@ CCMaths::Vector3 ExtractVector3(std::string str)
 
 bool Scene::Unserialize(const char* filePath) 
 {
-	m_entities.clear();
+	for (auto& [name, ref] : m_entities) 
+		delete ref;
 
+	m_entities.clear();
 
 	//First read the file and populate the entities + a uuid map and the component wrapper list 
 	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
@@ -254,7 +256,7 @@ bool Scene::Unserialize(const char* filePath)
 				isParsingComponent = true;
 				value = ExtractUUID(line);
 			}
-			else if (isParsingComponent) 
+			else if (isParsingComponent)
 			{
 				found = line.find("Transform");
 				if (found != std::string::npos)
@@ -266,13 +268,18 @@ bool Scene::Unserialize(const char* filePath)
 				{
 					behaviour = new LightComponent();
 				}
-				
+				found = line.find("ModelRenderer");
+				if (found != std::string::npos)
+				{
+					behaviour = new ModelRenderer();
+				}
+
 				if (!behaviour)
 					continue;
 
-				std::string key   = ExtractKey(line);
+				std::string key = ExtractKey(line);
 				std::string parsedValue = ExtractValue(line);
-				
+
 				if (line.size() == 0)
 				{
 					behaviour->m_uuid = value;
@@ -284,34 +291,59 @@ bool Scene::Unserialize(const char* filePath)
 				if (key == "m_owner")
 				{
 					if (behaviour)
-						behaviour->m_parentUuid = ExtractUUID(line);	
+						behaviour->m_parentUuid = ExtractUUID(line);
 				}
 
 				if (!behaviour->m_metadatas.m_fields.contains(key))
 					continue;
 
 				auto& info = behaviour->m_metadatas.m_fields[key].m_value.type();
-				if (info == typeid(CCMaths::Vector3*)) 
+				if (info == typeid(CCMaths::Vector3**))
 				{
-					
+
 					Vector3* vec = new Vector3();
 					*vec = ExtractVector3(parsedValue);
 
 					behaviour->m_metadatas.m_fields[key] = { key, std::any(vec) };
 				}
 
-				if (info == typeid(CCMaths::Vector3))
+				if (info == typeid(CCMaths::Vector3*))
 				{
 					Vector3 vec = {};
 					behaviour->m_metadatas.m_fields[key] = { key, std::any(vec) };
 				}
 
-				if (info == typeid(Behaviour*))
+				if (info == typeid(Behaviour**))
 				{
 					uint64_t refUUID = ExtractUUID(line);
 					if (refUUID != 0)
-						m_wrappedUUIDs[value].insert({key, refUUID});
+						m_wrappedUUIDs[value].insert({ key, refUUID });
 				}
+
+				if (info == typeid(std::string*))
+				{
+					behaviour->m_metadatas.m_fields[key] = { key, std::any(value) };
+					
+					ModelRenderer* renderer = (ModelRenderer*) behaviour;
+					if (renderer) 
+					{
+						std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>(parsedValue.c_str(), true);
+						renderer->SetModel(model);
+					}
+				}
+
+
+				//srd_ptr<model> model = AddResourceNoLoad(modelName)
+				// 
+				// {
+				//	uniqueGuard(mutex)
+				// 
+				//	if (model is load) 
+				//		modelRender.SetModel(model);
+				//	else
+				//		model.onLoaded.Bind(&ModelRenderer::SetModel, this);
+				// }
+				//
 			}
 		}
 		//Then loop over the wrapped component to add them into the entities

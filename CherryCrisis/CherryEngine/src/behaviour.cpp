@@ -13,47 +13,47 @@ std::string Behaviour::Serialize()
 		
 		value += fieldRef.m_name + ":";
 
-		if (type == typeid(CCMaths::Vector3*))
+		if (type == typeid(CCMaths::Vector3**))
 		{
-			CCMaths::Vector3 val = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+			CCMaths::Vector3* ptr = *std::any_cast<CCMaths::Vector3**>(fieldRef.m_value);
+			CCMaths::Vector3 val = *ptr;
+
 			value += std::to_string(val.x) +"/"+ std::to_string(val.y) +"/"+ std::to_string(val.z) + "\n";
 			continue;
 		}
 
-		if (type == typeid(CCMaths::Vector3))
+		if (type == typeid(CCMaths::Vector3*))
 		{
-			CCMaths::Vector3 val = std::any_cast<CCMaths::Vector3>(fieldRef.m_value);
+			CCMaths::Vector3 val = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
 			value += std::to_string(val.x) + "/" + std::to_string(val.y) + "/" + std::to_string(val.z) + "\n";
 			continue;
 		}
 
-		if (type == typeid(std::string))
+		if (type == typeid(std::string*))
 		{
-			std::string val = std::any_cast<std::string>(fieldRef.m_value);
-			value += val + "\n";
+			std::string* val = std::any_cast<std::string*>(fieldRef.m_value);
+			value += *val + "\n";
 			continue;
 		}
 
-		if (type == typeid(float))
+		if (type == typeid(float*))
 		{
-			float val = std::any_cast<float>(fieldRef.m_value);
+			float val = *std::any_cast<float*>(fieldRef.m_value);
 			value += std::to_string(val) + "\n";
 			continue;
 		}
 
-		if (type == typeid(int))
+		if (type == typeid(int*))
 		{
-			int val = std::any_cast<int>(fieldRef.m_value);
+			int val = *std::any_cast<int*>(fieldRef.m_value);
 			value += std::to_string(val) + "\n";
 			continue;
 		}
 
-		if (type == typeid(Behaviour*))
+		if (type == typeid(Behaviour**))
 		{
-			Behaviour* ptr = std::any_cast<Behaviour*>(fieldRef.m_value);
-			
-			if (ptr)
-				Behaviour val = *ptr;
+			Behaviour** ptrr = std::any_cast<Behaviour**>(fieldRef.m_value);
+			Behaviour* ptr = *ptrr;
 			
 			if (ptr)
 				value += std::to_string((uint64_t)ptr->GetUUID()) + "\n";
