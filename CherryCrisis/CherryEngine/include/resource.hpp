@@ -11,18 +11,16 @@
 class CCENGINE_API AResource
 {
 protected:
-	const size_t hashId;
-	const std::string filepath;
+	const std::string m_filepath;
 	std::atomic<bool> m_isLoaded;
 
 public:
 	AResource(const std::string& filepath)
-		: hashId(std::hash<std::string>()(filepath)), filepath(filepath) {}
+		: m_filepath(filepath) {}
 
 	virtual ~AResource() = default;
 
-	const size_t GetHashId() const { return hashId; }
-	const char* GetFilepath() const { return filepath.c_str(); }
+	const char* GetFilepath() const { return m_filepath.c_str(); }
 
 	bool GetIsLoaded() { return m_isLoaded.load(); }
 };
@@ -40,18 +38,34 @@ protected:
 		m_onLoaded.Invoke(std::move(resourcePtrCopy));
 	}
 
+	/*void OnDestroyed()
+	{
+		std::shared_ptr<ResourceT> resourcePtrCopy = resource;
+		m_onLoaded.Invoke(std::move(resourcePtrCopy));
+	}*/
+
 public:
-	Event<std::shared_ptr<T>> m_onLoaded {};
+	Event<std::shared_ptr<T>> m_onLoaded{};
+	Event<> m_onDestroyed {};
 
 	Resource(const std::string& filepath)
 		: AResource(filepath) {}
 
-	virtual ~Resource() = default;
+	virtual ~Resource()
+	{
+		IsDestroyed(ThreadPool::GetInstance());
+	}
 
-	void IsLoaded(std::shared_ptr<T> resource, ThreadPool* threadpool)
+	void IsLoaded(std::shared_ptr<T> resource, ThreadPool* m_threadpool)
 	{
 		auto eventFunction = CCFunction::BindFunctionUnsafe(&Resource::OnLoaded<T>, this, resource);
-		threadpool->CreateTask(eventFunction, EChannelTask::MAINTHREAD);
+		m_threadpool->CreateTask(eventFunction, EChannelTask::MAINTHREAD);
+	}
+
+	void IsDestroyed(ThreadPool* m_threadpool)
+	{
+		auto eventFunction = CCFunction::BindFunctionUnsafe(&Event<>::Invoke, &this->m_onDestroyed);
+		m_threadpool->CreateTask(eventFunction, EChannelTask::MAINTHREAD);
 	}
 };
 

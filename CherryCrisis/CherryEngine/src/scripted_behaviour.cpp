@@ -3,17 +3,25 @@
 #include "scripted_behaviour.hpp"
 
 #include "input_manager.hpp"
+#include "resource_manager.hpp"
 #include "csscripting_system.hpp"
+
+#include "csassembly.hpp"
 
 #include "monowrapper.hpp"
 
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
-	char domainName[16] = "ScriptingDomain";
 	// TODO: Change path
-	context = CsScriptingSystem::GetInstance()->CreateContext(domainName, "../x64/Debug/CherryScripting.dll");
-	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
+	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+}
+
+void ScriptedBehaviour::SetScriptClass(const char* scriptName)
+{
+	m_scriptName = scriptName;
+
+	managedClass = assembly->context->FindClass("CCScripting", scriptName);
 
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");
@@ -24,18 +32,12 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
 
 	PopulateMetadatas();
+
+	m_linked = true;
 }
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
-	auto handleRefClass = context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
-	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
-	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
-
-	auto managedVector = context->FindClass("CCEngine", "Vector3");
-	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
-	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
-
 	const auto& fields = managedClass->Fields();
 
 	for (const auto& [fieldName, fieldRef] : fields)
@@ -60,11 +62,18 @@ void ScriptedBehaviour::PopulateMetadatas()
 		}
 	}
 
+	/*auto handleRefClass = assembly->context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
+	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
+	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
+
+	auto managedVector = assembly->context->FindClass("CCEngine", "Vector3");
+	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
+	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
 	MonoObject* managedVec = nullptr;
 	behaviourInst->GetField("pos", &managedVec);
 
 	MonoException* excep = nullptr;
-	MonoObject* ptrHandle = getCPtr(managedVec, &excep);
+	MonoObject* ptrHandle = getCPtr->Invoke(managedVec, &excep);
 
 	void* unboxedHandle = mono_object_unbox(ptrHandle);
 
@@ -74,38 +83,30 @@ void ScriptedBehaviour::PopulateMetadatas()
 	if (!res || exception)
 		return;
 
-	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
-	m_metadatas.m_fields["pos"] = {"pos", vecPtr};
+	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);*/
 }
 
 void ScriptedBehaviour::Start()
 {
+	if (!m_linked)
+		return;
+
 	MonoException* excep = nullptr;
-	csStart(behaviourInst->RawObject(), &excep);
+	csStart->Invoke(behaviourInst->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Update()
 {
-	MonoException* excep = nullptr;
-	csUpdate(behaviourInst->RawObject(), &excep);
+	if (!m_linked)
+		return;
 
-	if (InputManager::GetInstance()->GetKeyDown(Keycode::R))
-		Reload();
+	MonoException* excep = nullptr;
+	csUpdate->Invoke(behaviourInst->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Reload()
 {
-	auto csDispose = (void(*)(MonoObject*, bool, MonoException**))mono_method_get_unmanaged_thunk(managedClass->FindMethod("Dispose")->RawMethod());
-
-	MonoException* excep = nullptr;
-	csDispose(behaviourInst->RawObject(), true, &excep);
-
-	CsScriptingSystem::GetInstance()->ReloadContextes();
-
-	MonoClass* intPtrType = context->FindSystemClass("System", "IntPtr");
-	MonoClass* boolType = context->FindSystemClass("System", "Boolean");
-
-	managedClass = context->FindClass("CCScripting", "BackpackBehaviour");
+	managedClass = assembly->context->FindClass("CCScripting", "BackpackBehaviour");
 
 	managedUpdate = managedClass->FindMethod("Update");
 	managedStart = managedClass->FindMethod("Start");

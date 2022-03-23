@@ -18,6 +18,7 @@
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
 #include "render_manager.hpp"
+#include "csscripting_system.hpp"
 
 //To Replace with Resource Manager Texture Handling
 bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height)
@@ -278,6 +279,9 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
         if (ImGui::Button("Show Demo"))
             m_isDemoOpened = true;
+
+        if (ImGui::Button("Reload scripts"))
+            CsScriptingSystem::GetInstance()->ReloadContextes();
     }
     ImGui::End();
 }

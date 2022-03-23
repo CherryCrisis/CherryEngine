@@ -4,6 +4,8 @@
 
 #include <filesystem>
 
+#include "monowrapper.hpp"
+
 template <>
 CsScriptingSystem* Singleton<CsScriptingSystem>::currentInstance = nullptr;
 
@@ -13,8 +15,12 @@ CsScriptingSystem::CsScriptingSystem()
 	mono_set_dirs("lib", "externals\\etc");
 }
 
-void CsScriptingSystem::Init(const mono::ManagedScriptSystemSettings_t& settings)
+CsScriptingSystem::~CsScriptingSystem() = default;
+
+
+void CsScriptingSystem::Init()
 {
+	mono::ManagedScriptSystemSettings_t settings("RootDomain");
 	m_scriptSystem = std::make_unique<mono::ManagedScriptSystem>(settings);
 }
 

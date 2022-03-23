@@ -476,6 +476,8 @@
     </ClInclude>
     <ClInclude Include="include\serializer.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
+    <ClInclude Include="include\resources_container.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -577,6 +579,9 @@
     </None>
     <None Include="interface\debug.i">
       <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="include\resources_container.inl">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

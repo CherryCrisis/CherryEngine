@@ -13,11 +13,21 @@ ResourceManager* ResourceManager::GetInstance()
 }
 
 ResourceManager::ResourceManager()
-	: threadpool(ThreadPool::GetInstance()), m_lockResources()
+	: m_threadpool(ThreadPool::GetInstance()), m_lockResources()
 {
 }
 
 ResourceManager::~ResourceManager()
 {
 
+}
+
+void ResourceManager::Purge()
+{
+	std::lock_guard<std::mutex> lock(m_lockResources);
+
+	for (auto& pair : m_resources)
+	{
+		pair.second->Purge();
+	}
 }

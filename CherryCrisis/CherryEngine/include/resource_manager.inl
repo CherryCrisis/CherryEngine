@@ -3,10 +3,19 @@
 template<class T>
 std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 {
-	std::lock_guard<std::mutex> lock(m_lockResources);
 	std::shared_ptr<T> resourcePtr = std::make_shared<T>(filepath);
-	auto pair = std::make_pair< std::type_index, std::shared_ptr<AResource>>(typeid(T), resourcePtr);
-	m_resources.insert(pair);
+
+	auto resourceContainerIt = m_resources.find(typeid(T));
+	if (resourceContainerIt == m_resources.end())
+	{
+		auto pair = m_resources.emplace(typeid(T), new ResourcesContainer<T>());
+		pair.first->second->Add(filepath, resourcePtr);
+	}
+	else
+	{
+		resourceContainerIt->second->Add(filepath, resourcePtr);
+	}
+
 
 	return resourcePtr;
 }
@@ -14,18 +23,28 @@ std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 template <class T, typename... Args>
 std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {
-	if (verifIsExist)
-	{
-		std::shared_ptr<T> findedResource = GetResource<T>(filepath);
-		if (findedResource != nullptr)
-			return findedResource;
-	}
+	std::shared_ptr<T> resourcePtr;
 
-	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
+	{
+		std::lock_guard<std::mutex> lock(m_lockResources);
+
+		if (verifIsExist)
+		{
+			auto resourceContainerIt = m_resources.find(typeid(T));
+			if (resourceContainerIt != m_resources.end())
+			{
+				std::shared_ptr<T>* findedResource = resourceContainerIt->second->GetResource<T>(filepath);
+				if (findedResource != nullptr)
+					return *findedResource;
+			}
+		}
+
+		resourcePtr = CreateResource<T>(filepath);
+	}
 
 	T::Load(resourcePtr, args...);
 
-	resourcePtr->IsLoaded(resourcePtr, threadpool);
+	resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 
 	return resourcePtr;
 }
@@ -34,34 +53,45 @@ template<class T, class CallbackType, typename... Args>
 void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIsExist,
 	CCCallback::AWrapCallback* wrappedCallback, Args... args)
 {
+	std::shared_ptr<T> resourcePtr;
+
 	auto unwrapedCallback = static_cast<CCCallback::ACallback<CallbackType>*>(wrappedCallback);
 	std::unique_ptr<CCCallback::ACallback<CallbackType>> uniqueCallback(unwrapedCallback);
 
-	if (verifIsExist)
 	{
-		std::shared_ptr<T> findedResource = GetResource<T>(filepath);
-		if (findedResource != nullptr)
+		std::lock_guard<std::mutex> lock(m_lockResources);
+
+		if (verifIsExist)
 		{
-			if (findedResource->GetIsLoaded())
+			auto resourceContainerIt = m_resources.find(typeid(T));
+			if (resourceContainerIt != m_resources.end())
 			{
-				/*std::shared_ptr<T> resourcePtrCopy = findedResource;
-				auto function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke<std::shared_ptr<T>>, 
-					wrappedCallback, std::move(resourcePtrCopy));
-				
-				threadpool->CreateTask(function, EChannelTask::MAINTHREAD);*/
+				std::shared_ptr<T>* findedResource = resourceContainerIt->second->GetResource<T>(filepath);
+				if (findedResource != nullptr)
+				{
+					if ((*findedResource)->GetIsLoaded())
+					{
+						auto function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
+							wrappedCallback, (*findedResource));
+
+						m_threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
+					}
+				}
+
+				(*findedResource)->m_onLoaded.Bind(uniqueCallback);
+				return;
 			}
 
-			//findedResource->m_onLoaded.Bind(uniqueCallback);
-			return;
 		}
+
+		resourcePtr = CreateResource<T>(filepath);
 	}
 
-	std::shared_ptr<T> resourcePtr = CreateResource<T>(filepath);
 
 	T::Load(resourcePtr, args...);
 
 	resourcePtr->m_onLoaded.Bind(uniqueCallback);
-	resourcePtr->IsLoaded(resourcePtr, threadpool);
+	resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 }
 
 template<class T, class CallbackType, typename... Args>
@@ -76,7 +106,7 @@ void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIs
 			&ResourceManager::AddResourceWithCallback<T, CallbackType, Args...>, this,
 			filepath, verifIsExist, wrappedCallback, args...);
 
-	threadpool->CreateTask(function, EChannelTask::MULTITHREAD);
+	m_threadpool->CreateTask(function, EChannelTask::MULTITHREAD);
 }
 
 template<class T>
@@ -84,35 +114,26 @@ std::shared_ptr<T> ResourceManager::GetResource(const char* filepath)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
 
-	const size_t hashKey = std::hash<std::string>()(filepath);
-	auto resourceRange = m_resources.equal_range(typeid(T));
-
-	for (auto& it = resourceRange.first; it != resourceRange.second; ++it)
+	auto resourceContainerIt = m_resources.find(typeid(T));
+	if (resourceContainerIt != m_resources.end())
 	{
-		if (it->second->GetHashId() == hashKey)
-		{
-			return (std::dynamic_pointer_cast<T>(it->second));
-		}
+		std::shared_ptr<T>* findedResource = resourceContainerIt->second->GetResource<T>(filepath);
+		if (findedResource != nullptr)
+			return *findedResource;
 	}
 
 	return nullptr;
 }
 
 template<class T>
-void ResourceManager::GetAllResources(std::vector<std::shared_ptr<T>>& resources) const
+void ResourceManager::Remove(const char* filepath)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
 
-	auto resourceRange = m_resources.equal_range(typeid(T));
-
-	auto& firstIt = resourceRange.first;
-	auto& lastIt = resourceRange.second;
-
-	resources.reserve(size_t(lastIt - firstIt));
-
-	for (auto& it = firstIt; it != lastIt; ++it)
+	auto resourceContainerIt = m_resources.find(typeid(T));
+	if (resourceContainerIt != m_resources.end())
 	{
-		resources.push_back(std::dynamic_pointer_cast<T>(it->second));
+		resourceContainerIt->second->Remove(filepath);
 	}
 }
 

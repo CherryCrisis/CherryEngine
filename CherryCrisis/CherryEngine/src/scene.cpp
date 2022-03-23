@@ -55,6 +55,7 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 
 	Entity* camera = new Entity("Camera");
 	camera->AddBehaviour<CameraComponent>()->m_transform = camera->AddBehaviour<Transform>();
+	camera->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("CameraController");
 
 	scene->AddEntity(camera);
 }
@@ -70,12 +71,16 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 
 	Entity* root = new Entity("Root");
 	std::vector<Entity*> children = modelBase->GenerateEntities(root);
-	root->AddBehaviour<ScriptedBehaviour>();
+
+	root->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("BackpackBehaviour");
 
 	AddEntity(root);
 
 	for (Entity* child : children)
 		AddEntity(child);
+
+	auto func = CCFunction::BindFunction(&ResourceManager::Remove<ModelBase>, ResourceManager::GetInstance(), resource->GetFilepath());
+	ThreadPool::GetInstance()->CreateTask(func, EChannelTask::MAINTHREAD);
 }
 
 void Scene::Start()

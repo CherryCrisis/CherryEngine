@@ -6,8 +6,7 @@
 #include <functional>
 #include <condition_variable>
 #include <mutex>
-
-#include <iostream>
+#include <map>
 
 #include "engine.hpp"
 #include "threadpool.hpp"
@@ -15,18 +14,18 @@
 #include "resource.hpp"
 #include "callback.hpp"
 #include "function.hpp" 
-
+#include "resources_container.hpp"
 
 class CCENGINE_API ResourceManager
 {
 private:
-	std::unordered_multimap<std::type_index, std::shared_ptr<AResource>> m_resources;
+	std::map<std::type_index, std::unique_ptr<AResourcesContainer>> m_resources;
 
 	std::mutex m_lockResources;
 
 	static ResourceManager* m_instance;
 
-	ThreadPool* threadpool = nullptr;
+	ThreadPool* m_threadpool = nullptr;
 
 	template<class T, class CallbackType, typename... Args>
 	void AddResourceWithCallback(const char* filepath, bool verifIsExist,
@@ -51,11 +50,13 @@ public:
 	template<class T>
 	std::shared_ptr<T> GetResource(const char* filepath);
 
-	template<class T>
-	void GetAllResources(std::vector<std::shared_ptr<T>>& resources) const;
-
 	size_t GetResourceCount() const { return m_resources.size(); }
 
+	//Unload unused resources
+	void Purge();
+
+	template<class T>
+	void Remove(const char* filepath);
 };
 
 

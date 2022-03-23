@@ -189,6 +189,7 @@ namespace mono
 		void InvalidateHandle() override;
 
 		void Reload();
+		void Clear();
 
 		inline void ReportException(MonoObject* exc);
 	};
@@ -239,6 +240,8 @@ namespace mono
 
 	public:
 		ManagedType(MonoType* type);
+
+		void Reload();
 
 		bool IsStruct() const { return m_isStruct; }
 		bool IsVoid()	const { return m_isVoid; }
@@ -316,6 +319,7 @@ namespace mono
 		class ManagedClass* m_class = nullptr;
 		uint32_t m_gcHandle = 0;
 		EManagedObjectHandleType m_handleType = EManagedObjectHandleType::HANDLE_PINNED;
+		void* m_handledPtr = nullptr;
 
 		std::function<MonoObject*()> m_getObject;
 
@@ -346,7 +350,43 @@ namespace mono
 		bool GetProperty(const char* p, void** outValue);
 		bool GetField(const char* p, void* outValue);
 
+		void Dispose();
+		void Reload();
+
 		MonoObject* Invoke(class ManagedMethod* method, void** params);
+	};
+
+	class AManagedThunk : public ManagedBase<AManagedThunk>
+	{
+	protected:
+		MonoMethod* m_method = nullptr;
+
+		friend class ManagedMethod;
+
+	public:
+		virtual void Reload() = 0;
+	};
+
+	template <typename RetT, typename ...Args>
+	class ManagedThunk : public AManagedThunk
+	{
+	private:
+		std::function<RetT(Args..., MonoException**)> m_unmanagedThunk;
+
+	public:
+		ManagedThunk() = default;
+		ManagedThunk(void* func)
+			: ManagedThunk(std::function<RetT(Args..., MonoException**)>((RetT(*)(Args..., MonoException**))func)) { }
+		ManagedThunk(const std::function<RetT(Args..., MonoException**)>& func)
+			: m_unmanagedThunk(func) {}
+
+		template <typename ...Params>
+		RetT Invoke(Params&&... params) { return m_unmanagedThunk(params...); }
+
+		void Reload() override
+		{
+			m_unmanagedThunk = (RetT(*)(Args..., MonoException**))mono_method_get_unmanaged_thunk(m_method);
+		}
 	};
 
 	//==============================================================================================//
@@ -369,6 +409,7 @@ namespace mono
 
 		Ref<ManagedType> m_returnType = nullptr;
 		std::vector<Ref<ManagedType>> m_params;
+		std::vector<Ref<AManagedThunk>> m_thunks;
 
 		friend class ManagedClass;
 		friend ManagedHandle<ManagedMethod>;
@@ -385,15 +426,25 @@ namespace mono
 		virtual ~ManagedMethod();
 
 		template <typename RetT, typename ...Args>
-		std::function<RetT(MonoObject*, Args..., MonoException**)> GetMemberUnmanagedThunk()
+		ManagedThunk<RetT, MonoObject*, Args...>* GetMemberUnmanagedThunk()
 		{
-			return (RetT(*)(MonoObject*, Args..., MonoException**))mono_method_get_unmanaged_thunk(RawMethod());
+			void* func = mono_method_get_unmanaged_thunk(m_method);
+
+			auto thunkPtr = new ManagedThunk<RetT, MonoObject*, Args...>(func);
+			m_thunks.emplace_back(thunkPtr);
+
+			return thunkPtr;
 		}
 
 		template <typename RetT, typename ...Args>
-		std::function<RetT(Args..., MonoException**)> GetStaticUnmanagedThunk()
+		ManagedThunk<RetT, Args...>* GetStaticUnmanagedThunk()
 		{
-			return (RetT(*)(Args..., MonoException**))mono_method_get_unmanaged_thunk(RawMethod());
+			void* func = mono_method_get_unmanaged_thunk(m_method);
+
+			auto thunkPtr = new ManagedThunk<RetT, Args...>(func);
+			m_thunks.emplace_back(thunkPtr);
+
+			return thunkPtr;
 		}
 
 		ManagedAssembly& Assembly() const;
@@ -408,9 +459,12 @@ namespace mono
 
 		MonoMethod* RawMethod() { return m_method; }
 
+		bool MatchSignature(MonoMethod* method);
 		bool MatchSignature(MonoType* returnval, std::vector<MonoType*> params);
 		bool MatchSignature(std::vector<MonoType*> params);
 		bool MatchSignature();
+
+		bool Reload();
 
 		MonoObject* Invoke(ManagedObject* obj, void** params, MonoObject** exception = nullptr);
 		MonoObject* InvokeStatic(void** params, MonoObject** exception = nullptr);
@@ -481,16 +535,17 @@ namespace mono
 	class ManagedClass : public ManagedBase<ManagedClass>
 	{
 	private:
-		std::vector<Ref<class ManagedMethod>> m_methods;
+		std::unordered_multimap<std::string, Ref<class ManagedMethod>> m_methods;
 		std::unordered_map<std::string, Ref<class ManagedField>> m_fields;
 		std::unordered_map<std::string, Ref<class ManagedProperty>> m_properties;
 		std::vector<Ref<class ManagedObject>> m_attributes;
 		std::vector<Ref<class ManagedProperty>> m_instances;
+		std::vector<Ref<class ManagedObject>> m_handledInstances;
 		MonoCustomAttrInfo* m_attrInfo;
 		std::string m_namespaceName;
 		std::string m_className;
 		MonoClass* m_class;
-		ManagedAssembly* m_assembly;
+		WeakRef<ManagedAssembly> m_assembly;
 		mono_byte m_numConstructors = 0;
 		mono_byte m_alignment;
 
@@ -501,6 +556,8 @@ namespace mono
 		bool m_nullableClass : 1;
 
 		uint32_t m_size; // Size in bytes
+
+		Ref<ManagedMethod> GetCtor(std::vector<MonoType*> signature);
 
 		static UniqueRef<ManagedClass> int16Class;
 		static UniqueRef<ManagedClass> int32Class;
@@ -537,15 +594,16 @@ namespace mono
 
 	public:
 		ManagedClass(MonoClass* cls);
-		ManagedClass(ManagedAssembly* assembly, MonoClass* cls);
+		ManagedClass(Ref<ManagedAssembly> assembly, MonoClass* cls);
 		virtual ~ManagedClass();
 
 		void Reload();
+		void Clear();
 
 		const std::string& NamespaceName() const { return m_namespaceName; }
 		const std::string& ClassName() const { return m_className; }
 
-		const std::vector<Ref<ManagedMethod>>& Methods() const { return m_methods; }
+		const std::unordered_multimap<std::string, Ref<class ManagedMethod>>& Methods() const { return m_methods; }
 		const std::unordered_map<std::string, Ref<ManagedField>>& Fields() const { return m_fields; }
 		const std::unordered_map<std::string, Ref<ManagedProperty>>& Properties() const { return m_properties; }
 		const std::vector<Ref<ManagedObject>>& Attributes() const { return m_attributes; }
@@ -563,7 +621,9 @@ namespace mono
 		Ref<ManagedField> FindField(const char* name);
 		Ref<ManagedProperty> FindProperty(const char* prop);
 
+		MonoObject* CreateRawInstance(std::vector<MonoType*> signature, void** params);
 		Ref<ManagedObject> CreateInstance(std::vector<MonoType*> signature, void** params);
+		MonoObject* CreateUnmanagedRawInstance(void* cPtr, bool ownMemory);
 		Ref<ManagedObject> CreateUnmanagedInstance(void* cPtr, bool ownMemory);
 
 		inline MonoType* RawType() const { return mono_class_get_type(m_class);	}
@@ -659,7 +719,7 @@ namespace mono
 		 * function */
 		Ref<ManagedClass> FindClass(const char* ns, const char* cls);
 
-		Ref<ManagedClass> FindClass(ManagedAssembly& assembly, const char* ns, const char* cls);
+		Ref<ManagedClass> FindClass(Ref<ManagedAssembly> assembly, const char* ns, const char* cls);
 
 		/* Returns a pointer to a raw MonoClass object corresponding to the
 		 * specified class */

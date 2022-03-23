@@ -8,7 +8,7 @@
 
 Engine::Engine() 
 {
-	CsScriptingSystem::GetInstance()->Init(mono::ManagedScriptSystemSettings_t("RootDomain"));
+	CsScriptingSystem::GetInstance()->Init();
 }
 
 void Engine::TickEngine()

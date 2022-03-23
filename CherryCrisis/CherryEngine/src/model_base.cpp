@@ -11,7 +11,7 @@
 
 void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 {
-    ThreadPool* threadpool = ThreadPool::GetInstance();
+    ThreadPool* m_threadpool = ThreadPool::GetInstance();
     CCModelLoader::LoadModel(modelBase->GetFilepath(), &modelBase->m_rootNode, modelBase->m_models);
 }
 

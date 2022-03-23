@@ -6,7 +6,6 @@
 #include "resource_manager.hpp"
 
 #include "basic_renderpass.hpp"
-
 #include "entity.hpp"
 #include "model.hpp"
 
@@ -32,6 +31,7 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 	if (m_model)
 	{
+		m_model->m_onDestroyed.Bind(&ModelRenderer::RemoveModel, this);
 		m_metadatas.SetField<std::string>("filepath", m_model->m_modelBasePath);
 
 		RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
@@ -43,7 +43,11 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 void ModelRenderer::RemoveModel()
 {
 	// TODO: Add pipeline remove
+	if (m_model)
+		m_model->m_onDestroyed.Unbind(&ModelRenderer::RemoveModel, this);
+
 	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
+	m_model = nullptr;
 }
 
 /*
