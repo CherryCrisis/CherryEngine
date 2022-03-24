@@ -12,7 +12,18 @@
 
 Material::~Material()
 {
+	if (m_resourceState.load() != EResourceState::DESTROYED)
+		Delete();
+}
 
+void Material::Delete()
+{
+	for (auto& pair : textures)
+	{
+		pair.second->IsDestroyed();
+	}
+
+	textures.clear();
 }
 
 void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial)

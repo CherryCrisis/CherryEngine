@@ -27,4 +27,5 @@ public:
 
 
 	static void Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial);
+	void Delete() override;
 };

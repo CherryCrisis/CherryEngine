@@ -24,6 +24,7 @@ Scene::~Scene()
 		delete entityPtr;
 }
 
+
 std::string Scene::GetUniqueEntityName(const std::string& entityName)
 {
 	// TODO: Try using string view
@@ -49,6 +50,9 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
 	RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 
+	//std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("Assets/backpack.obj", true);
+	//scene->GenerateEntities(modelBase);
+
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
 	scene->AddEntity(light);
@@ -60,10 +64,8 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	scene->AddEntity(camera);
 }
 
-void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
+void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
 {
-	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
-
 	Entity* root = new Entity("Root");
 	std::vector<Entity*> children = modelBase->GenerateEntities(root);
 

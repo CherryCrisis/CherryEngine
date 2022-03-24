@@ -25,4 +25,5 @@ public:
     const void* GetData() { return m_data; }
 
     static void Load(std::shared_ptr<Texture> texture);
+    void Delete() override;
 };

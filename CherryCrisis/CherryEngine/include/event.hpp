@@ -13,6 +13,7 @@ private:
 	using ACallback = CCCallback::ACallback<Args...>;
 
 	std::set<ACallback*> m_callbacks;
+
 public:
 	Event() = default;
 	virtual ~Event()
@@ -42,8 +43,10 @@ public:
 	template<typename T>
 	void Unbind(void (T::* func)(Args... type), T* member)
 	{
-		for (ACallback* callback : m_callbacks)
+		for (auto callbackIt = m_callbacks.begin(); callbackIt != m_callbacks.end(); callbackIt++)//ACallback* callback : m_callbacks)
 		{
+			ACallback* callback = *callbackIt;
+
 			if (auto memberCallback = static_cast<CCCallback::MemberCallback<T, Args...>*>(callback))
 			{
 				if (memberCallback->m_func == func && memberCallback->m_member == member)
@@ -59,8 +62,10 @@ public:
 
 	void Unbind(void (*func)(Args... type))
 	{
-		for (ACallback* callback : m_callbacks)
+		for (auto callbackIt = m_callbacks.begin(); callbackIt != m_callbacks.end(); callbackIt++)//ACallback* callback : m_callbacks)
 		{
+			ACallback* callback = *callbackIt;
+
 			if (auto nonMemberCallback = static_cast<CCCallback::NonMemberCallback<Args...>*>(callback))
 			{
 				if (nonMemberCallback->m_func == func)
@@ -75,8 +80,12 @@ public:
 
 	void Invoke(Args&&... args)
 	{
-		for (ACallback* callback : m_callbacks)
+		//TODO: Optimize, iterator crash if there is an unbind
+
+		std::set<ACallback*> callbacks = m_callbacks;
+		for (auto callbackIt = callbacks.begin(); callbackIt != callbacks.end(); callbackIt++)
 		{
+			ACallback* callback = *callbackIt;
 			callback->Invoke(std::forward<Args>(args)...);
 		}
 	}

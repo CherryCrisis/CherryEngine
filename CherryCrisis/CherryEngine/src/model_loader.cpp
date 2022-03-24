@@ -37,7 +37,8 @@ namespace CCModelLoader
         std::shared_ptr<Model> model;
         if (scene->mRootNode != node)
         {
-            model = resourceManager->AddResource<Model>(filepath, false, scene, node);
+            std::string modelName = filepath + std::string("/") + std::to_string(models.size());
+            model = resourceManager->AddResource<Model>(modelName.c_str(), true, scene, node, filepath);
             models.push_back(model);
         }
 

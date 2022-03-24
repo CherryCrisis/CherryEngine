@@ -9,6 +9,8 @@ namespace CCCallback
 	class AWrapCallback
 	{
 	public:
+		virtual ~AWrapCallback() = default;
+		
 		template<class... Args>
 		void Invoke(Args&&... args);
 	};
@@ -21,6 +23,7 @@ namespace CCCallback
 
 		ACallback(const std::type_index& typeIndex) : m_typeIndex(typeIndex) {}
 		virtual void Invoke(Args&&...) const = 0;
+
 	};
 
 	template<class T, class... Args>

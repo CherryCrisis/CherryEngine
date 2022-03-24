@@ -450,9 +450,6 @@
     <ClInclude Include="include\metadata.hpp">
       <Filter>Fichiers d%27en-tête\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="include\event.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\callback.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -476,6 +473,12 @@
     </ClInclude>
     <ClInclude Include="include\resources_container.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\csassembly.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\event.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -699,6 +702,9 @@
     </ClCompile>
     <ClCompile Include="src\uuid.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\csassembly.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

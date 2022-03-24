@@ -16,7 +16,6 @@ std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 		resourceContainerIt->second->Add(filepath, resourcePtr);
 	}
 
-
 	return resourcePtr;
 }
 
@@ -137,6 +136,18 @@ void ResourceManager::Remove(const char* filepath)
 	{
 		resourceContainerIt->second->Remove(filepath);
 	}
+}
+
+template<class T>
+size_t ResourceManager::GetResourceCount() const
+{
+	auto resourceContainerIt = m_resources.find(typeid(T));
+	if (resourceContainerIt != m_resources.end())
+	{
+		return resourceContainerIt->second->GetResourceCount();
+	}
+
+	return 0;
 }
 
 

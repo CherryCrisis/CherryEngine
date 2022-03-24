@@ -8,7 +8,8 @@ namespace CCFunction
 	class AFunction
 	{
 	public:
-		virtual void Invoke() const = 0;
+		virtual void Invoke() = 0;
+		virtual ~AFunction() = default;
 	};
 
 	template<class... Args>
@@ -24,7 +25,7 @@ namespace CCFunction
 		{
 		}
 
-		virtual void Invoke() const override
+		virtual void Invoke() override
 		{
 			(m_f)(std::get<Args>(m_args)...);
 		}
@@ -44,7 +45,7 @@ namespace CCFunction
 		{
 		}
 
-		virtual void Invoke() const override
+		virtual void Invoke() override
 		{
 			(m_member->*m_f)(std::get<Args>(m_args)...);
 		}

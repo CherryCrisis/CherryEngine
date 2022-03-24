@@ -4,6 +4,7 @@
 #include <imgui.h>
 
 #include "core/editor_manager.hpp"
+#include "resource_manager.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -15,6 +16,7 @@ ProjectSettingsDisplayer::ProjectSettingsDisplayer(bool spawnOpened = true) : Pa
     m_categories[3] = new Input("Inputs");
     m_categories[4] = new TagLayer("Tags / Layers");
     m_categories[5] = new RenderPass("Render Pass");
+    m_categories[6] = new ResourceViewer("Resource Viewer");
 }
 
 ProjectSettingsDisplayer::~ProjectSettingsDisplayer()
@@ -385,4 +387,51 @@ void ProjectSettingsDisplayer::TagLayer::Fill()
 void ProjectSettingsDisplayer::RenderPass::Fill()
 {
     ImGui::Text("Pass Order");
+}
+
+void ProjectSettingsDisplayer::ResourceViewer::Fill()
+{
+    ImGui::Text("Resource count %i", ResourceManager::GetInstance()->GetResourceCount());
+
+    std::map<std::type_index, std::vector<const char*>> resourcePaths;
+    std::vector<const char*> resourcesType;
+    std::vector<std::type_index> resourceTypeId;
+    ResourceManager::GetInstance()->GetResourcesPath(resourcePaths);
+
+    for (auto& pair : resourcePaths)
+    {
+        resourcesType.push_back(pair.first.name());
+        resourceTypeId.push_back(pair.first);
+    }
+
+    static const char* current_item = NULL;
+    static size_t current_id = 0;
+
+    if (ImGui::BeginCombo("##combo", current_item))
+    {
+        for (size_t n = 0; n < resourcesType.size(); n++)
+        {
+            bool is_selected = (current_item == resourcesType[n]);
+            if (ImGui::Selectable(resourcesType[n], is_selected))
+            {
+                current_item = resourcesType[n];
+                current_id = n;
+                if (is_selected)
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    auto it = resourcePaths.find(resourceTypeId[current_id]);
+    if (it != resourcePaths.end())
+    {
+        for (int i = 0; i < it->second.size(); i++)
+        {
+            ImGui::Text(it->second[i]);
+        }
+    }
+    
 }

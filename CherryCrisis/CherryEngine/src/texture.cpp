@@ -12,8 +12,16 @@ Texture::Texture(const char* texturePath)
 
 Texture::~Texture()
 {
-    stbi_image_free(m_data);
+    if (m_resourceState.load() != EResourceState::DESTROYED)
+        Delete();
 }
+
+void Texture::Delete()
+{
+    if (m_data)
+        stbi_image_free(m_data);
+}
+
 
 void Texture::Load(std::shared_ptr<Texture> texture)
 {

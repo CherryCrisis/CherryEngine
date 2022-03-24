@@ -156,15 +156,17 @@ void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action
 	m_framePressedKeys.push_back((Keycode)(button + 1000));
 }
 
+#include "resource_manager.hpp"
 void debug()
 {
+	ResourceManager::GetInstance()->Remove<ModelBase>("Assets/backpack.obj");
 	std::cout << "TEST" << std::endl;
 
 }
 
 void debug(const float& in)
 {
-	std::cout << "TEST " << in << std::endl;
+	std::cout << "TEST2 " << in << std::endl;
 }
 
 void InputManager::UpdateKeys()
@@ -178,7 +180,7 @@ void InputManager::UpdateKeys()
 		ActionButtons* button = AddActionButtons("Test", i);
 		//ActionAxes* axes= AddActionAxes("Test", i);
 
-		AddInputToAction("Test", Keycode::LEFT_CLICK);
+		AddInputToAction("Test", Keycode::SPACE);
 		//AddAxisToAction("Test", Axis(Keycode::W, Keycode::S), i);
 
 		button->m_pressed.Bind(debug);

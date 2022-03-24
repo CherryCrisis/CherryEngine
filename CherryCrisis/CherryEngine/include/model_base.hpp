@@ -38,6 +38,7 @@ public:
 	~ModelBase();
 
 	static void Load(std::shared_ptr<ModelBase> modelBase);
+	void Delete() override;
 
 	//Generate entities with modelBase (model instance)
 	std::vector<Entity*> GenerateEntities(Entity* rootEntity);
