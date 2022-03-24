@@ -15,12 +15,14 @@ namespace CCScripting
 		public void Start()
 		{
 			Debug.GetInstance().Log(pos);
+			InputManager.GetInstance().SetContext("user Context");
+			transform.position = new Vector3(0f, 0f, -5f);
 		}
 
 		void SetRotation()
         {
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
-			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
+			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
 
 		}
 
@@ -40,22 +42,19 @@ namespace CCScripting
 
 			float timeScaledSpeed = deltaTime * 2f;
 
-			if (InputManager.GetInstance().GetKey(Keycode.SPACE))
-				transform.position = new Vector3(transform.position.x, transform.position.y + timeScaledSpeed, transform.position.z);
-
-			if (InputManager.GetInstance().GetKey(Keycode.LEFT_CONTROL))
-				transform.position = new Vector3(transform.position.x, transform.position.y - timeScaledSpeed, transform.position.z);
-
-			if (InputManager.GetInstance().GetKey(Keycode.Z))
-				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + timeScaledSpeed);
-
-			if (InputManager.GetInstance().GetKey(Keycode.S))
-				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - timeScaledSpeed);
-
-			if (InputManager.GetInstance().GetKeyDown(Keycode.ESCAPE))
+			if (InputManager.GetInstance().GetKeyDown("Test"))
+            {
 				Debug.GetInstance().Log(transform.position, transform.eulerAngles, transform.scale);
 
-			transform.position.x = 5f;
+			}
+
+			if (InputManager.GetInstance().GetKey("Test"))
+				transform.position = new Vector3(transform.position.x, transform.position.y + timeScaledSpeed, transform.position.z);
+
+			if (InputManager.GetInstance().GetKey("Test2"))
+				transform.position = new Vector3(transform.position.x, transform.position.y - timeScaledSpeed, transform.position.z);
+
+			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + InputManager.GetInstance().GetAxis("Horizfeefeontal") * timeScaledSpeed);
 		}
 	}
 }

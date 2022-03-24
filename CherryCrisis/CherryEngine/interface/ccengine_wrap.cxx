@@ -371,6 +371,9 @@ namespace Swig {
 	#include "input_manager.hpp"
 
 
+#include <string>
+
+
 	#include "debug.hpp"
 
 
@@ -383,9 +386,6 @@ namespace Swig {
 
 
 	#include "entity.hpp"
-
-
-#include <string>
 
 
 	#include "maths.hpp"
@@ -449,7 +449,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetInstance() {
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_0(void * jarg1, int jarg2) {
   unsigned int jresult ;
   InputManager *arg1 = (InputManager *) 0 ;
   Keycode arg2 ;
@@ -463,7 +463,7 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey(void * j
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_0(void * jarg1, int jarg2) {
   unsigned int jresult ;
   InputManager *arg1 = (InputManager *) 0 ;
   Keycode arg2 ;
@@ -477,7 +477,7 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown(void
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_0(void * jarg1, int jarg2) {
   unsigned int jresult ;
   InputManager *arg1 = (InputManager *) 0 ;
   Keycode arg2 ;
@@ -486,6 +486,48 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp(void *
   arg1 = (InputManager *)jarg1; 
   arg2 = (Keycode)jarg2; 
   result = (bool)(arg1)->GetKeyUp(arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_1(void * jarg1, char * jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (bool)(arg1)->GetKey((char const *)arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_1(void * jarg1, char * jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (bool)(arg1)->GetKeyDown((char const *)arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_1(void * jarg1, char * jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (bool)(arg1)->GetKeyUp((char const *)arg2);
   jresult = result; 
   return jresult;
 }
@@ -502,6 +544,45 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_InputManager_GetAxis(void * jarg1, 
   result = (float)(arg1)->GetAxis((char const *)arg2);
   jresult = result; 
   return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseWheel(void * jarg1) {
+  void * jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  CCMaths::Vector2 result;
+  
+  arg1 = (InputManager *)jarg1; 
+  result = (arg1)->GetMouseWheel();
+  jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMousePos(void * jarg1) {
+  void * jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  CCMaths::Vector2 result;
+  
+  arg1 = (InputManager *)jarg1; 
+  result = (arg1)->GetMousePos();
+  jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_InputManager_SetContext(void * jarg1, char * jarg2) {
+  InputManager *arg1 = (InputManager *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  arg1 = (InputManager *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  (arg1)->SetContext((std::string const &)*arg2);
 }
 
 

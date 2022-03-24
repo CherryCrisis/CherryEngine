@@ -196,17 +196,35 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetInstance")]
   public static extern global::System.IntPtr InputManager_GetInstance();
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKey")]
-  public static extern bool InputManager_GetKey(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKey__SWIG_0")]
+  public static extern bool InputManager_GetKey__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKeyDown")]
-  public static extern bool InputManager_GetKeyDown(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKeyDown__SWIG_0")]
+  public static extern bool InputManager_GetKeyDown__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKeyUp")]
-  public static extern bool InputManager_GetKeyUp(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKeyUp__SWIG_0")]
+  public static extern bool InputManager_GetKeyUp__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKey__SWIG_1")]
+  public static extern bool InputManager_GetKey__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKeyDown__SWIG_1")]
+  public static extern bool InputManager_GetKeyDown__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKeyUp__SWIG_1")]
+  public static extern bool InputManager_GetKeyUp__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetAxis")]
   public static extern float InputManager_GetAxis(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetMouseWheel")]
+  public static extern global::System.IntPtr InputManager_GetMouseWheel(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetMousePos")]
+  public static extern global::System.IntPtr InputManager_GetMousePos(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_SetContext")]
+  public static extern void InputManager_SetContext(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_InputManager")]
   public static extern void delete_InputManager(global::System.Runtime.InteropServices.HandleRef jarg1);

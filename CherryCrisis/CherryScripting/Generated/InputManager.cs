@@ -51,23 +51,53 @@ public class InputManager : global::System.IDisposable {
   }
 
   public bool GetKey(Keycode key) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKey(swigCPtr, (int)key);
+    bool ret = CherryEnginePINVOKE.InputManager_GetKey__SWIG_0(swigCPtr, (int)key);
     return ret;
   }
 
   public bool GetKeyDown(Keycode key) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown(swigCPtr, (int)key);
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown__SWIG_0(swigCPtr, (int)key);
     return ret;
   }
 
   public bool GetKeyUp(Keycode key) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp(swigCPtr, (int)key);
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp__SWIG_0(swigCPtr, (int)key);
+    return ret;
+  }
+
+  public bool GetKey(string keyName) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKey__SWIG_1(swigCPtr, keyName);
+    return ret;
+  }
+
+  public bool GetKeyDown(string keyName) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown__SWIG_1(swigCPtr, keyName);
+    return ret;
+  }
+
+  public bool GetKeyUp(string keyName) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp__SWIG_1(swigCPtr, keyName);
     return ret;
   }
 
   public float GetAxis(string axisName) {
     float ret = CherryEnginePINVOKE.InputManager_GetAxis(swigCPtr, axisName);
     return ret;
+  }
+
+  public Vector2 GetMouseWheel() {
+    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMouseWheel(swigCPtr), true);
+    return ret;
+  }
+
+  public Vector2 GetMousePos() {
+    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMousePos(swigCPtr), true);
+    return ret;
+  }
+
+  public void SetContext(string name) {
+    CherryEnginePINVOKE.InputManager_SetContext(swigCPtr, name);
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
 }
