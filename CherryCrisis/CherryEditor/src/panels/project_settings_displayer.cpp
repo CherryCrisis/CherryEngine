@@ -231,7 +231,32 @@ void ProjectSettingsDisplayer::Input::Fill()
                             ImGui::SetItemDefaultFocus();
                     }
                     ImGui::EndCombo();
+                } ImGui::SameLine();
+
+                std::string listeningLabel = "Listening" + label;
+                if (ImGui::Button((std::string("-") + label).c_str()))
+                {
+                    IM->SetListening();
+
+                    ImGui::OpenPopup(listeningLabel.c_str());
                 }
+
+                ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                if (ImGui::BeginPopupModal(listeningLabel.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
+                {
+                    ImGui::Separator();
+
+                    int key = IM->GetListenedKey();
+                    if (key != -1)
+                    {
+                        IM->SetPositiveKey(axes, IM->GetKeycode(key));
+                        IM->ResetListenedKey();
+
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+
 
                 ImGui::Text("Negative key:"); ImGui::SameLine();
                 label = "##neg" + std::to_string(j);
@@ -251,7 +276,32 @@ void ProjectSettingsDisplayer::Input::Fill()
                             ImGui::SetItemDefaultFocus();
                     }
                     ImGui::EndCombo();
+                } ImGui::SameLine();
+
+                listeningLabel = "Listening" + label;
+                if (ImGui::Button((std::string("-") + label).c_str()))
+                {
+                    IM->SetListening();
+
+                    ImGui::OpenPopup(listeningLabel.c_str());
                 }
+
+                ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                if (ImGui::BeginPopupModal(listeningLabel.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
+                {
+                    ImGui::Separator();
+
+                    int key = IM->GetListenedKey();
+                    if (key != -1)
+                    {
+                        IM->SetNegativeKey(axes, IM->GetKeycode(key));
+                        IM->ResetListenedKey();
+
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+
                 ImGui::Separator();
 
                 j++;
@@ -328,7 +378,34 @@ void ProjectSettingsDisplayer::Input::Fill()
 
                     if (breakLoop)
                         break;
+                } ImGui::SameLine();
+
+                std::string listeningLabel = "Listening" + label;
+                if (ImGui::Button((std::string("-") + label).c_str()))
+                {
+                    IM->SetListening();
+
+                    ImGui::OpenPopup(listeningLabel.c_str());
                 }
+
+                ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                if (ImGui::BeginPopupModal(listeningLabel.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
+                {
+                    ImGui::Separator();
+
+                    int key = IM->GetListenedKey();
+                    if (key != -1)
+                    {
+                        IM->ChangeInputInAction(&button.second, input.first, IM->GetKeycode(key));
+                        breakLoop = true;
+
+                        IM->ResetListenedKey();
+
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+
                 ImGui::Separator();
 
                 j++;
