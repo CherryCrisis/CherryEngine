@@ -1,6 +1,17 @@
 Changelog
 ===
 
+*24-03-2022*
+-
+**[Adding]**:
+* Input manager (Mouse, InputAction references)
+* Event System
+* Basic Serialization (UUID system)
+* Scripting hotreload 
+
+**[Fixing]**:
+* Camera movement
+
 *18-03-2022*
 -
 **[Adding]**:
