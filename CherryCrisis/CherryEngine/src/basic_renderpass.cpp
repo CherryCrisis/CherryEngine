@@ -8,9 +8,10 @@
 #include "model.hpp"
 
 BasicRenderPass::BasicRenderPass(const char* name)
-	: ElementMeshRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
+	: ARenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
 {
-
+	if (m_program)
+		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
 }
 
 template <>
@@ -44,7 +45,7 @@ int BasicRenderPass::Generate(ModelRenderer* toGenerate)
 
 	// Generate GPU mesh
 	{
-		if (ElementMeshRenderPass::Generate(model->m_mesh.get()) == -1)
+		if (ElementMeshGenerator::Generate(model->m_mesh.get()) == -1)
 			return -1;
 
 		m_modelRenderers.insert(toGenerate);
@@ -121,7 +122,7 @@ void BasicRenderPass::Remove(CameraComponent* toGenerate)
 	m_camera = nullptr;
 }
 
-void BasicRenderPass::Execute(const float x, const float y)
+void BasicRenderPass::Execute(const float& x, const float& y)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);

@@ -8,5 +8,5 @@
 void CsAssembly::Load(std::shared_ptr<CsAssembly> csassembly, const char* domainName)
 {
 	char* name = (char*)&domainName[0];
-	csassembly->context = CsScriptingSystem::GetInstance()->CreateContext(name, csassembly->filepath.c_str());
+	csassembly->context = CsScriptingSystem::GetInstance()->CreateContext(name, csassembly->GetFilepath());
 }

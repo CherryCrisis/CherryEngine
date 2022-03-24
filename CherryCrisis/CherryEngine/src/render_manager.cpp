@@ -86,7 +86,7 @@ void RenderManager::DrawScene(const float x, const float y)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (ARenderPass* pipeline : RM->m_orderedPipeline)
-		pipeline->Execute(x, y);
+		pipeline->CallOnExecute(x, y);
 
 	glUseProgram(0);
 }
