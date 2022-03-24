@@ -451,6 +451,7 @@ public:
 	int ChangeInputInAction(ActionButtons* action, Keycode oldKey, Keycode newKey);
 	
 	// Axis
+	void SetKey(Axis* axis, Keycode key, bool isNeg);
 	void SetPositiveKey(Axis* axis, Keycode key);
 	void SetNegativeKey(Axis* axis, Keycode key);
 

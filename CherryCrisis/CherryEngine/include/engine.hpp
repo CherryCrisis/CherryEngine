@@ -13,7 +13,7 @@ public:
 	bool isPlaying = false;
 
 	void Launch();
-	void Stop() { isPlaying = false; }
+	void Stop();
 
 	void Tick();
 	void TickEngine();

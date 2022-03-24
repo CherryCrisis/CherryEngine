@@ -33,7 +33,11 @@ private:
 	public:
 		Input(std::string name = "default");
 		void Fill() override;
-
+		void CreateAction(InputManager* IM, int& type);
+		void CreateButtons(InputManager* IM, const char* name);
+		void CreateAxes(InputManager* IM, const char* name);
+		void SetButtons(InputManager* IM);
+		void SetAxes(InputManager* IM);
 
 		InputManager::KeyboardContext* userContext = nullptr;
 	};
