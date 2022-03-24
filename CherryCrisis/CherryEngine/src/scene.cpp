@@ -17,6 +17,7 @@
 #include "scripted_behaviour.hpp"
 
 #include "model_base.hpp"
+#include "model.hpp"
 
 Scene::~Scene()
 {
@@ -42,12 +43,17 @@ void Scene::AddEntity(Entity* toAdd)
 	m_entities[GetUniqueEntityName(toAdd->GetName())] = toAdd;
 }
 
-void Scene::Load(std::shared_ptr<Scene> scene)
+Scene::Scene(const char* filePath) : Resource(filePath)
 {
 	auto RM = ResourceManager::GetInstance();
 
-	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
+	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, this);
 	RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
+}
+
+void Scene::Load(std::shared_ptr<Scene> scene)
+{
+
 
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
@@ -58,11 +64,6 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	camera->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("CameraController");
 
 	scene->AddEntity(camera);
-}
-
-void Scene::Load(const char* filepath) 
-{
-	// do things
 }
 
 void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
@@ -325,6 +326,10 @@ bool Scene::Unserialize(const char* filePath)
 						m_wrappedUUIDs[value].insert({ key, refUUID });
 				}
 
+				if (key == "file")
+				{
+					key = key;
+				}
 				if (info == typeid(std::string*))
 				{
 					behaviour->m_metadatas.m_fields[key] = { key, std::any(value) };
@@ -332,23 +337,13 @@ bool Scene::Unserialize(const char* filePath)
 					ModelRenderer* renderer = (ModelRenderer*) behaviour;
 					if (renderer) 
 					{
-						std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>(parsedValue.c_str(), true);
-						renderer->SetModel(model);
+						std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(parsedValue.c_str());
+						if (model->GetResourceState() == EResourceState::LOADED)
+							renderer->SetModel(model);
+						else
+							model->m_onLoaded.Bind(&ModelRenderer::SetModel, renderer);
 					}
 				}
-
-
-				//srd_ptr<model> model = AddResourceNoLoad(modelName)
-				// 
-				// {
-				//	uniqueGuard(mutex)
-				// 
-				//	if (model is load) 
-				//		modelRender.SetModel(model);
-				//	else
-				//		model.onLoaded.Bind(&ModelRenderer::SetModel, this);
-				// }
-				//
 			}
 		}
 		//Then loop over the wrapped component to add them into the entities

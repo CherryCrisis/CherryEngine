@@ -27,13 +27,16 @@ void Transform::PopulateMetadatas()
 
 void Transform::ConsumeMetadatas()
 {
-	m_position = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["position"].m_value);
-	m_rotation = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["rotation"].m_value);
-	m_scale    = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["scale"].m_value);
+	//Vector3* position = *std::any_cast<CCMaths::Vector3**>(m_metadatas.m_fields["position"].m_value);
+	//Vector3* rotation = *std::any_cast<CCMaths::Vector3**>(m_metadatas.m_fields["rotation"].m_value);
+	//Vector3* scale    = *std::any_cast<CCMaths::Vector3**>(m_metadatas.m_fields["scale"].m_value);
+	//m_position = *position;
+	//m_position = *position;
+	//m_position = *position;
 	auto a = m_metadatas.m_fields["parent"].m_value;
-	Behaviour* b =  std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
+	Behaviour* b =  *std::any_cast<Behaviour**>(m_metadatas.m_fields["parent"].m_value);
 
-	m_parent   = (Transform*)std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
+	m_parent   = (Transform*)std::any_cast<Behaviour*>(b);
 }
 
 void Transform::SetDirty()

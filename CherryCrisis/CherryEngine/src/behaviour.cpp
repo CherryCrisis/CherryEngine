@@ -32,7 +32,10 @@ std::string Behaviour::Serialize()
 		if (type == typeid(std::string*))
 		{
 			std::string* val = std::any_cast<std::string*>(fieldRef.m_value);
-			value += *val + "\n";
+			if (val)
+				value += *val + "\n";
+			else
+				value += "null\n";
 			continue;
 		}
 

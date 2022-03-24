@@ -20,10 +20,11 @@ enum class EResourceState
 class CCENGINE_API AResource
 {
 protected:
-	const std::string m_filepath;
 	std::atomic<EResourceState> m_resourceState;
 
 public:
+	std::string m_filepath;
+	
 	AResource(const std::string& filepath)
 		: m_filepath(filepath)
 	{
