@@ -136,6 +136,7 @@
     <ClInclude Include="include\model_renderer.hpp" />
     <ClInclude Include="include\monowrapper.hpp" />
     <ClInclude Include="include\pch.hpp" />
+    <ClInclude Include="include\property.hpp" />
     <ClInclude Include="include\renderer.hpp" />
     <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
@@ -213,6 +214,7 @@
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
     <None Include="interface\matrix3.i" />
+    <None Include="interface\property.i" />
     <None Include="interface\singleton.i" />
     <None Include="interface\time_manager.i" />
     <None Include="interface\transform_comp.i" />
