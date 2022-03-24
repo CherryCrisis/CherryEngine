@@ -15,16 +15,7 @@
 class InputManager
 {
 public:
-	static InputManager* GetInstance()
-	{
-		if (!instantiateFlag.test_and_set())
-		{
-			if (!currentInstance)
-				currentInstance = new T();
-		}
-
-		return currentInstance;
-	}
+	static InputManager* GetInstance();
 
 	bool GetKey(Keycode key);
 	bool GetKeyDown(Keycode key);

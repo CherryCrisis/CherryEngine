@@ -23,19 +23,23 @@ namespace CCScripting
 			time += deltaTime;
 
 			Vector2 deltaMouse = InputManager.GetInstance().GetMouseDelta();
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x + deltaMouse.y * deltaTime, transform.eulerAngles.y + deltaMouse.x * deltaTime, transform.eulerAngles.z);
+			float sensitityX = Time.GetInstance().GetDeltaTime() * deltaMouse.x;
+			float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;
+			float speed = Time.GetInstance().GetDeltaTime() * 2f;
+
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x + sensitityY, transform.eulerAngles.y + sensitityX, transform.eulerAngles.z);
 
 			if (InputManager.GetInstance().GetKey(Keycode.SPACE))
-				transform.position = new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
+				transform.position = new Vector3(transform.position.x, transform.position.y + speed, transform.position.z);
 
 			if (InputManager.GetInstance().GetKey(Keycode.LEFT_CONTROL))
-				transform.position = new Vector3(transform.position.x, transform.position.y - 2f, transform.position.z);
+				transform.position = new Vector3(transform.position.x, transform.position.y - speed, transform.position.z);
 
 			if (InputManager.GetInstance().GetKey(Keycode.R))
-				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 2f);
+				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + speed);
 
 			if (InputManager.GetInstance().GetKey(Keycode.F))
-				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 2f);
+				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - speed);
 		}
 	}
 }

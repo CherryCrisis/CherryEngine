@@ -584,6 +584,9 @@
     <None Include="include\resources_container.inl">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </None>
+    <None Include="interface\time_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entity.cpp">

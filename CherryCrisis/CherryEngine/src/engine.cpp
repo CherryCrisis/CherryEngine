@@ -5,6 +5,7 @@
 
 #include "scene_manager.hpp"
 #include "csscripting_system.hpp"
+#include "time_manager.hpp"
 
 Engine::Engine() 
 {

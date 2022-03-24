@@ -40,7 +40,7 @@ namespace CCScripting
 			SetRotation();
 
 
-			float timeScaledSpeed = deltaTime * 2f;
+			float timeScaledSpeed = Time.GetInstance().GetDeltaTime() * 2f;
 
 			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + InputManager.GetInstance().GetAxis("Horizontal") * timeScaledSpeed);
 		}
