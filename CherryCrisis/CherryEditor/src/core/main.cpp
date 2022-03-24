@@ -76,11 +76,24 @@ int main()
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
     };
 
+    auto funcCP = [](GLFWwindow* w, double x, double y)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MousePosCallback(w, x, y);
+    };
+
+
+    auto funcCC = [](GLFWwindow* w, int k, int a, int m)
+    {
+        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
+    };
+
     glfwSetWindowUserPointer(window, &editor);
 
     glfwSetKeyCallback(window, func);
     glfwSetWindowFocusCallback(window, funcF);
     glfwSetScrollCallback(window, funcW);
+    glfwSetCursorPosCallback(window, funcCP);
+    glfwSetMouseButtonCallback(window, funcCC);
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
 

@@ -9,7 +9,7 @@ InputManager* Singleton<InputManager>::currentInstance = nullptr;
 
 const char* InputManager::GetKeyname(int index)
 {
-	if (index >= 0 && index < 119)
+	if (index >= 0 && index < 122)
 		return keynames[index];
 
 	return keynames[0];
@@ -17,7 +17,7 @@ const char* InputManager::GetKeyname(int index)
 
 const char* InputManager::GetKeyname(Keycode code)
 {
-	for (int i = 0; i < 119; ++i)
+	for (int i = 0; i < 122; ++i)
 	{
 		if (keycodes[i] == code)
 			return keynames[i];
@@ -28,7 +28,7 @@ const char* InputManager::GetKeyname(Keycode code)
 
 int InputManager::GetKeynameIndex(const char* name)
 {
-	for (int i = 0; i < 119; ++i)
+	for (int i = 0; i < 122; ++i)
 	{
 		if (keynames[i] == name)
 			return i;
@@ -39,7 +39,7 @@ int InputManager::GetKeynameIndex(const char* name)
 
 Keycode	InputManager::GetKeycode(int index)
 {
-	if (index >= 0 && index < 119)
+	if (index >= 0 && index < 122)
 		return keycodes[index];
 
 	return keycodes[0];
@@ -47,7 +47,7 @@ Keycode	InputManager::GetKeycode(int index)
 
 Keycode	InputManager::GetKeycode(const char* name)
 {
-	for (int i = 0; i < 119; ++i)
+	for (int i = 0; i < 122; ++i)
 	{
 		if (keynames[i] == name)
 			return keycodes[i];
@@ -58,7 +58,7 @@ Keycode	InputManager::GetKeycode(const char* name)
 
 int InputManager::GetKeycodeIndex(Keycode code)
 {
-	for (int i = 0; i < 119; ++i)
+	for (int i = 0; i < 122; ++i)
 	{
 		if (keycodes[i] == code)
 			return i;
@@ -137,6 +137,25 @@ void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double
 	m_mouseWheel.y = (float)yoffset;
 }
 
+void InputManager::MousePosCallback(GLFWwindow* window, double xpos, double ypos)
+{
+	m_mousePos.x = (float)xpos;
+	m_mousePos.y = (float)ypos;
+}
+
+void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (action == 2)	return;
+
+	Input& input = m_keys[(Keycode)(button+1000)];
+
+	input.Set(action, action, !action);
+
+	input.m_isUpdated.Invoke(&input);
+
+	m_framePressedKeys.push_back((Keycode)(button + 1000));
+}
+
 void debug()
 {
 	std::cout << "TEST" << std::endl;
@@ -159,7 +178,7 @@ void InputManager::UpdateKeys()
 		ActionButtons* button = AddActionButtons("Test", i);
 		//ActionAxes* axes= AddActionAxes("Test", i);
 
-		AddInputToAction("Test", Keycode::E);
+		AddInputToAction("Test", Keycode::LEFT_CLICK);
 		//AddAxisToAction("Test", Axis(Keycode::W, Keycode::S), i);
 
 		button->m_pressed.Bind(debug);
