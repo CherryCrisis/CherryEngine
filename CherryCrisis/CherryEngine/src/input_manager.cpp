@@ -116,8 +116,25 @@ void InputManager::SetContext(KeyboardContext* context)
 #pragma endregion
 
 #pragma region Callbacks
+void InputManager::SetListening()
+{
+	m_isListening = true;
+}
+
+void InputManager::ResetListenedKey()
+{
+	m_listenedKey = -1;
+}
+
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	if (m_isListening)
+	{
+		m_listenedKey = GetKeycodeIndex((Keycode)key);
+		m_isListening = false;
+		return;
+	}
+
 	if (action == 2)	return;
 
 	// action = 1 if pressed and 0 if released
@@ -148,6 +165,13 @@ void InputManager::MousePosCallback(GLFWwindow* window, double xpos, double ypos
 
 void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action, int mods)
 {
+	if (m_isListening)
+	{
+		m_listenedKey = GetKeycodeIndex((Keycode)(button + 1000));
+		m_isListening = false;
+		return;
+	}
+
 	if (action == 2)	return;
 
 	Input& input = m_keys[(Keycode)(button+1000)];
@@ -163,6 +187,8 @@ void InputManager::UpdateKeys()
 {
 	m_mouseWheel = CCMaths::Vector2::Zero;
 	m_mouseDelta = CCMaths::Vector2::Zero;
+
+	m_listenedKey = -1;
 
 	for (auto& key : m_framePressedKeys)
 	{
