@@ -571,6 +571,18 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMousePos(void * ja
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseDelta(void * jarg1) {
+  void * jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  CCMaths::Vector2 result;
+  
+  arg1 = (InputManager *)jarg1; 
+  result = (arg1)->GetMouseDelta();
+  jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_InputManager_SetContext(void * jarg1, char * jarg2) {
   InputManager *arg1 = (InputManager *) 0 ;
   std::string *arg2 = 0 ;
@@ -1226,28 +1238,6 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_b_get(void * jarg1) {
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_roll_set(void * jarg1, float jarg2) {
-  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
-  float arg2 ;
-  
-  arg1 = (CCMaths::Vector3 *)jarg1; 
-  arg2 = (float)jarg2; 
-  if (arg1) (arg1)->roll = arg2;
-}
-
-
-SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_roll_get(void * jarg1) {
-  float jresult ;
-  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
-  float result;
-  
-  arg1 = (CCMaths::Vector3 *)jarg1; 
-  result = (float) ((arg1)->roll);
-  jresult = result; 
-  return jresult;
-}
-
-
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_pitch_set(void * jarg1, float jarg2) {
   CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
   float arg2 ;
@@ -1287,6 +1277,28 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_yaw_get(void * jarg1) {
   
   arg1 = (CCMaths::Vector3 *)jarg1; 
   result = (float) ((arg1)->yaw);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_roll_set(void * jarg1, float jarg2) {
+  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->roll = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_roll_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1; 
+  result = (float) ((arg1)->roll);
   jresult = result; 
   return jresult;
 }

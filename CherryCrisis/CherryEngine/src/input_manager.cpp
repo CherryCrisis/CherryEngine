@@ -139,8 +139,8 @@ void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double
 
 void InputManager::MousePosCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	m_mouseDelta.x = CCMaths::Sign(xpos - m_mousePos.x);
-	m_mouseDelta.y = CCMaths::Sign(m_mousePos.y - ypos);
+	m_mouseDelta.x = m_mousePos.x - xpos;
+	m_mouseDelta.y = m_mousePos.y - ypos;
 
 	m_mousePos.x = (float)xpos;
 	m_mousePos.y = (float)ypos;

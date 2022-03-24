@@ -10,7 +10,7 @@ namespace CCMaths
 		{
 			struct { float x, y, z; };				//!< Struct of the three components of the Vector3
 			struct { float r, g, b; };				//!< Struct of the three components of the Vector3
-			struct { float roll, pitch, yaw; };		//!< Struct of the three components of the Vector3
+			struct { float pitch, yaw, roll; };		//!< Struct of the three components of the Vector3
 
 			float data[3];							//!< Pointer on the Vector3's data
 

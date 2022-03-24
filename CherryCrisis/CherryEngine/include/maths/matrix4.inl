@@ -147,14 +147,34 @@ namespace CCMaths
 		};
 	}
 
-	inline Matrix4 Matrix4::RotateZXY(const Vector3& eulerAngles)
+	inline Matrix4 Matrix4::RotateXYZ(const Vector3& eulerAngles)
 	{
-		return RotateZ(eulerAngles.yaw) * RotateX(eulerAngles.roll) * RotateY(eulerAngles.pitch);
+		return RotateX(eulerAngles.pitch) * RotateY(eulerAngles.yaw) * RotateZ(eulerAngles.roll);
+	}
+
+	inline Matrix4 Matrix4::RotateZYX(const Vector3& eulerAngles)
+	{
+		return RotateZ(eulerAngles.roll) * RotateY(eulerAngles.yaw) * RotateX(eulerAngles.pitch);
 	}
 
 	inline Matrix4 Matrix4::RotateYXZ(const Vector3& eulerAngles)
 	{
-		return RotateY(eulerAngles.pitch) * RotateX(eulerAngles.roll) * RotateZ(eulerAngles.yaw);
+		return RotateY(eulerAngles.yaw) * RotateX(eulerAngles.pitch) * RotateZ(eulerAngles.roll);
+	}
+
+	inline Matrix4 Matrix4::RotateZXY(const Vector3& eulerAngles)
+	{
+		return RotateZ(eulerAngles.roll) * RotateX(eulerAngles.pitch) * RotateY(eulerAngles.yaw);
+	}
+
+	inline Matrix4 Matrix4::RotateXZY(const Vector3& eulerAngles)
+	{
+		return RotateX(eulerAngles.pitch) * RotateZ(eulerAngles.roll) * RotateY(eulerAngles.yaw);
+	}
+
+	inline Matrix4 Matrix4::RotateYZX(const Vector3& eulerAngles)
+	{
+		return RotateY(eulerAngles.yaw) * RotateZ(eulerAngles.roll) * RotateX(eulerAngles.pitch);
 	}
 
 	inline Matrix4 Matrix4::RotateX(const float rad)
