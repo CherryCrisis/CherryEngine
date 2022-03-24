@@ -128,6 +128,7 @@ private:
 	
 	CCMaths::Vector2 m_mouseWheel {};
 	CCMaths::Vector2 m_mousePos   {};
+	CCMaths::Vector2 m_mouseDelta {};
 
 	const char* keynames[122] =
 	{
@@ -461,6 +462,7 @@ public:
 	// Get
 	CCMaths::Vector2 GetMouseWheel() { return m_mouseWheel; }
 	CCMaths::Vector2 GetMousePos()   { return m_mousePos;   }
+	CCMaths::Vector2 GetMouseDelta() { return m_mouseDelta;   }
 
 	int			KeynamesSize() { return 122; }
 

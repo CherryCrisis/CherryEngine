@@ -139,6 +139,9 @@ void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double
 
 void InputManager::MousePosCallback(GLFWwindow* window, double xpos, double ypos)
 {
+	m_mouseDelta.x = CCMaths::Sign(xpos - m_mousePos.x);
+	m_mouseDelta.y = CCMaths::Sign(m_mousePos.y - ypos);
+
 	m_mousePos.x = (float)xpos;
 	m_mousePos.y = (float)ypos;
 }
@@ -156,41 +159,10 @@ void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action
 	m_framePressedKeys.push_back((Keycode)(button + 1000));
 }
 
-void debug()
-{
-	std::cout << "TEST" << std::endl;
-
-}
-
-void debug(const float& in)
-{
-	std::cout << "TEST " << in << std::endl;
-}
-
 void InputManager::UpdateKeys()
 {
-	static bool doOnce = true;
-	
-	if (doOnce)
-	{
-		int i = 0;
-		SetContext("user Context");
-		ActionButtons* button = AddActionButtons("Test", i);
-		//ActionAxes* axes= AddActionAxes("Test", i);
-
-		AddInputToAction("Test", Keycode::LEFT_CLICK);
-		//AddAxisToAction("Test", Axis(Keycode::W, Keycode::S), i);
-
-		button->m_pressed.Bind(debug);
-		//axes->m_event.Bind(debug);
-		
-		SetContext(nullptr);
-
-		doOnce = false;
-	}
-
-
 	m_mouseWheel = CCMaths::Vector2::Zero;
+	m_mouseDelta = CCMaths::Vector2::Zero;
 
 	for (auto& key : m_framePressedKeys)
 	{
@@ -245,9 +217,7 @@ bool InputManager::GetKeyDown(const char* inputName)
 	else
 	{
 		ActionButtons& current = m_activeContext->m_buttons[inputName];
-		current.CheckDown();
-
-		return false;
+		return current.CheckDown();
 	}
 }
 
@@ -265,9 +235,7 @@ bool InputManager::GetKey(const char* inputName)
 	else
 	{
 		ActionButtons& current = m_activeContext->m_buttons[inputName];
-		current.CheckHeld();
-
-		return false;
+		return current.CheckHeld();
 	}
 }
 
@@ -285,9 +253,7 @@ bool InputManager::GetKeyUp(const char* inputName)
 	else
 	{
 		ActionButtons& current = m_activeContext->m_buttons[inputName];
-		current.CheckUp();
-
-		return false;
+		return current.CheckUp();
 	}
 }
 #pragma endregion
