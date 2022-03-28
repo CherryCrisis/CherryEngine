@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cherry_macros.hpp"
+#include "property.hpp"
 
 #include <any>
 #include <vector>
@@ -23,5 +24,6 @@ struct CCENGINE_API Field
 
 struct CCENGINE_API Metadata
 {
-	std::vector<Field> m_fields;
+    std::vector<Field> m_fields;
+    std::vector<CCProperty::IClearProperty*> m_properties;
 };

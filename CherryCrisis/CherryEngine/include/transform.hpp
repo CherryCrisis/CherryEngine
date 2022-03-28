@@ -7,6 +7,8 @@
 #include "behaviour.hpp"
 #include "maths.hpp"
 
+#include "property.hpp"
+
 using namespace CCMaths;
 
 class CCENGINE_API Transform : public Behaviour
@@ -25,6 +27,12 @@ private:
 
 	void SetDirty();
 
+	template <typename T>
+	using TransformProperty = CCProperty::Property<Transform, T>;
+
+	using Matrix4Property = TransformProperty<Matrix4>;
+	using Vector3Property = TransformProperty<Vector3>;
+
 public:
 	Transform(Entity& owner);
 
@@ -37,6 +45,8 @@ public:
 
 	void SetPosition(const Vector3& position);
 	Vector3 GetPosition() { return m_position; }
+
+	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 
 	void SetRotation(const Vector3& rotation);
 	Vector3 GetRotation() { return m_rotation; }

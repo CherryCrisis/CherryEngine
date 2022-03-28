@@ -214,7 +214,6 @@
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
     <None Include="interface\matrix3.i" />
-    <None Include="interface\property.i" />
     <None Include="interface\singleton.i" />
     <None Include="interface\time_manager.i" />
     <None Include="interface\transform_comp.i" />

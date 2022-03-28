@@ -35,6 +35,7 @@ public:
 	virtual std::string Serialize() { return std::string(""); }
 
 	std::vector<Field>& GetFields() { return m_metadatas.m_fields; }
+	std::vector<CCProperty::IClearProperty*>& GetProperties() { return m_metadatas.m_properties; }
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }

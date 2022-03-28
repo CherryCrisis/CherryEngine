@@ -477,11 +477,11 @@
     <ClInclude Include="include\resources_container.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="include\csassembly.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\property.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\csassembly.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -588,9 +588,6 @@
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </None>
     <None Include="interface\time_manager.i">
-      <Filter>Fichiers sources\Interface</Filter>
-    </None>
-    <None Include="interface\property.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>
@@ -713,7 +710,7 @@
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\csassembly.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
