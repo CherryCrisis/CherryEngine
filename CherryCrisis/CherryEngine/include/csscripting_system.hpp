@@ -17,14 +17,14 @@ class CCENGINE_API CsScriptingSystem : public Singleton<CsScriptingSystem>
 private:
 	std::string CopyTemporaryFile(const char* path);
 
-public:
 	std::unique_ptr<mono::ManagedScriptSystem> m_scriptSystem;
+
+public:
+	std::shared_ptr<mono::ManagedScriptContext> CreateContext(char* domainName, const char* contextPath);
 
 	CsScriptingSystem();
 	virtual ~CsScriptingSystem();
 
 	void Init();
-
-	std::shared_ptr<mono::ManagedScriptContext> CreateContext(char* domainName, const char* contextPath);
 	void ReloadContextes();
 };

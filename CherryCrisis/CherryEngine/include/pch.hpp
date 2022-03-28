@@ -9,6 +9,9 @@
 
 // ajouter les en-têtes à précompiler ici
 
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+
 #include <map>
 #include <cmath>
 #include <array>

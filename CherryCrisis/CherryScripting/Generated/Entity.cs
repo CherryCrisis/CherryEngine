@@ -72,6 +72,28 @@ public class Entity : global::System.IDisposable {
     return ret;
   }
 
+  private CameraComponentVector GetAllOfCameraComponent() {
+    CameraComponentVector ret = new CameraComponentVector(CherryEnginePINVOKE.Entity_GetAllOfCameraComponent(swigCPtr), true);
+    return ret;
+  }
+
+  private ScriptedBehaviour GetScriptedBehaviour() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetScriptedBehaviour(swigCPtr);
+    ScriptedBehaviour ret = (cPtr == global::System.IntPtr.Zero) ? null : new ScriptedBehaviour(cPtr, false);
+    return ret;
+  }
+
+  private ScriptedBehaviour AddScriptedBehaviour() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddScriptedBehaviour(swigCPtr);
+    ScriptedBehaviour ret = (cPtr == global::System.IntPtr.Zero) ? null : new ScriptedBehaviour(cPtr, false);
+    return ret;
+  }
+
+  private ScriptedBehaviourVector GetAllOfScriptedBehaviour() {
+    ScriptedBehaviourVector ret = new ScriptedBehaviourVector(CherryEnginePINVOKE.Entity_GetAllOfScriptedBehaviour(swigCPtr), true);
+    return ret;
+  }
+
   private Transform GetTransform() {
     global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetTransform(swigCPtr);
     Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
@@ -83,6 +105,25 @@ public class Entity : global::System.IDisposable {
     Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
     return ret;
   }
+
+  private TransformVector GetAllOfTransform() {
+    TransformVector ret = new TransformVector(CherryEnginePINVOKE.Entity_GetAllOfTransform(swigCPtr), true);
+    return ret;
+  }
+
+	private Behaviour GetScript(string scriptPath)
+	{
+        ScriptedBehaviourVector scriptedBehaviours = GetAllOfScriptedBehaviour();
+
+        for (int i = 0; i < scriptedBehaviours.Count; i++)
+        {
+			ScriptedBehaviour script = scriptedBehaviours[i];
+			if (script.GetScriptName() == scriptPath)
+				return script.GetInstance();
+        }
+
+		return null;
+	}
 
 	public string name => GetName();
 
@@ -109,7 +150,7 @@ public class Entity : global::System.IDisposable {
 		if (type == typeof(CameraComponent))
 			return GetCameraComponent();
 
-		return null;
+		return GetScript(type.Name);
 	}
 
 	public T GetComponent<T>() where T : Component => GetComponent(typeof(T)) as T;

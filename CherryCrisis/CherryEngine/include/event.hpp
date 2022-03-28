@@ -75,8 +75,10 @@ public:
 
 	void Invoke(Args&&... args)
 	{
-		for (ACallback* callback : m_callbacks)
+		std::set<ACallback*> callbacks = m_callbacks;
+		for (auto callbackIt = callbacks.begin(); callbackIt != callbacks.end(); callbackIt++)
 		{
+			ACallback* callback = *callbackIt;
 			callback->Invoke(std::forward<Args>(args)...);
 		}
 	}

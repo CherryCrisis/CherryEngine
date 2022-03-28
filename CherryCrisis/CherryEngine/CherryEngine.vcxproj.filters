@@ -489,6 +489,12 @@
     <ClInclude Include="include\serializer.hpp">
       <Filter>Fichiers d%27en-tête\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="include\csreflection.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\csreflection_ex.hpp">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -594,6 +600,9 @@
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </None>
     <None Include="interface\time_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\scripted_behaviour.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>

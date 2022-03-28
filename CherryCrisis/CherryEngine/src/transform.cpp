@@ -27,9 +27,6 @@ void Transform::PopulateMetadatas()
 
 void Transform::ConsumeMetadatas()
 {
-	m_position = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["position"].m_value);
-	m_rotation = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["rotation"].m_value);
-	m_scale    = *std::any_cast<CCMaths::Vector3*>(m_metadatas.m_fields["scale"].m_value);
 	auto a = m_metadatas.m_fields["parent"].m_value;
 	Behaviour* b =  std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
 

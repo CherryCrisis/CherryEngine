@@ -392,6 +392,20 @@ namespace Swig {
 	#include "entity.hpp"
 
 
+#include <typeinfo>
+#include <stdexcept>
+
+
+#include <vector>
+#include <algorithm>
+#include <stdexcept>
+
+
+	#include "transform.hpp"
+	#include "behaviour.hpp"
+	#include "maths.hpp"
+
+
 	#include "maths.hpp"
 
 	using namespace CCMaths;
@@ -406,13 +420,360 @@ namespace Swig {
 	#include "maths/vector4.hpp"
 
 
-	#include "transform.hpp"
-	#include "behaviour.hpp"
-	#include "maths.hpp"
-
-
 	#include "camera_component.hpp"
 
+
+	#include "scripted_behaviour.hpp"
+	#include "behaviour.hpp"
+
+SWIGINTERN std::vector< CameraComponent * > *new_std_vector_Sl_CameraComponent_Sm__Sg___SWIG_2(int capacity){
+        std::vector< CameraComponent * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< CameraComponent * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN CameraComponent *std_vector_Sl_CameraComponent_Sm__Sg__getitemcopy(std::vector< CameraComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< CameraComponent * >::value_type const &std_vector_Sl_CameraComponent_Sm__Sg__getitem(std::vector< CameraComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__setitem(std::vector< CameraComponent * > *self,int index,CameraComponent *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__AddRange(std::vector< CameraComponent * > *self,std::vector< CameraComponent * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< CameraComponent * > *std_vector_Sl_CameraComponent_Sm__Sg__GetRange(std::vector< CameraComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< CameraComponent * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__Insert(std::vector< CameraComponent * > *self,int index,CameraComponent *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__InsertRange(std::vector< CameraComponent * > *self,int index,std::vector< CameraComponent * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__RemoveAt(std::vector< CameraComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__RemoveRange(std::vector< CameraComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< CameraComponent * > *std_vector_Sl_CameraComponent_Sm__Sg__Repeat(CameraComponent *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< CameraComponent * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__Reverse__SWIG_0(std::vector< CameraComponent * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__Reverse__SWIG_1(std::vector< CameraComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_CameraComponent_Sm__Sg__SetRange(std::vector< CameraComponent * > *self,int index,std::vector< CameraComponent * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_CameraComponent_Sm__Sg__Contains(std::vector< CameraComponent * > *self,CameraComponent *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_CameraComponent_Sm__Sg__IndexOf(std::vector< CameraComponent * > *self,CameraComponent *const &value){
+        int index = -1;
+        std::vector< CameraComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_CameraComponent_Sm__Sg__LastIndexOf(std::vector< CameraComponent * > *self,CameraComponent *const &value){
+        int index = -1;
+        std::vector< CameraComponent * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_CameraComponent_Sm__Sg__Remove(std::vector< CameraComponent * > *self,CameraComponent *const &value){
+        std::vector< CameraComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< Transform * > *new_std_vector_Sl_Transform_Sm__Sg___SWIG_2(int capacity){
+        std::vector< Transform * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< Transform * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN Transform *std_vector_Sl_Transform_Sm__Sg__getitemcopy(std::vector< Transform * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< Transform * >::value_type const &std_vector_Sl_Transform_Sm__Sg__getitem(std::vector< Transform * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__setitem(std::vector< Transform * > *self,int index,Transform *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__AddRange(std::vector< Transform * > *self,std::vector< Transform * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< Transform * > *std_vector_Sl_Transform_Sm__Sg__GetRange(std::vector< Transform * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< Transform * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__Insert(std::vector< Transform * > *self,int index,Transform *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__InsertRange(std::vector< Transform * > *self,int index,std::vector< Transform * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__RemoveAt(std::vector< Transform * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__RemoveRange(std::vector< Transform * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< Transform * > *std_vector_Sl_Transform_Sm__Sg__Repeat(Transform *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< Transform * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__Reverse__SWIG_0(std::vector< Transform * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__Reverse__SWIG_1(std::vector< Transform * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_Transform_Sm__Sg__SetRange(std::vector< Transform * > *self,int index,std::vector< Transform * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_Transform_Sm__Sg__Contains(std::vector< Transform * > *self,Transform *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_Transform_Sm__Sg__IndexOf(std::vector< Transform * > *self,Transform *const &value){
+        int index = -1;
+        std::vector< Transform * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_Transform_Sm__Sg__LastIndexOf(std::vector< Transform * > *self,Transform *const &value){
+        int index = -1;
+        std::vector< Transform * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_Transform_Sm__Sg__Remove(std::vector< Transform * > *self,Transform *const &value){
+        std::vector< Transform * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< ScriptedBehaviour * > *new_std_vector_Sl_ScriptedBehaviour_Sm__Sg___SWIG_2(int capacity){
+        std::vector< ScriptedBehaviour * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< ScriptedBehaviour * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN ScriptedBehaviour *std_vector_Sl_ScriptedBehaviour_Sm__Sg__getitemcopy(std::vector< ScriptedBehaviour * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< ScriptedBehaviour * >::value_type const &std_vector_Sl_ScriptedBehaviour_Sm__Sg__getitem(std::vector< ScriptedBehaviour * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__setitem(std::vector< ScriptedBehaviour * > *self,int index,ScriptedBehaviour *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__AddRange(std::vector< ScriptedBehaviour * > *self,std::vector< ScriptedBehaviour * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< ScriptedBehaviour * > *std_vector_Sl_ScriptedBehaviour_Sm__Sg__GetRange(std::vector< ScriptedBehaviour * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< ScriptedBehaviour * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__Insert(std::vector< ScriptedBehaviour * > *self,int index,ScriptedBehaviour *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__InsertRange(std::vector< ScriptedBehaviour * > *self,int index,std::vector< ScriptedBehaviour * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__RemoveAt(std::vector< ScriptedBehaviour * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__RemoveRange(std::vector< ScriptedBehaviour * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< ScriptedBehaviour * > *std_vector_Sl_ScriptedBehaviour_Sm__Sg__Repeat(ScriptedBehaviour *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< ScriptedBehaviour * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__Reverse__SWIG_0(std::vector< ScriptedBehaviour * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__Reverse__SWIG_1(std::vector< ScriptedBehaviour * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_ScriptedBehaviour_Sm__Sg__SetRange(std::vector< ScriptedBehaviour * > *self,int index,std::vector< ScriptedBehaviour * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_ScriptedBehaviour_Sm__Sg__Contains(std::vector< ScriptedBehaviour * > *self,ScriptedBehaviour *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_ScriptedBehaviour_Sm__Sg__IndexOf(std::vector< ScriptedBehaviour * > *self,ScriptedBehaviour *const &value){
+        int index = -1;
+        std::vector< ScriptedBehaviour * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_ScriptedBehaviour_Sm__Sg__LastIndexOf(std::vector< ScriptedBehaviour * > *self,ScriptedBehaviour *const &value){
+        int index = -1;
+        std::vector< ScriptedBehaviour * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_ScriptedBehaviour_Sm__Sg__Remove(std::vector< ScriptedBehaviour * > *self,ScriptedBehaviour *const &value){
+        std::vector< ScriptedBehaviour * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
 
 
 /* ---------------------------------------------------
@@ -776,109 +1137,6 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Behaviour_director_connect(void *obj
   Behaviour *obj = (Behaviour *)objarg;
   SwigDirector_Behaviour *director = static_cast<SwigDirector_Behaviour *>(obj);
   director->swig_connect_director();
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Entity__SWIG_0() {
-  void * jresult ;
-  Entity *result = 0 ;
-  
-  result = (Entity *)new Entity();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Entity__SWIG_1(char * jarg1) {
-  void * jresult ;
-  std::string *arg1 = 0 ;
-  Entity *result = 0 ;
-  
-  if (!jarg1) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
-    return 0;
-  }
-  std::string arg1_str(jarg1);
-  arg1 = &arg1_str; 
-  result = (Entity *)new Entity((std::string const &)*arg1);
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Entity(void * jarg1) {
-  Entity *arg1 = (Entity *) 0 ;
-  
-  arg1 = (Entity *)jarg1; 
-  delete arg1;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_Destroy(void * jarg1) {
-  Entity *arg1 = (Entity *) 0 ;
-  
-  arg1 = (Entity *)jarg1; 
-  (arg1)->Destroy();
-}
-
-
-SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_Entity_GetName(void * jarg1) {
-  char * jresult ;
-  Entity *arg1 = (Entity *) 0 ;
-  std::string result;
-  
-  arg1 = (Entity *)jarg1; 
-  result = (arg1)->GetName();
-  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetCameraComponent(void * jarg1) {
-  void * jresult ;
-  Entity *arg1 = (Entity *) 0 ;
-  CameraComponent *result = 0 ;
-  
-  arg1 = (Entity *)jarg1; 
-  result = (CameraComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< CameraComponent >();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddCameraComponent(void * jarg1) {
-  void * jresult ;
-  Entity *arg1 = (Entity *) 0 ;
-  CameraComponent *result = 0 ;
-  
-  arg1 = (Entity *)jarg1; 
-  result = (CameraComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< CameraComponent >();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetTransform(void * jarg1) {
-  void * jresult ;
-  Entity *arg1 = (Entity *) 0 ;
-  Transform *result = 0 ;
-  
-  arg1 = (Entity *)jarg1; 
-  result = (Transform *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< Transform >();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddTransform(void * jarg1) {
-  void * jresult ;
-  Entity *arg1 = (Entity *) 0 ;
-  Transform *result = 0 ;
-  
-  arg1 = (Entity *)jarg1; 
-  result = (Transform *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< Transform >();
-  jresult = (void *)result; 
-  return jresult;
 }
 
 
@@ -2600,6 +2858,1416 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_transform_get(vo
 }
 
 
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_GetScriptName(void * jarg1) {
+  char * jresult ;
+  ScriptedBehaviour *arg1 = (ScriptedBehaviour *) 0 ;
+  std::string result;
+  
+  arg1 = (ScriptedBehaviour *)jarg1; 
+  result = (arg1)->GetScriptName();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ScriptedBehaviour(void * jarg1) {
+  ScriptedBehaviour *arg1 = (ScriptedBehaviour *) 0 ;
+  
+  arg1 = (ScriptedBehaviour *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Clear(void * jarg1) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Add(void * jarg1, void * jarg2) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  CameraComponent **arg2 = 0 ;
+  CameraComponent *temp2 = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  temp2 = (CameraComponent *)jarg2;
+  arg2 = (CameraComponent **)&temp2; 
+  (arg1)->push_back((CameraComponent *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  std::vector< CameraComponent * >::size_type result;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  result = ((std::vector< CameraComponent * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  std::vector< CameraComponent * >::size_type result;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  result = ((std::vector< CameraComponent * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  std::vector< CameraComponent * >::size_type arg2 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (std::vector< CameraComponent * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CameraComponentVector__SWIG_0() {
+  void * jresult ;
+  std::vector< CameraComponent * > *result = 0 ;
+  
+  result = (std::vector< CameraComponent * > *)new std::vector< CameraComponent * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CameraComponentVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< CameraComponent * > *arg1 = 0 ;
+  std::vector< CameraComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CameraComponent * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< CameraComponent * > *)new std::vector< CameraComponent * >((std::vector< CameraComponent * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CameraComponentVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< CameraComponent * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< CameraComponent * > *)new_std_vector_Sl_CameraComponent_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  CameraComponent *result = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (CameraComponent *)std_vector_Sl_CameraComponent_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< CameraComponent * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< CameraComponent * >::value_type *) &std_vector_Sl_CameraComponent_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  CameraComponent **arg3 = 0 ;
+  CameraComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (CameraComponent *)jarg3;
+  arg3 = (CameraComponent **)&temp3; 
+  try {
+    std_vector_Sl_CameraComponent_Sm__Sg__setitem(arg1,arg2,(CameraComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  std::vector< CameraComponent * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (std::vector< CameraComponent * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CameraComponent * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_CameraComponent_Sm__Sg__AddRange(arg1,(std::vector< CameraComponent * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< CameraComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< CameraComponent * > *)std_vector_Sl_CameraComponent_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  CameraComponent **arg3 = 0 ;
+  CameraComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (CameraComponent *)jarg3;
+  arg3 = (CameraComponent **)&temp3; 
+  try {
+    std_vector_Sl_CameraComponent_Sm__Sg__Insert(arg1,arg2,(CameraComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< CameraComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< CameraComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CameraComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_CameraComponent_Sm__Sg__InsertRange(arg1,arg2,(std::vector< CameraComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_CameraComponent_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_CameraComponent_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  CameraComponent **arg1 = 0 ;
+  int arg2 ;
+  CameraComponent *temp1 = 0 ;
+  std::vector< CameraComponent * > *result = 0 ;
+  
+  temp1 = (CameraComponent *)jarg1;
+  arg1 = (CameraComponent **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< CameraComponent * > *)std_vector_Sl_CameraComponent_Sm__Sg__Repeat((CameraComponent *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  std_vector_Sl_CameraComponent_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_CameraComponent_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< CameraComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< CameraComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CameraComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_CameraComponent_Sm__Sg__SetRange(arg1,arg2,(std::vector< CameraComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  CameraComponent **arg2 = 0 ;
+  CameraComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  temp2 = (CameraComponent *)jarg2;
+  arg2 = (CameraComponent **)&temp2; 
+  result = (bool)std_vector_Sl_CameraComponent_Sm__Sg__Contains(arg1,(CameraComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  CameraComponent **arg2 = 0 ;
+  CameraComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  temp2 = (CameraComponent *)jarg2;
+  arg2 = (CameraComponent **)&temp2; 
+  result = (int)std_vector_Sl_CameraComponent_Sm__Sg__IndexOf(arg1,(CameraComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  CameraComponent **arg2 = 0 ;
+  CameraComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  temp2 = (CameraComponent *)jarg2;
+  arg2 = (CameraComponent **)&temp2; 
+  result = (int)std_vector_Sl_CameraComponent_Sm__Sg__LastIndexOf(arg1,(CameraComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  CameraComponent **arg2 = 0 ;
+  CameraComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  temp2 = (CameraComponent *)jarg2;
+  arg2 = (CameraComponent **)&temp2; 
+  result = (bool)std_vector_Sl_CameraComponent_Sm__Sg__Remove(arg1,(CameraComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_CameraComponentVector(void * jarg1) {
+  std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
+  
+  arg1 = (std::vector< CameraComponent * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_Clear(void * jarg1) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_Add(void * jarg1, void * jarg2) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  Transform **arg2 = 0 ;
+  Transform *temp2 = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  temp2 = (Transform *)jarg2;
+  arg2 = (Transform **)&temp2; 
+  (arg1)->push_back((Transform *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_TransformVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  std::vector< Transform * >::size_type result;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  result = ((std::vector< Transform * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_TransformVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  std::vector< Transform * >::size_type result;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  result = ((std::vector< Transform * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  std::vector< Transform * >::size_type arg2 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (std::vector< Transform * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_TransformVector__SWIG_0() {
+  void * jresult ;
+  std::vector< Transform * > *result = 0 ;
+  
+  result = (std::vector< Transform * > *)new std::vector< Transform * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_TransformVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< Transform * > *arg1 = 0 ;
+  std::vector< Transform * > *result = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Transform * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< Transform * > *)new std::vector< Transform * >((std::vector< Transform * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_TransformVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< Transform * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< Transform * > *)new_std_vector_Sl_Transform_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_TransformVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  Transform *result = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (Transform *)std_vector_Sl_Transform_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_TransformVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  std::vector< Transform * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< Transform * >::value_type *) &std_vector_Sl_Transform_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  Transform **arg3 = 0 ;
+  Transform *temp3 = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (Transform *)jarg3;
+  arg3 = (Transform **)&temp3; 
+  try {
+    std_vector_Sl_Transform_Sm__Sg__setitem(arg1,arg2,(Transform *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  std::vector< Transform * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (std::vector< Transform * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Transform * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_Transform_Sm__Sg__AddRange(arg1,(std::vector< Transform * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_TransformVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< Transform * > *result = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< Transform * > *)std_vector_Sl_Transform_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  Transform **arg3 = 0 ;
+  Transform *temp3 = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (Transform *)jarg3;
+  arg3 = (Transform **)&temp3; 
+  try {
+    std_vector_Sl_Transform_Sm__Sg__Insert(arg1,arg2,(Transform *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  std::vector< Transform * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< Transform * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Transform * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_Transform_Sm__Sg__InsertRange(arg1,arg2,(std::vector< Transform * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_Transform_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_Transform_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_TransformVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  Transform **arg1 = 0 ;
+  int arg2 ;
+  Transform *temp1 = 0 ;
+  std::vector< Transform * > *result = 0 ;
+  
+  temp1 = (Transform *)jarg1;
+  arg1 = (Transform **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< Transform * > *)std_vector_Sl_Transform_Sm__Sg__Repeat((Transform *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  std_vector_Sl_Transform_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_Transform_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_TransformVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  int arg2 ;
+  std::vector< Transform * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< Transform * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Transform * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_Transform_Sm__Sg__SetRange(arg1,arg2,(std::vector< Transform * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_TransformVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  Transform **arg2 = 0 ;
+  Transform *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  temp2 = (Transform *)jarg2;
+  arg2 = (Transform **)&temp2; 
+  result = (bool)std_vector_Sl_Transform_Sm__Sg__Contains(arg1,(Transform *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_TransformVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  Transform **arg2 = 0 ;
+  Transform *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  temp2 = (Transform *)jarg2;
+  arg2 = (Transform **)&temp2; 
+  result = (int)std_vector_Sl_Transform_Sm__Sg__IndexOf(arg1,(Transform *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_TransformVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  Transform **arg2 = 0 ;
+  Transform *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  temp2 = (Transform *)jarg2;
+  arg2 = (Transform **)&temp2; 
+  result = (int)std_vector_Sl_Transform_Sm__Sg__LastIndexOf(arg1,(Transform *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_TransformVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  Transform **arg2 = 0 ;
+  Transform *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  temp2 = (Transform *)jarg2;
+  arg2 = (Transform **)&temp2; 
+  result = (bool)std_vector_Sl_Transform_Sm__Sg__Remove(arg1,(Transform *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_TransformVector(void * jarg1) {
+  std::vector< Transform * > *arg1 = (std::vector< Transform * > *) 0 ;
+  
+  arg1 = (std::vector< Transform * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Clear(void * jarg1) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Add(void * jarg1, void * jarg2) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  ScriptedBehaviour **arg2 = 0 ;
+  ScriptedBehaviour *temp2 = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  temp2 = (ScriptedBehaviour *)jarg2;
+  arg2 = (ScriptedBehaviour **)&temp2; 
+  (arg1)->push_back((ScriptedBehaviour *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  std::vector< ScriptedBehaviour * >::size_type result;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  result = ((std::vector< ScriptedBehaviour * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  std::vector< ScriptedBehaviour * >::size_type result;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  result = ((std::vector< ScriptedBehaviour * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  std::vector< ScriptedBehaviour * >::size_type arg2 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (std::vector< ScriptedBehaviour * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_ScriptedBehaviourVector__SWIG_0() {
+  void * jresult ;
+  std::vector< ScriptedBehaviour * > *result = 0 ;
+  
+  result = (std::vector< ScriptedBehaviour * > *)new std::vector< ScriptedBehaviour * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_ScriptedBehaviourVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = 0 ;
+  std::vector< ScriptedBehaviour * > *result = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ScriptedBehaviour * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< ScriptedBehaviour * > *)new std::vector< ScriptedBehaviour * >((std::vector< ScriptedBehaviour * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_ScriptedBehaviourVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< ScriptedBehaviour * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< ScriptedBehaviour * > *)new_std_vector_Sl_ScriptedBehaviour_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  ScriptedBehaviour *result = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (ScriptedBehaviour *)std_vector_Sl_ScriptedBehaviour_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  std::vector< ScriptedBehaviour * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< ScriptedBehaviour * >::value_type *) &std_vector_Sl_ScriptedBehaviour_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  ScriptedBehaviour **arg3 = 0 ;
+  ScriptedBehaviour *temp3 = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (ScriptedBehaviour *)jarg3;
+  arg3 = (ScriptedBehaviour **)&temp3; 
+  try {
+    std_vector_Sl_ScriptedBehaviour_Sm__Sg__setitem(arg1,arg2,(ScriptedBehaviour *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  std::vector< ScriptedBehaviour * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (std::vector< ScriptedBehaviour * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ScriptedBehaviour * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_ScriptedBehaviour_Sm__Sg__AddRange(arg1,(std::vector< ScriptedBehaviour * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< ScriptedBehaviour * > *result = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< ScriptedBehaviour * > *)std_vector_Sl_ScriptedBehaviour_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  ScriptedBehaviour **arg3 = 0 ;
+  ScriptedBehaviour *temp3 = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (ScriptedBehaviour *)jarg3;
+  arg3 = (ScriptedBehaviour **)&temp3; 
+  try {
+    std_vector_Sl_ScriptedBehaviour_Sm__Sg__Insert(arg1,arg2,(ScriptedBehaviour *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  std::vector< ScriptedBehaviour * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< ScriptedBehaviour * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ScriptedBehaviour * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_ScriptedBehaviour_Sm__Sg__InsertRange(arg1,arg2,(std::vector< ScriptedBehaviour * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_ScriptedBehaviour_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_ScriptedBehaviour_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  ScriptedBehaviour **arg1 = 0 ;
+  int arg2 ;
+  ScriptedBehaviour *temp1 = 0 ;
+  std::vector< ScriptedBehaviour * > *result = 0 ;
+  
+  temp1 = (ScriptedBehaviour *)jarg1;
+  arg1 = (ScriptedBehaviour **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< ScriptedBehaviour * > *)std_vector_Sl_ScriptedBehaviour_Sm__Sg__Repeat((ScriptedBehaviour *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  std_vector_Sl_ScriptedBehaviour_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_ScriptedBehaviour_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  int arg2 ;
+  std::vector< ScriptedBehaviour * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< ScriptedBehaviour * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ScriptedBehaviour * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_ScriptedBehaviour_Sm__Sg__SetRange(arg1,arg2,(std::vector< ScriptedBehaviour * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  ScriptedBehaviour **arg2 = 0 ;
+  ScriptedBehaviour *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  temp2 = (ScriptedBehaviour *)jarg2;
+  arg2 = (ScriptedBehaviour **)&temp2; 
+  result = (bool)std_vector_Sl_ScriptedBehaviour_Sm__Sg__Contains(arg1,(ScriptedBehaviour *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  ScriptedBehaviour **arg2 = 0 ;
+  ScriptedBehaviour *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  temp2 = (ScriptedBehaviour *)jarg2;
+  arg2 = (ScriptedBehaviour **)&temp2; 
+  result = (int)std_vector_Sl_ScriptedBehaviour_Sm__Sg__IndexOf(arg1,(ScriptedBehaviour *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  ScriptedBehaviour **arg2 = 0 ;
+  ScriptedBehaviour *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  temp2 = (ScriptedBehaviour *)jarg2;
+  arg2 = (ScriptedBehaviour **)&temp2; 
+  result = (int)std_vector_Sl_ScriptedBehaviour_Sm__Sg__LastIndexOf(arg1,(ScriptedBehaviour *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviourVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  ScriptedBehaviour **arg2 = 0 ;
+  ScriptedBehaviour *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  temp2 = (ScriptedBehaviour *)jarg2;
+  arg2 = (ScriptedBehaviour **)&temp2; 
+  result = (bool)std_vector_Sl_ScriptedBehaviour_Sm__Sg__Remove(arg1,(ScriptedBehaviour *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ScriptedBehaviourVector(void * jarg1) {
+  std::vector< ScriptedBehaviour * > *arg1 = (std::vector< ScriptedBehaviour * > *) 0 ;
+  
+  arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Entity__SWIG_0() {
+  void * jresult ;
+  Entity *result = 0 ;
+  
+  result = (Entity *)new Entity();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Entity__SWIG_1(char * jarg1) {
+  void * jresult ;
+  std::string *arg1 = 0 ;
+  Entity *result = 0 ;
+  
+  if (!jarg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg1_str(jarg1);
+  arg1 = &arg1_str; 
+  result = (Entity *)new Entity((std::string const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Entity(void * jarg1) {
+  Entity *arg1 = (Entity *) 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_Destroy(void * jarg1) {
+  Entity *arg1 = (Entity *) 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  (arg1)->Destroy();
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_Entity_GetName(void * jarg1) {
+  char * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::string result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->GetName();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetCameraComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  CameraComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (CameraComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< CameraComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddCameraComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  CameraComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (CameraComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< CameraComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfCameraComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< CameraComponent * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviours< CameraComponent >();
+  jresult = new std::vector< CameraComponent * >((const std::vector< CameraComponent * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetScriptedBehaviour(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  ScriptedBehaviour *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (ScriptedBehaviour *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< ScriptedBehaviour >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddScriptedBehaviour(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  ScriptedBehaviour *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (ScriptedBehaviour *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< ScriptedBehaviour >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfScriptedBehaviour(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< ScriptedBehaviour * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviours< ScriptedBehaviour >();
+  jresult = new std::vector< ScriptedBehaviour * >((const std::vector< ScriptedBehaviour * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetTransform(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (Transform *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< Transform >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddTransform(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (Transform *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< Transform >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfTransform(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< Transform * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviours< Transform >();
+  jresult = new std::vector< Transform * >((const std::vector< Transform * > &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT Component * SWIGSTDCALL CSharp_CCEngine_Behaviour_SWIGUpcast(Behaviour *jarg1) {
     return (Component *)jarg1;
 }
@@ -2609,6 +4277,10 @@ SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_Transform_SWIGUpcast(Transfor
 }
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_CameraComponent_SWIGUpcast(CameraComponent *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_SWIGUpcast(ScriptedBehaviour *jarg1) {
     return (Behaviour *)jarg1;
 }
 

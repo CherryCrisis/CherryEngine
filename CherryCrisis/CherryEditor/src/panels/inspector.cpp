@@ -25,7 +25,7 @@ void InspectComponents(Entity* entity, int id)
 {
     if (ImGui::TreeNode((void*)(intptr_t)id, "Instance %i", id))
     {
-        std::vector<Behaviour*> behaviours = entity->GetBehaviours();
+        auto behaviours = entity->GetAllBehaviours();
 
         for (Behaviour* behaviour : behaviours)
         {
@@ -68,6 +68,26 @@ void InspectComponents(Entity* entity, int id)
                     CCMaths::Vector3 val;
                     propRef->Get(&val);
                     if (ImGui::DragFloat3(propName.c_str(), val.data, 0.5f))
+                        propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (type == typeid(int))
+                {
+                    int val;
+                    propRef->Get(&val);
+                    ImGui::DragInt(propName.c_str(), &val, 0.5f);
+                        propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (type == typeid(std::string))
+                {
+                    std::string val;
+                    propRef->Get(&val);
+                    if (ImGui::InputText(propName.c_str(), &val[0], val.size() + 2))
                         propRef->Set(&val);
 
                     continue;

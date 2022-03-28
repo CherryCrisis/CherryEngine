@@ -15,7 +15,7 @@ private:
 
 public:
 	Scene(const char* filePath) : Resource(filePath) { }
-	~Scene();
+	virtual ~Scene();
 
 	Skybox m_skybox;
 
