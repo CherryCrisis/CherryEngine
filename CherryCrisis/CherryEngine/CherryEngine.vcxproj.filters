@@ -64,6 +64,9 @@
     <Filter Include="Fichiers d%27en-tête\Serialization">
       <UniqueIdentifier>{0ab9216f-9eb4-42d4-b253-2a60dfee6753}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Serialization">
+      <UniqueIdentifier>{371762ab-2a21-4ed8-9904-83cfaa0b8a47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -483,6 +486,9 @@
     <ClInclude Include="include\csassembly.hpp">
       <Filter>Fichiers d%27en-tête\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="include\serializer.hpp">
+      <Filter>Fichiers d%27en-tête\Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -711,6 +717,12 @@
     </ClCompile>
     <ClCompile Include="src\csassembly.cpp">
       <Filter>Fichiers sources\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\serializer.cpp">
+      <Filter>Fichiers sources\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="src\behaviour.cpp">
+      <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

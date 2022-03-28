@@ -52,7 +52,7 @@ namespace CCProperty
             return *IProperty<OwnerT>::m_ownerPtr;
         }
 
-        bool Set(const OwnerT* in)
+        bool Set(const ObjectT* in)
         {
             if (!in || !m_setter)
                 return false;
@@ -63,7 +63,8 @@ namespace CCProperty
 
         bool Set(const void* in) override
         {
-            return Set(static_cast<const ObjectT*>(in));
+            const ObjectT* objPtr = static_cast<const ObjectT*>(in);
+            return Set(objPtr);
         }
 
         OwnerT& SetAny(const std::any& value) override

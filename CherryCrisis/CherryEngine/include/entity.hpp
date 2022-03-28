@@ -10,7 +10,7 @@
 
 class Behaviour;
 
-class CCENGINE_API Entity
+class CCENGINE_API Entity 
 {
 private:
 	std::string m_name = "Entity";
@@ -18,7 +18,7 @@ private:
 	CCUUID m_uuid = {};
 public:
 	Entity() = default;
-	Entity(const std::string& name);
+	Entity(const std::string& name, CCUUID m_uuid = {});
 	virtual ~Entity();
 
 	template <class CompT>
@@ -29,6 +29,8 @@ public:
 
 	std::vector<Behaviour*>& GetBehaviours() { return m_behaviours; }
 	const std::vector<Behaviour*>& GetBehaviours() const { return m_behaviours; }
+
+	void SubscribeComponent(Behaviour* behaviour);
 
 	template <class CompT>
 	bool HasBehaviour();
@@ -46,6 +48,7 @@ public:
 	std::string GetName() { return m_name; }
 	uint64_t GetUUID() { return (uint64_t)m_uuid; }
 	std::string Serialized();
+	std::string SerializeBehaviours();
 };
 
 #include "entity.inl"

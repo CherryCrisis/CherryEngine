@@ -7,8 +7,6 @@
 #include "behaviour.hpp"
 #include "maths.hpp"
 
-#include "property.hpp"
-
 using namespace CCMaths;
 
 class CCENGINE_API Transform : public Behaviour
@@ -27,15 +25,17 @@ private:
 
 	void SetDirty();
 
-	template <typename T>
-	using TransformProperty = CCProperty::Property<Transform, T>;
+	void PopulateMetadatas() override;
+	void ConsumeMetadatas() override;
 
-	using Matrix4Property = TransformProperty<Matrix4>;
+	template<typename T>
+	using TransformProperty = CCProperty::Property<Transform, T>;
 	using Vector3Property = TransformProperty<Vector3>;
 
 public:
 	Transform(Entity& owner);
-
+	Transform(CCUUID& owner);
+	Transform() { PopulateMetadatas(); }
 	bool IsRoot() { return !m_parent; }
 
 	void SetParent(Transform* transform);
@@ -47,6 +47,8 @@ public:
 	Vector3 GetPosition() { return m_position; }
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
+	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };
+	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
 
 	void SetRotation(const Vector3& rotation);
 	Vector3 GetRotation() { return m_rotation; }
@@ -58,6 +60,4 @@ public:
 	void AddChildren(Transform* transform);
 
 	Matrix4 GetWorldMatrix();
-
-	std::string Serialize() override; 
 };

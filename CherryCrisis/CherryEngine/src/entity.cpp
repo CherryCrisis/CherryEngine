@@ -6,10 +6,10 @@
 #include "transform.hpp"
 
 #include <typeinfo>
-Entity::Entity(const std::string& name)
+Entity::Entity(const std::string& name, CCUUID id)
 	: m_name(name)
 {
-
+	m_uuid = id;
 }
 
 Entity::~Entity()
@@ -45,15 +45,33 @@ void Entity::Destroy()
 std::string Entity::Serialized() 
 {
 	std::string value;
-	value += "Entity: "+std::to_string(m_uuid)+"\n";
-	value += "	m_name: "+m_name+"\n";
-	value += "	m_components: \n";
+	value += "Entity:"+std::to_string(m_uuid)+"\n";
+	value += "  m_name:"+m_name+"\n";
+	value += "	m_components:\n";
 	for (Behaviour* behaviour : m_behaviours) 
 	{
-		value += "	-: " + std::to_string(behaviour->GetUUID())+ "\n";
-		value += "		m_type = "+ std::string(typeid(*behaviour).name()) + "\n";
-		value += "		"+behaviour->Serialize()+"\n";
+		value += "	-:" + std::to_string(behaviour->GetUUID())+ "\n";
 	}
 
 	return value.c_str();
+}
+
+std::string Entity::SerializeBehaviours() 
+{
+	std::string value;
+
+	for (Behaviour* behaviour : m_behaviours)
+	{
+		value += "Behaviour:"+std::to_string(behaviour->GetUUID()) + "\n";
+		value += "m_type:"+ std::string(typeid(*behaviour).name()) + "\n";
+		value += behaviour->Serialize() + "\n";
+	}
+
+	return value.c_str();
+}
+
+void Entity::SubscribeComponent(Behaviour* behaviour)
+{
+	behaviour->m_owner = this;
+	m_behaviours.push_back(behaviour);
 }

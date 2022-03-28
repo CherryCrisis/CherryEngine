@@ -46,7 +46,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 		{
 			int val;
 			behaviourInst->GetField(fieldRef.get(), &val);
-			m_metadatas.m_fields.push_back({ fieldName, val });
+			m_metadatas.m_fields[fieldName] = { fieldName, val };
 			continue;
 		}
 
@@ -58,7 +58,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 			std::string stringVal = monoChar;
 			mono_free(monoChar);
 
-			m_metadatas.m_fields.push_back({ fieldName, stringVal });
+			m_metadatas.m_fields[fieldName] = { fieldName, stringVal };
 		}
 	}
 
