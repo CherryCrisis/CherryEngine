@@ -229,6 +229,34 @@ namespace CCMaths
 		*	\sa RotateY(const float)
 		*	\sa RotateZ(const float)
 		*/
+		inline static Matrix4 RotateXYZ(const Vector3& eulerAngles);
+
+		//! Rotation Matrix
+		/*!
+		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*
+		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
+		inline static Matrix4 RotateZYX(const Vector3& eulerAngles);
+
+		//! Rotation Matrix
+		/*!
+		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*
+		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
 		inline static Matrix4 RotateZXY(const Vector3& eulerAngles);
 
 		//! Rotation Matrix
@@ -244,10 +272,38 @@ namespace CCMaths
 		*	\sa RotateZ(const float)
 		*/
 		inline static Matrix4 RotateYXZ(const Vector3& eulerAngles);
+
+		//! Rotation Matrix
+		/*!
+		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*
+		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
+		inline static Matrix4 RotateXZY(const Vector3& eulerAngles);
+
+		//! Rotation Matrix
+		/*!
+		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*
+		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
+		*
+		*	\return Matrix4 \b out
+		*
+		*	\sa RotateX(const float)
+		*	\sa RotateY(const float)
+		*	\sa RotateZ(const float)
+		*/
+		inline static Matrix4 RotateYZX(const Vector3& eulerAngles);
  
 		//! X-axis Rotation Matrix
 		/*!
-		*	\param rad: float angle of the rotation in radians (yaw)
+		*	\param rad: float angle of the rotation in radians (pitch)
 		*
 		*	Create a new Matrix4 \b out with the rotation around X-axis
 		* 
@@ -261,7 +317,7 @@ namespace CCMaths
 
 		//! Y-axis Rotation Matrix
 		/*!
-		*	\param rad: float angle of the rotation in radians (pitch)
+		*	\param rad: float angle of the rotation in radians (yaw)
 		*
 		*	Create a new Matrix4 \b out with the rotation around Y-axis
 		* 
@@ -293,8 +349,8 @@ namespace CCMaths
 
 		//! X-axis Rotation Matrix
 		/*!
-		*	\param cos: float cos of the angle of the rotation in radians (yaw)
-		*	\param sin: float sin of the angle of the rotation in radians (yaw)
+		*	\param cos: float cos of the angle of the rotation in radians (pitch)
+		*	\param sin: float sin of the angle of the rotation in radians (pitch)
 		*
 		*	Create a new Matrix4 \b out with the rotation around X-axis
 		*
@@ -318,8 +374,8 @@ namespace CCMaths
 
 		//! Y-axis Rotation Matrix
 		/*!
-		*	\param cos: float cos of the angle of the rotation in radians (pitch)
-		*	\param sin: float sin of the angle of the rotation in radians (pitch)
+		*	\param cos: float cos of the angle of the rotation in radians (yaw)
+		*	\param sin: float sin of the angle of the rotation in radians (yaw)
 		*
 		*	Create a new Matrix4 \b out with the rotation around Y-axis
 		*

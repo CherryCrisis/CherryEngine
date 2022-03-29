@@ -111,16 +111,6 @@ public class Vector3 : global::System.IDisposable {
     } 
   }
 
-  public float roll {
-    set {
-      CherryEnginePINVOKE.Vector3_roll_set(swigCPtr, value);
-    } 
-    get {
-      float ret = CherryEnginePINVOKE.Vector3_roll_get(swigCPtr);
-      return ret;
-    } 
-  }
-
   public float pitch {
     set {
       CherryEnginePINVOKE.Vector3_pitch_set(swigCPtr, value);
@@ -137,6 +127,16 @@ public class Vector3 : global::System.IDisposable {
     } 
     get {
       float ret = CherryEnginePINVOKE.Vector3_yaw_get(swigCPtr);
+      return ret;
+    } 
+  }
+
+  public float roll {
+    set {
+      CherryEnginePINVOKE.Vector3_roll_set(swigCPtr, value);
+    } 
+    get {
+      float ret = CherryEnginePINVOKE.Vector3_roll_get(swigCPtr);
       return ret;
     } 
   }

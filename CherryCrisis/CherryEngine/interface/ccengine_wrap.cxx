@@ -371,6 +371,13 @@ namespace Swig {
 	#include "input_manager.hpp"
 
 
+#include <string>
+
+
+	#include "singleton.hpp"
+	#include "time_manager.hpp"
+
+
 	#include "debug.hpp"
 
 
@@ -383,9 +390,6 @@ namespace Swig {
 
 
 	#include "entity.hpp"
-
-
-#include <string>
 
 
 	#include "maths.hpp"
@@ -449,7 +453,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetInstance() {
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_0(void * jarg1, int jarg2) {
   unsigned int jresult ;
   InputManager *arg1 = (InputManager *) 0 ;
   Keycode arg2 ;
@@ -463,7 +467,7 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey(void * j
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_0(void * jarg1, int jarg2) {
   unsigned int jresult ;
   InputManager *arg1 = (InputManager *) 0 ;
   Keycode arg2 ;
@@ -477,7 +481,7 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown(void
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_0(void * jarg1, int jarg2) {
   unsigned int jresult ;
   InputManager *arg1 = (InputManager *) 0 ;
   Keycode arg2 ;
@@ -486,6 +490,48 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp(void *
   arg1 = (InputManager *)jarg1; 
   arg2 = (Keycode)jarg2; 
   result = (bool)(arg1)->GetKeyUp(arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_1(void * jarg1, char * jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (bool)(arg1)->GetKey((char const *)arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_1(void * jarg1, char * jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (bool)(arg1)->GetKeyDown((char const *)arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_1(void * jarg1, char * jarg2) {
+  unsigned int jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  arg1 = (InputManager *)jarg1; 
+  arg2 = (char *)jarg2; 
+  result = (bool)(arg1)->GetKeyUp((char const *)arg2);
   jresult = result; 
   return jresult;
 }
@@ -505,10 +551,147 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_InputManager_GetAxis(void * jarg1, 
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseWheel(void * jarg1) {
+  void * jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  CCMaths::Vector2 result;
+  
+  arg1 = (InputManager *)jarg1; 
+  result = (arg1)->GetMouseWheel();
+  jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMousePos(void * jarg1) {
+  void * jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  CCMaths::Vector2 result;
+  
+  arg1 = (InputManager *)jarg1; 
+  result = (arg1)->GetMousePos();
+  jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseDelta(void * jarg1) {
+  void * jresult ;
+  InputManager *arg1 = (InputManager *) 0 ;
+  CCMaths::Vector2 result;
+  
+  arg1 = (InputManager *)jarg1; 
+  result = (arg1)->GetMouseDelta();
+  jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_InputManager_SetContext(void * jarg1, char * jarg2) {
+  InputManager *arg1 = (InputManager *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  arg1 = (InputManager *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  (arg1)->SetContext((std::string const &)*arg2);
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_InputManager(void * jarg1) {
   InputManager *arg1 = (InputManager *) 0 ;
   
   arg1 = (InputManager *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Time_GetInstance() {
+  void * jresult ;
+  TimeManager *result = 0 ;
+  
+  result = (TimeManager *)TimeManager::GetInstance();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetDeltaTime(void * jarg1) {
+  float jresult ;
+  TimeManager *arg1 = (TimeManager *) 0 ;
+  float result;
+  
+  arg1 = (TimeManager *)jarg1; 
+  result = (float)(arg1)->GetDeltaTime();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetTimeScale(void * jarg1) {
+  float jresult ;
+  TimeManager *arg1 = (TimeManager *) 0 ;
+  float result;
+  
+  arg1 = (TimeManager *)jarg1; 
+  result = (float)(arg1)->GetTimeScale();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetFixedDeltaTime(void * jarg1) {
+  float jresult ;
+  TimeManager *arg1 = (TimeManager *) 0 ;
+  float result;
+  
+  arg1 = (TimeManager *)jarg1; 
+  result = (float)(arg1)->GetFixedDeltaTime();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT double SWIGSTDCALL CSharp_CCEngine_Time_GetElapsedTime(void * jarg1) {
+  double jresult ;
+  TimeManager *arg1 = (TimeManager *) 0 ;
+  double result;
+  
+  arg1 = (TimeManager *)jarg1; 
+  result = (double)(arg1)->GetElapsedTime();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Time_SetTimeScale(void * jarg1, float jarg2) {
+  TimeManager *arg1 = (TimeManager *) 0 ;
+  float arg2 ;
+  
+  arg1 = (TimeManager *)jarg1; 
+  arg2 = (float)jarg2; 
+  (arg1)->SetTimeScale(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Time_SetFixedDeltaTime(void * jarg1, float jarg2) {
+  TimeManager *arg1 = (TimeManager *) 0 ;
+  float arg2 ;
+  
+  arg1 = (TimeManager *)jarg1; 
+  arg2 = (float)jarg2; 
+  (arg1)->SetFixedDeltaTime(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Time(void * jarg1) {
+  TimeManager *arg1 = (TimeManager *) 0 ;
+  
+  arg1 = (TimeManager *)jarg1; 
   delete arg1;
 }
 
@@ -1145,28 +1328,6 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_b_get(void * jarg1) {
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_roll_set(void * jarg1, float jarg2) {
-  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
-  float arg2 ;
-  
-  arg1 = (CCMaths::Vector3 *)jarg1; 
-  arg2 = (float)jarg2; 
-  if (arg1) (arg1)->roll = arg2;
-}
-
-
-SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_roll_get(void * jarg1) {
-  float jresult ;
-  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
-  float result;
-  
-  arg1 = (CCMaths::Vector3 *)jarg1; 
-  result = (float) ((arg1)->roll);
-  jresult = result; 
-  return jresult;
-}
-
-
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_pitch_set(void * jarg1, float jarg2) {
   CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
   float arg2 ;
@@ -1206,6 +1367,28 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_yaw_get(void * jarg1) {
   
   arg1 = (CCMaths::Vector3 *)jarg1; 
   result = (float) ((arg1)->yaw);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_roll_set(void * jarg1, float jarg2) {
+  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->roll = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_roll_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1; 
+  result = (float) ((arg1)->roll);
   jresult = result; 
   return jresult;
 }

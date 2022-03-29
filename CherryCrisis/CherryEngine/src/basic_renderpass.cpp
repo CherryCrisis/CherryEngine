@@ -133,9 +133,10 @@ void BasicRenderPass::Execute(const float& x, const float& y)
 
 	if (m_camera)
 	{
+		// TODO: Change this
 		m_camera->m_camera.aspect = x / y;
 		CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera->m_camera.fovY, m_camera->m_camera.aspect, m_camera->m_camera.near, m_camera->m_camera.far);
-		CCMaths::Matrix4 view = Matrix4::RotateYXZ(-m_camera->m_transform->GetRotation()) * Matrix4::Translate(m_camera->m_transform->GetPosition());
+		CCMaths::Matrix4 view = Matrix4::RotateZXY(-m_camera->m_transform->GetRotation()) * Matrix4::Translate(m_camera->m_transform->GetPosition());
 
 		CCMaths::Matrix4 viewProjection = projection * view;
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);

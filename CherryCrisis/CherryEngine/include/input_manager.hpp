@@ -101,7 +101,6 @@ private:
 		float ComputeValue();			// Updates and returns total value
 
 		const std::vector<Axis*>& Axes() { return m_axes; }
-
 	};
 
 public:
@@ -128,6 +127,10 @@ private:
 	
 	CCMaths::Vector2 m_mouseWheel {};
 	CCMaths::Vector2 m_mousePos   {};
+	CCMaths::Vector2 m_mouseDelta {};
+
+	bool m_isListening = false;
+	int m_listenedKey = -1;
 
 	const char* keynames[122] =
 	{
@@ -416,6 +419,9 @@ public:
 	void SetContext(KeyboardContext* context);
 
 	// Callbacks
+	void SetListening();
+	void ResetListenedKey();
+
 	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	void MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset);
 	void MousePosCallback(GLFWwindow* window, double xpos, double ypos);
@@ -445,6 +451,7 @@ public:
 	int ChangeInputInAction(ActionButtons* action, Keycode oldKey, Keycode newKey);
 	
 	// Axis
+	void SetKey(Axis* axis, Keycode key, bool isNeg);
 	void SetPositiveKey(Axis* axis, Keycode key);
 	void SetNegativeKey(Axis* axis, Keycode key);
 
@@ -461,6 +468,9 @@ public:
 	// Get
 	CCMaths::Vector2 GetMouseWheel() { return m_mouseWheel; }
 	CCMaths::Vector2 GetMousePos()   { return m_mousePos;   }
+	CCMaths::Vector2 GetMouseDelta() { return m_mouseDelta;   }
+
+	const int GetListenedKey() { return m_listenedKey; }
 
 	int			KeynamesSize() { return 122; }
 

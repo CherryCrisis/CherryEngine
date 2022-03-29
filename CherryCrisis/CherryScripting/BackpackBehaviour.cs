@@ -15,11 +15,13 @@ namespace CCScripting
 		public void Start()
 		{
 			Debug.GetInstance().Log(pos);
+			InputManager.GetInstance().SetContext("user Context");
+			transform.position = new Vector3(0f, 0f, -5f);
 		}
 
 		void SetRotation()
         {
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
 			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
 
 		}
@@ -38,24 +40,9 @@ namespace CCScripting
 			SetRotation();
 
 
-			float timeScaledSpeed = deltaTime * 2f;
+			float timeScaledSpeed = Time.GetInstance().GetDeltaTime() * 2f;
 
-			if (InputManager.GetInstance().GetKey(Keycode.SPACE))
-				transform.position = new Vector3(transform.position.x, transform.position.y + timeScaledSpeed, transform.position.z);
-
-			if (InputManager.GetInstance().GetKey(Keycode.LEFT_CONTROL))
-				transform.position = new Vector3(transform.position.x, transform.position.y - timeScaledSpeed, transform.position.z);
-
-			if (InputManager.GetInstance().GetKey(Keycode.Z))
-				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + timeScaledSpeed);
-
-			if (InputManager.GetInstance().GetKey(Keycode.S))
-				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - timeScaledSpeed);
-
-			if (InputManager.GetInstance().GetKeyDown(Keycode.ESCAPE))
-				Debug.GetInstance().Log(transform.position, transform.eulerAngles, transform.scale);
-
-			transform.position.x = 5f;
+			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + InputManager.GetInstance().GetAxis("Horizontal") * timeScaledSpeed);
 		}
 	}
 }

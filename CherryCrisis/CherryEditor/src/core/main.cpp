@@ -16,6 +16,7 @@
 
 #include "stb_image.h"
 #include "input_manager.hpp"
+#include "time_manager.hpp"
 
 #include <iostream>
 
@@ -108,10 +109,10 @@ int main()
     icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
     glfwSetWindowIcon(window, 1 , icon);
     stbi_image_free(icon[0].pixels);
-
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();
+        TimeManager::GetInstance()->Update(glfwGetTime());
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

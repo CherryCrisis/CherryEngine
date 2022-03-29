@@ -116,8 +116,25 @@ void InputManager::SetContext(KeyboardContext* context)
 #pragma endregion
 
 #pragma region Callbacks
+void InputManager::SetListening()
+{
+	m_isListening = true;
+}
+
+void InputManager::ResetListenedKey()
+{
+	m_listenedKey = -1;
+}
+
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	if (m_isListening)
+	{
+		m_listenedKey = GetKeycodeIndex((Keycode)key);
+		m_isListening = false;
+		return;
+	}
+
 	if (action == 2)	return;
 
 	// action = 1 if pressed and 0 if released
@@ -139,12 +156,22 @@ void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double
 
 void InputManager::MousePosCallback(GLFWwindow* window, double xpos, double ypos)
 {
+	m_mouseDelta.x = m_mousePos.x - (float)xpos;
+	m_mouseDelta.y = m_mousePos.y - (float)ypos;
+
 	m_mousePos.x = (float)xpos;
 	m_mousePos.y = (float)ypos;
 }
 
 void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action, int mods)
 {
+	if (m_isListening)
+	{
+		m_listenedKey = GetKeycodeIndex((Keycode)(button + 1000));
+		m_isListening = false;
+		return;
+	}
+
 	if (action == 2)	return;
 
 	Input& input = m_keys[(Keycode)(button+1000)];
@@ -156,41 +183,12 @@ void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action
 	m_framePressedKeys.push_back((Keycode)(button + 1000));
 }
 
-void debug()
-{
-	std::cout << "TEST" << std::endl;
-
-}
-
-void debug(const float& in)
-{
-	std::cout << "TEST " << in << std::endl;
-}
-
 void InputManager::UpdateKeys()
 {
-	static bool doOnce = true;
-	
-	if (doOnce)
-	{
-		int i = 0;
-		SetContext("user Context");
-		ActionButtons* button = AddActionButtons("Test", i);
-		//ActionAxes* axes= AddActionAxes("Test", i);
-
-		AddInputToAction("Test", Keycode::LEFT_CLICK);
-		//AddAxisToAction("Test", Axis(Keycode::W, Keycode::S), i);
-
-		button->m_pressed.Bind(debug);
-		//axes->m_event.Bind(debug);
-		
-		SetContext(nullptr);
-
-		doOnce = false;
-	}
-
-
 	m_mouseWheel = CCMaths::Vector2::Zero;
+	m_mouseDelta = CCMaths::Vector2::Zero;
+
+	m_listenedKey = -1;
 
 	for (auto& key : m_framePressedKeys)
 	{
@@ -245,9 +243,7 @@ bool InputManager::GetKeyDown(const char* inputName)
 	else
 	{
 		ActionButtons& current = m_activeContext->m_buttons[inputName];
-		current.CheckDown();
-
-		return false;
+		return current.CheckDown();
 	}
 }
 
@@ -265,9 +261,7 @@ bool InputManager::GetKey(const char* inputName)
 	else
 	{
 		ActionButtons& current = m_activeContext->m_buttons[inputName];
-		current.CheckHeld();
-
-		return false;
+		return current.CheckHeld();
 	}
 }
 
@@ -285,9 +279,7 @@ bool InputManager::GetKeyUp(const char* inputName)
 	else
 	{
 		ActionButtons& current = m_activeContext->m_buttons[inputName];
-		current.CheckUp();
-
-		return false;
+		return current.CheckUp();
 	}
 }
 #pragma endregion
@@ -447,6 +439,15 @@ float InputManager::GetAxis(const char* axisName)
 		return axis.ComputeValue();
 	}
 }
+
+void InputManager::SetKey(Axis* axis, Keycode key, bool isNeg)
+{
+	if (isNeg)
+		SetNegativeKey(axis, key);
+	else
+		SetPositiveKey(axis, key);
+}
+
 
 void InputManager::SetPositiveKey(Axis* axis, Keycode key)
 {

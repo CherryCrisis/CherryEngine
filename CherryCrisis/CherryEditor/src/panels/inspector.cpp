@@ -21,19 +21,35 @@ Inspector::Inspector(bool spawnOpened, EditorManager* manager) : Panel(spawnOpen
     
 }
 
+std::string ExtractValue(std::string str, const char key = ':')
+{
+    return str.substr(str.find_first_of(key) + 1);
+}
+
 void InspectComponents(Entity* entity, int id)
 {
-    if (ImGui::TreeNode((void*)(intptr_t)id, "Instance %i", id))
+    std::vector<Behaviour*> behaviours = entity->GetBehaviours();
+
+    for (Behaviour* behaviour : behaviours)
     {
-        std::vector<Behaviour*> behaviours = entity->GetBehaviours();
+        std::string bname = typeid(*behaviour).name();
+        bname = ExtractValue(bname, ' ');
 
-        for (Behaviour* behaviour : behaviours)
+        std::unordered_map<std::string, Field>& fields = behaviour->GetFields();
+
+        ImGui::PushID(behaviour->GetUUID());
+        if (ImGui::TreeNode(bname.c_str()))
         {
-            std::unordered_map <std::string, Field > & fields = behaviour->GetFields();
-
-            for (const auto& [fieldName, fieldRef] : fields)
+            for (auto& [fieldName, fieldRef] : fields)
             {
                 const std::type_index type = fieldRef.m_value.type();
+
+                if (type == typeid(CCMaths::Vector3))
+                {
+                    CCMaths::Vector3 val = std::any_cast<CCMaths::Vector3>(fieldRef.m_value);
+                    ImGui::DragFloat3(fieldRef.m_name.c_str(), val.data, 0.5f);
+                    continue;
+                }
 
                 if (type == typeid(CCMaths::Vector3*))
                 {
@@ -48,6 +64,12 @@ void InspectComponents(Entity* entity, int id)
                     ImGui::DragInt(fieldRef.m_name.c_str(), &val, 0.5f);
                     continue;
                 }
+                if (type == typeid(float))
+                {
+                    float val = std::any_cast<float>(fieldRef.m_value);
+                    ImGui::DragFloat(fieldRef.m_name.c_str(), &val, 0.5f);
+                    continue;
+                }
 
                 if (type == typeid(std::string))
                 {
@@ -55,29 +77,18 @@ void InspectComponents(Entity* entity, int id)
                     ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
                     continue;
                 }
+
+                if (type == typeid(std::string*))
+                {
+                    std::string val = *std::any_cast<std::string*>(fieldRef.m_value);
+                    ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
+                    continue;
+                }
+
             }
+            ImGui::TreePop();
         }
-
-        Transform* transform = nullptr;
-        if (entity->TryGetBehaviour<Transform>(transform))
-        {
-            Vector3 position = transform->GetPosition();
-
-            if (ImGui::DragFloat3("Position", position.data, 0.5f))
-                transform->SetPosition(position);
-
-            Vector3 rotation = transform->GetRotation() * CCMaths::RAD2DEG;
-
-            if (ImGui::DragFloat3("Rotation", rotation.data, 0.5f))
-                transform->SetRotation(rotation * CCMaths::DEG2RAD);
-
-            Vector3 scale = transform->GetScale();
-
-            if (ImGui::DragFloat3("Scale", scale.data, 0.5f))
-                transform->SetScale(scale);
-        }
-
-        ImGui::TreePop();
+        ImGui::PopID();
     }
 }
 
@@ -96,15 +107,4 @@ void Inspector::Render()
         }
     }
     ImGui::End();
-}
-
-
-void InspectVector2(void* vector) 
-{
-
-}
-
-void InspectVector3(void* vector)
-{
-
 }

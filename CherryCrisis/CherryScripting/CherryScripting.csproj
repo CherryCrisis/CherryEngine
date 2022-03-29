@@ -54,6 +54,7 @@
     <Compile Include="Generated\Keycode.cs" />
     <Compile Include="Generated\SWIGTYPE_p_Camera.cs" />
     <Compile Include="Generated\SWIGTYPE_p_float.cs" />
+    <Compile Include="Generated\Time.cs" />
     <Compile Include="Generated\Transform.cs" />
     <Compile Include="Generated\Vector2.cs" />
     <Compile Include="Generated\Vector3.cs" />

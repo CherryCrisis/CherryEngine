@@ -129,7 +129,10 @@ public enum Keycode {
   RIGHT_CONTROL = 345,
   RIGHT_ALT = 346,
   RIGHT_SUPER = 347,
-  MENU = 348
+  MENU = 348,
+  LEFT_CLICK = 1000,
+  RIGHT_CLICK = 1001,
+  MIDDLE_CLICK = 1002
 }
 
 }

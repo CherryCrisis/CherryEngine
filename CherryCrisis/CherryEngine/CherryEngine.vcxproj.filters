@@ -476,8 +476,12 @@
     </ClInclude>
     <ClInclude Include="include\serializer.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
+	</ClInclude>
     <ClInclude Include="include\resources_container.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\csassembly.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -582,6 +586,9 @@
     </None>
     <None Include="include\resources_container.inl">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </None>
+    <None Include="interface\time_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -701,6 +708,9 @@
     </ClCompile>
     <ClCompile Include="src\uuid.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\csassembly.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\behaviour.cpp">
       <Filter>Fichiers sources\Component</Filter>
