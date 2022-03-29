@@ -41,6 +41,7 @@ public:
 	virtual void Purge() = 0;
 	virtual void Remove(const char* filename) = 0;
 	virtual void Erase(const char* filename) = 0;
+	virtual void Reload(const char* filename) = 0;
 
 };
 
@@ -60,6 +61,8 @@ public:
 	void Purge() override;
 	void Remove(const char* filename) override;
 	void Erase(const char* filename) override;
+	void Reload(const char* filename) override;
+
 
 	size_t GetResourceCount() const override { return m_resources.size(); }
 	virtual void GetResourcesFilepath(std::vector<const char*>& resourcePaths) const override;

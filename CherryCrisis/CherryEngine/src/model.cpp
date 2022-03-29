@@ -19,29 +19,19 @@ void Model::Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const
 	const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
 	const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
 	
-	std::string modelPath = modelBasePath;
+	model->m_modelBasePath = modelBasePath;
 
-	std::string meshPath = modelPath + std::string("/") + std::string(assimpMesh->mName.C_Str());
-	model->m_mesh = resourceManager->AddResource<Mesh>(meshPath.c_str(), false, assimpMesh);
+	std::string meshPath = model->m_modelBasePath + std::string("/") + std::string(assimpMesh->mName.C_Str());
+	model->m_mesh = resourceManager->AddResource<Mesh>(meshPath.c_str(), true, assimpMesh);
 
 	aiString name = assimpMaterial->GetName();
-	std::string materialPath = modelPath + std::string("/") + std::string(name.C_Str());
+	std::string materialPath = model->m_modelBasePath + std::string("/") + std::string(name.C_Str());
 	model->m_material = resourceManager->AddResource<Material>(materialPath.c_str(), true, assimpMaterial);
 
-	model->m_modelBasePath = modelBasePath;
-}
-
-Model::~Model()
-{
-	m_mesh = nullptr;
-	m_material = nullptr;
 }
 
 void Model::Delete()
 {
-	m_mesh->IsDestroyed();
-	m_material->IsDestroyed();
-
 	m_mesh = nullptr;
 	m_material = nullptr;
 }

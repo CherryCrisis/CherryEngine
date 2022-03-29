@@ -17,7 +17,7 @@ public:
 
     GPUTexture* m_gpuTexture = nullptr;
 
-    ~Texture();
+    ~Texture() = default;
 
     int GetWidth()  { return m_width; }
     int GetHeight() { return m_height; }
@@ -26,4 +26,5 @@ public:
 
     static void Load(std::shared_ptr<Texture> texture);
     void Delete() override;
+    void Reload() override;
 };

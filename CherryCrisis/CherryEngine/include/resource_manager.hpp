@@ -66,6 +66,9 @@ public:
 
 	template<class T>
 	void Remove(const char* filepath);
+
+	template<class T>
+	void Reload(const char* filepath);
 };
 
 

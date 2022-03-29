@@ -35,7 +35,7 @@ private:
 
 public:
 	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
-	~ModelBase();
+	~ModelBase() = default;
 
 	static void Load(std::shared_ptr<ModelBase> modelBase);
 	void Delete() override;

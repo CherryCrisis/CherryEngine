@@ -17,7 +17,7 @@ class Model : public Resource<Model>
 {
 public:
 	Model(const char* filepath) : Resource(filepath) {}
-	~Model();
+	~Model() = default;
 
 	std::string					m_modelBasePath;
 	std::shared_ptr<Mesh>		m_mesh;

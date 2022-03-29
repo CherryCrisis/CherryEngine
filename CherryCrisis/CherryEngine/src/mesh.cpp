@@ -4,6 +4,11 @@
 
 #include <assimp/mesh.h>
 
+void Mesh::Delete()
+{
+
+}
+
 void Mesh::Load(std::shared_ptr<Mesh> mesh, const aiMesh* assimpMesh)
 {
     std::vector<Vertex> vertices;

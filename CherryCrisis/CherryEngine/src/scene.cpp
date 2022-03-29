@@ -50,9 +50,6 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
 	RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 
-	//std::shared_ptr<ModelBase> modelBase = RM->AddResource<ModelBase>("Assets/backpack.obj", true);
-	//scene->GenerateEntities(modelBase);
-
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
 	scene->AddEntity(light);

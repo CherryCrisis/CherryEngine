@@ -10,18 +10,11 @@ Texture::Texture(const char* texturePath)
 
 }
 
-Texture::~Texture()
-{
-    if (m_resourceState.load() != EResourceState::DESTROYED)
-        Delete();
-}
-
 void Texture::Delete()
 {
     if (m_data)
         stbi_image_free(m_data);
 }
-
 
 void Texture::Load(std::shared_ptr<Texture> texture)
 {
@@ -40,4 +33,15 @@ void Texture::Load(std::shared_ptr<Texture> texture)
         //TODO: Debug ErrorLog
         //std::cout << "Failed to load image. " << filename << std::endl;
     }
+}
+
+void Texture::Reload()
+{
+    if (m_data)
+        stbi_image_free(m_data);
+
+    stbi_set_flip_vertically_on_load(true);
+    int nrComponents;
+
+    m_data = stbi_load(GetFilepath(), &m_width, &m_height, &nrComponents, STBI_rgb_alpha);
 }

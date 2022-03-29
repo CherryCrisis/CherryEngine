@@ -15,17 +15,10 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
     CCModelLoader::LoadModel(modelBase->GetFilepath(), &modelBase->m_rootNode, modelBase->m_models);
 }
 
-ModelBase::~ModelBase()
-{
-    if (m_resourceState != EResourceState::DESTROYED)
-        Delete();
-    //TODO: add state if is in Loading
-}
-
 void ModelBase::Delete()
 {
     for (std::shared_ptr<Model>& model : m_models)
-        model->IsDestroyed();
+        model->DeleteResource();
 
     m_models.clear();
     DeleteModelNode(m_rootNode);
@@ -35,8 +28,6 @@ void ModelBase::DeleteModelNode(ModelNode* modelNode)
 {
     if (!modelNode)
         return;
-
-    //modelNode->m_model.
 
 	for (int i = 0; i < modelNode->m_childrenNode.size(); ++i)
 		DeleteModelNode(modelNode->m_childrenNode[i]);

@@ -16,6 +16,7 @@ std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 		resourceContainerIt->second->Add(filepath, resourcePtr);
 	}
 
+
 	return resourcePtr;
 }
 
@@ -48,12 +49,17 @@ template <class T, typename... Args>
 std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {
 	std::shared_ptr<T> resourcePtr = AddResourceRef<T>(filepath, verifIsExist);
+	EResourceState resourceState = resourcePtr->GetResourceState();
 
-	if (resourcePtr->GetResourceState() == EResourceState::EMPTY)
+	switch (resourceState)
 	{
-		resourcePtr->SetResourceState(EResourceState::LOADING);
+	case EResourceState::EMPTY:
+		resourcePtr->SetResourceState(EResourceState::LOADING);/*666*/
 		T::Load(resourcePtr, args...);
 		resourcePtr->IsLoaded(resourcePtr, m_threadpool);
+		break;
+	default:
+		break;
 	}
 
 	return resourcePtr;
@@ -73,22 +79,23 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 	switch (resourceState)
 	{
 	case EResourceState::EMPTY:
+		resourcePtr->SetResourceState(EResourceState::LOADING);/*666*/
 		T::Load(resourcePtr, args...);
-		resourcePtr->m_onLoaded.Bind(uniqueCallback);
+		resourcePtr->m_OnLoaded.Bind(uniqueCallback);
 		resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 		break;
 	case EResourceState::LOADING:
+		resourcePtr->m_OnLoaded.Bind(uniqueCallback);
+		break;
+	case EResourceState::LOADED:
 	{
 		std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
 			wrappedCallback, resourcePtr);
 
 		m_threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
-		resourcePtr->m_onLoaded.Bind(uniqueCallback);
+		resourcePtr->m_OnLoaded.Bind(uniqueCallback);
 	}
-		break;
-	case EResourceState::LOADED:
-		resourcePtr->m_onLoaded.Bind(uniqueCallback);
-		break;
+	break;
 
 	default:
 		break;
@@ -102,7 +109,7 @@ void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIs
 	//Wrap callback because CCFunction::BindFunction(...) doesn't work with an arg<Type<OtherType>>
 	CCCallback::AWrapCallback* wrappedCallback(static_cast<CCCallback::AWrapCallback*>(uniqueCallback.release()));
 
-	auto function = 
+	auto function =
 		CCFunction::BindFunctionUnsafe(
 			&ResourceManager::AddResourceWithCallback<T, CallbackType, Args...>, this,
 			filepath, verifIsExist, wrappedCallback, args...);
@@ -139,15 +146,15 @@ void ResourceManager::Remove(const char* filepath)
 }
 
 template<class T>
-size_t ResourceManager::GetResourceCount() const
+void ResourceManager::Reload(const char* filepath)
 {
+	std::lock_guard<std::mutex> lock(m_lockResources);
+
 	auto resourceContainerIt = m_resources.find(typeid(T));
 	if (resourceContainerIt != m_resources.end())
 	{
-		return resourceContainerIt->second->GetResourceCount();
+		resourceContainerIt->second->Reload(filepath);
 	}
-
-	return 0;
 }
 
 
