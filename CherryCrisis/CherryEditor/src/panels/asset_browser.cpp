@@ -47,6 +47,7 @@ void AssetBrowser::QuerryBrowser()
         node.m_isDirectory = entry.is_directory();
         node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
         node.m_path = entry.path();
+        node.m_relatiePath = entry.path().filename();
         node.m_filename = entry.path().filename().string();
         node.m_extension = entry.path().extension().string();
         m_nodes[i] = node;
@@ -214,6 +215,13 @@ void AssetBrowser::RenderNodes()
         ImGui::ImageButton((void*)(intptr_t)node.m_icon, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
 
         node.m_ImGuiID = ImGui::GetItemID();
+
+        if (ImGui::BeginDragDropSource()) 
+        {
+            const wchar_t* path = node.m_relatiePath.c_str();
+            ImGui::SetDragDropPayload("CONTENT_BROWSER_NODE", path, wcslen(path-1) * sizeof(wchar_t), ImGuiCond_Once);
+            ImGui::EndDragDropSource();
+        }
 
         ImGui::PopID();
         // Double Click Callback

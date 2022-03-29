@@ -54,7 +54,7 @@ Scene::Scene(const char* filePath) : Resource(filePath)
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
 
-
+	
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
 	scene->AddEntity(light);
@@ -218,7 +218,7 @@ bool Scene::Unserialize(const char* filePath)
 	ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 
 	//First read the file and populate the entities + a uuid map and the component wrapper list 
-	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
+	std::string fileName = "Assets/" + std::string(filePath);
 	std::ifstream file(fileName);
 
 	// first is the uuid and the behaviour pointer 
