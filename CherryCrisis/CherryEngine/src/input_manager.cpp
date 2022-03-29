@@ -156,8 +156,8 @@ void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double
 
 void InputManager::MousePosCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	m_mouseDelta.x = m_mousePos.x - xpos;
-	m_mouseDelta.y = m_mousePos.y - ypos;
+	m_mouseDelta.x = m_mousePos.x - (float)xpos;
+	m_mouseDelta.y = m_mousePos.y - (float)ypos;
 
 	m_mousePos.x = (float)xpos;
 	m_mousePos.y = (float)ypos;
@@ -439,6 +439,15 @@ float InputManager::GetAxis(const char* axisName)
 		return axis.ComputeValue();
 	}
 }
+
+void InputManager::SetKey(Axis* axis, Keycode key, bool isNeg)
+{
+	if (isNeg)
+		SetNegativeKey(axis, key);
+	else
+		SetPositiveKey(axis, key);
+}
+
 
 void InputManager::SetPositiveKey(Axis* axis, Keycode key)
 {
