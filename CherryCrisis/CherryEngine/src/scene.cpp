@@ -253,9 +253,13 @@ bool Scene::Unserialize(const char* filePath)
 			{
 				isParsingComponent = false;
 				actualUUID = ExtractUUID(line);
-				Entity* empty = new Entity("Empty", CCUUID(actualUUID));
-				
+
+				std::getline(buffer, line);
+				std::string name = ExtractValue(line);
+				Entity* empty = new Entity(name, CCUUID(actualUUID));
+
 				AddEntity(empty);
+
 				continue;
 			}
 
