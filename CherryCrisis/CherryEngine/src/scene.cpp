@@ -47,8 +47,8 @@ Scene::Scene(const char* filePath) : Resource(filePath)
 {
 	auto RM = ResourceManager::GetInstance();
 
-	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, this);
-	RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
+	//auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, this);
+	//RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)
@@ -79,9 +79,6 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 
 	for (Entity* child : children)
 		AddEntity(child);
-
-	//auto func = CCFunction::BindFunction(&ResourceManager::Remove<ModelBase>, ResourceManager::GetInstance(), resource->GetFilepath());
-	//ThreadPool::GetInstance()->CreateTask(func, EChannelTask::MAINTHREAD);
 }
 
 void Scene::Start()
@@ -204,7 +201,10 @@ CCMaths::Vector3 ExtractVector3(std::string str)
 	return value;
 }
 
-
+void Foo(std::shared_ptr<ModelBase>) 
+{
+	std::cout << "chargé maggle comme ta 50" << std::endl;
+}
 
 
 bool Scene::Unserialize(const char* filePath) 
@@ -214,13 +214,16 @@ bool Scene::Unserialize(const char* filePath)
 
 	m_entities.clear();
 
+	auto callback = CCCallback::BindCallback(Foo);
+	ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
+
 	//First read the file and populate the entities + a uuid map and the component wrapper list 
 	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
 	std::ifstream file(fileName);
 
 	// first is the uuid and the behaviour pointer 
 	std::unordered_map<uint64_t, Behaviour*> m_wrappedBehaviours;
-	// first is the behaviour uuidand the uuid to link in 
+	// first is the behaviour uuid and the uuid to link in 
 	std::unordered_map<uint64_t, std::unordered_map<std::string, uint64_t>> m_wrappedUUIDs;
 
 	bool opened = false;
@@ -240,7 +243,7 @@ bool Scene::Unserialize(const char* filePath)
 		Behaviour* behaviour = nullptr;
 
 		// need to get the actual serialized uuid 
-		uint64_t value;
+		uint64_t actualUUID;
 		uint64_t parent;
 
 		while (std::getline(buffer, line))
@@ -249,8 +252,8 @@ bool Scene::Unserialize(const char* filePath)
 			if (found != std::string::npos)
 			{
 				isParsingComponent = false;
-				value = ExtractUUID(line);
-				Entity* empty = new Entity("Empty", CCUUID(value));
+				actualUUID = ExtractUUID(line);
+				Entity* empty = new Entity("Empty", CCUUID(actualUUID));
 				
 				AddEntity(empty);
 				continue;
@@ -260,7 +263,7 @@ bool Scene::Unserialize(const char* filePath)
 			if (found != std::string::npos)
 			{
 				isParsingComponent = true;
-				value = ExtractUUID(line);
+				actualUUID = ExtractUUID(line);
 			}
 			else if (isParsingComponent)
 			{
@@ -288,8 +291,8 @@ bool Scene::Unserialize(const char* filePath)
 
 				if (line.size() == 0)
 				{
-					behaviour->m_uuid = value;
-					m_wrappedBehaviours[value] = behaviour;
+					behaviour->m_uuid = actualUUID;
+					m_wrappedBehaviours[actualUUID] = behaviour;
 					behaviour = nullptr;
 					continue;
 				}
@@ -306,7 +309,6 @@ bool Scene::Unserialize(const char* filePath)
 				auto& info = behaviour->m_metadatas.m_fields[key].m_value.type();
 				if (info == typeid(CCMaths::Vector3**))
 				{
-
 					Vector3* vec = new Vector3();
 					*vec = ExtractVector3(parsedValue);
 
@@ -315,7 +317,7 @@ bool Scene::Unserialize(const char* filePath)
 
 				if (info == typeid(CCMaths::Vector3*))
 				{
-					Vector3 vec = {};
+					Vector3 vec = ExtractVector3(parsedValue);
 					behaviour->m_metadatas.m_fields[key] = { key, std::any(vec) };
 				}
 
@@ -323,16 +325,12 @@ bool Scene::Unserialize(const char* filePath)
 				{
 					uint64_t refUUID = ExtractUUID(line);
 					if (refUUID != 0)
-						m_wrappedUUIDs[value].insert({ key, refUUID });
+						m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
 				}
 
-				if (key == "file")
-				{
-					key = key;
-				}
 				if (info == typeid(std::string*))
 				{
-					behaviour->m_metadatas.m_fields[key] = { key, std::any(value) };
+					behaviour->m_metadatas.m_fields[key] = { key, std::any(parsedValue) };
 					
 					ModelRenderer* renderer = (ModelRenderer*) behaviour;
 					if (renderer) 
@@ -346,6 +344,7 @@ bool Scene::Unserialize(const char* filePath)
 				}
 			}
 		}
+
 		//Then loop over the wrapped component to add them into the entities
 		for (auto& wrappedBehaviour : m_wrappedBehaviours) 
 		{
@@ -363,7 +362,7 @@ bool Scene::Unserialize(const char* filePath)
 
 			for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
 			{
-				if (fieldRef.m_value.type() == typeid(Behaviour*)) 
+				if (fieldRef.m_value.type() == typeid(Behaviour**)) 
 				{
 					auto refIt = grave->second.find(fieldName);
 
@@ -378,13 +377,13 @@ bool Scene::Unserialize(const char* filePath)
 						continue;
 
 					Behaviour* bhave = behaviourIt->second;
+					
 					fieldRef.m_value = bhave;
 				}
 			}
 			behaviourRef->ConsumeMetadatas();
 		}
 	}
-
 
 	return opened;
 }

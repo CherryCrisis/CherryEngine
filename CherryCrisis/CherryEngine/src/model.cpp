@@ -20,16 +20,15 @@ void Model::Load(std::shared_ptr<Model> model, const aiScene* assimpScene,
 	const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
 	const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
 	
-	std::string modelPath = model->GetFilepath();
+	model->m_modelBasePath = std::string(modelBasePath);
 
-	std::string meshPath = modelPath + std::string("/") + std::string(assimpMesh->mName.C_Str());
+	std::string meshPath = model->m_modelBasePath + std::string("/") + std::string(assimpMesh->mName.C_Str());
 	model->m_mesh = resourceManager->AddResource<Mesh>(meshPath.c_str(), false, assimpMesh);
 
 	aiString name = assimpMaterial->GetName();
-	std::string materialPath = modelPath + std::string("/") + std::string(name.C_Str());
+	std::string materialPath = model->m_modelBasePath + std::string("/") + std::string(name.C_Str());
 	model->m_material = resourceManager->AddResource<Material>(materialPath.c_str(), true, assimpMaterial);
 	
-	model->m_modelBasePath = std::string(modelBasePath);
 }
 
 Model::~Model()

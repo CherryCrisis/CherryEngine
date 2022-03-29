@@ -18,25 +18,17 @@ Transform::Transform(CCUUID& owner)
 void Transform::PopulateMetadatas() 
 {
 	m_metadatas.SetField<Behaviour*>("parent", m_parent);
-
-	m_metadatas.m_fields["position"] = { "position", &m_position };
-	m_metadatas.m_fields["rotation"] = { "rotation",  &m_rotation};
-	m_metadatas.m_fields["scale"] = { "scale",  &m_scale};
-	//m_metadatas.m_fields["parent"] = { "parent",  (Behaviour*)m_parent};
+	m_metadatas.SetField<Vector3>("position", m_position);
+	m_metadatas.SetField<Vector3>("rotation", m_rotation);
+	m_metadatas.SetField<Vector3>("scale", m_scale);
 }
 
 void Transform::ConsumeMetadatas()
 {
-	//Vector3* position = *std::any_cast<CCMaths::Vector3**>(m_metadatas.m_fields["position"].m_value);
-	//Vector3* rotation = *std::any_cast<CCMaths::Vector3**>(m_metadatas.m_fields["rotation"].m_value);
-	//Vector3* scale    = *std::any_cast<CCMaths::Vector3**>(m_metadatas.m_fields["scale"].m_value);
-	//m_position = *position;
-	//m_position = *position;
-	//m_position = *position;
-	auto a = m_metadatas.m_fields["parent"].m_value;
-	Behaviour* b =  *std::any_cast<Behaviour**>(m_metadatas.m_fields["parent"].m_value);
-
-	m_parent   = (Transform*)std::any_cast<Behaviour*>(b);
+	m_parent   = (Transform*)std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
+	m_position = std::any_cast<Vector3>(m_metadatas.m_fields["position"].m_value);
+	m_rotation = std::any_cast<Vector3>(m_metadatas.m_fields["rotation"].m_value);
+	m_scale    = std::any_cast<Vector3>(m_metadatas.m_fields["scale"].m_value);
 }
 
 void Transform::SetDirty()
@@ -70,6 +62,7 @@ void Transform::SetParent(Transform* transform)
 		}
 	}
 	m_parent = transform;
+	m_metadatas.SetField<Behaviour*>("parent", m_parent);
 }
 
 void Transform::UpdateMatrix()

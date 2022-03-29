@@ -14,6 +14,7 @@ class CCENGINE_API ModelRenderer : public Behaviour, public ARenderer
 {
 private:
 	void PopulateMetadatas() override;
+	void ConsumeMetadatas() override;
 public:
 
 

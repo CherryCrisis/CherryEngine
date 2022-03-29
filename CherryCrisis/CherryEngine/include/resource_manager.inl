@@ -49,12 +49,17 @@ template <class T, typename... Args>
 std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verifIsExist, Args... args)
 {
 	std::shared_ptr<T> resourcePtr = AddResourceRef<T>(filepath, verifIsExist);
+	EResourceState resourceState = resourcePtr->GetResourceState();
 
-	if (resourcePtr->GetResourceState() == EResourceState::EMPTY)
+	switch (resourceState)
 	{
-		resourcePtr->SetResourceState(EResourceState::LOADING);
+	case EResourceState::EMPTY:
+		resourcePtr->SetResourceState(EResourceState::LOADING);/*666*/
 		T::Load(resourcePtr, args...);
 		resourcePtr->IsLoaded(resourcePtr, m_threadpool);
+		break;
+	default:
+		break;
 	}
 
 	return resourcePtr;
@@ -74,11 +79,15 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 	switch (resourceState)
 	{
 	case EResourceState::EMPTY:
+		resourcePtr->SetResourceState(EResourceState::LOADING);/*666*/
 		T::Load(resourcePtr, args...);
 		resourcePtr->m_onLoaded.Bind(uniqueCallback);
 		resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 		break;
 	case EResourceState::LOADING:
+		resourcePtr->m_onLoaded.Bind(uniqueCallback);
+		break;
+	case EResourceState::LOADED:
 	{
 		std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
 			wrappedCallback, resourcePtr);
@@ -86,9 +95,6 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 		m_threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
 		resourcePtr->m_onLoaded.Bind(uniqueCallback);
 	}
-		break;
-	case EResourceState::LOADED:
-		resourcePtr->m_onLoaded.Bind(uniqueCallback);
 		break;
 
 	default:

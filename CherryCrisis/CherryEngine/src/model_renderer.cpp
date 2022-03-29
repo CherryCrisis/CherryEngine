@@ -22,12 +22,17 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::PopulateMetadatas() 
 {
+	std::string var = "null";
 	m_metadatas.SetField<Behaviour*>("transform", m_transform);
-	if (m_model.get() != nullptr )
-	{
-		if (modelFilepathStr.size() != 0)
-			m_metadatas.SetField<std::string>("file", m_model->m_filepath);
-	}
+	m_metadatas.SetField<std::string>("file", var);
+
+}
+
+void ModelRenderer::ConsumeMetadatas()
+{
+	Behaviour* b = std::any_cast<Behaviour*>(m_metadatas.m_fields["transform"].m_value);
+
+	m_transform = (Transform*)b;
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
@@ -72,12 +77,3 @@ void ModelRenderer::UnsubscribeToRenderPass()
 	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
 }
 
-/*
-void ModelRenderer::Deserialize(const char* filepath, const char* modelName) 
-{
-	ResourceManager* RM = ResourceManager::GetInstance();
-	RM->AddResource<ModelBase>(filepath, true);
-
-	std::shared_ptr<Model> model = RM->AddResource<Model>(modelName, true);
-
-}*/
