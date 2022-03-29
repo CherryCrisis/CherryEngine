@@ -360,22 +360,24 @@ bool Scene::Unserialize(const char* filePath)
 		//Then loop over the wrapped component again to link the uuids
 		for (const auto& [UUID, behaviourRef] : m_wrappedBehaviours)
 		{
+			//Find the UUID list of the actual behaviour
 			auto grave = m_wrappedUUIDs.find(UUID);
 			if (grave == m_wrappedUUIDs.end())
 				continue;
 
+			//Loop over the fields of the behaviour
 			for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
 			{
 				if (fieldRef.m_value.type() == typeid(Behaviour**)) 
 				{
+					//find the field in the UUID list of the behaviour
 					auto refIt = grave->second.find(fieldName);
 
 					if (refIt == grave->second.end())
 						continue;
 
-					uint64_t refUUID = refIt->second;
-
-					auto behaviourIt = m_wrappedBehaviours.find(refUUID);
+					//finally find the behaviour in the behaviour list by its uuid
+					auto behaviourIt = m_wrappedBehaviours.find(refIt->second);
 
 					if (behaviourIt == m_wrappedBehaviours.end())
 						continue;
