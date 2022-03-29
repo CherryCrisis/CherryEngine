@@ -53,13 +53,22 @@ public:
 	template<class T>
 	std::shared_ptr<T> GetResource(const char* filepath);
 
-	size_t GetResourceCount() const { return m_resources.size(); }
+	size_t GetResourceCount() const;
+	
+	template<class T>
+	size_t GetResourceCount() const;
+
+	//To draw filepath in editor (Resource Viewer)
+	void GetResourcesPath(std::map<std::type_index, std::vector<const char*>>& resourcePaths) const;
 
 	//Unload unused resources
 	void Purge();
 
 	template<class T>
 	void Remove(const char* filepath);
+
+	template<class T>
+	void Reload(const char* filepath);
 };
 
 

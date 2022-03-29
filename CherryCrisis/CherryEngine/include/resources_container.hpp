@@ -34,9 +34,14 @@ public:
 	template<class ResourceT>
 	std::shared_ptr<ResourceT>* GetResource(const char* filename);
 
+	virtual size_t GetResourceCount() const = 0;
+	virtual void GetResourcesFilepath(std::vector<const char*>& resourcePaths) const = 0;
+
 	//Unload unused resources
 	virtual void Purge() = 0;
 	virtual void Remove(const char* filename) = 0;
+	virtual void Erase(const char* filename) = 0;
+	virtual void Reload(const char* filename) = 0;
 
 };
 
@@ -55,6 +60,13 @@ public:
 
 	void Purge() override;
 	void Remove(const char* filename) override;
+	void Erase(const char* filename) override;
+	void Reload(const char* filename) override;
+
+
+	size_t GetResourceCount() const override { return m_resources.size(); }
+	virtual void GetResourcesFilepath(std::vector<const char*>& resourcePaths) const override;
+
 
 };
 

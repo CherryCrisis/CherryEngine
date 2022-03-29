@@ -21,10 +21,11 @@ private:
 	float	m_shininess = 0.f;
 public:
 	Material(const char* materialName) : Resource(materialName) {}
-	~Material();
+	~Material() = default;
 
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
 
-
 	static void Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial);
+	void Delete() override;
+	void Reload() override {};
 };

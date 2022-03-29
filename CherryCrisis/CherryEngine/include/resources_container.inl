@@ -15,6 +15,9 @@ void AResourcesContainer::Add(const char* filename, std::shared_ptr<ResourceT>& 
 	ResourcesContainer<ResourceT>* resourceContainer = UnwrapResourcesContainer<ResourceT>();
 	assert(resourceContainer != nullptr);
 
+	auto func = CCFunction::BindFunction(&AResourcesContainer::Erase, this, resource->GetFilepath());
+	resource->m_OnDeleted.Bind(&CCFunction::AFunction::Invoke, func.release());
+
 	resourceContainer->Add(filename, resource);
 }
 
@@ -46,13 +49,13 @@ std::shared_ptr<ResourceT>* ResourcesContainer<ResourceT>::ResourcesContainer::G
 template<class ResourceT>
 void ResourcesContainer<ResourceT>::Purge()
 {
-	for (auto& pair : m_resources)
+	auto resources = m_resources;
+	for (auto& pair : resources)
 	{
-		if (pair.second.use_count() <= 1)
+		if (pair.second.use_count() <= 2)
 		{
-			std::cout << pair.second->GetFilepath() << " " << std::to_string(pair.second.use_count()) << std::endl;
-			delete pair.second.get();
-			m_resources.erase(pair.first);
+			if (pair.second->GetResourceState() != EResourceState::DESTROYED)
+				pair.second->DeleteResource();
 		}
 	}
 }
@@ -63,10 +66,37 @@ void ResourcesContainer<ResourceT>::Remove(const char* filename)
 	auto pair = m_resources.find(filename);
 	if (pair != m_resources.end())
 	{
-		std::cout << pair->second->GetFilepath() << " deleted " << std::endl;
-		pair->second.reset();
-		m_resources.erase(pair->first);
+		std::shared_ptr<ResourceT> resource = pair->second;
+		resource->DeleteResource();
 	}
 }
+
+template<class ResourceT>
+void ResourcesContainer<ResourceT>::Erase(const char* filename)
+{
+	m_resources.erase(filename);
+}
+
+template<class ResourceT>
+void ResourcesContainer<ResourceT>::GetResourcesFilepath(std::vector<const char*>& resourcePaths) const
+{
+	for (auto& pair : m_resources)
+	{
+		resourcePaths.push_back(pair.second->GetFilepath());
+	}
+}
+
+template<class ResourceT>
+void ResourcesContainer<ResourceT>::Reload(const char* filename)
+{
+	auto pair = m_resources.find(filename);
+	if (pair != m_resources.end())
+	{
+		std::shared_ptr<ResourceT> resource = pair->second;
+		resource->ReloadResource();
+	}
+}
+
+
 
 

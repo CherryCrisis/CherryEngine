@@ -34,7 +34,7 @@ Headers must end with .hpp extension
 
 * Member variables, constructors, destructors and member functions, static member variables must be ordred in this way except when the code does not allow it.
 
----
+* Event and Properties must start with uppercase letter.
 
 ```c++
 #define CC_MACRO
@@ -49,14 +49,16 @@ namespace CCEngine
         std::string m_filePath;
 
     public:
-        float       width = 0.f;
-        float       height = 0.f;
+        float       m_width = 0.f;
+        float       m_height = 0.f;
+        Property    Filepath;
     }
 
     class ResourcesManager
     {
     private:
         std::vector<Texture> m_textures;
+        Event<...> m_OnReload;
 
     public:
         ResourcesManager();

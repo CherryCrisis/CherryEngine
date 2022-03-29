@@ -24,6 +24,7 @@ Scene::~Scene()
 		delete entityPtr;
 }
 
+
 std::string Scene::GetUniqueEntityName(const std::string& entityName)
 {
 	// TODO: Try using string view
@@ -60,10 +61,8 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	scene->AddEntity(camera);
 }
 
-void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
+void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
 {
-	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
-
 	Entity* root = new Entity("Root");
 	std::vector<Entity*> children = modelBase->GenerateEntities(root);
 

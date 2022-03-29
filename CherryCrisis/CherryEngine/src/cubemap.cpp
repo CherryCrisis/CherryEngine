@@ -4,7 +4,7 @@
 
 #include <stb_image.h>
 
-Cubemap::~Cubemap()
+void Cubemap::Delete()
 {
     for (int i = 0; i < 6; i++)
         stbi_image_free(m_data[i]);
