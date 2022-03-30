@@ -468,9 +468,6 @@
     <ClInclude Include="include\sound_manager.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\time_manager.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="include\function.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -1079,6 +1076,9 @@
     </ClInclude>
     <ClInclude Include="include\csassembly.hpp">
       <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\time_manager.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

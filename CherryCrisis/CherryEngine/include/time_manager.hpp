@@ -1,9 +1,11 @@
 #pragma once
 
 #include "singleton.hpp"
-#include "cherry_header.hpp"
 
-struct Time
+#include "cherry_macros.hpp"
+
+
+struct CCENGINE_API FullDate
 {
 	unsigned int hours;
 	unsigned int minutes;
@@ -28,7 +30,8 @@ private:
 public:
 	
 	//GETTER AND SETTERS
-	Time GetCurrentTime();
+
+	FullDate GetCurrentTime();
 	float GetDeltaTime()	  { return m_deltaTime; }
 	float GetTimeScale()	  { return m_timeScale; }
 	float GetFixedDeltaTime() { return m_fixedDeltaTime; }

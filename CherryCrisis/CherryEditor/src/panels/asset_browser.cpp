@@ -1,4 +1,3 @@
-
 #include "panels/asset_browser.hpp"
 
 #include <imgui.h>
@@ -9,6 +8,8 @@
 #include <windows.h>
 #undef far
 #undef near
+#undef ERROR
+
 #include <ShellAPI.h>
 
 #include "core/editor_manager.hpp"

@@ -1,41 +1,45 @@
 #include "pch.hpp"
-
 #include "debug.hpp"
 
 template <>
 Debug* Singleton<Debug>::currentInstance = nullptr;
 
-void Debug::Log(const char* string)
+Debug::Debug() 
 {
-	std::cout << string << std::endl;
+	m_timeManager = TimeManager::GetInstance();
 
-	if (!ContainsAndAdd(string)) 
-		logs.push_back(LogMessage(string));
+
+
+	/*HashTest hashTest{ .logType = ELogType::ERROR, .str = "test" };
+
+	std::size_t key = std::hash<HashTest>{}(hashTest);*/
 }
 
-void Debug::PrintAllLogs() 
-{
-	//for (const std::string& string : logs) 
-	//{
-	//	std::cout << string << std::endl;
-	//}
-}
 
-bool Debug::ContainsAndAdd(const char* string) 
+void Debug::AddLog(const char* message, ELogType logType)
 {
-	for (LogMessage& log : logs)
+	std::cout << message << std::endl;
+
+	LogMessage* logMessage = nullptr;
+
+	auto conditional = m_logMessages.find(message);
+	if (conditional != m_logMessages.end())
 	{
-		const char* strings = log.string.c_str();
-		if (!log.string.compare(string)) 
-		{
-			log.count++;
-			return true;
-		}
+		conditional->second.count++;
+		logMessage = &conditional->second;
 	}
-	return false;
+	else
+	{
+		auto pair = m_logMessages.emplace(message, LogMessage());
+		logMessage->m_logMessage = &pair.first->first; //To avoid copy string
+
+		logMessage = &pair.first->second;
+	}
+	
+	m_logs.push_back(Log(logMessage, logType, m_timeManager->GetCurrentTime()));
 }
 
-Debug::Debug()
+void Debug::Clear()
 {
-
+	m_logs.clear();
 }

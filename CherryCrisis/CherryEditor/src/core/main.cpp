@@ -23,7 +23,7 @@
 #include "debug.hpp"
 void PrintDebug()
 {
-    Debug::GetInstance()->Log("Print string");
+    //Debug::GetInstance()->Log("Print string");
 }
 
 int main()

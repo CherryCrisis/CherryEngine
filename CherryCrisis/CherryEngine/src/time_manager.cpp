@@ -14,7 +14,7 @@ void TimeManager::Update(const float time)
 	m_deltaTime = (m_elapsedTime - m_lastTime) * m_timeScale;
 }
 
-Time TimeManager::GetCurrentTime()
+FullDate TimeManager::GetCurrentTime()
 {
     auto tp = std::chrono::zoned_time{ std::chrono::current_zone(), std::chrono::system_clock::now() }.get_local_time();
     auto dp = floor<std::chrono::days>(tp);
@@ -23,7 +23,7 @@ Time TimeManager::GetCurrentTime()
 
     std::chrono::hh_mm_ss time{ floor<std::chrono::milliseconds>(tp - dp) };
 
-    return Time{
+    return FullDate{
         .hours = static_cast<unsigned int>(time.hours().count()),
         .minutes = static_cast<unsigned int>(time.minutes().count()),
         .seconds = static_cast<unsigned int>(time.seconds().count()),

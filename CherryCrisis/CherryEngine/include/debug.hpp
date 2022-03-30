@@ -3,55 +3,61 @@
 #include "singleton.hpp"
 
 #include <string>
-#include <vector>
+#include <queue>
 #include <unordered_map>
 
 #include "cherry_macros.hpp"
 #include "time_manager.hpp"
 
-enum class ELogType
+enum class CCENGINE_API ELogType
 {
-	DEBUG,
+	INFO,
 	WARNING,
 	ERROR,
 };
 
-class CCENGINE_API LogMessage
+struct CCENGINE_API LogMessage
 {
 public:
-	ELogType m_logType;
-	//std::string string;
-	//int count = 1;
-
-	//LogMessage(const char* value): string(std::string(value)) {}
+	const std::string* m_logMessage;
+	int count;
 
 	//std::string CollapsedString() { std::string val = string; val += "    : " + std::to_string(count); return val; }
 };
 
+struct HashTest
+{
+	ELogType logType;
+	std::string str;
+};
+
+class CCENGINE_API Log
+{
+private:
+	LogMessage* m_logMessage;
+	ELogType	m_logType;
+	FullDate	m_date;
+
+public:
+	Log(LogMessage* logMessage, ELogType logType, FullDate fullDate)
+		: m_logMessage(logMessage), m_logType(logType), m_date(fullDate) {}
+};
 
 class CCENGINE_API Debug : public Singleton<Debug>
 {
 private:
-	static Debug* instance;
+	std::unordered_map<std::string, LogMessage>		m_logMessages;
+	std::vector<Log>								m_logs;
 
-	std::vector<LogMessage> logs;
-	std::multimap<std::string, LogMessage>  m_logs;
-
-	Debug(Debug& other) = delete;
-	void operator=(const Debug&) = delete;
+	TimeManager* m_timeManager;
 
 public:
 	Debug();
 
-	std::vector<LogMessage> GetLogs() { return logs; }
+	std::vector<Log>* GetLogs() { return &m_logs; }
 	
 	// Print a string in the console and cache it
-	void Log(const char* string);
+	void AddLog(const char* message, ELogType logType);
 
-	// Print all cached logs
-	void PrintAllLogs();
-
-	bool ContainsAndAdd(const char* string);
-
-	void Clear() { logs.clear(); }
+	void Clear();
 };

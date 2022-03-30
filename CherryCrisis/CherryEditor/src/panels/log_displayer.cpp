@@ -19,7 +19,7 @@ void LogDisplayer::Render()
     {
         RenderMenuBar();
 
-        for (LogMessage& message : m_debug->GetLogs())
+        /*for (LogMessage& message : m_debug->GetLogs())
         {
             if (m_isCollapsing) 
             {
@@ -32,7 +32,7 @@ void LogDisplayer::Render()
                     ImGui::Text(message.string.c_str());
                 }
             }
-        }
+        }*/
 
         if (m_isAutoScrolling && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
             ImGui::SetScrollHereY(1.0f);
