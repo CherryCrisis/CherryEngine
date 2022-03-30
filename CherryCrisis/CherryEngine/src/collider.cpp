@@ -4,8 +4,7 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "physic_scene.hpp"
-#include "physic_actor.hpp"
+#include "physic_manager.hpp"
 #include "transform.hpp"
 
 Collider::Collider(Entity& owner)
@@ -38,12 +37,12 @@ void Collider::SetPxShape()
 	{
 		switch (m_colliderShape)
 		{
-		case ColliderShape::NONE:
+		case EColliderShape::NONE:
 			break;
-		case ColliderShape::BOX_COLLIDER:
+		case EColliderShape::BOX_COLLIDER:
 			m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(physx::PxVec3(1.f, 1.f, 1.f)));
 			break;
-		case ColliderShape::SPHERE_COLLIDER:
+		case EColliderShape::SPHERE_COLLIDER:
 			m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(1.f));
 			break;
 		default:

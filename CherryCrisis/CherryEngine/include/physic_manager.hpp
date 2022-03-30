@@ -7,21 +7,20 @@
 
 #include "singleton.hpp"
 
+#include "physic_actor.hpp"
+#include "physic_scene.hpp"
 #include "physic_utils.hpp"
 
 #define PX_RELEASE(x)	if(x)	{ x->release(); x = nullptr; }
+#define CCPhysicManager PhysicSystem::PhysicManager
 
 namespace physx
 {
 	class PxFoundation;
 	class PxPvd;
 	class PxPhysics;
-	class PxRigidActor;
-	class PxScene;
 	class PxMaterial;
 	class PxTransform;
-	class PxGeometry;
-	class PxShape;
 }
 
 namespace CCMaths
@@ -31,13 +30,10 @@ namespace CCMaths
 
 class Rigidbody;
 class Collider;
-class Entity;
+class Cell;
 
 namespace PhysicSystem
 {
-	class PhysicScene;
-	class PhysicActor;
-
 	class CCENGINE_API PhysicManager : public Singleton<PhysicManager>
 	{
 	private:
@@ -66,12 +62,12 @@ namespace PhysicSystem
 	
 		// TODO: Implement follozing functions when Cell system is done
 
-		//void Register(Cell* cell);
-		//void Unregister(Cell* cell);
+		void Register(Cell* cell);
+		void Unregister(Cell* cell);
 		
-		//PhysicScene* FindOrCreateScene()
-		//PhysicScene* FindScene()
-		//bool IsSceneEmpty(PhysicScene&) -> might be replace by just a destroy because a PhysicScene should only have one Cell
+		PhysicScene& FindOrCreateScene(Cell* cell);
+		PhysicScene* FindScene(Cell* cell);
+		bool IsSceneEmpty(PhysicScene&);  // -> might be replace by just a destroy because a PhysicScene should only have one Cell
 
 		// Instantiate physx for registered scenes and actors
 		void Launch();

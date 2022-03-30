@@ -73,6 +73,12 @@
     <Filter Include="Fichiers externes\PhysX">
       <UniqueIdentifier>{25093bd7-a514-4354-aca4-2f5c9d2e0171}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Cells">
+      <UniqueIdentifier>{53497885-1682-4a97-b0eb-9a3a7d97a416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Cells">
+      <UniqueIdentifier>{e04aefe8-b1c4-4334-9a43-aaad2c9262ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -1080,6 +1086,15 @@
     <ClInclude Include="include\csassembly.hpp">
       <Filter>Fichiers d%27en-tête\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="include\cell.hpp">
+      <Filter>Fichiers d%27en-tête\Cells</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cell_system.hpp">
+      <Filter>Fichiers d%27en-tête\Cells</Filter>
+    </ClInclude>
+    <ClInclude Include="include\physic_character_controller.hpp">
+      <Filter>Fichiers d%27en-tête\PhysX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1329,6 +1344,15 @@
     </ClCompile>
     <ClCompile Include="src\behaviour.cpp">
       <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cell.cpp">
+      <Filter>Fichiers sources\Cells</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cell_system.cpp">
+      <Filter>Fichiers sources\Cells</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physic_character_controller.cpp">
+      <Filter>Fichiers sources\PhysX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
