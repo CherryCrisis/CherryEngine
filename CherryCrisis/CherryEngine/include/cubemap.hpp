@@ -20,7 +20,7 @@ public:
 
     Cubemap(const char* name)
         : Resource(name) { }
-    ~Cubemap() = default;
+    ~Cubemap();
 
     int GetWidth()  { return m_width; }
     int GetHeight() { return m_height; }
@@ -29,6 +29,4 @@ public:
 
     static void Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6]);
     static void Load(std::shared_ptr<Cubemap> cubemap, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack);
-
-    void Delete() override;
 };

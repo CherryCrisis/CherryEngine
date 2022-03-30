@@ -4,28 +4,17 @@
 
 #include <glad/gl.h>
 
-void Shader::Delete()
+Shader::~Shader()
 {
 	glDeleteShader(m_shaderID);
 }
 
 void Shader::Load(std::shared_ptr<Shader> shader, EShader shaderType)
 {
-	shader->m_shaderType = shaderType;
-
 	const std::string shaderStr = ParseShaderFromFile(shader->GetFilepath());
 	const char* shaderCstr = shaderStr.c_str();
 
-	shader->m_shaderID = CompileShader(shader->m_shaderType, &shaderCstr);
-}
-
-void Shader::Reload()
-{
-	glDeleteShader(m_shaderID);
-
-	const std::string shaderStr = ParseShaderFromFile(GetFilepath());
-	const char* shaderCstr = shaderStr.c_str();
-	m_shaderID = CompileShader(m_shaderType, &shaderCstr);
+	shader->m_shaderID = CompileShader(shaderType, &shaderCstr);
 }
 
 std::string Shader::ParseShaderFromFile(const char* filepath)

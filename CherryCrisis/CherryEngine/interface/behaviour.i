@@ -25,8 +25,8 @@ public:
 	public Component GetComponent(System.Type type) => host.GetComponent(type);
 	public T GetComponent<T>() where T : Component => host.GetComponent<T>();
 
-	public Component AddComponent(System.Type type) => host.GetComponent(type);
-	public T AddComponent<T>() where T : Component => host.GetComponent<T>();
+	public Component AddComponent(System.Type type) => host.AddComponent(type);
+	public T AddComponent<T>() where T : Component => host.AddComponent<T>();
 	%}
 };
 

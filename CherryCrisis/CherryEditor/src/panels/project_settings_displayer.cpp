@@ -4,7 +4,6 @@
 #include <imgui.h>
 
 #include "core/editor_manager.hpp"
-#include "resource_manager.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -16,7 +15,6 @@ ProjectSettingsDisplayer::ProjectSettingsDisplayer(bool spawnOpened = true) : Pa
     m_categories[3] = new Input("Inputs");
     m_categories[4] = new TagLayer("Tags / Layers");
     m_categories[5] = new RenderPass("Render Pass");
-    m_categories[6] = new ResourceViewer("Resource Viewer");
 }
 
 ProjectSettingsDisplayer::~ProjectSettingsDisplayer()
@@ -87,33 +85,22 @@ void ProjectSettingsDisplayer::Input::Fill()
 {
     InputManager* IM = InputManager::GetInstance();
 
-    static int type = -1;
-    if (ImGui::Button("Add Button Mapped Action"))
-    {
-        ImGui::OpenPopup("Action Buttons Creation");
-        type = 0;
-    }
-    ImGui::SameLine();
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+
     if (ImGui::Button("Add Axis Mapped Action"))
     {
         ImGui::OpenPopup("Action Axes Creation");
-        type = 1;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Add Button Mapped Action"))
+    {
+        ImGui::OpenPopup("Action Buttons Creation");
     }
 
-    CreateAction(IM, type);
-
-    SetButtons(IM);
-    ImGui::Spacing(); ImGui::Separator();
-    SetAxes(IM);
-}
-
-void ProjectSettingsDisplayer::Input::CreateAction(InputManager* IM, int& type)
-{
-    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-
+#pragma region degeu 
+    //TODO ---- TO MOVE INTO A PROPER FUNCTION
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-    if (ImGui::BeginPopupModal("Action Buttons Creation", NULL, ImGuiWindowFlags_AlwaysAutoResize) ||
-        ImGui::BeginPopupModal("Action Axes Creation", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    if (ImGui::BeginPopupModal("Action Axes Creation", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         std::string str = "Name the new Action: \n\n";
         ImGui::Text(str.c_str());
@@ -128,12 +115,26 @@ void ProjectSettingsDisplayer::Input::CreateAction(InputManager* IM, int& type)
         {
             ImGui::CloseCurrentPopup();
 
-            if (type == 0)
-                CreateButtons(IM, name);
-            else if (type == 1)
-                CreateAxes(IM, name);
-
-            type = -1;
+            int success = 0;
+            IM->SetContext(userContext);
+            IM->AddActionAxes(std::string(name), success);
+            IM->SetContext(nullptr);
+            
+            if (success == 1)
+            {
+                std::string notif = "Action Axes " + std::string(name) + " created.";
+                EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+            }
+            else if (success == 0)
+            {
+                std::string notif = "Action Axes " + std::string(name) + " already exists.";
+                EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Warning, 1.0f);
+            }
+            else if (success == -1)
+            {
+                std::string notif = "Action Axes " + std::string(name) + " couldn't be created.";
+                EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
+            }
 
             memset(name, 0, IM_ARRAYSIZE(name));
         }
@@ -142,70 +143,201 @@ void ProjectSettingsDisplayer::Input::CreateAction(InputManager* IM, int& type)
         if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
     }
-}
 
-void ProjectSettingsDisplayer::Input::CreateButtons(InputManager* IM, const char* name)
-{
-    int success = 0;
-    IM->SetContext(userContext);
-    IM->AddActionButtons(std::string(name), success);
-    IM->SetContext(nullptr);
-
-    if (success == 1)
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal("Action Buttons Creation", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        std::string notif = "Action Buttons " + std::string(name) + " created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
-    }
-    else if (success == 0)
-    {
-        std::string notif = "Action Buttons " + std::string(name) + " already exists.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Warning, 1.0f);
-    }
-    else if (success == -1)
-    {
-        std::string notif = "Action Buttons " + std::string(name) + " couldn't be created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
-    }
-}
+        std::string str = "Name the new Action: \n\n";
+        ImGui::Text(str.c_str());
+        ImGui::Separator();
 
-void ProjectSettingsDisplayer::Input::CreateAxes(InputManager* IM, const char* name)
-{
-    int success = 0;
-    IM->SetContext(userContext);
-    IM->AddActionAxes(std::string(name), success);
-    IM->SetContext(nullptr);
+        static char name[32];
+        IMGUI_LEFT_LABEL(ImGui::InputText, "Name:", name, IM_ARRAYSIZE(name));
 
-    if (success == 1)
-    {
-        std::string notif = "Action Axes " + std::string(name) + " created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+        ImGui::Separator();
+
+        if (ImGui::Button("Create", ImVec2(120, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+
+            int success = 0;
+            IM->SetContext(userContext);
+            IM->AddActionButtons(std::string(name), success);
+            IM->SetContext(nullptr);
+
+            if (success == 1)
+            {
+                std::string notif = "Action Buttons " + std::string(name) + " created.";
+                EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+            }
+            else if (success == 0)
+            {
+                std::string notif = "Action Buttons " + std::string(name) + " already exists.";
+                EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Warning, 1.0f);
+            }
+            else if (success == -1)
+            {
+                std::string notif = "Action Buttons " + std::string(name) + " couldn't be created.";
+                EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
+            }
+
+            memset(name, 0, IM_ARRAYSIZE(name));
+        }
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+        ImGui::EndPopup();
     }
-    else if (success == 0)
+#pragma endregion
+    int i = 0;
+    int j = 0;
+    ImGui::Text("Axes"); ImGui::Separator();
+
+    for (auto& axis : userContext->m_axes)
     {
-        std::string notif = "Action Axes " + std::string(name) + " already exists.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Warning, 1.0f);
+        std::string treeLabel = axis.first + "##axis" + std::to_string(i);
+        if (ImGui::TreeNode(treeLabel.c_str()))
+        {
+            for (auto& axes : axis.second.Axes())
+            {
+                if (m_axisPosIndex.size() <= j)
+                    m_axisPosIndex.push_back(IM->GetKeycodeIndex(axes->GetPositiveKey()));
+                else
+                    m_axisPosIndex[j] = IM->GetKeycodeIndex(axes->GetPositiveKey());
+
+                if (m_axisNegIndex.size() <= j)
+                    m_axisNegIndex.push_back(IM->GetKeycodeIndex(axes->GetNegativeKey()));
+                else
+                    m_axisNegIndex[j] = IM->GetKeycodeIndex(axes->GetNegativeKey());
+
+                const char* combo_preview_valueP = IM->GetKeyname(m_axisPosIndex[j]);
+                const char* combo_preview_valueN = IM->GetKeyname(m_axisNegIndex[j]);
+
+                ImGui::Text("Positive key:"); ImGui::SameLine();
+                std::string label = "##pos" + std::to_string(j);
+
+                if (ImGui::BeginCombo(label.c_str(), combo_preview_valueP))
+                {
+                    for (int n = 0; n < IM->KeynamesSize(); n++)
+                    {
+                        const bool is_selected = (m_axisPosIndex[j] == n);
+                        if (ImGui::Selectable(IM->GetKeyname(n), is_selected))
+                        {
+                            m_axisPosIndex[j] = n;
+                            IM->SetPositiveKey(axes, IM->GetKeycode(m_axisPosIndex[j]));
+                        }
+                        // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                        if (is_selected)
+                            ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
+                } ImGui::SameLine();
+
+                std::string listeningLabel = "Listening" + label;
+                if (ImGui::Button((std::string("-") + label).c_str()))
+                {
+                    IM->SetListening();
+
+                    ImGui::OpenPopup(listeningLabel.c_str());
+                }
+
+                ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                if (ImGui::BeginPopupModal(listeningLabel.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
+                {
+                    ImGui::Separator();
+
+                    int key = IM->GetListenedKey();
+                    if (key != -1)
+                    {
+                        IM->SetPositiveKey(axes, IM->GetKeycode(key));
+                        IM->ResetListenedKey();
+
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+
+
+                ImGui::Text("Negative key:"); ImGui::SameLine();
+                label = "##neg" + std::to_string(j);
+
+                if (ImGui::BeginCombo(label.c_str(), combo_preview_valueN))
+                {
+                    for (int n = 0; n < IM->KeynamesSize(); n++)
+                    {
+                        const bool is_selected = (m_axisNegIndex[j] == n);
+                        if (ImGui::Selectable(IM->GetKeyname(n), is_selected))
+                        {
+                            m_axisNegIndex[j] = n;
+                            IM->SetNegativeKey(axes, IM->GetKeycode(m_axisNegIndex[j]));
+                        }
+                        // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+                        if (is_selected)
+                            ImGui::SetItemDefaultFocus();
+                    }
+                    ImGui::EndCombo();
+                } ImGui::SameLine();
+
+                listeningLabel = "Listening" + label;
+                if (ImGui::Button((std::string("-") + label).c_str()))
+                {
+                    IM->SetListening();
+
+                    ImGui::OpenPopup(listeningLabel.c_str());
+                }
+
+                ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+                if (ImGui::BeginPopupModal(listeningLabel.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
+                {
+                    ImGui::Separator();
+
+                    int key = IM->GetListenedKey();
+                    if (key != -1)
+                    {
+                        IM->SetNegativeKey(axes, IM->GetKeycode(key));
+                        IM->ResetListenedKey();
+
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+
+                ImGui::Separator();
+
+                j++;
+            }
+
+            if (ImGui::Button("+"))
+            {
+                IM->SetContext(userContext);
+                int success = IM->AddAxisToAction(&axis.second, { Keycode::UNKNOWN, Keycode::UNKNOWN });
+                IM->SetContext(nullptr);
+
+                if (success == 1)
+                {
+                    std::string notif = "New axis added to Action.";
+                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+                }
+                else if (success == -1)
+                {
+                    std::string notif = "Couldn't add axis to Action.";
+                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
+                }
+            }
+            ImGui::TreePop();
+        }
+        i++;
     }
-    else if (success == -1)
-    {
-        std::string notif = "Action Axes " + std::string(name) + " couldn't be created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
-    }
-}
 
-void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
-{
-    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-
-    int i = 0, j = 0;
-
-    // Loop on Buttons actions in Input Manager
+    i = 0;
+    j = 0;
+    ImGui::Spacing(); ImGui::Separator();
     ImGui::Text("Buttons"); ImGui::Separator();
     for (auto& button : userContext->m_buttons)
     {
         std::string treeLabel = button.first + "##button" + std::to_string(i);
         if (ImGui::TreeNode(treeLabel.c_str()))
         {
-            // Loop in keys in current action
             for (auto& input : button.second.Inputs())
             {
                 bool breakLoop = false;
@@ -215,13 +347,12 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 else
                     m_inputsIndex[j] = IM->GetKeycodeIndex(input.first);
 
-                const char* combo_preview_value = IM->GetKeyname(m_inputsIndex[j]);
+                const char* combo_preview_valueK = IM->GetKeyname(m_inputsIndex[j]);
 
                 ImGui::Text("Key:"); ImGui::SameLine();
                 std::string label = "##k" + std::to_string(j);
 
-                // Key selection combo
-                if (ImGui::BeginCombo(label.c_str(), combo_preview_value))
+                if (ImGui::BeginCombo(label.c_str(), combo_preview_valueK))
                 {
                     for (int n = 0; n < IM->KeynamesSize(); n++)
                     {
@@ -239,14 +370,16 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                             }
                         }
 
+                        // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                         if (is_selected)
                             ImGui::SetItemDefaultFocus();
                     }
                     ImGui::EndCombo();
 
+                    if (breakLoop)
+                        break;
                 } ImGui::SameLine();
 
-                // Start listening for key
                 std::string listeningLabel = "Listening" + label;
                 if (ImGui::Button((std::string("-") + label).c_str()))
                 {
@@ -255,7 +388,6 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                     ImGui::OpenPopup(listeningLabel.c_str());
                 }
 
-                // Listening
                 ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
                 if (ImGui::BeginPopupModal(listeningLabel.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
                 {
@@ -277,12 +409,8 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 ImGui::Separator();
 
                 j++;
-
-                if (breakLoop)
-                    break;
             }
 
-            // Add new key to Action
             if (ImGui::Button("+"))
             {
                 IM->SetContext(userContext);
@@ -297,135 +425,6 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 else if (success == -1)
                 {
                     std::string notif = "Couldn't add input to Action.";
-                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
-                }
-            }
-            ImGui::TreePop();
-        }
-        i++;
-    }
-}
-
-void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
-{
-    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-
-    int i = 0, j = 0;
-
-    // Loop over Axes actions in Input Manager
-    ImGui::Text("Axes"); ImGui::Separator();
-    for (auto& axis : userContext->m_axes)
-    {
-        std::string treeLabel = axis.first + "##axis" + std::to_string(i);
-        if (ImGui::TreeNode(treeLabel.c_str()))
-        {
-            // Loop over axis in current action
-            for (auto& axes : axis.second.Axes())
-            {
-                const char* combo_preview_value = nullptr;
-                std::string label = "";
-                int* currentKey = nullptr;
-
-                // Loop over positive and negative key of the axis
-                for (int k = 0; k < 2; k++)
-                {
-                    if (k == 0)
-                    {
-                        if (m_axisPosIndex.size() <= j)
-                            m_axisPosIndex.push_back(IM->GetKeycodeIndex(axes->GetPositiveKey()));
-                        else
-                            m_axisPosIndex[j] = IM->GetKeycodeIndex(axes->GetPositiveKey());
-
-                        currentKey = &m_axisPosIndex[j];
-
-                        ImGui::Text("Positive key:"); ImGui::SameLine();
-                        label = "##pos" + std::to_string(j);
-                    }
-                    else if (k == 1)
-                    {
-                        if (m_axisNegIndex.size() <= j)
-                            m_axisNegIndex.push_back(IM->GetKeycodeIndex(axes->GetNegativeKey()));
-                        else
-                            m_axisNegIndex[j] = IM->GetKeycodeIndex(axes->GetNegativeKey());
-
-                        currentKey = &m_axisNegIndex[j];
-
-                        ImGui::Text("Negative key:"); ImGui::SameLine();
-                        label = "##neg" + std::to_string(j);
-                    }
-
-                    if (currentKey)
-                    {
-                        combo_preview_value = IM->GetKeyname(*currentKey);
-
-                        // Key selection combo
-                        if (ImGui::BeginCombo(label.c_str(), combo_preview_value))
-                        {
-                            for (int n = 0; n < IM->KeynamesSize(); n++)
-                            {
-                                const bool is_selected = (*currentKey == n);
-
-                                if (ImGui::Selectable(IM->GetKeyname(n), is_selected))
-                                {
-                                    *currentKey = n;
-                                    
-                                    IM->SetKey(axes, IM->GetKeycode(*currentKey), (bool)k);
-                                }
-
-                                if (is_selected)
-                                    ImGui::SetItemDefaultFocus();
-                            }
-                            ImGui::EndCombo();
-                        } ImGui::SameLine();
-                    }
-
-                    // Start listening for key
-                    std::string listeningLabel = "Listening" + label;
-                    if (ImGui::Button((std::string("-") + label).c_str()))
-                    {
-                        IM->SetListening();
-
-                        ImGui::OpenPopup(listeningLabel.c_str());
-                    }
-
-                    // Listening
-                    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-                    if (ImGui::BeginPopupModal(listeningLabel.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize))
-                    {
-                        ImGui::Separator();
-
-                        int key = IM->GetListenedKey();
-                        if (key != -1)
-                        {
-                            IM->SetKey(axes, IM->GetKeycode(key), (bool)k);
-                            IM->ResetListenedKey();
-
-                            ImGui::CloseCurrentPopup();
-                        }
-                        ImGui::EndPopup();
-                    }
-
-                    ImGui::Separator();
-                }
-
-                j++;
-            }
-
-            // Add new axis to Action
-            if (ImGui::Button("+"))
-            {
-                IM->SetContext(userContext);
-                int success = IM->AddAxisToAction(&axis.second, { Keycode::UNKNOWN, Keycode::UNKNOWN });
-                IM->SetContext(nullptr);
-
-                if (success == 1)
-                {
-                    std::string notif = "New axis added to Action.";
-                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
-                }
-                else if (success == -1)
-                {
-                    std::string notif = "Couldn't add axis to Action.";
                     EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
                 }
             }
@@ -463,51 +462,4 @@ void ProjectSettingsDisplayer::TagLayer::Fill()
 void ProjectSettingsDisplayer::RenderPass::Fill()
 {
     ImGui::Text("Pass Order");
-}
-
-void ProjectSettingsDisplayer::ResourceViewer::Fill()
-{
-    ImGui::Text("Resource count %i", ResourceManager::GetInstance()->GetResourceCount());
-
-    std::map<std::type_index, std::vector<const char*>> resourcePaths;
-    std::vector<const char*> resourcesType;
-    std::vector<std::type_index> resourceTypeId;
-    ResourceManager::GetInstance()->GetResourcesPath(resourcePaths);
-
-    for (auto& pair : resourcePaths)
-    {
-        resourcesType.push_back(pair.first.name());
-        resourceTypeId.push_back(pair.first);
-    }
-
-    static const char* current_item = NULL;
-    static size_t current_id = 0;
-
-    if (ImGui::BeginCombo("##combo", current_item))
-    {
-        for (size_t n = 0; n < resourcesType.size(); n++)
-        {
-            bool is_selected = (current_item == resourcesType[n]);
-            if (ImGui::Selectable(resourcesType[n], is_selected))
-            {
-                current_item = resourcesType[n];
-                current_id = n;
-                if (is_selected)
-                {
-                    ImGui::SetItemDefaultFocus();
-                }
-            }
-        }
-        ImGui::EndCombo();
-    }
-
-    auto it = resourcePaths.find(resourceTypeId[current_id]);
-    if (it != resourcePaths.end())
-    {
-        for (int i = 0; i < it->second.size(); i++)
-        {
-            ImGui::Text(it->second[i]);
-        }
-    }
-    
 }

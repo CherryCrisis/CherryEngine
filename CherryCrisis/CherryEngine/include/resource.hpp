@@ -23,9 +23,6 @@ protected:
 	const std::string m_filepath;
 	std::atomic<EResourceState> m_resourceState;
 
-	virtual void Delete() {};
-	virtual void Reload() {};
-
 public:
 	AResource(const std::string& filepath)
 		: m_filepath(filepath)
@@ -39,7 +36,6 @@ public:
 
 	EResourceState GetResourceState() { return m_resourceState.load(); }
 	void SetResourceState(EResourceState resourceState) { m_resourceState.store(resourceState); }
-
 };
 
 template<class T>
@@ -52,23 +48,21 @@ protected:
 		m_resourceState.store(EResourceState::LOADED);
 
 		std::shared_ptr<ResourceT> resourcePtrCopy = resource;
-		m_OnLoaded.Invoke(std::move(resourcePtrCopy));
+		m_onLoaded.Invoke(std::move(resourcePtrCopy));
 	}
+
+	
 
 public:
-	Event<std::shared_ptr<T>> m_OnLoaded {};
-	Event<> m_OnReloaded {};
-	Event<> m_OnDeleted {};
+	Event<std::shared_ptr<T>> m_onLoaded{};
+	Event<> m_onDestroyed {};
 
 	Resource(const std::string& filepath)
-		: AResource(filepath) 
-	{
-	}
+		: AResource(filepath) {}
 
-	virtual ~Resource() 
+	virtual ~Resource()
 	{
-		if (m_resourceState.load() != EResourceState::DESTROYED)
-			Delete();
+		IsDestroyed(ThreadPool::GetInstance());
 	}
 
 	void IsLoaded(std::shared_ptr<T> resource, ThreadPool* m_threadpool)
@@ -77,22 +71,10 @@ public:
 		m_threadpool->CreateTask(eventFunction, EChannelTask::MAINTHREAD);
 	}
 
-	void DeleteResource()
+	void IsDestroyed(ThreadPool* m_threadpool)
 	{
-		m_resourceState.store(EResourceState::DESTROYED);
-
-		Delete();
-		m_OnDeleted.Invoke();
-	}
-
-	void ReloadResource()
-	{
-		m_resourceState.store(EResourceState::LOADING);
-
-		Reload();
-		m_OnReloaded.Invoke();
-		
-		m_resourceState.store(EResourceState::LOADED);
+		auto eventFunction = CCFunction::BindFunctionUnsafe(&Event<>::Invoke, &this->m_onDestroyed);
+		m_threadpool->CreateTask(eventFunction, EChannelTask::MAINTHREAD);
 	}
 };
 

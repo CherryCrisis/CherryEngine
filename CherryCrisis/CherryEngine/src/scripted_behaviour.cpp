@@ -121,3 +121,8 @@ void ScriptedBehaviour::Reload()
 
 	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
 }
+
+_MonoObject* ScriptedBehaviour::GetRawInstance()
+{
+	return managedInstance->RawObject();
+}

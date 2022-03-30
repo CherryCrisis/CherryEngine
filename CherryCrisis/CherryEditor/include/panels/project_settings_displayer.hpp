@@ -10,7 +10,7 @@
 class ProjectSettingsDisplayer : public Panel
 {
 private:
-	std::array<PanelCategory*, 7> m_categories;
+	std::array<PanelCategory*, 6> m_categories;
 
 	int m_selectedCategory = 0;
 
@@ -33,11 +33,7 @@ private:
 	public:
 		Input(std::string name = "default");
 		void Fill() override;
-		void CreateAction(InputManager* IM, int& type);
-		void CreateButtons(InputManager* IM, const char* name);
-		void CreateAxes(InputManager* IM, const char* name);
-		void SetButtons(InputManager* IM);
-		void SetAxes(InputManager* IM);
+
 
 		InputManager::KeyboardContext* userContext = nullptr;
 	};
@@ -72,13 +68,6 @@ private:
 	{
 	public:
 		RenderPass(std::string name = "default") : PanelCategory(name) {}
-		void Fill() override;
-	};
-
-	class ResourceViewer : public PanelCategory
-	{
-	public:
-		ResourceViewer(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
 	};
 

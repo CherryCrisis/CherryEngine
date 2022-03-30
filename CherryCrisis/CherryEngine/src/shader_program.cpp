@@ -8,11 +8,10 @@
 
 #include "shader.hpp"
 
-void ShaderProgram::Delete()
+ShaderProgram::~ShaderProgram()
 {
 	glDeleteProgram(m_shaderProgram);
 }
-
 
 void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, const char* vxFilepath, const char* fgFilepath)
 {
@@ -46,59 +45,44 @@ void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shar
 {
 	shaderProgram->m_shaderProgram = glCreateProgram();
 
-	shaderProgram->m_shaders.push_back(vx);
+	glAttachShader(shaderProgram->m_shaderProgram, vx->GetShaderID());
 
-	if (fg.get() != nullptr)
-		shaderProgram->m_shaders.push_back(fg);
+	if (fg)
+		glAttachShader(shaderProgram->m_shaderProgram, fg->GetShaderID());
 
-	shaderProgram->CreateProgram();
+	glLinkProgram(shaderProgram->m_shaderProgram);
 
+	GLint linkStatus;
+	glGetProgramiv(shaderProgram->m_shaderProgram, GL_LINK_STATUS, &linkStatus);
+	if (linkStatus == GL_FALSE)
+	{
+		char infolog[1024];
+		glGetProgramInfoLog(shaderProgram->m_shaderProgram, (sizeof(infolog) / sizeof(infolog[0])), nullptr, infolog);
+		fprintf(stderr, "Program link error: %s\n", infolog);
+	}
 }
 
 void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm)
 {
 	shaderProgram->m_shaderProgram = glCreateProgram();
 
-	shaderProgram->m_shaders.push_back(vx);
+	glAttachShader(shaderProgram->m_shaderProgram, vx->GetShaderID());
 
 	if (gm.get() != nullptr)
-		shaderProgram->m_shaders.push_back(gm);
+		glAttachShader(shaderProgram->m_shaderProgram, gm->GetShaderID());
 
 	if (fg.get() != nullptr)
-		shaderProgram->m_shaders.push_back(fg);
+		glAttachShader(shaderProgram->m_shaderProgram, fg->GetShaderID());
 
-	shaderProgram->CreateProgram();
-
-}
-
-void ShaderProgram::CreateProgram()
-{
-	for (auto& shader : m_shaders)
-	{
-		glAttachShader(m_shaderProgram, shader->GetShaderID());
-	}
-
-	glLinkProgram(m_shaderProgram);
+	glLinkProgram(shaderProgram->m_shaderProgram);
 
 	GLint linkStatus;
-	glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &linkStatus);
+	glGetProgramiv(shaderProgram->m_shaderProgram, GL_LINK_STATUS, &linkStatus);
 	if (linkStatus == GL_FALSE)
 	{
 		char infolog[1024];
-		glGetProgramInfoLog(m_shaderProgram, (sizeof(infolog) / sizeof(infolog[0])), nullptr, infolog);
+		glGetProgramInfoLog(shaderProgram->m_shaderProgram, (sizeof(infolog) / sizeof(infolog[0])), nullptr, infolog);
 		fprintf(stderr, "Program link error: %s\n", infolog);
-		//TODO: Add debug
 	}
-}
-
-void ShaderProgram::Reload()
-{
-	glDeleteProgram(m_shaderProgram);
-	m_shaderProgram = glCreateProgram();
-
-	for (auto& shader : m_shaders)
-		shader->ReloadResource();
-
-	CreateProgram();
 }
 

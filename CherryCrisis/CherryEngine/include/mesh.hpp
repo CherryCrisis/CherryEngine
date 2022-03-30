@@ -34,7 +34,7 @@ class Mesh : public Resource<Mesh>
 {
 public:
 	Mesh(const char* meshName) : Resource<Mesh>(meshName) {}
-	~Mesh() = default;
+	~Mesh() {}
 	
 	GPUMesh* m_gpuMesh = nullptr;
 
@@ -49,8 +49,6 @@ public:
 	static void Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, Args... args);
 
 	static void Load(std::shared_ptr<Mesh> mesh, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
-
-	void Delete() override;
 };
 
 #include "mesh.inl"

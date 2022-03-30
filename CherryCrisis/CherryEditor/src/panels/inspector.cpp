@@ -23,13 +23,11 @@ Inspector::Inspector(bool spawnOpened, EditorManager* manager) : Panel(spawnOpen
 
 void InspectComponents(Entity* entity, int id)
 {
-    std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
-
-    for (Behaviour* behaviour : behaviours)
+    if (ImGui::TreeNode((void*)(intptr_t)id, "Instance %i", id))
     {
-        ImGui::PushID(behaviour->GetUUID());
-        std::string bname = typeid(*behaviour).name();
-        if (ImGui::TreeNode(bname.c_str()))
+        auto behaviours = entity->GetAllBehaviours();
+
+        for (Behaviour* behaviour : behaviours)
         {
             std::unordered_map <std::string, Field > & fields = behaviour->GetFields();
 
@@ -44,24 +42,10 @@ void InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
-                if (type == typeid(CCMaths::Vector3**))
+                if (type == typeid(int))
                 {
-                    CCMaths::Vector3** val = std::any_cast<CCMaths::Vector3**>(fieldRef.m_value);
-                    CCMaths::Vector3* v = *val;
-                    ImGui::DragFloat3(fieldRef.m_name.c_str(), v->data, 0.5f);
-                    continue;
-                }
-
-                if (type == typeid(int*))
-                {
-                    int* val = std::any_cast<int*>(fieldRef.m_value);
-                    ImGui::DragInt(fieldRef.m_name.c_str(), val, 0.5f);
-                    continue;
-                }
-                if (type == typeid(float*))
-                {
-                    float* val = std::any_cast<float*>(fieldRef.m_value);
-                    ImGui::DragFloat(fieldRef.m_name.c_str(), val, 0.5f);
+                    int val = std::any_cast<int>(fieldRef.m_value);
+                    ImGui::DragInt(fieldRef.m_name.c_str(), &val, 0.5f);
                     continue;
                 }
 
@@ -109,9 +93,9 @@ void InspectComponents(Entity* entity, int id)
                     continue;
                 }
             }
-            ImGui::TreePop();
         }
-        ImGui::PopID();
+
+        ImGui::TreePop();
     }
 }
 
@@ -130,4 +114,15 @@ void Inspector::Render()
         }
     }
     ImGui::End();
+}
+
+
+void InspectVector2(void* vector) 
+{
+
+}
+
+void InspectVector3(void* vector)
+{
+
 }

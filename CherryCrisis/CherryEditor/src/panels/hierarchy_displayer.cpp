@@ -34,7 +34,7 @@ void HierarchyDisplayer::Render()
                 entityTransform && !entityTransform->IsRoot())
                 continue;
 
-            std::string name = entityRef->GetName();
+            std::string name = "Instance " + std::to_string(count);
 
             if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, entityRef)))
             {

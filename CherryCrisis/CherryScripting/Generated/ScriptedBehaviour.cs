@@ -39,6 +39,10 @@ public class ScriptedBehaviour : Behaviour {
     return ret;
   }
 
+  public void SetScriptClass(string scriptName) {
+    CherryEnginePINVOKE.ScriptedBehaviour_SetScriptClass(swigCPtr, scriptName);
+  }
+
 	[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.InternalCall)]
 	private extern static Behaviour GetStaticInstance(System.IntPtr cPtr);
 

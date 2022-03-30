@@ -12,9 +12,11 @@ namespace CCScripting
 
 		}
 
+		DebugTest debug;
+
 		public void Start()
         {
-
+			debug = AddComponent<DebugTest>();
 		}
 		public string camName = "Je suis un nom";
 		public int num = 5;
@@ -44,7 +46,7 @@ namespace CCScripting
 			if (InputManager.GetInstance().GetKey(Keycode.F))
 				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - speed);
 
-			GetComponent<DebugTest>()?.Debugger();
+			debug?.Debugger();
 		}
 	}
 }

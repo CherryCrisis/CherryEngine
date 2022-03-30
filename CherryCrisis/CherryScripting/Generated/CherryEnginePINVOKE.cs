@@ -712,6 +712,9 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_ScriptedBehaviour_GetScriptName")]
   public static extern string ScriptedBehaviour_GetScriptName(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_ScriptedBehaviour_SetScriptClass")]
+  public static extern void ScriptedBehaviour_SetScriptClass(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_ScriptedBehaviour")]
   public static extern void delete_ScriptedBehaviour(global::System.Runtime.InteropServices.HandleRef jarg1);
 
