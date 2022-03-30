@@ -14,6 +14,7 @@ namespace CCScripting
 
 		public void Start()
 		{
+
 			Debug.GetInstance().Log(pos);
 			InputManager.GetInstance().SetContext("user Context");
 			transform.position = new Vector3(0f, 0f, -5f);
@@ -21,15 +22,12 @@ namespace CCScripting
 
 		void SetRotation()
         {
-			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
 			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
 
 		}
 
 		public Vector3 pos = new Vector3(5f, 3f, 7f);
-
-		public string name = "Je suis un nom";
-		public int num = 5;
 
 		public float deltaTime = 0.01f;
 		float time = 0f;
@@ -38,7 +36,6 @@ namespace CCScripting
 			time += 0.05f;
 
 			SetRotation();
-
 
 			float timeScaledSpeed = Time.GetInstance().GetDeltaTime() * 2f;
 

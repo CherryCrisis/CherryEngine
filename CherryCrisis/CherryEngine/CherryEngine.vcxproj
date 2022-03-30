@@ -209,6 +209,8 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
     <ClInclude Include="include\collider.hpp" />
     <ClInclude Include="include\csassembly.hpp" />
+    <ClInclude Include="include\csreflection.hpp" />
+    <ClInclude Include="include\csreflection_ex.hpp" />
     <ClInclude Include="include\csscripting_system.hpp" />
     <ClInclude Include="externals\include\assimp\aabb.h" />
     <ClInclude Include="externals\include\assimp\ai_assert.h" />
@@ -409,6 +411,7 @@
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
     <None Include="interface\matrix3.i" />
+    <None Include="interface\scripted_behaviour.i" />
     <None Include="interface\singleton.i" />
     <None Include="interface\time_manager.i" />
     <None Include="interface\transform_comp.i" />
@@ -418,6 +421,7 @@
     <None Include="interface\vector4.i" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\behaviour.cpp" />
     <ClCompile Include="src\collider.cpp" />
     <ClCompile Include="src\csassembly.cpp" />
     <ClCompile Include="src\csscripting_system.cpp" />

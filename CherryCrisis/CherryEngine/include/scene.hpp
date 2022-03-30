@@ -15,13 +15,14 @@ private:
 
 public:
 	Scene(const char* filePath) : Resource(filePath) { }
-	~Scene();
+	virtual ~Scene();
 
 	Skybox m_skybox;
 
 	// TODO: Switch to unique_ptr
 	std::unordered_map<std::string, Entity*> m_entities;
 	static void Load(std::shared_ptr<Scene> scene);
+	void Load(const char* filepath);
 	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);
 	void Start();
 	void Update();
@@ -31,7 +32,8 @@ public:
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void AddEntity(Entity* toAdd);
-
+	Entity* FindEntity(uint64_t id);
 
 	bool Serialize(const char* filePath);
+	bool Unserialize(const char* filePath);
 };

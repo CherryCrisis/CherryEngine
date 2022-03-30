@@ -23,55 +23,91 @@ Inspector::Inspector(bool spawnOpened, EditorManager* manager) : Panel(spawnOpen
 
 void InspectComponents(Entity* entity, int id)
 {
-    std::vector<Behaviour*> behaviours = entity->GetBehaviours();
+    std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 
     for (Behaviour* behaviour : behaviours)
     {
-        std::string bname = typeid(*behaviour).name();
-
-        std::vector<Field>& fields = behaviour->GetFields();
         ImGui::PushID(behaviour->GetUUID());
+        std::string bname = typeid(*behaviour).name();
         if (ImGui::TreeNode(bname.c_str()))
         {
-            for (Field& field : fields)
+            std::unordered_map <std::string, Field > & fields = behaviour->GetFields();
+
+            for (const auto& [fieldName, fieldRef] : fields)
             {
-                const std::type_index type = field.m_value.type();
+                const std::type_index type = fieldRef.m_value.type();
 
                 if (type == typeid(CCMaths::Vector3*))
                 {
-                    CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(field.m_value);
-                    ImGui::DragFloat3(field.m_name.c_str(), val->data, 0.5f);
+                    CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+                    ImGui::DragFloat3(fieldRef.m_name.c_str(), val->data, 0.5f);
                     continue;
                 }
 
                 if (type == typeid(CCMaths::Vector3**))
                 {
-                    CCMaths::Vector3** val = std::any_cast<CCMaths::Vector3**>(field.m_value);
+                    CCMaths::Vector3** val = std::any_cast<CCMaths::Vector3**>(fieldRef.m_value);
                     CCMaths::Vector3* v = *val;
-                    ImGui::DragFloat3(field.m_name.c_str(), v->data, 0.5f);
+                    ImGui::DragFloat3(fieldRef.m_name.c_str(), v->data, 0.5f);
                     continue;
                 }
 
                 if (type == typeid(int*))
                 {
-                    int* val = std::any_cast<int*>(field.m_value);
-                    ImGui::DragInt(field.m_name.c_str(), val, 0.5f);
+                    int* val = std::any_cast<int*>(fieldRef.m_value);
+                    ImGui::DragInt(fieldRef.m_name.c_str(), val, 0.5f);
                     continue;
                 }
                 if (type == typeid(float*))
                 {
-                    float* val = std::any_cast<float*>(field.m_value);
-                    ImGui::DragFloat(field.m_name.c_str(), val, 0.5f);
+                    float* val = std::any_cast<float*>(fieldRef.m_value);
+                    ImGui::DragFloat(fieldRef.m_name.c_str(), val, 0.5f);
                     continue;
                 }
 
                 if (type == typeid(std::string))
                 {
-                    std::string val = std::any_cast<std::string>(field.m_value);
-                    ImGui::InputText(field.m_name.c_str(), &val[0], val.size() + 1);
+                    std::string val = std::any_cast<std::string>(fieldRef.m_value);
+                    ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
+                    continue;
+                }
+            }
+
+            std::unordered_map <std::string, CCProperty::IClearProperty*>& properties = behaviour->GetProperties();
+
+            for (const auto& [propName, propRef] : properties)
+            {
+                const std::type_index type = propRef->GetType();
+
+                if (type == typeid(CCMaths::Vector3))
+                {
+                    CCMaths::Vector3 val;
+                    propRef->Get(&val);
+                    if (ImGui::DragFloat3(propName.c_str(), val.data, 0.5f))
+                        propRef->Set(&val);
+
                     continue;
                 }
 
+                if (type == typeid(int))
+                {
+                    int val;
+                    propRef->Get(&val);
+                    ImGui::DragInt(propName.c_str(), &val, 0.5f);
+                        propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (type == typeid(std::string))
+                {
+                    std::string val;
+                    propRef->Get(&val);
+                    if (ImGui::InputText(propName.c_str(), &val[0], val.size() + 2))
+                        propRef->Set(&val);
+
+                    continue;
+                }
             }
             ImGui::TreePop();
         }

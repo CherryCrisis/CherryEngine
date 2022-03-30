@@ -6,17 +6,23 @@
 #include "resource_manager.hpp"
 
 #include "basic_renderpass.hpp"
-#include "model.hpp"
 #include "entity.hpp"
+#include "model.hpp"
 
 ModelRenderer::ModelRenderer(Entity& owner)
 	: Behaviour(owner)
 {
+	PopulateMetadatas();
 }
 
 ModelRenderer::~ModelRenderer()
 {
 	RemoveModel();
+}
+
+void ModelRenderer::PopulateMetadatas()
+{
+	m_metadatas.SetField<Behaviour*>("transform", m_transform);
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
@@ -52,3 +58,13 @@ void ModelRenderer::UnsubscribeToRenderPass()
 {
 	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
 }
+
+/*
+void ModelRenderer::Deserialize(const char* filepath, const char* modelName) 
+{
+	ResourceManager* RM = ResourceManager::GetInstance();
+	RM->AddResource<ModelBase>(filepath, true);
+
+	std::shared_ptr<Model> model = RM->AddResource<Model>(modelName, true);
+
+}*/

@@ -5,9 +5,33 @@
 Transform::Transform(Entity& owner)
 	: Behaviour(owner)
 {
-
+	PopulateMetadatas();
 }
 
+Transform::Transform(CCUUID& owner)
+	: Behaviour(owner)
+{
+	PopulateMetadatas();
+}
+
+
+void Transform::PopulateMetadatas() 
+{
+	m_metadatas.SetField<Behaviour*>("parent", m_parent);
+
+	m_metadatas.SetProperty("position", &position);
+	m_metadatas.SetProperty("rotation", &rotation);
+	m_metadatas.SetProperty("scale", &scale);
+	//m_metadatas.m_fields["parent"] = { "parent",  (Behaviour*)m_parent};
+}
+
+void Transform::ConsumeMetadatas()
+{
+	auto a = m_metadatas.m_fields["parent"].m_value;
+	Behaviour* b =  std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
+
+	m_parent   = (Transform*)std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
+}
 
 void Transform::SetDirty()
 {
@@ -98,17 +122,16 @@ void Transform::AddChildren(Transform* transform)
 {
 	m_children.push_back(transform);
 }
-
+/*
 std::string Transform::Serialize()
 {
 	std::string value;
 	value += std::to_string(m_position.x) + "/" + std::to_string(m_position.y) + "/"+  std::to_string(m_position.z) + "\n";
-	value += "		"	+ std::to_string(m_rotation.x) + "/" + std::to_string(m_rotation.y) + "/" + std::to_string(m_rotation.z) + "\n";
-	value += "		"   + std::to_string(m_scale.x) + "/" + std::to_string(m_scale.y) + "/" + std::to_string(m_scale.z) + "\n";
+	value += "  "	+ std::to_string(m_rotation.x) + "/" + std::to_string(m_rotation.y) + "/" + std::to_string(m_rotation.z) + "\n";
+	value += "  "   + std::to_string(m_scale.x) + "/" + std::to_string(m_scale.y) + "/" + std::to_string(m_scale.z) + "\n";
 	if (m_parent)
-		value += "m_parent: " + std::to_string(m_parent->GetUUID());
+		value += "  m_parent: " + std::to_string(m_parent->GetUUID());
 	else
-		value += "m_parent: null";
+		value += "  m_parent: null";
 	return value;
-
-}
+}*/
