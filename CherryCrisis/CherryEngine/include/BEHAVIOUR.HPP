@@ -37,6 +37,7 @@ public:
 	std::string Serialize();
 
 	std::unordered_map<std::string, Field>& GetFields() { return m_metadatas.m_fields; }
+	std::unordered_map<std::string, CCProperty::IClearProperty*>& GetProperties() { return m_metadatas.m_properties; }
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }

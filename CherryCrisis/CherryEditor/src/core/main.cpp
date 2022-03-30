@@ -112,7 +112,7 @@ int main()
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();
-        TimeManager::GetInstance()->Update(glfwGetTime());
+        TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
         ImGui_ImplOpenGL3_NewFrame();

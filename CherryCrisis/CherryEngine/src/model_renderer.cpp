@@ -20,19 +20,11 @@ ModelRenderer::~ModelRenderer()
 	RemoveModel();
 }
 
-void ModelRenderer::PopulateMetadatas() 
+void ModelRenderer::PopulateMetadatas()
 {
 	std::string var = "null";
 	m_metadatas.SetField<Behaviour*>("transform", m_transform);
 	m_metadatas.SetField<std::string>("file", var);
-
-}
-
-void ModelRenderer::ConsumeMetadatas()
-{
-	Behaviour* b = std::any_cast<Behaviour*>(m_metadatas.m_fields["transform"].m_value);
-
-	m_transform = (Transform*)b;
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
@@ -53,7 +45,7 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 			m_metadatas.SetField<std::string>("file", m_model->m_filepath);
 	}
 	
-	m_model->m_onDestroyed.Bind(&ModelRenderer::RemoveModel, this);
+	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
 	SubscribeToRenderPass();
 }
 
@@ -61,7 +53,7 @@ void ModelRenderer::RemoveModel()
 {
 	// TODO: Add pipeline remove
 	if (m_model)
-		m_model->m_onDestroyed.Unbind(&ModelRenderer::RemoveModel, this);
+		m_model->m_OnDeleted.Unbind(&ModelRenderer::RemoveModel, this);
 
 	UnsubscribeToRenderPass();
 	m_model = nullptr;

@@ -9,12 +9,15 @@ namespace CCScripting
 		public CameraController(System.IntPtr cPtr, bool cMemoryOwn) : base(cPtr, cMemoryOwn)
 		{
 			transform = GetComponent<Transform>();
+
 		}
 
 		public void Start()
         {
-			
+
 		}
+		public string camName = "Je suis un nom";
+		public int num = 5;
 
 		public float deltaTime = 0.01f;
 		float time = 0f;
@@ -40,6 +43,8 @@ namespace CCScripting
 
 			if (InputManager.GetInstance().GetKey(Keycode.F))
 				transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - speed);
+
+			GetComponent<DebugTest>()?.Debugger();
 		}
 	}
 }

@@ -14,8 +14,8 @@ class CCENGINE_API Scene : public Resource<Scene>
 private:
 
 public:
-	Scene(const char* filePath);
-	~Scene();
+	Scene(const char* filePath) : Resource(filePath) { }
+	virtual ~Scene();
 
 	Skybox m_skybox;
 

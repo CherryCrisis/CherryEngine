@@ -24,7 +24,7 @@ public:
 		m_program = ResourceManager::GetInstance()->AddResource<ShaderProgram>(pipelineName, true, vert, frag);
 		
 		if (m_program)
-			m_program->m_onDestroyed.Bind(&ARenderPass::InvalidatePass, this);
+			m_program->m_OnDeleted.Bind(&ARenderPass::InvalidatePass, this);
 	}
 
 	void CallOnExecute(float x, float y)
@@ -35,6 +35,6 @@ public:
 
 	virtual ~ARenderPass()
 	{
-		m_program->m_onDestroyed.Unbind(&ARenderPass::InvalidatePass, this);
+		m_program->m_OnDeleted.Unbind(&ARenderPass::InvalidatePass, this);
 	}
 };

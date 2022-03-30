@@ -10,12 +10,22 @@
 
 #include "monowrapper.hpp"
 
+#include "csreflection_ex.hpp"
+
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
 	// TODO: Change path
 	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+
 }
+
+ScriptedBehaviour::~ScriptedBehaviour()
+{
+	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
+	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
+}
+
 
 void ScriptedBehaviour::SetScriptClass(const char* scriptName)
 {
@@ -23,13 +33,19 @@ void ScriptedBehaviour::SetScriptClass(const char* scriptName)
 
 	managedClass = assembly->context->FindClass("CCScripting", scriptName);
 
-	managedUpdate = managedClass->FindMethod("Update");
-	managedStart = managedClass->FindMethod("Start");
+	if (managedUpdate = managedClass->FindMethod("Update"))
+	{
+		csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
+		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
+	}
 
-	csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
-	csStart = managedStart->GetMemberUnmanagedThunk<void>();
+	if (managedStart = managedClass->FindMethod("Start"))
+	{
+		csStart = managedStart->GetMemberUnmanagedThunk<void>();
+		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
+	}
 
-	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
+	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
 
 	PopulateMetadatas();
 
@@ -44,21 +60,14 @@ void ScriptedBehaviour::PopulateMetadatas()
 	{
 		if (fieldRef->Type()->Equals(mono::ManagedType::GetInt32()))
 		{
-			int val;
-			behaviourInst->GetField(fieldRef.get(), &val);
-			m_metadatas.m_fields[fieldName] = { fieldName, val };
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<int>(managedInstance.get(), fieldRef.get()));
 			continue;
 		}
 
 		if (fieldRef->Type()->Equals(mono::ManagedType::GetString()))
 		{
-			MonoString* managedVal;
-			behaviourInst->GetField(fieldRef.get(), &managedVal);
-			char* monoChar = mono_string_to_utf8(managedVal);
-			std::string stringVal = monoChar;
-			mono_free(monoChar);
-
-			m_metadatas.m_fields[fieldName] = { fieldName, stringVal };
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<std::string>(managedInstance.get(), fieldRef.get()));
+			continue;
 		}
 	}
 
@@ -88,20 +97,16 @@ void ScriptedBehaviour::PopulateMetadatas()
 
 void ScriptedBehaviour::Start()
 {
-	if (!m_linked)
-		return;
-
 	MonoException* excep = nullptr;
-	csStart->Invoke(behaviourInst->RawObject(), &excep);
+	csStart->Invoke(managedInstance->RawObject(), &excep);
+
+	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 }
 
 void ScriptedBehaviour::Update()
 {
-	if (!m_linked)
-		return;
-
 	MonoException* excep = nullptr;
-	csUpdate->Invoke(behaviourInst->RawObject(), &excep);
+	csUpdate->Invoke(managedInstance->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Reload()
@@ -114,5 +119,5 @@ void ScriptedBehaviour::Reload()
 	csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
 	csStart = managedStart->GetMemberUnmanagedThunk<void>();
 
-	behaviourInst = managedClass->CreateUnmanagedInstance(this, false);
+	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
 }

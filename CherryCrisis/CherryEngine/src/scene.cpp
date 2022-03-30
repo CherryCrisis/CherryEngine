@@ -25,6 +25,7 @@ Scene::~Scene()
 		delete entityPtr;
 }
 
+
 std::string Scene::GetUniqueEntityName(const std::string& entityName)
 {
 	// TODO: Try using string view
@@ -42,14 +43,14 @@ void Scene::AddEntity(Entity* toAdd)
 {
 	m_entities[GetUniqueEntityName(toAdd->GetName())] = toAdd;
 }
-
+/*
 Scene::Scene(const char* filePath) : Resource(filePath)
 {
 	auto RM = ResourceManager::GetInstance();
 
 	//auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, this);
 	//RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
-}
+}*/
 
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
@@ -60,16 +61,15 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	Entity* camera = new Entity("Camera");
 	camera->AddBehaviour<CameraComponent>()->m_transform = camera->AddBehaviour<Transform>();
 	camera->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("CameraController");
+	camera->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("DebugTest");
 
 	scene->AddEntity(camera);
 }
 
 void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 {
-	std::shared_ptr<ModelBase> modelBase = std::dynamic_pointer_cast<ModelBase>(resource);
-
 	Entity* root = new Entity("Root");
-	std::vector<Entity*> children = modelBase->GenerateEntities(root);
+	std::vector<Entity*> children = resource->GenerateEntities(root);
 
 	root->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("BackpackBehaviour");
 
@@ -201,7 +201,7 @@ CCMaths::Vector3 ExtractVector3(std::string str)
 
 void Foo(std::shared_ptr<ModelBase>) 
 {
-	std::cout << "chargé maggle comme ta 50" << std::endl;
+	std::cout << "chargï¿½ maggle comme ta 50" << std::endl;
 }
 
 
@@ -341,7 +341,7 @@ bool Scene::Unserialize(const char* filePath)
 						if (model->GetResourceState() == EResourceState::LOADED)
 							renderer->SetModel(model);
 						else
-							model->m_onLoaded.Bind(&ModelRenderer::SetModel, renderer);
+							model->m_OnLoaded.Bind(&ModelRenderer::SetModel, renderer);
 					}
 				}
 			}

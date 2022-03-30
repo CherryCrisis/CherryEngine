@@ -15,10 +15,13 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
     CCModelLoader::LoadModel(modelBase->GetFilepath(), &modelBase->m_rootNode, modelBase->m_models);
 }
 
-ModelBase::~ModelBase()
+void ModelBase::Delete()
 {
-	m_models.clear();
-	DeleteModelNode(m_rootNode);
+    for (std::shared_ptr<Model>& model : m_models)
+        model->DeleteResource();
+
+    m_models.clear();
+    DeleteModelNode(m_rootNode);
 }
 
 void ModelBase::DeleteModelNode(ModelNode* modelNode)

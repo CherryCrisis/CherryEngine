@@ -1,6 +1,7 @@
 #include <pch.hpp>
 
-#include <BEHAVIOUR.HPP>
+// TODO: Change this
+#include "behaviour.hpp"
 
 std::string Behaviour::Serialize()
 {

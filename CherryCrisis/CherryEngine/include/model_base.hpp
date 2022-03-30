@@ -35,9 +35,10 @@ private:
 
 public:
 	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
-	~ModelBase();
+	~ModelBase() = default;
 
 	static void Load(std::shared_ptr<ModelBase> modelBase);
+	void Delete() override;
 
 	//Generate entities with modelBase (model instance)
 	std::vector<Entity*> GenerateEntities(Entity* rootEntity);

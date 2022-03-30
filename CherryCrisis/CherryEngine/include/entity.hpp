@@ -2,11 +2,13 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 #include <fstream>
+#include <unordered_map>
 
 #include <cherry_macros.hpp>
+
 #include "uuid.hpp"
+#include "event.hpp"
 
 class Behaviour;
 
@@ -14,8 +16,9 @@ class CCENGINE_API Entity
 {
 private:
 	std::string m_name = "Entity";
-	std::vector<Behaviour*> m_behaviours;
+	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
 	CCUUID m_uuid = {};
+
 public:
 	Entity() = default;
 	Entity(const std::string& name, CCUUID m_uuid = {});
@@ -27,10 +30,13 @@ public:
 	template <class CompT>
 	CompT* GetBehaviour();
 
-	std::vector<Behaviour*>& GetBehaviours() { return m_behaviours; }
-	const std::vector<Behaviour*>& GetBehaviours() const { return m_behaviours; }
+	std::vector<Behaviour*> GetAllBehaviours();
 
-	void SubscribeComponent(Behaviour* behaviour);
+	template <class CompT>
+	std::vector<CompT*> GetBehaviours();
+
+	template <class CompT>
+	void SubscribeComponent(CompT* behaviour);
 
 	template <class CompT>
 	bool HasBehaviour();
@@ -40,6 +46,10 @@ public:
 
 	template <class CompT>
 	CompT* GetOrAddBehaviour();
+
+	Event<> m_OnAwake;
+	Event<> m_OnStart;
+	Event<> m_OnTick;
 
 	void Start();
 	void Update();

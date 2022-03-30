@@ -27,25 +27,41 @@ private:
 
 	void PopulateMetadatas() override;
 	void ConsumeMetadatas() override;
+
+	template<typename T>
+	using TransformProperty = CCProperty::Property<Transform, T>;
+	using Vector3Property = TransformProperty<Vector3>;
+
 public:
 	Transform(Entity& owner);
 	Transform(CCUUID& owner);
 	Transform() { PopulateMetadatas(); }
+
 	bool IsRoot() { return !m_parent; }
 
 	void SetParent(Transform* transform);
+	Transform* GetParent() { return m_parent; }
+
+	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
+
 	void UpdateMatrix();
 
 	bool IsDirty() { return m_isDirty; }
 
-	void SetPosition(const Vector3& position);
+	void SetPosition(Vector3& position);
 	Vector3 GetPosition() { return m_position; }
 
-	void SetRotation(const Vector3& rotation);
+	void SetRotation(Vector3& rotation);
 	Vector3 GetRotation() { return m_rotation; }
 
-	void SetScale(const Vector3& scale);
+	void SetScale(Vector3& scale);
 	Vector3 GetScale() { return m_scale; }
+
+	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
+	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };
+	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
+
+
 
 	std::vector<Transform*> GetChildren() { return m_children; }
 	void AddChildren(Transform* transform);

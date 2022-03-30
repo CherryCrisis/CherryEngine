@@ -10,9 +10,9 @@
 
 #include "texture.hpp"
 
-Material::~Material()
+void Material::Delete()
 {
-
+	textures.clear();
 }
 
 void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial)

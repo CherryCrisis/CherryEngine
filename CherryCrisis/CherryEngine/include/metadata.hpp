@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <string>
 
+#include "property.hpp"
+
 struct CCENGINE_API Field
 {
 	std::string m_name;
@@ -15,6 +17,7 @@ struct CCENGINE_API Field
 struct CCENGINE_API Metadata
 {
 	std::unordered_map<std::string, Field> m_fields;
+	std::unordered_map<std::string, CCProperty::IClearProperty*> m_properties;
 
 	template <typename CastT, typename RefT>
 	void SetField(const char* fieldName, RefT& ref)
@@ -22,4 +25,8 @@ struct CCENGINE_API Metadata
 		m_fields[fieldName] = { fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref))};
 	}
 
+	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop)
+	{
+		m_properties[fieldName] = { prop };
+	}
 };
