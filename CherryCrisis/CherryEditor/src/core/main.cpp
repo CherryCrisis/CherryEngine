@@ -102,7 +102,6 @@ int main()
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-
     //glfwRequestWindowAttention(window);
     stbi_set_flip_vertically_on_load(false);
     GLFWimage icon[1];
