@@ -39,7 +39,7 @@ public:
 
 	bool IsRoot() { return !m_parent; }
 
-	void SetParent(Transform* transform);
+	void SetParent(Transform*& transform);
 	Transform* GetParent() { return m_parent; }
 
 	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
@@ -60,6 +60,8 @@ public:
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };
 	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
+
+	TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
 
 

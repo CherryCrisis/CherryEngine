@@ -2705,10 +2705,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetPosition(void * jarg1, 
   arg1 = (Transform *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2;
   if (!arg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
     return ;
   } 
-  (arg1)->SetPosition((CCMaths::Vector3 const &)*arg2);
+  (arg1)->SetPosition(*arg2);
 }
 
 
@@ -2731,10 +2731,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetRotation(void * jarg1, 
   arg1 = (Transform *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2;
   if (!arg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
     return ;
   } 
-  (arg1)->SetRotation((CCMaths::Vector3 const &)*arg2);
+  (arg1)->SetRotation(*arg2);
 }
 
 
@@ -2757,10 +2757,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetScale(void * jarg1, voi
   arg1 = (Transform *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2;
   if (!arg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
     return ;
   } 
-  (arg1)->SetScale((CCMaths::Vector3 const &)*arg2);
+  (arg1)->SetScale(*arg2);
 }
 
 

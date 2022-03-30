@@ -6,6 +6,8 @@
 #include <imgui.h>
 #include <comdef.h>
 
+#include "core/editor_manager.hpp"
+
 void SceneDisplayer::Render() 
 {
     if (!m_isOpened)
@@ -34,6 +36,7 @@ void SceneDisplayer::Render()
                 //const wchar_t* path = (const wchar_t*)payload->Data;
                 //_bstr_t b(path);
                 const char* c = (const char*)payload->Data;
+                manager->m_selectedEntities.clear();
                 SceneManager::GetInstance()->m_currentScene->Unserialize(c);
             }
 

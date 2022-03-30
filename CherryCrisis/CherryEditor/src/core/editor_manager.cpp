@@ -87,6 +87,7 @@ void EditorManager::LinkEngine(Engine* engine)
 {
     m_engine = engine;
     m_inspector.m_engine = engine;
+    m_sceneDisplayer.manager = this;
 }
 
 void EditorManager::DisplayEditorUI(GLFWwindow* window) 
@@ -168,7 +169,17 @@ void EditorManager::HandleMenuBar()
                 ImGui::MenuItem("fish_hat.h");
                 ImGui::EndMenu();
             }
-            if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+            if (ImGui::MenuItem("Save", "Ctrl+S")) 
+            {
+                if (SceneManager::GetInstance()->m_currentScene->Serialize(SceneManager::GetInstance()->m_currentScene->GetFilepath()))
+                {
+                    EditorManager::SendNotification("Scene  Saved !", ImGuiToastType::Success, 2.f);
+                }
+                else
+                {
+                    EditorManager::SendNotification("Scene failed to save.", ImGuiToastType::Error, 2.f);
+                }
+            }
             if (ImGui::MenuItem("Save As..")) {}
 
             ImGui::EndMenu();

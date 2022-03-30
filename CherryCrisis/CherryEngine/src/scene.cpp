@@ -25,7 +25,6 @@ Scene::~Scene()
 		delete entityPtr;
 }
 
-
 std::string Scene::GetUniqueEntityName(const std::string& entityName)
 {
 	// TODO: Try using string view
@@ -43,14 +42,6 @@ void Scene::AddEntity(Entity* toAdd)
 {
 	m_entities[GetUniqueEntityName(toAdd->GetName())] = toAdd;
 }
-/*
-Scene::Scene(const char* filePath) : Resource(filePath)
-{
-	auto RM = ResourceManager::GetInstance();
-
-	//auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, this);
-	//RM->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
-}*/
 
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
@@ -305,45 +296,69 @@ bool Scene::Unserialize(const char* filePath)
 						behaviour->m_parentUuid = ExtractUUID(line);
 				}
 
-				if (!behaviour->m_metadatas.m_fields.contains(key))
-					continue;
-
-				auto& info = behaviour->m_metadatas.m_fields[key].m_value.type();
-				if (info == typeid(CCMaths::Vector3**))
+				if (behaviour->m_metadatas.m_properties.contains(key))
 				{
-					Vector3* vec = new Vector3();
-					*vec = ExtractVector3(parsedValue);
+					CCProperty::IClearProperty* prop = behaviour->m_metadatas.m_properties[key];
 
-					behaviour->m_metadatas.m_fields[key] = { key, std::any(vec) };
-				}
-
-				if (info == typeid(CCMaths::Vector3*))
-				{
-					Vector3 vec = ExtractVector3(parsedValue);
-					behaviour->m_metadatas.m_fields[key] = { key, std::any(vec) };
-				}
-
-				if (info == typeid(Behaviour**))
-				{
-					uint64_t refUUID = ExtractUUID(line);
-					if (refUUID != 0)
-						m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
-				}
-
-				if (info == typeid(std::string*))
-				{
-					behaviour->m_metadatas.m_fields[key] = { key, std::any(parsedValue) };
-					
-					ModelRenderer* renderer = (ModelRenderer*) behaviour;
-					if (renderer) 
+					if (prop->GetType() == typeid(Transform*))
 					{
-						std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(parsedValue.c_str());
-						if (model->GetResourceState() == EResourceState::LOADED)
-							renderer->SetModel(model);
-						else
-							model->m_OnLoaded.Bind(&ModelRenderer::SetModel, renderer);
+						uint64_t refUUID = ExtractUUID(line);
+						if (refUUID != 0)
+							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
+
+						continue;
+					}
+
+					if (prop->GetType() == typeid(CCMaths::Vector3))
+					{
+						Vector3 vec = ExtractVector3(parsedValue);
+						prop->Set(&vec);
+
+						continue;
 					}
 				}
+
+				if (behaviour->m_metadatas.m_fields.contains(key))
+				{
+					auto& info = behaviour->m_metadatas.m_fields[key].m_type;
+
+					Field& field = behaviour->m_metadatas.m_fields[key];
+
+					if (info == typeid(CCMaths::Vector3))
+					{
+						CCMaths::Vector3* valPtr = std::any_cast<CCMaths::Vector3*>(field.m_value);
+						*valPtr = ExtractVector3(parsedValue);
+						continue;
+					}
+
+					if (info == typeid(Behaviour*))
+					{
+						uint64_t refUUID = ExtractUUID(line);
+						if (refUUID != 0)
+							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
+
+						continue;
+					}
+
+					if (info == typeid(std::string))
+					{
+						std::string* valPtr = std::any_cast<std::string*>(field.m_value);
+						*valPtr = parsedValue;
+
+						ModelRenderer* renderer = (ModelRenderer*) behaviour;
+						if (renderer) 
+						{
+							std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(parsedValue.c_str());
+							if (model->GetResourceState() == EResourceState::LOADED)
+								renderer->SetModel(model);
+							else
+								model->m_OnLoaded.Bind(&ModelRenderer::SetModel, renderer);
+						}
+
+						continue;
+					}
+				}
+
 			}
 		}
 
@@ -366,7 +381,8 @@ bool Scene::Unserialize(const char* filePath)
 			//Loop over the fields of the behaviour
 			for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
 			{
-				if (fieldRef.m_value.type() == typeid(Behaviour**)) 
+				auto& info = fieldRef.m_type;
+				if (info == typeid(Behaviour*))
 				{
 					//find the field in the UUID list of the behaviour
 					auto refIt = grave->second.find(fieldName);
@@ -380,14 +396,37 @@ bool Scene::Unserialize(const char* filePath)
 					if (behaviourIt == m_wrappedBehaviours.end())
 						continue;
 
+					Behaviour** valuePtr = std::any_cast<Behaviour**>(fieldRef.m_value);
+
 					Behaviour* bhave = behaviourIt->second;
 					
-					fieldRef.m_value = bhave;
+					*valuePtr = bhave;
+				}
+			}
+
+			//Loop over the fields of the behaviour
+			for (auto& [propName, propRef] : behaviourRef->m_metadatas.m_properties)
+			{
+				if (propRef->GetType() == typeid(Transform*))
+				{
+					//find the field in the UUID list of the behaviour
+					auto refIt = grave->second.find(propName);
+
+					if (refIt == grave->second.end())
+						continue;
+
+					//finally find the behaviour in the behaviour list by its uuid
+					auto behaviourIt = m_wrappedBehaviours.find(refIt->second);
+
+					if (behaviourIt == m_wrappedBehaviours.end())
+						continue;
+
+					Behaviour* bhave = behaviourIt->second;
+					propRef->Set(&bhave);
 				}
 			}
 			behaviourRef->ConsumeMetadatas();
 		}
 	}
-
 	return opened;
 }

@@ -22,9 +22,8 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::PopulateMetadatas()
 {
-	std::string var = "null";
 	m_metadatas.SetField<Behaviour*>("transform", m_transform);
-	m_metadatas.SetField<std::string>("file", var);
+	m_metadatas.SetField<std::string>("file", model_path);
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
@@ -37,13 +36,7 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 	m_model = newModel;
 
-	if (m_model.get() != nullptr)
-	{
-		std::string modelFilepathStr = m_model->GetFilepath();
-
-		if (modelFilepathStr.size() != 0)
-			m_metadatas.SetField<std::string>("file", m_model->m_filepath);
-	}
+	model_path = m_model->GetFilepath();
 	
 	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
 	SubscribeToRenderPass();

@@ -140,11 +140,9 @@ void Inspector::Render()
 
     if (ImGui::Begin("Inspector", &m_isOpened))
     {
-        int i = 0;
-        for (auto& entity : m_manager->m_selectedEntities)
+        for (unsigned int i = 0; i < m_manager->m_selectedEntities.size(); i++)
         {
-            InspectComponents(entity, i);
-            i++;
+            InspectComponents(m_manager->m_selectedEntities[i], i);
         }
     }
     ImGui::End();
