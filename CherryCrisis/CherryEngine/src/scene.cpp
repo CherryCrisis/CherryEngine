@@ -68,7 +68,7 @@ void Scene::Load(const char* filepath)
 	// do things
 }
 
-void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
+void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
 {
 	Entity* root = new Entity("Root");
 	std::vector<Entity*> children = modelBase->GenerateEntities(root);

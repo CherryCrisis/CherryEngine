@@ -19,16 +19,16 @@ Rigidbody::Rigidbody(Entity& owner)
 
 void Rigidbody::PopulateMetadatas()
 {
-	m_metadatas.m_fields.push_back({ "Enabled", &m_isEnabled });
+	m_metadatas.m_fields["Enabled"]						= { "Enabled", &m_isEnabled };
 
-	m_metadatas.m_fields.push_back({ "Density",  &m_density });
-	m_metadatas.m_fields.push_back({ "Kinematic", &m_isKinematic });
-	m_metadatas.m_fields.push_back({ "Use gravity", &m_useGravity });
-	m_metadatas.m_fields.push_back({ "Position constraints", &m_positionConstraints[0] });
-	m_metadatas.m_fields.push_back({ "Rotation constraints", &m_rotationConstraints[0] });
-	m_metadatas.m_fields.push_back({ "Max velocity", &m_maxLinearVelocity });
-	m_metadatas.m_fields.push_back({ "Max angular velocity", &m_maxAngularVelocity });
-	m_metadatas.m_fields.push_back({ "Max depenetration velocity", &m_maxDepenetrationVelocity });
+	m_metadatas.m_fields["Density"]						= { "Density",  &m_density };
+	m_metadatas.m_fields["Kinematic"]					= { "Kinematic", &m_isKinematic };
+	m_metadatas.m_fields["Use gravity"]					= { "Use gravity", &m_useGravity };
+	m_metadatas.m_fields["Position constraints"]		= { "Position constraints", &m_positionConstraints[0] };
+	m_metadatas.m_fields["Rotation constraints"]		= { "Rotation constraints", &m_rotationConstraints[0] };
+	m_metadatas.m_fields["Max velocity"]				= { "Max velocity", &m_maxLinearVelocity };
+	m_metadatas.m_fields["Max angular velocity"]		= { "Max angular velocity", &m_maxAngularVelocity };
+	m_metadatas.m_fields["Max depenetration velocity"]	= { "Max depenetration velocity", &m_maxDepenetrationVelocity };
 }
 
 void Rigidbody::SetPxActor()
