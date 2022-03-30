@@ -20,6 +20,12 @@
 
 #include <iostream>
 
+#include "debug.hpp"
+void PrintDebug()
+{
+    Debug::GetInstance()->Log("Print string");
+}
+
 int main()
 {
     int screenWidth = 1200;
@@ -102,6 +108,11 @@ int main()
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+    InputManager* inputManager = InputManager::GetInstance();
+    inputManager->SetContext("user Context");
+    int succes;
+    inputManager->AddActionButtons("Debug", succes)->m_pressed.Bind(PrintDebug);
+    inputManager->AddInputToAction("Debug", Keycode::D);
 
     //glfwRequestWindowAttention(window);
     stbi_set_flip_vertically_on_load(false);

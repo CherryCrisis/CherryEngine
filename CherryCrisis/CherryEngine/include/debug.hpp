@@ -1,36 +1,48 @@
 #pragma once
 
+#include "singleton.hpp"
+
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "cherry_macros.hpp"
+#include "time_manager.hpp"
+
+enum class ELogType
+{
+	DEBUG,
+	WARNING,
+	ERROR,
+};
 
 class CCENGINE_API LogMessage
 {
 public:
-	std::string string;
-	int count = 1;
+	ELogType m_logType;
+	//std::string string;
+	//int count = 1;
 
-	LogMessage(const char* value): string(std::string(value)) {}
+	//LogMessage(const char* value): string(std::string(value)) {}
 
-	std::string CollapsedString() { std::string val = string; val += "    : " + std::to_string(count); return val; }
+	//std::string CollapsedString() { std::string val = string; val += "    : " + std::to_string(count); return val; }
 };
 
 
-class CCENGINE_API Debug
+class CCENGINE_API Debug : public Singleton<Debug>
 {
 private:
 	static Debug* instance;
 
 	std::vector<LogMessage> logs;
+	std::multimap<std::string, LogMessage>  m_logs;
 
 	Debug(Debug& other) = delete;
 	void operator=(const Debug&) = delete;
-	Debug();
 
 public:
-	static Debug* GetInstance();
-	
+	Debug();
+
 	std::vector<LogMessage> GetLogs() { return logs; }
 	
 	// Print a string in the console and cache it

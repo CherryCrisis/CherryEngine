@@ -2,7 +2,8 @@
 
 #include "debug.hpp"
 
-Debug* Debug::instance = nullptr;
+template <>
+Debug* Singleton<Debug>::currentInstance = nullptr;
 
 void Debug::Log(const char* string)
 {
@@ -37,12 +38,4 @@ bool Debug::ContainsAndAdd(const char* string)
 Debug::Debug()
 {
 
-}
-
-Debug* Debug::GetInstance()
-{
-	if (instance == nullptr) {
-		instance = new Debug();
-	}
-	return instance;
 }
