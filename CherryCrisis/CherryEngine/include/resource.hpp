@@ -84,8 +84,8 @@ public:
 		m_OnDeleted.Invoke();
 	}
 
-	template<class ResourceT, typename... Args>
-	static void ReloadResource(std::shared_ptr<ResourceT> resource, Args... args)
+	template<typename... Args>
+	static void ReloadResource(std::shared_ptr<T> resource, Args... args)
 	{
 		resource->SetResourceState(EResourceState::LOADING);
 		resource->Reload(args...);

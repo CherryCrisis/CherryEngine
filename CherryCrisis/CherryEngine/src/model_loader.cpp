@@ -94,7 +94,6 @@ namespace CCModelLoader
 
     #pragma region Reload
 
-
     ModelNode* ReloadProcessDataRecursive(const aiNode* node, ModelNode* parentModelNode, const aiScene* scene,
         std::vector<std::shared_ptr<Model>>& models,
         ResourceManager* resourceManager, const char* filepath)
@@ -143,7 +142,7 @@ namespace CCModelLoader
 
         //models.reserve((size_t)scene->mNumMeshes);
 
-        *rootModelNode = ProcessDataRecursive(scene->mRootNode, nullptr, scene, models, resourceManager, filepath);
+        *rootModelNode = ReloadProcessDataRecursive(scene->mRootNode, nullptr, scene, models, resourceManager, filepath);
     }
 
     void ReloadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models)

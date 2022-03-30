@@ -63,15 +63,15 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	scene->AddEntity(camera);
 }
 
-void Scene::Load(const char* filepath) 
+void Scene::Load(const char* filepath)
 {
 	// do things
 }
 
-void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
+void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 {
 	Entity* root = new Entity("Root");
-	std::vector<Entity*> children = modelBase->GenerateEntities(root);
+	std::vector<Entity*> children = resource->GenerateEntities(root);
 
 	root->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("BackpackBehaviour");
 
@@ -101,16 +101,16 @@ void Scene::Draw()
 	RenderManager::DrawScene();
 }
 
-bool Scene::Serialize(const char* filePath) 
+bool Scene::Serialize(const char* filePath)
 {
 	std::ofstream myfile;
 	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
 
 	bool opened = false;
 	myfile.open(fileName);
-	if (myfile.is_open()) 
+	if (myfile.is_open())
 	{
-		for (const auto& m_entity : m_entities) 
+		for (const auto& m_entity : m_entities)
 		{
 			myfile << m_entity.second->Serialized() << std::endl;
 		}
@@ -123,7 +123,7 @@ bool Scene::Serialize(const char* filePath)
 		myfile.close();
 		opened = true;
 	}
-	else 
+	else
 	{
 		std::cout << "Unable to open file" << std::endl;
 	}
@@ -131,14 +131,14 @@ bool Scene::Serialize(const char* filePath)
 	return opened;
 }
 
-bool Find(const std::string& string) 
+bool Find(const std::string& string)
 {
 	bool found = false;
 
 	return found;
 }
 
-Entity* Scene::FindEntity(uint64_t id) 
+Entity* Scene::FindEntity(uint64_t id)
 {
 	for (const auto& entity : m_entities)
 	{
@@ -158,7 +158,7 @@ std::string ExtractKey(std::string& str, const char key = ':', bool erase = fals
 {
 	std::string strr = str.substr(0, str.find(key));
 
-	if (erase) 
+	if (erase)
 	{
 		std::string::size_type i = str.find(strr);
 
@@ -169,7 +169,7 @@ std::string ExtractKey(std::string& str, const char key = ':', bool erase = fals
 	return strr;
 }
 
-uint64_t ExtractUUID(const std::string& str) 
+uint64_t ExtractUUID(const std::string& str)
 {
 	std::string uuid = ExtractValue(str);
 
@@ -193,7 +193,7 @@ int ExtractInt(const std::string& str)
 
 //Send the value and it parses it
 CCMaths::Vector3 ExtractVector3(std::string str)
-{	
+{
 	CCMaths::Vector3 value{};
 	std::string temp = ExtractKey(str, '/', true);
 	value.x = std::stof(temp);
@@ -207,9 +207,9 @@ CCMaths::Vector3 ExtractVector3(std::string str)
 
 
 
-bool Scene::Unserialize(const char* filePath) 
+bool Scene::Unserialize(const char* filePath)
 {
-	for (auto& [name, ref] : m_entities) 
+	for (auto& [name, ref] : m_entities)
 		delete ref;
 
 	m_entities.clear();
@@ -251,7 +251,7 @@ bool Scene::Unserialize(const char* filePath)
 				isParsingComponent = false;
 				value = ExtractUUID(line);
 				Entity* empty = new Entity("Empty", CCUUID(value));
-				
+
 				AddEntity(empty);
 				continue;
 			}
@@ -329,9 +329,9 @@ bool Scene::Unserialize(const char* filePath)
 				if (info == typeid(std::string*))
 				{
 					behaviour->m_metadatas.m_fields[key] = { key, std::any(value) };
-					
-					ModelRenderer* renderer = (ModelRenderer*) behaviour;
-					if (renderer) 
+
+					ModelRenderer* renderer = (ModelRenderer*)behaviour;
+					if (renderer)
 					{
 						//std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>(parsedValue.c_str(), true);
 						//renderer->SetModel(model);
@@ -353,7 +353,7 @@ bool Scene::Unserialize(const char* filePath)
 			}
 		}
 		//Then loop over the wrapped component to add them into the entities
-		for (auto& wrappedBehaviour : m_wrappedBehaviours) 
+		for (auto& wrappedBehaviour : m_wrappedBehaviours)
 		{
 			Entity* entity = FindEntity(wrappedBehaviour.second->GetOwnerUUID());
 			if (entity)
@@ -369,7 +369,7 @@ bool Scene::Unserialize(const char* filePath)
 
 			for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
 			{
-				if (fieldRef.m_value.type() == typeid(Behaviour*)) 
+				if (fieldRef.m_value.type() == typeid(Behaviour*))
 				{
 					auto refIt = grave->second.find(fieldName);
 

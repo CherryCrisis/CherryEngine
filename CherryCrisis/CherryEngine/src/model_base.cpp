@@ -71,5 +71,5 @@ void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity,
 
 void ModelBase::Reload()
 {
-    CCModelLoader::LoadModel(GetFilepath(), &m_rootNode, m_models);
+    CCModelLoader::ReloadModel(GetFilepath(), &m_rootNode, m_models);
 }

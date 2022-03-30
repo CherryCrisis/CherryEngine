@@ -45,6 +45,6 @@ void Model::Reload(const aiScene* assimpScene, const aiNode* assimpNode)
 	const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
 	const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
 
-	Resource::ReloadResource<Mesh>(m_mesh, assimpMesh);
-	Resource::ReloadResource<Material>(m_material, assimpMaterial);
+	Resource<Mesh>::ReloadResource(m_mesh, assimpMesh);
+	Resource<Material>::ReloadResource(m_material, assimpMaterial);
 }

@@ -30,7 +30,7 @@ std::shared_ptr<ResourceT>* AResourcesContainer::GetResource(const char* filenam
 template<class ResourceT, typename... Args>
 void AResourcesContainer::Reload(const char* filename, Args... args)
 {
-	return UnwrapResourcesContainer<ResourceT>()->ReloadT(filename, args...);
+	return UnwrapResourcesContainer<ResourceT>()->Reload(filename, args...);
 }
 
 template<class ResourceT>
@@ -92,6 +92,17 @@ void ResourcesContainer<ResourceT>::GetResourcesFilepath(std::vector<const char*
 	}
 }
 
+template<class ResourceT>
+template<class... Args>
+void ResourcesContainer<ResourceT>::Reload(const char* filename, Args... args)
+{
+	auto pair = m_resources.find(filename);
+	if (pair != m_resources.end())
+	{
+		std::shared_ptr<ResourceT> resource = pair->second;
+		Resource<ResourceT>::ReloadResource(pair->second, args...);
+	}
+}
 
 
 

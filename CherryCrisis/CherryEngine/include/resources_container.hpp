@@ -65,15 +65,7 @@ public:
 	void Erase(const char* filename) override;
 
 	template<class... Args>
-	void ReloadT(const char* filename, Args... args)
-	{
-		auto pair = m_resources.find(filename);
-		if (pair != m_resources.end())
-		{
-			std::shared_ptr<ResourceT> resource = pair->second;
-			Resource<ResourceT>::ReloadResource(pair->second, args...);
-		}
-	}
+	void Reload(const char* filename, Args... args);
 
 
 	size_t GetResourceCount() const override { return m_resources.size(); }
