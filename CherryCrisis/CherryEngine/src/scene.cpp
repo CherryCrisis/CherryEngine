@@ -53,8 +53,6 @@ Scene::Scene(const char* filePath) : Resource(filePath)
 
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
-
-	
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
 	scene->AddEntity(light);

@@ -31,9 +31,9 @@ void SceneDisplayer::Render()
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_NODE")) 
             {
-                const wchar_t* path = (const wchar_t*)payload->Data;
-                _bstr_t b(path);
-                const char* c = b;
+                //const wchar_t* path = (const wchar_t*)payload->Data;
+                //_bstr_t b(path);
+                const char* c = (const char*)payload->Data;
                 SceneManager::GetInstance()->m_currentScene->Unserialize(c);
             }
 

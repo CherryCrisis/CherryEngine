@@ -218,8 +218,8 @@ void AssetBrowser::RenderNodes()
 
         if (ImGui::BeginDragDropSource()) 
         {
-            const wchar_t* path = node.m_relatiePath.c_str();
-            ImGui::SetDragDropPayload("CONTENT_BROWSER_NODE", path, wcslen(path-1) * sizeof(wchar_t), ImGuiCond_Once);
+            const char* path = node.m_filename.c_str();
+            ImGui::SetDragDropPayload("CONTENT_BROWSER_NODE", path, (size_t)(strlen(path) * sizeof(char)), ImGuiCond_Once);
             ImGui::EndDragDropSource();
         }
 
