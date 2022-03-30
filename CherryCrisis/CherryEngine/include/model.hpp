@@ -25,4 +25,5 @@ public:
 
 	static void Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const aiNode* assimpNode, const char* modelBasePath);
 	void Delete() override;
+	void Reload(const aiScene* assimpScene, const aiNode* assimpNode);
 };

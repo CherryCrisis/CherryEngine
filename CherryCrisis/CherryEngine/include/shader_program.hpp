@@ -25,5 +25,5 @@ public:
 	static void Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm);
 
 	void Delete() override;
-	void Reload() override;
+	void Reload();
 };

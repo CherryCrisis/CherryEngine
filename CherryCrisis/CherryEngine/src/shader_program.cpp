@@ -97,7 +97,7 @@ void ShaderProgram::Reload()
 	m_shaderProgram = glCreateProgram();
 
 	for (auto& shader : m_shaders)
-		shader->ReloadResource();
+		Resource::ReloadResource<Shader>(shader);
 
 	CreateProgram();
 }

@@ -41,7 +41,9 @@ public:
 	virtual void Purge() = 0;
 	virtual void Remove(const char* filename) = 0;
 	virtual void Erase(const char* filename) = 0;
-	virtual void Reload(const char* filename) = 0;
+	
+	template<class ResourceT, typename... Args>
+	void Reload(const char* filename, Args... args);
 
 };
 
@@ -61,7 +63,17 @@ public:
 	void Purge() override;
 	void Remove(const char* filename) override;
 	void Erase(const char* filename) override;
-	void Reload(const char* filename) override;
+
+	template<class... Args>
+	void ReloadT(const char* filename, Args... args)
+	{
+		auto pair = m_resources.find(filename);
+		if (pair != m_resources.end())
+		{
+			std::shared_ptr<ResourceT> resource = pair->second;
+			Resource<ResourceT>::ReloadResource(pair->second, args...);
+		}
+	}
 
 
 	size_t GetResourceCount() const override { return m_resources.size(); }

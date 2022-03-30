@@ -35,3 +35,16 @@ void Model::Delete()
 	m_mesh = nullptr;
 	m_material = nullptr;
 }
+
+void Model::Reload(const aiScene* assimpScene, const aiNode* assimpNode)
+{
+	ResourceManager* resourceManager = ResourceManager::GetInstance();
+
+	size_t meshId = (size_t)assimpNode->mMeshes[0];
+
+	const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
+	const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
+
+	Resource::ReloadResource<Mesh>(m_mesh, assimpMesh);
+	Resource::ReloadResource<Material>(m_material, assimpMaterial);
+}

@@ -145,15 +145,15 @@ void ResourceManager::Remove(const char* filepath)
 	}
 }
 
-template<class T>
-void ResourceManager::Reload(const char* filepath)
+template<class T, typename... Args>
+void ResourceManager::Reload(const char* filepath, Args... args)
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
 
 	auto resourceContainerIt = m_resources.find(typeid(T));
 	if (resourceContainerIt != m_resources.end())
 	{
-		resourceContainerIt->second->Reload(filepath);
+		resourceContainerIt->second->Reload<T>(filepath, args...);
 	}
 }
 
