@@ -3,6 +3,17 @@
 #include "singleton.hpp"
 #include "cherry_header.hpp"
 
+struct Time
+{
+	unsigned int hours;
+	unsigned int minutes;
+	unsigned int seconds;
+	unsigned int milliseconds;
+
+	unsigned int year;
+	unsigned int month;
+	unsigned int day;
+};
 
 class CCENGINE_API TimeManager : public Singleton<TimeManager>
 {
@@ -17,6 +28,7 @@ private:
 public:
 	
 	//GETTER AND SETTERS
+	Time GetCurrentTime();
 	float GetDeltaTime()	  { return m_deltaTime; }
 	float GetTimeScale()	  { return m_timeScale; }
 	float GetFixedDeltaTime() { return m_fixedDeltaTime; }
