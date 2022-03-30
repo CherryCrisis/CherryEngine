@@ -11,6 +11,7 @@
 #include "event.hpp"
 
 class Behaviour;
+class Cell;
 
 class CCENGINE_API Entity 
 {
@@ -20,6 +21,8 @@ private:
 	CCUUID m_uuid = {};
 
 public:
+	Cell* m_cell;
+
 	Entity() = default;
 	Entity(const std::string& name, CCUUID m_uuid = {});
 	virtual ~Entity();
@@ -56,7 +59,7 @@ public:
 	void Destroy();
 
 	std::string GetName() { return m_name; }
-	uint64_t GetUUID() { return (uint64_t)m_uuid; }
+	uint64_t	GetUUID() { return (uint64_t)m_uuid; }
 	std::string Serialized();
 	std::string SerializeBehaviours();
 };

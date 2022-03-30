@@ -16,7 +16,7 @@ using namespace CCMaths;
 class CCENGINE_API Rigidbody : public Behaviour
 {
 private:
-	float	m_density = 0.0f;
+	float	m_density = 10.0f;
 
 	bool	m_isEnabled;
 	bool	m_isKinematic = false;

@@ -5,11 +5,10 @@
 #include <vector>
 #include <PxPhysicsAPI.h>
 
-#include "physic_actor.hpp"
-#include "physic_scene.hpp"
 #include "collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
+#include "cell.hpp"
 
 #include "debug.hpp"
 
@@ -82,6 +81,7 @@ namespace PhysicSystem
 
 		collider->m_physicActor = &actor;
 		actor.AddCollider(collider);
+		actor.m_owner->m_cell->AddEntityToPhysicScene(actor.m_owner);
 	}
 
 	void PhysicManager::Unregister(Rigidbody* rigidbody)
@@ -97,9 +97,6 @@ namespace PhysicSystem
 
 	void PhysicManager::Unregister(Collider* collider)
 	{
-		if (!collider->m_physicActor)
-			return;
-
 		PhysicActor* actor = collider->m_physicActor;
 		if (!actor)
 			return;
@@ -144,6 +141,67 @@ namespace PhysicSystem
 				{
 					m_physicActors[i] = m_physicActors.back();
 					m_physicActors.pop_back();
+				}
+			}
+			return true;
+		}
+
+		return false;
+	}
+
+	void PhysicManager::Register(Cell* cell)
+	{
+		PhysicScene& cellScene = FindOrCreateScene(cell);
+
+		cell->m_physicCell = &cellScene;
+		cellScene.AddCell(cell);
+	}
+
+	void PhysicManager::Unregister(Cell* cell)
+	{
+		PhysicScene* cellScene = cell->m_physicCell;
+		if (!cellScene)
+			return;
+
+		cellScene->RemoveCell(cell);
+
+		IsSceneEmpty(*cellScene);
+	}
+
+	PhysicScene& PhysicManager::FindOrCreateScene(Cell* cell)
+	{
+		for (auto& scene : m_scenes)
+		{
+			if (scene.m_cell == cell)
+				return scene;
+		}
+
+		m_scenes.push_back(PhysicScene());
+		PhysicScene& newScene = m_scenes.back();
+		return newScene;
+	}
+
+	PhysicScene* PhysicManager::FindScene(Cell* cell)
+	{
+		for (auto& scene : m_scenes)
+		{
+			if (scene.m_cell == cell)
+				return &scene;
+		}
+
+		return nullptr;
+	}
+
+	bool PhysicManager::IsSceneEmpty(PhysicScene& scene)
+	{
+		if (!scene.m_cell)
+		{
+			for (size_t i = 0; i < m_scenes.size(); ++i)
+			{
+				if (&scene == &m_scenes[i])
+				{
+					m_scenes[i] = m_scenes.back();
+					m_scenes.pop_back();
 				}
 			}
 			return true;

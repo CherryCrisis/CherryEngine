@@ -4,7 +4,7 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "physic_scene.hpp"
+#include "physic_manager.hpp"
 #include "collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"

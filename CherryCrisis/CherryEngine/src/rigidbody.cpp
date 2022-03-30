@@ -4,8 +4,7 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "physic_scene.hpp"
-#include "physic_actor.hpp"
+#include "physic_manager.hpp"
 #include "transform.hpp"
 
 Rigidbody::Rigidbody(Entity& owner)
