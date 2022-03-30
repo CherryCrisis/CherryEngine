@@ -23,7 +23,6 @@ protected:
 	std::atomic<EResourceState> m_resourceState;
 
 	virtual void Delete() {};
-	virtual void Reload() {};
 
 public:
 	std::string m_filepath;
@@ -86,14 +85,13 @@ public:
 		m_OnDeleted.Invoke();
 	}
 
-	void ReloadResource()
+	template<typename... Args>
+	static void ReloadResource(std::shared_ptr<T> resource, Args... args)
 	{
-		m_resourceState.store(EResourceState::LOADING);
-
-		Reload();
-		m_OnReloaded.Invoke();
-		
-		m_resourceState.store(EResourceState::LOADED);
+		resource->SetResourceState(EResourceState::LOADING);
+		resource->Reload(args...);
+		resource->m_OnReloaded.Invoke();
+		resource->SetResourceState(EResourceState::LOADED);
 	}
 };
 

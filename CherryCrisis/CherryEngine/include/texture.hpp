@@ -26,5 +26,5 @@ public:
 
     static void Load(std::shared_ptr<Texture> texture);
     void Delete() override;
-    void Reload() override;
+    void Reload();
 };

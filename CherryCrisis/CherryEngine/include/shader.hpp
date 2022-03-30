@@ -29,7 +29,7 @@ public:
 
 	static void Load(std::shared_ptr<Shader> shader, EShader shaderType);
 	void Delete() override;
-	void Reload() override;
+	void Reload();
 
 	const unsigned int GetShaderID() { return m_shaderID; }
 };

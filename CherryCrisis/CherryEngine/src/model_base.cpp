@@ -11,7 +11,6 @@
 
 void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 {
-    ThreadPool* m_threadpool = ThreadPool::GetInstance();
     CCModelLoader::LoadModel(modelBase->GetFilepath(), &modelBase->m_rootNode, modelBase->m_models);
 }
 
@@ -68,4 +67,9 @@ void ModelBase::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity,
         GenerateEntitiesRecursive(childNode, entity, entities);
 
     //parentTransform->AddChildren(entityTransform);
+}
+
+void ModelBase::Reload()
+{
+    CCModelLoader::ReloadModel(GetFilepath(), &m_rootNode, m_models);
 }

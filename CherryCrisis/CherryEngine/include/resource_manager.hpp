@@ -67,8 +67,8 @@ public:
 	template<class T>
 	void Remove(const char* filepath);
 
-	template<class T>
-	void Reload(const char* filepath);
+	template<class T, typename... Args>
+	void Reload(const char* filepath, Args... args);
 };
 
 
