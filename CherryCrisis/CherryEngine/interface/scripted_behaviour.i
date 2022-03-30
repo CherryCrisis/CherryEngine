@@ -14,6 +14,8 @@ public:
 
 	%ignore ScriptedBehaviour();
 
+	void SetScriptClass(const char* scriptName);
+
 	%proxycode%{
 	[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.InternalCall)]
 	private extern static Behaviour GetStaticInstance(System.IntPtr cPtr);

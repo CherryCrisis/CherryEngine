@@ -1095,6 +1095,9 @@
     <ClInclude Include="include\physic_character_controller.hpp">
       <Filter>Fichiers d%27en-tête\PhysX</Filter>
     </ClInclude>
+    <ClInclude Include="include\serializer.hpp">
+      <Filter>Fichiers d%27en-tête\Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">

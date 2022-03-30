@@ -2870,6 +2870,16 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_GetScriptName(vo
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_SetScriptClass(void * jarg1, char * jarg2) {
+  ScriptedBehaviour *arg1 = (ScriptedBehaviour *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  arg1 = (ScriptedBehaviour *)jarg1; 
+  arg2 = (char *)jarg2; 
+  (arg1)->SetScriptClass((char const *)arg2);
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ScriptedBehaviour(void * jarg1) {
   ScriptedBehaviour *arg1 = (ScriptedBehaviour *) 0 ;
   
