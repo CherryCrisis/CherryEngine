@@ -17,8 +17,10 @@ private :
 		unsigned int m_ImGuiID = 0u;
 	
 		std::filesystem::path m_path;
+		std::filesystem::path m_relatiePath;
 		std::string m_filename;
 		std::string m_extension;
+		
 
 		void Render();
 	};

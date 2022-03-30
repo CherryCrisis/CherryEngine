@@ -14,7 +14,7 @@ private:
 	mono::ManagedObject* m_csOwner = nullptr;
 
 public:
-	void SetField(const std::string& value)
+	void SetField(std::string& value)
 	{
 		size_t wideStrLen = 0u;
 		mbstate_t state {};

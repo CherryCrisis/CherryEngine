@@ -21,6 +21,11 @@ Inspector::Inspector(bool spawnOpened, EditorManager* manager) : Panel(spawnOpen
     
 }
 
+std::string ExtractValue(std::string str, const char key = ':')
+{
+    return str.substr(str.find_first_of(key) + 1);
+}
+
 void InspectComponents(Entity* entity, int id)
 {
     std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
@@ -29,13 +34,20 @@ void InspectComponents(Entity* entity, int id)
     {
         ImGui::PushID(behaviour->GetUUID());
         std::string bname = typeid(*behaviour).name();
+        bname = ExtractValue(bname, ' ');
         if (ImGui::TreeNode(bname.c_str()))
         {
-            std::unordered_map <std::string, Field > & fields = behaviour->GetFields();
-
-            for (const auto& [fieldName, fieldRef] : fields)
+            auto& fields = behaviour->GetFields();
+            for (auto& [fieldName, fieldRef] : fields)
             {
                 const std::type_index type = fieldRef.m_value.type();
+
+                if (type == typeid(CCMaths::Vector3))
+                {
+                    CCMaths::Vector3 val = std::any_cast<CCMaths::Vector3>(fieldRef.m_value);
+                    ImGui::DragFloat3(fieldRef.m_name.c_str(), val.data, 0.5f);
+                    continue;
+                }
 
                 if (type == typeid(CCMaths::Vector3*))
                 {
@@ -62,6 +74,12 @@ void InspectComponents(Entity* entity, int id)
                 {
                     float* val = std::any_cast<float*>(fieldRef.m_value);
                     ImGui::DragFloat(fieldRef.m_name.c_str(), val, 0.5f);
+                    continue;
+                }
+                if (type == typeid(float))
+                {
+                    float val = std::any_cast<float>(fieldRef.m_value);
+                    ImGui::DragFloat(fieldRef.m_name.c_str(), &val, 0.5f);
                     continue;
                 }
 
@@ -122,11 +140,9 @@ void Inspector::Render()
 
     if (ImGui::Begin("Inspector", &m_isOpened))
     {
-        int i = 0;
-        for (auto& entity : m_manager->m_selectedEntities)
+        for (unsigned int i = 0; i < m_manager->m_selectedEntities.size(); i++)
         {
-            InspectComponents(entity, i);
-            i++;
+            InspectComponents(m_manager->m_selectedEntities[i], i);
         }
     }
     ImGui::End();

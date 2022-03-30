@@ -401,6 +401,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="interface\behaviour.i" />
@@ -411,7 +412,6 @@
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
     <None Include="interface\matrix3.i" />
-    <None Include="interface\scripted_behaviour.i" />
     <None Include="interface\singleton.i" />
     <None Include="interface\time_manager.i" />
     <None Include="interface\transform_comp.i" />

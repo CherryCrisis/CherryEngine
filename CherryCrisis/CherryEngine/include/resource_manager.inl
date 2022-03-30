@@ -89,11 +89,11 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 		break;
 	case EResourceState::LOADED:
 	{
-		std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
+		/*std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
 			wrappedCallback, resourcePtr);
 
 		m_threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
-		resourcePtr->m_OnLoaded.Bind(uniqueCallback);
+		resourcePtr->m_OnLoaded.Bind(uniqueCallback);*/
 	}
 	break;
 

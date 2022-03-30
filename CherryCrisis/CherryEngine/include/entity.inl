@@ -18,9 +18,22 @@ CompT* Entity::GetBehaviour()
 	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
 	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
 
-	auto itPair = m_behaviours.find(typeid(CompT));
+	auto compIt = m_behaviours.find(typeid(CompT));
 
-	return itPair == m_behaviours.end() ? nullptr : static_cast<CompT*>(itPair->second);
+	if (compIt != m_behaviours.end())
+		return static_cast<CompT*>(compIt->second);
+
+	auto itPair = m_behaviours.equal_range(typeid(Behaviour));
+
+	for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
+	{
+		auto castedComp = dynamic_cast<CompT*>(findIt->second);
+
+		if (castedComp)
+			return castedComp;
+	}
+
+	return nullptr;
 }
 
 template <class CompT>

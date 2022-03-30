@@ -34,6 +34,7 @@ void HierarchyDisplayer::Render()
                 entityTransform && !entityTransform->IsRoot())
                 continue;
 
+            ImGui::PushID(entityRef->GetUUID());
             std::string name = entityRef->GetName();
 
             if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, entityRef)))
@@ -44,31 +45,8 @@ void HierarchyDisplayer::Render()
                 if (!contains(m_manager->m_selectedEntities, entityRef))
                     m_manager->m_selectedEntities.push_back(entityRef);
             }
-
+            ImGui::PopID();
             count++;
-        }
-        if (ImGui::Button("Save")) 
-        { 
-            if (m_displayedScene->Serialize(m_displayedScene->GetFilepath())) 
-            {
-                EditorManager::SendNotification("Scene  Saved !", ImGuiToastType::Success, 2.f);
-            } 
-            else 
-            {
-                EditorManager::SendNotification("Scene failed to save.", ImGuiToastType::Error, 2.f);
-            }
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Load"))
-        {
-            if (m_displayedScene->Unserialize(m_displayedScene->GetFilepath()))
-            {
-                EditorManager::SendNotification("Scene  Load !", ImGuiToastType::Success, 2.f);
-            }
-            else
-            {
-                EditorManager::SendNotification("Scene failed to load.", ImGuiToastType::Error, 2.f);
-            }
         }
     }
 

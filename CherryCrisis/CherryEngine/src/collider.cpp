@@ -18,11 +18,12 @@ Collider::Collider(Entity& owner)
 }
 
 void Collider::PopulateMetadatas()
-{
-	m_metadatas.m_fields["Enabled"]			= { "Enabled", &m_isEnabled};
-	m_metadatas.m_fields["Is Trigger"]		= { "Is Trigger", &m_isTrigger};
-	m_metadatas.m_fields["Shape"]			= { "Shape", &m_colliderShape};
-	m_metadatas.m_fields["Contact Offset"]	= { "Contact Offset", &m_contactOffset};
+{/*
+	m_metadatas.m_fields.push_back({ "Enabled", &m_isEnabled});
+	m_metadatas.m_fields.push_back({ "Is Trigger", &m_isTrigger});
+	m_metadatas.m_fields.push_back({ "Shape", &m_colliderShape});
+	m_metadatas.m_fields.push_back({ "Contact Offset", &m_contactOffset});
+	*/
 }
 
 void Collider::SetPxShape()

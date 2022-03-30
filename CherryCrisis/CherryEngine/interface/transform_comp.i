@@ -13,13 +13,13 @@ private:
 	void SetDirty();
 
 public:
-	void SetPosition(const CCMaths::Vector3& position);
+	void SetPosition(CCMaths::Vector3& position);
 	CCMaths::Vector3 GetPosition();
 
-	void SetRotation(const CCMaths::Vector3& rotation);
+	void SetRotation(CCMaths::Vector3& rotation);
 	CCMaths::Vector3 GetRotation();
 
-	void SetScale(const CCMaths::Vector3& scale);
+	void SetScale(CCMaths::Vector3& scale);
 	CCMaths::Vector3 GetScale();
 
 	%ignore Transform();

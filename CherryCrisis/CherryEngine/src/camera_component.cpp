@@ -19,10 +19,10 @@ CameraComponent::CameraComponent(Entity& owner)
 
 void CameraComponent::PopulateMetadatas()
 {
-	m_metadatas.m_fields["aspect"] = {"aspect", &m_camera.aspect};
-	m_metadatas.m_fields["near"]   = { "near",  &m_camera.near  };
-	m_metadatas.m_fields["far"]    = { "far",  &m_camera.far    };
-	m_metadatas.m_fields["fovY"]   = { "fovY",  &m_camera.fovY  };
+	m_metadatas.SetField<float>("aspect", m_camera.aspect);
+	m_metadatas.SetField<float>("near", m_camera.near);
+	m_metadatas.SetField<float>("far", m_camera.far);
+	m_metadatas.SetField<float>("fovY", m_camera.fovY);
 }
 
 CameraComponent::~CameraComponent()
