@@ -662,28 +662,19 @@ namespace mono
 	Ref<ManagedMethod> ManagedClass::FindMethod(const char* name)
 	{
 		auto methodIt = m_methods.find(name);
-
-		return methodIt->second;
+		return methodIt == m_methods.end() ? nullptr : methodIt->second;
 	}
 
 	Ref<ManagedField> ManagedClass::FindField(const char* name)
 	{
 		auto fieldIt = m_fields.find(name);
-
-		if (fieldIt == m_fields.end())
-			return nullptr;
-
-		return fieldIt->second;
+		return fieldIt == m_fields.end() ? fieldIt->second : nullptr;
 	}
 
 	Ref<ManagedProperty> ManagedClass::FindProperty(const char* prop)
 	{
 		auto propIt = m_properties.find(prop);
-
-		if (propIt == m_properties.end())
-			return nullptr;
-
-		return propIt->second;
+		return propIt == m_properties.end() ? propIt->second : nullptr;
 	}
 
 	/* Creates a raw instance of a this class */
@@ -851,23 +842,23 @@ namespace mono
 		mono_gchandle_free(m_gcHandle);
 	}
 
-	bool ManagedObject::SetProperty(ManagedProperty* prop, void* value) {
+	bool ManagedObject::SetProperty(ManagedProperty* prop, const void* value) {
 		MonoObject* exception = nullptr;
-		void* params[] = {value};
+		const void* params[] = {value};
 
 		if (!prop->m_setMethod)
 			return false;
 
-		MonoObject* res = mono_runtime_invoke(prop->m_setMethod, RawObject(), params, &exception);
+		MonoObject* res = mono_runtime_invoke(prop->m_setMethod, RawObject(), (void**)params, &exception);
 
 		if (exception)
 			return false;
 		return true;
 	}
 
-	bool ManagedObject::SetField(ManagedField* prop, void* value)
+	bool ManagedObject::SetField(ManagedField* prop, const void* value)
 	{
-		mono_field_set_value(RawObject(), prop->RawField(), value);
+		mono_field_set_value(RawObject(), prop->RawField(), (void*)value);
 		return true;
 	}
 
@@ -892,7 +883,7 @@ namespace mono
 		return true;
 	}
 
-	bool ManagedObject::SetProperty(const char* p, void* value)
+	bool ManagedObject::SetProperty(const char* p, const void* value)
 	{
 		auto propIt = m_class->m_properties.find(p);
 
@@ -902,7 +893,7 @@ namespace mono
 		return SetProperty(propIt->second.get(), value);
 	}
 
-	bool ManagedObject::SetField(const char* p, void* value)
+	bool ManagedObject::SetField(const char* p, const void* value)
 	{
 		auto fieldIt = m_class->m_fields.find(p);
 

@@ -29,7 +29,6 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	std::shared_ptr<mono::ManagedScriptSystem> script;
 
 	std::shared_ptr<mono::ManagedClass> managedClass;
-	std::shared_ptr<mono::ManagedObject> behaviourInst;
 	std::shared_ptr<mono::ManagedMethod> managedUpdate;
 	std::shared_ptr<mono::ManagedMethod> managedStart;
 
@@ -39,7 +38,10 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	void PopulateMetadatas() override;
 
 public:
+	std::shared_ptr<mono::ManagedObject> managedInstance;
+
 	ScriptedBehaviour(Entity& owner);
+	~ScriptedBehaviour();
 
 	void SetScriptClass(const char* scriptName);
 
@@ -47,4 +49,6 @@ public:
 	void Update() override;
 
 	void Reload();
+
+	std::string GetScriptName() { return m_scriptName; }
 };

@@ -11,6 +11,7 @@ protected:
 
 public:
 	LightComponent(Entity& owner);
+	LightComponent() { PopulateMetadatas(); };
 	~LightComponent();
 
 	Light m_light;

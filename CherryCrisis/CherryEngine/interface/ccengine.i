@@ -8,5 +8,3 @@
 %include entity.i
 %include maths.i
 
-%include transform_comp.i
-%include camera_comp.i

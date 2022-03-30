@@ -20,9 +20,9 @@ LightComponent::~LightComponent()
 
 void LightComponent::PopulateMetadatas()
 {
-	m_metadatas.m_fields.push_back({ "position", &m_light.m_position });
-	m_metadatas.m_fields.push_back({ "ambient",  &m_light.m_ambient });
-	m_metadatas.m_fields.push_back({ "diffuse",  &m_light.m_diffuse });
-	m_metadatas.m_fields.push_back({ "specular",  &m_light.m_specular });
-	m_metadatas.m_fields.push_back({ "attenuation",  &m_light.m_attenuation });
+	m_metadatas.m_fields["position"] = { "position", &m_light.m_position };
+	m_metadatas.m_fields["ambient"] = { "ambient",  &m_light.m_ambient };
+	m_metadatas.m_fields["diffuse"] = { "diffuse",  &m_light.m_diffuse };
+	m_metadatas.m_fields["specular"] = { "specular",  &m_light.m_specular };
+	m_metadatas.m_fields["attenuation"] = { "attenuation",  &m_light.m_attenuation };
 }

@@ -340,13 +340,13 @@ namespace mono
 
 		EManagedObjectHandleType GCHandleType() { return m_handleType; }
 
-		bool SetProperty(class ManagedProperty* prop, void* value);
-		bool SetField(class ManagedField* field, void* value);
+		bool SetProperty(class ManagedProperty* prop, const void* value);
+		bool SetField(class ManagedField* field, const void* value);
 		bool GetProperty(class ManagedProperty* prop, void** outValue);
 		bool GetField(class ManagedField* field, void* outValue);
 
-		bool SetProperty(const char* p, void* value);
-		bool SetField(const char* p, void* value);
+		bool SetProperty(const char* p, const void* value);
+		bool SetField(const char* p, const void* value);
 		bool GetProperty(const char* p, void** outValue);
 		bool GetField(const char* p, void* outValue);
 

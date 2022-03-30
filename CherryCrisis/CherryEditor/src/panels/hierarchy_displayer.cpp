@@ -59,7 +59,17 @@ void HierarchyDisplayer::Render()
             }
         }
         ImGui::SameLine();
-        if (ImGui::Button("Load")) { }
+        if (ImGui::Button("Load"))
+        {
+            if (m_displayedScene->Unserialize(m_displayedScene->GetFilepath()))
+            {
+                EditorManager::SendNotification("Scene  Load !", ImGuiToastType::Success, 2.f);
+            }
+            else
+            {
+                EditorManager::SendNotification("Scene failed to load.", ImGuiToastType::Error, 2.f);
+            }
+        }
     }
 
     ContextCallback();
@@ -80,7 +90,11 @@ void HierarchyDisplayer::ContextCallback()
         if (ImGui::BeginMenu("New"))
         {
 
-            if (ImGui::MenuItem("Empty")) {}
+            if (ImGui::MenuItem("Empty")) 
+            {
+                Entity* empty = new Entity("Empty");
+                m_displayedScene->AddEntity(empty);
+            }
             if (ImGui::MenuItem("ModelRenderer")) {}
             if (ImGui::MenuItem("Camera")) {}
             if (ImGui::MenuItem("Particle System")) {}

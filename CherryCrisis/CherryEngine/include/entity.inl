@@ -7,7 +7,7 @@ CompT* Entity::AddBehaviour()
 	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
 
 	CompT* rawPtr = new CompT(*this);
-	m_behaviours.push_back(rawPtr);
+	m_behaviours.insert({ typeid(CompT), rawPtr });
 
 	return rawPtr;
 }
@@ -18,15 +18,25 @@ CompT* Entity::GetBehaviour()
 	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
 	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
 
-	for (Behaviour* behaviour : m_behaviours)
-	{
-		CompT* castedComponent = dynamic_cast<CompT*>(behaviour);
+	auto itPair = m_behaviours.find(typeid(CompT));
 
-		if (castedComponent)
-			return castedComponent;
-	}
+	return itPair == m_behaviours.end() ? nullptr : static_cast<CompT*>(itPair->second);
+}
 
-	return nullptr;
+template <class CompT>
+std::vector<CompT*> Entity::GetBehaviours()
+{
+	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
+	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
+
+	std::vector<CompT*> behaviours;
+
+	auto itPair = m_behaviours.equal_range(typeid(CompT));
+
+	for (auto compIt = itPair.first; compIt != itPair.second; compIt++)
+		behaviours.push_back(static_cast<CompT*>(compIt->second));
+
+	return behaviours;
 }
 
 template <class CompT>
@@ -60,4 +70,11 @@ CompT* Entity::GetOrAddBehaviour()
 		return componentToReturn;
 
 	return AddBehaviour<CompT>();
+}
+
+template <class CompT>
+void Entity::SubscribeComponent(CompT* behaviour)
+{
+	behaviour->m_owner = this;
+	m_behaviours.insert({ typeid(CompT), behaviour });
 }
