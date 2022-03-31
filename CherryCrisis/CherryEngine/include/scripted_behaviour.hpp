@@ -40,16 +40,19 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 public:
 
 	ScriptedBehaviour(Entity& owner);
+	ScriptedBehaviour();
 	~ScriptedBehaviour();
 
-	void SetScriptClass(const char* scriptName);
-
+	void SetScriptClass(std::string& scriptName);
+	void BindToSignals() override;
 	void Start() override;
 	void Update() override;
 
 	void Reload();
 
-	std::string GetScriptName() { return m_scriptName; }
+	std::string GetScriptPath() { return m_scriptName; }
 
 	_MonoObject* GetRawInstance();
+
+	CCProperty::Property<ScriptedBehaviour, std::string> scriptPath { this, &ScriptedBehaviour::SetScriptClass, &ScriptedBehaviour::GetScriptPath};
 };

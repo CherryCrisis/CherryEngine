@@ -709,8 +709,8 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_CameraComponent_m_transform_get")]
   public static extern global::System.IntPtr CameraComponent_m_transform_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_ScriptedBehaviour_GetScriptName")]
-  public static extern string ScriptedBehaviour_GetScriptName(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_ScriptedBehaviour_GetScriptPath")]
+  public static extern string ScriptedBehaviour_GetScriptPath(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_ScriptedBehaviour_SetScriptClass")]
   public static extern void ScriptedBehaviour_SetScriptClass(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);

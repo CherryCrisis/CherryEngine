@@ -293,6 +293,7 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
         if (ImGui::Button("Reload scripts"))
             CsScriptingSystem::GetInstance()->ReloadContextes();
+        
     }
     ImGui::End();
 }

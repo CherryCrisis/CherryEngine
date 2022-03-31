@@ -2858,13 +2858,13 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_transform_get(vo
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_GetScriptName(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_GetScriptPath(void * jarg1) {
   char * jresult ;
   ScriptedBehaviour *arg1 = (ScriptedBehaviour *) 0 ;
   std::string result;
   
   arg1 = (ScriptedBehaviour *)jarg1; 
-  result = (arg1)->GetScriptName();
+  result = (arg1)->GetScriptPath();
   jresult = SWIG_csharp_string_callback((&result)->c_str()); 
   return jresult;
 }
@@ -2872,11 +2872,16 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_GetScriptName(vo
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_SetScriptClass(void * jarg1, char * jarg2) {
   ScriptedBehaviour *arg1 = (ScriptedBehaviour *) 0 ;
-  char *arg2 = (char *) 0 ;
+  std::string *arg2 = 0 ;
   
   arg1 = (ScriptedBehaviour *)jarg1; 
-  arg2 = (char *)jarg2; 
-  (arg1)->SetScriptClass((char const *)arg2);
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  (arg1)->SetScriptClass((std::string&)*arg2);
 }
 
 

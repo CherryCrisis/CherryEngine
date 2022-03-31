@@ -12,6 +12,7 @@ protected:
 
 public:
 	CameraComponent(Entity& owner);
+	CameraComponent();
 	~CameraComponent();
 
 	Camera		m_camera;

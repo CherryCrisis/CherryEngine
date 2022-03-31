@@ -34,6 +34,7 @@ public:
 	virtual void FixedUpdate() {}
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
+	virtual void BindToSignals() {}
 	std::string Serialize();
 
 	std::unordered_map<std::string, Field>& GetFields() { return m_metadatas.m_fields; }

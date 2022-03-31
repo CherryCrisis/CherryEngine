@@ -34,13 +34,14 @@ public class ScriptedBehaviour : Behaviour {
     }
   }
 
-  public string GetScriptName() {
-    string ret = CherryEnginePINVOKE.ScriptedBehaviour_GetScriptName(swigCPtr);
+  public string GetScriptPath() {
+    string ret = CherryEnginePINVOKE.ScriptedBehaviour_GetScriptPath(swigCPtr);
     return ret;
   }
 
   public void SetScriptClass(string scriptName) {
     CherryEnginePINVOKE.ScriptedBehaviour_SetScriptClass(swigCPtr, scriptName);
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
 	[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.InternalCall)]

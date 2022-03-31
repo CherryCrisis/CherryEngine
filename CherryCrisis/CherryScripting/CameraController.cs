@@ -8,7 +8,6 @@ namespace CCScripting
 
 		public CameraController(System.IntPtr cPtr, bool cMemoryOwn) : base(cPtr, cMemoryOwn)
 		{
-			transform = GetComponent<Transform>();
 
 		}
 
@@ -17,6 +16,7 @@ namespace CCScripting
 		public void Start()
         {
 			debug = AddComponent<DebugTest>();
+			transform = GetComponent<Transform>();
 		}
 		public string camName = "Je suis un nom";
 		public int num = 5;
