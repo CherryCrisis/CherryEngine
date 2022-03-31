@@ -25,7 +25,8 @@ void LogDisplayer::Render()
 
             for (auto it = collapsedLogs->begin(); it != collapsedLogs->end(); ++it)
             {
-                ImGui::Text(std::string("[" + LogTypeStr[(int)it->second.m_logType] + "] " + it->second.m_logMessage + " : " + std::to_string(it->second.m_count)).c_str());
+                ImGui::Text(std::string("[" + LogTypeStr[(int)it->second.m_logType] + "] " 
+                    + it->second.m_logMessage + " : " + std::to_string(it->second.m_count)).c_str());
             }
         }
         else
@@ -33,7 +34,12 @@ void LogDisplayer::Render()
             auto logs = m_debug->GetLogs();
             for (Log& log : *logs)
             {
-                ImGui::Text(log.m_logMessage->m_logMessage.c_str());
+                std::string date(std::to_string(log.m_date.hours) + ":"
+                    + std::to_string(log.m_date.minutes) + ":"
+                    + std::to_string(log.m_date.seconds));
+
+                ImGui::Text(std::string(date + " : [" + LogTypeStr[(int)log.m_logMessage->m_logType] + "] "
+                    + log.m_logMessage->m_logMessage).c_str());
             }
         }
 

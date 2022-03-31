@@ -9,8 +9,11 @@ Debug::Debug()
 	m_timeManager = TimeManager::GetInstance();
 	AddLog("Test", ELogType::ERROR);
 	AddLog("Test2", ELogType::ERROR);
+	AddLog("Test2", ELogType::WARNING);
 	AddLog("Test", ELogType::INFO);
-	AddLog("Test2", ELogType::ERROR);
+	AddLog("Test2", ELogType::WARNING);
+	AddLog("Test4", ELogType::INFO);
+	AddLog("Test2", ELogType::WARNING);
 }
 
 void Debug::AddLog(const char* message, ELogType logType)
