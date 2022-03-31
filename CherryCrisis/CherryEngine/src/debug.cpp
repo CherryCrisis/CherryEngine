@@ -7,14 +7,11 @@ Debug* Singleton<Debug>::currentInstance = nullptr;
 Debug::Debug() 
 {
 	m_timeManager = TimeManager::GetInstance();
-
-
-
-	/*HashTest hashTest{ .logType = ELogType::ERROR, .str = "test" };
-
-	std::size_t key = std::hash<HashTest>{}(hashTest);*/
+	AddLog("Test", ELogType::ERROR);
+	AddLog("Test2", ELogType::ERROR);
+	AddLog("Test", ELogType::INFO);
+	AddLog("Test2", ELogType::ERROR);
 }
-
 
 void Debug::AddLog(const char* message, ELogType logType)
 {
@@ -22,21 +19,22 @@ void Debug::AddLog(const char* message, ELogType logType)
 
 	LogMessage* logMessage = nullptr;
 
-	auto conditional = m_logMessages.find(message);
+	size_t key;
+	GetKeyOfLog(key, message, logType);
+
+	auto conditional = m_logMessages.find(key);
 	if (conditional != m_logMessages.end())
 	{
-		conditional->second.count++;
+		conditional->second.m_count++;
 		logMessage = &conditional->second;
 	}
 	else
 	{
-		auto pair = m_logMessages.emplace(message, LogMessage());
-		logMessage->m_logMessage = &pair.first->first; //To avoid copy string
-
+		auto pair = m_logMessages.emplace(key, LogMessage(message, logType ));
 		logMessage = &pair.first->second;
 	}
 	
-	m_logs.push_back(Log(logMessage, logType, m_timeManager->GetCurrentTime()));
+	m_logs.push_back(Log(logMessage, m_timeManager->GetCurrentTime()));
 }
 
 void Debug::Clear()

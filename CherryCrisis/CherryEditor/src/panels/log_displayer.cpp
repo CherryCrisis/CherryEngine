@@ -19,20 +19,23 @@ void LogDisplayer::Render()
     {
         RenderMenuBar();
 
-        /*for (LogMessage& message : m_debug->GetLogs())
+        if (m_isCollapsing)
         {
-            if (m_isCollapsing) 
+            auto collapsedLogs = m_debug->GetCollapsedLogs();
+
+            for (auto it = collapsedLogs->begin(); it != collapsedLogs->end(); ++it)
             {
-                ImGui::Text(message.CollapsedString().c_str());
+                ImGui::Text(std::string("[" + LogTypeStr[(int)it->second.m_logType] + "] " + it->second.m_logMessage + " : " + std::to_string(it->second.m_count)).c_str());
             }
-            else 
+        }
+        else
+        {
+            auto logs = m_debug->GetLogs();
+            for (Log& log : *logs)
             {
-                for (int i = 0; i < message.count; i++) 
-                {
-                    ImGui::Text(message.string.c_str());
-                }
+                ImGui::Text(log.m_logMessage->m_logMessage.c_str());
             }
-        }*/
+        }
 
         if (m_isAutoScrolling && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
             ImGui::SetScrollHereY(1.0f);
@@ -60,6 +63,10 @@ void LogDisplayer::RenderMenuBar()
         ImGui::Checkbox("Clear on play", &m_isClearOnPlay);
         ImGui::Checkbox("AutoScroll", &m_isAutoScrolling);
         ImGui::Checkbox("Collapse", &m_isCollapsing);
+
+        ImGui::Checkbox("Info", &m_displayInfo);
+        ImGui::Checkbox("Warning", &m_displayWarning);
+        ImGui::Checkbox("Error", &m_displayError);
 
         if (ImGui::Button("Clear"))         { Clear(); }
         if (ImGui::Button("Scroll Top"))    { m_isScrollingTop = true; }
