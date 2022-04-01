@@ -12,6 +12,7 @@ public:
 	static void* window_handle;
 
 	Engine();
+	~Engine();
 
 	bool isPlaying = false;
 

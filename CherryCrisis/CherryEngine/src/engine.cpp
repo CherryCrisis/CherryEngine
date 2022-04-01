@@ -5,19 +5,28 @@
 
 #include "scene_manager.hpp"
 #include "csscripting_system.hpp"
-#include "time_manager.hpp"
 
+#include "resource_manager.hpp"
+#include "time_manager.hpp"
 #include "input_manager.hpp"
 #include "physic_manager.hpp"
-
-#include "physic_scene.hpp"
-#include "physic_actor.hpp"
+#include "sound_manager.hpp"
 
 void* Engine::window_handle = nullptr;
 
 Engine::Engine() 
 {
 	CsScriptingSystem::GetInstance()->Init();
+}
+
+Engine::~Engine()
+{
+	InputManager::Kill();
+	PhysicSystem::PhysicManager::Kill();
+	SoundManager::Kill();
+	SceneManager::Kill();
+	ResourceManager::Kill();
+	CsScriptingSystem::Kill();
 }
 
 void Engine::TickEngine()

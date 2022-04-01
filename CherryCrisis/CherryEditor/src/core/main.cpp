@@ -20,6 +20,10 @@
 
 #include <iostream>
 
+#include <crtdbg.h>
+
+
+
 void HideCursor(void* window) 
 {
     GLFWwindow* castedWindow = (GLFWwindow*) window;
@@ -34,6 +38,9 @@ void ShowCursor(void* window)
 
 int main()
 {
+    // Check for leak
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     int screenWidth = 1200;
     int screenHeight = 1000;
 
@@ -133,4 +140,19 @@ int main()
 
         glfwSwapBuffers(window);
     }
+
+    io.Fonts->ClearFonts();
+
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    // Terminate glfw
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    system("PAUSE");
+
+    return 0;
 }

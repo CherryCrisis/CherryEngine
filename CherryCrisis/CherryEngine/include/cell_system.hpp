@@ -7,7 +7,7 @@
 #include "singleton.hpp"
 #include "cell.hpp"
 
-class CCENGINE_API CellSystem : public Singleton<CellSystem>
+class CCENGINE_API CellSystem
 {
 private:
 	std::unordered_map<std::string, Cell> m_cells;

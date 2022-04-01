@@ -2,15 +2,8 @@
 
 #include "resource_manager.hpp"
 
-ResourceManager* ResourceManager::m_instance = nullptr;
-
-ResourceManager* ResourceManager::GetInstance()
-{
-	if (!m_instance)
-		m_instance = new ResourceManager();
-
-	return m_instance;
-}
+template<>
+ResourceManager* Singleton<ResourceManager>::currentInstance = nullptr;
 
 ResourceManager::ResourceManager()
 	: m_threadpool(ThreadPool::GetInstance()), m_lockResources()

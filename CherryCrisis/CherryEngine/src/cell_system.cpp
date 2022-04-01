@@ -2,8 +2,6 @@
 
 #include "cell_system.hpp"
 
-CellSystem* Singleton<CellSystem>::currentInstance = nullptr;
-
 void CellSystem::AddCell(const std::string& name)
 {
 	m_cells[name] = Cell();

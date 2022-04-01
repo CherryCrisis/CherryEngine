@@ -18,7 +18,6 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	// TODO: Change path
 	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
 	m_metadatas.SetProperty("ntm", &scriptPath);
-
 }
 
 ScriptedBehaviour::ScriptedBehaviour()
@@ -33,6 +32,9 @@ ScriptedBehaviour::~ScriptedBehaviour()
 {
 	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
+
+	if (managedInstance)
+		managedInstance->Dispose();
 }
 
 void ScriptedBehaviour::BindToSignals() 

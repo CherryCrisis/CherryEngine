@@ -955,8 +955,9 @@ namespace mono
 			if (a->m_image)
 				mono_image_close(a->m_image);
 
-			if (a->m_assembly)
-				mono_assembly_close(a->m_assembly);
+			// TODO: ca explose mais je sais pas pourquoi
+			//if (a->m_assembly)
+			//	mono_assembly_close(a->m_assembly);
 		}
 	}
 
@@ -1283,6 +1284,7 @@ namespace mono
 
 	ManagedScriptSystem::~ManagedScriptSystem()
 	{
+		m_contexts.clear();
 		mono_jit_cleanup(m_rootDomain);
 	}
 
