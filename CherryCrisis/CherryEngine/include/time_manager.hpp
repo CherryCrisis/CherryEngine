@@ -1,8 +1,21 @@
 #pragma once
 
 #include "singleton.hpp"
-#include "cherry_header.hpp"
 
+#include "cherry_macros.hpp"
+
+
+struct CCENGINE_API FullDate
+{
+	unsigned int hours;
+	unsigned int minutes;
+	unsigned int seconds;
+	unsigned int milliseconds;
+
+	unsigned int year;
+	unsigned int month;
+	unsigned int day;
+};
 
 class CCENGINE_API TimeManager : public Singleton<TimeManager>
 {
@@ -17,6 +30,8 @@ private:
 public:
 	
 	//GETTER AND SETTERS
+
+	FullDate GetCurrentTime();
 	float GetDeltaTime()	  { return m_deltaTime; }
 	float GetTimeScale()	  { return m_timeScale; }
 	float GetFixedDeltaTime() { return m_fixedDeltaTime; }

@@ -1,48 +1,46 @@
 #include "pch.hpp"
-
 #include "debug.hpp"
 
-Debug* Debug::instance = nullptr;
+template <>
+Debug* Singleton<Debug>::currentInstance = nullptr;
 
-void Debug::Log(const char* string)
+Debug::Debug() 
 {
-	std::cout << string << std::endl;
-
-	if (!ContainsAndAdd(string)) 
-		logs.push_back(LogMessage(string));
+	m_timeManager = TimeManager::GetInstance();
+	AddLog("Test", ELogType::ERROR);
+	AddLog("Test2", ELogType::ERROR);
+	AddLog("Test2", ELogType::WARNING);
+	AddLog("Test", ELogType::INFO);
+	AddLog("Test2", ELogType::WARNING);
+	AddLog("Test4", ELogType::INFO);
+	AddLog("Test2", ELogType::WARNING);
 }
 
-void Debug::PrintAllLogs() 
+void Debug::AddLog(const char* message, ELogType logType)
 {
-	//for (const std::string& string : logs) 
-	//{
-	//	std::cout << string << std::endl;
-	//}
-}
+	std::cout << message << std::endl;
 
-bool Debug::ContainsAndAdd(const char* string) 
-{
-	for (LogMessage& log : logs)
+	LogMessage* logMessage = nullptr;
+
+	size_t key;
+	GetKeyOfLog(key, message, logType);
+
+	auto conditional = m_logMessages.find(key);
+	if (conditional != m_logMessages.end())
 	{
-		const char* strings = log.string.c_str();
-		if (!log.string.compare(string)) 
-		{
-			log.count++;
-			return true;
-		}
+		conditional->second.m_count++;
+		logMessage = &conditional->second;
 	}
-	return false;
+	else
+	{
+		auto pair = m_logMessages.emplace(key, LogMessage(message, logType ));
+		logMessage = &pair.first->second;
+	}
+	
+	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime());
 }
 
-Debug::Debug()
+void Debug::Clear()
 {
-
-}
-
-Debug* Debug::GetInstance()
-{
-	if (instance == nullptr) {
-		instance = new Debug();
-	}
-	return instance;
+	m_logs.clear();
 }

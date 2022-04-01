@@ -242,7 +242,7 @@ namespace PhysicSystem
 		if (!from->RemoveActor(actor))
 		{
 			static Debug* debug = Debug::GetInstance();
-			debug->Log("Actor is not in origin Scene");
+			//debug->Log("Actor is not in origin Scene");
 		}
 
 		to->AddActor(actor);

@@ -353,8 +353,8 @@
     <ClInclude Include="include\sound.hpp" />
     <ClInclude Include="include\sound_manager.hpp" />
     <ClInclude Include="include\texture.hpp" />
-    <ClInclude Include="include\time_manager.hpp" />
     <ClInclude Include="include\threadpool.hpp" />
+    <ClInclude Include="include\time_manager.hpp" />
     <ClInclude Include="include\transform.hpp" />
     <ClInclude Include="include\uuid.hpp" />
     <ClInclude Include="src\physic_utils.cpp" />

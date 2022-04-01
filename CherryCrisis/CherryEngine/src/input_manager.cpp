@@ -77,7 +77,7 @@ void InputManager::ErrorButtons(const char* name)
 	errorLog += name;
 	errorLog += " is not set up.";
 
-	debug->Log(errorLog.c_str());
+	//debug->Log(errorLog.c_str());
 }
 
 void InputManager::ErrorAxes(const char* name)
@@ -88,7 +88,7 @@ void InputManager::ErrorAxes(const char* name)
 	errorLog += name;
 	errorLog += " is not set up.";
 
-	debug->Log(errorLog.c_str());
+	//debug->Log(errorLog.c_str());
 }
 #pragma endregion
 
