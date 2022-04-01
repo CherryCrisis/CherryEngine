@@ -20,8 +20,6 @@ public:
 
 	void SetScene(Scene* scene) { m_displayedScene = scene; }
 
-	void* m_focusedEntity = nullptr;
-
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr) : 
 	Panel(spawnOpened),m_manager(manager) {}
 };

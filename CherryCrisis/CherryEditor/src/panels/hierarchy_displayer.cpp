@@ -89,13 +89,22 @@ void HierarchyDisplayer::ContextCallback()
 
             ImGui::EndMenu();
         }
-        if (m_focusedEntity)
+        if (m_manager->m_selectedEntities.size() > 0)
         {
             ImGui::Separator();
             
 
             if (ImGui::MenuItem("Rename")) { m_renaming = true; }
-            if (ImGui::MenuItem("Delete")) { m_deleting = true; }
+            if (ImGui::MenuItem("Delete")) 
+            {
+                for (auto& entity : m_manager->m_selectedEntities) 
+                {
+                    m_displayedScene->RemoveEntity(entity);
+                    entity->Destroy();
+                    //To Change
+                    m_manager->m_selectedEntities.clear();
+                }
+            }
 
             if (ImGui::MenuItem("Copy")) {}
 
