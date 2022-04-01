@@ -8,12 +8,15 @@ class LogDisplayer : public Panel
 {
 public:
 
+
 	void Render() override;
 	void TryClearOnPlay();
 	
 	LogDisplayer();
 
 private:
+	int m_showedLogMask;
+
 	void RenderMenuBar();
 
 	void Clear();

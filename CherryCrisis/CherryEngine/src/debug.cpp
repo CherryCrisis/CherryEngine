@@ -37,7 +37,7 @@ void Debug::AddLog(const char* message, ELogType logType)
 		logMessage = &pair.first->second;
 	}
 	
-	m_logs.push_back(Log(logMessage, m_timeManager->GetCurrentTime()));
+	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime());
 }
 
 void Debug::Clear()

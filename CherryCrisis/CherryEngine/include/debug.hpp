@@ -9,20 +9,20 @@
 #include "cherry_macros.hpp"
 #include "time_manager.hpp"
 
-enum class CCENGINE_API ELogType
+enum class CCENGINE_API ELogType : int
 {
 	INFO,
 	WARNING,
 	ERROR,
 };
 
-static std::string LogTypeStr[] = { "INFO", "WARNING", "ERROR" };
+static const char* LogTypeCstr[] = { "INFO", "WARNING", "ERROR" };
 
 struct LogMessage
 {
-	const std::string	m_logMessage	= {};
-	const ELogType		m_logType		= {};
-	unsigned int		m_count			= {1};
+	const std::string	m_logMessage	{};
+	const ELogType		m_logType		{};
+	unsigned int		m_count			{1};
 };
 
 class CCENGINE_API Log
