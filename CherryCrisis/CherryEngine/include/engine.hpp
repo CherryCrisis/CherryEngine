@@ -8,6 +8,9 @@
 class CCENGINE_API Engine
 {
 public:
+
+	static void* window_handle;
+
 	Engine();
 
 	bool isPlaying = false;

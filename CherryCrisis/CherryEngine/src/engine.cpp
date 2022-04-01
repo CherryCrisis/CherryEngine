@@ -13,6 +13,7 @@
 #include "physic_scene.hpp"
 #include "physic_actor.hpp"
 
+void* Engine::window_handle = nullptr;
 
 Engine::Engine() 
 {
@@ -29,6 +30,11 @@ void Engine::Tick()
 	SceneManager::GetInstance()->Update();
 
 	PhysicSystem::PhysicManager::GetInstance()->Simulate(1/60.f);
+
+	if (InputManager::GetInstance()->GetKeyDown(Keycode::ESCAPE))
+	{
+		InputManager::GetInstance()->SetCursorDisplayed();
+	}
 }
 
 void Engine::Launch() 
@@ -38,6 +44,7 @@ void Engine::Launch()
 	SceneManager::GetInstance()->Start();
 
 	InputManager::GetInstance()->SetContext("user Context");
+	InputManager::GetInstance()->SetCursorHidden();
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }
 

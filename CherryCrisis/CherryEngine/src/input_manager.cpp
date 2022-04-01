@@ -214,6 +214,17 @@ InputManager::Input* InputManager::GetInputRef(Keycode key)
 	return &m_keys[key];
 }
 
+
+void InputManager::SetCursorHidden()
+{
+	HideCursor(Engine::window_handle);
+}
+
+void InputManager::SetCursorDisplayed()
+{
+	ShowCursor(Engine::window_handle);
+}
+
 bool InputManager::GetKeyDown(Keycode key)
 {
 	return m_keys[key].Down();

@@ -418,6 +418,9 @@ public:
 	void SetContext(const std::string& name);
 	void SetContext(KeyboardContext* context);
 
+	void (*HideCursor)(void* window);
+	void (*ShowCursor)(void* window);
+
 	// Callbacks
 	void SetListening();
 	void ResetListenedKey();
@@ -440,6 +443,9 @@ public:
 
 	bool GetKeyUp(Keycode key);
 	bool GetKeyUp(const char* inputName);
+
+	void SetCursorHidden();
+	void SetCursorDisplayed();
 
 	// ActionButtons
 	ActionButtons* AddActionButtons(const std::string& name, int& success);

@@ -51,8 +51,13 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 
 	Entity* camera = new Entity("Camera");
 	camera->AddBehaviour<CameraComponent>()->m_transform = camera->AddBehaviour<Transform>();
-	camera->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("CameraController");
-	camera->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("DebugTest");
+	// TODO: Remove this
+	std::string cam = "CameraController";
+	std::string debugTest = "DebugTest";
+	ScriptedBehaviour* bhave1 = camera->AddBehaviour<ScriptedBehaviour>();
+	bhave1->SetScriptClass(cam); bhave1->BindToSignals();
+	ScriptedBehaviour* bhave2 = camera->AddBehaviour<ScriptedBehaviour>();
+	bhave2->SetScriptClass(debugTest); bhave2->BindToSignals();
 
 	scene->AddEntity(camera);
 }
@@ -62,7 +67,10 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 	Entity* root = new Entity("Root");
 	std::vector<Entity*> children = resource->GenerateEntities(root);
 
-	root->AddBehaviour<ScriptedBehaviour>()->SetScriptClass("BackpackBehaviour");
+	std::string backpack = "BackpackBehaviour";
+	ScriptedBehaviour* bhave = root->AddBehaviour<ScriptedBehaviour>();
+	bhave->SetScriptClass(backpack);
+	bhave->BindToSignals();
 
 	AddEntity(root);
 
@@ -275,12 +283,22 @@ bool Scene::Unserialize(const char* filePath)
 				{
 					behaviour = new ModelRenderer();
 				}
+				found = line.find("ScriptedBehaviour");
+				if (found != std::string::npos)
+				{
+					behaviour = new ScriptedBehaviour();
+				}
+				found = line.find("CameraComponent");
+				if (found != std::string::npos)
+				{
+					behaviour = new CameraComponent();
+				}
 
 				if (!behaviour)
 					continue;
 
 				std::string key = ExtractKey(line);
-				std::string parsedValue = ExtractValue(line);
+ 				std::string parsedValue = ExtractValue(line);
 
 				if (line.size() == 0)
 				{
@@ -313,6 +331,14 @@ bool Scene::Unserialize(const char* filePath)
 					{
 						Vector3 vec = ExtractVector3(parsedValue);
 						prop->Set(&vec);
+
+						continue;
+					}
+
+					if (prop->GetType() == typeid(std::string))
+					{
+						std::string str = ExtractValue(parsedValue);
+						prop->Set(&str);
 
 						continue;
 					}
@@ -366,8 +392,11 @@ bool Scene::Unserialize(const char* filePath)
 		for (auto& wrappedBehaviour : m_wrappedBehaviours) 
 		{
 			Entity* entity = FindEntity(wrappedBehaviour.second->GetOwnerUUID());
-			if (entity)
+			if (entity) 
+			{
 				entity->SubscribeComponent(wrappedBehaviour.second);
+				wrappedBehaviour.second->BindToSignals();
+			}
 		}
 
 		//Then loop over the wrapped component again to link the uuids

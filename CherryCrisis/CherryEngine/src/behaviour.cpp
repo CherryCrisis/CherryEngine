@@ -63,6 +63,7 @@ std::string Behaviour::Serialize()
 		value += ": " + std::string("#ERROR# ")+ std::string(type.name()) + std::string(" is not handled !") +"\n";
 	}
 
+	//Loop on every property to save them
 	for (const auto& [propName, propRef] : m_metadatas.m_properties)
 	{
 		const std::type_index& type = propRef->GetType();

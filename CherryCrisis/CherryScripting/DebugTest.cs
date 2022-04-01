@@ -14,7 +14,7 @@ namespace CCScripting
 
 		}
 
-		public string name = "Je suis un nom";
+		public string name = "Debug il sait pas quoi";
 		public void Debugger()
 		{
 			Debug.GetInstance().Log(name);

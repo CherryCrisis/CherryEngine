@@ -126,7 +126,7 @@ public class Entity : global::System.IDisposable {
         for (int i = 0; i < scriptedBehaviours.Count; i++)
         {
 			ScriptedBehaviour script = scriptedBehaviours[i];
-			if (script.GetScriptName() == scriptPath)
+			if (script.GetScriptPath() == scriptPath)
 				return script.GetInstance();
         }
 

@@ -129,6 +129,7 @@ void InspectComponents(Entity* entity, int id)
             }
             ImGui::TreePop();
         }
+        ImGui::Separator();
         ImGui::PopID();
     }
 }
@@ -143,6 +144,31 @@ void Inspector::Render()
         for (unsigned int i = 0; i < m_manager->m_selectedEntities.size(); i++)
         {
             InspectComponents(m_manager->m_selectedEntities[i], i);
+        }
+        if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+        {
+            ImGui::OpenPopup("Add Component");
+        }
+
+
+        ImVec2 center = { InputManager::GetInstance()->GetMousePos().x, InputManager::GetInstance()->GetMousePos().y };
+        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing);
+        if (ImGui::BeginPopupModal("Add Component", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        {
+            static char search[32] = "";
+            ImGui::InputText("##", search, IM_ARRAYSIZE(search));
+
+
+            // TODO: Replace with list of available components
+            ImGui::MenuItem("component");
+            ImGui::MenuItem("transform");
+            ImGui::MenuItem("model");
+            ImGui::MenuItem("scriptedBehaviour");
+            //---------------------------------------------------
+
+            ImGui::SetItemDefaultFocus();
+            if (ImGui::Button("Cancel", ImVec2(ImGui::GetContentRegionAvail().x, 0))) { ImGui::CloseCurrentPopup(); }
+            ImGui::EndPopup();
         }
     }
     ImGui::End();
