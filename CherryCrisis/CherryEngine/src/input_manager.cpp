@@ -353,6 +353,20 @@ int InputManager::ChangeInputInAction(ActionButtons* action, Keycode oldKey, Key
 	return action->ChangeInput(oldKey, newKey);
 }
 
+void InputManager::ActionButtons::SetPriorKey(EPriorKey key)
+{
+	if ((int)key == -1)
+		m_priorKey = nullptr;
+
+	else
+	{
+		InputManager* inputManager = InputManager::GetInstance();
+
+		m_priorKey = inputManager->GetInputRef((Keycode)key);
+	}
+}
+
+
 void InputManager::ActionButtons::AddInput(Keycode newInput)
 {
 	InputManager* inputManager = InputManager::GetInstance();
@@ -381,6 +395,9 @@ int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
 
 void InputManager::ActionButtons::Update(Input* input)
 {
+	if (!GetPriorKey())
+		return;
+
 	if (input->Down())
 		m_pressed.Invoke();
 
@@ -391,8 +408,19 @@ void InputManager::ActionButtons::Update(Input* input)
 		m_released.Invoke();
 }
 
+bool InputManager::ActionButtons::GetPriorKey()
+{
+	if (!m_priorKey || m_priorKey->Held())
+		return true;
+
+	return false;
+}
+
 bool InputManager::ActionButtons::CheckDown()
 {
+	if (!GetPriorKey())
+		return false;
+
 	for (auto& input : m_inputs)
 	{
 		if (input.second->Down())
@@ -404,6 +432,9 @@ bool InputManager::ActionButtons::CheckDown()
 
 bool InputManager::ActionButtons::CheckHeld()
 {
+	if (!GetPriorKey())
+		return false;
+
 	for (auto& input : m_inputs)
 	{
 		if (input.second->Held())
@@ -415,6 +446,9 @@ bool InputManager::ActionButtons::CheckHeld()
 
 bool InputManager::ActionButtons::CheckUp()
 {
+	if (!GetPriorKey())
+		return false;
+
 	for (auto& input : m_inputs)
 	{
 		if (input.second->Up())
