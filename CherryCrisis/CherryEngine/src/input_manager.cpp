@@ -7,6 +7,70 @@
 template <>
 InputManager* Singleton<InputManager>::currentInstance = nullptr;
 
+
+InputManager::InputManager()
+{
+	m_defaultContext = AddContext("Editor Context");
+	m_activeContext = m_defaultContext;
+}
+
+CCMaths::Vector2 InputManager::GetMouseWheel()
+{
+	if (m_activeContext)
+		return m_activeContext->m_mouseWheel;
+}
+
+CCMaths::Vector2 InputManager::GetMousePos()
+{
+	if (m_activeContext)
+		return m_activeContext->m_mousePos;
+}
+
+CCMaths::Vector2 InputManager::GetMouseDelta()
+{
+	if (m_activeContext)
+		return m_activeContext->m_mouseDelta;
+}
+
+
+CCMaths::Vector2 InputManager::GetMouseWheel(const std::string& name)
+{
+	if (!m_contexts.empty() && m_contexts.contains(name))
+		return m_contexts[name].m_mouseWheel;
+}
+
+CCMaths::Vector2 InputManager::GetMousePos(const std::string& name)
+{
+	if (!m_contexts.empty() && m_contexts.contains(name))
+		return m_contexts[name].m_mousePos;
+}
+
+CCMaths::Vector2 InputManager::GetMouseDelta(const std::string& name)
+{
+	if (!m_contexts.empty() && m_contexts.contains(name))
+		return m_contexts[name].m_mouseDelta;
+}
+
+
+CCMaths::Vector2 InputManager::GetMouseWheel(InputContext* context)
+{
+	if (context)
+		return context->m_mouseWheel;
+}
+
+CCMaths::Vector2 InputManager::GetMousePos(InputContext* context)
+{
+	if (context)
+		return context->m_mousePos;
+}
+
+CCMaths::Vector2 InputManager::GetMouseDelta(InputContext* context)
+{
+	if (context)
+		return context->m_mouseDelta;
+}
+
+
 const char* InputManager::GetKeyname(int index)
 {
 	if (index >= 0 && index < 122)
@@ -93,10 +157,10 @@ void InputManager::ErrorAxes(const char* name)
 #pragma endregion
 
 #pragma region Context
-InputManager::KeyboardContext* InputManager::AddContext(const std::string& name)
+InputManager::InputContext* InputManager::AddContext(const std::string& name)
 {
 	if (!m_contexts.contains(name))
-		m_contexts[name] = KeyboardContext();
+		m_contexts[name] = InputContext();
 
 	return &m_contexts[name];
 }
@@ -106,12 +170,24 @@ void InputManager::SetContext(const std::string& name)
 	if (m_contexts.empty() || !m_contexts.contains(name))
 		return;
 
-	m_activeContext = &m_contexts[name];
+	SetContext(&m_contexts[name]);
 }
 
-void InputManager::SetContext(KeyboardContext* context)
+void InputManager::SetContext(InputContext* context)
 {
+	if (!context)
+		context = m_defaultContext;
+
+	m_activeContext->m_mouseDelta = { 0.f, 0.f };
+	m_activeContext->m_mousePos = { 0.f, 0.f };
+	m_activeContext->m_mouseWheel = { 0.f, 0.f };
+
 	m_activeContext = context;
+}
+
+void InputManager::SetDefaultContext()
+{
+	SetContext(m_defaultContext);
 }
 #pragma endregion
 
@@ -150,17 +226,17 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 
 void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	m_mouseWheel.x = (float)xoffset;
-	m_mouseWheel.y = (float)yoffset;
+	m_activeContext->m_mouseWheel.x = (float)xoffset;
+	m_activeContext->m_mouseWheel.y = (float)yoffset;
 }
 
 void InputManager::MousePosCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	m_mouseDelta.x = m_mousePos.x - (float)xpos;
-	m_mouseDelta.y = m_mousePos.y - (float)ypos;
+	m_activeContext->m_mouseDelta.x = m_activeContext->m_mousePos.x - (float)xpos;
+	m_activeContext->m_mouseDelta.y = m_activeContext->m_mousePos.y - (float)ypos;
 
-	m_mousePos.x = (float)xpos;
-	m_mousePos.y = (float)ypos;
+	m_activeContext->m_mousePos.x = (float)xpos;
+	m_activeContext->m_mousePos.y = (float)ypos;
 }
 
 void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action, int mods)
@@ -185,10 +261,11 @@ void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action
 
 void InputManager::UpdateKeys()
 {
-	m_mouseWheel = CCMaths::Vector2::Zero;
-	m_mouseDelta = CCMaths::Vector2::Zero;
-
-	m_listenedKey = -1;
+	if (m_activeContext)
+	{
+		m_activeContext->m_mouseWheel = CCMaths::Vector2::Zero;
+		m_activeContext->m_mouseDelta = CCMaths::Vector2::Zero;
+	}
 
 	for (auto& key : m_framePressedKeys)
 	{

@@ -108,6 +108,8 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
 
     HandleNotifications();
 
+    UpdateFocusGame();
+
     if (m_isDemoOpened)   ImGui::ShowDemoWindow(&m_isDemoOpened);
 
     ImGui::Render();
@@ -227,6 +229,7 @@ void EditorManager::HandleMenuBar()
             {
                 m_logDisplayer.TryClearOnPlay();
                 m_engine->Launch();
+                FocusGame();
             }
 
         } ImGui::SameLine();
@@ -305,6 +308,32 @@ void EditorManager::HandleNotifications()
     ImGui::RenderNotifications(); 
     ImGui::PopStyleVar(1); 
     ImGui::PopStyleColor(1);
+}
+
+void EditorManager::UpdateFocusGame()
+{
+    if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
+    {
+        FocusGame();
+    }
+
+    if (InputManager::GetInstance()->GetKeyDown(Keycode::ESCAPE))
+    {
+        UnfocusGame();
+    }
+}
+
+void EditorManager::FocusGame()
+{
+    inputs->SetContext("User Context");
+    inputs->SetCursorHidden();
+    ImGui::GetIO().MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
+}
+
+void EditorManager::UnfocusGame()
+{
+    inputs->SetContext(nullptr);
+    inputs->SetCursorDisplayed();
 }
 
 //Display time in seconds

@@ -9,10 +9,15 @@
 CameraComponent::CameraComponent(Entity& owner)
 	: Behaviour(owner)
 {
+	m_transform = owner.GetBehaviour<Transform>();
+
 	auto RM = RenderManager::GetInstance();
 
 	RM->GenerateFromPipeline<BasicRenderPass>(this);
 	RM->GenerateFromPipeline<SkyboxRenderPass>(this);
+
+	m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
+	m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
 
 	PopulateMetadatas();
 }
@@ -27,6 +32,18 @@ CameraComponent::CameraComponent()
 	PopulateMetadatas();
 }
 
+CameraComponent::~CameraComponent()
+{
+	auto RM = RenderManager::GetInstance();
+
+	RM->RemoveFromPipeline<BasicRenderPass>(this);
+	RM->RemoveFromPipeline<SkyboxRenderPass>(this);
+
+	// TODO: Unbind not in destructor
+	// m_transform->m_onPositionChange.Unbind(&CameraComponent::ChangePosition, this);
+	// m_transform->m_onRotationChange.Unbind(&CameraComponent::ChangeRotation, this);
+}
+
 void CameraComponent::PopulateMetadatas()
 {
 	m_metadatas.SetField<float>("aspect", m_camera.aspect);
@@ -36,10 +53,12 @@ void CameraComponent::PopulateMetadatas()
 	m_metadatas.SetField<Behaviour*>("transform", m_transform);
 }
 
-CameraComponent::~CameraComponent()
+void CameraComponent::ChangePosition(const Vector3& position)
 {
-	auto RM = RenderManager::GetInstance();
+	m_camera.position = position;
+}
 
-	RM->RemoveFromPipeline<BasicRenderPass>(this);
-	RM->RemoveFromPipeline<SkyboxRenderPass>(this);
+void CameraComponent::ChangeRotation(const Vector3& rotation)
+{
+	m_camera.rotation = rotation;
 }

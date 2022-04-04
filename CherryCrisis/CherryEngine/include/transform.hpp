@@ -63,7 +63,8 @@ public:
 
 	TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
-
+	Event<const Vector3&> m_onPositionChange;
+	Event<const Vector3&> m_onRotationChange;
 
 	std::vector<Transform*> GetChildren() { return m_children; }
 	void AddChildren(Transform* transform);

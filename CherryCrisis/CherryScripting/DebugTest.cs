@@ -17,7 +17,7 @@ namespace CCScripting
 		public string name = "Debug il sait pas quoi";
 		public void Debugger()
 		{
-			Debug.GetInstance().Log(name);
+			Debug.GetInstance().Log(name, ELogType.ERROR);
 		}
 	}
 }

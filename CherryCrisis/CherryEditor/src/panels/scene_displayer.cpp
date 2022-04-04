@@ -40,7 +40,6 @@ void SceneDisplayer::Render()
                 SceneManager::GetInstance()->m_currentScene->Unserialize(c);
             }
 
-
             ImGui::EndDragDropTarget();
         }
         ImGui::EndChild();

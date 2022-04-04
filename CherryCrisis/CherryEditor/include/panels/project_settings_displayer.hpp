@@ -39,7 +39,7 @@ private:
 		void SetButtons(InputManager* IM);
 		void SetAxes(InputManager* IM);
 
-		InputManager::KeyboardContext* userContext = nullptr;
+		InputManager::InputContext* userContext = nullptr;
 	};
 
 	class Audio : public PanelCategory

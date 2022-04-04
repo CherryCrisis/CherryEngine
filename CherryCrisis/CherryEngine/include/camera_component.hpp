@@ -15,6 +15,9 @@ public:
 	CameraComponent();
 	~CameraComponent();
 
+	void ChangePosition(const Vector3& position);
+	void ChangeRotation(const Vector3& rotation);
+
 	Camera		m_camera;
 	Transform*	m_transform = nullptr;
 };
