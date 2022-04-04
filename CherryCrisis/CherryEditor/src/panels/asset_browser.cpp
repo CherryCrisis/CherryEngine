@@ -16,6 +16,8 @@
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
+#include "scene_manager.hpp"
+
 AssetBrowser::AssetBrowser()
 {
     //Set Full Path to Assets
@@ -235,6 +237,14 @@ void AssetBrowser::RenderNodes()
                 m_currentDirectory /= node.m_filename;
                 QuerryBrowser();
                 return;
+            }
+            if (node.m_extension == ".cherry") 
+            {
+                //open Scene and if the last is not saved, warn the user
+                if (SceneManager::GetInstance()->m_currentScene->Unserialize(node.m_filename.c_str()))
+                    EditorManager::SendNotification("Scene Loaded!", ImGuiToastType::Success);
+                else
+                    EditorManager::SendNotification("Scene failed to Load", ImGuiToastType::Error);
             }
         }
 

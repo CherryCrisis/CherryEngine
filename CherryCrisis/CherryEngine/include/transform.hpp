@@ -26,7 +26,6 @@ private:
 	void SetDirty();
 
 	void PopulateMetadatas() override;
-	void ConsumeMetadatas() override;
 
 	template<typename T>
 	using TransformProperty = CCProperty::Property<Transform, T>;

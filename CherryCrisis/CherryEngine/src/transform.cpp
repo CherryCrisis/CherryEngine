@@ -21,15 +21,6 @@ void Transform::PopulateMetadatas()
 	m_metadatas.SetProperty("rotation", &rotation);
 	m_metadatas.SetProperty("scale", &scale);
 	m_metadatas.SetProperty("parent", &parent);
-	//m_metadatas.m_fields["parent"] = { "parent",  (Behaviour*)m_parent};
-}
-
-void Transform::ConsumeMetadatas()
-{
-
-	/*m_position = std::any_cast<Vector3>(m_metadatas.m_fields["position"].m_value);
-	m_rotation = std::any_cast<Vector3>(m_metadatas.m_fields["rotation"].m_value);
-	m_scale    = std::any_cast<Vector3>(m_metadatas.m_fields["scale"].m_value);*/
 }
 
 void Transform::SetDirty()
@@ -42,26 +33,27 @@ void Transform::SetDirty()
 
 void Transform::SetParent(Transform*& transform)
 {
-	if (transform)
+	if (m_parent == transform) // Guard to prevent parent re-set
+		return;
+
+	if (m_parent) // Remove the transform from the last parent
 	{
-		transform->m_children.push_back(this);
-	}
-	else
-	{
-		//To remove this transform in parent
-		if (m_parent)
+		size_t childrenSize = m_parent->m_children.size();
+		for (size_t i = 0; i < childrenSize; ++i)
 		{
-			size_t childrenSize = m_parent->m_children.size();
-			for (size_t i = 0; i < m_parent->m_children.size(); ++i)
+			if (this == m_parent->m_children[i])
 			{
-				if (this == m_parent->m_children[i])
-				{
-					m_parent->m_children[i] = m_parent->m_children[childrenSize - 1];
-					m_parent->m_children.pop_back();
-				}
+				m_parent->m_children[i] = m_parent->m_children.back();
+				m_parent->m_children.pop_back();
+				break;
 			}
 		}
 	}
+	if (transform) // Subscribe to the new parent if there is one
+	{
+		transform->m_children.push_back(this);
+	}
+
 	m_parent = transform;
 	SetDirty();
 }
@@ -86,7 +78,7 @@ void Transform::UpdateMatrix()
 
 Matrix4 Transform::GetWorldMatrix()
 {
-	// TO DO: change this using event/cpp properties
+	// TODO: change this using event/cpp properties
 	if (!m_isDirty)
 		return m_worldMatrix;
 

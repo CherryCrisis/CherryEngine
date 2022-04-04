@@ -13,6 +13,8 @@
 #include "scene_manager.hpp"
 #include "model.hpp"
 
+#define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
+
 template <typename T>
 bool contains(std::vector<T> vec, const T& elem)
 {
@@ -31,33 +33,16 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
-        ImGui::BeginChild("DragDropTarget");
         for (auto& [entityName, entityRef] : m_displayedScene->m_entities)
         {
             if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
                 entityTransform && !entityTransform->IsRoot())
                 continue;
-            
-            ImGui::PushID(entityRef->GetUUID());
+                   
             std::string name = entityRef->GetName();
-            RenderEntity(entityRef);
-            
-            ImGui::PopID();
+            if (RenderEntity(entityRef))
+                break;   
         }
-
-        if (ImGui::BeginDragDropTarget())
-        {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj"))
-            {
-                const char* c = (const char*)payload->Data;
-                std::string str = "Assets/" + std::string(c);
-                const char* strReal = str.c_str();
-            }
-
-
-            ImGui::EndDragDropTarget();
-        }
-        ImGui::EndChild();
     }
 
     ContextCallback();
@@ -67,11 +52,42 @@ void HierarchyDisplayer::Render()
         ImGui::OpenPopup("context");
     }
 
+    if (m_renaming)
+        ImGui::OpenPopup("Rename");
+
+    //TODO: Replace this with per entity for multi selection
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal("Rename", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        std::string str = "Renaming ";
+        str += m_manager->m_selectedEntities[0]->GetName();
+        str += " ? \n\n";
+        ImGui::Text(str.c_str());
+        ImGui::Separator();
+
+        static char newName[32] = "New Name";
+        IMGUI_LEFT_LABEL(ImGui::InputText, "New Name:", newName, IM_ARRAYSIZE(newName));
+
+        ImGui::Separator();
+
+        if (ImGui::Button("Rename", ImVec2(120, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+            m_manager->m_selectedEntities[0]->SetName(newName);
+            memset(newName, 0, sizeof(char) * strlen(newName));
+            m_renaming = false;
+        }
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_renaming = false;  ImGui::CloseCurrentPopup(); }
+        ImGui::EndPopup();
+    }
     
     ImGui::End();
 }
 
-void HierarchyDisplayer::RenderEntity(Entity* entity) 
+bool HierarchyDisplayer::RenderEntity(Entity* entity) 
 {
     Transform* entityTransform = entity->GetBehaviour<Transform>();
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -84,19 +100,43 @@ void HierarchyDisplayer::RenderEntity(Entity* entity)
    
     if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered()) 
     {
-        if (!InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL))    // Clear selection when CTRL is not held
+        if (!InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) // Clear selection when CTRL is not held
             m_manager->m_selectedEntities.clear();
 
         if (!contains(m_manager->m_selectedEntities, entity))
             m_manager->m_selectedEntities.push_back(entity);
     }
 
+    if (entityTransform && ImGui::BeginDragDropSource())
+    {
+        ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
+        ImGui::Text(entity->GetName().c_str());
+        ImGui::EndDragDropSource();
+    }
+    Transform* toAdd = nullptr;
+    if (entityTransform && ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+        {
+            Entity* draggedEntity = (Entity*)payload->Data;
+
+            draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
+            m_manager->m_selectedEntities.clear();
+            ImGui::TreePop();
+            return true;
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
     if (opened && entityTransform)
         for (const auto& child : entityTransform->GetChildren())
-            RenderEntity(&child->GetHost());
+            if (RenderEntity(&child->GetHost())) { ImGui::TreePop(); return true; }
         
     if (opened)
         ImGui::TreePop();
+
+    return false;
 }
 
 void HierarchyDisplayer::ContextCallback()

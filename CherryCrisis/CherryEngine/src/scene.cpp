@@ -55,7 +55,7 @@ void Scene::RemoveEntity(Entity* toRemove)
 {
 	Transform* transform;
 	if (!toRemove->TryGetBehaviour(transform))
-		return;
+		m_entities.erase(toRemove->GetName()); return;
 
 	std::vector<Transform*> children = transform->GetChildren();
 

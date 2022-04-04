@@ -12,7 +12,6 @@ private:
 	Scene* m_displayedScene = nullptr;
 	EditorManager* m_manager = nullptr;
 
-	bool m_deleting = false;
 	bool m_renaming = false;
 
 public:
@@ -20,7 +19,7 @@ public:
 	void ContextCallback() override;
 
 	void SetScene(Scene* scene) { m_displayedScene = scene; }
-	void RenderEntity(Entity* entity);
+	bool RenderEntity(Entity* entity);
 
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr) : 
 	Panel(spawnOpened),m_manager(manager) {}
