@@ -7,11 +7,36 @@
 #include <GLFW/glfw3.h> 
 
 #include "input_manager.hpp"
+#include "time_manager.hpp"
+#include "render_manager.hpp"
 
 #include <iostream>
 
+#include <crtdbg.h>
+#include "scene_manager.hpp"
+
+struct Context 
+{
+    InputManager* inputs;
+};
+
+void HideCursor(void* window)
+{
+    GLFWwindow* castedWindow = (GLFWwindow*)window;
+    glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void ShowCursor(void* window)
+{
+    GLFWwindow* castedWindow = (GLFWwindow*)window;
+    glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
 int main()
 {
+    // Check for leak
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     int screenWidth = 1200;
     int screenHeight = 1000;
 
@@ -33,38 +58,65 @@ int main()
         return -1;
     }
     if (GLAD_GL_KHR_debug)
-    {
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    }
-    InputManager* IM = InputManager::GetInstance();
     Engine engine{};
+    Context context;
+    context.inputs = InputManager::GetInstance();
 
-    auto func = [](GLFWwindow* w, int k, int s, int a, int m)
-    {
-        static_cast<InputManager*>(glfwGetWindowUserPointer(w))->KeyCallback(w, k, s, a, m);
-    };
+    glfwSetWindowUserPointer(window, &context);
+    glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
+        {
+            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->KeyCallback(w, k, s, a, m);
+        });
+    glfwSetScrollCallback(window, [](GLFWwindow* w, double x, double y)
+        {
+            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
+        });
+    glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y)
+        {
+            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MousePosCallback(w, x, y);
+        });
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int k, int a, int m)
+        {
+            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
+        });
 
-    auto funcW = [](GLFWwindow* w, double x, double y)
-    {
-        static_cast<InputManager*>(glfwGetWindowUserPointer(w))->MouseWheelCallback(w, x, y);
-    };
+    InputManager::GetInstance()->HideCursor = HideCursor;
+    InputManager::GetInstance()->ShowCursor = ShowCursor;
+    Engine::window_handle = window;
 
-    glfwSetWindowUserPointer(window, IM);
+    engine.window_handle = window;
+    std::shared_ptr<Scene> scn;
+    scn = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
+    SceneManager::GetInstance()->SetCurrentScene(scn);
 
-    glfwSetKeyCallback(window, func);
-    glfwSetScrollCallback(window, funcW);
+    SceneManager::GetInstance()->m_currentScene->Unserialize("scene de ouf.cherry");
 
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();
+        TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.f, 0.f, 0.f, 1.f);
+        int x = 0;
+        int y = 0;
+
+        glfwGetWindowSize(window, &x, &y);
+        RenderManager::DrawScene(x, y);
+
+        engine.TickEngine();
+
+
 
         if (engine.isPlaying)
             engine.Tick();
 
         glfwSwapBuffers(window);
     }
+
+    // Terminate glfw
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    return 0;
 }
