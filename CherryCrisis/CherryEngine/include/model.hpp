@@ -3,6 +3,8 @@
 #include <vector>
 #include <map>
 
+#include "cherry_macros.hpp"
+
 #include "resource.hpp"
 #include "mesh.hpp"
 #include "material.hpp"
@@ -13,7 +15,7 @@ class Material;
 struct aiScene;
 struct aiNode;
 
-class Model : public Resource<Model>
+class CCENGINE_API Model : public Resource<Model>
 {
 public:
 	Model(const char* filepath) : Resource(filepath) {}

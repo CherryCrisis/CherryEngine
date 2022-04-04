@@ -1,9 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include "singleton.hpp"
 
 #include "cherry_macros.hpp"
 
+namespace std::chrono
+{
+	class time_zone;
+}
 
 struct CCENGINE_API FullDate
 {
@@ -27,8 +33,10 @@ private:
 
 	float m_lastTime = 0.f;
 
+	const std::chrono::time_zone* m_currentZone = nullptr;
+
 public:
-	
+	TimeManager();
 	//GETTER AND SETTERS
 
 	FullDate GetCurrentTime();

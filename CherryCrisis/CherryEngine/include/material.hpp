@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <memory>
 
+#include "cherry_macros.hpp"
+
 #include "resource.hpp"
 #include "maths.hpp"
 
@@ -14,7 +16,7 @@ class Texture;
 
 using namespace CCMaths;
 
-class Material : public Resource<Material>
+class CCENGINE_API Material : public Resource<Material>
 {
 private:
 	Vector3 m_albedo;

@@ -11,6 +11,8 @@
 #include "input_manager.hpp"
 #include "physic_manager.hpp"
 #include "sound_manager.hpp"
+#include "time_manager.hpp"
+#include "debug.hpp"
 
 void* Engine::window_handle = nullptr;
 
@@ -25,8 +27,10 @@ Engine::~Engine()
 	PhysicSystem::PhysicManager::Kill();
 	SoundManager::Kill();
 	SceneManager::Kill();
+	TimeManager::Kill();
 	ResourceManager::Kill();
 	CsScriptingSystem::Kill();
+	Debug::Kill(); 
 }
 
 void Engine::TickEngine()

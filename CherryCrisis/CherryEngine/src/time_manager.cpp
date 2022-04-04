@@ -7,6 +7,11 @@
 template <>
 TimeManager* Singleton<TimeManager>::currentInstance = nullptr;
 
+TimeManager::TimeManager()
+{
+    m_currentZone = std::chrono::current_zone();
+}
+
 void TimeManager::Update(const float time) 
 {
 	m_lastTime = m_elapsedTime;
@@ -16,7 +21,9 @@ void TimeManager::Update(const float time)
 
 FullDate TimeManager::GetCurrentTime()
 {
-    auto tp = std::chrono::zoned_time{ std::chrono::current_zone(), std::chrono::system_clock::now() }.get_local_time();
+
+    return FullDate();
+    auto tp = std::chrono::zoned_time{ m_currentZone, std::chrono::system_clock::now() }.get_local_time();
     auto dp = floor<std::chrono::days>(tp);
     
     std::chrono::year_month_day ymd{ dp };
