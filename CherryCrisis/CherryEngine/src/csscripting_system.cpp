@@ -16,11 +16,6 @@ CsScriptingSystem::CsScriptingSystem()
 
 CsScriptingSystem::~CsScriptingSystem() = default;
 
-MonoObject* GetStaticInstance(ScriptedBehaviour* managedInstance)
-{
-	return managedInstance->managedInstance->RawObject();
-};
-
 void CsScriptingSystem::Init()
 {
 	// TODO: Set generic pathes
@@ -29,9 +24,9 @@ void CsScriptingSystem::Init()
 	mono::ManagedScriptSystemSettings_t settings("RootDomain");
 	m_scriptSystem = std::make_unique<mono::ManagedScriptSystem>(settings);
 
-	MonoObject* (*lamb)(ScriptedBehaviour*) = [](ScriptedBehaviour* managedPtr)
+	MonoObject* (*GetStaticInstance)(ScriptedBehaviour*) = [](ScriptedBehaviour* managedPtr)
 	{
-		return ((ScriptedBehaviour*)&managedPtr->GetHost())->managedInstance->RawObject();
+		return managedPtr->GetRawInstance();
 	};
 
 	mono_add_internal_call("CCEngine.ScriptedBehaviour::GetStaticInstance", GetStaticInstance);

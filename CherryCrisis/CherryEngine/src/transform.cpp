@@ -17,20 +17,19 @@ Transform::Transform(CCUUID& owner)
 
 void Transform::PopulateMetadatas() 
 {
-	m_metadatas.SetField<Behaviour*>("parent", m_parent);
-
 	m_metadatas.SetProperty("position", &position);
 	m_metadatas.SetProperty("rotation", &rotation);
 	m_metadatas.SetProperty("scale", &scale);
+	m_metadatas.SetProperty("parent", &parent);
 	//m_metadatas.m_fields["parent"] = { "parent",  (Behaviour*)m_parent};
 }
 
 void Transform::ConsumeMetadatas()
 {
-	auto a = m_metadatas.m_fields["parent"].m_value;
-	Behaviour* b =  std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
 
-	m_parent   = (Transform*)std::any_cast<Behaviour*>(m_metadatas.m_fields["parent"].m_value);
+	/*m_position = std::any_cast<Vector3>(m_metadatas.m_fields["position"].m_value);
+	m_rotation = std::any_cast<Vector3>(m_metadatas.m_fields["rotation"].m_value);
+	m_scale    = std::any_cast<Vector3>(m_metadatas.m_fields["scale"].m_value);*/
 }
 
 void Transform::SetDirty()
@@ -41,7 +40,7 @@ void Transform::SetDirty()
 		child->SetDirty();
 }
 
-void Transform::SetParent(Transform* transform)
+void Transform::SetParent(Transform*& transform)
 {
 	if (transform)
 	{
@@ -64,6 +63,7 @@ void Transform::SetParent(Transform* transform)
 		}
 	}
 	m_parent = transform;
+	SetDirty();
 }
 
 void Transform::UpdateMatrix()
@@ -100,19 +100,19 @@ Matrix4 Transform::GetWorldMatrix()
 	return m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 }
 
-void Transform::SetPosition(const Vector3& position)
+void Transform::SetPosition(Vector3& position)
 {
 	m_position = position;
 	SetDirty();
 }
 
-void Transform::SetRotation(const Vector3& rotation)
+void Transform::SetRotation(Vector3& rotation)
 {
 	m_rotation = rotation;
 	SetDirty();
 }
 
-void Transform::SetScale(const Vector3& scale)
+void Transform::SetScale(Vector3& scale)
 {
 	m_scale = scale;
 	SetDirty();

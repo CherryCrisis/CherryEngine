@@ -1,6 +1,16 @@
 Changelog
 ===
 
+*01-04-2022*
+-
+**[Adding]**:
+* Serialization (inspector, saving/loading)
+* Debug
+* PhysX (intergration, structure)
+* Editor (drag & drop)
+* Resource manager (delete, hot reload)
+* Scripting (add / get componenet)
+
 *24-03-2022*
 -
 **[Adding]**:

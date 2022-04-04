@@ -71,6 +71,14 @@ public:
 	COMP_TEMPLATE_WRAP(Transform)
 
 	%proxycode %{
+	private Behaviour AddScript(string scriptPath)
+	{
+		ScriptedBehaviour script = AddScriptedBehaviour();
+		script.SetScriptClass(scriptPath);
+
+		return script.GetInstance();
+	}
+
 	private Behaviour GetScript(string scriptPath)
 	{
         ScriptedBehaviourVector scriptedBehaviours = GetAllOfScriptedBehaviour();
@@ -97,7 +105,7 @@ public:
 		if (type == typeof(CameraComponent))
 			return AddCameraComponent();
 
-		return null;
+		return AddScript(type.Name);
 	}
 
 	public T AddComponent<T>() where T : Component => AddComponent(typeof(T)) as T;

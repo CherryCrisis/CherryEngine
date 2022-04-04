@@ -4,8 +4,7 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "physic_scene.hpp"
-#include "physic_actor.hpp"
+#include "physic_manager.hpp"
 #include "transform.hpp"
 
 Collider::Collider(Entity& owner)
@@ -18,11 +17,12 @@ Collider::Collider(Entity& owner)
 }
 
 void Collider::PopulateMetadatas()
-{
-	m_metadatas.m_fields["Enabled"]			= { "Enabled", &m_isEnabled};
-	m_metadatas.m_fields["Is Trigger"]		= { "Is Trigger", &m_isTrigger};
-	m_metadatas.m_fields["Shape"]			= { "Shape", &m_colliderShape};
-	m_metadatas.m_fields["Contact Offset"]	= { "Contact Offset", &m_contactOffset};
+{/*
+	m_metadatas.m_fields.push_back({ "Enabled", &m_isEnabled});
+	m_metadatas.m_fields.push_back({ "Is Trigger", &m_isTrigger});
+	m_metadatas.m_fields.push_back({ "Shape", &m_colliderShape});
+	m_metadatas.m_fields.push_back({ "Contact Offset", &m_contactOffset});
+	*/
 }
 
 void Collider::SetPxShape()
@@ -37,12 +37,12 @@ void Collider::SetPxShape()
 	{
 		switch (m_colliderShape)
 		{
-		case ColliderShape::NONE:
+		case EColliderShape::NONE:
 			break;
-		case ColliderShape::BOX_COLLIDER:
+		case EColliderShape::BOX_COLLIDER:
 			m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(physx::PxVec3(1.f, 1.f, 1.f)));
 			break;
-		case ColliderShape::SPHERE_COLLIDER:
+		case EColliderShape::SPHERE_COLLIDER:
 			m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(1.f));
 			break;
 		default:

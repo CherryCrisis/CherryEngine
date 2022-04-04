@@ -20,14 +20,27 @@
 
 #include <iostream>
 
-#include "debug.hpp"
-void PrintDebug()
+#include <crtdbg.h>
+
+
+
+void HideCursor(void* window) 
 {
-    //Debug::GetInstance()->Log("Print string");
+    GLFWwindow* castedWindow = (GLFWwindow*) window;
+    glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void ShowCursor(void* window)
+{
+    GLFWwindow* castedWindow = (GLFWwindow*)window;
+    glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 int main()
 {
+    // Check for leak
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     int screenWidth = 1200;
     int screenHeight = 1000;
 
@@ -49,9 +62,7 @@ int main()
         return -1;
     }
     if (GLAD_GL_KHR_debug)
-    {
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    }
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -64,62 +75,49 @@ int main()
     io.Fonts->AddFontFromMemoryTTF((void*)tahoma, sizeof(tahoma), 17.f, &font_cfg);
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
-
     Engine engine{};
     EditorManager editor{};
 
-    auto func = [](GLFWwindow* w, int k, int s, int a, int m)
+    glfwSetWindowUserPointer(window, &editor);
+    glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
     {
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->KeyCallback(w, k, s, a, m);
-    };
-
-    auto funcF = [](GLFWwindow* w, int i)
+    });
+    glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int i)
     {
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->FocusCallback(w, i);
-    };
-
-    auto funcW = [](GLFWwindow* w, double x, double y)
+    });
+    glfwSetScrollCallback(window, [](GLFWwindow* w, double x, double y)
     {
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
-    };
-
-    auto funcCP = [](GLFWwindow* w, double x, double y)
+    });
+    glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y)
     {
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MousePosCallback(w, x, y);
-    };
-
-
-    auto funcCC = [](GLFWwindow* w, int k, int a, int m)
+    });
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int k, int a, int m)
     {
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
-    };
-
-    glfwSetWindowUserPointer(window, &editor);
-
-    glfwSetKeyCallback(window, func);
-    glfwSetWindowFocusCallback(window, funcF);
-    glfwSetScrollCallback(window, funcW);
-    glfwSetCursorPosCallback(window, funcCP);
-    glfwSetMouseButtonCallback(window, funcCC);
-
+    });
     ImGui_ImplGlfw_InitForOpenGL(window, true);
 
+    InputManager::GetInstance()->HideCursor = HideCursor;
+    InputManager::GetInstance()->ShowCursor = ShowCursor;
+    Engine::window_handle = window;
+
     editor.LinkEngine(&engine);
+    engine.window_handle = window;
 
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-    InputManager* inputManager = InputManager::GetInstance();
-    inputManager->SetContext("user Context");
-    int succes;
-    inputManager->AddActionButtons("Debug", succes)->m_pressed.Bind(PrintDebug);
-    inputManager->AddInputToAction("Debug", Keycode::D);
-
-    //glfwRequestWindowAttention(window);
+    // TODO: Change to pre-compiled image
     stbi_set_flip_vertically_on_load(false);
     GLFWimage icon[1];
     icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
     glfwSetWindowIcon(window, 1 , icon);
     stbi_image_free(icon[0].pixels);
+    //-----------------------------------
+
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();
@@ -142,4 +140,19 @@ int main()
 
         glfwSwapBuffers(window);
     }
+
+    io.Fonts->ClearFonts();
+
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    // Terminate glfw
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    system("PAUSE");
+
+    return 0;
 }

@@ -3,10 +3,16 @@
 #include "cherry_macros.hpp"
 
 #include "behaviour.hpp"
-#include "physic_manager.hpp"
 
 class Rigidbody;
 class Collider;
+
+namespace physx
+{
+	class PxRigidActor;
+	class PxGeometry;
+	class PxShape;
+}
 
 namespace PhysicSystem
 {

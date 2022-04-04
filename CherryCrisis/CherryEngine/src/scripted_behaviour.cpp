@@ -17,6 +17,14 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 {
 	// TODO: Change path
 	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+	m_metadatas.SetProperty("ntm", &scriptPath);
+}
+
+ScriptedBehaviour::ScriptedBehaviour()
+{
+	// TODO: Change path
+	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+	m_metadatas.SetProperty("ntm", &scriptPath);
 
 }
 
@@ -24,25 +32,38 @@ ScriptedBehaviour::~ScriptedBehaviour()
 {
 	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
+
+	if (managedInstance)
+		managedInstance->Dispose();
 }
 
+void ScriptedBehaviour::BindToSignals() 
+{
+	if (managedUpdate)
+	{
+		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
+	}
 
-void ScriptedBehaviour::SetScriptClass(const char* scriptName)
+	if (managedStart)
+	{
+		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
+	}
+}
+
+void ScriptedBehaviour::SetScriptClass(std::string& scriptName)
 {
 	m_scriptName = scriptName;
 
-	managedClass = assembly->context->FindClass("CCScripting", scriptName);
+	managedClass = assembly->context->FindClass("CCScripting", scriptName.c_str());
 
 	if (managedUpdate = managedClass->FindMethod("Update"))
 	{
 		csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
-		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
 	}
 
 	if (managedStart = managedClass->FindMethod("Start"))
 	{
 		csStart = managedStart->GetMemberUnmanagedThunk<void>();
-		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
 	}
 
 	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
@@ -70,7 +91,6 @@ void ScriptedBehaviour::PopulateMetadatas()
 			continue;
 		}
 	}
-
 	/*auto handleRefClass = assembly->context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
 	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
@@ -120,4 +140,9 @@ void ScriptedBehaviour::Reload()
 	csStart = managedStart->GetMemberUnmanagedThunk<void>();
 
 	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
+}
+
+_MonoObject* ScriptedBehaviour::GetRawInstance()
+{
+	return managedInstance->RawObject();
 }

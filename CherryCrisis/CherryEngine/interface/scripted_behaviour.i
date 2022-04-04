@@ -10,9 +10,11 @@
 class ScriptedBehaviour : public Behaviour
 {
 public:
-	std::string GetScriptName();
+	std::string GetScriptPath();
 
 	%ignore ScriptedBehaviour();
+
+	void SetScriptClass(const `std::string& scriptName);
 
 	%proxycode%{
 	[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.InternalCall)]

@@ -9,6 +9,7 @@
 #include <map>
 
 #include "engine.hpp"
+#include "singleton.hpp"
 #include "threadpool.hpp"
 
 #include "resource.hpp"
@@ -16,14 +17,12 @@
 #include "function.hpp" 
 #include "resources_container.hpp"
 
-class CCENGINE_API ResourceManager
+class CCENGINE_API ResourceManager : public Singleton<ResourceManager>
 {
 private:
 	std::map<std::type_index, std::unique_ptr<AResourcesContainer>> m_resources;
 
 	std::mutex m_lockResources;
-
-	static ResourceManager* m_instance;
 
 	ThreadPool* m_threadpool = nullptr;
 
@@ -35,7 +34,6 @@ private:
 	std::shared_ptr<T> CreateResource(const char* filepath);
 
 public:
-	static ResourceManager* GetInstance();
 
 	ResourceManager();
 	~ResourceManager();
@@ -67,8 +65,8 @@ public:
 	template<class T>
 	void Remove(const char* filepath);
 
-	template<class T>
-	void Reload(const char* filepath);
+	template<class T, typename... Args>
+	void Reload(const char* filepath, Args... args);
 };
 
 

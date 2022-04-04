@@ -58,7 +58,6 @@
     <Compile Include="Generated\ScriptedBehaviourVector.cs" />
     <Compile Include="Generated\SWIGTYPE_p_Camera.cs" />
     <Compile Include="Generated\SWIGTYPE_p_float.cs" />
-    <Compile Include="Generated\SWIGTYPE_p_p_Behaviour.cs" />
     <Compile Include="Generated\Time.cs" />
     <Compile Include="Generated\Transform.cs" />
     <Compile Include="Generated\TransformVector.cs" />

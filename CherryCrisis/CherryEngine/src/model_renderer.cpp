@@ -23,6 +23,7 @@ ModelRenderer::~ModelRenderer()
 void ModelRenderer::PopulateMetadatas()
 {
 	m_metadatas.SetField<Behaviour*>("transform", m_transform);
+	m_metadatas.SetField<std::string>("file", model_path);
 }
 
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
@@ -35,11 +36,13 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 	m_model = newModel;
 
+	model_path = m_model->GetFilepath();
+	
 	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
 	SubscribeToRenderPass();
 }
 
-void ModelRenderer::RemoveModel()
+void ModelRenderer::RemoveModel() 
 {
 	// TODO: Add pipeline remove
 	if (m_model)
@@ -59,12 +62,3 @@ void ModelRenderer::UnsubscribeToRenderPass()
 	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
 }
 
-/*
-void ModelRenderer::Deserialize(const char* filepath, const char* modelName) 
-{
-	ResourceManager* RM = ResourceManager::GetInstance();
-	RM->AddResource<ModelBase>(filepath, true);
-
-	std::shared_ptr<Model> model = RM->AddResource<Model>(modelName, true);
-
-}*/

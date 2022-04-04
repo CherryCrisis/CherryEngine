@@ -15,7 +15,7 @@ namespace PhysicSystem
 	class PhysicActor;
 }
 
-enum class ColliderShape
+enum class EColliderShape
 {
 	NONE,
 	BOX_COLLIDER,
@@ -25,7 +25,7 @@ enum class ColliderShape
 class CCENGINE_API Collider : public Behaviour
 {
 private:
-	ColliderShape	m_colliderShape;
+	EColliderShape	m_colliderShape;
 	physx::PxShape* m_pxShape;
 	
 	bool	m_isEnabled = true;
@@ -44,5 +44,5 @@ public:
 	void SetPxShape();
 	void SetPxData();
 
-	ColliderShape& GetShape() { return m_colliderShape; }
+	EColliderShape& GetShape() { return m_colliderShape; }
 };

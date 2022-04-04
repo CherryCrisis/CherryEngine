@@ -27,7 +27,7 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	std::shared_ptr<class CsAssembly> assembly;
 	std::shared_ptr<mono::ManagedScriptSystem> script;
-
+	std::shared_ptr<mono::ManagedObject> managedInstance;
 	std::shared_ptr<mono::ManagedClass> managedClass;
 	std::shared_ptr<mono::ManagedMethod> managedUpdate;
 	std::shared_ptr<mono::ManagedMethod> managedStart;
@@ -38,17 +38,21 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	void PopulateMetadatas() override;
 
 public:
-	std::shared_ptr<mono::ManagedObject> managedInstance;
 
 	ScriptedBehaviour(Entity& owner);
+	ScriptedBehaviour();
 	~ScriptedBehaviour();
 
-	void SetScriptClass(const char* scriptName);
-
+	void SetScriptClass(std::string& scriptName);
+	void BindToSignals() override;
 	void Start() override;
 	void Update() override;
 
 	void Reload();
 
-	std::string GetScriptName() { return m_scriptName; }
+	std::string GetScriptPath() { return m_scriptName; }
+
+	_MonoObject* GetRawInstance();
+
+	CCProperty::Property<ScriptedBehaviour, std::string> scriptPath { this, &ScriptedBehaviour::SetScriptClass, &ScriptedBehaviour::GetScriptPath};
 };

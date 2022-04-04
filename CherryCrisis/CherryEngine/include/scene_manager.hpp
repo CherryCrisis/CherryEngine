@@ -9,11 +9,12 @@ class CCENGINE_API SceneManager : public Singleton<SceneManager>
 {
 	friend class Singleton<SceneManager>;
 
-	std::shared_ptr<Scene> m_currentScene;
 
 public:
 	void SetCurrentScene(std::shared_ptr<Scene> scene);
 
+	std::shared_ptr<Scene> m_currentScene;
+	
 	void Start();
 	void Update();
 };

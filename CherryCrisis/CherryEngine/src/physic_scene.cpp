@@ -4,7 +4,8 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "physic_actor.hpp"
+#include "physic_manager.hpp"
+#include "cell.hpp"
 
 namespace PhysicSystem
 {
@@ -19,9 +20,9 @@ namespace PhysicSystem
 
 	void PhysicScene::CreatePxScene()
 	{
-		physx::PxPhysics* physics = PhysicManager::GetInstance()->Get();
+		physx::PxPhysics* pxPhysics = PhysicManager::GetInstance()->Get();
 
-		physx::PxSceneDesc sceneDesc(physics->getTolerancesScale());
+		physx::PxSceneDesc sceneDesc(pxPhysics->getTolerancesScale());
 
 		if (!sceneDesc.cpuDispatcher)
 		{
@@ -31,7 +32,7 @@ namespace PhysicSystem
 
 		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 
-		m_pxScene = physics->createScene(sceneDesc);
+		m_pxScene = pxPhysics->createScene(sceneDesc);
 
 		// TODO: change error (throw -> Log)
 		if (!m_pxScene)
@@ -46,6 +47,12 @@ namespace PhysicSystem
 			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 		}
+
+		physx::PxControllerManager* manager = PxCreateControllerManager(*m_pxScene);
+
+		physx::PxCapsuleControllerDesc desc;
+		m_cell->SetControllerDesc(desc);
+		m_playerPxController = manager->createController(desc);
 	}
 
 	void PhysicScene::DestroyPxScene()
@@ -53,8 +60,23 @@ namespace PhysicSystem
 		PX_RELEASE(m_pxScene);
 	}
 
+	void PhysicScene::AddCell(Cell* cell)
+	{
+		m_cell = cell;
+	}
+
+	void PhysicScene::RemoveCell(Cell* cell)
+	{
+		cell = nullptr;
+	}
+
 	void PhysicScene::AddActor(PhysicActor* actor)
 	{
+		int index = PossessActor(actor);
+
+		if (index != -1)
+			return;
+
 		actors.push_back(actor);
 
 		m_pxScene->addActor(*actor->Get());

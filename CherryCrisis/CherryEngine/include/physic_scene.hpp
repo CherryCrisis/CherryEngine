@@ -3,27 +3,40 @@
 #include "cherry_macros.hpp"
 
 #include "behaviour.hpp"
-#include "physic_manager.hpp"
+
+namespace physx
+{
+	class PxScene;
+	class PxController;
+}
+
+class Cell;
 
 namespace PhysicSystem
 {
+	class PhysicActor;
+
 	class CCENGINE_API PhysicScene
 	{
 	private:
 		physx::PxScene* m_pxScene = nullptr;
+		physx::PxController* m_playerPxController = nullptr;
 
 		bool	m_paused = false;
 		float	m_gravity = 9.81f;
 
-		// TODO: Add reference to cell;
+		std::vector<PhysicActor*> actors;
 
 	public:
-		std::vector<PhysicActor*> actors;
+		Cell*	m_cell;
 
 		void	Update(float deltaTime);
 
 		void	CreatePxScene();
 		void	DestroyPxScene();
+
+		void	AddCell(Cell* cell);
+		void	RemoveCell(Cell* cell);
 
 		void	AddActor(PhysicActor* actor);
 		bool	RemoveActor(PhysicActor* actor);

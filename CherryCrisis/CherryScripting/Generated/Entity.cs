@@ -111,6 +111,14 @@ public class Entity : global::System.IDisposable {
     return ret;
   }
 
+	private Behaviour AddScript(string scriptPath)
+	{
+		ScriptedBehaviour script = AddScriptedBehaviour();
+		script.SetScriptClass(scriptPath);
+
+		return script.GetInstance();
+	}
+
 	private Behaviour GetScript(string scriptPath)
 	{
         ScriptedBehaviourVector scriptedBehaviours = GetAllOfScriptedBehaviour();
@@ -118,7 +126,7 @@ public class Entity : global::System.IDisposable {
         for (int i = 0; i < scriptedBehaviours.Count; i++)
         {
 			ScriptedBehaviour script = scriptedBehaviours[i];
-			if (script.GetScriptName() == scriptPath)
+			if (script.GetScriptPath() == scriptPath)
 				return script.GetInstance();
         }
 
@@ -137,7 +145,7 @@ public class Entity : global::System.IDisposable {
 		if (type == typeof(CameraComponent))
 			return AddCameraComponent();
 
-		return null;
+		return AddScript(type.Name);
 	}
 
 	public T AddComponent<T>() where T : Component => AddComponent(typeof(T)) as T;

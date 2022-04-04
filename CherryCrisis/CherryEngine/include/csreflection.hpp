@@ -36,7 +36,7 @@ private:
 	mono::ManagedObject* m_csOwner = nullptr;
 
 public:
-	void SetField(const ManagedT& value)
+	void SetField(ManagedT& value)
 	{
 		m_csOwner->SetField(m_reflectedField, &value);
 	}

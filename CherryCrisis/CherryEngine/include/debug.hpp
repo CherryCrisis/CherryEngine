@@ -9,6 +9,8 @@
 #include "cherry_macros.hpp"
 #include "time_manager.hpp"
 
+#undef ERROR
+
 enum class CCENGINE_API ELogType : int
 {
 	INFO,

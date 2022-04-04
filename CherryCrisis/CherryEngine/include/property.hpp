@@ -9,7 +9,7 @@ namespace CCProperty
     {
         virtual ~IClearProperty() = default;
 
-        virtual bool Set(const void* in) = 0;
+        virtual bool Set(void* in) = 0;
         virtual bool Get(void* out) const = 0;
 
         const std::type_index& GetType() { return m_type; }
@@ -25,7 +25,7 @@ namespace CCProperty
     {
         virtual ~IProperty() = default;
 
-        virtual OwnerT& SetAny(const std::any& value) = 0;
+        virtual OwnerT& SetAny(std::any& value) = 0;
         virtual std::any GetAny() const = 0;
 
     protected:
@@ -39,20 +39,20 @@ namespace CCProperty
     {
         virtual ~Property() = default;
 
-        using SetType = void (OwnerT::*)(const ObjectT&);
+        using SetType = void (OwnerT::*)(ObjectT&);
         using GetType = ObjectT(OwnerT::*)();
 
         Property(OwnerT* ownerPtr, SetType setter, GetType getter)
             : IProperty<OwnerT>(ownerPtr, typeid(ObjectT)), m_setter(setter), m_getter(getter) { }
         
 #pragma region Setter
-        OwnerT& Set(const ObjectT& value)
+        OwnerT& Set(ObjectT& value)
         {
             (IProperty<OwnerT>::m_ownerPtr->*m_setter)(value);
             return *IProperty<OwnerT>::m_ownerPtr;
         }
 
-        bool Set(const ObjectT* in)
+        bool Set(ObjectT* in)
         {
             if (!in || !m_setter)
                 return false;
@@ -61,27 +61,27 @@ namespace CCProperty
             return true;
         }
 
-        bool Set(const void* in) override
+        bool Set(void* in) override
         {
-            const ObjectT* objPtr = static_cast<const ObjectT*>(in);
+            ObjectT* objPtr = static_cast<ObjectT*>(in);
             return Set(objPtr);
         }
 
-        OwnerT& SetAny(const std::any& value) override
+        OwnerT& SetAny(std::any& value) override
         {
-            const ObjectT* objPtr = std::any_cast<ObjectT>(&value);
-            const void* abstractPtr = static_cast<const void*>(objPtr);
+            ObjectT* objPtr = std::any_cast<ObjectT>(&value);
+            void* abstractPtr = static_cast<void*>(objPtr);
 
             Set(abstractPtr);
             return *IProperty<OwnerT>::m_ownerPtr;
         }
 
-        OwnerT& operator=(const std::any& value)
+        OwnerT& operator=(std::any& value)
         {
             return SetAny(value);
         }
 
-        OwnerT& operator=(const ObjectT& value)
+        OwnerT& operator=(ObjectT& value)
         {
             return Set(value);
         }

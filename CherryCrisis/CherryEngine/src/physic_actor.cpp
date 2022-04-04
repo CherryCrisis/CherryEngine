@@ -4,7 +4,7 @@
 
 #include <PxPhysicsAPI.h>
 
-#include "physic_scene.hpp"
+#include "physic_manager.hpp"
 #include "collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
@@ -18,8 +18,10 @@ namespace PhysicSystem
 
 		Transform* t = m_owner->GetBehaviour<Transform>();
 
-		t->SetPosition({ pxT.p.x, pxT.p.y, pxT.p.z });
-		t->SetRotation(Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z }));
+		Vector3 pos = { pxT.p.x, pxT.p.y, pxT.p.z };
+		t->SetPosition(pos);
+		Vector3 rot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
+		t->SetRotation(rot);
 	}
 
 	// TODO: Add actor in Scene according to owner cell

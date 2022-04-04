@@ -207,6 +207,9 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilSetup.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilTelemetry.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
+    <ClInclude Include="include\cell.hpp" />
+    <ClInclude Include="include\cell_system.hpp" />
+    <ClInclude Include="include\physic_character_controller.hpp" />
     <ClInclude Include="include\collider.hpp" />
     <ClInclude Include="include\csassembly.hpp" />
     <ClInclude Include="include\csreflection.hpp" />
@@ -340,6 +343,7 @@
     <ClInclude Include="include\scene.hpp" />
     <ClInclude Include="include\scene_manager.hpp" />
     <ClInclude Include="include\scripted_behaviour.hpp" />
+    <ClInclude Include="include\serializer.hpp" />
     <ClInclude Include="include\shader.hpp" />
     <ClInclude Include="include\shader_program.hpp" />
     <ClInclude Include="include\singleton.hpp" />
@@ -401,6 +405,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="interface\behaviour.i" />
@@ -422,6 +427,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour.cpp" />
+    <ClCompile Include="src\cell.cpp" />
+    <ClCompile Include="src\cell_system.cpp" />
+    <ClCompile Include="src\physic_character_controller.cpp" />
     <ClCompile Include="src\collider.cpp" />
     <ClCompile Include="src\csassembly.cpp" />
     <ClCompile Include="src\csscripting_system.cpp" />

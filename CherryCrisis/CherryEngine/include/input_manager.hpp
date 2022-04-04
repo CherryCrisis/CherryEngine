@@ -13,6 +13,18 @@ class KeyboardContext;
 
 struct GLFWwindow {};
 
+enum class EPriorKey
+{
+	NONE = -1,
+	LEFT_SHIFT = 340,
+	LEFT_CONTROL = 341,
+	LEFT_ALT = 342,
+	RIGHT_SHIFT = 344,
+	RIGHT_CONTROL = 345,
+	RIGHT_ALT = 346,
+};
+
+
 class CCENGINE_API InputManager : public Singleton<InputManager>
 {
 private:
@@ -62,6 +74,7 @@ private:
 	class ActionButtons
 	{
 	private:
+		Input* m_priorKey;
 		std::unordered_map<Keycode, Input*> m_inputs = {};
 
 		void Update(Input* input);
@@ -71,10 +84,12 @@ private:
 		Event<> m_held;						// Event called when the Action is held
 		Event<> m_released;					// Event called when the Action is release
 
-		void AddInput(Keycode newInput);	// Add a new key to the action
+		void SetPriorKey(EPriorKey key);
 
+		void AddInput(Keycode newInput);	// Add a new key to the action
 		int ChangeInput(Keycode oldKey, Keycode newKey);
 
+		bool GetPriorKey();
 		bool CheckDown();					// Return true if Action (any input off m_inputs) is pressed
 		bool CheckHeld();					// Return true if Action (any input off m_inputs) is held
 		bool CheckUp();						// Return true if Action (any input off m_inputs) is released
@@ -418,6 +433,9 @@ public:
 	void SetContext(const std::string& name);
 	void SetContext(KeyboardContext* context);
 
+	void (*HideCursor)(void* window);
+	void (*ShowCursor)(void* window);
+
 	// Callbacks
 	void SetListening();
 	void ResetListenedKey();
@@ -441,9 +459,14 @@ public:
 	bool GetKeyUp(Keycode key);
 	bool GetKeyUp(const char* inputName);
 
+	void SetCursorHidden();
+	void SetCursorDisplayed();
+
 	// ActionButtons
 	ActionButtons* AddActionButtons(const std::string& name, int& success);
 	int RenameActionButtons(const std::string& oldName, const std::string& newName);
+
+	void SetActionPriorKey(const std::string& name, EPriorKey priorKey);
 
 	int AddInputToAction(const std::string& name, Keycode key);
 	int AddInputToAction(ActionButtons* preset, Keycode key);
