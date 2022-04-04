@@ -9,12 +9,12 @@ namespace CCScripting
 		public BackpackBehaviour(System.IntPtr cPtr, bool cMemoryOwn)
 			: base(cPtr, cMemoryOwn)
 		{
-			transform = GetComponent<Transform>();
 		}
 
 		public void Start()
 		{
 
+			transform = GetComponent<Transform>();
 			Debug.GetInstance().Log(pos);
 			InputManager.GetInstance().SetContext("user Context");
 			transform.position = new Vector3(0f, 0f, -5f);

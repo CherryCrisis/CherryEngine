@@ -87,9 +87,6 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	bhave2->SetScriptClass(debugTest); bhave2->BindToSignals();
 
 	scene->AddEntity(camera);
-
-	auto callback = CCCallback::BindCallback(&Scene::GenerateEntities, scene.get());
-	ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 }
 
 void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)

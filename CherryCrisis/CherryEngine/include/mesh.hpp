@@ -7,6 +7,8 @@
 
 #include "renderer.hpp"
 
+#include "cherry_macros.hpp"
+
 //Assimp
 struct aiMesh;
 
@@ -30,7 +32,7 @@ enum class EMeshShape
 
 struct GPUMesh { };
 
-class Mesh : public Resource<Mesh>
+class CCENGINE_API Mesh : public Resource<Mesh>
 {
 public:
 	Mesh(const char* meshName) : Resource<Mesh>(meshName) {}

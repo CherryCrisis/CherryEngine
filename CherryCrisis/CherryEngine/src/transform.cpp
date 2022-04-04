@@ -122,16 +122,3 @@ void Transform::AddChildren(Transform* transform)
 {
 	m_children.push_back(transform);
 }
-/*
-std::string Transform::Serialize()
-{
-	std::string value;
-	value += std::to_string(m_position.x) + "/" + std::to_string(m_position.y) + "/"+  std::to_string(m_position.z) + "\n";
-	value += "  "	+ std::to_string(m_rotation.x) + "/" + std::to_string(m_rotation.y) + "/" + std::to_string(m_rotation.z) + "\n";
-	value += "  "   + std::to_string(m_scale.x) + "/" + std::to_string(m_scale.y) + "/" + std::to_string(m_scale.z) + "\n";
-	if (m_parent)
-		value += "  m_parent: " + std::to_string(m_parent->GetUUID());
-	else
-		value += "  m_parent: null";
-	return value;
-}*/
