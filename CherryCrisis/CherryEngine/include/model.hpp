@@ -4,8 +4,9 @@
 #include <map>
 
 #include "resource.hpp"
-#include "mesh.hpp"
 #include "material.hpp"
+
+#include "cherry_macros.hpp"
 
 class Mesh;
 class Material;
@@ -13,7 +14,7 @@ class Material;
 struct aiScene;
 struct aiNode;
 
-class Model : public Resource<Model>
+class CCENGINE_API Model : public Resource<Model>
 {
 public:
 	Model(const char* filepath) : Resource(filepath) {}
@@ -24,6 +25,8 @@ public:
 	std::shared_ptr<Material>	m_material;
 
 	static void Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const aiNode* assimpNode, const char* modelBasePath);
+	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh);
+
 	void Delete() override;
 	void Reload(const aiScene* assimpScene, const aiNode* assimpNode);
 };

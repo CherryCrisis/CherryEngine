@@ -19,6 +19,12 @@
 #include "model_base.hpp"
 #include "model.hpp"
 
+
+void Foo(std::shared_ptr<ModelBase>)
+{
+	std::cout << "charg� maggle comme ta 50" << std::endl;
+}
+
 Scene::~Scene()
 {
 	for (auto [entityName, entityPtr] : m_entities)
@@ -40,7 +46,28 @@ std::string Scene::GetUniqueEntityName(const std::string& entityName)
 
 void Scene::AddEntity(Entity* toAdd)
 {
-	m_entities[GetUniqueEntityName(toAdd->GetName())] = toAdd;
+	std::string name = GetUniqueEntityName(toAdd->GetName());
+	m_entities[name] = toAdd;
+	toAdd->SetName(name);
+}
+
+void Scene::RemoveEntity(Entity* toRemove) 
+{
+	Transform* transform;
+	if (!toRemove->TryGetBehaviour(transform))
+		return;
+
+	std::vector<Transform*> children = transform->GetChildren();
+
+	for (int i = 0; i < children.size(); i++)
+		RemoveEntity(&children[i]->GetHost());
+	
+	m_entities.erase(toRemove->GetName());
+}
+
+void Scene::RemoveEntity(std::string name)
+{
+	m_entities.erase(name);
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)
@@ -198,10 +225,7 @@ CCMaths::Vector3 ExtractVector3(std::string str)
 	return value;
 }
 
-void Foo(std::shared_ptr<ModelBase>) 
-{
-	std::cout << "charg� maggle comme ta 50" << std::endl;
-}
+
 
 
 bool Scene::Unserialize(const char* filePath) 

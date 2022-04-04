@@ -38,7 +38,15 @@ void Entity::Destroy()
 	std::vector<Transform*> children = transform->GetChildren();
 
 	for (int i = 0; i < children.size(); i++)
+	{
+		if (i == 78) 
+		{
+			std::cout << "e" << std::endl;
+		}
 		children[i]->GetHost().Destroy();
+	}
+	
+	delete this;
 }
 
 std::vector<Behaviour*> Entity::GetAllBehaviours()

@@ -9,6 +9,8 @@
 
 #include "renderer.hpp"
 
+#include "cherry_macros.hpp"
+
 class Model;
 class Entity;
 class Scene;
@@ -23,7 +25,7 @@ struct ModelNode
 	Vector3					m_baseTRS[3];
 };
 
-class ModelBase : public Resource<ModelBase>
+class CCENGINE_API ModelBase : public Resource<ModelBase>
 {
 private:
 
