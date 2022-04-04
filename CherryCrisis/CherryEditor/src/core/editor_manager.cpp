@@ -317,3 +317,9 @@ void EditorManager::FocusCallback(GLFWwindow* window, int focused)
 {
     m_browser.QuerryBrowser();
 }
+
+void EditorManager::FocusEntity(Entity* entity)
+{
+    m_selectedEntities.clear();
+    m_selectedEntities.push_back(entity);
+}

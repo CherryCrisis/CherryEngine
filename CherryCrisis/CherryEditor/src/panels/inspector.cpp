@@ -83,9 +83,9 @@ void InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
-                if (type == typeid(std::string))
+                if (type == typeid(std::string*))
                 {
-                    std::string val = std::any_cast<std::string>(fieldRef.m_value);
+                    std::string val = *std::any_cast<std::string*>(fieldRef.m_value);
                     ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
                     continue;
                 }
@@ -160,10 +160,10 @@ void Inspector::Render()
 
 
             // TODO: Replace with list of available components
-            ImGui::MenuItem("component");
-            ImGui::MenuItem("transform");
-            ImGui::MenuItem("model");
-            ImGui::MenuItem("scriptedBehaviour");
+            if (ImGui::MenuItem("Transform"))      { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
+            if (ImGui::MenuItem("Model Renderer")) { m_manager->m_selectedEntities[0]->AddBehaviour<ModelRenderer>(); }
+            if (ImGui::MenuItem("Camera"))     { }
+            if (ImGui::MenuItem("scriptedBehaviour")){}
             //---------------------------------------------------
 
             ImGui::SetItemDefaultFocus();

@@ -31,6 +31,8 @@ public:
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void AddEntity(Entity* toAdd);
+	void RemoveEntity(Entity* toRemove);
+	void RemoveEntity(std::string name);
 	Entity* FindEntity(uint64_t id);
 
 	bool Serialize(const char* filePath);

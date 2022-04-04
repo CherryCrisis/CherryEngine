@@ -30,6 +30,11 @@ void Model::Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const
 
 }
 
+void Model::Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh) 
+{
+	model->m_mesh = mesh;
+}
+
 void Model::Delete()
 {
 	m_mesh = nullptr;

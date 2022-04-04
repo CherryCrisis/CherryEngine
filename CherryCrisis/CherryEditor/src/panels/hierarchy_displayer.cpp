@@ -8,6 +8,12 @@
 #include "core/editor_manager.hpp"
 
 #include<algorithm>
+#include <resource_manager.hpp>
+#include "callback.hpp"
+#include "scene_manager.hpp"
+#include "model.hpp"
+
+#define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 template <typename T>
 bool contains(std::vector<T> vec, const T& elem)
@@ -27,26 +33,15 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
-        int count = 0;
         for (auto& [entityName, entityRef] : m_displayedScene->m_entities)
         {
             if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
                 entityTransform && !entityTransform->IsRoot())
                 continue;
-
-            ImGui::PushID(entityRef->GetUUID());
+                   
             std::string name = entityRef->GetName();
-
-            if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, entityRef)))
-            {
-                if (!ImGui::GetIO().KeyCtrl)    // Clear selection when CTRL is not held
-                    m_manager->m_selectedEntities.clear();
-
-                if (!contains(m_manager->m_selectedEntities, entityRef))
-                    m_manager->m_selectedEntities.push_back(entityRef);
-            }
-            ImGui::PopID();
-            count++;
+            if (RenderEntity(entityRef))
+                break;   
         }
     }
 
@@ -56,7 +51,92 @@ void HierarchyDisplayer::Render()
     {
         ImGui::OpenPopup("context");
     }
+
+    if (m_renaming)
+        ImGui::OpenPopup("Rename");
+
+    //TODO: Replace this with per entity for multi selection
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal("Rename", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        std::string str = "Renaming ";
+        str += m_manager->m_selectedEntities[0]->GetName();
+        str += " ? \n\n";
+        ImGui::Text(str.c_str());
+        ImGui::Separator();
+
+        static char newName[32] = "New Name";
+        IMGUI_LEFT_LABEL(ImGui::InputText, "New Name:", newName, IM_ARRAYSIZE(newName));
+
+        ImGui::Separator();
+
+        if (ImGui::Button("Rename", ImVec2(120, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+            m_manager->m_selectedEntities[0]->SetName(newName);
+            memset(newName, 0, sizeof(char) * strlen(newName));
+            m_renaming = false;
+        }
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_renaming = false;  ImGui::CloseCurrentPopup(); }
+        ImGui::EndPopup();
+    }
+    
     ImGui::End();
+}
+
+bool HierarchyDisplayer::RenderEntity(Entity* entity) 
+{
+    Transform* entityTransform = entity->GetBehaviour<Transform>();
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+    if (contains(m_manager->m_selectedEntities, entity))                { flags |= ImGuiTreeNodeFlags_Selected; }
+    if (!entityTransform || entityTransform->GetChildren().size() <= 0) { flags |= ImGuiTreeNodeFlags_Leaf; }
+
+
+    bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
+   
+    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered()) 
+    {
+        if (!InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) // Clear selection when CTRL is not held
+            m_manager->m_selectedEntities.clear();
+
+        if (!contains(m_manager->m_selectedEntities, entity))
+            m_manager->m_selectedEntities.push_back(entity);
+    }
+
+    if (entityTransform && ImGui::BeginDragDropSource())
+    {
+        ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
+        ImGui::Text(entity->GetName().c_str());
+        ImGui::EndDragDropSource();
+    }
+    Transform* toAdd = nullptr;
+    if (entityTransform && ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+        {
+            Entity* draggedEntity = (Entity*)payload->Data;
+
+            draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
+            m_manager->m_selectedEntities.clear();
+            ImGui::TreePop();
+            return true;
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
+    if (opened && entityTransform)
+        for (const auto& child : entityTransform->GetChildren())
+            if (RenderEntity(&child->GetHost())) { ImGui::TreePop(); return true; }
+        
+    if (opened)
+        ImGui::TreePop();
+
+    return false;
 }
 
 void HierarchyDisplayer::ContextCallback()
@@ -79,23 +159,80 @@ void HierarchyDisplayer::ContextCallback()
             if (ImGui::MenuItem("Audio Source")) {}
             if (ImGui::BeginMenu("Shapes"))
             {
-                if (ImGui::MenuItem("Cube")) {}
-                if (ImGui::MenuItem("Sphere")) {}
-                if (ImGui::MenuItem("Cone")) {}
-                if (ImGui::MenuItem("Plane")) {}
+                if (ImGui::MenuItem("Cube")) 
+                {
+                    Entity* cube = new Entity("Cube");
+                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCube");
+                    Mesh::CreateCube(mesh,1,1,1);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube",true,mesh);
+                    Transform* tr = cube->AddBehaviour<Transform>();
+                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
+                    rdr->m_transform = tr;
+                    rdr->SetModel(model);
+                    m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
+                }
+                if (ImGui::MenuItem("Sphere")) 
+                {
+                    Entity* cube = new Entity("Sphere");
+                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedSphere");
+                    Mesh::CreateCube(mesh, 1, 1, 1);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedSphere", true, mesh);
+                    Transform* tr = cube->AddBehaviour<Transform>();
+                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
+                    rdr->m_transform = tr;
+                    rdr->SetModel(model);
+                    m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
+                }
+                if (ImGui::MenuItem("Cone")) 
+                {
+                    Entity* cube = new Entity("Cone");
+                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCone");
+                    Mesh::CreateCube(mesh, 1, 1, 1);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCone", true, mesh);
+                    Transform* tr = cube->AddBehaviour<Transform>();
+                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
+                    rdr->m_transform = tr;
+                    rdr->SetModel(model);
+                    m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
+                }
+                if (ImGui::MenuItem("Plane")) 
+                {
+                    Entity* cube = new Entity("Plane");
+                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedPlane");
+                    Mesh::CreateCube(mesh, 1, 1, 1);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedPlane", true, mesh);
+                    Transform* tr = cube->AddBehaviour<Transform>();
+                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
+                    rdr->m_transform = tr;
+                    rdr->SetModel(model);
+                    m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
+                }
                 ImGui::EndMenu();
             }
             ImGui::Separator();
 
             ImGui::EndMenu();
         }
-        if (m_focusedEntity)
+        if (m_manager->m_selectedEntities.size() > 0)
         {
             ImGui::Separator();
             
 
             if (ImGui::MenuItem("Rename")) { m_renaming = true; }
-            if (ImGui::MenuItem("Delete")) { m_deleting = true; }
+            if (ImGui::MenuItem("Delete")) 
+            {
+                for (auto& entity : m_manager->m_selectedEntities) 
+                {
+                    m_displayedScene->RemoveEntity(entity);
+                    entity->Destroy();
+                    //To Change
+                    m_manager->m_selectedEntities.clear();
+                }
+            }
 
             if (ImGui::MenuItem("Copy")) {}
 

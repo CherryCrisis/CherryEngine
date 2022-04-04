@@ -70,6 +70,9 @@ public:
 
     void FocusCallback(GLFWwindow* window, int focused);
 
+
+    void FocusEntity(Entity* entity);
+
     static bool LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height);
 
     InputManager* inputs;

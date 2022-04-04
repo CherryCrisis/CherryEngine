@@ -6,8 +6,9 @@
 #include "cherry_macros.hpp"
 
 #include "resource.hpp"
-#include "mesh.hpp"
 #include "material.hpp"
+
+#include "cherry_macros.hpp"
 
 class Mesh;
 class Material;
@@ -26,6 +27,8 @@ public:
 	std::shared_ptr<Material>	m_material;
 
 	static void Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const aiNode* assimpNode, const char* modelBasePath);
+	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh);
+
 	void Delete() override;
 	void Reload(const aiScene* assimpScene, const aiNode* assimpNode);
 };

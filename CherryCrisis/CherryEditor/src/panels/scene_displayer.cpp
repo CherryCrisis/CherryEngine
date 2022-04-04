@@ -31,7 +31,7 @@ void SceneDisplayer::Render()
 
         if (ImGui::BeginDragDropTarget()) 
         {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_NODE")) 
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".cherry")) 
             {
                 //const wchar_t* path = (const wchar_t*)payload->Data;
                 //_bstr_t b(path);
