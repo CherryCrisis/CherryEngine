@@ -105,9 +105,7 @@ int main()
         RenderManager::DrawScene(x, y);
 
         engine.TickEngine();
-
-
-
+        engine.Launch();
         if (engine.isPlaying)
             engine.Tick();
 
