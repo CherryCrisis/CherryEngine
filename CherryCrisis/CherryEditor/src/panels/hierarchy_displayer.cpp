@@ -74,29 +74,29 @@ void HierarchyDisplayer::Render()
 void HierarchyDisplayer::RenderEntity(Entity* entity) 
 {
     Transform* entityTransform = entity->GetBehaviour<Transform>();
-    if (entityTransform && entityTransform->GetChildren().size() > 0)
-    {
-        //idk why but it is putting itself in children
-        if (ImGui::TreeNode((void*)(intptr_t)entity->GetUUID(), entity->GetName().c_str()))
-        {
-            for (const auto& child : entityTransform->GetChildren())
-                RenderEntity(&child->GetHost());
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-            ImGui::TreePop();
-        }
-    }
-    else 
-    {
-        if (ImGui::Selectable(entity->GetName().c_str(), contains(m_manager->m_selectedEntities, entity)))
-        {
-            if (!ImGui::GetIO().KeyCtrl)    // Clear selection when CTRL is not held
-                m_manager->m_selectedEntities.clear();
+    if (contains(m_manager->m_selectedEntities, entity))                { flags |= ImGuiTreeNodeFlags_Selected; }
+    if (!entityTransform || entityTransform->GetChildren().size() <= 0) { flags |= ImGuiTreeNodeFlags_Leaf; }
 
-            if (!contains(m_manager->m_selectedEntities, entity))
+
+    bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
+   
+    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered()) 
+    {
+        if (!InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL))    // Clear selection when CTRL is not held
+            m_manager->m_selectedEntities.clear();
+
+        if (!contains(m_manager->m_selectedEntities, entity))
             m_manager->m_selectedEntities.push_back(entity);
-        }
     }
 
+    if (opened && entityTransform)
+        for (const auto& child : entityTransform->GetChildren())
+            RenderEntity(&child->GetHost());
+        
+    if (opened)
+        ImGui::TreePop();
 }
 
 void HierarchyDisplayer::ContextCallback()
@@ -130,6 +130,7 @@ void HierarchyDisplayer::ContextCallback()
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
                     m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
                 }
                 if (ImGui::MenuItem("Sphere")) 
                 {
@@ -142,6 +143,7 @@ void HierarchyDisplayer::ContextCallback()
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
                     m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
                 }
                 if (ImGui::MenuItem("Cone")) 
                 {
@@ -154,6 +156,7 @@ void HierarchyDisplayer::ContextCallback()
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
                     m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
                 }
                 if (ImGui::MenuItem("Plane")) 
                 {
@@ -166,6 +169,7 @@ void HierarchyDisplayer::ContextCallback()
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
                     m_displayedScene->AddEntity(cube);
+                    m_manager->FocusEntity(cube);
                 }
                 ImGui::EndMenu();
             }

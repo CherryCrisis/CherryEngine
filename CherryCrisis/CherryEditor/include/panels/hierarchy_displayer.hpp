@@ -22,7 +22,6 @@ public:
 	void SetScene(Scene* scene) { m_displayedScene = scene; }
 	void RenderEntity(Entity* entity);
 
-
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr) : 
 	Panel(spawnOpened),m_manager(manager) {}
 };
