@@ -144,12 +144,6 @@ namespace mono
 	template <typename T>
 	using UniqueRef = std::unique_ptr<T>;
 
-	template <typename T>
-	using Ref = std::shared_ptr<T>;
-
-	template <typename T>
-	using WeakRef = std::shared_ptr<T>;
-
 	//==============================================================================================//
 	// ManagedAssembly
 	//      Represents an Assembly object
@@ -163,7 +157,7 @@ namespace mono
 		MonoAssembly* m_assembly = nullptr;
 		MonoImage* m_image = nullptr;
 		std::string m_path;
-		std::unordered_multimap<std::string, Ref<class ManagedClass>> m_classes;
+		std::unordered_multimap<std::string, UniqueRef<class ManagedClass>> m_classes;
 		bool m_populated = false;
 		class ManagedScriptContext* m_ctx = nullptr;
 
@@ -171,6 +165,7 @@ namespace mono
 		friend class ManagedScriptContext;
 		friend class ManagedClass;
 		friend class ManagedMethod;
+		friend class ManagedScriptSystem;
 
 		void PopulateReflectionInfo();
 		void DisposeReflectionInfo();
@@ -407,9 +402,9 @@ namespace mono
 		std::string m_fullyQualifiedName;
 		int m_paramCount = 0;
 
-		Ref<ManagedType> m_returnType = nullptr;
-		std::vector<Ref<ManagedType>> m_params;
-		std::vector<Ref<AManagedThunk>> m_thunks;
+		UniqueRef<ManagedType> m_returnType = nullptr;
+		std::vector<UniqueRef<ManagedType>> m_params;
+		std::vector<UniqueRef<AManagedThunk>> m_thunks;
 
 		friend class ManagedClass;
 		friend ManagedHandle<ManagedMethod>;
@@ -535,17 +530,18 @@ namespace mono
 	class ManagedClass : public ManagedBase<ManagedClass>
 	{
 	private:
-		std::unordered_multimap<std::string, Ref<class ManagedMethod>> m_methods;
-		std::unordered_map<std::string, Ref<class ManagedField>> m_fields;
-		std::unordered_map<std::string, Ref<class ManagedProperty>> m_properties;
-		std::vector<Ref<class ManagedObject>> m_attributes;
-		std::vector<Ref<class ManagedProperty>> m_instances;
-		std::vector<Ref<class ManagedObject>> m_handledInstances;
+		std::unordered_multimap<std::string, UniqueRef<class ManagedMethod>> m_methods;
+		std::unordered_map<std::string, UniqueRef<class ManagedField>> m_fields;
+		std::unordered_map<std::string, UniqueRef<class ManagedProperty>> m_properties;
+		std::vector<UniqueRef<class ManagedObject>> m_attributes;
+		std::vector<UniqueRef<class ManagedProperty>> m_instances;
+		std::vector<UniqueRef<class ManagedObject>> m_handledInstances;
+		std::vector<UniqueRef<class ManagedObject>> m_managedInstances;
 		MonoCustomAttrInfo* m_attrInfo;
 		std::string m_namespaceName;
 		std::string m_className;
 		MonoClass* m_class;
-		WeakRef<ManagedAssembly> m_assembly;
+		ManagedAssembly* m_assembly;
 		mono_byte m_numConstructors = 0;
 		mono_byte m_alignment;
 
@@ -557,7 +553,7 @@ namespace mono
 
 		uint32_t m_size; // Size in bytes
 
-		Ref<ManagedMethod> GetCtor(std::vector<MonoType*> signature);
+		ManagedMethod* GetCtor(std::vector<MonoType*> signature);
 
 		static UniqueRef<ManagedClass> int16Class;
 		static UniqueRef<ManagedClass> int32Class;
@@ -594,7 +590,7 @@ namespace mono
 
 	public:
 		ManagedClass(MonoClass* cls);
-		ManagedClass(Ref<ManagedAssembly> assembly, MonoClass* cls);
+		ManagedClass(ManagedAssembly* assembly, MonoClass* cls);
 		virtual ~ManagedClass();
 
 		void Reload();
@@ -603,10 +599,10 @@ namespace mono
 		const std::string& NamespaceName() const { return m_namespaceName; }
 		const std::string& ClassName() const { return m_className; }
 
-		const std::unordered_multimap<std::string, Ref<class ManagedMethod>>& Methods() const { return m_methods; }
-		const std::unordered_map<std::string, Ref<ManagedField>>& Fields() const { return m_fields; }
-		const std::unordered_map<std::string, Ref<ManagedProperty>>& Properties() const { return m_properties; }
-		const std::vector<Ref<ManagedObject>>& Attributes() const { return m_attributes; }
+		const std::unordered_multimap<std::string, UniqueRef<class ManagedMethod>>& Methods() const { return m_methods; }
+		const std::unordered_map<std::string, UniqueRef<ManagedField>>& Fields() const { return m_fields; }
+		const std::unordered_map<std::string, UniqueRef<ManagedProperty>>& Properties() const { return m_properties; }
+		const std::vector<UniqueRef<ManagedObject>>& Attributes() const { return m_attributes; }
 
 		uint32_t DataSize() const { return m_size; }
 		bool ValueClass() const { return m_valueClass; }
@@ -617,14 +613,14 @@ namespace mono
 
 		mono_byte NumConstructors() const;
 
-		Ref<ManagedMethod> FindMethod(const char* name);
-		Ref<ManagedField> FindField(const char* name);
-		Ref<ManagedProperty> FindProperty(const char* prop);
+		ManagedMethod* FindMethod(const char* name);
+		ManagedField* FindField(const char* name);
+		ManagedProperty* FindProperty(const char* prop);
 
 		MonoObject* CreateRawInstance(std::vector<MonoType*> signature, void** params);
-		Ref<ManagedObject> CreateInstance(std::vector<MonoType*> signature, void** params);
+		ManagedObject* CreateInstance(std::vector<MonoType*> signature, void** params);
 		MonoObject* CreateUnmanagedRawInstance(void* cPtr, bool ownMemory);
-		Ref<ManagedObject> CreateUnmanagedInstance(void* cPtr, bool ownMemory);
+		ManagedObject* CreateUnmanagedInstance(void* cPtr, bool ownMemory);
 
 		inline MonoType* RawType() const { return mono_class_get_type(m_class);	}
 
@@ -678,7 +674,7 @@ namespace mono
 	class ManagedScriptContext
 	{
 	public:
-		std::list<Ref<ManagedAssembly>> m_loadedAssemblies;
+		std::list<UniqueRef<ManagedAssembly>> m_loadedAssemblies;
 		std::string m_domainName;
 		std::string m_path;
 		MonoDomain* m_domain = nullptr;
@@ -699,7 +695,7 @@ namespace mono
 
 	public:
 		ManagedScriptContext(char* domainName, const char* path, const char* baseImage);
-		~ManagedScriptContext();
+		virtual ~ManagedScriptContext();
 
 		const std::string& GetImagePath() { return m_baseImage; }
 		const std::string& GetPath() { return m_path; }
@@ -717,9 +713,9 @@ namespace mono
 		/* Performs a class search in all loaded assemblies */
 		/* If you have the assembly name, please use the alternative version of this
 		 * function */
-		Ref<ManagedClass> FindClass(const char* ns, const char* cls);
+		ManagedClass* FindClass(const char* ns, const char* cls);
 
-		Ref<ManagedClass> FindClass(Ref<ManagedAssembly> assembly, const char* ns, const char* cls);
+		ManagedClass* FindClass(ManagedAssembly* assembly, const char* ns, const char* cls);
 
 		/* Returns a pointer to a raw MonoClass object corresponding to the
 		 * specified class */
@@ -727,7 +723,7 @@ namespace mono
 		 * class yourself */
 		MonoClass* FindSystemClass(const char*, const char* cls);
 
-		Ref<ManagedAssembly> FindAssembly(const char* path);
+		ManagedAssembly* FindAssembly(const char* path);
 
 		ManagedException_t GetExceptionDescriptor(MonoObject* exception);
 
@@ -807,7 +803,7 @@ namespace mono
 		MonoProfiler m_monoProfiler;
 		MonoDomain* m_rootDomain;
 
-		std::unordered_map<std::string, Ref<ManagedScriptContext>> m_contexts;
+		std::unordered_map<std::string, UniqueRef<ManagedScriptContext>> m_contexts;
 		std::stack<ManagedProfilingData_t> m_profilingData;
 		MonoAllocatorVTable m_allocator;
 		ManagedScriptSystemSettings_t m_settings;
@@ -817,16 +813,16 @@ namespace mono
 
 	public:
 		ManagedScriptSystem(ManagedScriptSystemSettings_t settings);
-		~ManagedScriptSystem();
+		virtual ~ManagedScriptSystem();
 
 		/* NO COPIES! */
 		ManagedScriptSystem(ManagedScriptSystem&) = delete;
 		ManagedScriptSystem(ManagedScriptSystem&&) = delete;
 		ManagedScriptSystem() = delete;
 
-		Ref<ManagedScriptContext> CreateContext(char* domainName, const char* path, const char* image);
+		ManagedScriptContext* CreateContext(char* domainName, const char* path, const char* image);
 
-		std::unordered_map<std::string, Ref<ManagedScriptContext>>& GetContextes() { return m_contexts; }
+		std::unordered_map<std::string, UniqueRef<ManagedScriptContext>>& GetContextes() { return m_contexts; }
 			
 		void DestroyContext(ManagedScriptContext* ctx);
 

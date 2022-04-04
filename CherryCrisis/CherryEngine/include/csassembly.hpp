@@ -12,7 +12,7 @@ class CsAssembly : public Resource<CsAssembly>
 public:
 	CsAssembly(const char* filePath) : Resource(filePath) { }
 
-	std::shared_ptr<mono::ManagedScriptContext> context;
+	mono::ManagedScriptContext* context = nullptr;
 
 	static void Load(std::shared_ptr<CsAssembly> csassembly, const char* domainName);
 };

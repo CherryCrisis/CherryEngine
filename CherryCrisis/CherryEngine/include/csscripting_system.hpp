@@ -20,7 +20,7 @@ private:
 	std::unique_ptr<mono::ManagedScriptSystem> m_scriptSystem;
 
 public:
-	std::shared_ptr<mono::ManagedScriptContext> CreateContext(char* domainName, const char* contextPath);
+	mono::ManagedScriptContext* CreateContext(char* domainName, const char* contextPath);
 
 	CsScriptingSystem();
 	virtual ~CsScriptingSystem();

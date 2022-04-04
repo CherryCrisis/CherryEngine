@@ -15,17 +15,18 @@
 ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
+	ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
 	// TODO: Change path
-	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+	//assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+
 	m_metadatas.SetProperty("ntm", &scriptPath);
 }
 
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
-	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+	//assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
 	m_metadatas.SetProperty("ntm", &scriptPath);
-
 }
 
 ScriptedBehaviour::~ScriptedBehaviour()
@@ -39,32 +40,30 @@ ScriptedBehaviour::~ScriptedBehaviour()
 
 void ScriptedBehaviour::BindToSignals() 
 {
+	if (!managedInstance)
+		return;
+
 	if (managedUpdate)
-	{
 		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
-	}
 
 	if (managedStart)
-	{
 		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
-	}
 }
 
 void ScriptedBehaviour::SetScriptClass(std::string& scriptName)
 {
 	m_scriptName = scriptName;
 
+	if (!assembly || !assembly->context)
+		return;
+
 	managedClass = assembly->context->FindClass("CCScripting", scriptName.c_str());
 
 	if (managedUpdate = managedClass->FindMethod("Update"))
-	{
 		csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
-	}
 
 	if (managedStart = managedClass->FindMethod("Start"))
-	{
 		csStart = managedStart->GetMemberUnmanagedThunk<void>();
-	}
 
 	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
 
@@ -81,13 +80,13 @@ void ScriptedBehaviour::PopulateMetadatas()
 	{
 		if (fieldRef->Type()->Equals(mono::ManagedType::GetInt32()))
 		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<int>(managedInstance.get(), fieldRef.get()));
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<int>(managedInstance, fieldRef.get()));
 			continue;
 		}
 
 		if (fieldRef->Type()->Equals(mono::ManagedType::GetString()))
 		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<std::string>(managedInstance.get(), fieldRef.get()));
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<std::string>(managedInstance, fieldRef.get()));
 			continue;
 		}
 	}

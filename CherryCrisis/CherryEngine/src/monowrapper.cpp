@@ -272,11 +272,11 @@ namespace mono
 		m_fullyQualifiedName = mono_method_full_name(m_method, true);
 		m_paramCount = mono_signature_get_param_count(m_signature);
 
-		m_returnType = std::make_shared<ManagedType>(mono_signature_get_return_type(m_signature));
+		m_returnType = std::make_unique<ManagedType>(mono_signature_get_return_type(m_signature));
 
 		void* paramIter = nullptr;
 		while (MonoType* paramType = mono_signature_get_params(m_signature, &paramIter))
-			m_params.push_back(std::make_shared<ManagedType>(paramType));
+			m_params.push_back(std::make_unique<ManagedType>(paramType));
 	}
 
 	ManagedMethod::~ManagedMethod()
@@ -495,10 +495,10 @@ namespace mono
 			return;
 
 		if (MonoObject* obj = mono_custom_attrs_get_attr(m_attrInfo, cls))
-			m_attributes.push_back(std::make_shared<ManagedObject>(obj, *this));
+			m_attributes.push_back(std::make_unique<ManagedObject>(obj, *this));
 	}
 
-	ManagedClass::ManagedClass(Ref<ManagedAssembly> assembly, MonoClass* cls)
+	ManagedClass::ManagedClass(ManagedAssembly* assembly, MonoClass* cls)
 		: ManagedClass(cls)
 	{
 		m_assembly = assembly;
@@ -513,13 +513,13 @@ namespace mono
 			mono_custom_attrs_free(m_attrInfo);
 	}
 
-	Ref<ManagedMethod> ManagedClass::GetCtor(std::vector<MonoType*> signature)
+	ManagedMethod* ManagedClass::GetCtor(std::vector<MonoType*> signature)
 	{
 		auto itPair = m_methods.equal_range(".ctor");
 
 		for (auto& it = itPair.first; it != itPair.second; it++)
 		{
-			Ref<ManagedMethod> method = it->second;
+			ManagedMethod* method = it->second.get();
 			if (method->MatchSignature(signature))
 				return method;
 		}
@@ -572,7 +572,7 @@ namespace mono
 			if (strcmp(methodName, ".ctor") == 0)
 				m_numConstructors++;
 
-			m_methods.insert({ methodName, std::make_shared<ManagedMethod>(method, this) });
+			m_methods.insert({ methodName, std::make_unique<ManagedMethod>(method, this) });
 		}
 
 		void* parentIter = nullptr;
@@ -586,7 +586,7 @@ namespace mono
 				if (strcmp(methodName, ".ctor") == 0)
 					continue;
 
-				m_methods.insert({ methodName, std::make_shared<ManagedMethod>(method, this) });
+				m_methods.insert({ methodName, std::make_unique<ManagedMethod>(method, this) });
 			}
 
 			parentIter = nullptr;
@@ -598,7 +598,7 @@ namespace mono
 		while ((field = mono_class_get_fields(m_class, &iter)))
 		{
 			const char* fieldName = mono_field_get_name(field);
-			m_fields[fieldName] = std::make_shared<ManagedField>(field, this, fieldName);
+			m_fields[fieldName] = std::make_unique<ManagedField>(field, this, fieldName);
 		}
 
 		MonoProperty* props;
@@ -607,7 +607,7 @@ namespace mono
 		{
 			const char* propName = mono_property_get_name(props);
 
-			m_properties[propName] = std::make_shared<ManagedProperty>(props, this, propName);
+			m_properties[propName] = std::make_unique<ManagedProperty>(props, this, propName);
 
 		}
 
@@ -637,7 +637,7 @@ namespace mono
 
 		for (auto methodIt = m_methods.begin(); methodIt != m_methods.end();)
 		{
-			Ref<ManagedMethod> method = methodIt->second;
+			ManagedMethod* method = methodIt->second.get();
 			method->m_class = this;
 
 			if (!method->Reload())
@@ -655,26 +655,26 @@ namespace mono
 
 	void ManagedClass::Clear()
 	{
-		for (Ref<ManagedObject> instance : m_handledInstances)
+		for (auto& instance : m_handledInstances)
 			instance->Dispose();
 	}
 
-	Ref<ManagedMethod> ManagedClass::FindMethod(const char* name)
+	ManagedMethod* ManagedClass::FindMethod(const char* name)
 	{
 		auto methodIt = m_methods.find(name);
-		return methodIt == m_methods.end() ? nullptr : methodIt->second;
+		return methodIt == m_methods.end() ? nullptr : methodIt->second.get();
 	}
 
-	Ref<ManagedField> ManagedClass::FindField(const char* name)
+	ManagedField* ManagedClass::FindField(const char* name)
 	{
 		auto fieldIt = m_fields.find(name);
-		return fieldIt == m_fields.end() ? fieldIt->second : nullptr;
+		return fieldIt == m_fields.end() ? nullptr : fieldIt->second.get();
 	}
 
-	Ref<ManagedProperty> ManagedClass::FindProperty(const char* prop)
+	ManagedProperty* ManagedClass::FindProperty(const char* prop)
 	{
 		auto propIt = m_properties.find(prop);
-		return propIt == m_properties.end() ? propIt->second : nullptr;
+		return propIt == m_properties.end() ? nullptr : propIt->second.get();
 	}
 
 	/* Creates a raw instance of a this class */
@@ -683,7 +683,7 @@ namespace mono
 		if (!m_assembly)
 			return nullptr;
 
-		Ref<ManagedMethod> ctor = GetCtor(signature);
+		ManagedMethod* ctor = GetCtor(signature);
 
 		if (!ctor)
 			return nullptr;
@@ -708,12 +708,18 @@ namespace mono
 	}
 
 	/* Creates an instance of a this class */
-	Ref<ManagedObject> ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params)
+	ManagedObject* ManagedClass::CreateInstance(std::vector<MonoType*> signature, void** params)
 	{
-		if (MonoObject* obj = CreateRawInstance(signature, params))
-			return std::make_shared<ManagedObject>(obj, *this);
+		MonoObject* obj = CreateRawInstance(signature, params);
+		if (!obj)
+			return nullptr;
 
-		return nullptr;
+		UniqueRef<ManagedObject> instance = std::make_unique<ManagedObject>(obj, *this);
+		ManagedObject* rawRef = instance.get();
+
+		m_managedInstances.push_back(std::move(instance));
+
+		return rawRef;
 	}
 
 	MonoObject* ManagedClass::CreateUnmanagedRawInstance(void* cPtr, bool ownMemory)
@@ -722,17 +728,26 @@ namespace mono
 		return CreateRawInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
 	}
 
-	Ref<ManagedObject> ManagedClass::CreateUnmanagedInstance(void* cPtr, bool ownMemory)
+	ManagedObject* ManagedClass::CreateUnmanagedInstance(void* cPtr, bool ownMemory)
 	{
 		void* args[] = { &cPtr, &ownMemory };
-		Ref<ManagedObject> instance = CreateInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
+		MonoObject* obj = CreateRawInstance({ ManagedType::GetIntptr()->RawType(), ManagedType::GetBoolean()->RawType() }, args);
+
+		if (!obj)
+			return nullptr;
+
+		UniqueRef<ManagedObject> instance = std::make_unique<ManagedObject>(obj, *this);
 
 		if (!instance)
 			return nullptr;
 
 		instance->m_handledPtr = cPtr;
-		m_handledInstances.push_back(instance);
-		return instance;
+
+		ManagedObject* rawRef = instance.get();
+
+		m_handledInstances.push_back(std::move(instance));
+
+		return rawRef;
 	}
 
 	mono_byte ManagedClass::NumConstructors() const {
@@ -915,8 +930,8 @@ namespace mono
 
 	bool ManagedObject::GetField(const char* p, void* outValue)
 	{
-		if (Ref<ManagedField> field = m_class->FindField(p))
-			return GetField(field.get(), outValue);
+		if (ManagedField* field = m_class->FindField(p))
+			return GetField(field, outValue);
 
 		return false;
 	}
@@ -950,15 +965,17 @@ namespace mono
 
 	ManagedScriptContext::~ManagedScriptContext()
 	{
-		for (auto& a : m_loadedAssemblies)
-		{
-			if (a->m_image)
-				mono_image_close(a->m_image);
+		// TODO: ca explose mais je sais pas pourquoi
 
-			// TODO: ca explose mais je sais pas pourquoi
-			//if (a->m_assembly)
-			//	mono_assembly_close(a->m_assembly);
-		}
+		/*for (auto& a : m_loadedAssemblies)
+		{
+			if (a->m_assembly)
+				mono_assembly_close(a->m_assembly);
+
+			//if (a->m_image)
+			//	mono_image_close(a->m_image);
+
+		}*/
 	}
 
 	bool ManagedScriptContext::Init()
@@ -1005,17 +1022,21 @@ namespace mono
 	{
 		if (!m_domain)
 			return false;
+
 		MonoAssembly* ass = mono_domain_assembly_open(m_domain, path);
+
 		if (!ass)
 			return false;
 
 		MonoImage* img = mono_assembly_get_image(ass);
+
 		if (!img)
 			return false;
 
-		Ref<ManagedAssembly> newAss = std::make_shared<ManagedAssembly>(this, path, img, ass);
-		m_loadedAssemblies.push_back(newAss);
+		UniqueRef<ManagedAssembly> newAss = std::make_unique<ManagedAssembly>(this, path, img, ass);
 		newAss->PopulateReflectionInfo();
+
+		m_loadedAssemblies.push_back(std::move(newAss));
 		return true;
 	}
 
@@ -1041,7 +1062,7 @@ namespace mono
 	/* Performs a class search in all loaded assemblies */
 	/* If you have the assembly name, please use the alternative version of this
 	 * function */
-	Ref<ManagedClass> ManagedScriptContext::FindClass(const char* ns, const char* cls)
+	ManagedClass* ManagedScriptContext::FindClass(const char* ns, const char* cls)
 	{
 		/* Try to find the managed class in each of the assemblies. if found, create
 		 * the managed class and return */
@@ -1051,21 +1072,21 @@ namespace mono
 			if (!a)
 				continue;
 
-			if (Ref<ManagedClass> _cls = FindClass(a, ns, cls))
+			if (ManagedClass* _cls = FindClass(a.get(), ns, cls))
 				return _cls;
 		}
 
 		return nullptr;
 	}
 
-	Ref<ManagedClass> ManagedScriptContext::FindClass(Ref<ManagedAssembly> assembly, const char* ns, const char* cls)
+	ManagedClass* ManagedScriptContext::FindClass(ManagedAssembly* assembly, const char* ns, const char* cls)
 	{
 		auto itpair = assembly->m_classes.equal_range(ns);
 
 		for (auto it = itpair.first; it != itpair.second; ++it)
 		{
 			if (it->second->m_className == cls)
-				return it->second;
+				return it->second.get();
 		}
 
 		/* Have mono perform the class lookup. If it's there, create and add a new
@@ -1075,10 +1096,11 @@ namespace mono
 		if (!monoClass)
 			return nullptr;
 
-		Ref<ManagedClass> classRef = std::make_shared<ManagedClass>(assembly, monoClass);
-		assembly->m_classes.insert(std::make_pair(classRef->ClassName(), classRef));
+		UniqueRef<ManagedClass> classRef = std::make_unique<ManagedClass>(assembly, monoClass);
+		ManagedClass* rawRef = classRef.get();
+		assembly->m_classes.insert({ classRef->ClassName(), std::move(classRef)});
 
-		return classRef;
+		return rawRef;
 	}
 
 	/* Used to locate a class not added by any assemblies explicitly loaded by the
@@ -1127,12 +1149,12 @@ namespace mono
 		return pvt.result;
 	}
 
-	Ref<ManagedAssembly> ManagedScriptContext::FindAssembly(const char* path)
+	ManagedAssembly* ManagedScriptContext::FindAssembly(const char* path)
 	{
 		for (auto& a : m_loadedAssemblies)
 		{
 			if (a->m_path == path)
-				return a;
+				return a.get();
 		}
 		return nullptr;
 	}
@@ -1288,14 +1310,17 @@ namespace mono
 		mono_jit_cleanup(m_rootDomain);
 	}
 
-	Ref<ManagedScriptContext> ManagedScriptSystem::CreateContext(char* domainName, const char* path, const char* image)
+	ManagedScriptContext* ManagedScriptSystem::CreateContext(char* domainName, const char* path, const char* image)
 	{
-		Ref<ManagedScriptContext> ctx = std::make_shared<ManagedScriptContext>(domainName, path, image);
+		UniqueRef<ManagedScriptContext> ctx = std::make_unique<ManagedScriptContext>(domainName, path, image);
 
 		if (!ctx->Init())
 			return nullptr;
-		m_contexts[domainName] = ctx;
-		return ctx;
+
+		ManagedScriptContext* rawRef = ctx.get();
+		m_contexts.insert({ domainName, std::move(ctx) });
+
+		return rawRef;
 	}
 
 	void ManagedScriptSystem::DestroyContext(ManagedScriptContext* ctx)
