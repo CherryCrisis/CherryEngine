@@ -4,7 +4,7 @@
 
 struct GPUTexture { };
 
-class Texture : public Resource<Texture>
+class CCENGINE_API Texture : public Resource<Texture>
 {
 private:
 
@@ -22,9 +22,9 @@ public:
     int GetWidth()  { return m_width; }
     int GetHeight() { return m_height; }
 
-    const void* GetData() { return m_data; }
+    void* GetData() { return m_data; }
 
-    static void Load(std::shared_ptr<Texture> texture);
+    static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true);
     void Delete() override;
     void Reload() override;
 };
