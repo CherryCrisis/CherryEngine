@@ -14,7 +14,7 @@ public:
 
 	%ignore ScriptedBehaviour();
 
-	void SetScriptClass(const `std::string& scriptName);
+	void SetScriptClass(const std::string& scriptName);
 
 	%proxycode%{
 	[System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.InternalCall)]

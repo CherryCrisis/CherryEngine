@@ -31,7 +31,7 @@ void Transform::SetDirty()
 		child->SetDirty();
 }
 
-void Transform::SetParent(Transform*& transform)
+void Transform::SetParent(Transform* transform)
 {
 	if (m_parent == transform) // Guard to prevent parent re-set
 		return;
@@ -92,21 +92,21 @@ Matrix4 Transform::GetWorldMatrix()
 	return m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 }
 
-void Transform::SetPosition(Vector3& position)
+void Transform::SetPosition(const Vector3& position)
 {
 	m_position = position;
 	SetDirty();
 	m_onPositionChange.Invoke(position);
 }
 
-void Transform::SetRotation(Vector3& rotation)
+void Transform::SetRotation(const Vector3& rotation)
 {
 	m_rotation = rotation;
 	SetDirty();
 	m_onRotationChange.Invoke(rotation);
 }
 
-void Transform::SetScale(Vector3& scale)
+void Transform::SetScale(const Vector3& scale)
 {
 	m_scale = scale;
 	SetDirty();

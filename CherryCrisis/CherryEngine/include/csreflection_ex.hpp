@@ -7,14 +7,14 @@
 #include <cstdlib>
 
 template <>
-struct ReflectedField<std::string> : public CCProperty::Property<ReflectedField<std::string>, std::string>
+struct ReflectedField<std::string> : public CCProperty::ConstRefProperty<ReflectedField<std::string>, std::string>
 {
 private:
 	mono::ManagedField* m_reflectedField = nullptr;
 	mono::ManagedObject* m_csOwner = nullptr;
 
 public:
-	void SetField(std::string& value)
+	void SetField(const std::string& value)
 	{
 		size_t wideStrLen = 0u;
 		mbstate_t state {};
@@ -40,7 +40,7 @@ public:
 	}
 
 	ReflectedField(mono::ManagedObject* owner, mono::ManagedField* field)
-		: CCProperty::Property<ReflectedField, std::string>(this, &ReflectedField::SetField, &ReflectedField::GetField),
+		: CCProperty::ConstRefProperty<ReflectedField, std::string>(this, &ReflectedField::SetField, &ReflectedField::GetField),
 		m_csOwner(owner), m_reflectedField(field)
 	{ }
 };

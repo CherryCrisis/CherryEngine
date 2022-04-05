@@ -16,14 +16,14 @@ ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
 	: Behaviour(owner)
 {
 	// TODO: Change path
-	//assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
 	m_metadatas.SetProperty("ntm", &scriptPath);
 }
 
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
-	//assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
 	m_metadatas.SetProperty("ntm", &scriptPath);
 }
 
@@ -48,7 +48,7 @@ void ScriptedBehaviour::BindToSignals()
 		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
 }
 
-void ScriptedBehaviour::SetScriptClass(std::string& scriptName)
+void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 {
 	m_scriptName = scriptName;
 

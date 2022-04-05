@@ -95,9 +95,9 @@ void InspectComponents(Entity* entity, int id)
 
             for (const auto& [propName, propRef] : properties)
             {
-                const std::type_index type = propRef->GetType();
+                auto& propType = propRef->GetGetType();
 
-                if (type == typeid(CCMaths::Vector3))
+                if (propType == typeid(CCMaths::Vector3))
                 {
                     CCMaths::Vector3 val;
                     propRef->Get(&val);
@@ -107,7 +107,7 @@ void InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
-                if (type == typeid(int))
+                if (propType == typeid(int))
                 {
                     int val;
                     propRef->Get(&val);
@@ -117,7 +117,7 @@ void InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
-                if (type == typeid(std::string))
+                if (propType == typeid(std::string))
                 {
                     std::string val;
                     propRef->Get(&val);
