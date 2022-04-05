@@ -51,7 +51,7 @@ void Engine::Launch()
 
 	SceneManager::GetInstance()->Start();
 
-	InputManager::GetInstance()->SetContext("user Context");
+	InputManager::GetInstance()->SetUpdatedContext("user Context");
 	InputManager::GetInstance()->SetCursorHidden();
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }

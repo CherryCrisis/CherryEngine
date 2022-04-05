@@ -27,22 +27,33 @@ enum class EPriorKey
 
 class CCENGINE_API InputManager : public Singleton<InputManager>
 {
+public:
+	struct InputContext;
+
 private:
-	class Input
+	struct BaseInput
 	{
-	private:
+		Keycode key = Keycode::UNKNOWN;
+
 		bool	m_isDown = false;
 		bool	m_isHeld = false;
 		bool	m_isUp = false;
 
+	};
+
+	class Input
+	{
+	private:
+
 	public:
-		Event<Input*> m_isUpdated;
+		BaseInput m_state;
+		Event<BaseInput*> m_isUpdated;
 
 		void Set(bool down, bool held, bool up);
 
-		bool Down() { return m_isDown; }	// Return true if input is pressed
-		bool Held() { return m_isHeld; }	// Return true if input is held
-		bool Up() { return m_isUp; }		// Return true if input is released
+		bool Down() { return m_state.m_isDown; }	// Return true if input is pressed
+		bool Held() { return m_state.m_isHeld; }	// Return true if input is held
+		bool Up() { return m_state.m_isUp; }		// Return true if input is released
 	};
 
 	class Axis
@@ -53,9 +64,10 @@ private:
 
 		float m_value = 0;
 
-		void Update(Input* input);
+		void Update(BaseInput* input);
 
 	public:
+		InputContext* m_ownerContext = nullptr;
 		Event<> m_isUpdated;
 
 		Axis(Keycode pos, Keycode neg)
@@ -76,11 +88,13 @@ private:
 	{
 	private:
 		Input* m_priorKey;
-		std::unordered_map<Keycode, Input*> m_inputs = {};
+		std::unordered_map<Keycode, BaseInput> m_inputs = {};
 
-		void Update(Input* input);
+		void Update(BaseInput* input);
 
 	public:
+		InputContext* m_ownerContext = nullptr;
+		
 		Event<> m_pressed;					// Event called when the Action is pressed
 		Event<> m_held;						// Event called when the Action is held
 		Event<> m_released;					// Event called when the Action is release
@@ -96,7 +110,7 @@ private:
 		bool CheckHeld();					// Return true if Action (any input off m_inputs) is held
 		bool CheckUp();						// Return true if Action (any input off m_inputs) is released
 
-		const std::unordered_map<Keycode, Input*>& Inputs() { return m_inputs; }
+		const std::unordered_map<Keycode, BaseInput>& Inputs() { return m_inputs; }
 	};
 
 	class ActionAxes
@@ -109,6 +123,8 @@ private:
 		void Update();
 
 	public:
+		InputContext* m_ownerContext = nullptr;
+		
 		Event<const float&> m_event;
 
 		~ActionAxes();
@@ -137,6 +153,7 @@ private:
 
 	// Context (presets of differents callbacks and axes)
 	InputContext* m_activeContext = nullptr;
+	InputContext* m_getContext = nullptr;
 	InputContext* m_defaultContext = nullptr;
 
 	//list of keys (intern glfw callback update key statut)
@@ -437,8 +454,12 @@ public:
 	// Context
 	InputContext* AddContext(const std::string& name);
 
-	void SetContext(const std::string& name);
-	void SetContext(InputContext* context);
+	void SetUpdatedContext(const std::string& name);
+	void SetUpdatedContext(InputContext* context);
+
+	void SetGetContext(const std::string& name);
+	void SetGetContext(InputContext* context);
+
 	void SetDefaultContext();
 
 	void (*HideCursor)(void* window);
@@ -500,14 +521,6 @@ public:
 	CCMaths::Vector2 GetMouseWheel();
 	CCMaths::Vector2 GetMousePos();
 	CCMaths::Vector2 GetMouseDelta();
-
-	CCMaths::Vector2 GetMouseWheel(const std::string& name);
-	CCMaths::Vector2 GetMousePos(const std::string& name);
-	CCMaths::Vector2 GetMouseDelta(const std::string& name);
-
-	CCMaths::Vector2 GetMouseWheel(InputContext* context);
-	CCMaths::Vector2 GetMousePos(InputContext* context);
-	CCMaths::Vector2 GetMouseDelta(InputContext* context);
 
 	const int GetListenedKey() { return m_listenedKey; }
 

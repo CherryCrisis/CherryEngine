@@ -16,7 +16,6 @@ namespace CCScripting
 
 			transform = GetComponent<Transform>();
 			Debug.GetInstance().Log(pos, ELogType.INFO);
-			InputManager.GetInstance().SetContext("user Context");
 			transform.position = new Vector3(0f, 0f, -5f);
 		}
 

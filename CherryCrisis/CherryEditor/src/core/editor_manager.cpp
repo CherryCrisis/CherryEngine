@@ -327,14 +327,14 @@ void EditorManager::UpdateFocusGame()
 
 void EditorManager::FocusGame()
 {
-    inputs->SetContext("User Context");
+    inputs->SetUpdatedContext("User Context");
     inputs->SetCursorHidden();
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
 void EditorManager::UnfocusGame()
 {
-    inputs->SetContext(nullptr);
+    inputs->SetUpdatedContext(nullptr);
     inputs->SetCursorDisplayed();
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
