@@ -20,8 +20,7 @@ public:
 	Transform* m_transform = nullptr;
 	std::shared_ptr<Model> m_model;
 	std::string model_path = "null";
-	ModelRenderer(Entity& owner);
-	ModelRenderer() { PopulateMetadatas(); };
+	ModelRenderer();
 	~ModelRenderer();
 
 	void SetModel(std::shared_ptr<Model> newModel);

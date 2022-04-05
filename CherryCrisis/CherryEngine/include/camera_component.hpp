@@ -11,12 +11,13 @@ protected:
 	void PopulateMetadatas() override;
 
 public:
-	CameraComponent(Entity& owner);
 	CameraComponent();
 	~CameraComponent();
 
 	void ChangePosition(const Vector3& position);
 	void ChangeRotation(const Vector3& rotation);
+
+	void BindToSignals() override;
 
 	Camera		m_camera;
 	Transform*	m_transform = nullptr;

@@ -36,11 +36,9 @@ private:
 	void PopulateMetadatas() override;
 
 public:
-	Entity& m_owner;
-	
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
 	
-	Rigidbody(Entity& owner);
+	Rigidbody();
 
 	void SetPxActor();
 	void SetActorConstraints();

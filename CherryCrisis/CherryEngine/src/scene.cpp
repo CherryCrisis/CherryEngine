@@ -77,14 +77,15 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	scene->AddEntity(light);
 
 	Entity* camera = new Entity("Camera");
-	camera->AddBehaviour<CameraComponent>()->m_transform = camera->AddBehaviour<Transform>();
+	camera->AddBehaviour<Transform>();
+	auto cameraComp = camera->AddBehaviour<CameraComponent>();
+	cameraComp->BindToSignals();
+
 	// TODO: Remove this
-	std::string cam = "CameraController";
-	std::string debugTest = "DebugTest";
 	ScriptedBehaviour* bhave1 = camera->AddBehaviour<ScriptedBehaviour>();
-	bhave1->SetScriptClass(cam); bhave1->BindToSignals();
+	bhave1->SetScriptClass("CameraController"); bhave1->BindToSignals();
 	ScriptedBehaviour* bhave2 = camera->AddBehaviour<ScriptedBehaviour>();
-	bhave2->SetScriptClass(debugTest); bhave2->BindToSignals();
+	bhave2->SetScriptClass("DebugTest"); bhave2->BindToSignals();
 
 	scene->AddEntity(camera);
 }
@@ -482,7 +483,6 @@ bool Scene::Unserialize(const char* filePath)
 					propRef->Set(&bhave);
 				}
 			}
-			behaviourRef->ConsumeMetadatas();
 		}
 	}
 	return opened;

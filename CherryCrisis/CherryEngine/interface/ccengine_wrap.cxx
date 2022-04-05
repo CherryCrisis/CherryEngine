@@ -2796,54 +2796,12 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Transform(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CameraComponent(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CameraComponent() {
   void * jresult ;
-  Entity *arg1 = 0 ;
   CameraComponent *result = 0 ;
   
-  arg1 = (Entity *)jarg1;
-  if (!arg1) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Entity & type is null", 0);
-    return 0;
-  } 
-  result = (CameraComponent *)new CameraComponent(*arg1);
+  result = (CameraComponent *)new CameraComponent();
   jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_CameraComponent(void * jarg1) {
-  CameraComponent *arg1 = (CameraComponent *) 0 ;
-  
-  arg1 = (CameraComponent *)jarg1; 
-  delete arg1;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_camera_set(void * jarg1, void * jarg2) {
-  CameraComponent *arg1 = (CameraComponent *) 0 ;
-  Camera arg2 ;
-  Camera *argp2 ;
-  
-  arg1 = (CameraComponent *)jarg1; 
-  argp2 = (Camera *)jarg2; 
-  if (!argp2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Camera", 0);
-    return ;
-  }
-  arg2 = *argp2; 
-  if (arg1) (arg1)->m_camera = arg2;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_camera_get(void * jarg1) {
-  void * jresult ;
-  CameraComponent *arg1 = (CameraComponent *) 0 ;
-  Camera result;
-  
-  arg1 = (CameraComponent *)jarg1; 
-  result =  ((arg1)->m_camera);
-  jresult = new Camera((const Camera &)result); 
   return jresult;
 }
 
@@ -2867,6 +2825,14 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CameraComponent_m_transform_get(vo
   result = (Transform *) ((arg1)->m_transform);
   jresult = (void *)result; 
   return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_CameraComponent(void * jarg1) {
+  CameraComponent *arg1 = (CameraComponent *) 0 ;
+  
+  arg1 = (CameraComponent *)jarg1; 
+  delete arg1;
 }
 
 

@@ -34,21 +34,16 @@ public class CameraComponent : Behaviour {
     }
   }
 
-  public CameraComponent(Entity owner) : this(CherryEnginePINVOKE.new_CameraComponent__SWIG_0(Entity.getCPtr(owner)), true) {
-    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  public CameraComponent() : this(CherryEnginePINVOKE.new_CameraComponent(), true) {
   }
 
-  public CameraComponent() : this(CherryEnginePINVOKE.new_CameraComponent__SWIG_1(), true) {
-  }
-
-  public SWIGTYPE_p_Camera m_camera {
+  public Transform m_transform {
     set {
-      CherryEnginePINVOKE.CameraComponent_m_camera_set(swigCPtr, SWIGTYPE_p_Camera.getCPtr(value));
-      if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+      CherryEnginePINVOKE.CameraComponent_m_transform_set(swigCPtr, Transform.getCPtr(value));
     } 
     get {
-      SWIGTYPE_p_Camera ret = new SWIGTYPE_p_Camera(CherryEnginePINVOKE.CameraComponent_m_camera_get(swigCPtr), true);
-      if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.CameraComponent_m_transform_get(swigCPtr);
+      Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
       return ret;
     } 
   }

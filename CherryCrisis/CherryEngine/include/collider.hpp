@@ -35,11 +35,9 @@ private:
 	void PopulateMetadatas() override;
 
 public:
-	Entity& m_owner;
-
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
 
-	Collider(Entity& owner);
+	Collider();
 
 	void SetPxShape();
 	void SetPxData();

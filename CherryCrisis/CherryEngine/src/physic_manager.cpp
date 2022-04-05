@@ -69,7 +69,7 @@ namespace PhysicSystem
 
 	void PhysicManager::Register(Rigidbody* rigidbody)
 	{
-		PhysicActor& actor = FindOrCreateActor(rigidbody->m_owner);
+		PhysicActor& actor = FindOrCreateActor(rigidbody->GetHost());
 		
 		rigidbody->m_physicActor = &actor;
 		actor.AddRigidbody(rigidbody);
@@ -77,7 +77,7 @@ namespace PhysicSystem
 
 	void PhysicManager::Register(Collider* collider)
 	{
-		PhysicActor& actor = FindOrCreateActor(collider->m_owner);
+		PhysicActor& actor = FindOrCreateActor(collider->GetHost());
 
 		collider->m_physicActor = &actor;
 		actor.AddCollider(collider);

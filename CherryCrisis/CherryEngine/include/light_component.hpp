@@ -10,8 +10,7 @@ protected:
 	void PopulateMetadatas() override;
 
 public:
-	LightComponent(Entity& owner);
-	LightComponent() { PopulateMetadatas(); };
+	LightComponent();
 	~LightComponent();
 
 	Light m_light;

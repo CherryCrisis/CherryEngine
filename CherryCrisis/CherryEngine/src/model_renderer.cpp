@@ -9,8 +9,7 @@
 #include "entity.hpp"
 #include "model.hpp"
 
-ModelRenderer::ModelRenderer(Entity& owner)
-	: Behaviour(owner)
+ModelRenderer::ModelRenderer()
 {
 	PopulateMetadatas();
 }

@@ -2,8 +2,7 @@
 
 #include "transform.hpp"
 
-Transform::Transform(Entity& owner)
-	: Behaviour(owner)
+Transform::Transform()
 {
 	PopulateMetadatas();
 }

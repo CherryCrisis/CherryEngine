@@ -12,14 +12,6 @@
 
 #include "csreflection_ex.hpp"
 
-ScriptedBehaviour::ScriptedBehaviour(Entity& owner)
-	: Behaviour(owner)
-{
-	// TODO: Change path
-	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
-	m_metadatas.SetProperty("ntm", &scriptPath);
-}
-
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path

@@ -7,8 +7,7 @@
 #include "physic_manager.hpp"
 #include "transform.hpp"
 
-Rigidbody::Rigidbody(Entity& owner)
-	: Behaviour(owner), m_owner(GetHost())
+Rigidbody::Rigidbody()
 {
 	PopulateMetadatas();
 

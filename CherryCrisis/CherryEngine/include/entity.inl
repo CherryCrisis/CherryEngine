@@ -6,7 +6,8 @@ CompT* Entity::AddBehaviour()
 	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
 	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
 
-	CompT* rawPtr = new CompT(*this);
+	CompT* rawPtr = new CompT();
+	rawPtr->m_owner = this;
 	m_behaviours.insert({ typeid(CompT), rawPtr });
 
 	return rawPtr;

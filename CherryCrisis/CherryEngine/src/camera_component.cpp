@@ -6,22 +6,6 @@
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
-CameraComponent::CameraComponent(Entity& owner)
-	: Behaviour(owner)
-{
-	m_transform = owner.GetBehaviour<Transform>();
-
-	auto RM = RenderManager::GetInstance();
-
-	RM->GenerateFromPipeline<BasicRenderPass>(this);
-	RM->GenerateFromPipeline<SkyboxRenderPass>(this);
-
-	m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
-	m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
-
-	PopulateMetadatas();
-}
-
 CameraComponent::CameraComponent()
 {
 	auto RM = RenderManager::GetInstance();
@@ -51,6 +35,14 @@ void CameraComponent::PopulateMetadatas()
 	m_metadatas.SetField<float>("far", m_camera.far);
 	m_metadatas.SetField<float>("fovY", m_camera.fovY);
 	m_metadatas.SetField<Behaviour*>("transform", m_transform);
+}
+
+void CameraComponent::BindToSignals()
+{
+	m_transform = GetHost().GetBehaviour<Transform>();
+
+	m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
+	m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
 }
 
 void CameraComponent::ChangePosition(const Vector3& position)

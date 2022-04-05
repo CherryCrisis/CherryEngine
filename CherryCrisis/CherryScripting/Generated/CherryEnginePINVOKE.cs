@@ -694,20 +694,17 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Transform")]
   public static extern void delete_Transform(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_CameraComponent__SWIG_0")]
-  public static extern global::System.IntPtr new_CameraComponent__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_CameraComponent")]
+  public static extern global::System.IntPtr new_CameraComponent();
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_CameraComponent__SWIG_1")]
-  public static extern global::System.IntPtr new_CameraComponent__SWIG_1();
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_CameraComponent_m_transform_set")]
+  public static extern void CameraComponent_m_transform_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_CameraComponent_m_transform_get")]
+  public static extern global::System.IntPtr CameraComponent_m_transform_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_CameraComponent")]
   public static extern void delete_CameraComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
-
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_CameraComponent_m_camera_set")]
-  public static extern void CameraComponent_m_camera_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
-
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_CameraComponent_m_camera_get")]
-  public static extern global::System.IntPtr CameraComponent_m_camera_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_ScriptedBehaviour_GetScriptPath")]
   public static extern string ScriptedBehaviour_GetScriptPath(global::System.Runtime.InteropServices.HandleRef jarg1);

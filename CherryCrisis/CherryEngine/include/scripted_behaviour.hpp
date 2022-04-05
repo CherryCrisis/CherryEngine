@@ -38,7 +38,6 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	void PopulateMetadatas() override;
 
 public:
-	ScriptedBehaviour(Entity& owner);
 	ScriptedBehaviour();
 	~ScriptedBehaviour();
 

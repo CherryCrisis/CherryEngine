@@ -5,8 +5,7 @@
 #include "basic_renderpass.hpp"
 #include "render_manager.hpp"
 
-LightComponent::LightComponent(Entity& owner)
-	: Behaviour(owner)
+LightComponent::LightComponent()
 {
 	RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(&m_light);
 

@@ -20,10 +20,8 @@ protected:
 	Metadata m_metadatas;
 
 	virtual void PopulateMetadatas() {}
-	virtual void ConsumeMetadatas()  {}
 public:
 	Behaviour() = default;
-	Behaviour(Entity& owner) : m_owner(&owner) { }
 	Behaviour(CCUUID& owner) { m_uuid = owner; }
 	virtual ~Behaviour() = default;
 

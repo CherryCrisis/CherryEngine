@@ -30,9 +30,8 @@ private:
 	using Vector3Property = CCProperty::ConstRefProperty<Transform, Vector3>;
 
 public:
-	Transform(Entity& owner);
+	Transform();
 	Transform(CCUUID& owner);
-	Transform() { PopulateMetadatas(); }
 
 	bool IsRoot() { return !m_parent; }
 
