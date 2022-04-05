@@ -129,6 +129,7 @@ void ScriptedBehaviour::Update()
 void ScriptedBehaviour::Reload()
 {
 	m_metadatas.m_fields.clear();
+	m_metadatas.m_properties.clear();
 	PopulateMetadatas();
 
 	if (managedStart)
