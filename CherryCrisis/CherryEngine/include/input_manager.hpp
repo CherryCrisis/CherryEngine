@@ -62,6 +62,7 @@ private:
 			: m_positiveKey(pos), m_negativeKey(neg) {}
 		
 		void BindUpdate();
+		void Destroy();
 		float Value();	// Updates and returns value
 
 		void SetPositiveKey(Keycode key);
@@ -88,6 +89,7 @@ private:
 
 		void AddInput(Keycode newInput);	// Add a new key to the action
 		int ChangeInput(Keycode oldKey, Keycode newKey);
+		void Destroy();
 
 		bool GetPriorKey();
 		bool CheckDown();					// Return true if Action (any input off m_inputs) is pressed
@@ -112,6 +114,7 @@ private:
 		~ActionAxes();
 
 		void AddAxis(Axis* newInput);	// Add Axis to Action
+		void Destroy();
 
 		float ComputeValue();			// Updates and returns total value
 
@@ -425,6 +428,7 @@ private:
 public:
 	
 	InputManager();
+	~InputManager();
 
 	//Errors
 	void ErrorButtons(const char* Name);
