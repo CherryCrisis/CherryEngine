@@ -14,6 +14,23 @@ InputManager::InputManager()
 	m_activeContext = m_defaultContext;
 }
 
+InputManager::~InputManager()
+{
+	for (auto& context : m_contexts)
+	{
+		for (auto& action : context.second.m_buttons)
+			action.second.Destroy();
+
+		for (auto& action : context.second.m_axes)
+			action.second.Destroy();
+
+		context.second.m_buttons.clear();
+		context.second.m_axes.clear();
+	}
+
+	m_contexts.clear();
+}
+
 CCMaths::Vector2 InputManager::GetMouseWheel()
 {
 	if (m_activeContext)
@@ -407,6 +424,14 @@ int InputManager::RenameActionButtons(const std::string& oldName, const std::str
 	return 1;
 }
 
+void InputManager::SetActionPriorKey(const std::string& name, EPriorKey priorKey)
+{
+	if (!m_activeContext || !m_activeContext->m_buttons.contains(name))
+		return;
+
+	m_activeContext->m_buttons[name].SetPriorKey(priorKey);
+}
+
 int InputManager::AddInputToAction(const std::string& name, Keycode key)
 {
 	if (!m_activeContext || !m_activeContext->m_buttons.contains(name))
@@ -467,6 +492,15 @@ int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
 	AddInput(newKey);
 
 	return 1;
+}
+
+void InputManager::ActionButtons::Destroy()
+{
+	for (auto& input : m_inputs)
+	{
+		input.second->m_isUpdated.Unbind(&ActionButtons::Update, this);
+	}
+	m_inputs.clear();
 }
 
 
@@ -588,6 +622,13 @@ void InputManager::Axis::BindUpdate()
 	inputManager->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
 }
 
+void InputManager::Axis::Destroy()
+{
+	InputManager* inputManager = InputManager::GetInstance();
+	inputManager->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
+	inputManager->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
+}
+
 void InputManager::Axis::SetPositiveKey(Keycode key)
 {
 	InputManager* inputManager = InputManager::GetInstance();
@@ -697,6 +738,18 @@ void InputManager::ActionAxes::AddAxis(Axis* newAxis)
 	newAxis->m_isUpdated.Bind(&ActionAxes::Update, this);
 
 	m_axes.push_back(newAxis);
+}
+
+void InputManager::ActionAxes::Destroy()
+{
+	for (auto& axis : m_axes)
+	{
+		axis->m_isUpdated.Unbind(&ActionAxes::Update, this);
+		delete axis;
+		axis = nullptr;
+	}
+
+	m_axes.clear();
 }
 
 void InputManager::ActionAxes::Update()
