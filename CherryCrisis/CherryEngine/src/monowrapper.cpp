@@ -466,6 +466,21 @@ namespace mono
 	{
 	}
 
+	bool ManagedField::Reload()
+	{
+		m_field = nullptr;
+
+		void* iter = nullptr;
+		MonoClassField* field = nullptr;
+		while ((field = mono_class_get_fields(m_class->m_class, &iter)) && !m_field)
+		{
+			if (mono_field_get_name(field) == m_name)
+				m_field = field;
+		}
+
+		return m_field;
+	}
+
 	//================================================================//
 	//
 	// Managed Property
@@ -477,6 +492,21 @@ namespace mono
 	{
 		m_getMethod = mono_property_get_get_method(m_property);
 		m_setMethod = mono_property_get_set_method(m_property);
+	}
+
+	bool ManagedProperty::Reload()
+	{
+		m_property = nullptr;
+
+		void* iter = nullptr;
+		MonoProperty* property = nullptr;
+		while ((property = mono_class_get_properties(m_class->m_class, &iter)) && !m_property)
+		{
+			if (mono_property_get_name(property) == m_name)
+				m_property = property;
+		}
+
+		return m_property;
 	}
 
 	//================================================================//
@@ -644,6 +674,28 @@ namespace mono
 				methodIt = m_methods.erase(methodIt);
 			else
 				methodIt++;
+		}
+
+		for (auto propIt = m_properties.begin(); propIt != m_properties.end();)
+		{
+			ManagedProperty* property = propIt->second.get();
+			property->m_class = this;
+
+			if (!property->Reload())
+				propIt = m_properties.erase(propIt);
+			else
+				propIt++;
+		}
+
+		for (auto fieldIt = m_fields.begin(); fieldIt != m_fields.end();)
+		{
+			ManagedField* field = fieldIt->second.get();
+			field->m_class = this;
+
+			if (!field->Reload())
+				fieldIt = m_fields.erase(fieldIt);
+			else
+				fieldIt++;
 		}
 
 		for (auto& attr : m_attributes)

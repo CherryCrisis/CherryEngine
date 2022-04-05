@@ -494,6 +494,8 @@ namespace mono
 	public:
 		ManagedField(MonoClassField* fld, class ManagedClass* cls, const char* name);
 		virtual ~ManagedField() = default;
+
+		bool Reload();
 	};
 
 	//==============================================================================================//
@@ -504,7 +506,7 @@ namespace mono
 	{
 	private:
 		MonoProperty* m_property = nullptr;
-		class ManagedClass* m_class;
+		class ManagedClass* m_class = nullptr;
 		std::string m_name;
 		MonoMethod* m_getMethod = nullptr;
 		MonoMethod* m_setMethod = nullptr;
@@ -521,6 +523,8 @@ namespace mono
 		const MonoProperty* RawProperty() const { return m_property; }
 
 		const ManagedClass* Class() const { return m_class; }
+
+		bool Reload();
 	};
 
 	//==============================================================================================//
@@ -581,6 +585,8 @@ namespace mono
 		friend class ManagedScriptContext;
 		friend class ManagedScriptSystem;
 		friend class ManagedMethod;
+		friend class ManagedProperty;
+		friend class ManagedField;
 		friend class ManagedAssembly;
 		friend class ManagedObject;
 	protected:

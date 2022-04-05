@@ -25,7 +25,7 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	bool m_linked = false;
 
-	std::shared_ptr<class CsAssembly> assembly;
+	std::shared_ptr<class CsAssembly> m_assembly;
 	mono::ManagedScriptSystem* script;
 	mono::ManagedObject* managedInstance;
 	mono::ManagedClass* managedClass;
@@ -36,6 +36,8 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	mono::ManagedThunk<void, struct _MonoObject*>* csStart;
 
 	void PopulateMetadatas() override;
+
+	void InvalidateAssembly() { m_assembly = nullptr; }
 
 public:
 	ScriptedBehaviour();
