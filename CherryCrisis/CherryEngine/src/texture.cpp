@@ -16,12 +16,11 @@ void Texture::Delete()
         stbi_image_free(m_data);
 }
 
-void Texture::Load(std::shared_ptr<Texture> texture)
+void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
 {
-    stbi_set_flip_vertically_on_load(true);
-    int nrComponents;
+    stbi_set_flip_vertically_on_load(flipTexture);
 
-    texture->m_data = stbi_load(texture->GetFilepath(), &texture->m_width, &texture->m_height, &nrComponents, STBI_rgb_alpha);
+    texture->m_data = stbi_load(texture->GetFilepath(), &texture->m_width, &texture->m_height, NULL, STBI_rgb_alpha);
 
     if (texture->m_data)
     {

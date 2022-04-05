@@ -1067,15 +1067,15 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Debug_GetInstance() {
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Debug_AddLog(void * jarg1, char * jarg2, int jarg3) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Debug_AddLog(void * jarg1, int jarg2, char * jarg3) {
   Debug *arg1 = (Debug *) 0 ;
-  char *arg2 = (char *) 0 ;
-  ELogType arg3 ;
+  ELogType arg2 ;
+  char *arg3 = (char *) 0 ;
   
   arg1 = (Debug *)jarg1; 
-  arg2 = (char *)jarg2; 
-  arg3 = (ELogType)jarg3; 
-  (arg1)->AddLog((char const *)arg2,arg3);
+  arg2 = (ELogType)jarg2; 
+  arg3 = (char *)jarg3; 
+  (arg1)->AddLog(arg2,(char const *)arg3);
 }
 
 

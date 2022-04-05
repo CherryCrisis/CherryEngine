@@ -7,19 +7,10 @@ Debug* Singleton<Debug>::currentInstance = nullptr;
 Debug::Debug() 
 {
 	m_timeManager = TimeManager::GetInstance();
-	AddLog("Test", ELogType::ERROR);
-	AddLog("Test2", ELogType::ERROR);
-	AddLog("Test2", ELogType::WARNING);
-	AddLog("Test", ELogType::INFO);
-	AddLog("Test2", ELogType::WARNING);
-	AddLog("Test4", ELogType::INFO);
-	AddLog("Test2", ELogType::WARNING);
 }
 
-void Debug::AddLog(const char* message, ELogType logType)
+void Debug::AddLog(ELogType logType, const char* message, std::source_location location)
 {
-	std::cout << message << std::endl;
-
 	LogMessage* logMessage = nullptr;
 
 	size_t key;
@@ -37,10 +28,11 @@ void Debug::AddLog(const char* message, ELogType logType)
 		logMessage = &pair.first->second;
 	}
 	
-	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime());
+	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime(), location);
 }
 
 void Debug::Clear()
 {
 	m_logs.clear();
+	m_logMessages.clear();
 }

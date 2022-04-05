@@ -16,10 +16,10 @@
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 template <typename T>
-bool contains(std::vector<T> vec, const T& elem)
+bool Contains(std::vector<T>& vec, const T& elem)
 {
     bool result = false;
-    if (find(vec.begin(), vec.end(), elem) != vec.end())
+    if (std::find(vec.begin(), vec.end(), elem) != vec.end())
     {
         result = true;
     }
@@ -92,7 +92,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
     Transform* entityTransform = entity->GetBehaviour<Transform>();
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-    if (contains(m_manager->m_selectedEntities, entity))                { flags |= ImGuiTreeNodeFlags_Selected; }
+    if (Contains(m_manager->m_selectedEntities, entity))                { flags |= ImGuiTreeNodeFlags_Selected; }
     if (!entityTransform || entityTransform->GetChildren().size() <= 0) { flags |= ImGuiTreeNodeFlags_Leaf; }
 
 
@@ -103,7 +103,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         if (!InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) // Clear selection when CTRL is not held
             m_manager->m_selectedEntities.clear();
 
-        if (!contains(m_manager->m_selectedEntities, entity))
+        if (!Contains(m_manager->m_selectedEntities, entity))
             m_manager->m_selectedEntities.push_back(entity);
     }
 

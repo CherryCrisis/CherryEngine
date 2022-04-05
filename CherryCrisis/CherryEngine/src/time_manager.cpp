@@ -21,8 +21,6 @@ void TimeManager::Update(const float time)
 
 FullDate TimeManager::GetCurrentTime()
 {
-
-    return FullDate();
     auto tp = std::chrono::zoned_time{ m_currentZone, std::chrono::system_clock::now() }.get_local_time();
     auto dp = floor<std::chrono::days>(tp);
     

@@ -22,5 +22,5 @@ public:
 	bool RenderEntity(Entity* entity);
 
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr) : 
-	Panel(spawnOpened),m_manager(manager) {}
+	Panel(spawnOpened), m_manager(manager) {}
 };

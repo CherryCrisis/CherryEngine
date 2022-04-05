@@ -50,14 +50,15 @@ public class Debug : global::System.IDisposable {
     return ret;
   }
 
-  public void AddLog(string message, ELogType type) {
-    CherryEnginePINVOKE.Debug_AddLog(swigCPtr, message, (int)type);
+  public void AddLog(ELogType type, string message) {
+    CherryEnginePINVOKE.Debug_AddLog(swigCPtr, (int)type, message);
   }
 
-	public void Log(object message, ELogType type) => AddLog(message.ToString(), type);
 
-	public void Log(ELogType type, string separator, params object[] messages) => AddLog(string.Join(separator, messages), type);
-	public void Log(ELogType type, params object[] messages) => AddLog(string.Join(" ; ", messages), type);
+	public void Log(ELogType type, params object[] messages) => AddLog(type, string.Join(" ; ", messages));
+	public void Info(params object[] messages) => AddLog(ELogType.INFO, string.Join(" ; ", messages));
+	public void Warning(params object[] messages) => AddLog(ELogType.WARNING, string.Join(" ; ", messages));
+	public void Error(params object[] messages) => AddLog(ELogType.ERROR, string.Join(" ; ", messages));
 	
   public Debug() : this(CherryEnginePINVOKE.new_Debug(), true) {
   }

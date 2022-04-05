@@ -32,7 +32,7 @@ void InspectComponents(Entity* entity, int id)
 
     for (Behaviour* behaviour : behaviours)
     {
-        ImGui::PushID(behaviour->GetUUID());
+        ImGui::PushID(static_cast<int>(behaviour->GetUUID()));
         std::string bname = typeid(*behaviour).name();
         bname = ExtractValue(bname, ' ');
         if (ImGui::TreeNode(bname.c_str()))
@@ -141,9 +141,9 @@ void Inspector::Render()
 
     if (ImGui::Begin("Inspector", &m_isOpened))
     {
-        for (unsigned int i = 0; i < m_manager->m_selectedEntities.size(); i++)
+        for (size_t i = 0; i < m_manager->m_selectedEntities.size(); i++)
         {
-            InspectComponents(m_manager->m_selectedEntities[i], i);
+            InspectComponents(m_manager->m_selectedEntities[i], static_cast<int>(i));
         }
         if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
         {
