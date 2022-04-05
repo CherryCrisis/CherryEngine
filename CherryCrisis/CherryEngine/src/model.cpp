@@ -26,7 +26,7 @@ void Model::Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const
 
 	aiString name = assimpMaterial->GetName();
 	std::string materialPath = model->m_modelBasePath + std::string("/") + std::string(name.C_Str());
-	model->m_material = resourceManager->AddResource<Material>(materialPath.c_str(), true, assimpMaterial);
+	model->m_material = resourceManager->AddResource<Material>(materialPath.c_str(), true, assimpMaterial, assimpScene);
 
 }
 

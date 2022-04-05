@@ -3,6 +3,9 @@
 #include "texture.hpp"
 
 #include <stb_image.h>
+#include <assimp/scene.h>
+#include <assimp/texture.h>
+
 
 Texture::Texture(const char* texturePath)
     : Resource(texturePath)
@@ -32,6 +35,34 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
         //TODO: Debug ErrorLog
         //std::cout << "Failed to load image. " << filename << std::endl;
     }
+}
+
+void Texture::Load(std::shared_ptr<Texture> texture, const aiTexture* assimpTexture, bool inutile)
+{
+    struct Test
+    {
+        unsigned int lenght;
+        unsigned char* data;
+    };
+
+    Test test;
+
+    if (assimpTexture->mHeight)
+    {
+        test.lenght = assimpTexture->mHeight * assimpTexture->mWidth * sizeof(assimpTexture->pcData);
+    }
+    else
+    {
+        test.lenght = assimpTexture->mWidth;
+    }
+
+    test.data = (unsigned char*)assimpTexture->pcData;
+
+    texture->m_data = stbi_load_from_memory(test.data, test.lenght, &texture->m_width, &texture->m_height, 0, 0);
+
+    //texture->m_data = reinterpret_cast<unsigned char*>(assimpTexture->pcData);
+    //texture->m_width = assimpTexture->mWidth;
+    //texture->m_height = assimpTexture->mHeight;
 }
 
 void Texture::Reload()

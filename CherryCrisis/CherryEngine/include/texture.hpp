@@ -2,6 +2,9 @@
 
 #include "resource.hpp"
 
+//struct from assimp
+struct aiTexture;
+
 struct GPUTexture { };
 
 class CCENGINE_API Texture : public Resource<Texture>
@@ -25,6 +28,7 @@ public:
     void* GetData() { return m_data; }
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true);
+    static void Load(std::shared_ptr<Texture> texture, const aiTexture* aiTexture, bool inutile); //TODO: Erase
     void Delete() override;
     void Reload();
 };

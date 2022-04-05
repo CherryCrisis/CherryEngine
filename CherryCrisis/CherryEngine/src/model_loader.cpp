@@ -74,10 +74,12 @@ namespace CCModelLoader
 
         Assimp::Importer importer = Assimp::Importer();
 
-        const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate |
-                                                           aiProcess_GenSmoothNormals |
+        const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate | 
+                                                           aiProcess_JoinIdenticalVertices | 
+                                                           aiProcess_SortByPType |
+                                                           aiProcess_GenNormals | 
+                                                           aiProcess_GenUVCoords | 
                                                            aiProcess_FlipUVs |
-                                                           aiProcess_JoinIdenticalVertices |
                                                            aiProcess_CalcTangentSpace);
 
         if (scene)

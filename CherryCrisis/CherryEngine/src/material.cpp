@@ -5,6 +5,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/cimport.h>
+#include <assimp/texture.h>
 
 #include "resource_manager.hpp"
 
@@ -15,7 +16,7 @@ void Material::Delete()
 	textures.clear();
 }
 
-void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial)
+void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial, const aiScene* assimpScene)
 {
     ResourceManager* resourceManager = ResourceManager::GetInstance();
 
@@ -23,6 +24,7 @@ void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimp
 	aiColor3D color(0.f, 0.f, 0.f);
 	if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
 		material->m_albedo = Vector3(color.r, color.g, color.b);
+
 
 	//Material Texture
 	{
@@ -32,7 +34,12 @@ void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimp
 			material->textures["ambient"] = resourceManager->AddResource<Texture>(texturePath.C_Str(), true);
 		}
 
-		if (assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS)
+		assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
+		if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
+		{
+			material->textures["albedo"] = resourceManager->AddResource<Texture>(texture->mFilename.C_Str(), true, texture, true);
+		}
+		else
 		{
 			// TODO: Remove this
 			std::string path = "Assets/" + std::string(texturePath.C_Str());

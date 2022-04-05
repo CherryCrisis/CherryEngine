@@ -10,6 +10,7 @@
 
 //class from assimp
 struct aiMaterial;
+struct aiScene;
 
 //Forward declaration
 class Texture;
@@ -26,8 +27,7 @@ public:
 	~Material() = default;
 
 	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
-
-	static void Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial);
+	static void Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial, const aiScene* assimpScene);
 	void Delete() override;
 	void Reload(const aiMaterial* assimpMaterial);
 
