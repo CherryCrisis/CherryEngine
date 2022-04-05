@@ -25,6 +25,9 @@ namespace CCScripting
 		float time = 0f;
 		public void Update()
 		{
+			if (transform == null)
+				return;
+
 			time += deltaTime;
 
 			Vector2 deltaMouse = InputManager.GetInstance().GetMouseDelta();

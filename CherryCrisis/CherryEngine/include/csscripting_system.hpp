@@ -20,6 +20,8 @@ private:
 	std::unique_ptr<mono::ManagedScriptSystem> m_scriptSystem;
 
 public:
+	std::vector<std::string> classesName;
+
 	mono::ManagedScriptContext* CreateContext(char* domainName, const char* contextPath);
 
 	CsScriptingSystem();

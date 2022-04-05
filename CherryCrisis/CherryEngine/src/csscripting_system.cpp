@@ -4,8 +4,10 @@
 
 #include <filesystem>
 
+#include "resource_manager.hpp"
 #include "monowrapper.hpp"
 #include "scripted_behaviour.hpp"
+#include "csassembly.hpp"
 
 template <>
 CsScriptingSystem* Singleton<CsScriptingSystem>::currentInstance = nullptr;
@@ -30,6 +32,27 @@ void CsScriptingSystem::Init()
 	};
 
 	mono_add_internal_call("CCEngine.ScriptedBehaviour::GetStaticInstance", GetStaticInstance);
+	auto csassembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
+	mono::ManagedAssembly* assembly = csassembly->context->FindAssembly("../x64/Debug/CherryScripting.copy.dll");
+	mono::ManagedClass* behaviourClass = csassembly->context->FindClass("CCEngine", "Behaviour");
+	csassembly->context->FindClass("CCScripting", "DebugTest");
+	csassembly->context->FindClass("CCScripting", "BackpackBehaviour");
+	csassembly->context->FindClass("CCScripting", "CameraController");
+
+	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
+
+	auto& classes = assembly->GetClasses();
+	for (auto& [className, classRef] : classes)
+	{
+		if (className == "Behaviour")
+			continue;
+		
+		MonoClass* classParentMDR = mono_class_get_parent(classRef->RawClass());
+		MonoType* typeParentMDR = mono_class_get_type(classParentMDR);
+		if (mono_type_get_type(typeParentMDR) == behaviourTypeID)
+			classesName.push_back(className);
+	}
+
 }
 
 std::string CsScriptingSystem::CopyTemporaryFile(const char* path)
