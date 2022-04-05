@@ -39,7 +39,7 @@ void ShowCursor(void* window)
 int main()
 {
     // Check for leak
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     int screenWidth = 1200;
     int screenHeight = 1000;
@@ -151,8 +151,6 @@ int main()
     // Terminate glfw
     glfwDestroyWindow(window);
     glfwTerminate();
-
-    system("PAUSE");
 
     return 0;
 }

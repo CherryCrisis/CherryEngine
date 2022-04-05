@@ -19,9 +19,12 @@ LogDisplayer::LogDisplayer()
     m_logTextures[1] = RM->AddResource<Texture>("Internal/IconsLog/warning_icon.png", true, false);
     m_logTextures[2] = RM->AddResource<Texture>("Internal/IconsLog/error_icon.png", true, false);
 
-    GenerateGPUTexture(m_logTextures[0]);
-    GenerateGPUTexture(m_logTextures[1]);
-    GenerateGPUTexture(m_logTextures[2]);
+    for (int i = 0; i < 3; ++i)
+    {
+        GenerateGPUTexture(m_logTextures[i]);
+        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_logTextures[i]->m_gpuTexture);
+        m_gpuTextureIDs[i] = reinterpret_cast<void*>(gpuTextureLog->m_ID);
+    }
 }
 
 void LogDisplayer::GenerateGPUTexture(std::shared_ptr<Texture> texture)
@@ -69,9 +72,8 @@ void LogDisplayer::Render()
                     {
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
-                        ImGui::Image((void*)static_cast<GPUTextureLog*>
-                            (m_logTextures[(int)it->second.m_logType]->m_gpuTexture)->m_ID,
-                            { 25.f, 25.f });
+                        ImGui::Image(m_gpuTextureIDs[(int)it->second.m_logType],
+                            { 20.f, 20.f });
 
                         ImGui::SameLine();
                         ImGui::Text("[%i] %s",
@@ -89,53 +91,58 @@ void LogDisplayer::Render()
             if (ImGui::BeginTable("Log", 1, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner))
             {
                 auto logs = m_debug->GetLogs();
-                for (auto it = logs->rbegin(); it != logs->rend(); ++it)
+
+                if (m_isAutoScrolling)
+                    ImGui::SetScrollY(logs->size() * 25);
+                
+                //int id = logs->size() - 1;
+                int id = 0;
+                for (auto it = logs->begin(); it != logs->end(); ++it)
                 {
                     if (m_showedLogMask & 1 << (int)it->m_logMessage->m_logType)
                     {
-                        ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
-
-                        static bool isSelected = false;
-                        ImGui::Selectable("", &isSelected, selectable_flags);
                         ImGui::TableNextRow();
                         ImGui::TableSetColumnIndex(0);
 
-                        ImGui::Image((void*)static_cast<GPUTextureLog*>
-                            (m_logTextures[(int)it->m_logMessage->m_logType]->m_gpuTexture)->m_ID,
-                            { 25.f, 25.f });
+                        ImGui::PushID(id);
+                        if (it->m_isSelected = ImGui::TreeNode(""))
+                        {
+                            ImGui::TreePop();
+                        }
+                        ImGui::PopID();
 
                         ImGui::SameLine();
-                        ImGui::Text("%02u:%02u:%02u %s",
+
+                        ImGui::Image(m_gpuTextureIDs[(int)it->m_logMessage->m_logType],
+                            { 20.f, 20.f });
+
+                        ImGui::SameLine();
+
+                        ImGui::Text("[%02u:%02u:%02u] %s",
                             it->m_date.hours,
                             it->m_date.minutes,
                             it->m_date.seconds,
                             it->m_logMessage->m_logMessage.c_str());
+
+                        if (it->m_isSelected)
+                        {
+                            ImGui::TextWrapped("Details : %s", it->m_logMessage->m_logMessage.c_str());
+                            ImGui::TextWrapped("file %s(%i:%i) : %s", 
+                                it->m_sourceLocation.file_name(),
+                                it->m_sourceLocation.line(),
+                                it->m_sourceLocation.column(),
+                                it->m_sourceLocation.function_name());
+                        }
+
                     }
+                    ++id;
                 }
 
                 ImGui::EndTable();
-
             }
         }
-
     }
 
-
-    /*if (m_isAutoScrolling && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-        ImGui::SetScrollHereY(1.0f);
-
-
-    if (m_isScrollingBot)
-    {
-        ImGui::SetScrollHereY(1.0f);
-        m_isScrollingBot = false;
-    }
-
-    if (m_isScrollingTop)
-    {
-        ImGui::SetScrollHereY(0.f);
-        m_isScrollingTop = false;
-    }*/
     ImGui::End();
 }
 
@@ -150,14 +157,13 @@ void LogDisplayer::RenderMenuBar()
         
         ImGui::Selectable("Clear on play", &m_isClearOnPlay, 0, ImGui::CalcTextSize("Clear on play"));
         ImGui::Spacing();
-        ImGui::Selectable("AutoScroll", &m_isAutoScrolling, 0, ImGui::CalcTextSize("AutoScroll"));
+        ImGui::Selectable("Auto scroll", &m_isAutoScrolling, 0, ImGui::CalcTextSize("AutoScroll"));
         ImGui::Spacing();
         ImGui::Selectable("Collapse", &m_isCollapsing, 0, ImGui::CalcTextSize("Collapse"));
 
         m_displayInfo ? colorButton = colorButtonDown : colorButton = colorButtonUp;
 
-        if (ImGui::ImageButton((void*)static_cast<GPUTextureLog*>
-            (m_logTextures[0]->m_gpuTexture)->m_ID, { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
+        if (ImGui::ImageButton(m_gpuTextureIDs[0], { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
         {
             m_displayInfo = !m_displayInfo;
 
@@ -169,8 +175,7 @@ void LogDisplayer::RenderMenuBar()
 
         m_displayWarning ? colorButton = colorButtonDown : colorButton = colorButtonUp;
 
-        if (ImGui::ImageButton((void*)static_cast<GPUTextureLog*>
-            (m_logTextures[1]->m_gpuTexture)->m_ID, { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
+        if (ImGui::ImageButton(m_gpuTextureIDs[1], { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
         {
             m_displayWarning = !m_displayWarning;
 
@@ -182,8 +187,7 @@ void LogDisplayer::RenderMenuBar()
 
         m_displayError ? colorButton = colorButtonDown : colorButton = colorButtonUp;
 
-        if (ImGui::ImageButton((void*)static_cast<GPUTextureLog*>
-            (m_logTextures[2]->m_gpuTexture)->m_ID, { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
+        if (ImGui::ImageButton(m_gpuTextureIDs[2], { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
         {
             m_displayError = !m_displayError;
             if (m_displayError)
@@ -193,9 +197,6 @@ void LogDisplayer::RenderMenuBar()
         }
 
         if (ImGui::Button("Clear")) Clear();
-
-        if (ImGui::Button("Scroll Top")) { m_isScrollingTop = true; }
-        if (ImGui::Button("Scroll Bottom")) { m_isScrollingBot = true; }
     }
 
     ImGui::EndMenuBar();
@@ -209,7 +210,11 @@ void LogDisplayer::Clear()
 
 void LogDisplayer::TryClearOnPlay()
 {
-    m_currentDisplayedLog = nullptr;
+    if (m_currentDisplayedLog)
+    {
+        m_currentDisplayedLog->m_isSelected = false;
+        m_currentDisplayedLog = nullptr;
+    }
 
     // Add Clearing code
     if (m_isClearOnPlay)

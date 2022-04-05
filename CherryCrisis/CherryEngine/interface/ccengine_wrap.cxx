@@ -1073,7 +1073,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Debug_Log(void * jarg1, char * jarg2
   
   arg1 = (Debug *)jarg1; 
   arg2 = (char *)jarg2; 
-  (arg1)->AddLog((char const *)arg2, ELogType::INFO);
+  (arg1)->AddLog(ELogType::INFO, (char const*)arg2);
 }
 
 

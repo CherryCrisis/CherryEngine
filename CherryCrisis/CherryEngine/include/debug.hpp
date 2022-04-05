@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <source_location>
+#include <memory>
 
 #include "cherry_macros.hpp"
 #include "time_manager.hpp"
@@ -32,10 +34,13 @@ class CCENGINE_API Log
 public:
 	LogMessage*	m_logMessage;
 	FullDate	m_date;
+	bool		m_isSelected = false;
+
+	std::source_location m_sourceLocation;
 
 public:
-	Log(LogMessage* logMessage, FullDate fullDate)
-		: m_logMessage(logMessage), m_date(fullDate) {}
+	Log(LogMessage* logMessage, FullDate fullDate, std::source_location sourceLocation)
+		: m_logMessage(logMessage), m_date(fullDate), m_sourceLocation(sourceLocation) {}
 };
 
 class CCENGINE_API Debug : public Singleton<Debug>
@@ -57,7 +62,8 @@ public:
 	std::map<size_t, LogMessage>* GetCollapsedLogs() { return &m_logMessages; }
 	
 	// Print a string in the console and cache it
-	void AddLog(const char* message, ELogType logType);
+	void AddLog(ELogType logType, const char* message, std::source_location location =
+		std::source_location::current());
 
 	void Clear();
 };

@@ -7,13 +7,13 @@
 #include "transform.hpp"
 #include "core/editor_manager.hpp"
 
-#include<algorithm>
+#include <algorithm>
 
 template <typename T>
-bool contains(std::vector<T> vec, const T& elem)
+bool Contains(std::vector<T>& vec, const T& elem)
 {
     bool result = false;
-    if (find(vec.begin(), vec.end(), elem) != vec.end())
+    if (std::find(vec.begin(), vec.end(), elem) != vec.end())
     {
         result = true;
     }
@@ -37,12 +37,12 @@ void HierarchyDisplayer::Render()
             ImGui::PushID(entityRef->GetUUID());
             std::string name = entityRef->GetName();
 
-            if (ImGui::Selectable(name.c_str(), contains(m_manager->m_selectedEntities, entityRef)))
+            if (ImGui::Selectable(name.c_str(), Contains(m_manager->m_selectedEntities, entityRef)))
             {
                 if (!ImGui::GetIO().KeyCtrl)    // Clear selection when CTRL is not held
                     m_manager->m_selectedEntities.clear();
 
-                if (!contains(m_manager->m_selectedEntities, entityRef))
+                if (!Contains(m_manager->m_selectedEntities, entityRef))
                     m_manager->m_selectedEntities.push_back(entityRef);
             }
             ImGui::PopID();

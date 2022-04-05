@@ -31,10 +31,8 @@ private:
 	bool m_displayInfo		= true;
 	bool m_displayError		= true;
 
-	bool m_isScrollingTop = false;
-	bool m_isScrollingBot = false;
-
 	std::shared_ptr<Texture> m_logTextures[3];
+	void* m_gpuTextureIDs[3];
 
 	void GenerateGPUTexture(std::shared_ptr<Texture> texture);
 
