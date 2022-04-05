@@ -342,7 +342,9 @@ bool Scene::Unserialize(const char* filePath)
 				{
 					CCProperty::IClearProperty* prop = behaviour->m_metadatas.m_properties[key];
 
-					if (prop->GetType() == typeid(Transform*))
+					auto& propType = prop->GetGetType();
+
+					if (propType == typeid(Transform*))
 					{
 						uint64_t refUUID = ExtractUUID(line);
 						if (refUUID != 0)
@@ -351,7 +353,7 @@ bool Scene::Unserialize(const char* filePath)
 						continue;
 					}
 
-					if (prop->GetType() == typeid(CCMaths::Vector3))
+					if (propType == typeid(CCMaths::Vector3))
 					{
 						Vector3 vec = ExtractVector3(parsedValue);
 						prop->Set(&vec);
@@ -359,7 +361,7 @@ bool Scene::Unserialize(const char* filePath)
 						continue;
 					}
 
-					if (prop->GetType() == typeid(std::string))
+					if (propType == typeid(std::string))
 					{
 						std::string str = ExtractValue(parsedValue);
 						prop->Set(&str);
@@ -460,7 +462,9 @@ bool Scene::Unserialize(const char* filePath)
 			//Loop over the fields of the behaviour
 			for (auto& [propName, propRef] : behaviourRef->m_metadatas.m_properties)
 			{
-				if (propRef->GetType() == typeid(Transform*))
+				auto& propType = propRef->GetGetType();
+
+				if (propType == typeid(Transform*))
 				{
 					//find the field in the UUID list of the behaviour
 					auto refIt = grave->second.find(propName);

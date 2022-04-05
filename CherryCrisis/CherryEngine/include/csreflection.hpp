@@ -4,7 +4,7 @@
 #include "monowrapper.hpp"
 
 template <typename ManagedT>
-struct ReflectedProperty : public CCProperty::Property<ReflectedProperty<ManagedT>, ManagedT>
+struct ReflectedProperty : public CCProperty::ConstRefProperty<ReflectedProperty<ManagedT>, ManagedT>
 {
 private:
 	mono::ManagedProperty* m_reflectedField = nullptr;
@@ -24,19 +24,19 @@ public:
 	}
 
 	ReflectedProperty(mono::ManagedObject* owner, mono::ManagedProperty* prop)
-		: CCProperty::Property<ReflectedProperty, ManagedT>(this, &ReflectedProperty::SetProperty, &ReflectedProperty::GetProperty), m_csOwner(owner), m_reflectedField(prop)
+		: CCProperty::ConstRefProperty<ReflectedProperty, ManagedT>(this, &ReflectedProperty::SetProperty, &ReflectedProperty::GetProperty), m_csOwner(owner), m_reflectedField(prop)
 	{ }
 };
 
 template <typename ManagedT>
-struct ReflectedField : public CCProperty::Property<ReflectedField<ManagedT>, ManagedT>
+struct ReflectedField : public CCProperty::ConstRefProperty<ReflectedField<ManagedT>, ManagedT>
 {
 private:
 	mono::ManagedField* m_reflectedField = nullptr;
 	mono::ManagedObject* m_csOwner = nullptr;
 
 public:
-	void SetField(ManagedT& value)
+	void SetField(const ManagedT& value)
 	{
 		m_csOwner->SetField(m_reflectedField, &value);
 	}
@@ -49,6 +49,6 @@ public:
 	}
 
 	ReflectedField(mono::ManagedObject* owner, mono::ManagedField* field)
-		: CCProperty::Property<ReflectedField, ManagedT>(this, &ReflectedField::SetField, &ReflectedField::GetField), m_csOwner(owner), m_reflectedField(field)
+		: CCProperty::ConstRefProperty<ReflectedField, ManagedT>(this, &ReflectedField::SetField, &ReflectedField::GetField), m_csOwner(owner), m_reflectedField(field)
 	{ }
 };

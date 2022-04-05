@@ -66,7 +66,7 @@ std::string Behaviour::Serialize()
 	//Loop on every property to save them
 	for (const auto& [propName, propRef] : m_metadatas.m_properties)
 	{
-		const std::type_index& type = propRef->GetType();
+		const std::type_index& type = propRef->GetGetType();
 
 		value += propName + ":";
 

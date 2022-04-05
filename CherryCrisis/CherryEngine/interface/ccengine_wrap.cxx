@@ -2881,7 +2881,7 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_SetScriptClass(voi
   }
   std::string arg2_str(jarg2);
   arg2 = &arg2_str; 
-  (arg1)->SetScriptClass((std::string&)*arg2);
+  (arg1)->SetScriptClass((std::string const &)*arg2);
 }
 
 

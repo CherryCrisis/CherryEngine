@@ -48,7 +48,7 @@ void ScriptedBehaviour::BindToSignals()
 		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
 }
 
-void ScriptedBehaviour::SetScriptClass(std::string& scriptName)
+void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 {
 	m_scriptName = scriptName;
 

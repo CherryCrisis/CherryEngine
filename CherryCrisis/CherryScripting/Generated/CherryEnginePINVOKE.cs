@@ -691,8 +691,11 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Transform")]
   public static extern void delete_Transform(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_CameraComponent")]
-  public static extern global::System.IntPtr new_CameraComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_CameraComponent__SWIG_0")]
+  public static extern global::System.IntPtr new_CameraComponent__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_CameraComponent__SWIG_1")]
+  public static extern global::System.IntPtr new_CameraComponent__SWIG_1();
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_CameraComponent")]
   public static extern void delete_CameraComponent(global::System.Runtime.InteropServices.HandleRef jarg1);

@@ -34,8 +34,11 @@ public class CameraComponent : Behaviour {
     }
   }
 
-  public CameraComponent(Entity owner) : this(CherryEnginePINVOKE.new_CameraComponent(Entity.getCPtr(owner)), true) {
+  public CameraComponent(Entity owner) : this(CherryEnginePINVOKE.new_CameraComponent__SWIG_0(Entity.getCPtr(owner)), true) {
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public CameraComponent() : this(CherryEnginePINVOKE.new_CameraComponent__SWIG_1(), true) {
   }
 
   public SWIGTYPE_p_Camera m_camera {

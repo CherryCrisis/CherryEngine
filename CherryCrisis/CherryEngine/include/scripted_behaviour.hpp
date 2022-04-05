@@ -42,7 +42,7 @@ public:
 	ScriptedBehaviour();
 	~ScriptedBehaviour();
 
-	void SetScriptClass(std::string& scriptName);
+	void SetScriptClass(const std::string& scriptName);
 	void BindToSignals() override;
 	void Start() override;
 	void Update() override;
@@ -53,5 +53,5 @@ public:
 
 	_MonoObject* GetRawInstance();
 
-	CCProperty::Property<ScriptedBehaviour, std::string> scriptPath { this, &ScriptedBehaviour::SetScriptClass, &ScriptedBehaviour::GetScriptPath};
+	CCProperty::ConstRefProperty<ScriptedBehaviour, std::string> scriptPath { this, &ScriptedBehaviour::SetScriptClass, &ScriptedBehaviour::GetScriptPath};
 };

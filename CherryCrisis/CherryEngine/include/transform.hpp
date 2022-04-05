@@ -27,9 +27,7 @@ private:
 
 	void PopulateMetadatas() override;
 
-	template<typename T>
-	using TransformProperty = CCProperty::Property<Transform, T>;
-	using Vector3Property = TransformProperty<Vector3>;
+	using Vector3Property = CCProperty::ConstRefProperty<Transform, Vector3>;
 
 public:
 	Transform(Entity& owner);
@@ -38,7 +36,7 @@ public:
 
 	bool IsRoot() { return !m_parent; }
 
-	void SetParent(Transform*& transform);
+	void SetParent(Transform* transform);
 	Transform* GetParent() { return m_parent; }
 
 	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
@@ -47,20 +45,20 @@ public:
 
 	bool IsDirty() { return m_isDirty; }
 
-	void SetPosition(Vector3& position);
+	void SetPosition(const Vector3& position);
 	Vector3 GetPosition() { return m_position; }
 
-	void SetRotation(Vector3& rotation);
+	void SetRotation(const Vector3& rotation);
 	Vector3 GetRotation() { return m_rotation; }
 
-	void SetScale(Vector3& scale);
+	void SetScale(const Vector3& scale);
 	Vector3 GetScale() { return m_scale; }
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };
 	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
 
-	TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
+	CCProperty::CopyProperty<Transform, Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
 
 
