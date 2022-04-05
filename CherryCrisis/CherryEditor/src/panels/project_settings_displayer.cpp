@@ -80,7 +80,7 @@ void ProjectSettingsDisplayer::General::Fill()
 
 ProjectSettingsDisplayer::Input::Input(std::string name) : PanelCategory(name)
 {
-    userContext = InputManager::GetInstance()->AddContext("user Context");
+    userContext = InputManager::GetInstance()->AddContext("User Context");
 }
 
 void ProjectSettingsDisplayer::Input::Fill()

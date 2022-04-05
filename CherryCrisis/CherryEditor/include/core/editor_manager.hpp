@@ -47,6 +47,9 @@ private:
     
     void HandleMenuBar();
 
+    void UpdateFocusGame();
+    void FocusGame();
+    void UnfocusGame();
 
     bool m_isDemoOpened     = false;
     bool m_isFeaturerOpened = false;

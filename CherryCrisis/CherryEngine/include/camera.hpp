@@ -16,4 +16,7 @@ struct Camera
 	float near = 0.01f;
 	float far = 200.f;
 	float fovY = CCMaths::PI / 3.f;
+
+	CCMaths::Vector3 position;
+	CCMaths::Vector3 rotation;
 };

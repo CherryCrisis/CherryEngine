@@ -43,11 +43,6 @@ void Engine::Tick()
 	SceneManager::GetInstance()->Update();
 
 	PhysicSystem::PhysicManager::GetInstance()->Simulate(1/60.f);
-
-	if (InputManager::GetInstance()->GetKeyDown(Keycode::ESCAPE))
-	{
-		InputManager::GetInstance()->SetCursorDisplayed();
-	}
 }
 
 void Engine::Launch() 

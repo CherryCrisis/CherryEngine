@@ -96,12 +96,14 @@ void Transform::SetPosition(Vector3& position)
 {
 	m_position = position;
 	SetDirty();
+	m_onPositionChange.Invoke(position);
 }
 
 void Transform::SetRotation(Vector3& rotation)
 {
 	m_rotation = rotation;
 	SetDirty();
+	m_onRotationChange.Invoke(rotation);
 }
 
 void Transform::SetScale(Vector3& scale)

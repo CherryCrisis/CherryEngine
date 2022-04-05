@@ -5,6 +5,7 @@
 class GameDisplayer : public FrameDisplayer
 {
 public:
-	void Render() override;
+	bool m_isHovered = false;
 
+	void Render() override;
 };

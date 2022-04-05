@@ -1,25 +1,30 @@
+%include "enums.swg"
+
 %{
 	#include "debug.hpp"
 
 %}
 
+enum class ELogType
+{
+	INFO,
+	WARNING,
+	ERROR,
+};
 
 class Debug
 {
 private:
-	Debug(Debug& other) = delete;
-	void operator=(const Debug&) = delete;
-	Debug();
 
 public:
 	static Debug* GetInstance();
 	
-	void Log(const char* message);
+	void AddLog(const char* message, ELogType type);
 
 	%proxycode %{
-	public void Log(object message) => Log(message.ToString());
+	public void Log(object message, ELogType type) => AddLog(message.ToString(), type);
 
-	public void Log(string separator, params object[] messages) => Log(string.Join(separator, messages));
-	public void Log(params object[] messages) => Log(string.Join(" ; ", messages));
+	public void Log(ELogType type, string separator, params object[] messages) => AddLog(string.Join(separator, messages), type);
+	public void Log(ELogType type, params object[] messages) => AddLog(string.Join(" ; ", messages), type);
 	%}
 };

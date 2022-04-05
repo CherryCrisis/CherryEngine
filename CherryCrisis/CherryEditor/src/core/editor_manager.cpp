@@ -108,6 +108,8 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
 
     HandleNotifications();
 
+    UpdateFocusGame();
+
     if (m_isDemoOpened)   ImGui::ShowDemoWindow(&m_isDemoOpened);
 
     ImGui::Render();
@@ -222,11 +224,13 @@ void EditorManager::HandleMenuBar()
             if (m_engine->isPlaying)
             {
                 m_engine->Stop();
+                UnfocusGame();
             }
             else
             {
                 m_logDisplayer.TryClearOnPlay();
                 m_engine->Launch();
+                FocusGame();
             }
 
         } ImGui::SameLine();
@@ -305,6 +309,34 @@ void EditorManager::HandleNotifications()
     ImGui::RenderNotifications(); 
     ImGui::PopStyleVar(1); 
     ImGui::PopStyleColor(1);
+}
+
+void EditorManager::UpdateFocusGame()
+{
+    // TODO: Maybe an event on click bind to an action of the editor's input context
+    if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
+    {
+        FocusGame();
+    }
+
+    if (InputManager::GetInstance()->GetKeyDown(Keycode::ESCAPE))
+    {
+        UnfocusGame();
+    }
+}
+
+void EditorManager::FocusGame()
+{
+    inputs->SetContext("User Context");
+    inputs->SetCursorHidden();
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+}
+
+void EditorManager::UnfocusGame()
+{
+    inputs->SetContext(nullptr);
+    inputs->SetCursorDisplayed();
+    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 
 //Display time in seconds

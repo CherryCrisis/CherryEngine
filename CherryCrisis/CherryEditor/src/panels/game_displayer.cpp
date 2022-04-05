@@ -3,13 +3,20 @@
 
 #include <imgui.h>
 
+#include "input_manager.hpp"
+
 void GameDisplayer::Render() 
 {
     if (!m_isOpened)
         return;
 
+    m_isHovered = false;
+
     if (ImGui::Begin("Game", &m_isOpened))
     {
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+            m_isHovered = true;
+
         m_isActive = !ImGui::IsWindowCollapsed();
 
         ImGui::SetWindowSize({1920,1080});

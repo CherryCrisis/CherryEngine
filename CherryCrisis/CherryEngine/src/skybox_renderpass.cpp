@@ -79,7 +79,7 @@ void SkyboxRenderPass::Execute(const float& x, const float& y)
 	if (m_cameraComp)
 	{
 		CCMaths::Matrix4 projection = Matrix4::Perspective(m_cameraComp->m_camera.fovY, m_cameraComp->m_camera.aspect, m_cameraComp->m_camera.near, m_cameraComp->m_camera.far);
-		CCMaths::Matrix4 view = Matrix4::RotateZXY(-m_cameraComp->m_transform->GetRotation());
+		CCMaths::Matrix4 view = Matrix4::RotateZXY(-m_cameraComp->m_camera.rotation);
 
 		CCMaths::Matrix4 viewProjection = projection * view;
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);

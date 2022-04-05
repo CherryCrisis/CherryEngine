@@ -9,7 +9,7 @@
 #include "cherry_header.hpp"
 #include "keycode.hpp"
 
-class KeyboardContext;
+class InputContext;
 
 struct GLFWwindow {};
 
@@ -119,17 +119,22 @@ private:
 	};
 
 public:
-	struct KeyboardContext
+	struct InputContext
 	{
 		std::unordered_map<std::string, ActionAxes> m_axes;
 		std::unordered_map<std::string, ActionButtons> m_buttons;
+
+		CCMaths::Vector2 m_mouseWheel{};
+		CCMaths::Vector2 m_mousePos{};
+		CCMaths::Vector2 m_mouseDelta{};
 	};
 
 private:
-	std::unordered_map<std::string, KeyboardContext> m_contexts;
+	std::unordered_map<std::string, InputContext> m_contexts;
 
 	// Context (presets of differents callbacks and axes)
-	KeyboardContext* m_activeContext = nullptr;
+	InputContext* m_activeContext = nullptr;
+	InputContext* m_defaultContext = nullptr;
 
 	//list of keys (intern glfw callback update key statut)
 	std::unordered_map<Keycode, Input> m_keys;
@@ -139,10 +144,6 @@ private:
 
 	//list of keys just pressed
 	std::vector<Keycode> m_framePressedKeys;
-	
-	CCMaths::Vector2 m_mouseWheel {};
-	CCMaths::Vector2 m_mousePos   {};
-	CCMaths::Vector2 m_mouseDelta {};
 
 	bool m_isListening = false;
 	int m_listenedKey = -1;
@@ -423,15 +424,18 @@ private:
 
 public:
 	
+	InputManager();
+
 	//Errors
 	void ErrorButtons(const char* Name);
 	void ErrorAxes(const char* Name);
 
 	// Context
-	KeyboardContext* AddContext(const std::string& name);
+	InputContext* AddContext(const std::string& name);
 
 	void SetContext(const std::string& name);
-	void SetContext(KeyboardContext* context);
+	void SetContext(InputContext* context);
+	void SetDefaultContext();
 
 	void (*HideCursor)(void* window);
 	void (*ShowCursor)(void* window);
@@ -489,9 +493,17 @@ public:
 	int AddAxisToAction(ActionAxes* preset, Axis axis);
 
 	// Get
-	CCMaths::Vector2 GetMouseWheel() { return m_mouseWheel; }
-	CCMaths::Vector2 GetMousePos()   { return m_mousePos;   }
-	CCMaths::Vector2 GetMouseDelta() { return m_mouseDelta;   }
+	CCMaths::Vector2 GetMouseWheel();
+	CCMaths::Vector2 GetMousePos();
+	CCMaths::Vector2 GetMouseDelta();
+
+	CCMaths::Vector2 GetMouseWheel(const std::string& name);
+	CCMaths::Vector2 GetMousePos(const std::string& name);
+	CCMaths::Vector2 GetMouseDelta(const std::string& name);
+
+	CCMaths::Vector2 GetMouseWheel(InputContext* context);
+	CCMaths::Vector2 GetMousePos(InputContext* context);
+	CCMaths::Vector2 GetMouseDelta(InputContext* context);
 
 	const int GetListenedKey() { return m_listenedKey; }
 
