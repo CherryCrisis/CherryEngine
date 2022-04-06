@@ -54,7 +54,7 @@ public:
 	Event<> m_OnStart;
 	Event<> m_OnTick;
 
-	void Start();
+	void Initialize();
 	void Update();
 	void Destroy();
 

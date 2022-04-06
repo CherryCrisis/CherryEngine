@@ -25,9 +25,6 @@ public:
 	Behaviour(CCUUID& owner) { m_uuid = owner; }
 	virtual ~Behaviour() = default;
 
-	virtual void Awake() {}
-	virtual void Start() {}
-	virtual void Update() {}
 	virtual void LateUpdate() {}
 	virtual void FixedUpdate() {}
 	virtual void OnEnable() {}
