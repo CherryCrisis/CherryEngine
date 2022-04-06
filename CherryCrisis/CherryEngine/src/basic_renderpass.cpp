@@ -2,7 +2,7 @@
 
 #include "basic_renderpass.hpp"
 
-#include "camera_component.hpp"
+#include "camera.hpp"
 #include "model_renderer.hpp"
 #include "transform.hpp"
 #include "model.hpp"
@@ -26,7 +26,7 @@ int BasicRenderPass::Generate(Light* toGenerate)
 }
 
 template <>
-int BasicRenderPass::Generate(CameraComponent* toGenerate)
+int BasicRenderPass::Generate(Camera* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -149,12 +149,12 @@ void BasicRenderPass::Remove(Light* toGenerate)
 }
 
 template <>
-void BasicRenderPass::Remove(CameraComponent* toGenerate)
+void BasicRenderPass::Remove(Camera* toGenerate)
 {
 	m_camera = nullptr;
 }
 
-void BasicRenderPass::Execute(const float& x, const float& y)
+void BasicRenderPass::Execute(const float& x, const float& y, Camera& camera)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -163,16 +163,13 @@ void BasicRenderPass::Execute(const float& x, const float& y)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	if (m_camera)
-	{
 		// TODO: Change this
-		m_camera->m_camera.aspect = x / y;
-		CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera->m_camera.fovY, m_camera->m_camera.aspect, m_camera->m_camera.near, m_camera->m_camera.far);
-		CCMaths::Matrix4 view = Matrix4::RotateZXY(-m_camera->m_camera.rotation) * Matrix4::Translate(m_camera->m_camera.position);
+	    camera.aspect = x / y;
+		CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
+		CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation) * Matrix4::Translate(-camera.position);
 
 		CCMaths::Matrix4 viewProjection = projection * view;
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
-	}
 
 	size_t lightID = 0u;
 	for (Light* light : m_lights)

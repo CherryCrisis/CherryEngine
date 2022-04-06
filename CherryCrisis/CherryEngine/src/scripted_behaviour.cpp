@@ -15,14 +15,28 @@
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
-	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
-	m_metadatas.SetProperty("ntm", &scriptPath);
+	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
+	m_metadatas.SetProperty("scriptName", &scriptPath);
+
+	if (m_assembly)
+	{
+		m_assembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
+		m_assembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
+	}
+
+
 }
 
 ScriptedBehaviour::~ScriptedBehaviour()
 {
 	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
+
+	if (m_assembly) 
+	{
+		m_assembly->m_OnReloaded.Unbind(&ScriptedBehaviour::Reload, this);
+		m_assembly->m_OnDeleted.Unbind(&ScriptedBehaviour::InvalidateAssembly, this);
+	}
 
 	if (managedInstance)
 		managedInstance->Dispose();
@@ -44,10 +58,10 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 {
 	m_scriptName = scriptName;
 
-	if (!assembly || !assembly->context)
+	if (!m_assembly || !m_assembly->m_context)
 		return;
 
-	managedClass = assembly->context->FindClass("CCScripting", scriptName.c_str());
+	managedClass = m_assembly->m_context->FindClass("CCScripting", scriptName.c_str());
 
 	if (managedUpdate = managedClass->FindMethod("Update"))
 		csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
@@ -64,6 +78,8 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
+	m_metadatas.SetProperty("scriptName", &scriptPath);
+
 	const auto& fields = managedClass->Fields();
 
 	for (const auto& [fieldName, fieldRef] : fields)
@@ -120,15 +136,12 @@ void ScriptedBehaviour::Update()
 
 void ScriptedBehaviour::Reload()
 {
-	managedClass = assembly->context->FindClass("CCScripting", "BackpackBehaviour");
+	m_metadatas.m_fields.clear();
+	m_metadatas.m_properties.clear();
+	PopulateMetadatas();
 
-	managedUpdate = managedClass->FindMethod("Update");
-	managedStart = managedClass->FindMethod("Start");
-
-	csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
-	csStart = managedStart->GetMemberUnmanagedThunk<void>();
-
-	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
+	if (managedStart)
+		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
 }
 
 _MonoObject* ScriptedBehaviour::GetRawInstance()

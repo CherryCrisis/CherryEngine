@@ -10,8 +10,8 @@ CameraComponent::CameraComponent()
 {
 	auto RM = RenderManager::GetInstance();
 
-	RM->GenerateFromPipeline<BasicRenderPass>(this);
-	RM->GenerateFromPipeline<SkyboxRenderPass>(this);
+	RM->GenerateFromPipeline<BasicRenderPass>(&m_camera);
+	RM->GenerateFromPipeline<SkyboxRenderPass>(&m_camera);
 
 	PopulateMetadatas();
 }
@@ -20,8 +20,8 @@ CameraComponent::~CameraComponent()
 {
 	auto RM = RenderManager::GetInstance();
 
-	RM->RemoveFromPipeline<BasicRenderPass>(this);
-	RM->RemoveFromPipeline<SkyboxRenderPass>(this);
+	RM->RemoveFromPipeline<BasicRenderPass>(&m_camera);
+	RM->RemoveFromPipeline<SkyboxRenderPass>(&m_camera);
 
 	// TODO: Unbind not in destructor
 	// m_transform->m_onPositionChange.Unbind(&CameraComponent::ChangePosition, this);
@@ -39,10 +39,17 @@ void CameraComponent::PopulateMetadatas()
 
 void CameraComponent::BindToSignals()
 {
+	GetHost().m_OnAwake.Bind(&CameraComponent::Initialize, this);
+}
+
+void CameraComponent::Initialize() 
+{
 	m_transform = GetHost().GetBehaviour<Transform>();
 
 	m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
 	m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
+
+	GetHost().m_OnAwake.Unbind(&CameraComponent::Initialize, this);
 }
 
 void CameraComponent::ChangePosition(const Vector3& position)

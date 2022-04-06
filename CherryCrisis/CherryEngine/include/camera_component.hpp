@@ -19,6 +19,8 @@ public:
 
 	void BindToSignals() override;
 
+	void Initialize();
+
 	Camera		m_camera;
 	Transform*	m_transform = nullptr;
 };

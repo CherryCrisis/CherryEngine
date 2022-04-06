@@ -2,6 +2,7 @@
 
 #include "core/panel.hpp"
 
+class Camera;
 class Scene;
 
 class FrameDisplayer : public Panel 
@@ -24,6 +25,6 @@ protected:
 	bool m_isActive = false;
 	unsigned int m_ViewTex = 0u;
 
-	void UpdateFramebuffer(float width, float height);
+	void UpdateFramebuffer(float width, float height, Camera& camera);
 	void Render() override;
 };

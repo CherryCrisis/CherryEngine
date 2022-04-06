@@ -5,6 +5,9 @@
 
 #include "input_manager.hpp"
 
+#include "scene_manager.hpp"
+#include "camera_component.hpp"
+
 void GameDisplayer::Render() 
 {
     if (!m_isOpened)
@@ -24,9 +27,12 @@ void GameDisplayer::Render()
         FrameDisplayer::Render();
         ImGui::BeginChild("GameFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
-
-        if (m_isActive)
-            UpdateFramebuffer(wsize.x, wsize.y);
+        // TODO: LELOU: replace this shit
+        if (m_isActive) 
+        {  
+            Camera* cam = &SceneManager::GetInstance()->m_currentScene->m_entities["Camera"]->GetBehaviour<CameraComponent>()->m_camera;
+            UpdateFramebuffer(wsize.x, wsize.y, *cam);
+        }
 
         uint64_t ViewTex = (uint64_t)m_ViewTex;
 

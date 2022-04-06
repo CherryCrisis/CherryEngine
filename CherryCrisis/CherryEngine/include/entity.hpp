@@ -33,6 +33,8 @@ public:
 	template <class CompT>
 	CompT* GetBehaviour();
 
+	bool RemoveBehaviour(Behaviour* behaviour);
+
 	std::vector<Behaviour*> GetAllBehaviours();
 
 	template <class CompT>
@@ -54,7 +56,7 @@ public:
 	Event<> m_OnStart;
 	Event<> m_OnTick;
 
-	void Start();
+	void Initialize();
 	void Update();
 	void Destroy();
 

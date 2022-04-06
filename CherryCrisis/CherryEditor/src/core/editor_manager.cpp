@@ -8,6 +8,7 @@
 #include <string>
 
 #include <imgui_impl_opengl3.h>
+#include "ImGuizmo.h"
 
 #include <glad/gl.h>
 #include <tchar.h>
@@ -58,13 +59,13 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 
 EditorManager::EditorManager() 
 {
-    // To Replace too
+    // Put here the editor keyboard context creation
     inputs = InputManager::GetInstance();
+
 
     // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
     SceneManager::GetInstance()->SetCurrentScene(scene);
-    m_hierarchyDisplayer.SetScene(scene.get());
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -94,11 +95,14 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
 {
     HandleDocking();
 
+    if (m_selectedEntities.size() > 0)
+        ImGuizmo::Enable(true);
+
     HandleMenuBar();
     m_browser.Render();
     m_logDisplayer.Render();
-    m_inspector.Render();
     m_sceneDisplayer.Render();
+    m_inspector.Render();
     m_gameDisplayer.Render();
     m_hierarchyDisplayer.Render();
     m_preferencesDisplayer.Render();
@@ -313,13 +317,18 @@ void EditorManager::HandleNotifications()
 
 void EditorManager::UpdateFocusGame()
 {
-    // TODO: Maybe an event on click bind to an action of the editor's input context
-    if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
-    {
-        FocusGame();
-    }
+    InputManager* IM = InputManager::GetInstance();
 
-    if (InputManager::GetInstance()->GetKeyDown(Keycode::ESCAPE))
+    if (!m_gameDisplayer.m_isFocused)
+    {
+        IM->SetGetContext("Editor Context");
+        if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && IM->GetKeyDown(Keycode::LEFT_CLICK))
+            FocusGame();
+    }
+    else if (m_gameDisplayer.m_isFocused && m_engine->isPlaying)
+        IM->SetGetContext("User Context");
+
+    if (IM->GetKeyDown(Keycode::ESCAPE))
     {
         UnfocusGame();
     }
@@ -327,15 +336,18 @@ void EditorManager::UpdateFocusGame()
 
 void EditorManager::FocusGame()
 {
-    inputs->SetContext("User Context");
+    inputs->SetUpdatedContext("User Context");
     inputs->SetCursorHidden();
+    m_gameDisplayer.m_isFocused = true;
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    ImGui::SetWindowFocus("Game");
 }
 
 void EditorManager::UnfocusGame()
 {
-    inputs->SetContext(nullptr);
+    inputs->SetUpdatedContext(nullptr);
     inputs->SetCursorDisplayed();
+    m_gameDisplayer.m_isFocused = false;
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 

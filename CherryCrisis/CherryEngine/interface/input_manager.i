@@ -27,7 +27,4 @@ public:
 	CCMaths::Vector2 GetMouseWheel();
 	CCMaths::Vector2 GetMousePos();
 	CCMaths::Vector2 GetMouseDelta();
-
-	// TODO: Remove this
-	void SetContext(const std::string& name);
 };

@@ -12,6 +12,7 @@ InputManager::InputManager()
 {
 	m_defaultContext = AddContext("Editor Context");
 	m_activeContext = m_defaultContext;
+	m_getContext = m_defaultContext;
 }
 
 InputManager::~InputManager()
@@ -33,60 +34,27 @@ InputManager::~InputManager()
 
 CCMaths::Vector2 InputManager::GetMouseWheel()
 {
-	if (m_activeContext)
-		return m_activeContext->m_mouseWheel;
+	if (m_getContext)
+		return m_getContext->m_mouseWheel;
+	
+	return { 0 };
 }
 
 CCMaths::Vector2 InputManager::GetMousePos()
 {
-	if (m_activeContext)
-		return m_activeContext->m_mousePos;
+	if (m_getContext)
+		return m_getContext->m_mousePos;
+	
+	return { 0 };
 }
 
 CCMaths::Vector2 InputManager::GetMouseDelta()
 {
-	if (m_activeContext)
-		return m_activeContext->m_mouseDelta;
+	if (m_getContext)
+		return m_getContext->m_mouseDelta;
+
+	return { 0 };
 }
-
-
-CCMaths::Vector2 InputManager::GetMouseWheel(const std::string& name)
-{
-	if (!m_contexts.empty() && m_contexts.contains(name))
-		return m_contexts[name].m_mouseWheel;
-}
-
-CCMaths::Vector2 InputManager::GetMousePos(const std::string& name)
-{
-	if (!m_contexts.empty() && m_contexts.contains(name))
-		return m_contexts[name].m_mousePos;
-}
-
-CCMaths::Vector2 InputManager::GetMouseDelta(const std::string& name)
-{
-	if (!m_contexts.empty() && m_contexts.contains(name))
-		return m_contexts[name].m_mouseDelta;
-}
-
-
-CCMaths::Vector2 InputManager::GetMouseWheel(InputContext* context)
-{
-	if (context)
-		return context->m_mouseWheel;
-}
-
-CCMaths::Vector2 InputManager::GetMousePos(InputContext* context)
-{
-	if (context)
-		return context->m_mousePos;
-}
-
-CCMaths::Vector2 InputManager::GetMouseDelta(InputContext* context)
-{
-	if (context)
-		return context->m_mouseDelta;
-}
-
 
 const char* InputManager::GetKeyname(int index)
 {
@@ -182,18 +150,24 @@ InputManager::InputContext* InputManager::AddContext(const std::string& name)
 	return &m_contexts[name];
 }
 
-void InputManager::SetContext(const std::string& name)
+void InputManager::SetUpdatedContext(const std::string& name)
 {
 	if (m_contexts.empty() || !m_contexts.contains(name))
 		return;
 
-	SetContext(&m_contexts[name]);
+	SetUpdatedContext(&m_contexts[name]);
 }
 
-void InputManager::SetContext(InputContext* context)
+void InputManager::SetUpdatedContext(InputContext* context)
 {
 	if (!context)
 		context = m_defaultContext;
+
+	// TODO: separate in an other function
+	for (auto& key : m_activeContext->m_keys)
+	{
+		key.second.Set(false, false, false);
+	}
 
 	m_activeContext->m_mouseDelta = { 0.f, 0.f };
 	m_activeContext->m_mousePos = { 0.f, 0.f };
@@ -202,9 +176,25 @@ void InputManager::SetContext(InputContext* context)
 	m_activeContext = context;
 }
 
+void InputManager::SetGetContext(const std::string& name)
+{
+	if (m_contexts.empty() || !m_contexts.contains(name))
+		return;
+
+	SetGetContext(&m_contexts[name]);
+}
+
+void InputManager::SetGetContext(InputContext* context)
+{
+	if (!context)
+		context = m_defaultContext;
+
+	m_getContext = context;
+}
+
 void InputManager::SetDefaultContext()
 {
-	SetContext(m_defaultContext);
+	SetUpdatedContext(m_defaultContext);
 }
 #pragma endregion
 
@@ -232,13 +222,13 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 
 	// action = 1 if pressed and 0 if released
 
-	Input& input = m_keys[(Keycode)key];
-
+	Input& input = m_activeContext->m_keys[(Keycode)key];
+	
 	input.Set(action, action, !action);
 
 	input.m_isUpdated.Invoke(&input);
 
-	m_framePressedKeys.push_back((Keycode)key);
+	m_activeContext->m_framePressedKeys.push_back((Keycode)key);
 }
 
 void InputManager::MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset)
@@ -267,13 +257,13 @@ void InputManager::MouseClickCallback(GLFWwindow* window, int button, int action
 
 	if (action == 2)	return;
 
-	Input& input = m_keys[(Keycode)(button+1000)];
+	Input& input = m_activeContext->m_keys[(Keycode)(button+1000)];
 
 	input.Set(action, action, !action);
 
 	input.m_isUpdated.Invoke(&input);
 
-	m_framePressedKeys.push_back((Keycode)(button + 1000));
+	m_activeContext->m_framePressedKeys.push_back((Keycode)(button + 1000));
 }
 
 void InputManager::UpdateKeys()
@@ -284,28 +274,28 @@ void InputManager::UpdateKeys()
 		m_activeContext->m_mouseDelta = CCMaths::Vector2::Zero;
 	}
 
-	for (auto& key : m_framePressedKeys)
+	for (auto& key : m_activeContext->m_framePressedKeys)
 	{
-		Input& input = m_keys[key];
+		Input& input = m_activeContext->m_keys[key];
 
 		input.Set(false, input.Held(), false);
 	}
 
-	m_framePressedKeys.clear();
+	m_activeContext->m_framePressedKeys.clear();
 }
 #pragma endregion
 
 #pragma region Input
 void InputManager::Input::Set(bool down, bool held, bool up)
 {
-	m_isDown = down;
-	m_isHeld = held;
-	m_isUp = up;
+	m_isDown	= down;
+	m_isHeld	= held;
+	m_isUp		= up;
 }
 
 InputManager::Input* InputManager::GetInputRef(Keycode key)
 {
-	return &m_keys[key];
+	return &m_getContext->m_keys[key];
 }
 
 
@@ -321,25 +311,25 @@ void InputManager::SetCursorDisplayed()
 
 bool InputManager::GetKeyDown(Keycode key)
 {
-	return m_keys[key].Down();
+	return m_getContext->m_keys[key].Down();
 }
 
 bool InputManager::GetKey(Keycode key)
 {
-	return m_keys[key].Held();
+	return m_getContext->m_keys[key].Held();
 }
 
 bool InputManager::GetKeyUp(Keycode key)
 {
-	return m_keys[key].Up();
+	return m_getContext->m_keys[key].Up();
 }
 
 bool InputManager::GetKeyDown(const char* inputName)
 {
-	if (!m_activeContext)
+	if (!m_getContext)
 		return false;
 
-	if (m_activeContext->m_buttons.empty() || !m_activeContext->m_buttons.contains(inputName))
+	if (m_getContext->m_buttons.empty() || !m_getContext->m_buttons.contains(inputName))
 	{
 		ErrorButtons(inputName);
 
@@ -347,17 +337,17 @@ bool InputManager::GetKeyDown(const char* inputName)
 	}
 	else
 	{
-		ActionButtons& current = m_activeContext->m_buttons[inputName];
+		ActionButtons& current = m_getContext->m_buttons[inputName];
 		return current.CheckDown();
 	}
 }
 
 bool InputManager::GetKey(const char* inputName)
 {
-	if (!m_activeContext)
+	if (!m_getContext)
 		return false;
 
-	if (m_activeContext->m_buttons.empty() || !m_activeContext->m_buttons.contains(inputName))
+	if (m_getContext->m_buttons.empty() || !m_getContext->m_buttons.contains(inputName))
 	{
 		ErrorButtons(inputName);
 
@@ -365,17 +355,17 @@ bool InputManager::GetKey(const char* inputName)
 	}
 	else
 	{
-		ActionButtons& current = m_activeContext->m_buttons[inputName];
+		ActionButtons& current = m_getContext->m_buttons[inputName];
 		return current.CheckHeld();
 	}
 }
 
 bool InputManager::GetKeyUp(const char* inputName)
 {
-	if (!m_activeContext)
+	if (!m_getContext)
 		return false;
 
-	if (m_activeContext->m_buttons.empty() || !m_activeContext->m_buttons.contains(inputName))
+	if (m_getContext->m_buttons.empty() || !m_getContext->m_buttons.contains(inputName))
 	{
 		ErrorButtons(inputName);
 
@@ -383,7 +373,7 @@ bool InputManager::GetKeyUp(const char* inputName)
 	}
 	else
 	{
-		ActionButtons& current = m_activeContext->m_buttons[inputName];
+		ActionButtons& current = m_getContext->m_buttons[inputName];
 		return current.CheckUp();
 	}
 }
@@ -471,11 +461,11 @@ void InputManager::ActionButtons::SetPriorKey(EPriorKey key)
 
 void InputManager::ActionButtons::AddInput(Keycode newInput)
 {
-	InputManager* inputManager = InputManager::GetInstance();
+	Input* input = InputManager::GetInstance()->GetInputRef(newInput);
 
-	m_inputs[newInput] = inputManager->GetInputRef(newInput);
+	m_inputs[newInput] = input;
 
-	m_inputs[newInput]->m_isUpdated.Bind(&ActionButtons::Update, this);
+	input->m_isUpdated.Bind(&ActionButtons::Update, this);
 }
 
 int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
@@ -486,7 +476,9 @@ int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
 	if (m_inputs.contains(newKey))
 		return 0;
 
-	m_inputs[oldKey]->m_isUpdated.Unbind(&ActionButtons::Update, this);
+	Input* input = InputManager::GetInstance()->GetInputRef(oldKey);
+
+	input->m_isUpdated.Unbind(&ActionButtons::Update, this);
 	
 	m_inputs.erase(oldKey);
 	AddInput(newKey);
@@ -496,9 +488,11 @@ int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
 
 void InputManager::ActionButtons::Destroy()
 {
+	InputManager* IM = InputManager::GetInstance();
+
 	for (auto& input : m_inputs)
 	{
-		input.second->m_isUpdated.Unbind(&ActionButtons::Update, this);
+		IM->GetInputRef(input.first)->m_isUpdated.Unbind(&ActionButtons::Update, this);
 	}
 	m_inputs.clear();
 }
@@ -508,6 +502,8 @@ void InputManager::ActionButtons::Update(Input* input)
 {
 	if (!GetPriorKey())
 		return;
+	
+	// TODO: if not active context return
 
 	if (input->Down())
 		m_pressed.Invoke();
@@ -617,38 +613,37 @@ void InputManager::SetNegativeKey(Axis* axis, Keycode key)
 
 void InputManager::Axis::BindUpdate()
 {
-	InputManager* inputManager = InputManager::GetInstance();
-	inputManager->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
-	inputManager->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
+	InputContext* context = InputManager::GetInstance()->m_activeContext;
+	context->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
+	context->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
 }
 
 void InputManager::Axis::Destroy()
 {
-	InputManager* inputManager = InputManager::GetInstance();
-	inputManager->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
-	inputManager->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
+	InputContext* context = InputManager::GetInstance()->m_activeContext;
+	context->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
+	context->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
 }
 
 void InputManager::Axis::SetPositiveKey(Keycode key)
 {
-	InputManager* inputManager = InputManager::GetInstance();
+	InputContext* context = InputManager::GetInstance()->m_activeContext;
 
-	// TODO: Unbind old key update
-	inputManager->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
-
+	context->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
+	
 	m_positiveKey = key;
-	inputManager->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
+	context->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
 }
 
 void InputManager::Axis::SetNegativeKey(Keycode key)
 {
-	InputManager* inputManager = InputManager::GetInstance();
+	InputContext* context = InputManager::GetInstance()->m_activeContext;
 
 	// TODO: Unbind old key update
-	inputManager->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
+	context->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
 
 	m_negativeKey = key;
-	inputManager->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
+	context->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
 }
 
 void InputManager::Axis::Update(Input* input)

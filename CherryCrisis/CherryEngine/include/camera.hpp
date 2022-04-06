@@ -19,4 +19,6 @@ struct Camera
 
 	CCMaths::Vector3 position;
 	CCMaths::Vector3 rotation;
+
+	bool isEnabled = true;
 };

@@ -33,7 +33,7 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
-        for (auto& [entityName, entityRef] : m_displayedScene->m_entities)
+        for (auto& [entityName, entityRef] : SceneManager::GetInstance()->m_currentScene->m_entities)
         {
             if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
                 entityTransform && !entityTransform->IsRoot())
@@ -47,7 +47,7 @@ void HierarchyDisplayer::Render()
 
     ContextCallback();
 
-    if (ImGui::IsWindowHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
+    if (ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
     {
         ImGui::OpenPopup("context");
     }
@@ -151,7 +151,7 @@ void HierarchyDisplayer::ContextCallback()
             if (ImGui::MenuItem("Empty")) 
             {
                 Entity* empty = new Entity("Empty");
-                m_displayedScene->AddEntity(empty);
+                SceneManager::GetInstance()->m_currentScene->AddEntity(empty);
             }
             if (ImGui::MenuItem("ModelRenderer")) {}
             if (ImGui::MenuItem("Camera")) {}
@@ -169,7 +169,7 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
-                    m_displayedScene->AddEntity(cube);
+                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
                 if (ImGui::MenuItem("Sphere")) 
@@ -182,7 +182,7 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
-                    m_displayedScene->AddEntity(cube);
+                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
                 if (ImGui::MenuItem("Cone")) 
@@ -195,7 +195,7 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
-                    m_displayedScene->AddEntity(cube);
+                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
                 if (ImGui::MenuItem("Plane")) 
@@ -208,7 +208,7 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
-                    m_displayedScene->AddEntity(cube);
+                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
                 ImGui::EndMenu();
@@ -227,7 +227,7 @@ void HierarchyDisplayer::ContextCallback()
             {
                 for (auto& entity : m_manager->m_selectedEntities) 
                 {
-                    m_displayedScene->RemoveEntity(entity);
+                    SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
                     entity->Destroy();
                     //To Change
                     m_manager->m_selectedEntities.clear();

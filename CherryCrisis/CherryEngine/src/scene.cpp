@@ -106,10 +106,10 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 		AddEntity(child);
 }
 
-void Scene::Start()
+void Scene::Initialize() 
 {
 	for (auto& [eName, entity] : m_entities)
-		entity->Start();
+		entity->Initialize();
 }
 
 void Scene::Update()
@@ -120,7 +120,7 @@ void Scene::Update()
 
 void Scene::Draw()
 {
-	RenderManager::DrawScene();
+	//RenderManager::DrawScene();
 }
 
 bool Scene::Serialize(const char* filePath) 
@@ -485,5 +485,8 @@ bool Scene::Unserialize(const char* filePath)
 			}
 		}
 	}
+	for (auto& [entityName, entityRef] : m_entities)
+		entityRef->Initialize();
+	
 	return opened;
 }

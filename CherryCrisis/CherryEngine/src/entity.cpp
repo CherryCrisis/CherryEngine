@@ -18,9 +18,21 @@ Entity::~Entity()
 		delete behaviour;
 }
 
-void Entity::Start()
+void Entity::Initialize() 
 {
-	
+	m_OnAwake.Invoke();	
+}	
+
+bool Entity::RemoveBehaviour(Behaviour* behaviour)
+{
+	auto compIt = m_behaviours.find(typeid(*behaviour));
+
+	if (compIt == m_behaviours.end())
+		return false;
+
+	m_behaviours.erase(compIt);
+	delete behaviour;
+	return true;
 }
 
 void Entity::Update()

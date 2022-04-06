@@ -1098,6 +1098,9 @@
     <ClInclude Include="include\serializer.hpp">
       <Filter>Fichiers d%27en-tête\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="include\utils.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1356,6 +1359,9 @@
     </ClCompile>
     <ClCompile Include="src\physic_character_controller.cpp">
       <Filter>Fichiers sources\PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
