@@ -10,7 +10,7 @@
 #include "light.hpp"
 #include "mesh.hpp"
 
-class CameraComponent;
+class Camera;
 class ModelRenderer;
 class Material;
 
@@ -19,7 +19,7 @@ class BasicRenderPass : public ARenderPass, ElementMeshGenerator
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
 	
-	CameraComponent* m_camera = nullptr;
+	Camera* m_camera = nullptr;
 
 public:
 	struct GPUTextureBasic : GPUTexture
@@ -45,7 +45,7 @@ public:
 	int Generate(Light* toGenerate);
 
 	template <>
-	int Generate(CameraComponent* toGenerate);
+	int Generate(Camera* toGenerate);
 
 	template <>
 	int Generate(ModelRenderer* toGenerate);
@@ -57,7 +57,7 @@ public:
 	int Generate(Texture* toGenerate);
 
 	template <>
-	void Remove(CameraComponent* toGenerate);
+	void Remove(Camera* toGenerate);
 
 	template <>
 	void Remove(ModelRenderer* toGenerate);
