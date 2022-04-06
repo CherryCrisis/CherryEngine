@@ -15,6 +15,6 @@ public:
 
 	std::shared_ptr<Scene> m_currentScene;
 	
-	void Start();
+	void Initialize();
 	void Update();
 };

@@ -43,8 +43,8 @@ public:
 
 	void SetScriptClass(const std::string& scriptName);
 	void BindToSignals() override;
-	void Start() override;
-	void Update() override;
+	void Start();
+	void Update();
 
 	void Reload();
 

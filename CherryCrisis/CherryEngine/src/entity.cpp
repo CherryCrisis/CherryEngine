@@ -18,10 +18,10 @@ Entity::~Entity()
 		delete behaviour;
 }
 
-void Entity::Start()
+void Entity::Initialize() 
 {
-	
-}
+	m_OnAwake.Invoke();	
+}	
 
 void Entity::RemoveBehaviour(Behaviour* behaviour)
 {

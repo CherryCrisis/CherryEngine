@@ -23,7 +23,7 @@ public:
 	std::unordered_map<std::string, Entity*> m_entities;
 	static void Load(std::shared_ptr<Scene> scene);
 	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);
-	void Start();
+	void Initialize();
 	void Update();
 
 	void Draw();
