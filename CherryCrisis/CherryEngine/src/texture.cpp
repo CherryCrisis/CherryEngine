@@ -5,6 +5,9 @@
 #include <stb_image.h>
 #include <assimp/scene.h>
 #include <assimp/texture.h>
+#include <format>
+
+#include "debug.hpp"
 
 
 Texture::Texture(const char* texturePath)
@@ -25,44 +28,29 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
 
     texture->m_data = stbi_load(texture->GetFilepath(), &texture->m_width, &texture->m_height, NULL, STBI_rgb_alpha);
 
-    if (texture->m_data)
+    if (!texture->m_data)
     {
-        //texture.gpu = renderer.CreateTexture(texture);
-        //stbi_image_free(texture->m_data);
-    }
-    else
-    {
-        //TODO: Debug ErrorLog
-        //std::cout << "Failed to load image. " << filename << std::endl;
+        Debug* debug = Debug::GetInstance();
+        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texture->GetFilepath()).c_str());
     }
 }
 
-void Texture::Load(std::shared_ptr<Texture> texture, const aiTexture* assimpTexture, bool inutile)
+void Texture::Load(std::shared_ptr<Texture> texture, const aiTexture* assimpTexture)
 {
-    struct Test
-    {
-        unsigned int lenght;
-        unsigned char* data;
-    };
-
-    Test test;
+    unsigned int len;
 
     if (assimpTexture->mHeight)
-    {
-        test.lenght = assimpTexture->mHeight * assimpTexture->mWidth * sizeof(assimpTexture->pcData);
-    }
+        len = assimpTexture->mHeight * assimpTexture->mWidth * sizeof(assimpTexture->pcData);
     else
+        len = assimpTexture->mWidth;
+
+    texture->m_data = stbi_load_from_memory((unsigned char*)assimpTexture->pcData, len, &texture->m_width, &texture->m_height, 0, STBI_rgb_alpha);
+
+    if (!texture->m_data)
     {
-        test.lenght = assimpTexture->mWidth;
+        Debug* debug = Debug::GetInstance();
+        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texture->GetFilepath()).c_str());
     }
-
-    test.data = (unsigned char*)assimpTexture->pcData;
-
-    texture->m_data = stbi_load_from_memory(test.data, test.lenght, &texture->m_width, &texture->m_height, 0, 0);
-
-    //texture->m_data = reinterpret_cast<unsigned char*>(assimpTexture->pcData);
-    //texture->m_width = assimpTexture->mWidth;
-    //texture->m_height = assimpTexture->mHeight;
 }
 
 void Texture::Reload()

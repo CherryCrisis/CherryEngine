@@ -28,7 +28,7 @@ public:
     void* GetData() { return m_data; }
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true);
-    static void Load(std::shared_ptr<Texture> texture, const aiTexture* aiTexture, bool inutile); //TODO: Erase
+    static void Load(std::shared_ptr<Texture> texture, const aiTexture* aiTexture);
     void Delete() override;
     void Reload();
 };

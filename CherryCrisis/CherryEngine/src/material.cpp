@@ -37,7 +37,7 @@ void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimp
 		assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
 		if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
 		{
-			material->textures["albedo"] = resourceManager->AddResource<Texture>(texture->mFilename.C_Str(), true, texture, true);
+			material->textures["albedo"] = resourceManager->AddResource<Texture>(texture->mFilename.C_Str(), true, texture);
 		}
 		else
 		{
