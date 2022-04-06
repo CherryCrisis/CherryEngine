@@ -15,7 +15,9 @@ private:
     int     m_height = 0;
     void*   m_data = nullptr;
 
+
 public:
+    int m_len = 0;
     Texture(const char* texturePath);
 
     GPUTexture* m_gpuTexture = nullptr;
@@ -29,6 +31,9 @@ public:
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true);
     static void Load(std::shared_ptr<Texture> texture, const aiTexture* aiTexture);
+    static void LoadFromCache(std::shared_ptr<Texture> texture);
+    
+    void SaveToCache();
     void Delete() override;
     void Reload();
 };
