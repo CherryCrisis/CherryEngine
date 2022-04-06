@@ -646,6 +646,57 @@ namespace mono
 				methodIt++;
 		}
 
+		std::unordered_map<std::string, UniqueRef<ManagedField>> fields;
+
+		void* fieldIter = nullptr;
+		MonoClassField* field = nullptr;
+		while ((field = mono_class_get_fields(m_class, &fieldIter)))
+		{
+			const char* fieldName = mono_field_get_name(field);
+
+			// TODO: add type check using type's name
+			if (m_fields.find(fieldName) == m_fields.end())
+			{
+				fields[fieldName] = std::make_unique<ManagedField>(field, this, fieldName);
+				continue;
+			}
+
+			auto& managedField = fields[fieldName] = std::move(m_fields[fieldName]);
+
+			managedField->m_class = this;
+			managedField->m_field = field;
+			managedField->m_type = mono_field_get_type(field);
+		}
+
+		m_fields = std::move(fields);
+
+		std::unordered_map<std::string, UniqueRef<ManagedProperty>> properties;
+
+		void* propIter = nullptr;
+		MonoProperty* prop = nullptr;
+		while ((prop = mono_class_get_properties(m_class, &propIter)))
+		{
+			const char* propName = mono_property_get_name(prop);
+
+			// TODO: add type check using type's name
+			if (m_properties.find(propName) == m_properties.end())
+			{
+				properties[propName] = std::make_unique<ManagedProperty>(prop, this, propName);
+
+				continue;
+			}
+
+			auto& managedProp = properties[propName] = std::move(m_properties[propName]);
+			managedProp->m_class = this;
+			managedProp->m_property = prop;
+
+			managedProp->m_getMethod = mono_property_get_get_method(managedProp->m_property);
+			managedProp->m_setMethod = mono_property_get_set_method(managedProp->m_property);
+		}
+
+		m_properties = std::move(properties);
+
+
 		for (auto& attr : m_attributes)
 			attr->Reload();
 

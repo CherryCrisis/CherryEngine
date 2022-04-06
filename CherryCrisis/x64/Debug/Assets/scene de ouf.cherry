@@ -554,7 +554,7 @@ transform:2751403994234810065
 Behaviour:6774134139902692262
 m_type:class ScriptedBehaviour
 m_owner:4455480958036211468
-ntm:CameraController
+scriptName:CameraController
 num:5
 camName:Je suis un nom
 
@@ -562,7 +562,7 @@ Behaviour:367291041277050918
 m_type:class ScriptedBehaviour
 m_owner:4455480958036211468
 name:Debug il sait pas quoi
-ntm:DebugTest
+scriptName:DebugTest
 
 Behaviour:16551788924122524820
 m_type:class Transform
@@ -575,7 +575,7 @@ parent:none
 Behaviour:11878379299283951687
 m_type:class ScriptedBehaviour
 m_owner:14527456374623426492
-ntm:BackpackBehaviour
+scriptName:BackpackBehaviour
 
 Behaviour:3877380645132067376
 m_type:class ModelRenderer

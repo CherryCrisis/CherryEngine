@@ -49,8 +49,6 @@ void Engine::Launch()
 {
 	isPlaying = true;
 
-	InputManager::GetInstance()->SetUpdatedContext("user Context");
-	InputManager::GetInstance()->SetCursorHidden();
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }
 

@@ -18,8 +18,6 @@ namespace CCScripting
 			debug = AddComponent<DebugTest>();
 			transform = GetComponent<Transform>();
 		}
-		public string camName = "Je suis un nom";
-		public int num = 5;
 
 		public float deltaTime = 0.01f;
 		float time = 0f;
@@ -29,6 +27,10 @@ namespace CCScripting
 				return;
 
 			time += deltaTime;
+
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
+
+			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
 
 			Vector2 deltaMouse = InputManager.GetInstance().GetMouseDelta();
 			float sensitityX = Time.GetInstance().GetDeltaTime() * deltaMouse.x;

@@ -506,7 +506,7 @@ namespace mono
 	{
 	private:
 		MonoProperty* m_property = nullptr;
-		class ManagedClass* m_class;
+		class ManagedClass* m_class = nullptr;
 		std::string m_name;
 		MonoMethod* m_getMethod = nullptr;
 		MonoMethod* m_setMethod = nullptr;
@@ -583,6 +583,8 @@ namespace mono
 		friend class ManagedScriptContext;
 		friend class ManagedScriptSystem;
 		friend class ManagedMethod;
+		friend class ManagedProperty;
+		friend class ManagedField;
 		friend class ManagedAssembly;
 		friend class ManagedObject;
 	protected:
