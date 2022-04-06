@@ -313,13 +313,18 @@ void EditorManager::HandleNotifications()
 
 void EditorManager::UpdateFocusGame()
 {
-    // TODO: Maybe an event on click bind to an action of the editor's input context
-    if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
-    {
-        FocusGame();
-    }
+    InputManager* IM = InputManager::GetInstance();
 
-    if (InputManager::GetInstance()->GetKeyDown(Keycode::ESCAPE))
+    if (m_gameDisplayer.m_isHovered && m_engine->isPlaying)
+    {
+        IM->SetGetContext("Editor Context");
+        if (IM->GetKeyDown(Keycode::LEFT_CLICK))
+            FocusGame();
+    }
+    else
+        IM->SetGetContext("User Context");
+
+    if (IM->GetKeyDown(Keycode::ESCAPE))
     {
         UnfocusGame();
     }
@@ -327,14 +332,14 @@ void EditorManager::UpdateFocusGame()
 
 void EditorManager::FocusGame()
 {
-    inputs->SetContext("User Context");
+    inputs->SetUpdatedContext("User Context");
     inputs->SetCursorHidden();
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
 void EditorManager::UnfocusGame()
 {
-    inputs->SetContext(nullptr);
+    inputs->SetUpdatedContext(nullptr);
     inputs->SetCursorDisplayed();
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }

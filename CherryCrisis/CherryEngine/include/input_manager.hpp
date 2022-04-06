@@ -108,7 +108,7 @@ private:
 
 		void Update();
 
-	public:
+	public:		
 		Event<const float&> m_event;
 
 		~ActionAxes();
@@ -124,6 +124,10 @@ private:
 public:
 	struct InputContext
 	{
+		//list of keys (intern glfw callback update key statut)
+		std::unordered_map<Keycode, Input> m_keys;
+		std::vector<Keycode> m_framePressedKeys;
+
 		std::unordered_map<std::string, ActionAxes> m_axes;
 		std::unordered_map<std::string, ActionButtons> m_buttons;
 
@@ -137,17 +141,10 @@ private:
 
 	// Context (presets of differents callbacks and axes)
 	InputContext* m_activeContext = nullptr;
-	InputContext* m_defaultContext = nullptr;
-
-	//list of keys (intern glfw callback update key statut)
-	std::unordered_map<Keycode, Input> m_keys;
-	
-	//list of mouse keys (intern glfw callback update key statut)
-	std::unordered_map<Keycode, Input> m_mouseKeys;
+	InputContext* m_getContext = nullptr;
+	InputContext* m_defaultContext = nullptr;	
 
 	//list of keys just pressed
-	std::vector<Keycode> m_framePressedKeys;
-
 	bool m_isListening = false;
 	int m_listenedKey = -1;
 
@@ -437,8 +434,12 @@ public:
 	// Context
 	InputContext* AddContext(const std::string& name);
 
-	void SetContext(const std::string& name);
-	void SetContext(InputContext* context);
+	void SetUpdatedContext(const std::string& name);
+	void SetUpdatedContext(InputContext* context);
+
+	void SetGetContext(const std::string& name);
+	void SetGetContext(InputContext* context);
+
 	void SetDefaultContext();
 
 	void (*HideCursor)(void* window);
@@ -500,14 +501,6 @@ public:
 	CCMaths::Vector2 GetMouseWheel();
 	CCMaths::Vector2 GetMousePos();
 	CCMaths::Vector2 GetMouseDelta();
-
-	CCMaths::Vector2 GetMouseWheel(const std::string& name);
-	CCMaths::Vector2 GetMousePos(const std::string& name);
-	CCMaths::Vector2 GetMouseDelta(const std::string& name);
-
-	CCMaths::Vector2 GetMouseWheel(InputContext* context);
-	CCMaths::Vector2 GetMousePos(InputContext* context);
-	CCMaths::Vector2 GetMouseDelta(InputContext* context);
 
 	const int GetListenedKey() { return m_listenedKey; }
 

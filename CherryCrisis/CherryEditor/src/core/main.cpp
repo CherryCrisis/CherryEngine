@@ -133,10 +133,14 @@ int main()
 
         editor.DisplayEditorUI(window);
 
+        InputManager::GetInstance()->SetGetContext(nullptr);
         engine.TickEngine();
 
         if (engine.isPlaying)
+        {
+            InputManager::GetInstance()->SetGetContext("User Context");
             engine.Tick();
+        }
 
         glfwSwapBuffers(window);
     }

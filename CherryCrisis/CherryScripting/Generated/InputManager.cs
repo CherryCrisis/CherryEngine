@@ -100,11 +100,6 @@ public class InputManager : global::System.IDisposable {
     return ret;
   }
 
-  public void SetContext(string name) {
-    CherryEnginePINVOKE.InputManager_SetContext(swigCPtr, name);
-    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
-  }
-
 }
 
 }
