@@ -32,8 +32,8 @@ void CsScriptingSystem::Init()
 	};
 
 	mono_add_internal_call("CCEngine.ScriptedBehaviour::GetStaticInstance", GetStaticInstance);
-	auto csassembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
-	mono::ManagedAssembly* assembly = csassembly->context->FindAssembly("../x64/Debug/CherryScripting.copy.dll");
+	auto csassembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
+	mono::ManagedAssembly* assembly = csassembly->context->FindAssembly("CherryScripting.copy.dll");
 	mono::ManagedClass* behaviourClass = csassembly->context->FindClass("CCEngine", "Behaviour");
 	csassembly->context->FindClass("CCScripting", "DebugTest");
 	csassembly->context->FindClass("CCScripting", "BackpackBehaviour");

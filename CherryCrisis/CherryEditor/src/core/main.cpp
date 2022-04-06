@@ -5,7 +5,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include "tahoma.h"
-
+#include "ImGuizmo.h"
 #include <glad/gl.h>
 
 #define GLFW_INCLUDE_NONE
@@ -76,6 +76,7 @@ int main()
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
     Engine engine{};
+    std::cout << "here is ok" << std::endl;
     EditorManager editor{};
 
     glfwSetWindowUserPointer(window, &editor);
@@ -116,6 +117,7 @@ int main()
     icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
     glfwSetWindowIcon(window, 1 , icon);
     stbi_image_free(icon[0].pixels);
+    ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
     //-----------------------------------
 
     while (glfwWindowShouldClose(window) == false)
@@ -127,6 +129,7 @@ int main()
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        ImGuizmo::BeginFrame();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.f, 0.f, 0.f, 1.f);

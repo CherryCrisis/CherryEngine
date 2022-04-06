@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="externals\src\gl.c" />
     <ClCompile Include="externals\src\imgui.cpp" />
+    <ClCompile Include="externals\src\ImGuizmo.cpp" />
     <ClCompile Include="externals\src\imgui_demo.cpp" />
     <ClCompile Include="externals\src\imgui_draw.cpp" />
     <ClCompile Include="externals\src\imgui_impl_glfw.cpp" />
@@ -44,6 +45,7 @@
     <ClCompile Include="src\panels\toolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="externals\include\ImGuizmo.h" />
     <ClInclude Include="externals\include\imgui_notify.h" />
     <ClInclude Include="include\core\editor_manager.hpp" />
     <ClInclude Include="include\core\frame_displayer.hpp" />
@@ -108,6 +110,9 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+   <PropertyGroup>
+    <LocalDebuggerWorkingDirectory>$(OutDir)</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">

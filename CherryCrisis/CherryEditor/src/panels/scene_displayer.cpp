@@ -7,6 +7,8 @@
 #include <comdef.h>
 
 #include "core/editor_manager.hpp"
+#include "ImGuizmo.h"
+#include "transform.hpp"
 
 void SceneDisplayer::Render() 
 {
@@ -33,8 +35,6 @@ void SceneDisplayer::Render()
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".cherry")) 
             {
-                //const wchar_t* path = (const wchar_t*)payload->Data;
-                //_bstr_t b(path);
                 const char* c = (const char*)payload->Data;
                 manager->m_selectedEntities.clear();
                 SceneManager::GetInstance()->m_currentScene->Unserialize(c);
@@ -42,8 +42,34 @@ void SceneDisplayer::Render()
 
             ImGui::EndDragDropTarget();
         }
+
+        // matrices view and proj
+        CCMaths::Matrix4 projection = Matrix4::Perspective(CCMaths::PI / 3.f, 4.f / 3.f, 0.01f, 200.f);
+        // TODO: Replace with editor camera view matrix
+        CCMaths::Matrix4 view = Matrix4::Scale({ 1.f,1.f,1.f }) * Matrix4::RotateZXY({ 0.f,0.f,0.f }) * Matrix4::Translate({ -1.f,1.f,-1.f });
+
+        ImGuizmo::SetOrthographic(false);
+        ImGuizmo::SetDrawlist();
+        ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+        if (manager->m_selectedEntities.size() > 0 && manager->m_selectedEntities[0]->GetBehaviour<Transform>() != nullptr) 
+        {
+            Transform* t = manager->m_selectedEntities[0]->GetBehaviour<Transform>();
+            CCMaths::Matrix4 mat = t->GetWorldMatrix();
+            float p[3], r[3], s[3]; // position, rotation and scale
+
+            if (ImGuizmo::Manipulate(view.data, projection.data,
+                ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::LOCAL, mat.data))
+            {
+                ImGuizmo::DecomposeMatrixToComponents(mat.data, p, r, s);
+
+                t->SetPosition({p[0],p[1],p[2]}); 
+                t->SetRotation({ r[0],r[1],r[2]}); 
+                t->SetScale({s[0],s[1],s[2]});
+            }            
+        }
         ImGui::EndChild();
     }
+
 
     ImGui::End();
 }
