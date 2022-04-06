@@ -67,7 +67,7 @@ void SkyboxRenderPass::Remove(Skybox* toGenerate)
 	}
 }
 
-void SkyboxRenderPass::Execute(const float& x, const float& y)
+void SkyboxRenderPass::Execute(const float& x, const float& y, Camera& camera)
 {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
@@ -75,15 +75,13 @@ void SkyboxRenderPass::Execute(const float& x, const float& y)
 	glDepthFunc(GL_LEQUAL);
 
 	glUseProgram(m_program->m_shaderProgram);
+	
+	CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
+	CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation);
 
-	if (m_camera)
-	{
-		CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera->fovY, m_camera->aspect, m_camera->near, m_camera->far);
-		CCMaths::Matrix4 view = Matrix4::RotateZXY(-m_camera->rotation);
+	CCMaths::Matrix4 viewProjection = projection * view;
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
-		CCMaths::Matrix4 viewProjection = projection * view;
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
-	}
 
 	Mesh* mesh = m_skybox->m_mesh.get();
 

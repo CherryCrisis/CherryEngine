@@ -101,8 +101,8 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     HandleMenuBar();
     m_browser.Render();
     m_logDisplayer.Render();
-    m_inspector.Render();
     m_sceneDisplayer.Render();
+    m_inspector.Render();
     m_gameDisplayer.Render();
     m_hierarchyDisplayer.Render();
     m_preferencesDisplayer.Render();
@@ -319,13 +319,13 @@ void EditorManager::UpdateFocusGame()
 {
     InputManager* IM = InputManager::GetInstance();
 
-    if (m_gameDisplayer.m_isHovered && m_engine->isPlaying)
+    if (!m_gameDisplayer.m_isFocused)
     {
         IM->SetGetContext("Editor Context");
-        if (IM->GetKeyDown(Keycode::LEFT_CLICK))
+        if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && IM->GetKeyDown(Keycode::LEFT_CLICK))
             FocusGame();
     }
-    else
+    else if (m_gameDisplayer.m_isFocused && m_engine->isPlaying)
         IM->SetGetContext("User Context");
 
     if (IM->GetKeyDown(Keycode::ESCAPE))
@@ -338,13 +338,16 @@ void EditorManager::FocusGame()
 {
     inputs->SetUpdatedContext("User Context");
     inputs->SetCursorHidden();
+    m_gameDisplayer.m_isFocused = true;
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    ImGui::SetWindowFocus("Game");
 }
 
 void EditorManager::UnfocusGame()
 {
     inputs->SetUpdatedContext(nullptr);
     inputs->SetCursorDisplayed();
+    m_gameDisplayer.m_isFocused = false;
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 

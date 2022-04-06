@@ -47,7 +47,7 @@ void HierarchyDisplayer::Render()
 
     ContextCallback();
 
-    if (ImGui::IsWindowHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
+    if (ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
     {
         ImGui::OpenPopup("context");
     }

@@ -163,6 +163,12 @@ void InputManager::SetUpdatedContext(InputContext* context)
 	if (!context)
 		context = m_defaultContext;
 
+	// TODO: separate in an other function
+	for (auto& key : m_activeContext->m_keys)
+	{
+		key.second.Set(false, false, false);
+	}
+
 	m_activeContext->m_mouseDelta = { 0.f, 0.f };
 	m_activeContext->m_mousePos = { 0.f, 0.f };
 	m_activeContext->m_mouseWheel = { 0.f, 0.f };

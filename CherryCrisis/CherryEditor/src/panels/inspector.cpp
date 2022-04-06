@@ -41,7 +41,12 @@ void InspectComponents(Entity* entity, int id)
         {
             if (ImGui::MenuItem("Delete")) 
             {
-                entity->RemoveBehaviour(behaviour);
+                if (entity->RemoveBehaviour(behaviour)) 
+                {
+                    ImGui::EndPopup(); ImGui::PopID();
+                    break;
+                }
+
             }
             if (ImGui::MenuItem("Copy")) {}
             if (ImGui::MenuItem("Paste")) {}

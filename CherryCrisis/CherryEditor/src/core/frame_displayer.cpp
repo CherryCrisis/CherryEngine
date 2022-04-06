@@ -9,8 +9,9 @@
 #include <imgui.h>
 
 #include "render_manager.hpp"
+#include "camera.hpp"
 
-void FrameDisplayer::UpdateFramebuffer(float width, float height)
+void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera)
 {
 	if (!m_isInit) Init();
 
@@ -19,7 +20,7 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height)
 
     glViewport(0, 0, (GLsizei)width, (GLsizei)height);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-    RenderManager::DrawScene(width, height);
+    RenderManager::DrawScene(width, height, camera);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

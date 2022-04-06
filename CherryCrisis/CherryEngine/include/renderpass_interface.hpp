@@ -8,12 +8,14 @@
 #include "event.hpp"
 #include "callback.hpp"
 
+#include "camera.hpp"
+
 class ARenderPass
 {
 protected:
 	std::shared_ptr<ShaderProgram> m_program;
 
-	std::unique_ptr<CCCallback::ACallback<const float&, const float&>> m_callExecute = nullptr;
+	std::unique_ptr<CCCallback::ACallback<const float&, const float&, Camera&>> m_callExecute = nullptr;
 
 
 public:
@@ -27,10 +29,10 @@ public:
 			m_program->m_OnDeleted.Bind(&ARenderPass::InvalidatePass, this);
 	}
 
-	void CallOnExecute(float x, float y)
+	void CallOnExecute(float x, float y, Camera& camera)
 	{
 		if (m_callExecute)
-			m_callExecute->Invoke(x, y);
+			m_callExecute->Invoke(x, y, camera);
 	}
 
 	virtual ~ARenderPass()

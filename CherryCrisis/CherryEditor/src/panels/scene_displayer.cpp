@@ -6,9 +6,47 @@
 #include <imgui.h>
 #include <comdef.h>
 
+#include "time_manager.hpp"
 #include "core/editor_manager.hpp"
 #include "ImGuizmo.h"
 #include "transform.hpp"
+
+#undef near
+#undef far
+
+SceneDisplayer::SceneDisplayer() 
+{
+    InputManager* IM = InputManager::GetInstance();
+    m_sceneContext = IM->AddContext("Scene Context");
+    IM->SetUpdatedContext(m_sceneContext);
+
+    int i = 0;
+    IM->AddActionAxes("UpDown", i);
+    IM->AddAxisToAction("UpDown", { Keycode::SPACE, Keycode::LEFT_CONTROL });
+
+    IM->AddActionAxes("FrontBack", i);
+    IM->AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
+
+    IM->AddActionAxes("RightLeft", i);
+    IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
+    
+    IM->SetUpdatedContext(nullptr);
+}
+
+void SceneDisplayer::UpdateCamera()
+{
+    InputManager* IM = InputManager::GetInstance();
+    float dt = TimeManager::GetInstance()->GetDeltaTime();
+    float speed = dt * m_cameraSpeed;
+    m_camera.position.x += IM->GetAxis("RightLeft") * speed;
+    m_camera.position.y += IM->GetAxis("UpDown") * speed;
+    m_camera.position.z += IM->GetAxis("FrontBack") * speed;
+
+    CCMaths::Vector2 deltaMouse = IM->GetMouseDelta();
+
+    m_camera.rotation.x += dt * deltaMouse.y;
+    m_camera.rotation.y += dt * deltaMouse.x;
+}
 
 void SceneDisplayer::Render() 
 {
@@ -19,13 +57,21 @@ void SceneDisplayer::Render()
 
     if (ImGui::Begin("Scene", &m_isOpened))
     {
+        InputManager* IM = InputManager::GetInstance();
+        IM->SetGetContext(m_sceneContext);
+        
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && IM->GetKey(Keycode::RIGHT_CLICK))
+            UpdateCamera();
+
+        IM->SetGetContext(nullptr);
+
         m_isActive = !ImGui::IsWindowCollapsed();
 
         ImGui::BeginChild("SceneFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
         
         if (m_isActive)
-            UpdateFramebuffer(wsize.x, wsize.y);
+            UpdateFramebuffer(wsize.x, wsize.y, m_camera);
 
         uint64_t ViewTex = (uint64_t)m_ViewTex;
 
@@ -44,9 +90,9 @@ void SceneDisplayer::Render()
         }
 
         // matrices view and proj
-        CCMaths::Matrix4 projection = Matrix4::Perspective(CCMaths::PI / 3.f, 4.f / 3.f, 0.01f, 200.f);
-        // TODO: Replace with editor camera view matrix
-        CCMaths::Matrix4 view = Matrix4::Scale({ 1.f,1.f,1.f }) * Matrix4::RotateZXY({ 0.f,0.f,0.f }) * Matrix4::Translate({ -1.f,1.f,-1.f });
+
+        CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera.fovY, m_camera.aspect, m_camera.near, m_camera.far);
+        CCMaths::Matrix4 view = Matrix4::RotateZXY(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();

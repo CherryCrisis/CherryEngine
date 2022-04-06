@@ -33,7 +33,7 @@ public:
 	template <class CompT>
 	CompT* GetBehaviour();
 
-	void RemoveBehaviour(Behaviour* behaviour);
+	bool RemoveBehaviour(Behaviour* behaviour);
 
 	std::vector<Behaviour*> GetAllBehaviours();
 

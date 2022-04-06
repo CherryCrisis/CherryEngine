@@ -10,7 +10,8 @@
 #include "light.hpp"
 #include "mesh.hpp"
 
-class Camera;
+#include "camera.hpp"
+
 class ModelRenderer;
 class Material;
 
@@ -65,5 +66,5 @@ public:
 	template <>
 	void Remove(Light* toGenerate);
 
-	void Execute(const float& x = 0, const float& y = 0);
+	void Execute(const float& x, const float& y, Camera& camera);
 };

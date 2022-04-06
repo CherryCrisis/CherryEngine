@@ -120,7 +120,7 @@ void Scene::Update()
 
 void Scene::Draw()
 {
-	RenderManager::DrawScene();
+	//RenderManager::DrawScene();
 }
 
 bool Scene::Serialize(const char* filePath) 

@@ -62,6 +62,7 @@ private:
     uint64_t ReplayIcon = 0;
     uint64_t StopIcon = 0;
 
+    InputManager::InputContext* m_editorContext;
 public:
     // TODO: Temporary, to replace with scene engine handling
     std::shared_ptr<Scene> scene;
