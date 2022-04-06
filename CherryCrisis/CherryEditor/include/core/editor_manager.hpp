@@ -17,6 +17,8 @@
 #include "panels/project_settings_displayer.hpp"
 #include "panels/build_displayer.hpp"
 
+#include "maths.hpp"
+
 // not sure about this
 static const std::filesystem::path AssetPath = "Assets";
  
@@ -38,7 +40,7 @@ private:
     ProjectSettingsDisplayer m_projSettingsDisplayer {false};
     BuildDisplayer           m_buildDisplayer        {false};
     //--------------
-    
+
     Engine* m_engine = nullptr;
 
     void HandleDocking();

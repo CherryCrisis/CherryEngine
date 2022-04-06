@@ -15,8 +15,8 @@
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
-	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("../x64/Debug/CherryScripting.dll", true, "ScriptingDomain");
-	m_metadatas.SetProperty("ntm", &scriptPath);
+	assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
+	m_metadatas.SetProperty("scriptName", &scriptPath);
 }
 
 ScriptedBehaviour::~ScriptedBehaviour()

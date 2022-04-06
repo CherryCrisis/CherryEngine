@@ -12,6 +12,7 @@
 #include "light_component.hpp"
 #include "camera_component.hpp"
 #include "scripted_behaviour.hpp"
+#include "csscripting_system.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -35,7 +36,27 @@ void InspectComponents(Entity* entity, int id)
         ImGui::PushID(static_cast<int>(behaviour->GetUUID()));
         std::string bname = typeid(*behaviour).name();
         bname = ExtractValue(bname, ' ');
-        if (ImGui::TreeNode(bname.c_str()))
+
+        if (ImGui::BeginPopupContextItem("context"))
+        {
+            if (ImGui::MenuItem("Delete")) 
+            {
+                entity->RemoveBehaviour(behaviour);
+            }
+            if (ImGui::MenuItem("Copy")) {}
+            if (ImGui::MenuItem("Paste")) {}
+            ImGui::EndPopup();
+        }
+
+        bool opened = ImGui::TreeNode(bname.c_str());
+
+        // check if right clicked
+        if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
+        {
+            ImGui::OpenPopup("context");
+        }
+
+        if (opened)
         {
             auto& fields = behaviour->GetFields();
             for (auto& [fieldName, fieldRef] : fields)
@@ -145,9 +166,12 @@ void Inspector::Render()
         {
             InspectComponents(m_manager->m_selectedEntities[i], static_cast<int>(i));
         }
-        if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+        if (m_manager->m_selectedEntities.size() > 0) 
         {
-            ImGui::OpenPopup("Add Component");
+            if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+            {
+                ImGui::OpenPopup("Add Component");
+            }
         }
 
 
@@ -163,7 +187,15 @@ void Inspector::Render()
             if (ImGui::MenuItem("Transform"))      { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
             if (ImGui::MenuItem("Model Renderer")) { m_manager->m_selectedEntities[0]->AddBehaviour<ModelRenderer>(); }
             if (ImGui::MenuItem("Camera"))     { }
-            if (ImGui::MenuItem("scriptedBehaviour")){}
+            for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
+            {
+                if (ImGui::MenuItem(name.c_str()))
+                {
+                    ScriptedBehaviour* behaviour = m_manager->m_selectedEntities[0]->AddBehaviour<ScriptedBehaviour>();
+                        behaviour->SetScriptClass(name);
+                }
+            }   
+
             //---------------------------------------------------
 
             ImGui::SetItemDefaultFocus();

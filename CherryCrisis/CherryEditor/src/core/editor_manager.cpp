@@ -8,6 +8,7 @@
 #include <string>
 
 #include <imgui_impl_opengl3.h>
+#include "ImGuizmo.h"
 
 #include <glad/gl.h>
 #include <tchar.h>
@@ -58,13 +59,13 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 
 EditorManager::EditorManager() 
 {
-    // To Replace too
+    // Put here the editor keyboard context creation
     inputs = InputManager::GetInstance();
+
 
     // To Replace
     scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
     SceneManager::GetInstance()->SetCurrentScene(scene);
-    m_hierarchyDisplayer.SetScene(scene.get());
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -93,6 +94,9 @@ void EditorManager::LinkEngine(Engine* engine)
 void EditorManager::DisplayEditorUI(GLFWwindow* window) 
 {
     HandleDocking();
+
+    if (m_selectedEntities.size() > 0)
+        ImGuizmo::Enable(true);
 
     HandleMenuBar();
     m_browser.Render();

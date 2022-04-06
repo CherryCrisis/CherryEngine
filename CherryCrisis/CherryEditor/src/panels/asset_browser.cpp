@@ -22,7 +22,7 @@ AssetBrowser::AssetBrowser()
 {
     //Set Full Path to Assets
     m_currentDirectory = std::filesystem::current_path();
-    m_currentDirectory /= AssetPath;
+    m_currentDirectory /= "Assets";
     m_solutionDirectory = m_currentDirectory;
 
     int null = 0;
@@ -44,17 +44,20 @@ void AssetBrowser::QuerryBrowser()
 
     namespace fs = std::filesystem;
     int i = 0;
-    for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
+    if (fs::exists(m_currentDirectory)) 
     {
-        AssetNode node;
-        node.m_isDirectory = entry.is_directory();
-        node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
-        node.m_path = entry.path();
-        node.m_relatiePath = entry.path().filename();
-        node.m_filename = entry.path().filename().string();
-        node.m_extension = entry.path().extension().string();
-        m_nodes[i] = node;
-        i++;
+        for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
+        {
+            AssetNode node;
+            node.m_isDirectory = entry.is_directory();
+            node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
+            node.m_path = entry.path();
+            node.m_relatiePath = entry.path().filename();
+            node.m_filename = entry.path().filename().string();
+            node.m_extension = entry.path().extension().string();
+            m_nodes[i] = node;
+            i++;
+        }
     }
 }
 

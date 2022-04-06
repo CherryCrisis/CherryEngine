@@ -187,6 +187,8 @@ namespace mono
 		void Clear();
 
 		inline void ReportException(MonoObject* exc);
+
+		std::unordered_multimap<std::string, UniqueRef<class ManagedClass>>& GetClasses() { return m_classes;  }
 	};
 
 	//==============================================================================================//
@@ -622,7 +624,8 @@ namespace mono
 		MonoObject* CreateUnmanagedRawInstance(void* cPtr, bool ownMemory);
 		ManagedObject* CreateUnmanagedInstance(void* cPtr, bool ownMemory);
 
-		inline MonoType* RawType() const { return mono_class_get_type(m_class);	}
+		inline MonoType* RawType() const { return mono_class_get_type(m_class); }
+		inline MonoClass* RawClass() const { return m_class;	}
 
 		bool ImplementsInterface(ManagedClass& interface);
 		bool DerivedFromClass(ManagedClass& cls);

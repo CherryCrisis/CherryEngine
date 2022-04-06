@@ -99,6 +99,9 @@
     <ClCompile Include="src\core\panel.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
+    <ClCompile Include="externals\src\ImGuizmo.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\ImGuizmo.h">
+      <Filter>Fichiers externes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

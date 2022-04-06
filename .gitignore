@@ -1,5 +1,8 @@
 !x64/Debug/imgui.ini
 !x64/Release/imgui.ini
+!x64/Debug/Assets/
+!x64/Release/Assets/
+
 x64
 *.user
 .vs
