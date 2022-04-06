@@ -72,6 +72,9 @@ void Scene::RemoveEntity(std::string name)
 
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
+	std::shared_ptr<ModelBase> modelBase = ResourceManager::GetInstance()->AddResource<ModelBase>("Assets/backpack.obj", true);
+	scene->GenerateEntities(modelBase);
+
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
 	scene->AddEntity(light);

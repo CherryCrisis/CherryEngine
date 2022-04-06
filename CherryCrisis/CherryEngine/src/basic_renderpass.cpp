@@ -86,7 +86,6 @@ int BasicRenderPass::Generate(Texture* toGenerate)
 
 	glCreateTextures(GL_TEXTURE_2D, 1, &gpuTexture.ID);
 	
-	glBindTexture(GL_TEXTURE_2D, gpuTexture.ID);
 
 	//glTextureStorage2D(gpuTexture.ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
 	//glTextureSubImage2D(gpuTexture.ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_COMPRESSED_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
@@ -125,10 +124,11 @@ int BasicRenderPass::Generate(Texture* toGenerate)
 	//glTextureSubImage2D(gpuTexture.ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_COMPRESSED_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
 
 	/*https://www.oldunreal.com/editing/s3tc/ARB_texture_compression.pdf*/
-	int blockSize = 8; //compression level
-	int size = ((toGenerate->GetWidth()) / 4) * ((toGenerate->GetHeight()) / 4) * blockSize;
-	glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_BPTC_UNORM, toGenerate->GetWidth(), toGenerate->GetHeight(), 0, size, toGenerate->GetData());
-	
+
+	glBindTexture(GL_TEXTURE_2D, gpuTexture.ID);
+	glCompressedTexImage2D(GL_TEXTURE_2D, 0, toGenerate->m_internalFormat, toGenerate->GetWidth(), toGenerate->GetHeight(), 0, toGenerate->m_compressedSize, 
+		(unsigned char*)toGenerate->GetData());
+
 	glGenerateTextureMipmap(gpuTexture.ID);
 
 	toGenerate->m_gpuTexture = new GPUTextureBasic(gpuTexture);
