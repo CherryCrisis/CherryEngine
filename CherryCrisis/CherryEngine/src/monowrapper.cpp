@@ -466,21 +466,6 @@ namespace mono
 	{
 	}
 
-	bool ManagedField::Reload()
-	{
-		m_field = nullptr;
-
-		void* iter = nullptr;
-		MonoClassField* field = nullptr;
-		while ((field = mono_class_get_fields(m_class->m_class, &iter)) && !m_field)
-		{
-			if (mono_field_get_name(field) == m_name)
-				m_field = field;
-		}
-
-		return m_field;
-	}
-
 	//================================================================//
 	//
 	// Managed Property
@@ -492,21 +477,6 @@ namespace mono
 	{
 		m_getMethod = mono_property_get_get_method(m_property);
 		m_setMethod = mono_property_get_set_method(m_property);
-	}
-
-	bool ManagedProperty::Reload()
-	{
-		m_property = nullptr;
-
-		void* iter = nullptr;
-		MonoProperty* property = nullptr;
-		while ((property = mono_class_get_properties(m_class->m_class, &iter)) && !m_property)
-		{
-			if (mono_property_get_name(property) == m_name)
-				m_property = property;
-		}
-
-		return m_property;
 	}
 
 	//================================================================//
@@ -676,27 +646,56 @@ namespace mono
 				methodIt++;
 		}
 
-		for (auto propIt = m_properties.begin(); propIt != m_properties.end();)
-		{
-			ManagedProperty* property = propIt->second.get();
-			property->m_class = this;
+		std::unordered_map<std::string, UniqueRef<ManagedField>> fields;
 
-			if (!property->Reload())
-				propIt = m_properties.erase(propIt);
-			else
-				propIt++;
+		void* fieldIter = nullptr;
+		MonoClassField* field = nullptr;
+		while ((field = mono_class_get_fields(m_class, &fieldIter)))
+		{
+			const char* fieldName = mono_field_get_name(field);
+
+			// TODO: add type check using type's name
+			if (m_fields.find(fieldName) == m_fields.end())
+			{
+				fields[fieldName] = std::make_unique<ManagedField>(field, this, fieldName);
+				continue;
+			}
+
+			auto& managedField = fields[fieldName] = std::move(m_fields[fieldName]);
+
+			managedField->m_class = this;
+			managedField->m_field = field;
+			managedField->m_type = mono_field_get_type(field);
 		}
 
-		for (auto fieldIt = m_fields.begin(); fieldIt != m_fields.end();)
-		{
-			ManagedField* field = fieldIt->second.get();
-			field->m_class = this;
+		m_fields = std::move(fields);
 
-			if (!field->Reload())
-				fieldIt = m_fields.erase(fieldIt);
-			else
-				fieldIt++;
+		std::unordered_map<std::string, UniqueRef<ManagedProperty>> properties;
+
+		void* propIter = nullptr;
+		MonoProperty* prop = nullptr;
+		while ((prop = mono_class_get_properties(m_class, &propIter)))
+		{
+			const char* propName = mono_property_get_name(prop);
+
+			// TODO: add type check using type's name
+			if (m_properties.find(propName) == m_properties.end())
+			{
+				properties[propName] = std::make_unique<ManagedProperty>(prop, this, propName);
+
+				continue;
+			}
+
+			auto& managedProp = properties[propName] = std::move(m_properties[propName]);
+			managedProp->m_class = this;
+			managedProp->m_property = prop;
+
+			managedProp->m_getMethod = mono_property_get_get_method(managedProp->m_property);
+			managedProp->m_setMethod = mono_property_get_set_method(managedProp->m_property);
 		}
+
+		m_properties = std::move(properties);
+
 
 		for (auto& attr : m_attributes)
 			attr->Reload();

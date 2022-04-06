@@ -18,7 +18,6 @@ namespace CCScripting
 			debug = AddComponent<DebugTest>();
 			transform = GetComponent<Transform>();
 		}
-		public int num = 5;
 
 		public float deltaTime = 0.01f;
 		float time = 0f;

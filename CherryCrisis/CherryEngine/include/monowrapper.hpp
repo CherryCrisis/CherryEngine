@@ -494,8 +494,6 @@ namespace mono
 	public:
 		ManagedField(MonoClassField* fld, class ManagedClass* cls, const char* name);
 		virtual ~ManagedField() = default;
-
-		bool Reload();
 	};
 
 	//==============================================================================================//
@@ -523,8 +521,6 @@ namespace mono
 		const MonoProperty* RawProperty() const { return m_property; }
 
 		const ManagedClass* Class() const { return m_class; }
-
-		bool Reload();
 	};
 
 	//==============================================================================================//
