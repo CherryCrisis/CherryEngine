@@ -65,7 +65,7 @@ void Scene::RemoveEntity(Entity* toRemove)
 	m_entities.erase(toRemove->GetName());
 }
 
-void Scene::RemoveEntity(std::string name)
+void Scene::RemoveEntity(const std::string& name)
 {
 	m_entities.erase(name);
 }

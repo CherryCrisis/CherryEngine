@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include <iostream>
 
 #include <imgui_impl_opengl3.h>
 #include "ImGuizmo.h"
@@ -20,6 +21,8 @@
 #include "scene_manager.hpp"
 #include "render_manager.hpp"
 #include "csscripting_system.hpp"
+
+#include "command.hpp"
 
 //To Replace with Resource Manager Texture Handling
 bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height)
@@ -88,7 +91,7 @@ void EditorManager::LinkEngine(Engine* engine)
 {
     m_engine = engine;
     m_inspector.m_engine = engine;
-    m_sceneDisplayer.manager = this;
+    m_sceneDisplayer.m_manager = this;
 }
 
 void EditorManager::DisplayEditorUI(GLFWwindow* window) 
@@ -187,6 +190,11 @@ void EditorManager::HandleMenuBar()
                 }
             }
             if (ImGui::MenuItem("Save As..")) {}
+
+            if (ImGui::MenuItem("Launch"))
+            {
+                call("open","CherryStandalone.exe");
+            }
 
             ImGui::EndMenu();
         }
