@@ -44,6 +44,8 @@ private:
 
 	static ThreadPool* m_instance;
 
+	std::thread::id m_mainThreadID;
+
 public:
 
 	ThreadPool();
@@ -54,4 +56,6 @@ public:
 	void RethrowExceptions(std::exception_ptr exeption);
 	void CreateTask(std::unique_ptr<CCFunction::AFunction>& function, EChannelTask channelTask);
 	void Update(EChannelTask channelTask);
+
+	std::thread::id GetMainThreadID() { return m_mainThreadID; }
 };

@@ -14,7 +14,6 @@
 
 namespace CCModelLoader
 {
-
     /*
     Order to load model from cache
     - read modelCount
@@ -28,8 +27,37 @@ namespace CCModelLoader
 
         if (hasMesh)
             read vertices and indices
+
+        if (hasMaterial)
+        {
+            read texturesPathSize, m_texturesType
+
+            for (i; textureCount)
+            {
+                read texturesPath with texturesPathSize[i]
+            }
+        }
     }
     */
+
+    struct TextureHeader
+    {
+        int internalFormat;
+        int compressedSize;
+        int height;
+        int width;
+    };
+
+    struct MaterialHeader
+    {
+        bool            m_hasMaterial;
+        size_t          m_matarialId;
+        Vector3         m_albedo;
+        float           m_shininess;
+
+        unsigned int    m_texturesCount;
+    };
+
 
     struct ModelHeader
     {
@@ -44,6 +72,8 @@ namespace CCModelLoader
         size_t          m_meshId;
         unsigned int    m_verticesCount;
         unsigned int    m_indicesCount;
+
+        MaterialHeader  m_materialHeader;
     };
 
     struct ImportModelUtils
@@ -53,9 +83,16 @@ namespace CCModelLoader
         std::vector<unsigned int>   m_childrenIndices;
         std::vector<Vertex>         m_vertices;
         std::vector<unsigned int>   m_indices;
+
+        std::vector<unsigned int>   m_texturesPathSize;
+        std::vector<unsigned int>   m_texturesType;
+        std::vector<char>     m_texturesPath;
     };
 
 	void ImportModel(const char* filepath, std::vector<ImportModelUtils>& models);
+
+    //TODO:
+    //void ImportTexture(const char* filepath, unsigned char** textureData);
 
 	//void LoadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);
 	//void ReloadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);

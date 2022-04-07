@@ -17,6 +17,12 @@ class Texture;
 
 using namespace CCMaths;
 
+enum class ETextureType : unsigned int
+{
+	AMBIENT,
+	ALBEDO,
+};
+
 class CCENGINE_API Material : public Resource<Material>
 {
 private:
@@ -26,7 +32,7 @@ public:
 	Material(const char* materialName) : Resource(materialName) {}
 	~Material() = default;
 
-	std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+	std::unordered_map<ETextureType, std::shared_ptr<Texture>> textures;
 	static void Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial, const aiScene* assimpScene);
 	void Delete() override;
 	void Reload(const aiMaterial* assimpMaterial);

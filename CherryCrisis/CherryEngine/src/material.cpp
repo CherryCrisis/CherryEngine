@@ -18,57 +18,57 @@ void Material::Delete()
 
 void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial, const aiScene* assimpScene)
 {
-    ResourceManager* resourceManager = ResourceManager::GetInstance();
+    //ResourceManager* resourceManager = ResourceManager::GetInstance();
 
 	//Material Color
-	aiColor3D color(0.f, 0.f, 0.f);
-	if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
-		material->m_albedo = Vector3(color.r, color.g, color.b);
+	//aiColor3D color(0.f, 0.f, 0.f);
+	//if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
+	//	material->m_albedo = Vector3(color.r, color.g, color.b);
 
-	//Material Texture
-	{
-		aiString texturePath;
-		if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
-		{
-			material->textures["ambient"] = resourceManager->AddResource<Texture>(texturePath.C_Str(), true);
-		}
+	////Material Texture
+	//{
+	//	aiString texturePath;
+	//	if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
+	//	{
+	//		material->textures["ambient"] = resourceManager->AddResource<Texture>(texturePath.C_Str(), true);
+	//	}
 
-		assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
-		if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
-		{
-			material->textures["albedo"] = resourceManager->AddResource<Texture>(texture->mFilename.C_Str(), true, texture);
-		}
-		else
-		{
-			// TODO: Remove this
-			std::string path = "Assets/" + std::string(texturePath.C_Str());
-			material->textures["albedo"] = resourceManager->AddResource<Texture>(path.c_str(), true);
-		}
-	}
+	//	assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
+	//	if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
+	//	{
+	//		material->textures["albedo"] = resourceManager->AddResource<Texture>(texture->mFilename.C_Str(), true, texture);
+	//	}
+	//	else
+	//	{
+	//		// TODO: Remove this
+	//		std::string path = "Assets/" + std::string(texturePath.C_Str());
+	//		material->textures["albedo"] = resourceManager->AddResource<Texture>(path.c_str(), true);
+	//	}
+	//}
 }
 
 void Material::Reload(const aiMaterial* assimpMaterial)
 {
-	ResourceManager* resourceManager = ResourceManager::GetInstance();
+	//ResourceManager* resourceManager = ResourceManager::GetInstance();
 
-	//Material Color
-	aiColor3D color(0.f, 0.f, 0.f);
-	if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
-		m_albedo = Vector3(color.r, color.g, color.b);
+	////Material Color
+	//aiColor3D color(0.f, 0.f, 0.f);
+	//if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
+	//	m_albedo = Vector3(color.r, color.g, color.b);
 
-	//Material Texture
-	{
-		aiString texturePath;
-		if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
-		{
-			Resource<Texture>::ReloadResource(textures["ambient"]);
-		}
+	////Material Texture
+	//{
+	//	aiString texturePath;
+	//	if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
+	//	{
+	//		Resource<Texture>::ReloadResource(textures["ambient"]);
+	//	}
 
-		if (assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS)
-		{
-			// TODO: Remove this
-			std::string path = "Assets/" + std::string(texturePath.C_Str());
-			Resource<Texture>::ReloadResource(textures["albedo"]);
-		}
-	}
+	//	if (assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS)
+	//	{
+	//		// TODO: Remove this
+	//		std::string path = "Assets/" + std::string(texturePath.C_Str());
+	//		Resource<Texture>::ReloadResource(textures["albedo"]);
+	//	}
+	//}
 }
