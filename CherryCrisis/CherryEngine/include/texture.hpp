@@ -35,7 +35,7 @@ public:
     static void Load(std::shared_ptr<Texture> texture, const aiTexture* aiTexture);
     static bool LoadFromCache(std::shared_ptr<Texture> texture);
     
-    void SaveToCache();
+    void SaveToCache(std::mutex& mutex, std::condition_variable* condition);
     void Delete() override;
     void Reload();
 };

@@ -8,6 +8,7 @@
 #include <format>
 #include <fstream>
 #include <glad/gl.h>
+#include <condition_variable>
 
 #include "render_manager.hpp"
 
@@ -43,13 +44,25 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
     }
 
     if (std::string(texture->GetFilepath()).compare("Assets/diffuse.jpg") == 0)
-        texture->SaveToCache();
+    {
+        std::mutex mutex;
+        std::condition_variable condition;
+
+        std::unique_lock<std::mutex> uniqueMutex(mutex);
+
+        //To compress texture with openGL
+        auto function = CCFunction::BindFunction(&Texture::SaveToCache, texture.get(), mutex, &condition);
+        ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
+
+        //Wait for the texture to compress
+        condition.wait(uniqueMutex);
+    }
 }
 
 void Texture::Load(std::shared_ptr<Texture> texture, const aiTexture* assimpTexture)
 {
-    //LoadFromCache(texture);
-    //return;
+    if (LoadFromCache(texture))
+        return;
 
     unsigned int len;
 
@@ -66,7 +79,19 @@ void Texture::Load(std::shared_ptr<Texture> texture, const aiTexture* assimpText
         debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load texture", texture->GetFilepath()).c_str());
     }
 
-    //texture->SaveToCache();
+    {
+        std::mutex mutex;
+        std::condition_variable condition;
+
+        std::unique_lock<std::mutex> uniqueMutex(mutex);
+
+        //To compress texture with openGL
+        auto function = CCFunction::BindFunction(&Texture::SaveToCache, texture.get(), mutex, &condition);
+        ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
+
+        //Wait for the texture to compress
+        condition.wait(uniqueMutex);
+    }
 }
 
 bool Texture::LoadFromCache(std::shared_ptr<Texture> texture)
@@ -114,19 +139,16 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture)
     return true;
 }
 
-void Texture::SaveToCache()
+void Texture::SaveToCache(std::mutex& mutex, std::condition_variable* condition)
 {
+
     RenderManager::GetInstance();
     /*https://www.oldunreal.com/editing/s3tc/ARB_texture_compression.pdf*/
 
     GLuint tex;
-
     glGenTextures(1, &tex);
+  
 
-    /*https://en.cppreference.com/w/c/io/fopen*/
-
-
-    //glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_data);
@@ -180,11 +202,15 @@ void Texture::SaveToCache()
     fwrite(&data[0], compressedSize, 1, file);
     fclose(file);
 
+    stbi_image_free(m_data);
+
     m_internalFormat = internalFormat;
     m_compressedSize = compressedSize;
-
-    stbi_image_free(m_data);
     m_data = std::move(data);
+
+
+    std::unique_lock<std::mutex> uniqueMutex(mutex);
+    condition->notify_one();
 }
 
 void Texture::Reload()

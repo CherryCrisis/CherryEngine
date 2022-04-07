@@ -25,7 +25,6 @@ void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimp
 	if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
 		material->m_albedo = Vector3(color.r, color.g, color.b);
 
-
 	//Material Texture
 	{
 		aiString texturePath;
