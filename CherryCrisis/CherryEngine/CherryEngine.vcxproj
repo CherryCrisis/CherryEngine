@@ -210,6 +210,7 @@
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
     <ClInclude Include="include\command.hpp" />
+    <ClInclude Include="include\framebuffer.hpp" />
     <ClInclude Include="include\physic_character_controller.hpp" />
     <ClInclude Include="include\collider.hpp" />
     <ClInclude Include="include\csassembly.hpp" />
@@ -304,7 +305,7 @@
     <ClInclude Include="include\component.hpp" />
     <ClInclude Include="include\cubemap.hpp" />
     <ClInclude Include="include\debug.hpp" />
-    <ClInclude Include="include\element_mesh_renderpass.hpp" />
+    <ClInclude Include="include\element_mesh_generator.hpp" />
     <ClInclude Include="include\engine.hpp" />
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\event.hpp" />
@@ -469,7 +470,7 @@
     <ClCompile Include="src\cubemap.cpp" />
     <ClCompile Include="src\debug.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
-    <ClCompile Include="src\element_mesh_renderpass.cpp" />
+    <ClCompile Include="src\element_mesh_generator.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\input_manager.cpp" />

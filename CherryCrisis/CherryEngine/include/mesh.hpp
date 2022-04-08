@@ -30,18 +30,21 @@ enum class EMeshShape
 	SPHERE,
 };
 
-struct GPUMesh { };
+struct GPUMesh
+{
+	virtual ~GPUMesh() = default; 
+};
 
 class CCENGINE_API Mesh : public Resource<Mesh>
 {
 public:
-	Mesh(const char* meshName) : Resource<Mesh>(meshName) {}
-	~Mesh() = default;
-	
-	GPUMesh* m_gpuMesh = nullptr;
+	std::unique_ptr<GPUMesh> m_gpuMesh = nullptr;
 
 	std::vector<Vertex>			m_vertices;
 	std::vector<unsigned int>	m_indices;
+
+	Mesh(const char* meshName) : Resource<Mesh>(meshName) {}
+	virtual ~Mesh() = default;
 
 	static void Load(std::shared_ptr<Mesh> mesh, const aiMesh* assimpMesh);
 
@@ -55,7 +58,6 @@ public:
 	void Delete() override;
 
 	void Reload(const aiMesh* assimpMesh);
-
 };
 
 #include "mesh.inl"

@@ -16,12 +16,15 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera
 {
 	if (!m_isInit) Init();
 
-    if (width != m_width && height != m_height)
+    if (width != framebuffer.width || height != framebuffer.height)
         UpdateTextureSize(width, height);
 
+    framebuffer.width = width;
+    framebuffer.height = height;
+
     glViewport(0, 0, (GLsizei)width, (GLsizei)height);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-    RenderManager::DrawScene(width, height, camera);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+    RenderManager::DrawScene(framebuffer, camera);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -29,8 +32,8 @@ void FrameDisplayer::Init()
 {
     m_inputs = InputManager::GetInstance();
 
-    glGenFramebuffers(1, &m_FBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+    glGenFramebuffers(1, &framebuffer.FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
     glGenTextures(1, &m_ViewTex);
     glBindTexture(GL_TEXTURE_2D, m_ViewTex);
@@ -39,10 +42,10 @@ void FrameDisplayer::Init()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ViewTex, 0);
 
-    glGenRenderbuffers(1, &m_RBO);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_RBO);
+    glGenRenderbuffers(1, &framebuffer.RBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, framebuffer.RBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer.RBO);
 
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

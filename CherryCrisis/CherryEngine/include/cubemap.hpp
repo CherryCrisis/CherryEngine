@@ -16,7 +16,7 @@ private:
 
 
 public:
-    GPUCubemap* m_gpuCubemap = nullptr;
+    std::unique_ptr<GPUCubemap> m_gpuCubemap = nullptr;
 
     Cubemap(const char* name)
         : Resource(name) { }

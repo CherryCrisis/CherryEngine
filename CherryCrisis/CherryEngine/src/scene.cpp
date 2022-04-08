@@ -31,19 +31,6 @@ Scene::~Scene()
 		delete entityPtr;
 }
 
-void Scene::Initialize()
-{
-	for (auto& [eName, entity] : m_entities)
-		entity->Initialize();
-}
-
-void Scene::Update()
-{
-	for (auto& [eName, entity] : m_entities)
-		entity->Update();
-}
-
-
 std::string Scene::GetUniqueEntityName(const std::string& entityName)
 {
 	// TODO: Try using string view
@@ -85,8 +72,6 @@ void Scene::RemoveEntity(const std::string& name)
 
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
-	//Replace all of this with unserialization
-	//------------------------------------------------
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();
 	scene->AddEntity(light);
@@ -96,8 +81,12 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	auto cameraComp = camera->AddBehaviour<CameraComponent>();
 	cameraComp->BindToSignals();
 
+	// TODO: Remove this
 	ScriptedBehaviour* bhave1 = camera->AddBehaviour<ScriptedBehaviour>();
 	bhave1->SetScriptClass("CameraController"); bhave1->BindToSignals();
+	ScriptedBehaviour* bhave2 = camera->AddBehaviour<ScriptedBehaviour>();
+	bhave2->SetScriptClass("DebugTest"); bhave2->BindToSignals();
+
 	scene->AddEntity(camera);
 }
 
@@ -115,6 +104,18 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 
 	for (Entity* child : children)
 		AddEntity(child);
+}
+
+void Scene::Initialize() 
+{
+	for (auto& [eName, entity] : m_entities)
+		entity->Initialize();
+}
+
+void Scene::Update()
+{
+	for (auto& [eName, entity] : m_entities)
+		entity->Update();
 }
 
 bool Scene::Serialize(const char* filePath) 

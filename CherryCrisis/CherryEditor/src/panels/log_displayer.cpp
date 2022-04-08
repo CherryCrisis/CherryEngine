@@ -22,17 +22,17 @@ LogDisplayer::LogDisplayer()
     for (int i = 0; i < 3; ++i)
     {
         GenerateGPUTexture(m_logTextures[i]);
-        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_logTextures[i]->m_gpuTexture);
+        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_logTextures[i]->m_gpuTexture.get());
         m_gpuTextureIDs[i] = reinterpret_cast<void*>(gpuTextureLog->m_ID);
     }
 }
 
 void LogDisplayer::GenerateGPUTexture(std::shared_ptr<Texture> texture)
 {
-    GPUTextureLog gpuTexture;
+    std::unique_ptr<GPUTextureLog> gpuTexture = std::make_unique<GPUTextureLog>();
 
-    glGenTextures(1, &gpuTexture.m_ID);
-    glBindTexture(GL_TEXTURE_2D, gpuTexture.m_ID);
+    glGenTextures(1, &gpuTexture->m_ID);
+    glBindTexture(GL_TEXTURE_2D, gpuTexture->m_ID);
 
     // Setup filtering parameters for display
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -47,7 +47,7 @@ void LogDisplayer::GenerateGPUTexture(std::shared_ptr<Texture> texture)
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    texture->m_gpuTexture = new GPUTextureLog(gpuTexture);
+    texture->m_gpuTexture = std::move(gpuTexture);
 }
 
 void LogDisplayer::Render()

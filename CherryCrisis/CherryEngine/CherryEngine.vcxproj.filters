@@ -408,7 +408,7 @@
     <ClInclude Include="include\cherry_macros.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\element_mesh_renderpass.hpp">
+    <ClInclude Include="include\element_mesh_generator.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\skybox.hpp">
@@ -1104,6 +1104,9 @@
     <ClInclude Include="include\command.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
+    <ClInclude Include="include\framebuffer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1282,7 +1285,7 @@
     <ClCompile Include="src\maths.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\element_mesh_renderpass.cpp">
+    <ClCompile Include="src\element_mesh_generator.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\skybox.cpp">
