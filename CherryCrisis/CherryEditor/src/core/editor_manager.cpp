@@ -236,13 +236,13 @@ void EditorManager::HandleMenuBar()
             if (m_engine->isPlaying)
             {
                 m_engine->Stop();
-                UnfocusGame();
+                m_gameDisplayer.Unfocus();
             }
             else
             {
                 m_logDisplayer.TryClearOnPlay();
                 m_engine->Launch();
-                FocusGame();
+                m_gameDisplayer.Focus();
             }
 
         } ImGui::SameLine();
@@ -331,32 +331,15 @@ void EditorManager::UpdateFocusGame()
     {
         IM->SetGetContext("Editor Context");
         if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && IM->GetKeyDown(Keycode::LEFT_CLICK))
-            FocusGame();
+            m_gameDisplayer.Focus();
     }
     else if (m_gameDisplayer.m_isFocused && m_engine->isPlaying)
         IM->SetGetContext("User Context");
 
     if (IM->GetKeyDown(Keycode::ESCAPE))
     {
-        UnfocusGame();
+        m_gameDisplayer.Unfocus();
     }
-}
-
-void EditorManager::FocusGame()
-{
-    inputs->SetUpdatedContext("User Context");
-    inputs->SetCursorHidden();
-    m_gameDisplayer.m_isFocused = true;
-    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
-    ImGui::SetWindowFocus("Game");
-}
-
-void EditorManager::UnfocusGame()
-{
-    inputs->SetUpdatedContext(nullptr);
-    inputs->SetCursorDisplayed();
-    m_gameDisplayer.m_isFocused = false;
-    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 
 //Display time in seconds

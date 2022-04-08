@@ -42,3 +42,20 @@ void GameDisplayer::Render()
 
     ImGui::End();
 }
+
+void GameDisplayer::Focus()
+{
+    m_inputs->SetUpdatedContext("User Context");
+    m_inputs->SetCursorHidden();
+    m_isFocused = true;
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    ImGui::SetWindowFocus("Game");
+}
+
+void GameDisplayer::Unfocus()
+{
+    m_inputs->SetUpdatedContext(nullptr);
+    m_inputs->SetCursorDisplayed();
+    m_isFocused = false;
+    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
+}

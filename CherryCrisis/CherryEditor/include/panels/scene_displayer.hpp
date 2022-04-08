@@ -21,5 +21,8 @@ public:
 	void UpdateCamera();
 	void Render() override;
 
+	void Focus() override;
+	void Unfocus() override;
+
 	ImGuizmo::OPERATION m_operation = ImGuizmo::OPERATION::TRANSLATE;
 };

@@ -10,6 +10,7 @@
 
 #include "render_manager.hpp"
 #include "camera.hpp"
+#include "input_manager.hpp"
 
 void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera)
 {
@@ -26,6 +27,8 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera
 
 void FrameDisplayer::Init() 
 {
+    m_inputs = InputManager::GetInstance();
+
     glGenFramebuffers(1, &m_FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 

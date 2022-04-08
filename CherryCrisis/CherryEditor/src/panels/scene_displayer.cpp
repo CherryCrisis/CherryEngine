@@ -80,10 +80,12 @@ void SceneDisplayer::Render()
         InputManager* IM = InputManager::GetInstance();
 
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+            if (IM->GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
+        
+        if (m_isFocused) 
         {
-            if (IM->GetKeyDown(Keycode::RIGHT_CLICK)) { IM->SetCursorHidden(); }
-            if (IM->GetKey(Keycode::RIGHT_CLICK))     { UpdateCamera(); }
-            if (IM->GetKeyUp(Keycode::RIGHT_CLICK))   { IM->SetCursorDisplayed(); }
+            if (IM->GetKey(Keycode::RIGHT_CLICK)) { UpdateCamera(); }
+            if (IM->GetKeyUp(Keycode::RIGHT_CLICK)) { Unfocus(); }
         }
 
         if (IM->GetKeyDown(Keycode::W))  m_operation = ImGuizmo::OPERATION::TRANSLATE; 
@@ -145,4 +147,19 @@ void SceneDisplayer::Render()
 
 
     ImGui::End();
+}
+
+void SceneDisplayer::Focus()
+{
+    m_isFocused = true;
+    m_inputs->SetCursorHidden();
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    ImGui::SetWindowFocus("Scene");
+}
+
+void SceneDisplayer::Unfocus()
+{
+    m_isFocused = false;
+    m_inputs->SetCursorDisplayed();
+    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
