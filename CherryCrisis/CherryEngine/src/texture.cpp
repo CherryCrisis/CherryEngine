@@ -11,6 +11,7 @@
 #include <condition_variable>
 
 #include "render_manager.hpp"
+#include "model_loader.hpp"
 
 #include "debug.hpp"
 
@@ -29,10 +30,7 @@ void Texture::Delete()
 
 void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
 {
-    if (std::string(texture->GetFilepath()).compare("Assets/diffuse.jpg") == 0)
-        if (LoadFromCache(texture))
-            return;
-
+    //TODO: Replace to importTexture
     stbi_set_flip_vertically_on_load(flipTexture);
 
     texture->m_data = stbi_load(texture->GetFilepath(), &texture->m_width, &texture->m_height, NULL, STBI_rgb_alpha);
@@ -42,95 +40,53 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
         Debug* debug = Debug::GetInstance();
         debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texture->GetFilepath()).c_str());
     }
-
-    if (std::string(texture->GetFilepath()).compare("Assets/diffuse.jpg") == 0)
-    {
-        std::mutex mutex;
-        std::condition_variable condition;
-
-        std::unique_lock<std::mutex> uniqueMutex(mutex);
-
-        //To compress texture with openGL
-        auto function = CCFunction::BindFunction(&Texture::SaveToCache, texture.get(), mutex, &condition);
-        ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
-
-        //Wait for the texture to compress
-        condition.wait(uniqueMutex);
-    }
 }
 
-void Texture::Load(std::shared_ptr<Texture> texture, const aiTexture* assimpTexture)
+void Texture::Load(std::shared_ptr<Texture> texture)
 {
-    if (LoadFromCache(texture))
-        return;
+    unsigned char* data{};
+    CCModelLoader::TextureHeader textureHeader{};
 
-    unsigned int len;
+    if (!LoadFromCache(texture, &data, textureHeader))
+    {
+        CCModelLoader::ImportTexture(texture->GetFilepath(), &data, textureHeader);
+    }
 
-    if (assimpTexture->mHeight)
-        len = assimpTexture->mHeight * assimpTexture->mWidth * sizeof(assimpTexture->pcData);
-    else
-        len = assimpTexture->mWidth;
-
-    texture->m_data = stbi_load_from_memory((unsigned char*)assimpTexture->pcData, len, &texture->m_width, &texture->m_height, 0, STBI_rgb_alpha);
-
-    if (!texture->m_data)
+    if (!data)
     {
         Debug* debug = Debug::GetInstance();
-        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load texture", texture->GetFilepath()).c_str());
+        debug->AddLog(ELogType::ERROR, std::format("Failed to load image : {}", texture->GetFilepath()).c_str());
     }
 
-    {
-        std::mutex mutex;
-        std::condition_variable condition;
-
-        std::unique_lock<std::mutex> uniqueMutex(mutex);
-
-        //To compress texture with openGL
-        auto function = CCFunction::BindFunction(&Texture::SaveToCache, texture.get(), mutex, &condition);
-        ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
-
-        //Wait for the texture to compress
-        condition.wait(uniqueMutex);
-    }
+    texture->m_data = (void*)std::move(data);
+    texture->m_internalFormat = textureHeader.internalFormat;
+    texture->m_compressedSize = textureHeader.compressedSize;
+    texture->m_height = textureHeader.height;
+    texture->m_width = textureHeader.width;
 }
 
-bool Texture::LoadFromCache(std::shared_ptr<Texture> texture)
+bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCModelLoader::TextureHeader& textureHeader)
 {
-    const char* cacheLocation = "Assets/Cache/";
-    std::string filepath = std::format("{}{}.ccfile", cacheLocation,"test");
     FILE* file = nullptr;
 
     Debug* debug = Debug::GetInstance();
 
-    if (fopen_s(&file, filepath.c_str(), "rb")) //rb = read in binary mode
+    std::string fullTexturePath("Assets/");
+    fullTexturePath += texture->GetFilepath();
+
+    if (fopen_s(&file, fullTexturePath.c_str(), "rb")) //rb = read in binary mode
     {
-        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to open cache texture", filepath).c_str());
+        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to open cache texture", fullTexturePath.c_str()).c_str());
         return false;
     }
 
-    struct Header
-    {
-        int internalFormat;
-        int compressedSize;
-        int height;
-        int width;
-    };
+    fread(&textureHeader, sizeof(CCModelLoader::TextureHeader), 1, file);
 
-    Header header;
-    fread(&header, sizeof(Header), 1, file);
+    *data = new unsigned char[textureHeader.compressedSize];
+    fread(&(*data)[0], sizeof(unsigned char), textureHeader.compressedSize, file);
 
-    unsigned char* data = (unsigned char*)malloc(header.compressedSize);
 
-    fread(&data[0], sizeof(unsigned char), header.compressedSize, file);
-
-    texture->m_data = std::move(data);
-
-    texture->m_height = header.height;
-    texture->m_width = header.width;
-    texture->m_compressedSize = header.compressedSize;
-    texture->m_internalFormat = header.internalFormat;
-
-    if (!texture->m_data)
+    if (!*data)
     {
         debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load texture", texture->GetFilepath()).c_str());
         return false;

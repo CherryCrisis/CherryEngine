@@ -10,44 +10,30 @@
 #include "resource_manager.hpp"
 
 #include "texture.hpp"
+#include "model_loader.hpp"
 
 void Material::Delete()
 {
 	textures.clear();
 }
 
-void Material::Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial, const aiScene* assimpScene)
+void Material::Load(std::shared_ptr<Material> material, const MaterialArgs& materialArgs)
 {
-    //ResourceManager* resourceManager = ResourceManager::GetInstance();
+    ResourceManager* resourceManager = ResourceManager::GetInstance();
 
-	//Material Color
-	//aiColor3D color(0.f, 0.f, 0.f);
-	//if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
-	//	material->m_albedo = Vector3(color.r, color.g, color.b);
+	material->m_albedo = materialArgs.m_materialHeader->m_albedo;
+	material->m_shininess = materialArgs.m_materialHeader->m_shininess;
 
-	////Material Texture
-	//{
-	//	aiString texturePath;
-	//	if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
-	//	{
-	//		material->textures["ambient"] = resourceManager->AddResource<Texture>(texturePath.C_Str(), true);
-	//	}
+	for (int i = 0; i < materialArgs.m_materialHeader->m_texturesCount; ++i)
+	{
+		std::shared_ptr<Texture> texture =
+			resourceManager->AddResource<Texture>((*materialArgs.m_texturesPath)[i].c_str(), true);
 
-	//	assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
-	//	if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
-	//	{
-	//		material->textures["albedo"] = resourceManager->AddResource<Texture>(texture->mFilename.C_Str(), true, texture);
-	//	}
-	//	else
-	//	{
-	//		// TODO: Remove this
-	//		std::string path = "Assets/" + std::string(texturePath.C_Str());
-	//		material->textures["albedo"] = resourceManager->AddResource<Texture>(path.c_str(), true);
-	//	}
-	//}
+		material->textures.emplace((ETextureType)(*materialArgs.m_textureType)[i], texture);
+	}
 }
 
-void Material::Reload(const aiMaterial* assimpMaterial)
+void Material::Reload(/*const aiMaterial* assimpMaterial*/)
 {
 	//ResourceManager* resourceManager = ResourceManager::GetInstance();
 

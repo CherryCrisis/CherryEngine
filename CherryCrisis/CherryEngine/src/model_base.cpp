@@ -32,9 +32,18 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         {
             std::string modelName(std::to_string(modelUtils.modelHeader.m_modelId));
             std::string meshName(std::to_string(modelUtils.modelHeader.m_meshId));
+            std::string materialName(std::to_string(modelUtils.modelHeader.m_materialHeader.m_matarialId));
 
             std::shared_ptr<Mesh> mesh = resourceManager->AddResource<Mesh>(meshName.c_str(), true, modelUtils.m_vertices, modelUtils.m_indices);
-            std::shared_ptr<Model> model = resourceManager->AddResource<Model>(modelName.c_str(), true, mesh);
+
+            MaterialArgs materialArgs{ .m_materialHeader = &modelUtils.modelHeader.m_materialHeader,
+                .m_texturesPath = &modelUtils.m_texturesPathCstr,
+                .m_textureType = &modelUtils.m_texturesType };
+
+            std::shared_ptr<Material> material = resourceManager->AddResource<Material>(materialName.c_str(), true, materialArgs);
+            
+            std::shared_ptr<Model> model = resourceManager->AddResource<Model>(modelName.c_str(), true, mesh, material);
+
 
             modelNode->m_model = model;
             modelBase->m_models.push_back(model);
@@ -42,14 +51,6 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 
         modelNodes.push_back(modelNode);
     }
-
-    /*for (CCModelLoader::ImportModelUtils& modelUtils : modelsUtils)
-    {
-        ModelNode* modelNode = new ModelNode();
-        std::swap(modelNode->m_baseTRS, modelUtils.modelHeader.m_trs);
-        modelNode->m_model = modelBase->m_models[modelUtils.modelHeader.m_index];
-        modelNodes.push_back(modelNode);
-    }*/
 
     for (CCModelLoader::ImportModelUtils& modelUtils : modelsUtils)
     {
@@ -81,6 +82,9 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
 
     for (int i = 0; i < modelCount; ++i)
     {
+        if (i == 2)
+            int j = 0;
+
         CCModelLoader::ImportModelUtils model;
 
         fread(&model.modelHeader, sizeof(CCModelLoader::ModelHeader), 1, file);
@@ -98,6 +102,26 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
 
             fread(&model.m_vertices[0], sizeof(Vertex) * model.modelHeader.m_verticesCount, 1, file);
             fread(&model.m_indices[0], sizeof(unsigned int) * model.modelHeader.m_indicesCount, 1, file);
+        }
+
+        if (model.modelHeader.m_materialHeader.m_hasMaterial)
+        {
+            unsigned int texturesCount = model.modelHeader.m_materialHeader.m_texturesCount;
+            model.m_texturesPathSize.resize(texturesCount);
+            model.m_texturesType.resize(texturesCount);
+
+            fread(&model.m_texturesPathSize[0], texturesCount * sizeof(unsigned int), 1, file);
+            fread(&model.m_texturesType[0], texturesCount * sizeof(unsigned int), 1, file);
+
+            for (int i = 0; i < model.modelHeader.m_materialHeader.m_texturesCount; ++i)
+            {
+                std::string texturePath;
+                texturePath.resize(model.m_texturesPathSize[i]);
+
+                fread(&texturePath[0], model.m_texturesPathSize[i], 1, file);
+
+                model.m_texturesPathCstr.push_back(std::move(texturePath));
+            }
         }
 
         models.push_back(model);

@@ -86,13 +86,16 @@ namespace CCModelLoader
 
         std::vector<unsigned int>   m_texturesPathSize;
         std::vector<unsigned int>   m_texturesType;
-        std::vector<char>     m_texturesPath;
+        std::vector<char>           m_texturesPath;
+
+        //No used in writing
+        std::vector <std::string> m_texturesPathCstr;
     };
 
 	void ImportModel(const char* filepath, std::vector<ImportModelUtils>& models);
 
     //TODO:
-    //void ImportTexture(const char* filepath, unsigned char** textureData);
+    void ImportTexture(const char* filepath, unsigned char** textureData, TextureHeader& textureHeader);
 
 	//void LoadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);
 	//void ReloadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);

@@ -26,7 +26,7 @@ public:
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Material>	m_material;
 
-	static void Load(std::shared_ptr<Model> model);
+	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
 	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh);
 
 	void Delete() override;

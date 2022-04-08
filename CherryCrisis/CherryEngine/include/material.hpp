@@ -8,12 +8,20 @@
 #include "resource.hpp"
 #include "maths.hpp"
 
-//class from assimp
-struct aiMaterial;
-struct aiScene;
-
 //Forward declaration
+namespace CCModelLoader
+{
+	struct MaterialHeader;
+}
 class Texture;
+
+struct MaterialArgs
+{
+	CCModelLoader:: MaterialHeader*  m_materialHeader;
+	std::vector<std::string>*	 m_texturesPath;
+	std::vector<unsigned int>* m_textureType;
+
+};
 
 using namespace CCMaths;
 
@@ -33,8 +41,9 @@ public:
 	~Material() = default;
 
 	std::unordered_map<ETextureType, std::shared_ptr<Texture>> textures;
-	static void Load(std::shared_ptr<Material> material, const aiMaterial* assimpMaterial, const aiScene* assimpScene);
+	static void Load(std::shared_ptr<Material> material, const MaterialArgs& materialArgs);
+
 	void Delete() override;
-	void Reload(const aiMaterial* assimpMaterial);
+	void Reload(/*const aiMaterial* assimpMaterial*/);
 
 };

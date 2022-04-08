@@ -1,9 +1,11 @@
 #pragma once
 
 #include "resource.hpp"
-
-//struct from assimp
-struct aiTexture;
+#include "model_loader.hpp"
+//namespace CCModelLoader
+//{
+//    struct HeaderTexture;
+//}
 
 struct GPUTexture { };
 
@@ -31,9 +33,9 @@ public:
 
     void* GetData() { return m_data; }
 
-    static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true);
-    static void Load(std::shared_ptr<Texture> texture, const aiTexture* aiTexture);
-    static bool LoadFromCache(std::shared_ptr<Texture> texture);
+    static void Load(std::shared_ptr<Texture> texture, bool flipTexture);
+    static void Load(std::shared_ptr<Texture> texture);
+    static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCModelLoader::TextureHeader& textureHeader);
     
     void SaveToCache(std::mutex& mutex, std::condition_variable* condition);
     void Delete() override;
