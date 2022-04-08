@@ -3,7 +3,7 @@
 #include "core/panel.hpp"
 
 class InputManager;
-class Camera;
+struct Camera;
 class Scene;
 
 class FrameDisplayer : public Panel 
@@ -22,7 +22,7 @@ private:
 	void UpdateTextureSize(float x, float y);
 
 protected:
-	InputManager* m_inputs;
+	InputManager* m_inputs = nullptr;
 
 	bool m_isActive = false;
 	unsigned int m_ViewTex = 0u;

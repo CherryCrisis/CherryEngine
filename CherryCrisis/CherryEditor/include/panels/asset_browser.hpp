@@ -27,7 +27,7 @@ private :
 
 	void CheckThings();
 	AssetNode* GetNodeByPath(std::filesystem::path path);
-
+	AssetNode* GetNodeByName(const std::string& name);
 	// Control Variables
 	float m_padding = 16.f;
 	float m_thumbnailSize = 128.f;
@@ -35,6 +35,7 @@ private :
 	//not clean at all but anyway imgui internal logic problem solving
 	bool m_deleting = false;
 	bool m_renaming = false;
+	bool m_creating = false;
 	std::string m_renamingName = "";
 
 	std::filesystem::path m_currentDirectory;

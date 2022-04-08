@@ -76,7 +76,7 @@ private:
 	class ActionButtons
 	{
 	private:
-		Input* m_priorKey;
+		Input* m_priorKey = nullptr;
 		std::unordered_map<Keycode, Input*> m_inputs = {};
 
 		void Update(Input* input);

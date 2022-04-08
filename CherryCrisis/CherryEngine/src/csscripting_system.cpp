@@ -38,6 +38,8 @@ void CsScriptingSystem::Init()
 	csassembly->m_context->FindClass("CCScripting", "DebugTest");
 	csassembly->m_context->FindClass("CCScripting", "BackpackBehaviour");
 	csassembly->m_context->FindClass("CCScripting", "CameraController");
+	csassembly->m_context->FindClass("CCScripting", "Meow");
+	csassembly->m_context->FindClass("CCScripting", "TG");
 
 	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
 

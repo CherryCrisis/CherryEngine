@@ -13,6 +13,8 @@
 #include "camera_component.hpp"
 #include "scripted_behaviour.hpp"
 #include "csscripting_system.hpp"
+#include "rigidbody.hpp"
+#include "collider.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -190,8 +192,9 @@ void Inspector::Render()
 
             // TODO: Replace with list of available components
             if (ImGui::MenuItem("Transform"))      { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
-            if (ImGui::MenuItem("Model Renderer")) { m_manager->m_selectedEntities[0]->AddBehaviour<ModelRenderer>(); }
             if (ImGui::MenuItem("Camera"))     { }
+            if (ImGui::MenuItem("Rigidbody")) { m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); }
+            if (ImGui::MenuItem("Collider"))  { m_manager->m_selectedEntities[0]->AddBehaviour<Collider>(); }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))

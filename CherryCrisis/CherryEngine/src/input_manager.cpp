@@ -130,7 +130,7 @@ void InputManager::ErrorButtons(const char* name)
 	errorLog += name;
 	errorLog += " is not set up.";
 
-	//debug->Log(errorLog.c_str());
+	debug->AddLog(ELogType::ERROR, errorLog.c_str());
 }
 
 void InputManager::ErrorAxes(const char* name)
@@ -141,7 +141,7 @@ void InputManager::ErrorAxes(const char* name)
 	errorLog += name;
 	errorLog += " is not set up.";
 
-	//debug->Log(errorLog.c_str());
+	debug->AddLog(ELogType::ERROR, errorLog.c_str());
 }
 #pragma endregion
 
@@ -280,16 +280,16 @@ void InputManager::UpdateKeys()
 	{
 		m_pollContext->m_mouseWheel = CCMaths::Vector2::Zero;
 		m_pollContext->m_mouseDelta = CCMaths::Vector2::Zero;
+
+		for (auto& key : m_pollContext->m_framePressedKeys)
+		{
+			Input& input = m_pollContext->m_keys[key];
+
+			input.Set(false, input.Held(), false);
+		}
+
+		m_pollContext->m_framePressedKeys.clear();
 	}
-
-	for (auto& key : m_pollContext->m_framePressedKeys)
-	{
-		Input& input = m_pollContext->m_keys[key];
-
-		input.Set(false, input.Held(), false);
-	}
-
-	m_pollContext->m_framePressedKeys.clear();
 }
 #pragma endregion
 
@@ -340,7 +340,6 @@ bool InputManager::GetKeyDown(const char* inputName)
 	if (m_fetchContext.top()->m_buttons.empty() || !m_fetchContext.top()->m_buttons.contains(inputName))
 	{
 		ErrorButtons(inputName);
-
 		return 0.f;
 	}
 	else

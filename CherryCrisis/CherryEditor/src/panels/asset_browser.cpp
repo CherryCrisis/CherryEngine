@@ -4,13 +4,6 @@
 #include <imgui_internal.h>
 #include <cstdio>
 #include <iostream>
-/*
-#include <windows.h>
-#undef far
-#undef near
-#undef ERROR
-
-#include <ShellAPI.h>*/
 
 #include "core/editor_manager.hpp"
 #include "command.hpp"
@@ -18,6 +11,44 @@
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 #include "scene_manager.hpp"
+
+const char* scriptTemplate = 
+R"CS(using CCEngine;
+
+namespace CCScripting
+{
+    public class %s : Behaviour
+    {
+        public %s(System.IntPtr cPtr, bool cMemoryOwn)
+            : base(cPtr, cMemoryOwn) {}
+
+
+    //called at the start of the game
+    public void Start()
+    {
+
+    }
+
+    //called each tick 
+    public void Update()
+    {
+
+    }
+    }
+})CS";
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to) 
+{
+    if (from.empty())
+        return;
+
+    size_t start_pos = 0;
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos) 
+    {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}
 
 AssetBrowser::AssetBrowser()
 {
@@ -134,11 +165,24 @@ void AssetBrowser::ContextCallback()
 
             ImGui::Separator();
 
-            if (ImGui::MenuItem("C# Script")) {}
-            if (ImGui::MenuItem("Material")) {}
-            if (ImGui::MenuItem("Texture")) {}
-            if (ImGui::MenuItem("Scene")) {}
-            if (ImGui::MenuItem("Prefab")) {}
+            if (ImGui::MenuItem("C# Script")) m_creating = true;
+            if (ImGui::MenuItem("Scene")) 
+            {
+                std::ofstream myfile;
+
+                myfile.open("Assets/NewScene.cherry");
+                if (myfile.is_open())
+                {
+                    myfile << " ";
+                    myfile.close();
+                }
+
+
+                QuerryBrowser();
+                m_focusedNode = GetNodeByName("NewScene.cherry");
+                m_renaming = true;
+            }
+
 
             ImGui::EndMenu();
         }
@@ -202,6 +246,18 @@ AssetBrowser::AssetNode* AssetBrowser::GetNodeByPath(std::filesystem::path path)
     return nullptr;
 }
 
+AssetBrowser::AssetNode* AssetBrowser::GetNodeByName(const std::string& name)
+{
+    for (auto& couple : m_nodes)
+    {
+        AssetNode& node = couple.second;
+        if (name == node.m_filename)
+        {
+            return &node;
+        }
+    }
+    return nullptr;
+}
 
 void AssetBrowser::RenderNodes()
 {
@@ -264,12 +320,15 @@ void AssetBrowser::RenderNodes()
     }
     ImGui::Columns(1);
 
-
+    // Create a class Popup 
     if (m_deleting)
         ImGui::OpenPopup("Delete");
 
     if (m_renaming)
         ImGui::OpenPopup("Rename");
+
+    if (m_creating)
+        ImGui::OpenPopup("Create Script");
 
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
@@ -322,14 +381,52 @@ void AssetBrowser::RenderNodes()
             if (!newPath.has_extension())
                 newPath += m_focusedNode->m_extension;
             
-            if (rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str()))
-                QuerryBrowser();
+            rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str());
+            QuerryBrowser();
 
             m_renaming = false;
         }
         ImGui::SetItemDefaultFocus();
         ImGui::SameLine();
         if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_renaming = false;  ImGui::CloseCurrentPopup(); }
+        ImGui::EndPopup();
+    }
+
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    if (ImGui::BeginPopupModal("Create Script", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::Text("Name the new Script");
+        ImGui::Separator();
+
+        static char newName[32] = "New Name";
+        IMGUI_LEFT_LABEL(ImGui::InputText, "New Name:", newName, IM_ARRAYSIZE(newName));
+
+        ImGui::Separator();
+
+        if (ImGui::Button("Create", ImVec2(120, 0)))
+        {
+            ImGui::CloseCurrentPopup();
+            std::ofstream myfile;
+            std::string fileName = "Assets/"+std::string(newName)+".cs";
+
+            bool opened = false;
+            myfile.open(fileName);
+            std::string str = scriptTemplate;
+            replaceAll(str, "%s", newName);
+            if (myfile.is_open())
+            {
+                myfile << str;
+                myfile.close();
+
+                EditorManager::SendNotification("Script Created", ImGuiToastType::Success);
+            }
+            QuerryBrowser();
+
+            m_creating = false;
+        }
+        ImGui::SetItemDefaultFocus();
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_creating = false;  ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
     }
 }
