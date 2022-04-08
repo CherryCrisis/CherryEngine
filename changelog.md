@@ -1,6 +1,16 @@
 Changelog
 ===
 
+*08-04-2022*
+-
+**[Adding]**:
+* InputManager (Contextual base input, poll and fetch contexts)
+* Editor (Scene & Game focus, Guizmo, Scene editor cameras movement, Add component)
+* Standalone (Basic implementation)
+* Debug (Log refont)
+* Behaviour (Awake, Start, Update functions as events)
+* Scripting (Hot reload)
+
 *01-04-2022*
 -
 **[Adding]**:
