@@ -207,11 +207,13 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilSetup.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilTelemetry.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
+    <ClInclude Include="include\bool3.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
+    <ClInclude Include="include\collider.hpp" />
     <ClInclude Include="include\command.hpp" />
     <ClInclude Include="include\physic_character_controller.hpp" />
-    <ClInclude Include="include\collider.hpp" />
+    <ClInclude Include="include\box_collider.hpp" />
     <ClInclude Include="include\csassembly.hpp" />
     <ClInclude Include="include\csreflection.hpp" />
     <ClInclude Include="include\csreflection_ex.hpp" />
@@ -353,6 +355,7 @@
     <ClInclude Include="include\renderpass_interface.hpp" />
     <ClInclude Include="include\sound.hpp" />
     <ClInclude Include="include\sound_manager.hpp" />
+    <ClInclude Include="include\sphere_collider.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\time_manager.hpp" />
@@ -431,9 +434,10 @@
     <ClCompile Include="src\behaviour.cpp" />
     <ClCompile Include="src\cell.cpp" />
     <ClCompile Include="src\cell_system.cpp" />
+    <ClCompile Include="src\collider.cpp" />
     <ClCompile Include="src\command.cpp" />
     <ClCompile Include="src\physic_character_controller.cpp" />
-    <ClCompile Include="src\collider.cpp" />
+    <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\csassembly.cpp" />
     <ClCompile Include="src\csscripting_system.cpp" />
     <ClCompile Include="externals\src\gl.c">
@@ -498,6 +502,7 @@
     <ClCompile Include="src\skybox_renderpass.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\sound_manager.cpp" />
+    <ClCompile Include="src\sphere_collider.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\time_manager.cpp" />
     <ClCompile Include="src\threadpool.cpp" />

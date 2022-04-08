@@ -41,9 +41,12 @@ namespace PhysicSystem
 		physx::PxPvd* m_pvd = nullptr;
 		physx::PxPhysics* m_physics = nullptr;
 
-		std::vector<PhysicActor> m_physicActors;
-		std::vector<PhysicScene> m_scenes;
+		std::vector<PhysicActor*> m_physicActors;
+		std::vector<PhysicScene*> m_scenes;
 
+		bool m_isPlaying = false;
+
+		Cell* cell = nullptr;
 	public:
 		PhysicManager();
 		~PhysicManager();

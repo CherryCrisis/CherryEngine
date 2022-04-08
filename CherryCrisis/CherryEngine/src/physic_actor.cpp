@@ -8,6 +8,7 @@
 #include "collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
+#include "cell.hpp"
 
 
 namespace PhysicSystem
@@ -24,9 +25,6 @@ namespace PhysicSystem
 		t->SetRotation(rot);
 	}
 
-	// TODO: Add actor in Scene according to owner cell
-
-	// TODO: Call on play
 	void PhysicActor::CreatePxActor()
 	{
 		Transform* t = m_owner->GetBehaviour<Transform>();
@@ -41,13 +39,15 @@ namespace PhysicSystem
 		{
 			m_isDynamic = true;
 
-			m_pxActor = physics->createRigidDynamic(transform);
+			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
 			m_rigidbody->SetPxActor();
 
 			physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidDynamic*>(m_pxActor), m_density);
 		}
-		else
+		else if (!m_pxActor || m_isDynamic)
 		{
+			m_isDynamic = false;
+
 			m_pxActor = physics->createRigidStatic(transform);
 		}
 
@@ -61,7 +61,8 @@ namespace PhysicSystem
 
 	void PhysicActor::DestroyPxActor()
 	{
-		PX_RELEASE(m_pxActor);
+		if (m_pxActor)
+			PX_RELEASE(m_pxActor);
 	}
 
 	physx::PxShape* PhysicActor::CreateShape(const physx::PxGeometry& geometry)
@@ -73,24 +74,45 @@ namespace PhysicSystem
 
 	void PhysicActor::RemoveShape(physx::PxShape* shape)
 	{
-		m_pxActor->detachShape(*shape);
+		if (m_pxActor)
+			m_pxActor->detachShape(*shape);
 	}
 
-	void PhysicActor::AddRigidbody(Rigidbody* rigidbody)
+	void PhysicActor::AddRigidbody(Rigidbody* rigidbody, bool isPlaying)
 	{
 		if (!m_rigidbody)
+		{
 			m_rigidbody = rigidbody;
+			if (isPlaying)
+			{
+				m_owner->m_cell->m_physicCell->RemoveActor(this);
+				CreatePxActor();
+				m_owner->m_cell->m_physicCell->AddActor(this);
+			}
+		}
 	}
 
-	void PhysicActor::AddCollider(Collider* collider)
+	void PhysicActor::AddCollider(Collider* collider, bool isPlaying)
 	{
 		m_colliders.push_back(collider);
+
+		if (isPlaying)
+			CreatePxActor();
 	}
 
 	void PhysicActor::RemoveRigidbody(Rigidbody* rigidbody)
 	{
 		if (m_rigidbody == rigidbody)
+		{
 			m_rigidbody = nullptr;
+
+			if (m_pxActor)
+			{
+				m_owner->m_cell->m_physicCell->RemoveActor(this);
+				CreatePxActor();
+				m_owner->m_cell->m_physicCell->AddActor(this);
+			}
+		}
 	}
 
 	void PhysicActor::RemoveCollider(Collider* collider)
@@ -99,9 +121,25 @@ namespace PhysicSystem
 		{
 			if (collider == m_colliders[i])
 			{
+				if (m_pxActor)
+					m_colliders[i]->ClearPxShape();
+
 				m_colliders[i] = m_colliders.back();
 				m_colliders.pop_back();
 			}
+		}
+	}
+
+	void PhysicActor::Empty()
+	{
+		if (m_rigidbody)
+		{
+			m_rigidbody->Unregister();
+		}
+
+		while (!m_colliders.empty())
+		{
+			m_colliders.back()->Unregister();
 		}
 	}
 

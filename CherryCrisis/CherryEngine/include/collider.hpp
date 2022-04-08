@@ -1,46 +1,48 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include "behaviour.hpp"
 
-class Transform;
 namespace physx
 {
 	class PxShape;
 }
-
 namespace PhysicSystem
 {
 	class PhysicActor;
 }
 
-enum class EColliderShape
-{
-	NONE,
-	BOX_COLLIDER,
-	SPHERE_COLLIDER,
-};
-
 class CCENGINE_API Collider : public Behaviour
 {
-private:
-	EColliderShape	m_colliderShape;
-	physx::PxShape* m_pxShape;
+protected:
+	using boolProperty = CCProperty::ConstRefProperty<Collider, bool>;
+	using floatProperty = CCProperty::ConstRefProperty<Collider, float>;
 	
+	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;
 	bool	m_isTrigger = false;
 	float	m_contactOffset = 2.f;
 
-	void PopulateMetadatas() override;
+	virtual void PopulateMetadatas() override {}
 
 public:
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
 
-	Collider();
+	virtual void BindToSignals() override {}
+	virtual void Unregister() {}
+	virtual void SetPxShape() {}
+	virtual void ClearPxShape() {}
+	virtual void ResetPxShape() {}
 
-	void SetPxShape();
-	void SetPxData();
+	virtual void SetPxData() {}
 
-	EColliderShape& GetShape() { return m_colliderShape; }
+	void	SetEnabled(const bool& isEnabled);
+	bool	GetEnabled() { return m_isEnabled; }
+	void	SetTrigger(const bool& isTrigger);
+	bool	GetTrigger() { return m_isTrigger; }
+	void	SetContact(const float& contactOffset);
+	float	GetContact() { return m_contactOffset; }
+
+	boolProperty isEnabled{ this, &Collider::SetEnabled, &Collider::GetEnabled };
+	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };
+	floatProperty contactOffset{ this, &Collider::SetContact, &Collider::GetContact };
 };

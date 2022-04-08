@@ -36,6 +36,9 @@ void Cell::AddEntityToPhysicScene(Entity* newEntity)
 	PhysicSystem::PhysicManager* pxManager = PhysicSystem::PhysicManager::GetInstance();
 	PhysicSystem::PhysicActor* actor = pxManager->FindActor(*newEntity);
 
+	if (!m_physicCell)
+		return;
+
 	if (actor)
 		m_physicCell->AddActor(actor);
 }
@@ -46,11 +49,32 @@ void Cell::RemoveEntity(Entity* newEntity)
 	{
 		if (newEntity == m_entities[i])
 		{
+			RemoveEntityFromPhysicScene(newEntity);
 			newEntity->m_cell = nullptr;
 			m_entities[i] = m_entities.back();
 			m_entities.pop_back();
 		}
 	}
+}
+
+void Cell::RemoveEntityFromPhysicScene(Entity* newEntity)
+{
+	PhysicSystem::PhysicManager* pxManager = PhysicSystem::PhysicManager::GetInstance();
+	PhysicSystem::PhysicActor* actor = pxManager->FindActor(*newEntity);
+
+	if (!m_physicCell)
+		return;
+
+	if (actor)
+		m_physicCell->RemoveActor(actor);
+}
+
+void Cell::MoveCharacter(float deltaTime)
+{
+	m_physicCell->MoveCharacterController(deltaTime);
+
+	for (auto& cell : m_surroundingCells)
+		cell->m_physicCell->MoveCharacterController(deltaTime);
 }
 
 void Cell::LinkToCell(Cell& other)

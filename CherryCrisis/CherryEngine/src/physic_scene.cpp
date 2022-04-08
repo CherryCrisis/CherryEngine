@@ -16,6 +16,9 @@ namespace PhysicSystem
 
 		m_pxScene->simulate(deltaTime);
 		m_pxScene->fetchResults(true);
+
+		for (auto& actor : m_actors)
+			actor->Update();
 	}
 
 	void PhysicScene::CreatePxScene()
@@ -53,6 +56,9 @@ namespace PhysicSystem
 		physx::PxCapsuleControllerDesc desc;
 		m_cell->SetControllerDesc(desc);
 		m_playerPxController = manager->createController(desc);
+
+		for (auto& actor : m_actors)
+			m_pxScene->addActor(*actor->Get());
 	}
 
 	void PhysicScene::DestroyPxScene()
@@ -77,9 +83,12 @@ namespace PhysicSystem
 		if (index != -1)
 			return;
 
-		actors.push_back(actor);
+		m_actors.push_back(actor);
 
-		m_pxScene->addActor(*actor->Get());
+		if (m_pxScene)
+		{
+			m_pxScene->addActor(*m_actors.back()->Get());
+		}
 	}
 
 	bool PhysicScene::RemoveActor(PhysicActor* actor)
@@ -89,10 +98,11 @@ namespace PhysicSystem
 		if (index == -1)
 			return false;
 
-		m_pxScene->removeActor(*actors[index]->Get());
+		if (m_pxScene)
+			m_pxScene->removeActor(*m_actors[index]->Get());
 
-		actors[index] = actors.back();
-		actors.pop_back();
+		m_actors[index] = m_actors.back();
+		m_actors.pop_back();
 
 		return true;
 	}
@@ -100,12 +110,17 @@ namespace PhysicSystem
 	int PhysicScene::PossessActor(PhysicActor* actor)
 	{
 		int index = 0;
-		for (auto& current : actors)
+		for (auto& current : m_actors)
 		{
 			if (actor == current)
 				return index;
 			index++;
 		}
 		return -1;
+	}
+
+	void PhysicScene::MoveCharacterController(float deltaTime)
+	{
+		m_playerPxController->move(physx::PxVec3(0.f, -9.81f, 0.f ), 1.f, deltaTime, physx::PxControllerFilters());
 	}
 }

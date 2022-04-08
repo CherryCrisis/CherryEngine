@@ -193,8 +193,23 @@ namespace CCMaths
 		*	\return Vector3 \b out
 		*
 		*	\sa operator*=(const float)
+		*	\sa operator*=(const Vector3&)
 		*/
 		inline Vector3 operator*(const float rhs) const;
+
+		//! Mutliply the Vector3 by the scalar
+		/*!
+		*	\param object : Vector3 on the left side of the operator
+		*	\param rhs : Vector3 on the right side of the operator
+		*
+		*	Mutliply \b object by \b rhs
+		*
+		*	\return Reference to \b object
+		*
+		*	\sa operator*=(const float)
+		*	\sa operator*(const float const)
+		*/
+		inline Vector3& operator*=(const Vector3& rhs);
 
 		//! Mutliply the Vector3 by the scalar
 		/*!
@@ -205,6 +220,7 @@ namespace CCMaths
 		*
 		*	\return Reference to \b object
 		*
+		*	\sa operator*=(const Vector3&)
 		*	\sa operator*(const float) const
 		*/
 		inline Vector3& operator*=(const float rhs);

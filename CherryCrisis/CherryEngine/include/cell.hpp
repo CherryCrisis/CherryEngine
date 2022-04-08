@@ -2,6 +2,8 @@
 
 #include "cherry_macros.hpp"
 
+#include <deque>
+
 #include "physic_character_controller.hpp"
 
 class Entity;
@@ -19,8 +21,8 @@ namespace PhysicSystem
 class CCENGINE_API Cell
 {
 private:
-	std::vector<Entity*>	m_entities;
-	std::vector<Cell*>		m_surroundingCells;
+	std::deque<Entity*>	m_entities;
+	std::deque<Cell*>	m_surroundingCells;
 	
 	PhysicSystem::PhysicCharacterController m_playerController;
 
@@ -33,7 +35,11 @@ public:
 	void AddEntity(Entity* newEntity);
 	void AddEntityToPhysicScene(Entity* newEntity);
 	void RemoveEntity(Entity* newEntity);
+	void RemoveEntityFromPhysicScene(Entity* newEntity);
 
+	// TODO: Add info of movement (direction, speed, ...)
+	void MoveCharacter(float deltaTime);
+	
 	void LinkToCell(Cell& other);
 
 	void SetControllerDesc(physx::PxCapsuleControllerDesc& desc);

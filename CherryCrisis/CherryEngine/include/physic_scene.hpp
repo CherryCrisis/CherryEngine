@@ -25,10 +25,10 @@ namespace PhysicSystem
 		bool	m_paused = false;
 		float	m_gravity = 9.81f;
 
-		std::vector<PhysicActor*> actors;
+		std::vector<PhysicActor*> m_actors;
 
 	public:
-		Cell*	m_cell;
+		Cell*	m_cell = nullptr;
 
 		void	Update(float deltaTime);
 
@@ -41,6 +41,8 @@ namespace PhysicSystem
 		void	AddActor(PhysicActor* actor);
 		bool	RemoveActor(PhysicActor* actor);
 		int		PossessActor(PhysicActor* actor);
+
+		void	MoveCharacterController(float deltaTime);
 
 		void			Pause(bool value)	{ m_paused = value; }
 		bool			IsPaused()			{ return m_paused; }

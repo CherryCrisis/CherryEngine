@@ -1059,7 +1059,7 @@
     <ClInclude Include="include\rigidbody.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\collider.hpp">
+    <ClInclude Include="include\box_collider.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\physic_actor.hpp">
@@ -1103,6 +1103,15 @@
     </ClInclude>
     <ClInclude Include="include\command.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sphere_collider.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\collider.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bool3.hpp">
+      <Filter>Fichiers d%27en-tête\PhysX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1339,7 +1348,7 @@
     <ClCompile Include="src\rigidbody.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\collider.cpp">
+    <ClCompile Include="src\box_collider.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\physic_actor.cpp">
@@ -1368,6 +1377,12 @@
     </ClCompile>
     <ClCompile Include="src\command.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sphere_collider.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\collider.cpp">
+      <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

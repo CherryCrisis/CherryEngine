@@ -38,11 +38,12 @@ namespace PhysicSystem
 		physx::PxShape* CreateShape(const physx::PxGeometry& geometry);
 		void			RemoveShape(physx::PxShape* shape);
 
-		void AddRigidbody(Rigidbody* rigidbody);
-		void AddCollider(Collider* collider);
+		void AddRigidbody(Rigidbody* rigidbody, bool isPlaying = false);
+		void AddCollider(Collider* collider, bool isPlaying = false);
 
 		void RemoveRigidbody(Rigidbody* rigidbody);
 		void RemoveCollider(Collider* collider);
+		void Empty();
 
 		void SetDensity(float density) { m_density = density; }
 

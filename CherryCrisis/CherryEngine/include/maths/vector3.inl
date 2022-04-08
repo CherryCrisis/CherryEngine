@@ -61,6 +61,12 @@ namespace CCMaths
 		return { x * rhs, y * rhs, z * rhs };
 	}
 
+	inline Vector3& Vector3::operator*=(const Vector3& rhs)
+	{
+		*this = { this->x * rhs.x, this->y * rhs.y, this->z * rhs.z };
+		return *this;
+	}
+
 	inline Vector3& Vector3::operator*=(const float rhs)
 	{
 		*this = *this * rhs;

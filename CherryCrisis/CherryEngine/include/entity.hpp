@@ -21,7 +21,7 @@ private:
 	CCUUID m_uuid = {};
 
 public:
-	Cell* m_cell  = nullptr;
+	Cell* m_cell = nullptr;
 
 	Entity() = default;
 	Entity(const std::string& name, CCUUID m_uuid = {});

@@ -240,11 +240,11 @@ namespace CCMaths
 	inline Quaternion Quaternion::FromEuler(const float roll, const float pitch, const float yaw)
 	{
 		float rollCos  = std::cosf(roll);
-		float rollSin  = std::cosf(roll);
+		float rollSin  = std::sinf(roll);
 		float pitchCos = std::cosf(pitch);
-		float pitchSin = std::cosf(pitch);
+		float pitchSin = std::sinf(pitch);
 		float yawCos   = std::cosf(yaw);
-		float yawSin   = std::cosf(yaw);
+		float yawSin   = std::sinf(yaw);
 
 		return
 		{

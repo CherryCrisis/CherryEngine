@@ -14,7 +14,9 @@
 #include "scripted_behaviour.hpp"
 #include "csscripting_system.hpp"
 #include "rigidbody.hpp"
-#include "collider.hpp"
+#include "box_collider.hpp"
+#include "sphere_collider.hpp"
+#include "bool3.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -92,6 +94,20 @@ void InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
+                if (type == typeid(Bool3))
+                {
+                    Bool3 val = std::any_cast<Bool3>(fieldRef.m_value);
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val.x); ImGui::SameLine();
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val.y); ImGui::SameLine();
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val.z);
+                    continue;
+                }
+                if (type == typeid(bool))
+                {
+                    bool val = std::any_cast<bool>(fieldRef.m_value);
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val);
+                    continue;
+                }
                 if (type == typeid(int*))
                 {
                     int* val = std::any_cast<int*>(fieldRef.m_value);
@@ -101,13 +117,13 @@ void InspectComponents(Entity* entity, int id)
                 if (type == typeid(float*))
                 {
                     float* val = std::any_cast<float*>(fieldRef.m_value);
-                    ImGui::DragFloat(fieldRef.m_name.c_str(), val, 0.5f);
+                    ImGui::DragFloat(fieldRef.m_name.c_str(), val, 0.5f, 0.0f, 0.0f, *val >= 1.0e+5 ? "%e" : "%.3f");
                     continue;
                 }
                 if (type == typeid(float))
                 {
                     float val = std::any_cast<float>(fieldRef.m_value);
-                    ImGui::DragFloat(fieldRef.m_name.c_str(), &val, 0.5f);
+                    ImGui::DragFloat(fieldRef.m_name.c_str(), &val, 0.5f, 0.0f, 0.0f, val >= 1.0e+5 ? "%e" : "%.3f");
                     continue;
                 }
 
@@ -139,8 +155,45 @@ void InspectComponents(Entity* entity, int id)
                 {
                     int val;
                     propRef->Get(&val);
-                    ImGui::DragInt(propName.c_str(), &val, 0.5f);
+                    if (ImGui::DragInt(propName.c_str(), &val, 0.5f))
                         propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (propType == typeid(bool))
+                {
+                    bool val;
+                    propRef->Get(&val);
+                    if (ImGui::Checkbox(propName.c_str(), &val))
+                        propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (propType == typeid(Bool3))
+                {
+                    Bool3 val;
+                    propRef->Get(&val);
+                    if (ImGui::TreeNode(propName.c_str()))
+                    {
+                        ImGui::Checkbox("X", &val.x); ImGui::SameLine();
+                        ImGui::Checkbox("Y", &val.y); ImGui::SameLine();
+                        ImGui::Checkbox("Z", &val.z);
+                        propRef->Set(&val);
+
+                        ImGui::TreePop();
+                    }
+                    continue;
+                }
+
+                if (propType == typeid(float))
+                {
+                    float val;
+                    propRef->Get(&val);
+                    if (ImGui::DragFloat(propName.c_str(), &val, 0.5f, 0.0f, 0.0f, val >= 1.0e+5 ? "%e" : "%.3f"))
+                        propRef->Set(&val);
+
 
                     continue;
                 }
@@ -193,8 +246,9 @@ void Inspector::Render()
             // TODO: Replace with list of available components
             if (ImGui::MenuItem("Transform"))      { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
             if (ImGui::MenuItem("Camera"))     { }
-            if (ImGui::MenuItem("Rigidbody")) { m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); }
-            if (ImGui::MenuItem("Collider"))  { m_manager->m_selectedEntities[0]->AddBehaviour<Collider>(); }
+            if (ImGui::MenuItem("Rigidbody")) { auto rigidbody = m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); rigidbody->BindToSignals(); }
+            if (ImGui::MenuItem("BoxCollider")) { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); collider->BindToSignals(); }
+            if (ImGui::MenuItem("SphereCollider")) { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); collider->BindToSignals(); }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))

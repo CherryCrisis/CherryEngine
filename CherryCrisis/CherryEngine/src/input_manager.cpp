@@ -197,7 +197,8 @@ void InputManager::PushContext(InputContext* context)
 
 void InputManager::PopContext()
 {
-	m_fetchContext.pop();
+	if (!m_fetchContext.empty())
+		m_fetchContext.pop();
 }
 
 void InputManager::SetDefaultContext()
