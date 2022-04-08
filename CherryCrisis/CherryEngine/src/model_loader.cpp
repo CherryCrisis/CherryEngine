@@ -222,14 +222,14 @@ namespace CCImporter
 
         //TODO: change location
         std::string texturePathStr(texturePath);
-        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), '/'), texturePathStr.end());
+        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), [](char c) {return c == '/'; }), texturePathStr.end());
         texturePathStr += ".ccfile";
 
         FILE* file = nullptr;
 
-        const char* fullPath = (CCImporter::cacheDirectory + texturePathStr).c_str();
+        std::string fullPath(CCImporter::cacheDirectory + texturePathStr);
 
-        if (fopen_s(&file, fullPath, "wb")) //w+b = write in binary mode
+        if (fopen_s(&file, fullPath.c_str(), "wb")) //w+b = write in binary mode
         {
             debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullPath).c_str());
             return;
@@ -344,10 +344,10 @@ namespace CCImporter
     bool VerifIfTextureCacheExist(const char* texturePath)
     {
         std::string texturePathStr(texturePath);
-        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), '/'), texturePathStr.end());
+        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), [](char c) {return c == '/'; }), texturePathStr.end());
         texturePathStr += ".ccfile";
 
-        std::string allTexturePath("Assets/");
+        std::string allTexturePath(CCImporter::cacheDirectory);
         allTexturePath += texturePathStr;
 
         FILE* file;
@@ -413,30 +413,32 @@ namespace CCImporter
             aiString texturePath;
             if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
             {
-                const char* fullPath = ("Assets/" + std::string(texturePath.C_Str())).c_str();
-                if (!VerifIfTextureCacheExist(fullPath))
-                    ImportTextureData(texturePath.C_Str());
+                std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
 
-                AddTextureDataToModel(model, ETextureType::AMBIENT, fullPath);
+                if (!VerifIfTextureCacheExist(fullPath.c_str()))
+                    ImportTextureData(fullPath.c_str());
+
+                AddTextureDataToModel(model, ETextureType::AMBIENT, fullPath.c_str());
             }
 
             assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
             if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
             {
-                const char* fullPath = ("Assets/" + std::string(texturePath.C_Str())).c_str();
-                if (!VerifIfTextureCacheExist(fullPath))
-                    ImportTextureData(texturePath.C_Str(), texture);
+                std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
 
-                AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath);
+                if (!VerifIfTextureCacheExist(fullPath.c_str()))
+                    ImportTextureData(fullPath.c_str(), texture);
+
+                AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath.c_str());
             }
             else
             {
-                const char* fullPath = ("Assets/" + std::string(texturePath.C_Str())).c_str();
+                std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
 
-                if (!VerifIfTextureCacheExist(fullPath))
-                    ImportTextureData(texturePath.C_Str());
+                if (!VerifIfTextureCacheExist(fullPath.c_str()))
+                    ImportTextureData(fullPath.c_str());
 
-                AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath);
+                AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath.c_str());
             }
         }
     }
@@ -513,12 +515,16 @@ namespace CCImporter
 
             FILE* file = nullptr;
 
-            std::string fileIDStr = filepath;
-            fileIDStr += ".ccfile";
+            std::string filepathStr(filepath);
+            filepathStr.erase(std::remove_if(filepathStr.begin(), filepathStr.end(), [](char c) {return c == '/'; }), filepathStr.end());
+            filepathStr += CCImporter::cacheExtension;
 
-            if (fopen_s(&file, fileIDStr.c_str(), "wb"))
+            std::string fullFilepath(CCImporter::cacheDirectory);
+            fullFilepath += filepathStr;
+
+            if (fopen_s(&file, fullFilepath.c_str(), "wb"))
             {
-                debug->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", fileIDStr).c_str());
+                debug->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", fullFilepath).c_str());
                 return;
             }
 

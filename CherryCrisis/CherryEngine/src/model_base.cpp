@@ -19,6 +19,9 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         CCImporter::ImportModel(modelBase->GetFilepath(), modelsUtils);
     }
 
+    if (modelsUtils.size() == 0)
+        return;
+
     ResourceManager* resourceManager = ResourceManager::GetInstance();
 
     std::vector<ModelNode*> modelNodes;
@@ -63,19 +66,20 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
     }
 
     modelBase->m_rootNode = modelNodes[0];
-
 }
 
 bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models)
 {
-    std::string fileIDStr = modelBase->GetFilepath();
-    fileIDStr += ".ccfile";
+    std::string filepath = modelBase->GetFilepath();
+    filepath.erase(std::remove_if(filepath.begin(), filepath.end(), [](char c) {return c == '/'; }), filepath.end());
+    filepath += CCImporter::cacheExtension;
+
+    std::string fullFilepath(CCImporter::cacheDirectory);
+    fullFilepath += filepath;
 
     FILE* file;
-    if (fopen_s(&file, fileIDStr.c_str(), "rb")) //rb = read in binary mode
-    {
+    if (fopen_s(&file, fullFilepath.c_str(), "rb")) //rb = read in binary mode
         return false;
-    }
 
     size_t modelCount;
     fread(&modelCount, sizeof(size_t), 1, file);

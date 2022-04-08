@@ -70,24 +70,22 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** da
     FILE* file = nullptr;
 
     std::string texturePath(texture->GetFilepath());
-    texturePath.erase(std::remove_if(texturePath.begin(), texturePath.end(), '/'), texturePath.end());
+    texturePath.erase(std::remove_if(texturePath.begin(), texturePath.end(), [](char c) {return c == '/'; }), texturePath.end());
     texturePath += CCImporter::cacheExtension;
 
-    //std::string fullTexturePath("Assets/");
-    //fullTexturePath += texture->GetFilepath();
+    std::string fullTexturePath(CCImporter::cacheDirectory);
+    fullTexturePath += texturePath;
     
     Debug* debug = Debug::GetInstance();
-    if (fopen_s(&file, texturePath.c_str(), "rb")) //rb = read in binary mode
-    {
-        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to open cache texture", texturePath.c_str()).c_str());
+    if (fopen_s(&file, fullTexturePath.c_str(), "rb")) //rb = read in binary mode
         return false;
-    }
 
     fread(&textureHeader, sizeof(CCImporter::TextureHeader), 1, file);
 
     *data = new unsigned char[textureHeader.compressedSize];
     fread(&(*data)[0], sizeof(unsigned char), textureHeader.compressedSize, file);
 
+    fclose(file);
 
     if (!*data)
     {

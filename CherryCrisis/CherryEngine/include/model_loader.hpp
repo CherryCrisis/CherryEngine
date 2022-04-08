@@ -92,6 +92,7 @@ namespace CCImporter
         std::vector <std::string> m_texturesPathCstr;
     };
 
+    static const char* assetsDirectory("Assets/");
     static const char* cacheExtension(".ccfile");
     static const char* cacheDirectory("Cache/");
 
