@@ -53,11 +53,11 @@ void ModelRenderer::RemoveModel()
 
 void ModelRenderer::SubscribeToRenderPass()
 {
-	RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
+	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(this);
 }
 
 void ModelRenderer::UnsubscribeToRenderPass()
 {
-	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
+	RenderManager::GetInstance()->UnsubscribeToPipeline<BasicRenderPass>(this);
 }
 

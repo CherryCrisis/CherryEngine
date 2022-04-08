@@ -7,6 +7,11 @@
 #include "transform.hpp"
 #include "model.hpp"
 
+BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
+{
+	glDeleteTextures(1, &ID);
+}
+
 BasicRenderPass::BasicRenderPass(const char* name)
 	: ARenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
 {
@@ -15,7 +20,7 @@ BasicRenderPass::BasicRenderPass(const char* name)
 }
 
 template <>
-int BasicRenderPass::Generate(Light* toGenerate)
+int BasicRenderPass::Subscribe(Light* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -26,7 +31,7 @@ int BasicRenderPass::Generate(Light* toGenerate)
 }
 
 template <>
-int BasicRenderPass::Generate(Camera* toGenerate)
+int BasicRenderPass::Subscribe(Camera* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -36,7 +41,7 @@ int BasicRenderPass::Generate(Camera* toGenerate)
 }
 
 template <>
-int BasicRenderPass::Generate(ModelRenderer* toGenerate)
+int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
 	Model* model = toGenerate->m_model.get();
 
@@ -54,27 +59,27 @@ int BasicRenderPass::Generate(ModelRenderer* toGenerate)
 	// Generate GPU textures
 	{
 		if (Material* material = model->m_material.get())
-			Generate(material);
+			Subscribe(material);
 	}
 
 	return 1;
 }
 
 template <>
-int BasicRenderPass::Generate(Material* toGenerate)
+int BasicRenderPass::Subscribe(Material* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
 
 	// Albedo texture
 	if (Texture* albedoTexture = toGenerate->textures["albedo"].get())
-		Generate(albedoTexture);
+		Subscribe(albedoTexture);
 
 	return 1;
 }
 
 template <>
-int BasicRenderPass::Generate(Texture* toGenerate)
+int BasicRenderPass::Subscribe(Texture* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
@@ -82,42 +87,42 @@ int BasicRenderPass::Generate(Texture* toGenerate)
 	if (toGenerate->m_gpuTexture)
 		return 0;
 
-	GPUTextureBasic gpuTexture;
+	auto gpuTexture = std::make_unique<GPUTextureBasic>();
 
-	glCreateTextures(GL_TEXTURE_2D, 1, &gpuTexture.ID);
+	glCreateTextures(GL_TEXTURE_2D, 1, &gpuTexture->ID);
 
-	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(gpuTexture.ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return -1;
 
-	glTextureStorage2D(gpuTexture.ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
-	glTextureSubImage2D(gpuTexture.ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
+	glTextureStorage2D(gpuTexture->ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
+	glTextureSubImage2D(gpuTexture->ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
 
-	glGenerateTextureMipmap(gpuTexture.ID);
+	glGenerateTextureMipmap(gpuTexture->ID);
 
-	toGenerate->m_gpuTexture = new GPUTextureBasic(gpuTexture);
+	toGenerate->m_gpuTexture = std::move(gpuTexture);
 
 	return 1;
 }
 
 template <>
-void BasicRenderPass::Remove(ModelRenderer* toGenerate)
+void BasicRenderPass::Unsubscribe(ModelRenderer* toGenerate)
 {
 	m_modelRenderers.erase(toGenerate);
 }
 
 template <>
-void BasicRenderPass::Remove(Light* toGenerate)
+void BasicRenderPass::Unsubscribe(Light* toGenerate)
 {
 	m_lights.erase(toGenerate);
 }
 
 template <>
-void BasicRenderPass::Remove(Camera* toGenerate)
+void BasicRenderPass::Unsubscribe(Camera* toGenerate)
 {
 	m_camera = nullptr;
 }
@@ -180,7 +185,7 @@ void BasicRenderPass::Execute(const float& x, const float& y, Camera& camera)
 		{
 			if (Texture* albedoTexture = material->textures["albedo"].get())
 			{
-				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture))
+				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture.get()))
 					glBindTextureUnit(0, gpuAlbedoTexture->ID);
 			}
 		}
@@ -190,7 +195,7 @@ void BasicRenderPass::Execute(const float& x, const float& y, Camera& camera)
 		if (!mesh)
 			continue;
 
-		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh);
+		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
 
 		if (!gpuMesh)
 			continue;

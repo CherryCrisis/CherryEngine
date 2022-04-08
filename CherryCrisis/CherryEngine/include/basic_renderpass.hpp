@@ -4,7 +4,7 @@
 
 #include <glad/gl.h>
 
-#include "element_mesh_renderpass.hpp"
+#include "element_mesh_generator.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -22,49 +22,52 @@ class BasicRenderPass : public ARenderPass, ElementMeshGenerator
 	
 	Camera* m_camera = nullptr;
 
-public:
-	struct GPUTextureBasic : GPUTexture
+protected:
+	struct GPUTextureBasic : public GPUTexture
 	{
 		GLuint ID = 0u;
+
+		virtual ~GPUTextureBasic();
 	};
 
+public:
 	BasicRenderPass(const char* name);
 
 	template <typename RendererT>
-	int Generate(RendererT* toGenerate)
+	int Subscribe(RendererT* toGenerate)
 	{
 		static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
 	}
 
 	template <typename RendererT>
-	void Remove(RendererT* toGenerate)
+	void Unsubscribe(RendererT* toGenerate)
 	{
 		static_assert(false, "RendererT deletion is not implemented in BasicSubPipeline");
 	}
 
 	template <>
-	int Generate(Light* toGenerate);
+	int Subscribe(Light* toGenerate);
 
 	template <>
-	int Generate(Camera* toGenerate);
+	int Subscribe(Camera* toGenerate);
 
 	template <>
-	int Generate(ModelRenderer* toGenerate);
+	int Subscribe(ModelRenderer* toGenerate);
 
 	template <>
-	int Generate(Material* toGenerate);
+	int Subscribe(Material* toGenerate);
 
 	template <>
-	int Generate(Texture* toGenerate);
+	int Subscribe(Texture* toGenerate);
 
 	template <>
-	void Remove(Camera* toGenerate);
+	void Unsubscribe(Camera* toGenerate);
 
 	template <>
-	void Remove(ModelRenderer* toGenerate);
+	void Unsubscribe(ModelRenderer* toGenerate);
 
 	template <>
-	void Remove(Light* toGenerate);
+	void Unsubscribe(Light* toGenerate);
 
 	void Execute(const float& x, const float& y, Camera& camera);
 };

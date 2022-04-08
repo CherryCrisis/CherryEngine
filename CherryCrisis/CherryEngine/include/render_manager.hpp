@@ -18,7 +18,7 @@ public:
 	using PipelineDesc = std::function<void(const std::unordered_map<std::type_index, ARenderPass*>&, std::vector<ARenderPass*>&)>;
 
 private:
-	std::unordered_map<std::type_index, ARenderPass*>	m_existingSubpipelines;
+	std::unordered_map<std::type_index, ARenderPass*>	m_existingRenderpasses;
 	std::vector<ARenderPass*> m_orderedPipeline;
 
 	template <class SubPipelineT>
@@ -31,10 +31,10 @@ public:
 	RenderManager();
 
 	template <class SubPipelineT, class RendererT>
-	void GenerateFromPipeline(RendererT* renderer);
+	void SubscribeToPipeline(RendererT* renderer);
 
 	template <class SubPipelineT, class RendererT>
-	void RemoveFromPipeline(RendererT* renderer);
+	void UnsubscribeToPipeline(RendererT* renderer);
 
 	static void DrawScene(const float x, const float y, Camera& camera);
 

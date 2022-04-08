@@ -79,7 +79,7 @@ void RenderManager::DrawScene(const float x, const float y, Camera& camera)
 	RenderManager* RM = GetInstance();
 	
     // TODO: Move this
-	if (RM->m_orderedPipeline.size() == 0 && RM->m_existingSubpipelines.size() > 0)
+	if (RM->m_orderedPipeline.size() == 0 && RM->m_existingRenderpasses.size() > 0)
 		InitializePipeline(DefaultRenderingPipeline());
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -95,7 +95,7 @@ void RenderManager::InitializePipeline(const PipelineDesc& pipelineDesc)
 {
 	RenderManager* RM = GetInstance();
 
-	pipelineDesc(RM->m_existingSubpipelines, RM->m_orderedPipeline);
+	pipelineDesc(RM->m_existingRenderpasses, RM->m_orderedPipeline);
 }
 
 RenderManager::PipelineDesc RenderManager::DefaultRenderingPipeline()

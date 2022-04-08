@@ -2,7 +2,7 @@
 
 #include <glad/gl.h>
 
-#include "element_mesh_renderpass.hpp"
+#include "element_mesh_generator.hpp"
 
 #include "cubemap.hpp"
 
@@ -24,28 +24,28 @@ public:
 	SkyboxRenderPass(const char* name);
 
 	template <typename RendererT>
-	int Generate(RendererT* toGenerate)
+	int Subscribe(RendererT* toGenerate)
 	{
 		static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
 	}
 
 	template <typename RendererT>
-	void Remove(RendererT* toGenerate)
+	void Unsubscribe(RendererT* toGenerate)
 	{
 		static_assert(false, "RendererT deletion is not implemented in BasicSubPipeline");
 	}
 
 	template <>
-	int Generate(Skybox* toGenerate);
+	int Subscribe(Skybox* toGenerate);
 
 	template <>
-	void Remove(Skybox* toGenerate);
+	void Unsubscribe(Skybox* toGenerate);
 
 	template <>
-	int Generate(Camera* toGenerate);
+	int Subscribe(Camera* toGenerate);
 
 	template <>
-	void Remove(Camera* toGenerate);
+	void Unsubscribe(Camera* toGenerate);
 
 	void Execute(const float& x, const float& y, Camera& canera);
 };

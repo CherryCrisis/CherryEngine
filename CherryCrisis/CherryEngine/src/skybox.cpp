@@ -54,10 +54,10 @@ void Skybox::Load()
 
 void Skybox::SubscribeToRenderPass()
 {
-	RenderManager::GetInstance()->GenerateFromPipeline<SkyboxRenderPass>(this);
+	RenderManager::GetInstance()->SubscribeToPipeline<SkyboxRenderPass>(this);
 }
 
 void Skybox::UnsubscribeToRenderPass()
 {
-	RenderManager::GetInstance()->RemoveFromPipeline<SkyboxRenderPass>(this);
+	RenderManager::GetInstance()->UnsubscribeToPipeline<SkyboxRenderPass>(this);
 }
