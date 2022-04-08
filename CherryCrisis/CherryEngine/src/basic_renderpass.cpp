@@ -2,6 +2,8 @@
 
 #include "basic_renderpass.hpp"
 
+#include "framebuffer.hpp"
+
 #include "camera.hpp"
 #include "model_renderer.hpp"
 #include "transform.hpp"
@@ -127,7 +129,7 @@ void BasicRenderPass::Unsubscribe(Camera* toGenerate)
 	m_camera = nullptr;
 }
 
-void BasicRenderPass::Execute(const float& x, const float& y, Camera& camera)
+void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -136,13 +138,13 @@ void BasicRenderPass::Execute(const float& x, const float& y, Camera& camera)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-		// TODO: Change this
-	    camera.aspect = x / y;
-		CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
-		CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation) * Matrix4::Translate(-camera.position);
+	// TODO: Change this
+	camera.aspect = (float)framebuffer.width / (float)framebuffer.height;
+	CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
+	CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation) * Matrix4::Translate(-camera.position);
 
-		CCMaths::Matrix4 viewProjection = projection * view;
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
+	CCMaths::Matrix4 viewProjection = projection * view;
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
 	size_t lightID = 0u;
 	for (Light* light : m_lights)

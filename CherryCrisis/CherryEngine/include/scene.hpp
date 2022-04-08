@@ -26,8 +26,6 @@ public:
 	void Initialize();
 	void Update();
 
-	void Draw();
-
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void AddEntity(Entity* toAdd);

@@ -118,11 +118,6 @@ void Scene::Update()
 		entity->Update();
 }
 
-void Scene::Draw()
-{
-	//RenderManager::DrawScene();
-}
-
 bool Scene::Serialize(const char* filePath) 
 {
 	std::ofstream myfile;

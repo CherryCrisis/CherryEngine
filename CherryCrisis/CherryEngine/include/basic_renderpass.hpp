@@ -69,5 +69,5 @@ public:
 	template <>
 	void Unsubscribe(Light* toGenerate);
 
-	void Execute(const float& x, const float& y, Camera& camera);
+	void Execute(Framebuffer& framebuffer, Camera& camera);
 };

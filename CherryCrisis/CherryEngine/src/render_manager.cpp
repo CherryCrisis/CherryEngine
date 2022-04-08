@@ -9,6 +9,8 @@
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
 
+#include "framebuffer.hpp"
+
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
 
@@ -74,7 +76,7 @@ RenderManager::RenderManager()
     LoadSubpipeline<SkyboxRenderPass>();
 }
 
-void RenderManager::DrawScene(const float x, const float y, Camera& camera)
+void RenderManager::DrawScene(Framebuffer& framebuffer, Camera& camera)
 {
 	RenderManager* RM = GetInstance();
 	
@@ -86,7 +88,7 @@ void RenderManager::DrawScene(const float x, const float y, Camera& camera)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (ARenderPass* pipeline : RM->m_orderedPipeline)
-		pipeline->CallOnExecute(x, y, camera);
+		pipeline->CallOnExecute(framebuffer, camera);
 
 	glUseProgram(0);
 }

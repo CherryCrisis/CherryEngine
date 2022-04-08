@@ -67,7 +67,7 @@ void SkyboxRenderPass::Unsubscribe(Skybox* toGenerate)
 	}
 }
 
-void SkyboxRenderPass::Execute(const float& x, const float& y, Camera& camera)
+void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 {
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
@@ -81,7 +81,6 @@ void SkyboxRenderPass::Execute(const float& x, const float& y, Camera& camera)
 
 	CCMaths::Matrix4 viewProjection = projection * view;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
-
 
 	Mesh* mesh = m_skybox->m_mesh.get();
 

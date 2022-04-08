@@ -47,5 +47,5 @@ public:
 	template <>
 	void Unsubscribe(Camera* toGenerate);
 
-	void Execute(const float& x, const float& y, Camera& canera);
+	void Execute(Framebuffer& framebuffer, Camera& canera);
 };

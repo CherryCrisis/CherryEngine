@@ -36,7 +36,7 @@ public:
 	template <class SubPipelineT, class RendererT>
 	void UnsubscribeToPipeline(RendererT* renderer);
 
-	static void DrawScene(const float x, const float y, Camera& camera);
+	static void DrawScene(Framebuffer& framebuffer, Camera& camera);
 
 	static PipelineDesc DefaultRenderingPipeline();
 
