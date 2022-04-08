@@ -3,6 +3,7 @@
 #include "core/frame_displayer.hpp"
 #include "camera.hpp"
 #include "input_manager.hpp"
+#include "ImGuizmo.h"
 
 class EditorManager;
 class SceneDisplayer : public FrameDisplayer
@@ -13,10 +14,15 @@ private:
 	InputManager::InputContext* m_sceneContext = nullptr;
 
 public:
-	EditorManager* manager = nullptr;
+	EditorManager* m_manager = nullptr;
 	
 	SceneDisplayer();
 	
 	void UpdateCamera();
 	void Render() override;
+
+	void Focus() override;
+	void Unfocus() override;
+
+	ImGuizmo::OPERATION m_operation = ImGuizmo::OPERATION::TRANSLATE;
 };

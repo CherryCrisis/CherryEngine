@@ -14,6 +14,9 @@
 
 #include <crtdbg.h>
 #include "scene_manager.hpp"
+#include "camera_component.hpp"
+
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 struct Context 
 {
@@ -30,6 +33,11 @@ void ShowCursor(void* window)
 {
     GLFWwindow* castedWindow = (GLFWwindow*)window;
     glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
 
 int main()
@@ -81,6 +89,8 @@ int main()
             static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
         });
 
+    glfwSetWindowSizeCallback(window, window_size_callback);
+
     InputManager::GetInstance()->HideCursor = HideCursor;
     InputManager::GetInstance()->ShowCursor = ShowCursor;
     Engine::window_handle = window;
@@ -90,7 +100,9 @@ int main()
     scn = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
     SceneManager::GetInstance()->SetCurrentScene(scn);
 
-    SceneManager::GetInstance()->m_currentScene->Unserialize("scene de ouf.cherry");
+    SceneManager::GetInstance()->m_currentScene->Unserialize("scn.cherry");
+
+    InputManager::GetInstance()->SetCursorHidden();
 
     while (glfwWindowShouldClose(window) == false)
     {
@@ -102,7 +114,8 @@ int main()
         int y = 0;
 
         glfwGetWindowSize(window, &x, &y);
-        RenderManager::DrawScene(x, y);
+
+        RenderManager::DrawScene(x, y, SceneManager::GetInstance()->m_currentScene->m_entities["Camera"]->GetBehaviour<CameraComponent>()->m_camera);
 
         engine.TickEngine();
         engine.Launch();

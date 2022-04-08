@@ -32,7 +32,7 @@ public:
 
 	void AddEntity(Entity* toAdd);
 	void RemoveEntity(Entity* toRemove);
-	void RemoveEntity(std::string name);
+	void RemoveEntity(const std::string& name);
 	Entity* FindEntity(uint64_t id);
 
 	bool Serialize(const char* filePath);

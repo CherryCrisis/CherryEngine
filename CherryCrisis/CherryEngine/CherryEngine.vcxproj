@@ -209,6 +209,7 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
+    <ClInclude Include="include\command.hpp" />
     <ClInclude Include="include\physic_character_controller.hpp" />
     <ClInclude Include="include\collider.hpp" />
     <ClInclude Include="include\csassembly.hpp" />
@@ -430,6 +431,7 @@
     <ClCompile Include="src\behaviour.cpp" />
     <ClCompile Include="src\cell.cpp" />
     <ClCompile Include="src\cell_system.cpp" />
+    <ClCompile Include="src\command.cpp" />
     <ClCompile Include="src\physic_character_controller.cpp" />
     <ClCompile Include="src\collider.cpp" />
     <ClCompile Include="src\csassembly.cpp" />
@@ -650,7 +652,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>CCENGINE_EXPORTS;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PX_PHYSX_STATIC_LIB;CCENGINE_EXPORTS;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>

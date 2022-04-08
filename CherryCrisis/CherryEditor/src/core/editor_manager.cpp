@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include <iostream>
 
 #include <imgui_impl_opengl3.h>
 #include "ImGuizmo.h"
@@ -20,6 +21,8 @@
 #include "scene_manager.hpp"
 #include "render_manager.hpp"
 #include "csscripting_system.hpp"
+
+#include "command.hpp"
 
 //To Replace with Resource Manager Texture Handling
 bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height)
@@ -88,7 +91,7 @@ void EditorManager::LinkEngine(Engine* engine)
 {
     m_engine = engine;
     m_inspector.m_engine = engine;
-    m_sceneDisplayer.manager = this;
+    m_sceneDisplayer.m_manager = this;
 }
 
 void EditorManager::DisplayEditorUI(GLFWwindow* window) 
@@ -188,6 +191,11 @@ void EditorManager::HandleMenuBar()
             }
             if (ImGui::MenuItem("Save As..")) {}
 
+            if (ImGui::MenuItem("Launch"))
+            {
+                call("open","CherryStandalone.exe");
+            }
+
             ImGui::EndMenu();
         }
         
@@ -228,13 +236,13 @@ void EditorManager::HandleMenuBar()
             if (m_engine->isPlaying)
             {
                 m_engine->Stop();
-                UnfocusGame();
+                m_gameDisplayer.Unfocus();
             }
             else
             {
                 m_logDisplayer.TryClearOnPlay();
                 m_engine->Launch();
-                FocusGame();
+                m_gameDisplayer.Focus();
             }
 
         } ImGui::SameLine();
@@ -323,32 +331,15 @@ void EditorManager::UpdateFocusGame()
     {
         IM->SetGetContext("Editor Context");
         if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && IM->GetKeyDown(Keycode::LEFT_CLICK))
-            FocusGame();
+            m_gameDisplayer.Focus();
     }
     else if (m_gameDisplayer.m_isFocused && m_engine->isPlaying)
         IM->SetGetContext("User Context");
 
     if (IM->GetKeyDown(Keycode::ESCAPE))
     {
-        UnfocusGame();
+        m_gameDisplayer.Unfocus();
     }
-}
-
-void EditorManager::FocusGame()
-{
-    inputs->SetUpdatedContext("User Context");
-    inputs->SetCursorHidden();
-    m_gameDisplayer.m_isFocused = true;
-    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
-    ImGui::SetWindowFocus("Game");
-}
-
-void EditorManager::UnfocusGame()
-{
-    inputs->SetUpdatedContext(nullptr);
-    inputs->SetCursorDisplayed();
-    m_gameDisplayer.m_isFocused = false;
-    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 
 //Display time in seconds

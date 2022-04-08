@@ -4,15 +4,16 @@
 #include <imgui_internal.h>
 #include <cstdio>
 #include <iostream>
-
+/*
 #include <windows.h>
 #undef far
 #undef near
 #undef ERROR
 
-#include <ShellAPI.h>
+#include <ShellAPI.h>*/
 
 #include "core/editor_manager.hpp"
+#include "command.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -144,7 +145,7 @@ void AssetBrowser::ContextCallback()
         if (m_focusedNode)
         {
             ImGui::Separator();
-            if (ImGui::MenuItem("Open")) { ShellExecuteA(NULL, NULL, m_focusedNode->m_path.string().c_str(), NULL, NULL, 10); }
+            if (ImGui::MenuItem("Open")) { call(0, m_focusedNode->m_path.string().c_str()); }
             
             if (ImGui::MenuItem("Rename"))
                 m_renaming = true;
@@ -161,11 +162,11 @@ void AssetBrowser::ContextCallback()
                 std::string str = "/select,";
                 str += m_focusedNode->m_path.string();
 
-                ShellExecuteA(NULL, "open", "explorer.exe", str.c_str(), NULL, 10);
+                call("open", "explorer.exe", str.c_str());
             }
             else
             {
-                ShellExecuteA(NULL, NULL, m_currentDirectory.string().c_str(), NULL, NULL, 10);
+                call(0, m_currentDirectory.string().c_str());
             }
         }
 

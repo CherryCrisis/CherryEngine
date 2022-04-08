@@ -22,7 +22,7 @@
 
 #include <crtdbg.h>
 
-
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 void HideCursor(void* window) 
 {

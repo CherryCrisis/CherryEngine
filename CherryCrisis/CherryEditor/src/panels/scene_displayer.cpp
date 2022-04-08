@@ -8,44 +8,64 @@
 
 #include "time_manager.hpp"
 #include "core/editor_manager.hpp"
-#include "ImGuizmo.h"
 #include "transform.hpp"
+#include "callback.hpp"
+#include "maths.hpp"
 
 #undef near
 #undef far
 
+void Serialize() 
+{
+    if (SceneManager::GetInstance()->m_currentScene->Serialize("scn")) 
+    {
+        EditorManager::SendNotification("Scene Saved!", ImGuiToastType::Info);
+    }
+}
+
 SceneDisplayer::SceneDisplayer() 
 {
     InputManager* IM = InputManager::GetInstance();
-    m_sceneContext = IM->AddContext("Scene Context");
-    IM->SetUpdatedContext(m_sceneContext);
 
     int i = 0;
     IM->AddActionAxes("UpDown", i);
     IM->AddAxisToAction("UpDown", { Keycode::SPACE, Keycode::LEFT_CONTROL });
 
-    IM->AddActionAxes("FrontBack", i);
-    IM->AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
+    IM->AddActionAxes("BackFront", i);
+    IM->AddAxisToAction("BackFront", { Keycode::S, Keycode::W });
 
     IM->AddActionAxes("RightLeft", i);
     IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
-    
-    IM->SetUpdatedContext(nullptr);
+
+    auto callback = CCCallback::BindCallback(Serialize);
+    IM->AddActionButtons("Save",i)->m_pressed.Bind(callback);
+    IM->AddInputToAction("Save", Keycode::S);
+    IM->SetActionPriorKey("Save", EPriorKey::LEFT_CONTROL);
+
+    IM->AddActionButtons("Translate", i);
+    IM->AddActionButtons("Rotate", i);
+    IM->AddActionButtons("Scale", i);
+
+    IM->AddInputToAction("Translate", Keycode::W);
+    IM->AddInputToAction("Rotate", Keycode::E);
+    IM->AddInputToAction("Scale", Keycode::R);
 }
 
 void SceneDisplayer::UpdateCamera()
 {
     InputManager* IM = InputManager::GetInstance();
+    CCMaths::Vector2 deltaMouse = IM->GetMouseDelta();
+
     float dt = TimeManager::GetInstance()->GetDeltaTime();
     float speed = dt * m_cameraSpeed;
-    m_camera.position.x += IM->GetAxis("RightLeft") * speed;
-    m_camera.position.y += IM->GetAxis("UpDown") * speed;
-    m_camera.position.z += IM->GetAxis("FrontBack") * speed;
-
-    CCMaths::Vector2 deltaMouse = IM->GetMouseDelta();
 
     m_camera.rotation.x += dt * deltaMouse.y;
     m_camera.rotation.y += dt * deltaMouse.x;
+    
+    m_camera.position.x += IM->GetAxis("RightLeft") * speed;// * transform.right ;
+    m_camera.position.y += IM->GetAxis("UpDown") * speed;
+    m_camera.position.z += IM->GetAxis("BackFront") * speed; // * transform.forward ;
+
 }
 
 void SceneDisplayer::Render() 
@@ -58,12 +78,19 @@ void SceneDisplayer::Render()
     if (ImGui::Begin("Scene", &m_isOpened))
     {
         InputManager* IM = InputManager::GetInstance();
-        IM->SetGetContext(m_sceneContext);
-        
-        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && IM->GetKey(Keycode::RIGHT_CLICK))
-            UpdateCamera();
 
-        IM->SetGetContext(nullptr);
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+            if (IM->GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
+        
+        if (m_isFocused) 
+        {
+            if (IM->GetKey(Keycode::RIGHT_CLICK)) { UpdateCamera(); }
+            if (IM->GetKeyUp(Keycode::RIGHT_CLICK)) { Unfocus(); }
+        }
+
+        if (IM->GetKeyDown(Keycode::W))  m_operation = ImGuizmo::OPERATION::TRANSLATE; 
+        if (IM->GetKey(Keycode::E))      m_operation = ImGuizmo::OPERATION::ROTATE; 
+        if (IM->GetKeyUp(Keycode::R))    m_operation = ImGuizmo::OPERATION::SCALE; 
 
         m_isActive = !ImGui::IsWindowCollapsed();
 
@@ -82,7 +109,7 @@ void SceneDisplayer::Render()
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".cherry")) 
             {
                 const char* c = (const char*)payload->Data;
-                manager->m_selectedEntities.clear();
+                m_manager->m_selectedEntities.clear();
                 SceneManager::GetInstance()->m_currentScene->Unserialize(c);
             }
 
@@ -97,19 +124,21 @@ void SceneDisplayer::Render()
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();
         ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
-        if (manager->m_selectedEntities.size() > 0 && manager->m_selectedEntities[0]->GetBehaviour<Transform>() != nullptr) 
+        if (m_manager->m_selectedEntities.size() > 0 && m_manager->m_selectedEntities[0]->GetBehaviour<Transform>() != nullptr) 
         {
-            Transform* t = manager->m_selectedEntities[0]->GetBehaviour<Transform>();
+            Transform* t = m_manager->m_selectedEntities[0]->GetBehaviour<Transform>();
             CCMaths::Matrix4 mat = t->GetWorldMatrix();
             float p[3], r[3], s[3]; // position, rotation and scale
 
-            if (ImGuizmo::Manipulate(view.data, projection.data,
-                ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::LOCAL, mat.data))
+            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, ImGuizmo::MODE::LOCAL, mat.data))
             {
                 ImGuizmo::DecomposeMatrixToComponents(mat.data, p, r, s);
-
+                
+                //TODO: Fix operator*(const float) not working
+                CCMaths::Vector3 rot = { r[0]* CCMaths::DEG2RAD ,r[1]* CCMaths::DEG2RAD,r[2]* CCMaths::DEG2RAD };
+                
                 t->SetPosition({p[0],p[1],p[2]}); 
-                t->SetRotation({ r[0],r[1],r[2]}); 
+                t->SetRotation(rot); 
                 t->SetScale({s[0],s[1],s[2]});
             }            
         }
@@ -118,4 +147,19 @@ void SceneDisplayer::Render()
 
 
     ImGui::End();
+}
+
+void SceneDisplayer::Focus()
+{
+    m_isFocused = true;
+    m_inputs->SetCursorHidden();
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    ImGui::SetWindowFocus("Scene");
+}
+
+void SceneDisplayer::Unfocus()
+{
+    m_isFocused = false;
+    m_inputs->SetCursorDisplayed();
+    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
