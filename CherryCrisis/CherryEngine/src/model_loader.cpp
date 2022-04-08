@@ -26,7 +26,7 @@ struct CompressedArgs
 {
     unsigned char** stbiData;
     unsigned char** cacheData;
-    CCModelLoader::TextureHeader* textureHeader;
+    CCImporter::TextureHeader* textureHeader;
     std::mutex* mutex;
     std::condition_variable* condition;
 };
@@ -66,7 +66,7 @@ void CompressTextureWithOpenGL(CompressedArgs& args)
     }
 }
 
-namespace CCModelLoader
+namespace CCImporter
 {
     /*
     #pragma region Load
@@ -214,9 +214,6 @@ namespace CCModelLoader
         model.m_indices.swap(indices);
     }
 
-    bool isCharacterToErase(unsigned char c) {
-        return (c == ' ' || c == '/');
-    }
 
     //Mutex and condition if the texture compression function is called on multithread
     void CacheTextureData(const char* texturePath, const unsigned char* cacheData, const TextureHeader& textureHeader)
@@ -225,17 +222,16 @@ namespace CCModelLoader
 
         //TODO: change location
         std::string texturePathStr(texturePath);
-        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), isCharacterToErase), texturePathStr.end());
+        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), '/'), texturePathStr.end());
         texturePathStr += ".ccfile";
-
-        std::string allTexturePath("Assets/");
-        allTexturePath += texturePathStr;
 
         FILE* file = nullptr;
 
-        if (fopen_s(&file, allTexturePath.c_str(), "wb")) //w+b = write in binary mode
+        const char* fullPath = (CCImporter::cacheDirectory + texturePathStr).c_str();
+
+        if (fopen_s(&file, fullPath, "wb")) //w+b = write in binary mode
         {
-            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", allTexturePath).c_str());
+            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullPath).c_str());
             return;
         }
 
@@ -304,10 +300,10 @@ namespace CCModelLoader
         int width;
         int height;
 
-        std::string allTexturePath("Assets/");
-        allTexturePath += texturePath;
+        //std::string allTexturePath("Assets/");
+        //allTexturePath += texturePath;
 
-        unsigned char* stbiData = stbi_load(allTexturePath.c_str(), &width, &height, 0, STBI_rgb_alpha);
+        unsigned char* stbiData = stbi_load(texturePath, &width, &height, 0, STBI_rgb_alpha);
 
         if (!stbiData)
         {
@@ -348,7 +344,7 @@ namespace CCModelLoader
     bool VerifIfTextureCacheExist(const char* texturePath)
     {
         std::string texturePathStr(texturePath);
-        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), isCharacterToErase), texturePathStr.end());
+        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), '/'), texturePathStr.end());
         texturePathStr += ".ccfile";
 
         std::string allTexturePath("Assets/");
@@ -374,18 +370,16 @@ namespace CCModelLoader
 
         model.m_texturesType.push_back((unsigned int)textureType);
 
-        std::string texturePathStr(texturePath);
-        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), isCharacterToErase), texturePathStr.end());
-        //texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), "'\'"), texturePathStr.end());
-        texturePathStr += ".ccfile";
+        //std::string texturePathStr(texturePath);
+        //texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), '/'), texturePathStr.end());
+        ////texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), "'\'"), texturePathStr.end());
+        //texturePathStr += ".ccfile";
 
-        const char* texturePathCstr = texturePathStr.c_str();
-
-        size_t texturePathSize = std::strlen(texturePathCstr);
+        size_t texturePathSize = std::strlen(texturePath);
 
         model.m_texturesPathSize.push_back(static_cast<unsigned int>(texturePathSize));
-        model.m_texturesPath.insert(model.m_texturesPath.end(), &texturePathCstr[0], &texturePathCstr[texturePathSize]);
-        model.m_texturesPathCstr.push_back(texturePathCstr);
+        model.m_texturesPath.insert(model.m_texturesPath.end(), &texturePath[0], &texturePath[texturePathSize]);
+        model.m_texturesPathCstr.push_back(texturePath);
     }
 
     void ImportMaterialData(const aiScene* assimpScene, const aiNode* assimpNode, ImportModelUtils& model, const char* filepath)
@@ -419,26 +413,30 @@ namespace CCModelLoader
             aiString texturePath;
             if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
             {
-                if (!VerifIfTextureCacheExist(texturePath.C_Str()))
+                const char* fullPath = ("Assets/" + std::string(texturePath.C_Str())).c_str();
+                if (!VerifIfTextureCacheExist(fullPath))
                     ImportTextureData(texturePath.C_Str());
 
-                AddTextureDataToModel(model, ETextureType::AMBIENT, texturePath.C_Str());
+                AddTextureDataToModel(model, ETextureType::AMBIENT, fullPath);
             }
 
             assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
             if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
             {
-                if (!VerifIfTextureCacheExist(texturePath.C_Str()))
+                const char* fullPath = ("Assets/" + std::string(texturePath.C_Str())).c_str();
+                if (!VerifIfTextureCacheExist(fullPath))
                     ImportTextureData(texturePath.C_Str(), texture);
 
-                AddTextureDataToModel(model, ETextureType::ALBEDO, texturePath.C_Str());
+                AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath);
             }
             else
             {
-                if (!VerifIfTextureCacheExist(texturePath.C_Str()))
+                const char* fullPath = ("Assets/" + std::string(texturePath.C_Str())).c_str();
+
+                if (!VerifIfTextureCacheExist(fullPath))
                     ImportTextureData(texturePath.C_Str());
 
-                AddTextureDataToModel(model, ETextureType::ALBEDO, texturePath.C_Str());
+                AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath);
             }
         }
     }
@@ -561,10 +559,10 @@ namespace CCModelLoader
     {
         stbi_set_flip_vertically_on_load(true);
 
-        std::string allTexturePath("Assets/");
-        allTexturePath += texturePath;
+        //std::string allTexturePath("Assets/");
+        //allTexturePath += texturePath;
 
-        unsigned char* stbiData = stbi_load(allTexturePath.c_str(), &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
+        unsigned char* stbiData = stbi_load(texturePath, &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
         if (!stbiData)
         {

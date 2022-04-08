@@ -35,7 +35,7 @@ public:
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture);
     static void Load(std::shared_ptr<Texture> texture);
-    static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCModelLoader::TextureHeader& textureHeader);
+    static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     
     void SaveToCache(std::mutex& mutex, std::condition_variable* condition);
     void Delete() override;

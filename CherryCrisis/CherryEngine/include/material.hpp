@@ -9,7 +9,7 @@
 #include "maths.hpp"
 
 //Forward declaration
-namespace CCModelLoader
+namespace CCImporter
 {
 	struct MaterialHeader;
 }
@@ -17,7 +17,7 @@ class Texture;
 
 struct MaterialArgs
 {
-	CCModelLoader:: MaterialHeader*  m_materialHeader;
+	CCImporter:: MaterialHeader*  m_materialHeader;
 	std::vector<std::string>*	 m_texturesPath;
 	std::vector<unsigned int>* m_textureType;
 

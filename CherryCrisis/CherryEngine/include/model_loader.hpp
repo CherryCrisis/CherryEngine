@@ -12,7 +12,7 @@
 
 //class Vertex;
 
-namespace CCModelLoader
+namespace CCImporter
 {
     /*
     Order to load model from cache
@@ -91,6 +91,9 @@ namespace CCModelLoader
         //No used in writing
         std::vector <std::string> m_texturesPathCstr;
     };
+
+    static const char* cacheExtension(".ccfile");
+    static const char* cacheDirectory("Cache/");
 
 	void ImportModel(const char* filepath, std::vector<ImportModelUtils>& models);
 

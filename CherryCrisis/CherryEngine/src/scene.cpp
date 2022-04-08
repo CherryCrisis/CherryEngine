@@ -70,10 +70,18 @@ void Scene::RemoveEntity(const std::string& name)
 	m_entities.erase(name);
 }
 
+#include "time_manager.hpp"
+#include "debug.hpp"
+
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
-	std::shared_ptr<ModelBase> modelBase = ResourceManager::GetInstance()->AddResource<ModelBase>("Assets/backpack.obj", true);
+	FullDate oldTime = TimeManager::GetInstance()->GetCurrentTime();
+	std::shared_ptr<ModelBase> modelBase = ResourceManager::GetInstance()->AddResource<ModelBase>("Assets/sponza.obj", true);
 	scene->GenerateEntities(modelBase);
+	FullDate newTime = TimeManager::GetInstance()->GetCurrentTime();
+
+	int time = (newTime.seconds * 1000 + newTime.milliseconds) - (oldTime.seconds * 1000 + oldTime.milliseconds);
+	Debug::GetInstance()->AddLog(ELogType::INFO, std::format("Loaded time = {}ms", time).c_str());
 
 	Entity* light = new Entity("Light");
 	light->AddBehaviour<LightComponent>();

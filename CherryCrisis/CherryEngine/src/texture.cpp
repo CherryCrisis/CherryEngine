@@ -45,11 +45,11 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
 void Texture::Load(std::shared_ptr<Texture> texture)
 {
     unsigned char* data{};
-    CCModelLoader::TextureHeader textureHeader{};
+    CCImporter::TextureHeader textureHeader{};
 
     if (!LoadFromCache(texture, &data, textureHeader))
     {
-        CCModelLoader::ImportTexture(texture->GetFilepath(), &data, textureHeader);
+        CCImporter::ImportTexture(texture->GetFilepath(), &data, textureHeader);
     }
 
     if (!data)
@@ -65,22 +65,25 @@ void Texture::Load(std::shared_ptr<Texture> texture)
     texture->m_width = textureHeader.width;
 }
 
-bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCModelLoader::TextureHeader& textureHeader)
+bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader)
 {
     FILE* file = nullptr;
 
+    std::string texturePath(texture->GetFilepath());
+    texturePath.erase(std::remove_if(texturePath.begin(), texturePath.end(), '/'), texturePath.end());
+    texturePath += CCImporter::cacheExtension;
+
+    //std::string fullTexturePath("Assets/");
+    //fullTexturePath += texture->GetFilepath();
+    
     Debug* debug = Debug::GetInstance();
-
-    std::string fullTexturePath("Assets/");
-    fullTexturePath += texture->GetFilepath();
-
-    if (fopen_s(&file, fullTexturePath.c_str(), "rb")) //rb = read in binary mode
+    if (fopen_s(&file, texturePath.c_str(), "rb")) //rb = read in binary mode
     {
-        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to open cache texture", fullTexturePath.c_str()).c_str());
+        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to open cache texture", texturePath.c_str()).c_str());
         return false;
     }
 
-    fread(&textureHeader, sizeof(CCModelLoader::TextureHeader), 1, file);
+    fread(&textureHeader, sizeof(CCImporter::TextureHeader), 1, file);
 
     *data = new unsigned char[textureHeader.compressedSize];
     fread(&(*data)[0], sizeof(unsigned char), textureHeader.compressedSize, file);

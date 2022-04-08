@@ -13,17 +13,17 @@
 
 void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 {
-    std::vector<CCModelLoader::ImportModelUtils> modelsUtils;
+    std::vector<CCImporter::ImportModelUtils> modelsUtils;
     if (!LoadFromCache(modelBase, modelsUtils))
     {
-        CCModelLoader::ImportModel(modelBase->GetFilepath(), modelsUtils);
+        CCImporter::ImportModel(modelBase->GetFilepath(), modelsUtils);
     }
 
     ResourceManager* resourceManager = ResourceManager::GetInstance();
 
     std::vector<ModelNode*> modelNodes;
 
-    for (CCModelLoader::ImportModelUtils& modelUtils : modelsUtils)
+    for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
         ModelNode* modelNode = new ModelNode();
         std::swap(modelNode->m_baseTRS, modelUtils.modelHeader.m_trs);
@@ -52,7 +52,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         modelNodes.push_back(modelNode);
     }
 
-    for (CCModelLoader::ImportModelUtils& modelUtils : modelsUtils)
+    for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
         ModelNode* modelNode = modelNodes[modelUtils.modelHeader.m_index];
         for (int i = 0; i < modelUtils.modelHeader.m_childrenCount; ++i)
@@ -66,7 +66,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 
 }
 
-bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCModelLoader::ImportModelUtils>& models)
+bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models)
 {
     std::string fileIDStr = modelBase->GetFilepath();
     fileIDStr += ".ccfile";
@@ -85,9 +85,9 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
         if (i == 2)
             int j = 0;
 
-        CCModelLoader::ImportModelUtils model;
+        CCImporter::ImportModelUtils model;
 
-        fread(&model.modelHeader, sizeof(CCModelLoader::ModelHeader), 1, file);
+        fread(&model.modelHeader, sizeof(CCImporter::ModelHeader), 1, file);
 
         if (model.modelHeader.m_childrenCount)
         {

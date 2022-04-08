@@ -17,7 +17,7 @@ class Scene;
 
 using namespace CCMaths;
 
-namespace CCModelLoader
+namespace CCImporter
 {
 	struct ImportModelUtils;
 }
@@ -45,7 +45,7 @@ public:
 	~ModelBase() = default;
 
 	static void Load(std::shared_ptr<ModelBase> modelBase);
-	static bool LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCModelLoader::ImportModelUtils>& models);
+	static bool LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models);
 
 	void Delete() override;
 	void Reload();
