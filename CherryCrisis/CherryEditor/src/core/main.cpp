@@ -140,9 +140,9 @@ int main()
 
         if (engine.isPlaying)
         {
-            InputManager::GetInstance()->SetGetContext("User Context");
+            InputManager::GetInstance()->PushContext("User Context");
             engine.Tick();
-            InputManager::GetInstance()->SetGetContext(nullptr);
+            InputManager::GetInstance()->PopContext();
         }
 
         glfwSwapBuffers(window);

@@ -26,6 +26,7 @@ void Serialize()
 SceneDisplayer::SceneDisplayer() 
 {
     InputManager* IM = InputManager::GetInstance();
+    IM->PushContext("Editor Context");
 
     int i = 0;
     IM->AddActionAxes("UpDown", i);
@@ -49,6 +50,8 @@ SceneDisplayer::SceneDisplayer()
     IM->AddInputToAction("Translate", Keycode::W);
     IM->AddInputToAction("Rotate", Keycode::E);
     IM->AddInputToAction("Scale", Keycode::R);
+
+    IM->PopContext();
 }
 
 void SceneDisplayer::UpdateCamera()
@@ -78,6 +81,8 @@ void SceneDisplayer::Render()
     if (ImGui::Begin("Scene", &m_isOpened))
     {
         InputManager* IM = InputManager::GetInstance();
+
+        IM->PushContext("Editor Context");
 
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
             if (IM->GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
@@ -143,6 +148,8 @@ void SceneDisplayer::Render()
             }            
         }
         ImGui::EndChild();
+
+        IM->PopContext();
     }
 
 

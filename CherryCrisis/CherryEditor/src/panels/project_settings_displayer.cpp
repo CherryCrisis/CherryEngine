@@ -147,9 +147,9 @@ void ProjectSettingsDisplayer::Input::CreateAction(InputManager* IM, int& type)
 void ProjectSettingsDisplayer::Input::CreateButtons(InputManager* IM, const char* name)
 {
     int success = 0;
-    IM->SetUpdatedContext(userContext);
+    IM->PushContext(userContext);
     IM->AddActionButtons(std::string(name), success);
-    IM->SetUpdatedContext(nullptr);
+    IM->PopContext();
 
     if (success == 1)
     {
@@ -171,9 +171,9 @@ void ProjectSettingsDisplayer::Input::CreateButtons(InputManager* IM, const char
 void ProjectSettingsDisplayer::Input::CreateAxes(InputManager* IM, const char* name)
 {
     int success = 0;
-    IM->SetUpdatedContext(userContext);
+    IM->PushContext(userContext);
     IM->AddActionAxes(std::string(name), success);
-    IM->SetUpdatedContext(nullptr);
+    IM->PopContext();
 
     if (success == 1)
     {
@@ -285,9 +285,9 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
             // Add new key to Action
             if (ImGui::Button("+"))
             {
-                IM->SetUpdatedContext(userContext);
+                IM->PushContext(userContext);
                 int success = IM->AddInputToAction(&button.second, Keycode::UNKNOWN);
-                IM->SetUpdatedContext(nullptr);
+                IM->PopContext();
 
                 if (success == 1)
                 {
@@ -414,9 +414,9 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
             // Add new axis to Action
             if (ImGui::Button("+"))
             {
-                IM->SetUpdatedContext(userContext);
+                IM->PushContext(userContext);
                 int success = IM->AddAxisToAction(&axis.second, { Keycode::UNKNOWN, Keycode::UNKNOWN });
-                IM->SetUpdatedContext(nullptr);
+                IM->PopContext();
 
                 if (success == 1)
                 {

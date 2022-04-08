@@ -329,16 +329,20 @@ void EditorManager::UpdateFocusGame()
 
     if (!m_gameDisplayer.m_isFocused)
     {
-        IM->SetGetContext("Editor Context");
+        IM->PushContext("Editor Context");
         if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && IM->GetKeyDown(Keycode::LEFT_CLICK))
             m_gameDisplayer.Focus();
+        IM->PopContext();
     }
     else if (m_gameDisplayer.m_isFocused && m_engine->isPlaying)
-        IM->SetGetContext("User Context");
-
-    if (IM->GetKeyDown(Keycode::ESCAPE))
     {
-        m_gameDisplayer.Unfocus();
+        IM->PushContext("User Context");
+
+        if (IM->GetKeyDown(Keycode::ESCAPE))
+        {
+            m_gameDisplayer.Unfocus();
+        }
+        IM->PopContext();
     }
 }
 

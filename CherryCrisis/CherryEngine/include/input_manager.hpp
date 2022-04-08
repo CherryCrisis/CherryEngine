@@ -3,6 +3,7 @@
 #include "singleton.hpp"
 
 #include <unordered_map>
+#include <stack>
 #include <vector>
 
 #include "event.hpp"
@@ -132,7 +133,6 @@ public:
 		std::unordered_map<std::string, ActionButtons> m_buttons;
 
 		CCMaths::Vector2 m_mouseWheel{};
-		CCMaths::Vector2 m_mousePos{};
 		CCMaths::Vector2 m_mouseDelta{};
 	};
 
@@ -140,13 +140,14 @@ private:
 	std::unordered_map<std::string, InputContext> m_contexts;
 
 	// Context (presets of differents callbacks and axes)
-	InputContext* m_activeContext = nullptr;
-	InputContext* m_getContext = nullptr;
+	InputContext* m_pollContext = nullptr;
 	InputContext* m_defaultContext = nullptr;	
+	std::stack<InputContext*> m_fetchContext;
 
 	//list of keys just pressed
 	bool m_isListening = false;
 	int m_listenedKey = -1;
+	CCMaths::Vector2 m_mousePos{};
 
 	const char* keynames[122] =
 	{
@@ -434,11 +435,13 @@ public:
 	// Context
 	InputContext* AddContext(const std::string& name);
 
-	void SetUpdatedContext(const std::string& name);
-	void SetUpdatedContext(InputContext* context);
+	void SetPollContext(const std::string& name);
+	void SetPollContext(InputContext* context);
 
-	void SetGetContext(const std::string& name);
-	void SetGetContext(InputContext* context);
+	void PushContext(const std::string& name);
+	void PushContext(InputContext* context);
+
+	void PopContext();
 
 	void SetDefaultContext();
 
