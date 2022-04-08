@@ -13,12 +13,13 @@ class FrameDisplayer : public Panel
 private:
 	bool m_isInit   = false;
 
-	Framebuffer framebuffer;
 
 	void Init();
 	void UpdateTextureSize(float x, float y);
 
 protected:
+	Framebuffer m_framebuffer;
+	
 	InputManager* m_inputs = nullptr;
 
 	bool m_isActive = false;

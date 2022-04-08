@@ -62,7 +62,7 @@ public:
 
 	void SetName(std::string name) { m_name = name; }
 	std::string GetName() { return m_name; }
-	uint64_t	GetUUID() { return (uint64_t)m_uuid; }
+	uint32_t	GetUUID() { return (uint32_t)m_uuid; }
 	std::string Serialized();
 	std::string SerializeBehaviours();
 };

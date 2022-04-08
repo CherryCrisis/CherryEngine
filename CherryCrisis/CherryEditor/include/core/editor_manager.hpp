@@ -65,7 +65,7 @@ public:
     // TODO: Temporary, to replace with scene engine handling
     std::shared_ptr<Scene> scene;
 
-    static void SendNotification(const char* title, ImGuiToastType type, float displayTime = 3.f);
+    static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
     
     EditorManager();
     void DisplayEditorUI(GLFWwindow* window);

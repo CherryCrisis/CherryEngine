@@ -18,7 +18,7 @@
 
 #include "model_base.hpp"
 #include "model.hpp"
-
+#include "debug.hpp"
 
 void Foo(std::shared_ptr<ModelBase>)
 {
@@ -54,15 +54,17 @@ void Scene::AddEntity(Entity* toAdd)
 void Scene::RemoveEntity(Entity* toRemove) 
 {
 	Transform* transform;
-	if (!toRemove->TryGetBehaviour(transform))
-		m_entities.erase(toRemove->GetName()); return;
+	toRemove->TryGetBehaviour(transform);
+	if (transform && transform->GetChildren().size() > 0 )
+	{
+		std::vector<Transform*> children = transform->GetChildren();
 
-	std::vector<Transform*> children = transform->GetChildren();
+		for (int i = 0; i < children.size(); i++)
+			RemoveEntity(&children[i]->GetHost());
+	}
 
-	for (int i = 0; i < children.size(); i++)
-		RemoveEntity(&children[i]->GetHost());
-	
 	m_entities.erase(toRemove->GetName());
+	toRemove->Destroy();
 }
 
 void Scene::RemoveEntity(const std::string& name)
@@ -155,12 +157,24 @@ bool Find(const std::string& string)
 	return found;
 }
 
-Entity* Scene::FindEntity(uint64_t id) 
+Entity* Scene::FindEntity(uint32_t id)
 {
 	for (const auto& entity : m_entities)
 	{
-		if ((uint64_t)entity.second->GetUUID() == id)
+		Debug::GetInstance()->AddLog(ELogType::INFO, std::to_string(entity.second->GetUUID()).c_str());
+		if ((uint32_t)entity.second->GetUUID() == id)
 			return entity.second;
+	}
+
+	return nullptr;
+}
+
+Entity* Scene::FindModelEntity(uint32_t id)
+{
+	for (const auto& [entityName, entityRef]: m_entities)
+	{
+		if (ModelRenderer* rdr = entityRef->GetBehaviour<ModelRenderer>(); rdr && rdr->m_id == id) 
+			return entityRef;
 
 	}
 	return nullptr;
@@ -186,11 +200,11 @@ std::string ExtractKey(std::string& str, const char key = ':', bool erase = fals
 	return strr;
 }
 
-uint64_t ExtractUUID(const std::string& str) 
+uint32_t ExtractUUID(const std::string& str) 
 {
 	std::string uuid = ExtractValue(str);
 
-	uint64_t value;
+	uint32_t value;
 	std::istringstream iss(uuid);
 	iss >> value;
 	return value;
@@ -221,9 +235,6 @@ CCMaths::Vector3 ExtractVector3(std::string str)
 	return value;
 }
 
-
-
-
 bool Scene::Unserialize(const char* filePath) 
 {
 	for (auto& [name, ref] : m_entities) 
@@ -239,9 +250,9 @@ bool Scene::Unserialize(const char* filePath)
 	std::ifstream file(fileName);
 
 	// first is the uuid and the behaviour pointer 
-	std::unordered_map<uint64_t, Behaviour*> m_wrappedBehaviours;
+	std::unordered_map<uint32_t, Behaviour*> m_wrappedBehaviours;
 	// first is the behaviour uuid and the uuid to link in 
-	std::unordered_map<uint64_t, std::unordered_map<std::string, uint64_t>> m_wrappedUUIDs;
+	std::unordered_map<uint32_t, std::unordered_map<std::string, uint32_t>> m_wrappedUUIDs;
 
 	bool opened = false;
 	if (file)
@@ -260,8 +271,8 @@ bool Scene::Unserialize(const char* filePath)
 		Behaviour* behaviour = nullptr;
 
 		// need to get the actual serialized uuid 
-		uint64_t actualUUID;
-		uint64_t parent;
+		uint32_t actualUUID;
+		uint32_t parent;
 
 		while (std::getline(buffer, line))
 		{
@@ -342,7 +353,7 @@ bool Scene::Unserialize(const char* filePath)
 
 					if (propType == typeid(Transform*))
 					{
-						uint64_t refUUID = ExtractUUID(line);
+						uint32_t refUUID = ExtractUUID(line);
 						if (refUUID != 0)
 							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
 
@@ -381,7 +392,7 @@ bool Scene::Unserialize(const char* filePath)
 
 					if (info == typeid(Behaviour*))
 					{
-						uint64_t refUUID = ExtractUUID(line);
+						uint32_t refUUID = ExtractUUID(line);
 						if (refUUID != 0)
 							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
 

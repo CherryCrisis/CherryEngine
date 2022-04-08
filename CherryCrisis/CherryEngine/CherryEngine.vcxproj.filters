@@ -79,6 +79,12 @@
     <Filter Include="Fichiers d%27en-tête\Cells">
       <UniqueIdentifier>{e04aefe8-b1c4-4334-9a43-aaad2c9262ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Picking">
+      <UniqueIdentifier>{1acd25f1-bb3b-4e34-b70e-3386bddb4095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Picking">
+      <UniqueIdentifier>{0ad23ffb-a465-4f8a-8046-1421fc6db677}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -1107,6 +1113,12 @@
     <ClInclude Include="include\framebuffer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\picking_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Picking</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pickinger.hpp">
+      <Filter>Fichiers d%27en-tête\Picking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1371,6 +1383,12 @@
     </ClCompile>
     <ClCompile Include="src\command.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\picking_renderpass.cpp">
+      <Filter>Fichiers sources\Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pickinger.cpp">
+      <Filter>Fichiers sources\Picking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

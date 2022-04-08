@@ -154,17 +154,17 @@ void ProjectSettingsDisplayer::Input::CreateButtons(InputManager* IM, const char
     if (success == 1)
     {
         std::string notif = "Action Buttons " + std::string(name) + " created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+        EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
     }
     else if (success == 0)
     {
         std::string notif = "Action Buttons " + std::string(name) + " already exists.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Warning, 1.0f);
+        EditorManager::SendNotification(notif.c_str(), ENotifType::Warning, 1.0f);
     }
     else if (success == -1)
     {
         std::string notif = "Action Buttons " + std::string(name) + " couldn't be created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
+        EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
     }
 }
 
@@ -178,17 +178,17 @@ void ProjectSettingsDisplayer::Input::CreateAxes(InputManager* IM, const char* n
     if (success == 1)
     {
         std::string notif = "Action Axes " + std::string(name) + " created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+        EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
     }
     else if (success == 0)
     {
         std::string notif = "Action Axes " + std::string(name) + " already exists.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Warning, 1.0f);
+        EditorManager::SendNotification(notif.c_str(), ENotifType::Warning, 1.0f);
     }
     else if (success == -1)
     {
         std::string notif = "Action Axes " + std::string(name) + " couldn't be created.";
-        EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
+        EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
     }
 }
 
@@ -235,7 +235,7 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                             if (success == 0)
                             {
                                 std::string notif = "Key " + std::string(IM->GetKeyname(m_inputsIndex[j])) + " is already link to Action " + button.first;
-                                EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Warning, 1.0f);
+                                EditorManager::SendNotification(notif.c_str(), ENotifType::Warning, 1.0f);
                             }
                         }
 
@@ -292,12 +292,12 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 if (success == 1)
                 {
                     std::string notif = "New input added to Action.";
-                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+                    EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
                 }
                 else if (success == -1)
                 {
                     std::string notif = "Couldn't add input to Action.";
-                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
+                    EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
                 }
             }
             ImGui::TreePop();
@@ -421,12 +421,12 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                 if (success == 1)
                 {
                     std::string notif = "New axis added to Action.";
-                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Success, 1.0f);
+                    EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
                 }
                 else if (success == -1)
                 {
                     std::string notif = "Couldn't add axis to Action.";
-                    EditorManager::SendNotification(notif.c_str(), ImGuiToastType::Error, 1.0f);
+                    EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
                 }
             }
             ImGui::TreePop();

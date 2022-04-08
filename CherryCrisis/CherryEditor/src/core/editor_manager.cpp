@@ -182,11 +182,11 @@ void EditorManager::HandleMenuBar()
             {
                 if (SceneManager::GetInstance()->m_currentScene->Serialize(SceneManager::GetInstance()->m_currentScene->GetFilepath()))
                 {
-                    EditorManager::SendNotification("Scene  Saved !", ImGuiToastType::Success, 2.f);
+                    EditorManager::SendNotification("Scene  Saved !", ENotifType::Success, 2.f);
                 }
                 else
                 {
-                    EditorManager::SendNotification("Scene failed to save.", ImGuiToastType::Error, 2.f);
+                    EditorManager::SendNotification("Scene failed to save.", ENotifType::Error, 2.f);
                 }
             }
             if (ImGui::MenuItem("Save As..")) {}
@@ -289,19 +289,19 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
         }
 
         if (ImGui::Button("Success"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Success, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Success, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Warning"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Warning, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Warning, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Error"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Error, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Error, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Info"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Info, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Info, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("None"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::None, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::None, 3.f);
         ImGui::SameLine();
 
         if (ImGui::Button("Show Demo"))
@@ -347,7 +347,7 @@ void EditorManager::UpdateFocusGame()
 }
 
 //Display time in seconds
-void EditorManager::SendNotification(const char* title, ImGuiToastType type, float displayTime)
+void EditorManager::SendNotification(const char* title, ENotifType type, float displayTime)
 {
     ImGui::InsertNotification({ type, displayTime, title, ""});
 }

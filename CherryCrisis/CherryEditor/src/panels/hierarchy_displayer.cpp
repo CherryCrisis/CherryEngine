@@ -33,6 +33,9 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
+        ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
+        ImGui::Separator();\
+
         for (auto& [entityName, entityRef] : SceneManager::GetInstance()->m_currentScene->m_entities)
         {
             if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
@@ -83,7 +86,23 @@ void HierarchyDisplayer::Render()
         if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_renaming = false;  ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
     }
-    
+
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj"))
+        {
+            const char* c = (const char*)payload->Data;
+            std::string str = "Assets/" + std::string(c);
+            const char* string = str.c_str();
+            auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
+            ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
+
     ImGui::End();
 }
 
@@ -228,7 +247,6 @@ void HierarchyDisplayer::ContextCallback()
                 for (auto& entity : m_manager->m_selectedEntities) 
                 {
                     SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-                    entity->Destroy();
                     //To Change
                     m_manager->m_selectedEntities.clear();
                 }

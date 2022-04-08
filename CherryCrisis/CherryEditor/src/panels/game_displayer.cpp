@@ -30,8 +30,12 @@ void GameDisplayer::Render()
         // TODO: LELOU: replace this shit
         if (m_isActive) 
         {  
-            Camera* cam = &SceneManager::GetInstance()->m_currentScene->m_entities["Camera"]->GetBehaviour<CameraComponent>()->m_camera;
-            UpdateFramebuffer(wsize.x, wsize.y, *cam);
+            Entity* entity = SceneManager::GetInstance()->m_currentScene->m_entities["Camera"];
+            if (entity) 
+            {
+                Camera* cam = &entity->GetBehaviour<CameraComponent>()->m_camera;
+                UpdateFramebuffer(wsize.x, wsize.y, *cam);
+            }
         }
 
         uint64_t ViewTex = (uint64_t)m_ViewTex;
