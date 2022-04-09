@@ -30,6 +30,7 @@ public:
 
 	//To Move
 	static void Load(std::shared_ptr<Scene> scene);
+	bool Save(const char* sceneName);
 	
 	//To Rework
 	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);

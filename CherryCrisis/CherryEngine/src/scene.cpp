@@ -19,6 +19,7 @@
 #include "model_base.hpp"
 #include "model.hpp"
 
+#include "utils.hpp"
 
 void Foo(std::shared_ptr<ModelBase>)
 {
@@ -101,6 +102,36 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	scene->AddEntity(camera);
 }
 
+bool Scene::Save(const char* sceneName) 
+{
+	std::ofstream myfile;
+	std::string fileName = "Assets/" + std::string(sceneName) + ".cherry";
+
+	bool opened = false;
+	myfile.open(fileName);
+	if (myfile.is_open())
+	{
+		for (const auto& m_entity : m_entities)
+		{
+			myfile << m_entity.second->Serialized() << std::endl;
+		}
+
+		for (const auto& m_entity : m_entities)
+		{
+			myfile << m_entity.second->SerializeBehaviours();
+		}
+
+		myfile.close();
+		opened = true;
+	}
+	else
+	{
+		std::cout << "Unable to open file" << std::endl;
+	}
+
+	return opened;
+}
+
 void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 {
 	Entity* root = new Entity("Root");
@@ -119,32 +150,7 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
 
 bool Scene::Serialize(const char* filePath) 
 {
-	std::ofstream myfile;
-	std::string fileName = "Assets/" + std::string(filePath) + ".cherry";
-
-	bool opened = false;
-	myfile.open(fileName);
-	if (myfile.is_open()) 
-	{
-		for (const auto& m_entity : m_entities) 
-		{
-			myfile << m_entity.second->Serialized() << std::endl;
-		}
-
-		for (const auto& m_entity : m_entities)
-		{
-			myfile << m_entity.second->SerializeBehaviours();
-		}
-
-		myfile.close();
-		opened = true;
-	}
-	else 
-	{
-		std::cout << "Unable to open file" << std::endl;
-	}
-
-	return opened;
+	return true;
 }
 
 bool Find(const std::string& string) 
@@ -164,64 +170,6 @@ Entity* Scene::FindEntity(uint64_t id)
 	}
 	return nullptr;
 }
-
-std::string ExtractValue(std::string str, const char key = ':')
-{
-	return str.substr(str.find_first_of(key) + 1);
-}
-
-std::string ExtractKey(std::string& str, const char key = ':', bool erase = false)
-{
-	std::string strr = str.substr(0, str.find(key));
-
-	if (erase) 
-	{
-		std::string::size_type i = str.find(strr);
-
-		if (i != std::string::npos)
-			str.erase(i, strr.length() + 1);
-	}
-
-	return strr;
-}
-
-uint64_t ExtractUUID(const std::string& str) 
-{
-	std::string uuid = ExtractValue(str);
-
-	uint64_t value;
-	std::istringstream iss(uuid);
-	iss >> value;
-	return value;
-}
-
-float ExtractFloat(const std::string& str)
-{
-	std::string vector = ExtractValue(str);
-	return std::stof(vector);
-}
-
-int ExtractInt(const std::string& str)
-{
-	std::string vector = ExtractValue(str);
-	return std::stoi(vector);
-}
-
-//Send the value and it parses it
-CCMaths::Vector3 ExtractVector3(std::string str)
-{	
-	CCMaths::Vector3 value{};
-	std::string temp = ExtractKey(str, '/', true);
-	value.x = std::stof(temp);
-	temp = ExtractKey(str, '/', true);
-	value.y = std::stof(temp);
-	temp = ExtractKey(str, '/', true);
-	value.z = std::stof(temp);
-	return value;
-}
-
-
-
 
 bool Scene::Unserialize(const char* filePath) 
 {
@@ -268,10 +216,10 @@ bool Scene::Unserialize(const char* filePath)
 			if (found != std::string::npos)
 			{
 				isParsingComponent = false;
-				actualUUID = ExtractUUID(line);
+				actualUUID = String::ExtractUUID(line);
 
 				std::getline(buffer, line);
-				std::string name = ExtractValue(line);
+				std::string name = String::ExtractValue(line);
 				Entity* empty = new Entity(name, CCUUID(actualUUID));
 
 				AddEntity(empty);
@@ -283,7 +231,7 @@ bool Scene::Unserialize(const char* filePath)
 			if (found != std::string::npos)
 			{
 				isParsingComponent = true;
-				actualUUID = ExtractUUID(line);
+				actualUUID = String::ExtractUUID(line);
 			}
 			else if (isParsingComponent)
 			{
@@ -316,8 +264,8 @@ bool Scene::Unserialize(const char* filePath)
 				if (!behaviour)
 					continue;
 
-				std::string key = ExtractKey(line);
- 				std::string parsedValue = ExtractValue(line);
+				std::string key = String::ExtractKey(line);
+ 				std::string parsedValue = String::ExtractValue(line);
 
 				if (line.size() == 0)
 				{
@@ -330,7 +278,7 @@ bool Scene::Unserialize(const char* filePath)
 				if (key == "m_owner")
 				{
 					if (behaviour)
-						behaviour->m_parentUuid = ExtractUUID(line);
+						behaviour->m_parentUuid = String::ExtractUUID(line);
 				}
 
 				if (behaviour->m_metadatas.m_properties.contains(key))
@@ -341,7 +289,7 @@ bool Scene::Unserialize(const char* filePath)
 
 					if (propType == typeid(Transform*))
 					{
-						uint64_t refUUID = ExtractUUID(line);
+						uint64_t refUUID = String::ExtractUUID(line);
 						if (refUUID != 0)
 							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
 
@@ -350,7 +298,7 @@ bool Scene::Unserialize(const char* filePath)
 
 					if (propType == typeid(CCMaths::Vector3))
 					{
-						Vector3 vec = ExtractVector3(parsedValue);
+						Vector3 vec = String::ExtractVector3(parsedValue);
 						prop->Set(&vec);
 
 						continue;
@@ -358,7 +306,7 @@ bool Scene::Unserialize(const char* filePath)
 
 					if (propType == typeid(std::string))
 					{
-						std::string str = ExtractValue(parsedValue);
+						std::string str = String::ExtractValue(parsedValue);
 						prop->Set(&str);
 
 						continue;
@@ -374,13 +322,13 @@ bool Scene::Unserialize(const char* filePath)
 					if (info == typeid(CCMaths::Vector3))
 					{
 						CCMaths::Vector3* valPtr = std::any_cast<CCMaths::Vector3*>(field.m_value);
-						*valPtr = ExtractVector3(parsedValue);
+						*valPtr = String::ExtractVector3(parsedValue);
 						continue;
 					}
 
 					if (info == typeid(Behaviour*))
 					{
-						uint64_t refUUID = ExtractUUID(line);
+						uint64_t refUUID = String::ExtractUUID(line);
 						if (refUUID != 0)
 							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
 
