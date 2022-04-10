@@ -71,7 +71,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models)
 {
     std::string filepath = modelBase->GetFilepath();
-    filepath.erase(std::remove_if(filepath.begin(), filepath.end(), [](char c) {return c == '/'; }), filepath.end());
+    filepath.erase(std::remove_if(filepath.begin(), filepath.end(), [](char c) {return c == '\\' || c == '/'; }), filepath.end());
     filepath += CCImporter::cacheExtension;
 
     std::string fullFilepath(CCImporter::cacheDirectory);
@@ -111,20 +111,23 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
         if (model.modelHeader.m_materialHeader.m_hasMaterial)
         {
             unsigned int texturesCount = model.modelHeader.m_materialHeader.m_texturesCount;
-            model.m_texturesPathSize.resize(texturesCount);
-            model.m_texturesType.resize(texturesCount);
-
-            fread(&model.m_texturesPathSize[0], texturesCount * sizeof(unsigned int), 1, file);
-            fread(&model.m_texturesType[0], texturesCount * sizeof(unsigned int), 1, file);
-
-            for (int i = 0; i < model.modelHeader.m_materialHeader.m_texturesCount; ++i)
+            if (texturesCount)
             {
-                std::string texturePath;
-                texturePath.resize(model.m_texturesPathSize[i]);
+                model.m_texturesPathSize.resize(texturesCount);
+                model.m_texturesType.resize(texturesCount);
 
-                fread(&texturePath[0], model.m_texturesPathSize[i], 1, file);
+                fread(&model.m_texturesPathSize[0], texturesCount * sizeof(unsigned int), 1, file);
+                fread(&model.m_texturesType[0], texturesCount * sizeof(unsigned int), 1, file);
 
-                model.m_texturesPathCstr.push_back(std::move(texturePath));
+                for (int i = 0; i < model.modelHeader.m_materialHeader.m_texturesCount; ++i)
+                {
+                    std::string texturePath;
+                    texturePath.resize(model.m_texturesPathSize[i]);
+
+                    fread(&texturePath[0], model.m_texturesPathSize[i], 1, file);
+
+                    model.m_texturesPathCstr.push_back(std::move(texturePath));
+                }
             }
         }
 

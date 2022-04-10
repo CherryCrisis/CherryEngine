@@ -70,7 +70,7 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** da
     FILE* file = nullptr;
 
     std::string texturePath(texture->GetFilepath());
-    texturePath.erase(std::remove_if(texturePath.begin(), texturePath.end(), [](char c) {return c == '/'; }), texturePath.end());
+    texturePath.erase(std::remove_if(texturePath.begin(), texturePath.end(), [](char c) {return c == '\\' || c == '/';}), texturePath.end());
     texturePath += CCImporter::cacheExtension;
 
     std::string fullTexturePath(CCImporter::cacheDirectory);
