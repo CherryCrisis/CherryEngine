@@ -90,7 +90,7 @@ void LogDisplayer::Render()
         {
             if (ImGui::BeginTable("Log", 1, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInner))
             {
-                auto logs = m_debug->GetLogs();
+                std::vector<Log>* logs = m_debug->GetLogs();
 
                 if (m_isAutoScrolling)
                     ImGui::SetScrollY(static_cast<float>(logs->size() * 25));
@@ -146,7 +146,6 @@ void LogDisplayer::Render()
     ImGui::End();
 }
 
-
 void LogDisplayer::RenderMenuBar()
 {
     if (ImGui::BeginMenuBar())
@@ -154,6 +153,7 @@ void LogDisplayer::RenderMenuBar()
         ImVec4 colorButton;
         ImVec4 colorButtonUp = { 1.f,1.f,1.f,0.2f };
         ImVec4 colorButtonDown = { 1.f,1.f,1.f,1.f };
+        ImVec2 buttonSize = { 15.f,15.f };
         
         ImGui::Selectable("Clear on play", &m_isClearOnPlay, 0, ImGui::CalcTextSize("Clear on play"));
         ImGui::Spacing();
@@ -161,9 +161,12 @@ void LogDisplayer::RenderMenuBar()
         ImGui::Spacing();
         ImGui::Selectable("Collapse", &m_isCollapsing, 0, ImGui::CalcTextSize("Collapse"));
 
+        const std::array<int, 3>* logTypeCounts = m_debug->GetLogTypeCounts();
+
         m_displayInfo ? colorButton = colorButtonDown : colorButton = colorButtonUp;
 
-        if (ImGui::ImageButton(m_gpuTextureIDs[0], { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
+
+        if (ImGui::ImageButtonWithText(m_gpuTextureIDs[0], std::format("({})", (*logTypeCounts)[0]).c_str(), buttonSize, {0,0}, {1,1}, -1, {0,0,0,0}, colorButton))
         {
             m_displayInfo = !m_displayInfo;
 
@@ -175,7 +178,7 @@ void LogDisplayer::RenderMenuBar()
 
         m_displayWarning ? colorButton = colorButtonDown : colorButton = colorButtonUp;
 
-        if (ImGui::ImageButton(m_gpuTextureIDs[1], { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
+        if (ImGui::ImageButtonWithText(m_gpuTextureIDs[1], std::format("({})", (*logTypeCounts)[1]).c_str(), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
         {
             m_displayWarning = !m_displayWarning;
 
@@ -187,7 +190,7 @@ void LogDisplayer::RenderMenuBar()
 
         m_displayError ? colorButton = colorButtonDown : colorButton = colorButtonUp;
 
-        if (ImGui::ImageButton(m_gpuTextureIDs[2], { 20.f,20.f }, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
+        if (ImGui::ImageButtonWithText(m_gpuTextureIDs[2], std::format("({})", (*logTypeCounts)[2]).c_str(), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
         {
             m_displayError = !m_displayError;
             if (m_displayError)
