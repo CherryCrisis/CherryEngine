@@ -42,10 +42,9 @@ namespace CCImporter
 
     struct TextureHeader
     {
-        int internalFormat;
-        int compressedSize;
         int height;
         int width;
+        int size;
     };
 
     struct MaterialHeader

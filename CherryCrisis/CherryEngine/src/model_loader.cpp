@@ -109,12 +109,12 @@ namespace CCImporter
     #pragma region Texture
 
     //Mutex and condition if the texture compression function is called on multithread
-    void CompressTextureWithOpenGL(CompressedArgs& args)
+    /*void CompressTextureWithOpenGL(CompressedArgs& args)
 {
     //TODO: remove when instance create in engine constructor
     RenderManager::GetInstance(); //TO initialize openGL
 
-    /*https://www.oldunreal.com/editing/s3tc/ARB_texture_compression.pdf*/
+    //https://www.oldunreal.com/editing/s3tc/ARB_texture_compression.pdf
 
     GLuint tex;
     glGenTextures(1, &tex);
@@ -127,7 +127,7 @@ namespace CCImporter
 
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED, &compressed);
 
-    /* if the compression has been successful */
+    //if the compression has been successful
     if (compressed == GL_TRUE)
     {
         glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &args.textureHeader->internalFormat);
@@ -143,6 +143,7 @@ namespace CCImporter
         args.condition->notify_one();
     }
 }
+*/
 
     void CacheTextureData(const char* texturePath, const unsigned char* cacheData, const TextureHeader& textureHeader)
     {
@@ -165,7 +166,7 @@ namespace CCImporter
 
         fwrite(&textureHeader, sizeof(TextureHeader), 1, file);
 
-        fwrite(&cacheData[0], textureHeader.compressedSize, 1, file);
+        fwrite(&cacheData[0], textureHeader.size, 1, file);
         fclose(file);
     }
 
@@ -178,10 +179,9 @@ namespace CCImporter
         else
             len = assimpTexture->mWidth;
 
-        int width;
-        int height;
+        TextureHeader textureHeader;
 
-        unsigned char* stbiData = stbi_load_from_memory((unsigned char*)assimpTexture->pcData, len, &width, &height, 0, STBI_rgb_alpha);
+        unsigned char* stbiData = stbi_load_from_memory((unsigned char*)assimpTexture->pcData, len, &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
         if (!stbiData)
         {
@@ -190,48 +190,17 @@ namespace CCImporter
             return;
         }
 
-        unsigned char* cacheData = nullptr;
-        TextureHeader textureHeader{.height = height, .width = width};
-
-        CompressedArgs args{ &stbiData, &cacheData, &textureHeader, nullptr, nullptr};
-
-        if (ThreadPool::GetInstance()->GetMainThreadID() != std::this_thread::get_id())
-        {
-            std::mutex mutex;
-            std::condition_variable condition;
-
-            std::unique_lock<std::mutex> uniqueMutex(mutex);
-
-            args.mutex = &mutex;
-            args.condition = &condition;
-
-            //To compress texture with openGL
-            auto function = CCFunction::BindFunctionUnsafe(&CompressTextureWithOpenGL, args);
-            ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
-            //Wait for the texture to compress
-            condition.wait(uniqueMutex);
-        }
-        else
-        {
-            CompressTextureWithOpenGL(args);
-        }
-
+        CacheTextureData(texturePath, stbiData, textureHeader);
         stbi_image_free(stbiData);
-
-        CacheTextureData(texturePath, cacheData, textureHeader);
     }
 
     void ImportTextureData(const char* texturePath)
     {
         stbi_set_flip_vertically_on_load(true);
 
-        int width;
-        int height;
+        TextureHeader textureHeader{};
 
-        //std::string allTexturePath("Assets/");
-        //allTexturePath += texturePath;
-
-        unsigned char* stbiData = stbi_load(texturePath, &width, &height, 0, STBI_rgb_alpha);
+        unsigned char* stbiData = stbi_load(texturePath, &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
         if (!stbiData)
         {
@@ -239,33 +208,9 @@ namespace CCImporter
             debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texturePath).c_str());
         }
 
-        unsigned char* cacheData = nullptr;
-        TextureHeader textureHeader{ .height = height, .width = width };
+        textureHeader.size = textureHeader.height * textureHeader.width * STBI_rgb_alpha;
 
-        CompressedArgs args{ &stbiData, &cacheData, &textureHeader, nullptr, nullptr };
-
-        if (ThreadPool::GetInstance()->GetMainThreadID() != std::this_thread::get_id())
-        {
-            std::mutex mutex;
-            std::condition_variable condition;
-
-            std::unique_lock<std::mutex> uniqueMutex(mutex);
-
-            args.mutex = &mutex;
-            args.condition = &condition;
-
-            //To compress texture with openGL
-            auto function = CCFunction::BindFunctionUnsafe(&CompressTextureWithOpenGL, args);
-            ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
-            //Wait for the texture to compress
-            condition.wait(uniqueMutex);
-        }
-        else
-        {
-            CompressTextureWithOpenGL(args);
-        }
-
-        CacheTextureData(texturePath, cacheData, textureHeader);
+        CacheTextureData(texturePath, stbiData, textureHeader);
 
     }
 
@@ -312,41 +257,20 @@ namespace CCImporter
 
     void ImportTexture(const char* texturePath, unsigned char** textureData, TextureHeader& textureHeader)
     {
+        if (!textureData)
+            return;
+
         stbi_set_flip_vertically_on_load(true);
 
-        //std::string allTexturePath("Assets/");
-        //allTexturePath += texturePath;
+        *textureData = stbi_load(texturePath, &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
-        unsigned char* stbiData = stbi_load(texturePath, &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
-
-        if (!stbiData)
+        if (!textureData)
         {
             Debug* debug = Debug::GetInstance();
             debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texturePath).c_str());
         }
 
-        CompressedArgs args{ &stbiData, textureData, &textureHeader, nullptr, nullptr };
-
-        if (ThreadPool::GetInstance()->GetMainThreadID() != std::this_thread::get_id())
-        {
-            std::mutex mutex;
-            std::condition_variable condition;
-
-            std::unique_lock<std::mutex> uniqueMutex(mutex);
-
-            args.mutex = &mutex;
-            args.condition = &condition;
-
-            //To compress texture with openGL
-            auto function = CCFunction::BindFunctionUnsafe(&CompressTextureWithOpenGL, args);
-            ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
-            //Wait for the texture to compress
-            condition.wait(uniqueMutex);
-        }
-        else
-        {
-            CompressTextureWithOpenGL(args);
-        }
+        textureHeader.size = textureHeader.height * textureHeader.width * 4;
 
         CacheTextureData(texturePath, *textureData, textureHeader);
     }

@@ -15,13 +15,11 @@ private:
 
     int     m_width = 0;
     int     m_height = 0;
+
     void*   m_data = nullptr;
 
 
 public:
-    int     m_internalFormat = 0;
-    int     m_compressedSize = 0;
-    int m_len = 0;
     Texture(const char* texturePath);
 
     GPUTexture* m_gpuTexture = nullptr;
@@ -37,7 +35,6 @@ public:
     static void Load(std::shared_ptr<Texture> texture);
     static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     
-    void SaveToCache(std::mutex& mutex, std::condition_variable* condition);
     void Delete() override;
     void Reload();
 };
