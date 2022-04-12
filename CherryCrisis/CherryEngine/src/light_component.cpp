@@ -27,7 +27,7 @@ void LightComponent::BindToSignals()
 
 void LightComponent::Initialize()
 {
-	m_transform = GetHost().GetBehaviour<Transform>();
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
 
 	if (m_transform)
 	{

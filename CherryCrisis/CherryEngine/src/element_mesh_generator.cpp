@@ -8,14 +8,13 @@ ElementMeshGenerator::GPUMeshBasic::~GPUMeshBasic()
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 }
-
-int ElementMeshGenerator::Generate(Mesh* toGenerate)
+bool ElementMeshGenerator::Generate(Mesh* toGenerate)
 {
 	if (!toGenerate)
-		return -1;
+		return false;
 
 	if (toGenerate->m_gpuMesh)
-		return 0;
+		return true;
 
 	auto gpuMesh = std::make_unique<GPUMeshBasic>();
 
@@ -57,15 +56,12 @@ int ElementMeshGenerator::Generate(Mesh* toGenerate)
 
 	toGenerate->m_gpuMesh = std::move(gpuMesh);
 
-	return 1;
+	return true;
 }
 
-int ElementMeshGenerator::Destroy(Mesh* toDestroy)
+bool ElementMeshGenerator::Destroy(Mesh* toDestroy)
 {
 	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(toDestroy->m_gpuMesh.get());
 
-	if (!gpuMesh)
-		return -1;
-
-	return 1;
+	return gpuMesh;
 }

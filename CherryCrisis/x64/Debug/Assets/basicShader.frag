@@ -1,6 +1,7 @@
-#version 330 core
+#version 430 core
 
 //#define BLINN_PHONG
+#define USE_NORMAL_MAP
 
 // Varyings
 in VS_OUT
@@ -8,9 +9,8 @@ in VS_OUT
 	vec2 vUV;
 	vec3 vNormal;
 	vec3 vFragPosition;
+	mat3 vTBN;
 } fs_in;
-
-out vec4 oColor;
 
 struct Material
 {
@@ -24,6 +24,8 @@ struct Material
 	sampler2D normalMap;
 };
 
+uniform Material uMaterial;
+
 struct Light
 {
 	bool isPoint;
@@ -36,9 +38,9 @@ struct Light
 #define NBR_LIGHTS 8
 uniform Light uLights[NBR_LIGHTS];
 
-uniform Material uMaterial;
-
 uniform vec3 uViewPosition;
+
+out vec4 oColor;
 
 void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 specular)
 {
@@ -108,9 +110,13 @@ vec3 getShadedColor(in vec3 normal)
 
 void main()
 {
-	//vec3 N = normalize(texture(uMaterial.normalMap, fs_in.vUV).xyz * 2.0 - 1.0);
+	#ifdef USE_NORMAL_MAP
+	vec3 N = texture(uMaterial.normalMap, fs_in.vUV).xyz * 2.0 - 1.0;
+    N = normalize(fs_in.vTBN * N);
 
-
-	vec3 shadedColor = getShadedColor(fs_in.vNormal);
+	vec3 shadedColor = getShadedColor(N);
+	#else 
+	vec3 shadedColor = getShadedColor(normalize(fs_in.vNormal));
+	#endif
     oColor = vec4(shadedColor, 1.0);
 }

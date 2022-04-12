@@ -1107,6 +1107,9 @@
     <ClInclude Include="include\framebuffer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\ebo_tbn_generator.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1377,6 +1380,9 @@
     </ClCompile>
     <ClCompile Include="src\command.cpp">
       <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ebo_tbn_generator.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

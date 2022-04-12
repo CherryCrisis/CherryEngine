@@ -88,7 +88,7 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 	Debug::GetInstance()->AddLog(ELogType::INFO, std::format("Generate Entities time = {}ms", time2).c_str());
 
 	Entity* light = new Entity("Light");
-	light->AddBehaviour<LightComponent>();
+	light->AddBehaviour<LightComponent>()->BindToSignals();
 	scene->AddEntity(light);
 
 	Entity* camera = new Entity("Camera");

@@ -19,10 +19,14 @@ BasicRenderPass::BasicRenderPass(const char* name)
 {
 	if (m_program)
 	{
+		glUseProgram(m_program->m_shaderProgram);
+
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoTex"), 0);
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.normalMap"), 1);
 
 		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
+
+		glUseProgram(0);
 	}
 }
 
@@ -57,7 +61,7 @@ int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 
 	// Generate GPU mesh
 	{
-		if (ElementMeshGenerator::Generate(model->m_mesh.get()) == -1)
+		if (!ElementMeshGenerator::Generate(model->m_mesh.get()))
 			return -1;
 
 		m_modelRenderers.insert(toGenerate);
@@ -162,29 +166,24 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 	
 
 	size_t lightID = 0u;
+	const char* lightFormat = "uLights[{}]";
 	for (Light* light : m_lights)
 	{
-		std::string count = "[" + std::to_string(lightID) + "]";
-		std::string lightIdentifier = "uLights" + count;
-
-		std::string pointString = lightIdentifier + ".isPoint";
-		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, pointString.c_str());
+		// TODO: Use string view
+		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
+		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isPoint").c_str());
 		glUniform1i(pointLoc, light->m_isPoint);
 
-		std::string posString = lightIdentifier + ".position";
-		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, posString.c_str());
+		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "position").c_str());
 		glUniform3fv(posLoc, 1, light->m_position.data);
 
-		std::string diffuseString = lightIdentifier + ".diffuse";
-		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, diffuseString.c_str());
+		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "diffuse").c_str());
 		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
 
-		std::string ambientString = lightIdentifier + ".ambient";
-		GLuint ambientLoc = glGetUniformLocation(m_program->m_shaderProgram, ambientString.c_str());
+		GLuint ambientLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "ambient").c_str());
 		glUniform3fv(ambientLoc, 1, light->m_ambient.data);
 
-		std::string specularString = lightIdentifier + ".specular";
-		GLuint specularLoc = glGetUniformLocation(m_program->m_shaderProgram, specularString.c_str());
+		GLuint specularLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "specular").c_str());
 		glUniform3fv(specularLoc, 1, light->m_specular.data);
 
 		lightID++;
@@ -225,7 +224,6 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 			{
 				if (auto gpuNormalMap = static_cast<GPUTextureBasic*>(normalMap->m_gpuTexture.get()))
 				{
-
 					glBindTextureUnit(1, gpuNormalMap->ID);
 				}
 			}
