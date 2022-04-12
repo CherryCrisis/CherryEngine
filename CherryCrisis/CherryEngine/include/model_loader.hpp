@@ -57,7 +57,6 @@ namespace CCImporter
         unsigned int    m_texturesCount;
     };
 
-
     struct ModelHeader
     {
         size_t          m_modelId;
@@ -95,10 +94,11 @@ namespace CCImporter
     static const char* cacheExtension(".ccfile");
     static const char* cacheDirectory("Cache/");
 
-	void ImportModel(const char* filepath, std::vector<ImportModelUtils>& models);
+	void ImportModel(const char* filename, const char* relativePath, std::vector<ImportModelUtils>& models);
 
     //TODO:
-    void ImportTexture(const char* filepath, unsigned char** textureData, TextureHeader& textureHeader);
+    void ImportTexture(const char* filename, const char* relativePath, 
+        unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture);
 
 	//void LoadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);
 	//void ReloadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);

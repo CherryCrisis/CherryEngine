@@ -11,12 +11,14 @@
 #include "mesh.hpp"
 #include "scene.hpp"
 
-void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
+void ModelBase::Load(std::shared_ptr<ModelBase> modelBase, const char* relativePath)
 {
+    modelBase->m_relativePath = relativePath;
+
     std::vector<CCImporter::ImportModelUtils> modelsUtils;
     if (!LoadFromCache(modelBase, modelsUtils))
     {
-        CCImporter::ImportModel(modelBase->GetFilepath(), modelsUtils);
+        CCImporter::ImportModel(modelBase->GetFilepath(), relativePath, modelsUtils);
     }
 
     if (modelsUtils.size() == 0)
@@ -25,6 +27,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
     ResourceManager* resourceManager = ResourceManager::GetInstance();
 
     std::vector<ModelNode*> modelNodes;
+
 
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
@@ -38,6 +41,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
             std::string materialName(std::to_string(modelUtils.modelHeader.m_materialHeader.m_matarialId));
 
             std::shared_ptr<Mesh> mesh = resourceManager->AddResource<Mesh>(meshName.c_str(), true, modelUtils.m_vertices, modelUtils.m_indices);
+
 
             MaterialArgs materialArgs{ .m_materialHeader = &modelUtils.modelHeader.m_materialHeader,
                 .m_texturesPath = &modelUtils.m_texturesPathCstr,
@@ -55,6 +59,9 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         modelNodes.push_back(modelNode);
     }
 
+    ModelNode* rootNode = new ModelNode();
+    rootNode->m_baseTRS[2] = Vector3::One;
+
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
         ModelNode* modelNode = modelNodes[modelUtils.modelHeader.m_index];
@@ -62,20 +69,28 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
             modelNode->m_childrenNode.push_back(modelNodes[modelUtils.m_childrenIndices[i]]);
 
         if (modelUtils.modelHeader.m_parentIndex != -1)
+        {
             modelNode->m_parentNode = modelNodes[modelUtils.modelHeader.m_parentIndex];
+        }
+        else
+        {
+            modelNode->m_parentNode = rootNode;
+            rootNode->m_childrenNode.push_back(modelNode);
+        }
     }
 
-    modelBase->m_rootNode = modelNodes[0];
+    modelBase->m_rootNode = rootNode;
 }
 
 bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models)
 {
-    std::string filepath = modelBase->GetFilepath();
-    filepath.erase(std::remove_if(filepath.begin(), filepath.end(), [](char c) {return c == '\\' || c == '/'; }), filepath.end());
-    filepath += CCImporter::cacheExtension;
-
     std::string fullFilepath(CCImporter::cacheDirectory);
-    fullFilepath += filepath;
+    fullFilepath += modelBase->GetFilepath();
+    fullFilepath += CCImporter::cacheExtension;
+    //filepath.erase(std::remove_if(filepath.begin(), filepath.end(), [](char c) {return c == '\\' || c == '/'; }), filepath.end());
+
+    //std::string fullFilepath(CCImporter::cacheDirectory);
+    //fullFilepath += filepath;
 
     FILE* file;
     if (fopen_s(&file, fullFilepath.c_str(), "rb")) //rb = read in binary mode
@@ -133,6 +148,8 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
 
         models.push_back(model);
     }
+
+    fclose(file);
 
     return true;
 }

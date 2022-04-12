@@ -56,7 +56,7 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 	case EResourceState::EMPTY:
 		resourcePtr->SetResourceState(EResourceState::LOADING);/*666*/
 		T::Load(resourcePtr, args...);
-		resourcePtr->IsLoaded(resourcePtr, m_threadpool);
+		//resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 		break;
 	default:
 		break;

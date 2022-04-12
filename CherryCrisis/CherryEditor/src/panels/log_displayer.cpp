@@ -15,9 +15,9 @@ LogDisplayer::LogDisplayer()
 
     ResourceManager* RM = ResourceManager::GetInstance();
 
-    m_logTextures[0] = RM->AddResource<Texture>("Internal/IconsLog/info_icon.png", true, false);
-    m_logTextures[1] = RM->AddResource<Texture>("Internal/IconsLog/warning_icon.png", true, false);
-    m_logTextures[2] = RM->AddResource<Texture>("Internal/IconsLog/error_icon.png", true, false);
+    m_logTextures[0] = RM->AddResource<Texture>("info_icon.png", true, false, "Internal/IconsLog/");
+    m_logTextures[1] = RM->AddResource<Texture>("warning_icon.png", true, false, "Internal/IconsLog/");
+    m_logTextures[2] = RM->AddResource<Texture>("error_icon.png", true, false, "Internal/IconsLog/");
 
     for (int i = 0; i < 3; ++i)
     {

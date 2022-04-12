@@ -18,6 +18,7 @@ private:
 
     void*   m_data = nullptr;
 
+    std::string m_relativePath;
 
 public:
     Texture(const char* texturePath);
@@ -31,8 +32,8 @@ public:
 
     void* GetData() { return m_data; }
 
-    static void Load(std::shared_ptr<Texture> texture, bool flipTexture);
-    static void Load(std::shared_ptr<Texture> texture);
+    //static void Load(std::shared_ptr<Texture> texture, bool flipTexture);
+    static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true, const char* relativePath = "");
     static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     
     void Delete() override;
