@@ -16,16 +16,18 @@ private :
 		uint64_t m_icon    = 0u;
 		unsigned int m_ImGuiID = 0u;
 	
-		std::filesystem::path m_path;
-		std::filesystem::path m_relatiePath;
-		std::string m_filename;
-		std::string m_extension;
+		std::filesystem::path m_path; // full path from C:/
+		std::filesystem::path m_relativePath; // path starting at Assets without filename
+		std::string m_filename; // filename without extension
+		std::string m_extension; // extension
 		
 
 		void Render();
 	};
 
 	void CheckThings();
+
+	void GenerateNode(const std::filesystem::directory_entry& entry);
 	AssetNode* GetNodeByPath(std::filesystem::path path);
 	AssetNode* GetNodeByName(const std::string& name);
 	// Control Variables

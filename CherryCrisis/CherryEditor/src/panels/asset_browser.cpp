@@ -11,6 +11,7 @@
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 #include "scene_manager.hpp"
+#include "utils.hpp"
 
 const char* scriptTemplate = 
 R"CS(using CCEngine;
@@ -75,21 +76,12 @@ void AssetBrowser::QuerryBrowser()
     m_nodes.clear();
 
     namespace fs = std::filesystem;
-    int i = 0;
+
     if (fs::exists(m_currentDirectory)) 
     {
         for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
-        {
-            AssetNode node;
-            node.m_isDirectory = entry.is_directory();
-            node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
-            node.m_path = entry.path();
-            node.m_relatiePath = entry.path().filename();
-            node.m_filename = entry.path().filename().string();
-            node.m_extension = entry.path().extension().string();
-            m_nodes[i] = node;
-            i++;
-        }
+            GenerateNode(entry);
+
     }
 }
 
@@ -233,6 +225,21 @@ void AssetBrowser::CheckThings()
     m_focusedNode = nullptr;
 }
 
+void AssetBrowser::GenerateNode(const std::filesystem::directory_entry& entry)
+{
+    AssetNode node;
+
+    node.m_isDirectory = entry.is_directory();
+    node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon; // To Change
+    node.m_path = entry.path().parent_path();
+    node.m_relativePath = entry.path();
+     
+    std::string filename = entry.path().filename().string();
+    node.m_filename = String::ExtractKey(filename, '.');
+
+    node.m_extension = entry.path().extension().string();
+}
+
 AssetBrowser::AssetNode* AssetBrowser::GetNodeByPath(std::filesystem::path path)
 {
     for (auto& couple : m_nodes)
@@ -301,7 +308,8 @@ void AssetBrowser::RenderNodes()
             if (node.m_extension == ".cherry") 
             {
                 //open Scene and if the last is not saved, warn the user
-                if (SceneManager::LoadScene(node.m_filename.c_str()))
+                std::string str = "Assets/"+node.m_filename;
+                if (SceneManager::LoadScene(str.c_str()))
                     EditorManager::SendNotification("Scene Loaded!", ENotifType::Success);
                 else
                     EditorManager::SendNotification("Scene failed to Load", ENotifType::Error);
@@ -313,7 +321,8 @@ void AssetBrowser::RenderNodes()
 
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2)
         {
-            EditorManager::SendNotification("Outch it hurts", ENotifType::Warning);
+            m_focusedNode = &node;
+            m_renaming = true;
         }
 
         ImGui::NextColumn();
