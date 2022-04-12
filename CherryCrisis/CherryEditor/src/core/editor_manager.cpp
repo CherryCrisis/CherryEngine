@@ -62,13 +62,8 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 
 EditorManager::EditorManager() 
 {
-    // Put here the editor keyboard context creation
     inputs = InputManager::GetInstance();
-
-
-    // To Replace
-    scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
-    SceneManager::GetInstance()->SetCurrentScene(scene);
+    SceneManager::LoadScene("Internal/SampleScene.cherry");
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -180,7 +175,7 @@ void EditorManager::HandleMenuBar()
             }
             if (ImGui::MenuItem("Save", "Ctrl+S")) 
             {
-                if (SceneManager::GetInstance()->m_currentScene->Serialize(SceneManager::GetInstance()->m_currentScene->GetFilepath()))
+                if (SceneManager::SaveCurrentScene())
                 {
                     EditorManager::SendNotification("Scene  Saved !", ENotifType::Success, 2.f);
                 }

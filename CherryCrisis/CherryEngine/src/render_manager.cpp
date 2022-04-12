@@ -100,13 +100,14 @@ void RenderManager::InitializePipeline(const PipelineDesc& pipelineDesc)
 
 RenderManager::PipelineDesc RenderManager::DefaultRenderingPipeline()
 {
-	return [](const std::unordered_map<std::type_index, ARenderPass*>& pipelines,
+	return [&](const std::unordered_map<std::type_index, ARenderPass*>& pipelines,
 		std::vector<ARenderPass*>& orderedPipelines)
-	{
-        ARenderPass* lit = pipelines.find(typeid(BasicRenderPass))->second;
+    {
+        
+        ARenderPass* lit = RenderManager::GetInstance()->LoadSubpipeline<BasicRenderPass>();
         orderedPipelines.push_back(lit);
-
-        ARenderPass* skybox = pipelines.find(typeid(SkyboxRenderPass))->second;
+        
+        ARenderPass* skybox = RenderManager::GetInstance()->LoadSubpipeline<SkyboxRenderPass>(); 
         orderedPipelines.push_back(skybox);
 	};
 }

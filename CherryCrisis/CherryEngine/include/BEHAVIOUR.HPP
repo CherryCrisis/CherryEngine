@@ -6,10 +6,13 @@
 #include "entity.hpp"
 
 #include "metadata.hpp"
+#include "scene.hpp"
+#include "serializer.hpp"
 
 class CCENGINE_API Behaviour : public Component
 {
 	friend class Entity;
+	friend class Serializer;
 	friend class Scene;
 
 private:

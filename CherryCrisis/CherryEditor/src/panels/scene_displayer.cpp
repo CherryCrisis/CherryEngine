@@ -20,7 +20,7 @@
 
 void Serialize() 
 {
-    if (SceneManager::GetInstance()->m_currentScene->Serialize("scn")) 
+    if (SceneManager::SaveCurrentScene())
     {
         EditorManager::SendNotification("Scene Saved!", ENotifType::Info);
     }
@@ -142,7 +142,8 @@ void SceneDisplayer::Render()
             {
                 const char* c = (const char*)payload->Data;
                 m_manager->m_selectedEntities.clear();
-                SceneManager::GetInstance()->m_currentScene->Unserialize(c);
+
+                SceneManager::LoadScene(c);
             }
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj") )
             {

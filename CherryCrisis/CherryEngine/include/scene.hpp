@@ -10,9 +10,7 @@
 class ModelBase;
 
 class CCENGINE_API Scene : public Resource<Scene>
-{
-private:
-
+{ 
 public:
 	Scene(const char* filePath) : Resource(filePath) { }
 	virtual ~Scene();
@@ -33,6 +31,8 @@ public:
 
 	std::string GetUniqueEntityName(const std::string& entityName);
 
+	void PopulateEmpty();
+
 	//To Rework
 	void AddEntity(Entity* toAdd);
 	//To Rework
@@ -43,11 +43,10 @@ public:
 	Entity* FindEntity(uint32_t id);
 	//To Remove
 	Entity* FindModelEntity(uint32_t id);
-	//To Move
-	bool Serialize(const char* filePath);
-	bool Unserialize(const char* filePath);
 
 	void GenerateEntities(std::shared_ptr<ModelBase> resource);
 
 	std::string GetName() { return m_filepath; }
+
+	bool Save();
 };

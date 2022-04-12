@@ -301,7 +301,7 @@ void AssetBrowser::RenderNodes()
             if (node.m_extension == ".cherry") 
             {
                 //open Scene and if the last is not saved, warn the user
-                if (SceneManager::GetInstance()->m_currentScene->Unserialize(node.m_filename.c_str()))
+                if (SceneManager::LoadScene(node.m_filename.c_str()))
                     EditorManager::SendNotification("Scene Loaded!", ENotifType::Success);
                 else
                     EditorManager::SendNotification("Scene failed to Load", ENotifType::Error);

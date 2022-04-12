@@ -85,6 +85,9 @@
     <Filter Include="Fichiers sources\Picking">
       <UniqueIdentifier>{0ad23ffb-a465-4f8a-8046-1421fc6db677}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Serialization">
+      <UniqueIdentifier>{afdd0ab2-1029-4166-9f31-55e41b1d6d2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -1389,6 +1392,9 @@
     </ClCompile>
     <ClCompile Include="src\pickinger.cpp">
       <Filter>Fichiers sources\Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\serializer.cpp">
+      <Filter>Fichiers sources\Serialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
