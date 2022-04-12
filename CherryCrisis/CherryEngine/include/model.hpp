@@ -26,9 +26,9 @@ public:
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Material>	m_material;
 
-	static void Load(std::shared_ptr<Model> model, const aiScene* assimpScene, const aiNode* assimpNode, const char* modelBasePath);
+	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
 	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh);
 
 	void Delete() override;
-	void Reload(const aiScene* assimpScene, const aiNode* assimpNode);
+	void Reload(/*const aiScene* assimpScene, const aiNode* assimpNode*/);
 };

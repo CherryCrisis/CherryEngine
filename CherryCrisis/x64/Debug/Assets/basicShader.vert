@@ -7,20 +7,22 @@ layout(location = 2) in vec3 aNormal;
 uniform mat4 uModel;
 uniform mat4 uViewProjection;
 
-out vec2 vUV;
-out vec3 vNormal;
-out vec3 vFragPosition;
+out VS_OUT
+{
+    vec2 vUV;
+    vec3 vNormal;
+    vec3 vFragPosition;
+} vs_out;
 
 void main()
 {
-    vUV = aUV;
-    vNormal = aNormal;
+    vs_out.vUV = aUV;
 
-	vNormal = transpose(inverse(mat3(uModel))) * aNormal;
+	vs_out.vNormal = transpose(inverse(mat3(uModel))) * aNormal;
 
-    vec4 fragPos = uModel * vec4(aPosition, 1.0);
+    vec4 fragPos4 = uModel * vec4(aPosition, 1.0);
 
-	vFragPosition = vec3(fragPos);
+	vs_out.vFragPosition = vec3(fragPos4);
 
-    gl_Position = uViewProjection * fragPos;
+    gl_Position = uViewProjection * fragPos4;
 }

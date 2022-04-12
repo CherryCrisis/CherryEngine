@@ -1157,12 +1157,6 @@
     <None Include="include\renderer_manager.inl">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </None>
-    <None Include="..\Assets\basicShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\Assets\basicShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
     <None Include="include\entity.inl">
       <Filter>Fichiers d%27en-tête</Filter>
     </None>
@@ -1216,6 +1210,18 @@
     </None>
     <None Include="interface\scripted_behaviour.i">
       <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\basicShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\basicShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\skyboxShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\skyboxShader.vert">
+      <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
