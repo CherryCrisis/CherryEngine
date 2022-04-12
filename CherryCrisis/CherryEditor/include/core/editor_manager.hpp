@@ -84,3 +84,10 @@ public:
     //Selected Entities in hierarchy
     std::vector<Entity*> m_selectedEntities;
 };
+
+namespace EditorNotifications 
+{
+    void SceneSaving(bool result);
+    void SceneLoading(bool result);
+    void ObjectLoading(bool result);
+}

@@ -9,7 +9,6 @@
 #include "time_manager.hpp"
 #include "core/editor_manager.hpp"
 #include "transform.hpp"
-#include "callback.hpp"
 #include "maths.hpp"
 #include "resource_manager.hpp"
 
@@ -17,14 +16,6 @@
 
 #undef near
 #undef far
-
-void Serialize() 
-{
-    if (SceneManager::SaveCurrentScene())
-    {
-        EditorManager::SendNotification("Scene Saved!", ENotifType::Info);
-    }
-}
 
 SceneDisplayer::SceneDisplayer() 
 {
@@ -41,8 +32,7 @@ SceneDisplayer::SceneDisplayer()
     IM->AddActionAxes("RightLeft", i);
     IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
 
-    auto callback = CCCallback::BindCallback(Serialize);
-    IM->AddActionButtons("Save",i)->m_pressed.Bind(callback);
+    IM->AddActionButtons("Save", i);
     IM->AddInputToAction("Save", Keycode::S);
     IM->SetActionPriorKey("Save", EPriorKey::LEFT_CONTROL);
 
@@ -99,10 +89,14 @@ void SceneDisplayer::Render()
             if (IM->GetKeyUp(Keycode::RIGHT_CLICK)) { Unfocus(); }
         }
 
-        if (IM->GetKeyDown(Keycode::W))  m_operation = ImGuizmo::OPERATION::TRANSLATE; 
-        if (IM->GetKey(Keycode::E))      m_operation = ImGuizmo::OPERATION::ROTATE; 
-        if (IM->GetKeyUp(Keycode::R))    m_operation = ImGuizmo::OPERATION::SCALE; 
+        if (ImGui::IsWindowFocused(ImGuiHoveredFlags_ChildWindows)) 
+        {
+            if (IM->GetKeyDown("Translate"))   m_operation = ImGuizmo::OPERATION::TRANSLATE;
+            if (IM->GetKeyDown("Rotate"))      m_operation = ImGuizmo::OPERATION::ROTATE;
+            if (IM->GetKeyDown("Scale"))       m_operation = ImGuizmo::OPERATION::SCALE;
+        }
 
+        if (IM->GetKeyDown("Save"))      EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
 
         if (InputManager::GetInstance()->GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
             && !ImGuizmo::IsOver())
@@ -113,13 +107,12 @@ void SceneDisplayer::Render()
             Entity* e = Pickinger::GetEntity(mousePos.x - ImGui::GetWindowPos().x, mousePos.y - ImGui::GetWindowPos().y);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-            m_manager->m_selectedEntities.clear();
             //TODO: Add multi select CTRL 
+
+            m_manager->m_selectedEntities.clear();
             if (e)
-            {
-                Debug::GetInstance()->AddLog(ELogType::INFO, e->GetName().c_str());
                 m_manager->m_selectedEntities.push_back(e);
-            }
+
         }
 
 
@@ -181,7 +174,7 @@ void SceneDisplayer::Render()
             CCMaths::Matrix4 mat = t->GetWorldMatrix();
             float p[3], r[3], s[3]; // position, rotation and scale
 
-            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, ImGuizmo::MODE::LOCAL, mat.data))
+            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, ImGuizmo::MODE::WORLD, mat.data))
             {
                 ImGuizmo::DecomposeMatrixToComponents(mat.data, p, r, s);
                 

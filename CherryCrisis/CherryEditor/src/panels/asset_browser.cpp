@@ -24,17 +24,17 @@ namespace CCScripting
             : base(cPtr, cMemoryOwn) {}
 
 
-    //called at the start of the game
-    public void Start()
-    {
+        //called at the start of the game
+        public void Start()
+        {
 
-    }
+        }
 
-    //called each tick 
-    public void Update()
-    {
+        //called each tick 
+        public void Update()
+        {
 
-    }
+        }
     }
 })CS";
 
@@ -72,17 +72,11 @@ AssetBrowser::AssetBrowser()
 
 void AssetBrowser::QuerryBrowser()
 {
-    //TODO: change, 
     m_nodes.clear();
 
-    namespace fs = std::filesystem;
-
-    if (fs::exists(m_currentDirectory)) 
-    {
-        for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
+    if (std::filesystem::exists(m_currentDirectory)) 
+        for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(m_currentDirectory)) 
             GenerateNode(entry);
-
-    }
 }
 
 void AssetBrowser::Render()
@@ -132,11 +126,6 @@ void AssetBrowser::Render()
     ImGui::End();
 }
 
-void AssetBrowser::AssetNode::Render()
-{
-
-}
-
 void AssetBrowser::ContextCallback()
 {
     if (ImGui::BeginPopupContextItem("context"))
@@ -181,7 +170,7 @@ void AssetBrowser::ContextCallback()
         if (m_focusedNode)
         {
             ImGui::Separator();
-            if (ImGui::MenuItem("Open")) { call(0, m_focusedNode->m_path.string().c_str()); }
+            if (ImGui::MenuItem("Open")) { call(0, m_focusedNode->GetFullPath().c_str()); }
             
             if (ImGui::MenuItem("Rename"))
                 m_renaming = true;
@@ -196,7 +185,7 @@ void AssetBrowser::ContextCallback()
             if (m_focusedNode)
             {
                 std::string str = "/select,";
-                str += m_focusedNode->m_path.string();
+                str += m_focusedNode->GetFullPath();
 
                 call("open", "explorer.exe", str.c_str());
             }
@@ -208,6 +197,11 @@ void AssetBrowser::ContextCallback()
 
         ImGui::EndPopup();
     }
+}
+
+std::string AssetBrowser::AssetNode::GetFullPath() 
+{
+    return m_path.string() + "\\" + m_filename + m_extension;
 }
 
 void AssetBrowser::CheckThings()
@@ -238,6 +232,8 @@ void AssetBrowser::GenerateNode(const std::filesystem::directory_entry& entry)
     node.m_filename = String::ExtractKey(filename, '.');
 
     node.m_extension = entry.path().extension().string();
+
+    m_nodes[node.m_relativePath.string()] = node;
 }
 
 AssetBrowser::AssetNode* AssetBrowser::GetNodeByPath(std::filesystem::path path)
@@ -286,10 +282,12 @@ void AssetBrowser::RenderNodes()
 
         node.m_ImGuiID = ImGui::GetItemID();
 
+        std::string name = node.m_filename + node.m_extension;
+        const char* path = name.c_str();
+
         if (ImGui::BeginDragDropSource()) 
         {
-            const char* path = node.m_filename.c_str();
-            size_t length = node.m_filename.size();
+            size_t length = name.size();
             ImGui::SetDragDropPayload(node.m_extension.c_str(), path,length+1, ImGuiCond_Once);
             ImGui::Text(path);
             ImGui::EndDragDropSource();
@@ -316,8 +314,7 @@ void AssetBrowser::RenderNodes()
             }
         }
 
-        // TODO: Need to set double click callback rename
-        ImGui::Text(node.m_filename.c_str());
+        ImGui::Text(path);
 
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2)
         {
@@ -385,12 +382,12 @@ void AssetBrowser::RenderNodes()
         if (ImGui::Button("Rename", ImVec2(120, 0)))
         {
             ImGui::CloseCurrentPopup();
-            std::filesystem::path newPath = m_focusedNode->m_path.parent_path();
+            std::filesystem::path newPath = m_focusedNode->m_path;
             newPath /= newName;
             if (!newPath.has_extension())
                 newPath += m_focusedNode->m_extension;
             
-            rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str());
+            rename(m_focusedNode->GetFullPath().c_str(), newPath.string().c_str());
             QuerryBrowser();
 
             m_renaming = false;

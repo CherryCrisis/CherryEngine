@@ -22,7 +22,7 @@ private :
 		std::string m_extension; // extension
 		
 
-		void Render();
+		std::string GetFullPath();
 	};
 
 	void CheckThings();
@@ -30,9 +30,10 @@ private :
 	void GenerateNode(const std::filesystem::directory_entry& entry);
 	AssetNode* GetNodeByPath(std::filesystem::path path);
 	AssetNode* GetNodeByName(const std::string& name);
+	
 	// Control Variables
 	float m_padding = 16.f;
-	float m_thumbnailSize = 128.f;
+	float m_thumbnailSize = 180.f;
 
 	//not clean at all but anyway imgui internal logic problem solving
 	bool m_deleting = false;
@@ -43,7 +44,7 @@ private :
 	std::filesystem::path m_currentDirectory;
 	std::filesystem::path m_solutionDirectory;
 
-	std::unordered_map<int, AssetNode> m_nodes;
+	std::unordered_map<std::string, AssetNode> m_nodes;
 	//-------------------
 
 	AssetNode* m_focusedNode = nullptr;

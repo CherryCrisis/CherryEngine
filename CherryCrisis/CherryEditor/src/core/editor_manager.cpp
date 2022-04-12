@@ -164,32 +164,17 @@ void EditorManager::HandleMenuBar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("New")) {}
-            if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-            if (ImGui::BeginMenu("Open Recent"))
-            {
-                ImGui::MenuItem("fish_hat.c");
-                ImGui::MenuItem("fish_hat.inl");
-                ImGui::MenuItem("fish_hat.h");
-                ImGui::EndMenu();
-            }
             if (ImGui::MenuItem("Save", "Ctrl+S")) 
-            {
-                if (SceneManager::SaveCurrentScene())
-                {
-                    EditorManager::SendNotification("Scene  Saved !", ENotifType::Success, 2.f);
-                }
-                else
-                {
-                    EditorManager::SendNotification("Scene failed to save.", ENotifType::Error, 2.f);
-                }
-            }
+                EditorNotifications::SceneLoading(SceneManager::SaveCurrentScene());
+
             if (ImGui::MenuItem("Save As..")) {}
+
 
             if (ImGui::MenuItem("Launch"))
             {
                 call("open","CherryStandalone.exe");
             }
+
 
             ImGui::EndMenu();
         }
@@ -356,4 +341,31 @@ void EditorManager::FocusEntity(Entity* entity)
 {
     m_selectedEntities.clear();
     m_selectedEntities.push_back(entity);
+}
+
+namespace EditorNotifications
+{
+    void SceneSaving(bool result) 
+    {
+        if (result)
+            EditorManager::SendNotification("Scene Saved!", ENotifType::Success);
+        else
+            EditorManager::SendNotification("Scene Failed to save", ENotifType::Error);
+    }
+
+    void SceneLoading(bool result)
+    {
+        if (result)
+            EditorManager::SendNotification("Scene Loaded!", ENotifType::Success);
+        else
+            EditorManager::SendNotification("Scene Failed to load", ENotifType::Error);
+    }
+
+    void ObjectLoading(bool result)
+    {
+        if (result)
+            EditorManager::SendNotification("loading Object", ENotifType::Info);
+        else
+            EditorManager::SendNotification("Error while loading object", ENotifType::Warning);
+    }
 }
