@@ -50,6 +50,9 @@ void CameraComponent::Initialize()
 	m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
 
 	GetHost().m_OnAwake.Unbind(&CameraComponent::Initialize, this);
+
+	ChangePosition(m_transform->GetPosition());
+	ChangeRotation(m_transform->GetRotation());
 }
 
 void CameraComponent::ChangePosition(const Vector3& position)

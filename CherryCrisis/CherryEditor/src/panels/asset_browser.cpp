@@ -170,13 +170,10 @@ void AssetBrowser::ContextCallback()
         if (m_focusedNode)
         {
             ImGui::Separator();
-            if (ImGui::MenuItem("Open")) { call(0, m_focusedNode->GetFullPath().c_str()); }
-            
-            if (ImGui::MenuItem("Rename"))
-                m_renaming = true;
 
-            if (ImGui::MenuItem("Delete"))
-                m_deleting = true;
+            if (ImGui::MenuItem("Open"))    call(0, m_focusedNode->GetFullPath().c_str());
+            if (ImGui::MenuItem("Rename"))  m_renaming = true;
+            if (ImGui::MenuItem("Delete"))  m_deleting = true;
 
             ImGui::Separator();
         }
@@ -190,9 +187,8 @@ void AssetBrowser::ContextCallback()
                 call("open", "explorer.exe", str.c_str());
             }
             else
-            {
                 call(0, m_currentDirectory.string().c_str());
-            }
+
         }
 
         ImGui::EndPopup();
@@ -216,16 +212,15 @@ void AssetBrowser::CheckThings()
             return;
         }
     }
-    m_focusedNode = nullptr;
 }
 
 void AssetBrowser::GenerateNode(const std::filesystem::directory_entry& entry)
 {
     AssetNode node;
 
-    node.m_isDirectory = entry.is_directory();
-    node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon; // To Change
-    node.m_path = entry.path().parent_path();
+    node.m_isDirectory  = entry.is_directory();
+    node.m_icon         = entry.is_directory() ? m_browserIcon : m_fileIcon; // To Change
+    node.m_path         = entry.path().parent_path();
     node.m_relativePath = entry.path();
      
     std::string filename = entry.path().filename().string();
@@ -265,7 +260,6 @@ AssetBrowser::AssetNode* AssetBrowser::GetNodeByName(const std::string& name)
 void AssetBrowser::RenderNodes()
 {
     float width = ImGui::GetContentRegionAvail().x;
-
 
     float cellSize = m_thumbnailSize + m_padding;
     int columnCount = (int)(width / cellSize);    if (columnCount < 1) columnCount = 1;

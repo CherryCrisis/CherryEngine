@@ -18,10 +18,14 @@ void Foos(std::shared_ptr<ModelBase>)
 
 }
 
-bool Serializer::SerializeScene(Scene* scene) 
+bool Serializer::SerializeScene(Scene* scene, const char* filepath) 
 {
 	std::ofstream myfile;
-	std::string fileName = scene->GetFilepath();
+	std::string fileName;
+	if (strlen(filepath) > 0)
+		fileName = std::string(filepath);
+	else
+		fileName = scene->GetFilepath();
 
 	bool opened = false;
 	myfile.open(fileName);
@@ -40,14 +44,22 @@ bool Serializer::SerializeScene(Scene* scene)
 	return opened;
 }
 
-bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene)
+bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* filepath)
 {
+	scene->Empty();
+
 	// To serialize to load used resources
-	auto callback = CCCallback::BindCallback(Foos);
+ 	auto callback = CCCallback::BindCallback(Foos);
 	ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 
 	//First read the file and populate the entities + a uuid map and the component wrapper list 
-	std::string fileName = std::string(scene->m_filepath);
+	std::string fileName;
+	
+	if (strlen(filepath) > 0)
+		fileName = std::string(filepath);
+	else
+		fileName = scene->GetFilepath();
+
 	std::ifstream file(fileName);
 
 	// first is the uuid and the behaviour pointer 

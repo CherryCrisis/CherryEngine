@@ -33,7 +33,7 @@ void Scene::Initialize()
 
 void Scene::Update()
 {
-	for (auto& [eName, entity] : m_entities)
+ 	for (auto& [eName, entity] : m_entities)
 		entity->Update();
 }
 
@@ -74,6 +74,9 @@ void Scene::AddEntity(Entity* toAdd)
 
 void Scene::RemoveEntity(Entity* toRemove) 
 {
+	if (!toRemove)
+		return;
+
 	Transform* transform;
 	toRemove->TryGetBehaviour(transform);
 	if (transform && transform->GetChildren().size() > 0 )
@@ -90,7 +93,7 @@ void Scene::RemoveEntity(Entity* toRemove)
 
 void Scene::RemoveEntity(const std::string& name)
 {
-	m_entities.erase(name);
+	
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)
@@ -101,6 +104,11 @@ void Scene::Load(std::shared_ptr<Scene> scene)
 bool Scene::Save() 
 {
 	return Serializer::SerializeScene(this);
+}
+
+bool Scene::SaveAs(const char* filepath)
+{
+	return Serializer::SerializeScene(this, filepath);
 }
 
 void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
@@ -140,4 +148,12 @@ Entity* Scene::FindModelEntity(uint32_t id)
 
 	}
 	return nullptr;
+}
+
+void Scene::Empty() 
+{
+	for (auto entityIt = m_entities.begin(); entityIt != m_entities.end(); entityIt = m_entities.erase(entityIt))
+	{
+		entityIt->second->Destroy();
+	}
 }

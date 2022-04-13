@@ -89,7 +89,7 @@ void SceneDisplayer::Render()
             if (IM->GetKeyUp(Keycode::RIGHT_CLICK)) { Unfocus(); }
         }
 
-        if (ImGui::IsWindowFocused(ImGuiHoveredFlags_ChildWindows)) 
+        if (ImGui::IsWindowFocused(ImGuiHoveredFlags_ChildWindows) && !IM->GetKey(Keycode::RIGHT_CLICK))
         {
             if (IM->GetKeyDown("Translate"))   m_operation = ImGuizmo::OPERATION::TRANSLATE;
             if (IM->GetKeyDown("Rotate"))      m_operation = ImGuizmo::OPERATION::ROTATE;

@@ -12,10 +12,11 @@ class ModelBase;
 class CCENGINE_API Scene : public Resource<Scene>
 { 
 public:
+	
 	Scene(const char* filePath) : Resource(filePath) { }
 	virtual ~Scene();
 	
-	// TODO: Switch to unique_ptr
+	// TODO: Switch to unique_ptr this is shitty shit shit shit
 	std::unordered_map<std::string, Entity*> m_entities;
 
 	Skybox m_skybox;
@@ -49,4 +50,7 @@ public:
 	std::string GetName() { return m_filepath; }
 
 	bool Save();
+	bool SaveAs(const char* filepath);
+
+	void Empty();
 };
