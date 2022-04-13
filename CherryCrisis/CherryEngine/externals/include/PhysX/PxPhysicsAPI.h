@@ -41,6 +41,14 @@ want to use a single #include file.
 Alternatively, one can instead directly #include a subset of the below files.
 */
 
+#pragma warning(push, 3)
+#pragma warning(disable : 4369)
+#pragma warning(disable : 26451)
+#pragma warning(disable : 26495)
+#pragma warning(disable : 26812)
+#pragma warning(disable : 33010)
+
+
 // Foundation SDK 
 #include "foundation/Px.h"
 #include "foundation/PxAllocatorCallback.h"
@@ -215,4 +223,6 @@ Alternatively, one can instead directly #include a subset of the below files.
 #include "pvd/PxPvd.h"
 #include "pvd/PxPvdTransport.h"
 /** @} */
+
+#pragma warning(pop)
 #endif

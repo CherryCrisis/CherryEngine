@@ -649,6 +649,7 @@
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Debug;$(ProjectDir)lib\PhysX\debug</AdditionalLibraryDirectories>
       <AdditionalDependencies>mono-2.0-sgen.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;alut.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glfw3.lib;PhysX_static.lib;PhysXCharacterKinematic_static.lib;PhysXCommon_static.lib;PhysXCooking_static.lib;PhysXExtensions_static.lib;PhysXFoundation_static.lib;PhysXPvdSDK_static.lib;PhysXVehicle_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
