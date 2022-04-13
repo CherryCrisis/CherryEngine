@@ -69,14 +69,14 @@ namespace CCCallback
 	}
 
 	template<class T, class... Args>
-	std::unique_ptr<ACallback<Args...>> BindCallback(void (T::* func)(Args... type), T* member)
+	std::shared_ptr<ACallback<Args...>> BindCallback(void (T::* func)(Args... type), T* member)
 	{
-		return std::make_unique<CCCallback::MemberCallback<T, Args...>>(func, member);
+		return std::make_shared<CCCallback::MemberCallback<T, Args...>>(func, member);
 	}
 
 	template<class... Args>
-	std::unique_ptr<ACallback<Args...>> BindCallback(void (*func)(Args...))
+	std::shared_ptr<ACallback<Args...>> BindCallback(void (*func)(Args...))
 	{
-		return std::make_unique<CCCallback::NonMemberCallback<Args...>>(func);
+		return std::make_shared<CCCallback::NonMemberCallback<Args...>>(func);
 	}
 }

@@ -4,6 +4,8 @@
 #include <queue>
 #include <condition_variable>
 #include <mutex>
+#include <exception>
+#include <stdexcept> 
 
 #include <vector>
 #include <memory>

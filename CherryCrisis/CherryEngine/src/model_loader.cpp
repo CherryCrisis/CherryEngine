@@ -212,6 +212,7 @@ namespace CCImporter
         {
             Debug* debug = Debug::GetInstance();
             debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texturePath).c_str());
+            return;
         }
 
         textureHeader.size = textureHeader.height * textureHeader.width * STBI_rgb_alpha;
@@ -320,34 +321,34 @@ namespace CCImporter
             aiString textureFilename;
             if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &textureFilename) == AI_SUCCESS)
             {
-                std::string fullPath = fullPath + std::string(textureFilename.C_Str());
+                //std::string fullPath = fullPath + std::string(textureFilename.C_Str());
 
                 if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
-                    ImportTextureData(relativePath, fullPath.c_str());
+                    ImportTextureData(relativePath, textureFilename.C_Str());
 
-                AddTextureDataToModel(model, ETextureType::AMBIENT, fullPath.c_str());
+                AddTextureDataToModel(model, ETextureType::AMBIENT, textureFilename.C_Str());
             }
 
             
             //aiTextureType_BASE_COLOR
             if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), textureFilename) == AI_SUCCESS)
             {
-                std::string fullPath = fullPath + std::string(textureFilename.C_Str());
+                //std::string fullPath = fullPath + std::string(textureFilename.C_Str());
 
                 if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
                 {
-                    if (!VerifIfTextureCacheExist(fullPath.c_str()))
-                        ImportTextureData(fullPath.c_str(), texture);
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(textureFilename.C_Str(), texture);
 
-                    AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath.c_str());
+                    AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilename.C_Str());
                 }
                 else
                 {
 
-                    if (!VerifIfTextureCacheExist(fullPath.c_str()))
-                        ImportTextureData(relativePath, fullPath.c_str());
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(relativePath, textureFilename.C_Str());
 
-                    AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath.c_str());
+                    AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilename.C_Str());
                 }
             }
         }

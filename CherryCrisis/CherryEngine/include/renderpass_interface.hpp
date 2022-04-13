@@ -15,7 +15,7 @@ class ARenderPass
 protected:
 	std::shared_ptr<ShaderProgram> m_program;
 
-	std::unique_ptr<CCCallback::ACallback<const float&, const float&, Camera&>> m_callExecute = nullptr;
+	std::shared_ptr<CCCallback::ACallback<const float&, const float&, Camera&>> m_callExecute = nullptr;
 
 
 public:

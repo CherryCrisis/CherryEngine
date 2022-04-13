@@ -46,7 +46,7 @@ void Skybox::Load()
 	// TODO: Remove this
 	const char* textures[6] = { "right.jpg", "left.jpg", "top.jpg", "bottom.jpg", "front.jpg", "back.jpg" };
 
-	m_cubemap = ResourceManager::GetInstance()->AddResource<Cubemap>("skyCubemap", true, textures, "Assets/skybox");
+	m_cubemap = ResourceManager::GetInstance()->AddResource<Cubemap>("skyCubemap", true, textures, "Assets/skybox/");
 	m_cubemap->m_OnDeleted.Bind(&Skybox::RemoveCubemap, this);
 
 	SubscribeToRenderPass();

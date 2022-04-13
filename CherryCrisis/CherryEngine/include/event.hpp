@@ -3,90 +3,116 @@
 #include <set>
 #include <memory>
 #include <typeindex>
+#include <queue>
 
 #include "callback.hpp"
+#include "function.hpp"
 
 template<class... Args>
 class Event
 {
 private:
-	using ACallback = CCCallback::ACallback<Args...>;
+	std::set<std::shared_ptr<CCCallback::ACallback<Args...>>> m_callbacks;
+	std::queue<CCFunction::AFunction*> m_queries;
 
-	std::set<ACallback*> m_callbacks;
+	void AddToCallbacks(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
+	{
+		m_callbacks.insert(callback);
+	}
+
+	void DeleteCallbacks(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
+	{
+		m_callbacks.erase(callback);
+	}
 
 public:
 	Event() = default;
-	virtual ~Event()
-	{
-		for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
-			delete *it;
-	}
+	virtual ~Event() = default;
 
-	void Bind(std::unique_ptr<CCCallback::ACallback<Args...>>& callback)
+
+	void Bind(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
 	{
-		m_callbacks.insert(callback.release());
+		//m_callbacks.insert(callback);
+		//auto function = CCFunction::BindFunctionUnsafe(&Event<Args...>::AddToCallbacks, this, callback);
+		//m_queries.push(function.release());
 	}
 
 	template<typename T>
 	void Bind(void (T::* func)(Args... type), T* member)
 	{
-		std::unique_ptr<ACallback> callback = CCCallback::BindCallback(func, member);
-		Bind(callback);
+		//auto callback = CCCallback::BindCallback(func, member);
+		//Bind(callback);
 	}
 
 	void Bind(void (*func)(Args... type))
 	{
-		std::unique_ptr<ACallback> callback = CCCallback::BindCallback(func);
-		Bind(callback);
+		//auto callback = CCCallback::BindCallback(func);
+		//Bind(callback);
 	}
 
 	template<typename T>
 	void Unbind(void (T::* func)(Args... type), T* member)
 	{
-		for (auto callbackIt = m_callbacks.begin(); callbackIt != m_callbacks.end(); callbackIt++)//ACallback* callback : m_callbacks)
+		std::shared_ptr<CCCallback::ACallback<Args...>> findedCallback(nullptr);
+		/*for (auto& callback : m_callbacks)
 		{
-			ACallback* callback = *callbackIt;
-
-			if (auto memberCallback = static_cast<CCCallback::MemberCallback<T, Args...>*>(callback))
+			if (auto memberCallback = std::dynamic_pointer_cast<CCCallback::MemberCallback<T, Args...>>(callback))
 			{
 				if (memberCallback->m_func == func && memberCallback->m_member == member)
 				{
-					m_callbacks.erase(callback);
-					delete callback;
-
-					return;
+					findedCallback = callback;
+					break;
 				}
 			}
+		}*/
+
+		if (findedCallback)
+		{
+			auto function = CCFunction::BindFunctionUnsafe(&Event<Args...>::DeleteCallbacks, this, findedCallback);
+			m_queries.push(function.release());
 		}
 	}
 
 	void Unbind(void (*func)(Args... type))
 	{
-		for (auto callbackIt = m_callbacks.begin(); callbackIt != m_callbacks.end(); callbackIt++)//ACallback* callback : m_callbacks)
+		std::shared_ptr<CCCallback::ACallback<Args...>> findedCallback(nullptr);
+		/*for (auto& callback : m_callbacks)
 		{
-			ACallback* callback = *callbackIt;
-
-			if (auto nonMemberCallback = static_cast<CCCallback::NonMemberCallback<Args...>*>(callback))
+			if (auto nonMemberCallback = std::dynamic_pointer_cast<CCCallback::NonMemberCallback<Args...>>(callback))
 			{
 				if (nonMemberCallback->m_func == func)
 				{
-					m_callbacks.erase(callback);
-					delete callback;
+					findedCallback = callback;
 					return;
 				}
 			}
+		}*/
+
+		if (findedCallback)
+		{
+			auto function = CCFunction::BindFunctionUnsafe(&Event<Args...>::DeleteCallbacks, this, findedCallback);
+			m_queries.push(function.release());
 		}
 	}
 
 	void Invoke(Args&&... args)
 	{
-		//TODO: Optimize, iterator crash if there is an unbind
-
-		std::set<ACallback*> callbacks = m_callbacks;
-		for (auto callbackIt = callbacks.begin(); callbackIt != callbacks.end(); callbackIt++)
+		while (!m_queries.empty())
 		{
-			ACallback* callback = *callbackIt;
+			auto& function = m_queries.front();
+			function->Invoke();
+			m_queries.pop();
+		}
+
+		for (auto callbackIt = m_callbacks.begin(); callbackIt != m_callbacks.end(); callbackIt++)
+		{
+			std::shared_ptr< CCCallback::ACallback<Args...>> callback = *callbackIt;
 			callback->Invoke(std::forward<Args>(args)...);
 		}
+	}
+
+	void Reset()
+	{
+		m_callbacks.clear();
 	}
 };

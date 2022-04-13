@@ -25,7 +25,7 @@ Texture::Texture(const char* texturePath)
 void Texture::Delete()
 {
     if (m_data)
-        free(m_data);
+        delete m_data;
 }
 
 //void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)

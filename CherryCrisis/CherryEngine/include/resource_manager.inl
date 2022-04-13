@@ -65,35 +65,30 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 	return resourcePtr;
 }
 
-template<class T, class CallbackType, typename... Args>
-void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIsExist,
-	CCCallback::AWrapCallback* wrappedCallback, Args... args)
+template<class T, typename... Args>
+void ResourceManager::AddResourceWithCallback(std::shared_ptr<T> resource,
+	std::shared_ptr<CCCallback::AWrapCallback> wrappedCallback, Args... args)
 {
-	std::shared_ptr<T> resourcePtr = AddResourceRef<T>(filepath, verifIsExist);
-
-	auto unwrapedCallback = static_cast<CCCallback::ACallback<CallbackType>*>(wrappedCallback);
-	std::unique_ptr<CCCallback::ACallback<CallbackType>> uniqueCallback(unwrapedCallback);
-
-	EResourceState resourceState = resourcePtr->GetResourceState();
+	EResourceState resourceState = resource->GetResourceState();
 
 	switch (resourceState)
 	{
 	case EResourceState::EMPTY:
-		resourcePtr->SetResourceState(EResourceState::LOADING);/*666*/
-		T::Load(resourcePtr, args...);
-		resourcePtr->m_OnLoaded.Bind(uniqueCallback);
-		resourcePtr->IsLoaded(resourcePtr, m_threadpool);
-		break;
-	case EResourceState::LOADING:
-		resourcePtr->m_OnLoaded.Bind(uniqueCallback);
+		resource->SetResourceState(EResourceState::LOADING);
+		T::Load(resource, args...);
+		resource->IsLoaded(resource, m_threadpool);
 		break;
 	case EResourceState::LOADED:
 	{
-		/*std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
-			wrappedCallback, resourcePtr);
+		auto resourceContainerIt = m_resources.find(typeid(T));
+		if (resourceContainerIt == m_resources.end())
+			return;
+
+		//std::shared_ptr<T>* resourceRef = resourceContainerIt->second->GetResource<T>(resource->GetFilepath());
+		std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
+			wrappedCallback, resource);
 
 		m_threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
-		resourcePtr->m_OnLoaded.Bind(uniqueCallback);*/
 	}
 	break;
 
@@ -102,17 +97,26 @@ void ResourceManager::AddResourceWithCallback(const char* filepath, bool verifIs
 	}
 }
 
-template<class T, class CallbackType, typename... Args>
+template<class T, typename... Args>
 void ResourceManager::AddResourceMultiThreads(const char* filepath, bool verifIsExist,
-	std::unique_ptr<CCCallback::ACallback<CallbackType>>& uniqueCallback, Args&&... args)
+	std::shared_ptr<CCCallback::ACallback<std::shared_ptr<T>>> callback, Args&&... args)
 {
-	//Wrap callback because CCFunction::BindFunction(...) doesn't work with an arg<Type<OtherType>>
-	CCCallback::AWrapCallback* wrappedCallback(static_cast<CCCallback::AWrapCallback*>(uniqueCallback.release()));
+	std::shared_ptr<T> resource = AddResourceRef<T>(filepath, verifIsExist);
+
+	std::shared_ptr<CCCallback::AWrapCallback> wrappedCallback(nullptr);
+
+	if (callback)
+	{
+		resource->m_OnLoaded.Bind(callback);
+
+		//Wrap callback because CCFunction::BindFunction(...) doesn't work with an arg<Type<OtherType>>
+		wrappedCallback = std::dynamic_pointer_cast<CCCallback::AWrapCallback>(callback);
+	}
 
 	auto function =
 		CCFunction::BindFunctionUnsafe(
-			&ResourceManager::AddResourceWithCallback<T, CallbackType, Args...>, this,
-			filepath, verifIsExist, wrappedCallback, args...);
+			&ResourceManager::AddResourceWithCallback<T, Args...>, this,
+			resource, wrappedCallback, args...);
 
 	m_threadpool->CreateTask(function, EChannelTask::MULTITHREAD);
 }
