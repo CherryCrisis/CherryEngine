@@ -7,9 +7,9 @@ constexpr SubPipelineT* RenderManager::GetSubpipeline()
 
 	const std::type_index typeID = typeid(SubPipelineT);
 
-	const auto& pipelineIt = m_existingSubpipelines.find(typeID);
+	const auto& pipelineIt = m_existingRenderpasses.find(typeID);
 
-	if (pipelineIt == m_existingSubpipelines.end())
+	if (pipelineIt == m_existingRenderpasses.end())
 		return nullptr;
 
 	return static_cast<SubPipelineT*>(pipelineIt->second);
@@ -26,20 +26,20 @@ constexpr SubPipelineT* RenderManager::LoadSubpipeline()
 	const std::type_index typeID = typeid(SubPipelineT);
 
 	subPipeline = new SubPipelineT(typeID.name());
-	m_existingSubpipelines[typeID] = subPipeline;
+	m_existingRenderpasses[typeID] = subPipeline;
 
 	return subPipeline;
 }
 
 template <class SubPipelineT, class RendererT>
-void RenderManager::GenerateFromPipeline(RendererT* renderer)
+void RenderManager::SubscribeToPipeline(RendererT* renderer)
 {
-	LoadSubpipeline<SubPipelineT>()->Generate(renderer);
+	LoadSubpipeline<SubPipelineT>()->Subscribe(renderer);
 }
 
 template <class SubPipelineT, class RendererT>
-void RenderManager::RemoveFromPipeline(RendererT* renderer)
+void RenderManager::UnsubscribeToPipeline(RendererT* renderer)
 {
 	if (SubPipelineT* subPipeline = GetSubpipeline<SubPipelineT>(); subPipeline)
-		subPipeline->Remove(renderer);
+		subPipeline->Unsubscribe(renderer);
 }

@@ -10,12 +10,14 @@
 
 #include "camera.hpp"
 
+class Framebuffer;
+
 class ARenderPass
 {
 protected:
 	std::shared_ptr<ShaderProgram> m_program;
 
-	std::unique_ptr<CCCallback::ACallback<const float&, const float&, Camera&>> m_callExecute = nullptr;
+	std::unique_ptr<CCCallback::ACallback<Framebuffer&, Camera&>> m_callExecute = nullptr;
 
 
 public:
@@ -29,10 +31,10 @@ public:
 			m_program->m_OnDeleted.Bind(&ARenderPass::InvalidatePass, this);
 	}
 
-	void CallOnExecute(float x, float y, Camera& camera)
+	void CallOnExecute(Framebuffer& framebuffer, Camera& camera)
 	{
 		if (m_callExecute)
-			m_callExecute->Invoke(x, y, camera);
+			m_callExecute->Invoke(framebuffer, camera);
 	}
 
 	virtual ~ARenderPass()

@@ -86,7 +86,23 @@ void HierarchyDisplayer::Render()
         if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_renaming = false;  ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
     }
-    
+
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj"))
+        {
+            const char* c = (const char*)payload->Data;
+            std::string str = "Assets/" + std::string(c);
+            const char* string = str.c_str();
+            auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
+            ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
+        }
+
+        ImGui::EndDragDropTarget();
+    }
+
+
     ImGui::End();
 }
 

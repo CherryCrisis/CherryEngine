@@ -7,14 +7,14 @@
 
 LightComponent::LightComponent()
 {
-	RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(&m_light);
+	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(&m_light);
 
 	PopulateMetadatas();
 }
 
 LightComponent::~LightComponent()
 {
-	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(&m_light);
+	RenderManager::GetInstance()->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
 }
 
 void LightComponent::PopulateMetadatas()
