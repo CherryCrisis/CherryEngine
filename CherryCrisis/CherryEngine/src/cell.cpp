@@ -12,8 +12,6 @@ Cell::Cell()
 	PhysicSystem::PhysicManager* pxManager = PhysicSystem::PhysicManager::GetInstance();
 
 	pxManager->Register(this);
-
-	m_playerController = PhysicSystem::PhysicCharacterController();
 }
 
 Cell::~Cell()
@@ -92,18 +90,18 @@ void Cell::LinkToCell(Cell& other)
 
 void Cell::SetControllerDesc(physx::PxCapsuleControllerDesc& desc)
 {
-	PhysicSystem::PhysicManager* physics = PhysicSystem::PhysicManager::GetInstance();
+	//PhysicSystem::PhysicManager* physics = PhysicSystem::PhysicManager::GetInstance();
 
-	CCMaths::Vector3& p = m_playerController.position;
-	desc.position		= physx::PxExtendedVec3(p.x, p.y, p.z);
-	desc.radius			= m_playerController.radius;
-	desc.height			= m_playerController.height;
-	desc.slopeLimit		= m_playerController.slopeLimit;
-	desc.maxJumpHeight	= m_playerController.maxJumpHeight;
-	desc.contactOffset	= m_playerController.contactOffset;
-	desc.stepOffset		= m_playerController.stepOffset;
-	desc.density		= m_playerController.density;
+	//CCMaths::Vector3& p = m_playerController.position;
+	//desc.position		= physx::PxExtendedVec3(p.x, p.y, p.z);
+	//desc.radius			= m_playerController.radius;
+	//desc.height			= m_playerController.height;
+	//desc.slopeLimit		= m_playerController.slopeLimit;
+	//desc.maxJumpHeight	= m_playerController.maxJumpHeight;
+	//desc.contactOffset	= m_playerController.contactOffset;
+	//desc.stepOffset		= m_playerController.stepOffset;
+	//desc.density		= m_playerController.density;
 
-	desc.climbingMode = physx::PxCapsuleClimbingMode::Enum::eCONSTRAINED;
-	desc.material = physics->GetMaterial();
+	//desc.climbingMode = physx::PxCapsuleClimbingMode::Enum::eCONSTRAINED;
+	//desc.material = physics->GetMaterial();
 }

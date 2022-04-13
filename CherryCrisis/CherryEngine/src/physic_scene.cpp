@@ -51,11 +51,11 @@ namespace PhysicSystem
 			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 		}
 
-		physx::PxControllerManager* manager = PxCreateControllerManager(*m_pxScene);
+		//physx::PxControllerManager* manager = PxCreateControllerManager(*m_pxScene);
 
-		physx::PxCapsuleControllerDesc desc;
-		m_cell->SetControllerDesc(desc);
-		m_playerPxController = manager->createController(desc);
+		//physx::PxCapsuleControllerDesc desc;
+		//m_cell->SetControllerDesc(desc);
+		//m_playerPxController = manager->createController(desc);
 
 		for (auto& actor : m_actors)
 			m_pxScene->addActor(*actor->Get());

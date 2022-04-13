@@ -10,12 +10,12 @@ class Transform;
 class CCENGINE_API BoxCollider : public Collider
 {
 private:
+	using Vector3Property = CCProperty::ConstRefProperty<BoxCollider, CCMaths::Vector3>;
+
 	physx::PxShape* m_pxShape = nullptr;
 
 	CCMaths::Vector3 m_baseEntityScale = CCMaths::Vector3::One;
 	CCMaths::Vector3 m_editableScale = CCMaths::Vector3::One;
-
-	using Vector3Property = CCProperty::ConstRefProperty<BoxCollider, CCMaths::Vector3>;
 
 	void PopulateMetadatas() override;
 

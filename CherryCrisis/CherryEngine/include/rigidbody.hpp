@@ -1,7 +1,5 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include "behaviour.hpp"
 #include "maths.hpp"
 #include "bool3.hpp"
@@ -20,7 +18,6 @@ private:
 	using bool3Property = CCProperty::ConstRefProperty<Rigidbody, Bool3>;
 	using boolProperty = CCProperty::ConstRefProperty<Rigidbody, bool>;
 	using floatProperty = CCProperty::ConstRefProperty<Rigidbody, float>;
-
 
 	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;;

@@ -4,8 +4,6 @@
 
 #include <deque>
 
-#include "physic_character_controller.hpp"
-
 class Entity;
 
 namespace physx
@@ -23,8 +21,6 @@ class CCENGINE_API Cell
 private:
 	std::deque<Entity*>	m_entities;
 	std::deque<Cell*>	m_surroundingCells;
-	
-	PhysicSystem::PhysicCharacterController m_playerController;
 
 public:
 	PhysicSystem::PhysicScene* m_physicCell = nullptr;

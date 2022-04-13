@@ -1092,9 +1092,6 @@
     <ClInclude Include="include\cell_system.hpp">
       <Filter>Fichiers d%27en-tête\Cells</Filter>
     </ClInclude>
-    <ClInclude Include="include\physic_character_controller.hpp">
-      <Filter>Fichiers d%27en-tête\PhysX</Filter>
-    </ClInclude>
     <ClInclude Include="include\serializer.hpp">
       <Filter>Fichiers d%27en-tête\Serialization</Filter>
     </ClInclude>
@@ -1112,6 +1109,9 @@
     </ClInclude>
     <ClInclude Include="include\bool3.hpp">
       <Filter>Fichiers d%27en-tête\PhysX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\character_controller.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1369,9 +1369,6 @@
     <ClCompile Include="src\cell_system.cpp">
       <Filter>Fichiers sources\Cells</Filter>
     </ClCompile>
-    <ClCompile Include="src\physic_character_controller.cpp">
-      <Filter>Fichiers sources\PhysX</Filter>
-    </ClCompile>
     <ClCompile Include="src\utils.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -1382,6 +1379,9 @@
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\collider.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\character_controller.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>

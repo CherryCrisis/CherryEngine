@@ -212,7 +212,7 @@
     <ClInclude Include="include\cell_system.hpp" />
     <ClInclude Include="include\collider.hpp" />
     <ClInclude Include="include\command.hpp" />
-    <ClInclude Include="include\physic_character_controller.hpp" />
+    <ClInclude Include="include\character_controller.hpp" />
     <ClInclude Include="include\box_collider.hpp" />
     <ClInclude Include="include\csassembly.hpp" />
     <ClInclude Include="include\csreflection.hpp" />
@@ -436,7 +436,7 @@
     <ClCompile Include="src\cell_system.cpp" />
     <ClCompile Include="src\collider.cpp" />
     <ClCompile Include="src\command.cpp" />
-    <ClCompile Include="src\physic_character_controller.cpp" />
+    <ClCompile Include="src\character_controller.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\csassembly.cpp" />
     <ClCompile Include="src\csscripting_system.cpp" />
