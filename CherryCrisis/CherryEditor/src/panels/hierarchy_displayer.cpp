@@ -33,6 +33,9 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
+        ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
+        ImGui::Separator();\
+
         for (auto& [entityName, entityRef] : SceneManager::GetInstance()->m_currentScene->m_entities)
         {
             if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
@@ -228,7 +231,6 @@ void HierarchyDisplayer::ContextCallback()
                 for (auto& entity : m_manager->m_selectedEntities) 
                 {
                     SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-                    entity->Destroy();
                     //To Change
                     m_manager->m_selectedEntities.clear();
                 }

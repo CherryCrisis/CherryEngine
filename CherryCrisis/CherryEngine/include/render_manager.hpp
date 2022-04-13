@@ -21,11 +21,6 @@ private:
 	std::unordered_map<std::type_index, ARenderPass*>	m_existingSubpipelines;
 	std::vector<ARenderPass*> m_orderedPipeline;
 
-	template <class SubPipelineT>
-	constexpr SubPipelineT* GetSubpipeline();
-
-	template <class SubPipelineT>
-	constexpr SubPipelineT* LoadSubpipeline();
 
 public:
 	RenderManager();
@@ -41,6 +36,12 @@ public:
 	static PipelineDesc DefaultRenderingPipeline();
 
 	static void InitializePipeline(const PipelineDesc& pipelineDesc);
+	
+	template <class SubPipelineT>
+	constexpr SubPipelineT* GetSubpipeline();
+
+	template <class SubPipelineT>
+	constexpr SubPipelineT* LoadSubpipeline();
 };
 
 #include "renderer_manager.inl"

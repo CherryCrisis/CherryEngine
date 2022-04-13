@@ -302,9 +302,9 @@ void AssetBrowser::RenderNodes()
             {
                 //open Scene and if the last is not saved, warn the user
                 if (SceneManager::GetInstance()->m_currentScene->Unserialize(node.m_filename.c_str()))
-                    EditorManager::SendNotification("Scene Loaded!", ImGuiToastType::Success);
+                    EditorManager::SendNotification("Scene Loaded!", ENotifType::Success);
                 else
-                    EditorManager::SendNotification("Scene failed to Load", ImGuiToastType::Error);
+                    EditorManager::SendNotification("Scene failed to Load", ENotifType::Error);
             }
         }
 
@@ -313,7 +313,7 @@ void AssetBrowser::RenderNodes()
 
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2)
         {
-            EditorManager::SendNotification("Outch it hurts", ImGuiToastType::Warning);
+            EditorManager::SendNotification("Outch it hurts", ENotifType::Warning);
         }
 
         ImGui::NextColumn();
@@ -418,7 +418,7 @@ void AssetBrowser::RenderNodes()
                 myfile << str;
                 myfile.close();
 
-                EditorManager::SendNotification("Script Created", ImGuiToastType::Success);
+                EditorManager::SendNotification("Script Created", ENotifType::Success);
             }
             QuerryBrowser();
 

@@ -7,7 +7,7 @@
 
 static std::random_device rDevice;
 static std::mt19937_64 rEngine(rDevice());
-static std::uniform_int_distribution<uint64_t> rDistribution;
+static std::uniform_int_distribution<uint32_t> rDistribution;
 
 CCUUID::CCUUID()
 {

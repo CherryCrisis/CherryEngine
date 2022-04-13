@@ -30,12 +30,7 @@ public:
 
 	//To Move
 	static void Load(std::shared_ptr<Scene> scene);
-	bool Save(const char* sceneName);
-	
-	//To Rework
-	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);
 
-	//To Rework
 	std::string GetUniqueEntityName(const std::string& entityName);
 
 	//To Rework
@@ -45,9 +40,14 @@ public:
 	//To Rework
 	void RemoveEntity(const std::string& name);
 	//To Rework
-	Entity* FindEntity(uint64_t id);
-
+	Entity* FindEntity(uint32_t id);
+	//To Remove
+	Entity* FindModelEntity(uint32_t id);
 	//To Move
 	bool Serialize(const char* filePath);
 	bool Unserialize(const char* filePath);
+
+	void GenerateEntities(std::shared_ptr<ModelBase> resource);
+
+	std::string GetName() { return m_filepath; }
 };

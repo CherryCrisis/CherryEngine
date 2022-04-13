@@ -36,7 +36,7 @@
 #define NOTIFY_NULL_OR_EMPTY(str)		(!str ||! strlen(str))
 #define NOTIFY_FORMAT(fn, format, ...)	if (format) { va_list args; va_start(args, format); fn(format, args, __VA_ARGS__); va_end(args); }
 
-enum class ImGuiToastType
+enum class ENotifType
 {
 	None,
 	Success,
@@ -70,7 +70,7 @@ enum class ImGuiToastPos
 class ImGuiToast
 {
 private:
-	ImGuiToastType	type = ImGuiToastType::None;
+	ENotifType	type = ENotifType::None;
 	char			title[NOTIFY_MAX_MSG_LENGTH];
 	char			content[NOTIFY_MAX_MSG_LENGTH];
 	float			dismiss_time = NOTIFY_DEFAULT_DISMISS;
@@ -89,7 +89,7 @@ public:
 
 	NOTIFY_INLINE auto set_content(const char* format, ...) -> void { NOTIFY_FORMAT(this->set_content, format); }
 
-	NOTIFY_INLINE auto set_type(const ImGuiToastType& type) -> void { IM_ASSERT(type < ImGuiToastType::COUNT); this->type = type; };
+	NOTIFY_INLINE auto set_type(const ENotifType& type) -> void { IM_ASSERT(type < ENotifType::COUNT); this->type = type; };
 
 public:
 	// Getters
@@ -102,15 +102,15 @@ public:
 		{
 			switch (this->type)
 			{
-			case ImGuiToastType::None:
+			case ENotifType::None:
 				return NULL;
-			case ImGuiToastType::Success:
+			case ENotifType::Success:
 				return "Success";
-			case ImGuiToastType::Warning:
+			case ENotifType::Warning:
 				return "Warning";
-			case ImGuiToastType::Error:
+			case ENotifType::Error:
 				return "Error";
-			case ImGuiToastType::Info:
+			case ENotifType::Info:
 				return "Info";
 			}
 		}
@@ -118,21 +118,21 @@ public:
 		return this->title;
 	};
 
-	NOTIFY_INLINE auto get_type() -> const ImGuiToastType& { return this->type; };
+	NOTIFY_INLINE auto get_type() -> const ENotifType& { return this->type; };
 
 	NOTIFY_INLINE auto get_color() -> const ImVec4
 	{
 		switch (this->type)
 		{
-		case ImGuiToastType::None:
+		case ENotifType::None:
 			return { 255, 255, 255, 255 }; // White
-		case ImGuiToastType::Success:
+		case ENotifType::Success:
 			return { 0, 255, 0, 255 }; // Green
-		case ImGuiToastType::Warning:
+		case ENotifType::Warning:
 			return { 255, 255, 0, 255 }; // Yellow
-		case ImGuiToastType::Error:
+		case ENotifType::Error:
 			return { 255, 0, 0, 255 }; // Error
-		case ImGuiToastType::Info:
+		case ENotifType::Info:
 			return { 0, 157, 255, 255 }; // Blue
 		default:
 			return { 255, 255, 255, 255 }; // White
@@ -143,15 +143,15 @@ public:
 	{
 		switch (this->type)
 		{
-		case ImGuiToastType::None:
+		case ENotifType::None:
 			return NULL;
-		case ImGuiToastType::Success:
+		case ENotifType::Success:
 			return ICON_FA_CHECK_CIRCLE;
-		case ImGuiToastType::Warning:
+		case ENotifType::Warning:
 			return ICON_FA_EXCLAMATION_TRIANGLE;
-		case ImGuiToastType::Error:
+		case ENotifType::Error:
 			return ICON_FA_TIMES_CIRCLE;
-		case ImGuiToastType::Info:
+		case ENotifType::Info:
 			return ICON_FA_INFO_CIRCLE;
 		default:
 			return NULL;
@@ -204,9 +204,9 @@ public:
 public:
 	// Constructors
 
-	ImGuiToast(ImGuiToastType type, float dismiss_time = NOTIFY_DEFAULT_DISMISS)
+	ImGuiToast(ENotifType type, float dismiss_time = NOTIFY_DEFAULT_DISMISS)
 	{
-		IM_ASSERT(type < ImGuiToastType::COUNT);
+		IM_ASSERT(type < ENotifType::COUNT);
 
 		this->type = type;
 		this->dismiss_time = dismiss_time; 
@@ -216,9 +216,9 @@ public:
 		memset(this->content, 0, sizeof(this->content));
 	}
 
-	ImGuiToast(ImGuiToastType type, const char* format, ...) : ImGuiToast(type) { NOTIFY_FORMAT(this->set_content, format); }
+	ImGuiToast(ENotifType type, const char* format, ...) : ImGuiToast(type) { NOTIFY_FORMAT(this->set_content, format); }
 
-	ImGuiToast(ImGuiToastType type, float dismiss_time, const char* format, ...) : ImGuiToast(type, dismiss_time) { NOTIFY_FORMAT(this->set_content, format); }
+	ImGuiToast(ENotifType type, float dismiss_time, const char* format, ...) : ImGuiToast(type, dismiss_time) { NOTIFY_FORMAT(this->set_content, format); }
 };
 
 namespace ImGui
@@ -311,7 +311,7 @@ namespace ImGui
 					if (!NOTIFY_NULL_OR_EMPTY(icon))
 						SameLine();
 
-					Text(default_title); // Render default title text (ImGuiToastType::Success -> "Success", etc...)
+					Text(default_title); // Render default title text (ENotifType::Success -> "Success", etc...)
 					was_title_rendered = true;
 				}
 

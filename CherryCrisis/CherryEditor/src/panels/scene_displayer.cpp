@@ -11,6 +11,9 @@
 #include "transform.hpp"
 #include "callback.hpp"
 #include "maths.hpp"
+#include "resource_manager.hpp"
+
+#include "pickinger.hpp"
 
 #undef near
 #undef far
@@ -19,7 +22,7 @@ void Serialize()
 {
     if (SceneManager::GetInstance()->m_currentScene->Serialize("scn")) 
     {
-        EditorManager::SendNotification("Scene Saved!", ImGuiToastType::Info);
+        EditorManager::SendNotification("Scene Saved!", ENotifType::Info);
     }
 }
 
@@ -50,6 +53,9 @@ SceneDisplayer::SceneDisplayer()
     IM->AddInputToAction("Translate", Keycode::W);
     IM->AddInputToAction("Rotate", Keycode::E);
     IM->AddInputToAction("Scale", Keycode::R);
+
+    IM->AddActionButtons("Pick", i);
+    IM->AddInputToAction("Pick", Keycode::LEFT_CLICK);
 
     IM->PopContext();
 }
@@ -97,6 +103,26 @@ void SceneDisplayer::Render()
         if (IM->GetKey(Keycode::E))      m_operation = ImGuizmo::OPERATION::ROTATE; 
         if (IM->GetKeyUp(Keycode::R))    m_operation = ImGuizmo::OPERATION::SCALE; 
 
+
+        if (InputManager::GetInstance()->GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
+            && !ImGuizmo::IsOver())
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
+            Pickinger::SetBuffer(&m_framebuffer, &m_camera);
+            CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
+            Entity* e = Pickinger::GetEntity(mousePos.x - ImGui::GetWindowPos().x, mousePos.y - ImGui::GetWindowPos().y);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+            m_manager->m_selectedEntities.clear();
+            //TODO: Add multi select CTRL 
+            if (e)
+            {
+                Debug::GetInstance()->AddLog(ELogType::INFO, e->GetName().c_str());
+                m_manager->m_selectedEntities.push_back(e);
+            }
+        }
+
+
         m_isActive = !ImGui::IsWindowCollapsed();
 
         ImGui::BeginChild("SceneFrameBuffer");
@@ -111,11 +137,30 @@ void SceneDisplayer::Render()
 
         if (ImGui::BeginDragDropTarget()) 
         {
+       
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".cherry")) 
             {
                 const char* c = (const char*)payload->Data;
                 m_manager->m_selectedEntities.clear();
                 SceneManager::GetInstance()->m_currentScene->Unserialize(c);
+            }
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj") )
+            {
+                const char* c = (const char*)payload->Data;
+                std::string str = "Assets/" + std::string(c);
+                const char* string = str.c_str();
+                auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
+                ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
+                EditorManager::SendNotification("Adding object ...", ENotifType::Info);
+            }
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".fbx"))
+            {
+                const char* c = (const char*)payload->Data;
+                std::string str = "Assets/" + std::string(c);
+                const char* string = str.c_str();
+                auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
+                ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
+                EditorManager::SendNotification("Adding object ...", ENotifType::Info);
             }
 
             ImGui::EndDragDropTarget();
