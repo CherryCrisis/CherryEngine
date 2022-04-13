@@ -201,6 +201,7 @@ void Inspector::Render()
                 {
                     ScriptedBehaviour* behaviour = m_manager->m_selectedEntities[0]->AddBehaviour<ScriptedBehaviour>();
                         behaviour->SetScriptClass(name);
+                        behaviour->BindToSignals();
                 }
             }   
 

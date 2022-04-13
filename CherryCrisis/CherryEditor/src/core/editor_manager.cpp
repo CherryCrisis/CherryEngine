@@ -216,6 +216,7 @@ void EditorManager::HandleMenuBar()
             if (m_engine->isPlaying)
             {
                 m_engine->Stop();
+                m_selectedEntities.clear();
                 m_gameDisplayer.Unfocus();
             }
             else
