@@ -84,18 +84,56 @@ void ScriptedBehaviour::PopulateMetadatas()
 
 	for (const auto& [fieldName, fieldRef] : fields)
 	{
-		if (fieldRef->Type()->Equals(mono::ManagedType::GetInt32()))
+		mono::ManagedType* fieldType = fieldRef->Type();
+
+		if (fieldType->Equals(mono::ManagedType::GetInt32()))
 		{
 			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<int>(managedInstance, fieldRef.get()));
 			continue;
 		}
 
-		if (fieldRef->Type()->Equals(mono::ManagedType::GetString()))
+		if (fieldType->Equals(mono::ManagedType::GetString()))
 		{
 			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<std::string>(managedInstance, fieldRef.get()));
 			continue;
 		}
+
+		if (fieldType->Equals(mono::ManagedType::GetSingle()))
+		{
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<float>(managedInstance, fieldRef.get()));
+			continue;
+		}
 	}
+
+	const auto& properties = managedClass->Properties();
+
+	for (const auto& [propName, propRef] : properties)
+	{
+		const mono::ManagedType* getType = propRef->GetType();
+		const mono::ManagedType* setType = propRef->SetType();
+
+		if (getType && getType->Equals(mono::ManagedType::GetInt32()) ||
+			setType && setType->Equals(mono::ManagedType::GetInt32()))
+		{
+			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<int>(managedInstance, propRef.get()));
+			continue;
+		}
+
+		if (getType && getType->Equals(mono::ManagedType::GetString()) ||
+			setType && setType->Equals(mono::ManagedType::GetString()))
+		{
+			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<std::string>(managedInstance, propRef.get()));
+			continue;
+		}
+
+		if (getType && getType->Equals(mono::ManagedType::GetSingle()) ||
+			setType && setType->Equals(mono::ManagedType::GetSingle()))
+		{
+			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<float>(managedInstance, propRef.get()));
+			continue;
+		}
+	}
+
 	/*auto handleRefClass = assembly->context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
 	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);

@@ -139,7 +139,17 @@ void InspectComponents(Entity* entity, int id)
                 {
                     int val;
                     propRef->Get(&val);
-                    ImGui::DragInt(propName.c_str(), &val, 0.5f);
+                    if (ImGui::DragInt(propName.c_str(), &val, 0.5f))
+                        propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (propType == typeid(float))
+                {
+                    float val;
+                    propRef->Get(&val);
+                    if (ImGui::DragFloat(propName.c_str(), &val, 0.5f))
                         propRef->Set(&val);
 
                     continue;

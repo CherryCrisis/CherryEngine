@@ -198,6 +198,10 @@ namespace mono
 		m_isRef = mono_type_is_reference(type);
 		m_isPtr = mono_type_is_pointer(type);
 		m_typeindex = mono_type_get_type(type);
+
+		char* name = mono_type_get_name(type);
+		m_name = name;
+		mono_free(name);
 	}
 
 	void ManagedType::InitializeStatics()
@@ -446,12 +450,6 @@ namespace mono
 			thunk->Reload();
 		}
 
-		for (auto& parm : m_params)
-			parm->Reload();
-
-		for (auto& a : m_attributes)
-			a->Reload();
-
 		return true;
 	}
 
@@ -464,6 +462,7 @@ namespace mono
 	ManagedField::ManagedField(MonoClassField* fld, ManagedClass* cls, const char* name)
 		: m_class(cls), m_field(fld), m_name(name), m_type(mono_field_get_type(fld))
 	{
+
 	}
 
 	//================================================================//
@@ -477,6 +476,20 @@ namespace mono
 	{
 		m_getMethod = mono_property_get_get_method(m_property);
 		m_setMethod = mono_property_get_set_method(m_property);
+		
+		if (m_getMethod)
+		{
+			MonoMethodSignature* getSignature = mono_method_signature(m_getMethod);
+			MonoType* getType = mono_signature_get_return_type(getSignature);
+			m_getType = std::make_unique<ManagedType>(getType);
+		}
+
+		if (m_setMethod)
+		{
+			MonoMethodSignature* setSignature = mono_method_signature(m_setMethod);
+			MonoType* setType = mono_signature_get_return_type(setSignature);
+			m_setType = std::make_unique<ManagedType>(setType);
+		}
 	}
 
 	//================================================================//
@@ -654,12 +667,19 @@ namespace mono
 		{
 			const char* fieldName = mono_field_get_name(field);
 
+			MonoType* fieldType = mono_field_get_type(field);
+			char* fieldTypeName = mono_type_get_name(fieldType);
+			mono_free(fieldTypeName);
+			std::string fieldTypeStr = fieldTypeName;
+
 			// TODO: add type check using type's name
-			if (m_fields.find(fieldName) == m_fields.end())
+			if (m_fields.find(fieldName) == m_fields.end() ||
+				m_fields[fieldName]->Type()->Name() != fieldTypeStr)
 			{
 				fields[fieldName] = std::make_unique<ManagedField>(field, this, fieldName);
 				continue;
 			}
+
 
 			auto& managedField = fields[fieldName] = std::move(m_fields[fieldName]);
 
@@ -678,8 +698,37 @@ namespace mono
 		{
 			const char* propName = mono_property_get_name(prop);
 
+			MonoMethod* getMethod = mono_property_get_get_method(prop);
+
+			char* getTypeName = nullptr;
+			if (getMethod)
+			{
+				MonoMethodSignature* getSignature = mono_method_signature(getMethod);
+				MonoType* getType = mono_signature_get_return_type(getSignature);
+
+				getTypeName = mono_type_get_name(getType);
+			}
+
+			MonoMethod* setMethod = mono_property_get_get_method(prop);
+
+			char* setTypeName = nullptr;
+			if (setMethod)
+			{
+				MonoMethodSignature* setSignature = mono_method_signature(setMethod);
+				MonoType* setType = mono_signature_get_return_type(setSignature);
+
+				setTypeName = mono_type_get_name(setType);
+
+			}
+			std::string getTypeStr = getTypeName ? getTypeName : (char*)'/0';
+			std::string setTypeStr = setTypeName ? setTypeName : (char*)'/0';
+
+			auto propIt = m_properties.find(propName);
+
 			// TODO: add type check using type's name
-			if (m_properties.find(propName) == m_properties.end())
+			if (propIt == m_properties.end() ||
+				propIt->second->m_getType && propIt->second->m_getType->Name() != getTypeStr ||
+				propIt->second->m_setType && propIt->second->m_setType->Name() != setTypeStr)
 			{
 				properties[propName] = std::make_unique<ManagedProperty>(prop, this, propName);
 
@@ -690,8 +739,8 @@ namespace mono
 			managedProp->m_class = this;
 			managedProp->m_property = prop;
 
-			managedProp->m_getMethod = mono_property_get_get_method(managedProp->m_property);
-			managedProp->m_setMethod = mono_property_get_set_method(managedProp->m_property);
+			managedProp->m_getMethod = getMethod;
+			managedProp->m_setMethod = setMethod;
 		}
 
 		m_properties = std::move(properties);
