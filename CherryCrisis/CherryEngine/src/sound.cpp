@@ -7,7 +7,7 @@
 void Sound::Load(std::shared_ptr<Sound> sound)
 {
 	//Load Sound
-	sound->m_buffer = alutCreateBufferFromFile(sound->GetFilepath());
+	sound->m_buffer = alutCreateBufferFromFile(sound->GetFilepath().c_str());
 	if (sound->m_buffer == AL_NONE)
 	{
 		unsigned int error = alutGetError();

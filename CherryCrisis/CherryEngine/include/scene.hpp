@@ -47,7 +47,7 @@ public:
 
 	void GenerateEntities(std::shared_ptr<ModelBase> resource);
 
-	std::string GetName() { return m_filepath; }
+	std::string GetName() { return GetFilepath(); }
 
 	bool Save();
 	bool SaveAs(const char* filepath);

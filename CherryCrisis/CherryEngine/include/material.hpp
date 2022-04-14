@@ -17,10 +17,9 @@ class Texture;
 
 struct MaterialArgs
 {
-	CCImporter:: MaterialHeader*  m_materialHeader;
-	std::vector<std::string>*	 m_texturesPath;
-	std::vector<unsigned int>* m_textureType;
-
+	CCImporter:: MaterialHeader*	m_materialHeader;
+	std::vector<std::string>*		m_texturesPath;
+	std::vector<unsigned int>*		m_textureType;
 };
 
 using namespace CCMaths;

@@ -37,11 +37,13 @@ private:
 	ModelNode* m_rootNode;
 	std::vector<std::shared_ptr<Model>>	m_models;
 
+	std::string m_relativePath;
+
 	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities);
 	void DeleteModelNode(ModelNode* modelNode);
 
 public:
-	ModelBase(const char* filepath) : Resource(filepath), m_rootNode(nullptr) {}
+	ModelBase(const char* filename) : Resource(filename), m_rootNode(nullptr) {}
 	~ModelBase() = default;
 
 	static void Load(std::shared_ptr<ModelBase> modelBase);

@@ -1,5 +1,8 @@
 #include "pch.hpp"
-#include "threadpool.hpp"
+
+#include "threadpool.hpp"  
+
+#include "debug.hpp"
 
 ThreadPool* ThreadPool::m_instance = nullptr;
 
@@ -73,14 +76,15 @@ void ThreadPool::Update(EChannelTask channelTask)
 			}
 
 
+
 			try
 			{
 				task->m_func->Invoke();
 			}
-			catch (...)
+			catch (const std::exception& exception)
 			{
-				std::exception_ptr exception = std::current_exception();
-				auto exeptionFunc = CCFunction::BindFunctionUnsafe(&ThreadPool::RethrowExceptions, this, exception);
+				std::exception_ptr exceptionPtr = std::current_exception();
+				auto exeptionFunc = CCFunction::BindFunctionUnsafe(&ThreadPool::RethrowExceptions, this, exceptionPtr);
 				CreateTask(exeptionFunc, EChannelTask::MAINTHREAD);
 			}
 		}
@@ -104,9 +108,16 @@ void ThreadPool::Update(EChannelTask channelTask)
 	}
 }
 
-void ThreadPool::RethrowExceptions(std::exception_ptr exception)
+void ThreadPool::RethrowExceptions(std::exception_ptr exceptionPtr)
 {
-	std::rethrow_exception(exception);
+	try
+	{
+		std::rethrow_exception(exceptionPtr);
+	}
+	catch (const std::exception& exception)
+	{
+		std::cout << exception.what() << std::endl;
+	}
 }
 
 

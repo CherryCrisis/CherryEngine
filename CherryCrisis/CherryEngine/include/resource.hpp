@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <atomic>
+#include <filesystem>
 
 #include "cherry_macros.hpp"
 #include "event.hpp"
@@ -25,9 +26,9 @@ protected:
 	virtual void Delete() {};
 
 public:
-	std::string m_filepath;
-	
-	AResource(const std::string& filepath)
+	std::filesystem::path m_filepath;
+
+	AResource(const std::filesystem::path& filepath)
 		: m_filepath(filepath)
 	{
 		m_resourceState.store(EResourceState::EMPTY);
@@ -35,7 +36,8 @@ public:
 
 	virtual ~AResource() = default;
 
-	const char* GetFilepath() const { return m_filepath.c_str(); }
+	std::string GetFilepath() { return m_filepath.string(); }
+	std::filesystem::path* GetFilesystemPath() { return &m_filepath; }
 
 	EResourceState GetResourceState() { return m_resourceState.load(); }
 	void SetResourceState(EResourceState resourceState) { m_resourceState.store(resourceState); }
@@ -60,7 +62,7 @@ public:
 	Event<> m_OnReloaded {};
 	Event<> m_OnDeleted {};
 
-	Resource(const std::string& filepath)
+	Resource(const std::filesystem::path& filepath)
 		: AResource(filepath) 
 	{
 	}

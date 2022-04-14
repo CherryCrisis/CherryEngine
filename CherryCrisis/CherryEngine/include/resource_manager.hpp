@@ -26,9 +26,9 @@ private:
 
 	ThreadPool* m_threadpool = nullptr;
 
-	template<class T, class CallbackType, typename... Args>
-	void AddResourceWithCallback(const char* filepath, bool verifIsExist,
-		CCCallback::AWrapCallback* wrappedCallback, Args... args);
+	template<class T, typename... Args>
+	void AddResourceWithCallback(std::shared_ptr<T> resource,
+		std::shared_ptr<CCCallback::AWrapCallback> wrappedCallback, Args... args);
 
 	template<class T>
 	std::shared_ptr<T> CreateResource(const char* filepath);
@@ -44,9 +44,9 @@ public:
 	template<class T, typename... Args>
 	std::shared_ptr<T> AddResource(const char* filepath, bool verifIsExist, Args... args);
 
-	template<class T, class CallbackType, typename... Args>
+	template<class T, typename... Args>
 	void AddResourceMultiThreads(const char* filepath, bool verifIsExist,
-		std::unique_ptr<CCCallback::ACallback<CallbackType>>& callback, Args&&... args);
+		std::shared_ptr<CCCallback::ACallback<std::shared_ptr<T>>> callback, Args&&... args);
 
 	template<class T>
 	std::shared_ptr<T> GetResource(const char* filepath);

@@ -55,7 +55,6 @@ void LogDisplayer::Render()
     if (!m_isOpened)
         return;
 
-    ImGui::ShowDemoWindow();
     if (ImGui::Begin("Logs", &m_isOpened, ImGuiWindowFlags_MenuBar))
     {
         RenderMenuBar();

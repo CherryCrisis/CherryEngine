@@ -111,9 +111,6 @@ int BasicRenderPass::Subscribe(Texture* toGenerate)
 	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTextureStorage2D(gpuTexture->ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
-	glTextureSubImage2D(gpuTexture->ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
-
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return -1;
 

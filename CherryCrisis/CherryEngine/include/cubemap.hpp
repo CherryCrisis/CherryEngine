@@ -5,6 +5,7 @@
 #include "resource.hpp"
 
 struct GPUCubemap { };
+class Texture;
 
 class Cubemap : public Resource<Cubemap>
 {
@@ -12,7 +13,7 @@ private:
     int     m_width = 0;
     int     m_height = 0;
     std::array<void*, 6> m_data = { nullptr };
-
+    std::shared_ptr<Texture> m_textures[6];
 
 
 public:

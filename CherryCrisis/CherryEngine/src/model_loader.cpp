@@ -21,26 +21,12 @@
 #include "model_base.hpp"
 #include "model.hpp"
 
-//TODO: Remove this change CCFunction to accept multiple same T
-struct CompressedArgs
-{
-    unsigned char** stbiData;
-    unsigned char** cacheData;
-    CCImporter::TextureHeader* textureHeader;
-    std::mutex* mutex;
-    std::condition_variable* condition;
-};
-
-
-
 namespace CCImporter
 {
     #pragma region Mesh
 
-    void ImportMeshData(const aiScene* assimpScene, const aiNode* assimpNode, ImportModelUtils& model, const char* filepath)
+    void ImportMeshData(const aiScene* assimpScene, const aiNode* assimpNode, int meshIndex, ImportModelUtils& model, const std::filesystem::path& filepath)
     {
-        /* model->m_mesh = resourceManager->AddResource<Mesh>(meshPath.c_str(), true, assimpMesh); */
-
         if (assimpNode->mNumMeshes == 0)
         {
             model.modelHeader.m_hasMesh = false;
@@ -49,11 +35,13 @@ namespace CCImporter
 
         model.modelHeader.m_hasMesh = true;
 
-
-        size_t meshId = (size_t)assimpNode->mMeshes[0];
+        size_t meshId = (size_t)assimpNode->mMeshes[meshIndex];
         const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
 
-        std::string meshPath = filepath + std::string("/") + std::string(assimpMesh->mName.C_Str());
+        std::string meshPath(filepath.generic_string());
+        meshPath += std::string("_");
+        meshPath += std::string(assimpMesh->mName.C_Str());
+
         model.modelHeader.m_meshId = std::hash<std::string>{}(meshPath);
 
         std::vector<Vertex> vertices;
@@ -108,51 +96,12 @@ namespace CCImporter
 
     #pragma region Texture
 
-    //Mutex and condition if the texture compression function is called on multithread
-    /*void CompressTextureWithOpenGL(CompressedArgs& args)
-{
-    //TODO: remove when instance create in engine constructor
-    RenderManager::GetInstance(); //TO initialize openGL
-
-    //https://www.oldunreal.com/editing/s3tc/ARB_texture_compression.pdf
-
-    GLuint tex;
-    glGenTextures(1, &tex);
-
-    glBindTexture(GL_TEXTURE_2D, tex);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA, args.textureHeader->width, args.textureHeader->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, *args.stbiData);
-
-    int compressed;
-
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED, &compressed);
-
-    //if the compression has been successful
-    if (compressed == GL_TRUE)
-    {
-        glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &args.textureHeader->internalFormat);
-        glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &args.textureHeader->compressedSize);
-
-        *args.cacheData = (unsigned char*)malloc(args.textureHeader->compressedSize);
-        glGetCompressedTexImage(GL_TEXTURE_2D, 0, *args.cacheData);
-    }
-
-    if (args.mutex)
-    {
-        std::unique_lock<std::mutex> uniqueMutex(*args.mutex);
-        args.condition->notify_one();
-    }
-}
-*/
-
-    void CacheTextureData(const char* texturePath, const unsigned char* cacheData, const TextureHeader& textureHeader)
+    void CacheTextureData(const std::filesystem::path& filepath, const unsigned char* cacheData, const TextureHeader& textureHeader)
     {
         Debug* debug = Debug::GetInstance();
 
-        //TODO: change location
-        std::string texturePathStr(texturePath);
-        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), [](char c) {return c == '\\' || c == '/'; }), texturePathStr.end());
-        texturePathStr += ".ccfile";
+        std::string texturePathStr(filepath.filename().generic_string());
+        texturePathStr += CCImporter::cacheExtension;
 
         FILE* file = nullptr;
 
@@ -170,7 +119,7 @@ namespace CCImporter
         fclose(file);
     }
 
-    void ImportTextureData(const char* texturePath, const aiTexture* assimpTexture)
+    void ImportTextureData(const std::filesystem::path& filepath, const aiTexture* assimpTexture)
     {
         unsigned int len;
 
@@ -190,41 +139,41 @@ namespace CCImporter
             return;
         }
 
-        CacheTextureData(texturePath, stbiData, textureHeader);
+        textureHeader.size = textureHeader.height * textureHeader.width * 4;
+        CacheTextureData(filepath, stbiData, textureHeader);
         stbi_image_free(stbiData);
     }
 
-    void ImportTextureData(const char* texturePath)
+    void ImportTextureData(const std::filesystem::path& filepath)
     {
         stbi_set_flip_vertically_on_load(true);
 
         TextureHeader textureHeader{};
 
-        unsigned char* stbiData = stbi_load(texturePath, &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
+        std::string texturePath(filepath.generic_string());
+
+        unsigned char* stbiData = stbi_load(texturePath.c_str(), &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
         if (!stbiData)
         {
             Debug* debug = Debug::GetInstance();
             debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texturePath).c_str());
+            return;
         }
 
         textureHeader.size = textureHeader.height * textureHeader.width * STBI_rgb_alpha;
 
-        CacheTextureData(texturePath, stbiData, textureHeader);
-
+        CacheTextureData(filepath, stbiData, textureHeader);
     }
 
-    bool VerifIfTextureCacheExist(const char* texturePath)
+    bool VerifIfTextureCacheExist(const char* textureFilename)
     {
-        std::string texturePathStr(texturePath);
-        texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), [](char c) {return c == '\\' || c == '/'; }), texturePathStr.end());
-        texturePathStr += ".ccfile";
-
-        std::string allTexturePath(CCImporter::cacheDirectory);
-        allTexturePath += texturePathStr;
+        std::string texturePath(CCImporter::cacheDirectory);
+        texturePath += textureFilename;
+        texturePath += CCImporter::cacheExtension;
 
         FILE* file;
-        if (fopen_s(&file, allTexturePath.c_str(), "r"))
+        if (fopen_s(&file, texturePath.c_str(), "r"))
         {
             return false;
         }
@@ -235,7 +184,7 @@ namespace CCImporter
         }
     }
 
-    void AddTextureDataToModel(ImportModelUtils& model, ETextureType textureType, const char* texturePath)
+    void AddTextureDataToModel(ImportModelUtils& model, ETextureType textureType, const std::filesystem::path& filepath)
     {
         MaterialHeader* materialHeader = &model.modelHeader.m_materialHeader;
 
@@ -243,42 +192,41 @@ namespace CCImporter
 
         model.m_texturesType.push_back((unsigned int)textureType);
 
-        //std::string texturePathStr(texturePath);
-        //texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), '/'), texturePathStr.end());
-        ////texturePathStr.erase(std::remove_if(texturePathStr.begin(), texturePathStr.end(), "'\'"), texturePathStr.end());
-        //texturePathStr += ".ccfile";
-
-        size_t texturePathSize = std::strlen(texturePath);
+        std::string filepathStr(filepath.string());
+        size_t texturePathSize = filepathStr.size();
 
         model.m_texturesPathSize.push_back(static_cast<unsigned int>(texturePathSize));
-        model.m_texturesPath.insert(model.m_texturesPath.end(), &texturePath[0], &texturePath[texturePathSize]);
-        model.m_texturesPathCstr.push_back(texturePath);
+        model.m_texturesPath.insert(model.m_texturesPath.end(), &filepathStr[0], &filepathStr[texturePathSize]);
+        model.m_texturesPathCstr.push_back(filepathStr);
     }
 
-    void ImportTexture(const char* texturePath, unsigned char** textureData, TextureHeader& textureHeader)
+    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture)
     {
         if (!textureData)
             return;
 
-        stbi_set_flip_vertically_on_load(true);
+        stbi_set_flip_vertically_on_load(flipTexture);
 
-        *textureData = stbi_load(texturePath, &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
+        std::string fullTexturePath(filepath.generic_string());
+        //fullTexturePath += filename;
+
+        *textureData = stbi_load(fullTexturePath.c_str(), &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
         if (!textureData)
         {
             Debug* debug = Debug::GetInstance();
-            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texturePath).c_str());
+            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", fullTexturePath).c_str());
         }
 
         textureHeader.size = textureHeader.height * textureHeader.width * 4;
 
-        CacheTextureData(texturePath, *textureData, textureHeader);
+        CacheTextureData(filepath, *textureData, textureHeader);
     }
     #pragma endregion
 
     #pragma region Material
 
-    void ImportMaterialData(const aiScene* assimpScene, const aiNode* assimpNode, ImportModelUtils& model, const char* filepath)
+    void ImportMaterialData(const aiScene* assimpScene, const aiNode* assimpNode, int meshIndex, ImportModelUtils& model, const std::filesystem::path& filepath)
     {
         if (assimpNode->mNumMeshes == 0)
         {
@@ -290,13 +238,20 @@ namespace CCImporter
 
         MaterialHeader* materialHeader = &model.modelHeader.m_materialHeader;
 
-        size_t meshId = (size_t)assimpNode->mMeshes[0];
+        size_t meshId = (size_t)assimpNode->mMeshes[meshIndex];
         
         const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
         const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
 
-        aiString name = assimpMaterial->GetName();
-        std::string materialPath = filepath + std::string("/") + std::string(name.C_Str());
+        aiString name(assimpMaterial->GetName());
+
+        if (name.length == 0)
+            name = std::format("mat_{}", assimpMesh->mMaterialIndex).c_str();
+
+        std::string materialPath(filepath.string());
+        materialPath += std::string("_");
+        materialPath += std::string(name.C_Str());
+
         materialHeader->m_matarialId = std::hash<std::string>{}(materialPath);
 
         float matValue = 0.f;
@@ -319,58 +274,74 @@ namespace CCImporter
 
         //Material Texture
         {
-            aiString texturePath;
-            if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
+            aiString textureFilename;
+            if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &textureFilename) == AI_SUCCESS)
             {
-                std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
+                std::filesystem::path textureFilepath(filepath.parent_path());
+                textureFilepath += "/";
+                textureFilepath += textureFilename.C_Str();
 
-                if (!VerifIfTextureCacheExist(fullPath.c_str()))
-                    ImportTextureData(fullPath.c_str());
-
-                AddTextureDataToModel(model, ETextureType::AMBIENT, fullPath.c_str());
-            }
-
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_HEIGHT, 0), texturePath) == AI_SUCCESS)
-            {
-                if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
+                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
                 {
-                    std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
 
-                    if (!VerifIfTextureCacheExist(fullPath.c_str()))
-                        ImportTextureData(fullPath.c_str(), texture);
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(textureFilepath);
 
-                    AddTextureDataToModel(model, ETextureType::NORMAL_MAP, fullPath.c_str());
+                    AddTextureDataToModel(model, ETextureType::AMBIENT, textureFilepath);
                 }
                 else
                 {
-                    std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(textureFilepath);
 
-                    if (!VerifIfTextureCacheExist(fullPath.c_str()))
-                        ImportTextureData(fullPath.c_str());
-
-                    AddTextureDataToModel(model, ETextureType::NORMAL_MAP, fullPath.c_str());
+                    AddTextureDataToModel(model, ETextureType::AMBIENT, textureFilepath);
                 }
             }
 
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath) == AI_SUCCESS)
+            
+            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_HEIGHT, 0), textureFilename) == AI_SUCCESS)
             {
-                if (auto texture = assimpScene->GetEmbeddedTexture(texturePath.C_Str()))
+                std::filesystem::path textureFilepath(filepath.parent_path());
+                textureFilepath += "/";
+                textureFilepath += textureFilename.C_Str();
+
+                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
                 {
-                    std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
 
-                    if (!VerifIfTextureCacheExist(fullPath.c_str()))
-                        ImportTextureData(fullPath.c_str(), texture);
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(textureFilepath);
 
-                    AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath.c_str());
+                    AddTextureDataToModel(model, ETextureType::NORMAL_MAP, textureFilepath);
                 }
                 else
                 {
-                    std::string fullPath = CCImporter::assetsDirectory + std::string(texturePath.C_Str());
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(textureFilepath);
 
-                    if (!VerifIfTextureCacheExist(fullPath.c_str()))
-                        ImportTextureData(fullPath.c_str());
+                    AddTextureDataToModel(model, ETextureType::NORMAL_MAP, textureFilepath);
+                }
+            }
 
-                    AddTextureDataToModel(model, ETextureType::ALBEDO, fullPath.c_str());
+            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), textureFilename) == AI_SUCCESS)
+            {
+                std::filesystem::path textureFilepath(filepath.parent_path());
+                textureFilepath += "/";
+                textureFilepath += textureFilename.C_Str();
+
+                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
+                {
+
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(textureFilepath);
+
+                    AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilepath);
+                }
+                else
+                {
+                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                        ImportTextureData(textureFilepath);
+
+                    AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilepath);
                 }
             }
         }
@@ -380,67 +351,68 @@ namespace CCImporter
 
     #pragma region Model
 
-    void ImportModelDataRecursive(const aiNode* node, int modelParentIndex, unsigned int& index,
-        const aiScene* scene, std::vector<ImportModelUtils>& models, const char* filepath)
+    void ImportModelDataRecursive(const aiNode* node, int modelParentIndex, unsigned int& index, int meshIndex,
+        const aiScene* scene, std::vector<ImportModelUtils>& models, const std::filesystem::path& filepath)
     {
-        ImportModelUtils model {};
+            ImportModelUtils model{};
 
-        std::string modelName = filepath + std::string("/") + std::to_string(index);
-        model.modelHeader.m_modelId = std::hash<std::string>{}(modelName);
-        model.modelHeader.m_index = index;
-        model.modelHeader.m_parentIndex = modelParentIndex;
+            std::string modelName(filepath.generic_string());
+            modelName += std::string("_");
+            modelName += std::to_string(index);
 
-        aiVector3D trs[3];
-        node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
+            model.modelHeader.m_modelId = std::hash<std::string>{}(modelName);
+            model.modelHeader.m_index = index;
+            model.modelHeader.m_parentIndex = modelParentIndex;
 
-        for (int i = 0; i < 3; ++i)
-        {
-            for (int comp = 0; comp < 3; ++comp)
+            aiVector3D trs[3];
+            node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
+
+            for (int i = 0; i < 3; ++i)
             {
-                model.modelHeader.m_trs[i] = trs[i][comp];
+                for (int comp = 0; comp < 3; ++comp)
+                {
+                    model.modelHeader.m_trs[i] = trs[i][comp];
+                }
             }
-        }
 
-        ImportMeshData(scene, node, model, filepath);
-        ImportMaterialData(scene, node, model, filepath);
+            ImportMeshData(scene, node, meshIndex, model, filepath);
+            ImportMaterialData(scene, node, meshIndex, model, filepath);
 
-        model.modelHeader.m_childrenCount = node->mNumChildren;
+            model.modelHeader.m_childrenCount = node->mNumChildren;
 
-        models.push_back(model);
+            models.push_back(model);
 
-        int indexBuff = index;
-        ++index;
+            int indexBuff = index;
+            ++index;
 
-        std::vector<unsigned int> childrenIndexs;
-        childrenIndexs.reserve(model.modelHeader.m_childrenCount * sizeof(unsigned int));
-        for (unsigned int i = 0; i < node->mNumChildren; ++i)
-        {
-            childrenIndexs.push_back(index);
-            ImportModelDataRecursive(node->mChildren[i], model.modelHeader.m_index, index, scene, models, filepath);
-        }
+            std::vector<unsigned int> childrenIndexs;
+            childrenIndexs.reserve(model.modelHeader.m_childrenCount * sizeof(unsigned int));
+            for (unsigned int i = 0; i < node->mNumChildren; ++i)
+            {
+                childrenIndexs.push_back(index);
+                ImportModelDataRecursive(node->mChildren[i], model.modelHeader.m_index, index, 0, scene, models, filepath);
+            }
 
-        if (node->mNumChildren)
-        {
-            models[indexBuff].m_childrenIndices.swap(childrenIndexs);
-        }
+            if (node->mNumChildren)
+                models[indexBuff].m_childrenIndices.swap(childrenIndexs);
+
+            if (node->mNumMeshes > 1 && node->mNumMeshes > meshIndex + 1)
+                ImportModelDataRecursive(node, model.modelHeader.m_index - index, index, meshIndex + 1, scene, models, filepath);
     }
 
-    void ImportModelData(const aiScene* scene, std::vector<ImportModelUtils>& models, const char* filepath)
+    void ImportModelData(const aiScene* scene, std::vector<ImportModelUtils>& models, const std::filesystem::path& filepath)
     {
         unsigned int currentIndex = 0;
-        ImportModelDataRecursive(scene->mRootNode, -1, currentIndex, scene, models, filepath);
+        ImportModelDataRecursive(scene->mRootNode, -1, currentIndex, 0, scene, models, filepath);
     }
 
-    void CacheModelData(const char* filepath, const std::vector<ImportModelUtils>& models)
+    void CacheModelData(const std::filesystem::path& filepath, const std::vector<ImportModelUtils>& models)
     {
         FILE* file = nullptr;
 
-        std::string filepathStr(filepath);
-        filepathStr.erase(std::remove_if(filepathStr.begin(), filepathStr.end(), [](char c) {return c == '\\' || c == '/'; }), filepathStr.end());
-        filepathStr += CCImporter::cacheExtension;
-
         std::string fullFilepath(CCImporter::cacheDirectory);
-        fullFilepath += filepathStr;
+        fullFilepath += filepath.filename().generic_string();
+        fullFilepath += CCImporter::cacheExtension;
 
         if (fopen_s(&file, fullFilepath.c_str(), "wb"))
         {
@@ -468,6 +440,7 @@ namespace CCImporter
             {
                 if (model.modelHeader.m_materialHeader.m_texturesCount)
                 {
+
                     fwrite(&model.m_texturesPathSize[0], model.m_texturesPathSize.size() * sizeof(unsigned int), 1, file);
                     fwrite(&model.m_texturesType[0], model.m_texturesType.size() * sizeof(unsigned int), 1, file);
                     fwrite(&model.m_texturesPath[0], model.m_texturesPath.size(), 1, file);
@@ -478,11 +451,11 @@ namespace CCImporter
         fclose(file);
     }
 
-    void ImportModel(const char* filepath, std::vector<ImportModelUtils>& models)
+    void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models)
     {
         Assimp::Importer importer = Assimp::Importer();
 
-        const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate |
+        const aiScene* scene = importer.ReadFile(filepath.string().c_str(), aiProcess_Triangulate |
             aiProcess_JoinIdenticalVertices |
             aiProcess_SortByPType |
             aiProcess_GenNormals |

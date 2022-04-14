@@ -467,7 +467,7 @@ void ProjectSettingsDisplayer::RenderPass::Fill()
 
 void ProjectSettingsDisplayer::ResourceViewer::Fill()
 {
-    ImGui::Text("Resource count %i", ResourceManager::GetInstance()->GetResourceCount());
+    /*ImGui::Text("Resource count %i", ResourceManager::GetInstance()->GetResourceCount());
 
     std::map<std::type_index, std::vector<const char*>> resourcePaths;
     std::vector<const char*> resourcesType;
@@ -509,5 +509,5 @@ void ProjectSettingsDisplayer::ResourceViewer::Fill()
             ImGui::Text(it->second[i]);
         }
     }
-    
+    */
 }
