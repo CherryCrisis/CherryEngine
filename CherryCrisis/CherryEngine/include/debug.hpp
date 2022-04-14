@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <array>
 #include <source_location>
 #include <memory>
 
@@ -50,6 +51,8 @@ private:
 	//key size_t = hash of (string) message and (int) logType
 	std::map<size_t, LogMessage>	m_logMessages;
 	std::vector<Log>				m_logs;
+	
+	std::array<int, 3>				m_logTypeCounts{0,0,0};
 
 	TimeManager* m_timeManager;
 
@@ -59,7 +62,8 @@ public:
 	Debug();
 
 	std::vector<Log>* GetLogs() { return &m_logs; }
-	std::map<size_t, LogMessage>* GetCollapsedLogs() { return &m_logMessages; }
+	const std::map<size_t, LogMessage>* GetCollapsedLogs() { return &m_logMessages; }
+	const std::array<int, 3>* GetLogTypeCounts() { return &m_logTypeCounts; }
 	
 	// Print a string in the console and cache it
 	void AddLog(ELogType logType, const char* message, std::source_location location =

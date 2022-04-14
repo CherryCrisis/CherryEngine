@@ -7,6 +7,11 @@ Debug* Singleton<Debug>::currentInstance = nullptr;
 Debug::Debug() 
 {
 	m_timeManager = TimeManager::GetInstance();
+
+	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
+	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
+	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
+	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
 }
 
 void Debug::AddLog(ELogType logType, const char* message, std::source_location location)
@@ -27,7 +32,9 @@ void Debug::AddLog(ELogType logType, const char* message, std::source_location l
 		auto pair = m_logMessages.emplace(key, LogMessage(message, logType ));
 		logMessage = &pair.first->second;
 	}
-	
+
+	m_logTypeCounts[(int)logType]++;
+
 	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime(), location);
 }
 
@@ -35,4 +42,7 @@ void Debug::Clear()
 {
 	m_logs.clear();
 	m_logMessages.clear();
+
+	for (int i = 0; i < 3; ++i)
+		m_logTypeCounts[i] = 0;
 }
