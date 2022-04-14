@@ -32,7 +32,6 @@ public:
 
 	void Bind(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
 	{
-		m_callbacks.insert(callback);
 		auto function = CCFunction::BindFunctionUnsafe(&Event<Args...>::AddToCallbacks, this, callback);
 		m_queries.push(function.release());
 	}
