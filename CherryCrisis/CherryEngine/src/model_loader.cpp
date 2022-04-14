@@ -98,8 +98,8 @@ namespace CCImporter
             }
         }
 
-        model.modelHeader.m_verticesCount = vertices.size();
-        model.modelHeader.m_indicesCount = indices.size();
+        model.modelHeader.m_verticesCount = (unsigned int)vertices.size();
+        model.modelHeader.m_indicesCount = (unsigned int)indices.size();
         model.m_vertices.swap(vertices);
         model.m_indices.swap(indices);
     }

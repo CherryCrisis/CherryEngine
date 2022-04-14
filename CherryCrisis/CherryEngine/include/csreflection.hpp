@@ -7,24 +7,24 @@ template <typename ManagedT>
 struct ReflectedProperty : public CCProperty::ConstRefProperty<ReflectedProperty<ManagedT>, ManagedT>
 {
 private:
-	mono::ManagedProperty* m_reflectedField = nullptr;
+	mono::ManagedProperty* m_reflectedProp = nullptr;
 	mono::ManagedObject* m_csOwner = nullptr;
 
 public:
 	void SetProperty(const ManagedT& value)
 	{
-		m_csOwner->GetProperty(m_reflectedField, &value);
+		m_csOwner->SetProperty(m_reflectedProp, &value);
 	}
 
 	ManagedT GetProperty()
 	{
-		ManagedT value;
-		m_csOwner->GetProperty(m_reflectedField, &value);
-		return value;
+		ManagedT* valuePtr = nullptr;
+		m_csOwner->GetProperty(m_reflectedProp, (void**)&valuePtr);
+		return *valuePtr;
 	}
 
 	ReflectedProperty(mono::ManagedObject* owner, mono::ManagedProperty* prop)
-		: CCProperty::ConstRefProperty<ReflectedProperty, ManagedT>(this, &ReflectedProperty::SetProperty, &ReflectedProperty::GetProperty), m_csOwner(owner), m_reflectedField(prop)
+		: CCProperty::ConstRefProperty<ReflectedProperty, ManagedT>(this, &ReflectedProperty::SetProperty, &ReflectedProperty::GetProperty), m_csOwner(owner), m_reflectedProp(prop)
 	{ }
 };
 

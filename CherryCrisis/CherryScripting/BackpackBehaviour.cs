@@ -30,9 +30,12 @@ namespace CCScripting
 
 		public float deltaTime = 0.01f;
 		float time = 0f;
+		int i = 0;
+
 		public void Update()
 		{
-			time += 0.05f;
+			i++;
+		   time += 0.05f;
 
 			SetRotation();
 

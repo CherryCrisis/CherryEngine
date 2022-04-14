@@ -28,7 +28,7 @@ void Material::Load(std::shared_ptr<Material> material, const MaterialArgs& mate
 
 	material->m_shininess = materialArgs.m_materialHeader->m_shininess;
 
-	for (int i = 0; i < materialArgs.m_materialHeader->m_texturesCount; ++i)
+	for (unsigned int i = 0; i < materialArgs.m_materialHeader->m_texturesCount; ++i)
 	{
 		std::shared_ptr<Texture> texture =
 			resourceManager->AddResource<Texture>((*materialArgs.m_texturesPath)[i].c_str(), true);

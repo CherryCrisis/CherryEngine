@@ -46,7 +46,7 @@ int SkyboxRenderPass::Subscribe(Skybox* toGenerate)
 
 	cubemap->m_gpuCubemap = std::move(gpuCubemap);
 
-	if (ElementMeshGenerator::Generate(toGenerate->m_mesh.get()) == -1)
+	if (!ElementMeshGenerator::Generate(toGenerate->m_mesh.get()))
 		return -1;
 
 	m_skybox = toGenerate;

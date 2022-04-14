@@ -13,6 +13,9 @@ namespace CCScripting
         {
 
 		}
+		int oui = 6;
+
+		int SuperOui { set => oui = (int)(value - 7f); get => oui + 6; }
 
 		public string name = "Debug il sait pas quoi";
 		public void Debugger()

@@ -7,11 +7,6 @@ Debug* Singleton<Debug>::currentInstance = nullptr;
 Debug::Debug() 
 {
 	m_timeManager = TimeManager::GetInstance();
-
-	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
-	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
-	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
-	AddLog(ELogType::INFO, "rfjpigdpjiodfo");
 }
 
 void Debug::AddLog(ELogType logType, const char* message, std::source_location location)

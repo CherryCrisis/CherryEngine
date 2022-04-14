@@ -475,7 +475,7 @@ namespace mono
 	{
 	private:
 		MonoClassField* m_field;
-		ManagedType m_type = nullptr;
+		ManagedType m_type;
 		class ManagedClass* m_class;
 		std::string m_name;
 
@@ -510,6 +510,8 @@ namespace mono
 		std::string m_name;
 		MonoMethod* m_getMethod = nullptr;
 		MonoMethod* m_setMethod = nullptr;
+		std::unique_ptr<ManagedType> m_getType = nullptr;
+		std::unique_ptr<ManagedType> m_setType = nullptr;
 
 	protected:
 		friend class ManagedClass;
@@ -523,6 +525,8 @@ namespace mono
 		const MonoProperty* RawProperty() const { return m_property; }
 
 		const ManagedClass* Class() const { return m_class; }
+		const ManagedType* GetType() const { return m_getType.get(); }
+		const ManagedType* SetType() const { return m_setType.get(); }
 	};
 
 	//==============================================================================================//

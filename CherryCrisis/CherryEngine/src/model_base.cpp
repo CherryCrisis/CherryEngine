@@ -58,7 +58,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
         ModelNode* modelNode = modelNodes[modelUtils.modelHeader.m_index];
-        for (int i = 0; i < modelUtils.modelHeader.m_childrenCount; ++i)
+        for (unsigned int i = 0; i < modelUtils.modelHeader.m_childrenCount; ++i)
             modelNode->m_childrenNode.push_back(modelNodes[modelUtils.m_childrenIndices[i]]);
 
         if (modelUtils.modelHeader.m_parentIndex != -1)
@@ -119,7 +119,7 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
                 fread(&model.m_texturesPathSize[0], texturesCount * sizeof(unsigned int), 1, file);
                 fread(&model.m_texturesType[0], texturesCount * sizeof(unsigned int), 1, file);
 
-                for (int i = 0; i < model.modelHeader.m_materialHeader.m_texturesCount; ++i)
+                for (unsigned int i = 0; i < model.modelHeader.m_materialHeader.m_texturesCount; ++i)
                 {
                     std::string texturePath;
                     texturePath.resize(model.m_texturesPathSize[i]);
