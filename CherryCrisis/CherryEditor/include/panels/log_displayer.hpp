@@ -7,12 +7,10 @@
 
 class Debug;
 class Log;
-//class Texture;
 
-//struct GPUTexture;
-struct GPUTextureLog : GPUTexture
+struct GPUTextureLog : public GPUTexture
 {
-	unsigned int m_ID;
+	unsigned int m_ID = 0;
 };
 
 class LogDisplayer : public Panel 

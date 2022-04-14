@@ -11,6 +11,7 @@
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 #include "scene_manager.hpp"
+#include "utils.hpp"
 
 const char* scriptTemplate = 
 R"CS(using CCEngine;
@@ -23,17 +24,17 @@ namespace CCScripting
             : base(cPtr, cMemoryOwn) {}
 
 
-    //called at the start of the game
-    public void Start()
-    {
+        //called at the start of the game
+        public void Start()
+        {
 
-    }
+        }
 
-    //called each tick 
-    public void Update()
-    {
+        //called each tick 
+        public void Update()
+        {
 
-    }
+        }
     }
 })CS";
 
@@ -71,26 +72,11 @@ AssetBrowser::AssetBrowser()
 
 void AssetBrowser::QuerryBrowser()
 {
-    //TODO: change, 
     m_nodes.clear();
 
-    namespace fs = std::filesystem;
-    int i = 0;
-    if (fs::exists(m_currentDirectory)) 
-    {
-        for (const fs::directory_entry& entry : fs::directory_iterator(m_currentDirectory))
-        {
-            AssetNode node;
-            node.m_isDirectory = entry.is_directory();
-            node.m_icon = entry.is_directory() ? m_browserIcon : m_fileIcon;
-            node.m_path = entry.path();
-            node.m_relatiePath = entry.path().filename();
-            node.m_filename = entry.path().filename().string();
-            node.m_extension = entry.path().extension().string();
-            m_nodes[i] = node;
-            i++;
-        }
-    }
+    if (std::filesystem::exists(m_currentDirectory)) 
+        for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(m_currentDirectory)) 
+            GenerateNode(entry);
 }
 
 void AssetBrowser::Render()
@@ -140,11 +126,6 @@ void AssetBrowser::Render()
     ImGui::End();
 }
 
-void AssetBrowser::AssetNode::Render()
-{
-
-}
-
 void AssetBrowser::ContextCallback()
 {
     if (ImGui::BeginPopupContextItem("context"))
@@ -189,13 +170,10 @@ void AssetBrowser::ContextCallback()
         if (m_focusedNode)
         {
             ImGui::Separator();
-            if (ImGui::MenuItem("Open")) { call(0, m_focusedNode->m_path.string().c_str()); }
-            
-            if (ImGui::MenuItem("Rename"))
-                m_renaming = true;
 
-            if (ImGui::MenuItem("Delete"))
-                m_deleting = true;
+            if (ImGui::MenuItem("Open"))    call(0, m_focusedNode->GetFullPath().c_str());
+            if (ImGui::MenuItem("Rename"))  m_renaming = true;
+            if (ImGui::MenuItem("Delete"))  m_deleting = true;
 
             ImGui::Separator();
         }
@@ -204,18 +182,22 @@ void AssetBrowser::ContextCallback()
             if (m_focusedNode)
             {
                 std::string str = "/select,";
-                str += m_focusedNode->m_path.string();
+                str += m_focusedNode->GetFullPath();
 
                 call("open", "explorer.exe", str.c_str());
             }
             else
-            {
                 call(0, m_currentDirectory.string().c_str());
-            }
+
         }
 
         ImGui::EndPopup();
     }
+}
+
+std::string AssetBrowser::AssetNode::GetFullPath() 
+{
+    return m_path.string() + "\\" + m_filename + m_extension;
 }
 
 void AssetBrowser::CheckThings()
@@ -230,7 +212,23 @@ void AssetBrowser::CheckThings()
             return;
         }
     }
-    m_focusedNode = nullptr;
+}
+
+void AssetBrowser::GenerateNode(const std::filesystem::directory_entry& entry)
+{
+    AssetNode node;
+
+    node.m_isDirectory  = entry.is_directory();
+    node.m_icon         = entry.is_directory() ? m_browserIcon : m_fileIcon; // To Change
+    node.m_path         = entry.path().parent_path();
+    node.m_relativePath = entry.path();
+     
+    std::string filename = entry.path().filename().string();
+    node.m_filename = String::ExtractKey(filename, '.');
+
+    node.m_extension = entry.path().extension().string();
+
+    m_nodes[node.m_relativePath.string()] = node;
 }
 
 AssetBrowser::AssetNode* AssetBrowser::GetNodeByPath(std::filesystem::path path)
@@ -263,7 +261,6 @@ void AssetBrowser::RenderNodes()
 {
     float width = ImGui::GetContentRegionAvail().x;
 
-
     float cellSize = m_thumbnailSize + m_padding;
     int columnCount = (int)(width / cellSize);    if (columnCount < 1) columnCount = 1;
 
@@ -279,10 +276,12 @@ void AssetBrowser::RenderNodes()
 
         node.m_ImGuiID = ImGui::GetItemID();
 
+        std::string name = node.m_filename + node.m_extension;
+        const char* path = name.c_str();
+
         if (ImGui::BeginDragDropSource()) 
         {
-            const char* path = node.m_filename.c_str();
-            size_t length = node.m_filename.size();
+            size_t length = name.size();
             ImGui::SetDragDropPayload(node.m_extension.c_str(), path,length+1, ImGuiCond_Once);
             ImGui::Text(path);
             ImGui::EndDragDropSource();
@@ -301,19 +300,20 @@ void AssetBrowser::RenderNodes()
             if (node.m_extension == ".cherry") 
             {
                 //open Scene and if the last is not saved, warn the user
-                if (SceneManager::GetInstance()->m_currentScene->Unserialize(node.m_filename.c_str()))
-                    EditorManager::SendNotification("Scene Loaded!", ImGuiToastType::Success);
+                std::string str = "Assets/"+node.m_filename;
+                if (SceneManager::LoadScene(str.c_str()))
+                    EditorManager::SendNotification("Scene Loaded!", ENotifType::Success);
                 else
-                    EditorManager::SendNotification("Scene failed to Load", ImGuiToastType::Error);
+                    EditorManager::SendNotification("Scene failed to Load", ENotifType::Error);
             }
         }
 
-        // TODO: Need to set double click callback rename
-        ImGui::Text(node.m_filename.c_str());
+        ImGui::Text(path);
 
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2)
         {
-            EditorManager::SendNotification("Outch it hurts", ImGuiToastType::Warning);
+            m_focusedNode = &node;
+            m_renaming = true;
         }
 
         ImGui::NextColumn();
@@ -376,12 +376,12 @@ void AssetBrowser::RenderNodes()
         if (ImGui::Button("Rename", ImVec2(120, 0)))
         {
             ImGui::CloseCurrentPopup();
-            std::filesystem::path newPath = m_focusedNode->m_path.parent_path();
+            std::filesystem::path newPath = m_focusedNode->m_path;
             newPath /= newName;
             if (!newPath.has_extension())
                 newPath += m_focusedNode->m_extension;
             
-            rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str());
+            rename(m_focusedNode->GetFullPath().c_str(), newPath.string().c_str());
             QuerryBrowser();
 
             m_renaming = false;
@@ -418,7 +418,7 @@ void AssetBrowser::RenderNodes()
                 myfile << str;
                 myfile.close();
 
-                EditorManager::SendNotification("Script Created", ImGuiToastType::Success);
+                EditorManager::SendNotification("Script Created", ENotifType::Success);
             }
             QuerryBrowser();
 

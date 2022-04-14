@@ -4,6 +4,7 @@
 
 #include <stb_image.h>
 
+
 Texture::Texture(const char* texturePath)
     : Resource(texturePath)
 {

@@ -20,6 +20,9 @@ Entity::~Entity()
 
 void Entity::Initialize() 
 {
+	for (auto& [type, behaviour] : m_behaviours)
+		behaviour->BindToSignals();
+	
 	m_OnAwake.Invoke();	
 }	
 
@@ -43,21 +46,6 @@ void Entity::Update()
 
 void Entity::Destroy()
 {
-	Transform* transform;
-	if (!TryGetBehaviour(transform))
-		return;
-
-	std::vector<Transform*> children = transform->GetChildren();
-
-	for (int i = 0; i < children.size(); i++)
-	{
-		if (i == 78) 
-		{
-			std::cout << "e" << std::endl;
-		}
-		children[i]->GetHost().Destroy();
-	}
-	
 	delete this;
 }
 

@@ -8,10 +8,15 @@
 #include "basic_renderpass.hpp"
 #include "entity.hpp"
 #include "model.hpp"
+#include "picking_renderpass.hpp"
+
+int ModelRenderer::count = 1;
 
 ModelRenderer::ModelRenderer()
 {
 	PopulateMetadatas();
+	m_id = count;
+	count++;
 }
 
 ModelRenderer::~ModelRenderer()
@@ -53,11 +58,13 @@ void ModelRenderer::RemoveModel()
 
 void ModelRenderer::SubscribeToRenderPass()
 {
-	RenderManager::GetInstance()->GenerateFromPipeline<BasicRenderPass>(this);
+	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(this);
+	RenderManager::GetInstance()->SubscribeToPipeline<PickingRenderPass>(this);
 }
 
 void ModelRenderer::UnsubscribeToRenderPass()
 {
-	RenderManager::GetInstance()->RemoveFromPipeline<BasicRenderPass>(this);
+	RenderManager::GetInstance()->UnsubscribeToPipeline<BasicRenderPass>(this);
+	RenderManager::GetInstance()->UnsubscribeToPipeline<PickingRenderPass>(this);
 }
 

@@ -6,10 +6,13 @@
 #include "entity.hpp"
 
 #include "metadata.hpp"
+#include "scene.hpp"
+#include "serializer.hpp"
 
 class CCENGINE_API Behaviour : public Component
 {
 	friend class Entity;
+	friend class Serializer;
 	friend class Scene;
 
 private:
@@ -37,6 +40,6 @@ public:
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }
-	const uint64_t GetUUID() const { return (uint64_t)m_uuid; }
-	const uint64_t GetOwnerUUID() const { return (uint64_t)m_parentUuid; }
+	const uint32_t GetUUID() const { return (uint32_t)m_uuid; }
+	const uint32_t GetOwnerUUID() const { return (uint32_t)m_parentUuid; }
 };

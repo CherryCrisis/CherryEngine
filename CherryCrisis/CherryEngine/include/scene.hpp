@@ -10,14 +10,13 @@
 class ModelBase;
 
 class CCENGINE_API Scene : public Resource<Scene>
-{
-private:
-
+{ 
 public:
+	
 	Scene(const char* filePath) : Resource(filePath) { }
 	virtual ~Scene();
 	
-	// TODO: Switch to unique_ptr
+	// TODO: Switch to unique_ptr this is shitty shit shit shit
 	std::unordered_map<std::string, Entity*> m_entities;
 
 	Skybox m_skybox;
@@ -30,12 +29,10 @@ public:
 
 	//To Move
 	static void Load(std::shared_ptr<Scene> scene);
-	
-	//To Rework
-	void GenerateEntities(std::shared_ptr<ModelBase> modelBase);
 
-	//To Rework
 	std::string GetUniqueEntityName(const std::string& entityName);
+
+	void PopulateEmpty();
 
 	//To Rework
 	void AddEntity(Entity* toAdd);
@@ -44,9 +41,16 @@ public:
 	//To Rework
 	void RemoveEntity(const std::string& name);
 	//To Rework
-	Entity* FindEntity(uint64_t id);
+	Entity* FindEntity(uint32_t id);
+	//To Remove
+	Entity* FindModelEntity(uint32_t id);
 
-	//To Move
-	bool Serialize(const char* filePath);
-	bool Unserialize(const char* filePath);
+	void GenerateEntities(std::shared_ptr<ModelBase> resource);
+
+	std::string GetName() { return m_filepath; }
+
+	bool Save();
+	bool SaveAs(const char* filepath);
+
+	void Empty();
 };

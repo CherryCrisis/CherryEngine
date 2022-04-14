@@ -53,7 +53,7 @@ std::string Behaviour::Serialize()
 			Behaviour* ptr = *ptrr;
 			
 			if (ptr)
-				value += std::to_string((uint64_t)ptr->GetUUID()) + "\n";
+				value += std::to_string((uint32_t)ptr->GetUUID()) + "\n";
 			else
 				value += "none\n";
 			continue;
@@ -114,7 +114,7 @@ std::string Behaviour::Serialize()
 			propRef->Get(&ptr);
 
 			if (ptr)
-				value += std::to_string((uint64_t)ptr->GetUUID()) + "\n";
+				value += std::to_string((uint32_t)ptr->GetUUID()) + "\n";
 			else
 				value += "none\n";
 			continue;
@@ -126,7 +126,7 @@ std::string Behaviour::Serialize()
 			propRef->Get(&ptr);
 
 			if (ptr)
-				value += std::to_string((uint64_t)ptr->GetUUID()) + "\n";
+				value += std::to_string((uint32_t)ptr->GetUUID()) + "\n";
 			else
 				value += "none\n";
 			continue;

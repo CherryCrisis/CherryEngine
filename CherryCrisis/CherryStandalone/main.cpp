@@ -15,6 +15,7 @@
 #include <crtdbg.h>
 #include "scene_manager.hpp"
 #include "camera_component.hpp"
+#include "framebuffer.hpp"
 
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
@@ -104,18 +105,17 @@ int main()
 
     InputManager::GetInstance()->SetCursorHidden();
 
+    Framebuffer framebuffer;
+
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();
         TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
-        int x = 0;
-        int y = 0;
+        glfwGetWindowSize(window, &framebuffer.width, &framebuffer.height);
 
-        glfwGetWindowSize(window, &x, &y);
-
-        RenderManager::DrawScene(x, y, SceneManager::GetInstance()->m_currentScene->m_entities["Camera"]->GetBehaviour<CameraComponent>()->m_camera);
+        RenderManager::DrawScene(framebuffer, SceneManager::GetInstance()->m_currentScene->m_entities["Camera"]->GetBehaviour<CameraComponent>()->m_camera);
 
         engine.TickEngine();
         engine.Launch();

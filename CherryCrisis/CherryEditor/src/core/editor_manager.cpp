@@ -62,13 +62,8 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 
 EditorManager::EditorManager() 
 {
-    // Put here the editor keyboard context creation
     inputs = InputManager::GetInstance();
-
-
-    // To Replace
-    scene = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
-    SceneManager::GetInstance()->SetCurrentScene(scene);
+    SceneManager::LoadScene("Internal/SampleScene.cherry");
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -169,32 +164,17 @@ void EditorManager::HandleMenuBar()
     {
         if (ImGui::BeginMenu("File"))
         {
-            if (ImGui::MenuItem("New")) {}
-            if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-            if (ImGui::BeginMenu("Open Recent"))
-            {
-                ImGui::MenuItem("fish_hat.c");
-                ImGui::MenuItem("fish_hat.inl");
-                ImGui::MenuItem("fish_hat.h");
-                ImGui::EndMenu();
-            }
             if (ImGui::MenuItem("Save", "Ctrl+S")) 
-            {
-                if (SceneManager::GetInstance()->m_currentScene->Serialize(SceneManager::GetInstance()->m_currentScene->GetFilepath()))
-                {
-                    EditorManager::SendNotification("Scene  Saved !", ImGuiToastType::Success, 2.f);
-                }
-                else
-                {
-                    EditorManager::SendNotification("Scene failed to save.", ImGuiToastType::Error, 2.f);
-                }
-            }
+                EditorNotifications::SceneLoading(SceneManager::SaveCurrentScene());
+
             if (ImGui::MenuItem("Save As..")) {}
+
 
             if (ImGui::MenuItem("Launch"))
             {
                 call("open","CherryStandalone.exe");
             }
+
 
             ImGui::EndMenu();
         }
@@ -236,6 +216,7 @@ void EditorManager::HandleMenuBar()
             if (m_engine->isPlaying)
             {
                 m_engine->Stop();
+                m_selectedEntities.clear();
                 m_gameDisplayer.Unfocus();
             }
             else
@@ -289,19 +270,19 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
         }
 
         if (ImGui::Button("Success"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Success, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Success, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Warning"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Warning, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Warning, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Error"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Error, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Error, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("Info"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::Info, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::Info, 3.f);
         ImGui::SameLine();
         if (ImGui::Button("None"))
-            SendNotification("I am the Title ! %s", ImGuiToastType::None, 3.f);
+            SendNotification("I am the Title ! %s", ENotifType::None, 3.f);
         ImGui::SameLine();
 
         if (ImGui::Button("Show Demo"))
@@ -347,7 +328,7 @@ void EditorManager::UpdateFocusGame()
 }
 
 //Display time in seconds
-void EditorManager::SendNotification(const char* title, ImGuiToastType type, float displayTime)
+void EditorManager::SendNotification(const char* title, ENotifType type, float displayTime)
 {
     ImGui::InsertNotification({ type, displayTime, title, ""});
 }
@@ -361,4 +342,31 @@ void EditorManager::FocusEntity(Entity* entity)
 {
     m_selectedEntities.clear();
     m_selectedEntities.push_back(entity);
+}
+
+namespace EditorNotifications
+{
+    void SceneSaving(bool result) 
+    {
+        if (result)
+            EditorManager::SendNotification("Scene Saved!", ENotifType::Success);
+        else
+            EditorManager::SendNotification("Scene Failed to save", ENotifType::Error);
+    }
+
+    void SceneLoading(bool result)
+    {
+        if (result)
+            EditorManager::SendNotification("Scene Loaded!", ENotifType::Success);
+        else
+            EditorManager::SendNotification("Scene Failed to load", ENotifType::Error);
+    }
+
+    void ObjectLoading(bool result)
+    {
+        if (result)
+            EditorManager::SendNotification("loading Object", ENotifType::Info);
+        else
+            EditorManager::SendNotification("Error while loading object", ENotifType::Warning);
+    }
 }

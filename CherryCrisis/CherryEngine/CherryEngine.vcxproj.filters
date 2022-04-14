@@ -79,6 +79,15 @@
     <Filter Include="Fichiers d%27en-tête\Cells">
       <UniqueIdentifier>{e04aefe8-b1c4-4334-9a43-aaad2c9262ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Picking">
+      <UniqueIdentifier>{1acd25f1-bb3b-4e34-b70e-3386bddb4095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Picking">
+      <UniqueIdentifier>{0ad23ffb-a465-4f8a-8046-1421fc6db677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Serialization">
+      <UniqueIdentifier>{afdd0ab2-1029-4166-9f31-55e41b1d6d2d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -408,7 +417,7 @@
     <ClInclude Include="include\cherry_macros.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\element_mesh_renderpass.hpp">
+    <ClInclude Include="include\element_mesh_generator.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\skybox.hpp">
@@ -1059,7 +1068,7 @@
     <ClInclude Include="include\rigidbody.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\box_collider.hpp">
+    <ClInclude Include="include\collider.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\physic_actor.hpp">
@@ -1101,17 +1110,14 @@
     <ClInclude Include="include\command.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\sphere_collider.hpp">
-      <Filter>Fichiers d%27en-tête\Component</Filter>
+    <ClInclude Include="include\framebuffer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\collider.hpp">
-      <Filter>Fichiers d%27en-tête\Component</Filter>
+    <ClInclude Include="include\picking_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Picking</Filter>
     </ClInclude>
-    <ClInclude Include="include\bool3.hpp">
-      <Filter>Fichiers d%27en-tête\PhysX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\character_controller.hpp">
-      <Filter>Fichiers d%27en-tête\Component</Filter>
+    <ClInclude Include="include\pickinger.hpp">
+      <Filter>Fichiers d%27en-tête\Picking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1291,7 +1297,7 @@
     <ClCompile Include="src\maths.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\element_mesh_renderpass.cpp">
+    <ClCompile Include="src\element_mesh_generator.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\skybox.cpp">
@@ -1348,7 +1354,7 @@
     <ClCompile Include="src\rigidbody.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\box_collider.cpp">
+    <ClCompile Include="src\collider.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\physic_actor.cpp">
@@ -1375,13 +1381,22 @@
     <ClCompile Include="src\command.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\sphere_collider.cpp">
-      <Filter>Fichiers sources\Component</Filter>
+    <ClCompile Include="src\picking_renderpass.cpp">
+      <Filter>Fichiers sources\Picking</Filter>
     </ClCompile>
-    <ClCompile Include="src\collider.cpp">
-      <Filter>Fichiers sources\Component</Filter>
+    <ClCompile Include="src\pickinger.cpp">
+      <Filter>Fichiers sources\Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\serializer.cpp">
+      <Filter>Fichiers sources\Serialization</Filter>
     </ClCompile>
     <ClCompile Include="src\character_controller.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\box_collider.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sphere_collider.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>

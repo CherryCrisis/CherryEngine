@@ -45,6 +45,7 @@ public:
 
 	void SetScriptClass(const std::string& scriptName);
 	void BindToSignals() override;
+	void Initialize();
 	void Start();
 	void Update();
 

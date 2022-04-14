@@ -48,13 +48,14 @@ void Engine::Tick()
 void Engine::Launch() 
 {
 	isPlaying = true;
-
+	SceneManager::FlipScene();
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
+	
 }
 
 void Engine::Stop()
 {
 	isPlaying = false;
-	
 	PhysicSystem::PhysicManager::GetInstance()->Stop();
+	SceneManager::ResetScene();
 }

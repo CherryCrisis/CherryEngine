@@ -14,8 +14,9 @@ class CCENGINE_API ModelRenderer : public Behaviour, public ARenderer
 {
 private:
 	void PopulateMetadatas() override;
+	static int count;
 public:
-
+	int m_id = -1;
 
 	Transform* m_transform = nullptr;
 	std::shared_ptr<Model> m_model;
