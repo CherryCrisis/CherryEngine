@@ -13,7 +13,9 @@ ThreadPool* ThreadPool::GetInstance()
 
 ThreadPool::ThreadPool()
 {
-	const int threadCount = (std::thread::hardware_concurrency()/2) - 1;
+	m_mainThreadID = std::this_thread::get_id();
+
+	const int threadCount = (std::thread::hardware_concurrency() / 2) - 1;
 	std::cout << std::to_string(threadCount) << std::endl;
 
 	for (int i = 0; i < threadCount; ++i)

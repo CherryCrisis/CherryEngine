@@ -17,6 +17,6 @@ protected:
 	};
 
 public:
-	int Generate(Mesh* toGenerate);
-	int Destroy(Mesh* toGenerate);
+	virtual bool Generate(Mesh* toGenerate);
+	virtual bool Destroy(Mesh* toGenerate);
 };

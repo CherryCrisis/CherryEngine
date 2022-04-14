@@ -6,6 +6,8 @@
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
+#include "transform.hpp"
+
 CameraComponent::CameraComponent()
 {
 	auto RM = RenderManager::GetInstance();
@@ -55,12 +57,13 @@ void CameraComponent::Initialize()
 	ChangeRotation(m_transform->GetRotation());
 }
 
-void CameraComponent::ChangePosition(const Vector3& position)
+void CameraComponent::ChangePosition(const CCMaths::Vector3& position)
 {
+	m_camera.lastPosition = m_camera.position;
 	m_camera.position = position;
 }
 
-void CameraComponent::ChangeRotation(const Vector3& rotation)
+void CameraComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 {
 	m_camera.rotation = rotation;
 }

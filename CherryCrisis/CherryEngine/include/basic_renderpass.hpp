@@ -4,7 +4,7 @@
 
 #include <glad/gl.h>
 
-#include "element_mesh_generator.hpp"
+#include "ebo_tbn_generator.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -15,7 +15,7 @@
 class ModelRenderer;
 class Material;
 
-class BasicRenderPass : public ARenderPass, ElementMeshGenerator
+class BasicRenderPass : public ARenderPass, ElementTBNGenerator
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;

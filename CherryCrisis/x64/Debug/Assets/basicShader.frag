@@ -1,18 +1,30 @@
-#version 330 core
+#version 430 core
+
+//#define BLINN_PHONG
+#define USE_NORMAL_MAP
 
 // Varyings
-in vec2 vUV;
-in vec3 vNormal;
-in vec3 vFragPosition;
-
-out vec4 oColor;
+in VS_OUT
+{
+	vec2 vUV;
+	vec3 vNormal;
+	vec3 vFragPosition;
+	mat3 vTBN;
+} fs_in;
 
 struct Material
 {
-	vec3 albedoColor;
+	vec3	ambientCol;
+	vec3	diffuseCol;
+	vec3	specularCol;
+	vec3	emissiveCol;
 	float	shininess;
 
+	sampler2D albedoTex;
+	sampler2D normalMap;
 };
+
+uniform Material uMaterial;
 
 struct Light
 {
@@ -26,65 +38,85 @@ struct Light
 #define NBR_LIGHTS 8
 uniform Light uLights[NBR_LIGHTS];
 
-uniform Material uMaterial;
-
-uniform sampler2D uDiffuseTexture;
-
 uniform vec3 uViewPosition;
 
-void getLightColor(out vec3 ambient, out vec3 diffuse, out vec3 specular)
+out vec4 oColor;
+
+void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 specular)
 {
-	ambient = diffuse = specular = vec3(0.0, 0.0, 0.0);
+	ambient = diffuse = specular = vec3(0.0);
 	
-	vec3 normal = normalize(vNormal);
-	vec3 viewDir = normalize(uViewPosition - vFragPosition);
+	vec3 viewDir = normalize(uViewPosition - fs_in.vFragPosition);
 
 	for (int i = 0; i < NBR_LIGHTS; i++)
 	{
 		Light light = uLights[i];
 
+		// Compute ambient
+		ambient += light.ambient;
+
 		// Get light direction, if the light is a point light or a directionnal light
-		vec3 lightDir = light.position.xyz - float(light.isPoint) * vFragPosition;
+		vec3 lightDir = light.position - float(light.isPoint) * fs_in.vFragPosition;
 	
 		// Compute the light direction and the distance between the fragment and the light
-		float distance = length(lightDir);
+		// Normalize it manually
+		float lightDist = length(lightDir);
+		lightDir /= lightDist;
 
-		// Normalize the light direction manually
-		lightDir /= distance;
-
-		// Pre-compute normal ElightDir
+		// Pre-compute normal lightDir
 		float NdotL = dot(normal, lightDir);
 
-		// Compute ambient
-		ambient += uLights[i].ambient;
+		float diffuseVal = max(NdotL, 0.0);
+
+		if (diffuseVal <= 0)
+			continue;
 
 		// Compute diffuse
-		diffuse += max(NdotL, 0.0) * light.diffuse;
+		diffuse += diffuseVal * light.diffuse;
 
 		// Compute specular
 		#ifdef BLINN_PHONG
 			// Blinn phong
-			vec3 halfwayDir = normalize(lightDir - viewDir);
-			float dotValue = dot(normal, halfwayDir);
+			vec3 H = normalize(lightDir + viewDir);
+			float dotValue = dot(normal, H);
 		#else
 			// Phong
-			vec3 reflectDir = lightDir - 2.0 * NdotL * normal; 
+			vec3 reflectDir = 2.0 * NdotL * normal - lightDir; 
 			float dotValue = dot(viewDir, reflectDir);
 		#endif
 
-		specular += pow(max(dot(viewDir, reflectDir), 0.0), uMaterial.shininess) * light.specular;
+		specular += pow(clamp(dotValue, 0.0, 1.0), uMaterial.shininess) * light.specular;
 	}
 }
 
+vec3 getShadedColor(in vec3 normal)
+{
+	vec3 ambient, diffuse, specular;
+
+	getLightColor(normal, ambient, diffuse, specular);
+
+	vec3 ambientColor = uMaterial.ambientCol * ambient;
+
+	vec3 diffuseColor = uMaterial.diffuseCol * diffuse;
+
+	vec3 albedoColor = (ambientColor + diffuseColor) * texture(uMaterial.albedoTex, fs_in.vUV).rgb;
+
+	vec3 specularColor = uMaterial.specularCol * specular;
+
+	vec3 emissiveColor = uMaterial.emissiveCol;
+
+	return albedoColor + specularColor + emissiveColor;
+}
 
 void main()
 {
+	#ifdef USE_NORMAL_MAP
+	vec3 N = texture(uMaterial.normalMap, fs_in.vUV).xyz * 2.0 - 1.0;
+    N = normalize(fs_in.vTBN * N);
 
-	vec3 ambient, diffuse, specular;
-	
-	getLightColor(ambient, diffuse, specular);
-
-
-	vec3 albedo = texture(uDiffuseTexture, vUV).rgb * diffuse * uMaterial.albedoColor;
-    oColor = vec4(albedo, 1.0);
+	vec3 shadedColor = getShadedColor(N);
+	#else 
+	vec3 shadedColor = getShadedColor(normalize(fs_in.vNormal));
+	#endif
+    oColor = vec4(shadedColor, 1.0);
 }

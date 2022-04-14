@@ -18,7 +18,16 @@ BasicRenderPass::BasicRenderPass(const char* name)
 	: ARenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
 {
 	if (m_program)
+	{
+		glUseProgram(m_program->m_shaderProgram);
+
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoTex"), 0);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.normalMap"), 1);
+
 		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
+
+		glUseProgram(0);
+	}
 }
 
 template <>
@@ -52,7 +61,7 @@ int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 
 	// Generate GPU mesh
 	{
-		if (ElementMeshGenerator::Generate(model->m_mesh.get()) == -1)
+		if (!ElementMeshGenerator::Generate(model->m_mesh.get()))
 			return -1;
 
 		m_modelRenderers.insert(toGenerate);
@@ -74,8 +83,12 @@ int BasicRenderPass::Subscribe(Material* toGenerate)
 		return -1;
 
 	// Albedo texture
-	if (Texture* albedoTexture = toGenerate->textures["albedo"].get())
+	if (Texture* albedoTexture = toGenerate->textures[ETextureType::ALBEDO].get())
 		Subscribe(albedoTexture);
+
+	// Normal texture
+	if (Texture* normalMap = toGenerate->textures[ETextureType::NORMAL_MAP].get())
+		Subscribe(normalMap);
 
 	return 1;
 }
@@ -97,6 +110,9 @@ int BasicRenderPass::Subscribe(Texture* toGenerate)
 	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTextureStorage2D(gpuTexture->ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
+	glTextureSubImage2D(gpuTexture->ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
 
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return -1;
@@ -146,23 +162,29 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 	CCMaths::Matrix4 viewProjection = projection * view;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
+	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), GL_FALSE, camera.position.data);
+	
+
 	size_t lightID = 0u;
+	const char* lightFormat = "uLights[{}]";
 	for (Light* light : m_lights)
 	{
-		std::string count = "[" + std::to_string(lightID) + "]";
-		std::string lightIdentifier = "uLights" + count;
-
-		std::string pointString = lightIdentifier + ".isPoint";
-		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, pointString.c_str());
+		// TODO: Use string view
+		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
+		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isPoint").c_str());
 		glUniform1i(pointLoc, light->m_isPoint);
 
-		std::string posString = lightIdentifier + ".position";
-		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, posString.c_str());
+		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "position").c_str());
 		glUniform3fv(posLoc, 1, light->m_position.data);
 
-		std::string diffuseString = lightIdentifier + ".diffuse";
-		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, diffuseString.c_str());
+		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "diffuse").c_str());
 		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
+
+		GLuint ambientLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "ambient").c_str());
+		glUniform3fv(ambientLoc, 1, light->m_ambient.data);
+
+		GLuint specularLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "specular").c_str());
+		glUniform3fv(specularLoc, 1, light->m_specular.data);
 
 		lightID++;
 	}
@@ -175,8 +197,6 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-		float albedo[3] = { 1.0f, 1.0f, 1.0f };
-		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoColor"), 1, albedo);
 
 		Model* model = modelRdr->m_model.get();
 
@@ -185,10 +205,27 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 
 		if (Material* material = model->m_material.get())
 		{
-			if (Texture* albedoTexture = material->textures["albedo"].get())
+
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.ambientCol"), 1, material->m_ambient.data);
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.diffuseCol"), 1, material->m_diffuse.data);
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specularCol"), 1, material->m_specular.data);
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.emissiveCol"), 1, material->m_emissive.data);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.shininess"), material->m_shininess);
+
+			if (Texture* albedoTexture = material->textures[ETextureType::ALBEDO].get())
 			{
 				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture.get()))
+				{
 					glBindTextureUnit(0, gpuAlbedoTexture->ID);
+				}
+			}
+
+			if (Texture* normalMap = material->textures[ETextureType::NORMAL_MAP].get())
+			{
+				if (auto gpuNormalMap = static_cast<GPUTextureBasic*>(normalMap->m_gpuTexture.get()))
+				{
+					glBindTextureUnit(1, gpuNormalMap->ID);
+				}
 			}
 		}
 

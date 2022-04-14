@@ -3,7 +3,9 @@
 #include "behaviour.hpp"
 
 #include "camera.hpp"
-#include "transform.hpp"
+#include "maths.hpp"
+
+class Transform;
 
 class CameraComponent : public Behaviour
 {
@@ -11,16 +13,15 @@ protected:
 	void PopulateMetadatas() override;
 
 public:
+	Camera		m_camera;
+	Transform*	m_transform = nullptr;
+
 	CameraComponent();
 	~CameraComponent();
 
-	void ChangePosition(const Vector3& position);
-	void ChangeRotation(const Vector3& rotation);
-
+	void Initialize();
 	void BindToSignals() override;
 
-	void Initialize();
-
-	Camera		m_camera;
-	Transform*	m_transform = nullptr;
+	void ChangePosition(const CCMaths::Vector3& position);
+	void ChangeRotation(const CCMaths::Vector3& rotation);
 };

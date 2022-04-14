@@ -1119,6 +1119,9 @@
     <ClInclude Include="include\pickinger.hpp">
       <Filter>Fichiers d%27en-tête\Picking</Filter>
     </ClInclude>
+    <ClInclude Include="include\ebo_tbn_generator.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1398,6 +1401,9 @@
     </ClCompile>
     <ClCompile Include="src\sphere_collider.cpp">
       <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ebo_tbn_generator.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
