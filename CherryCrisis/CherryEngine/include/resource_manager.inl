@@ -9,11 +9,11 @@ std::shared_ptr<T> ResourceManager::CreateResource(const char* filepath)
 	if (resourceContainerIt == m_resources.end())
 	{
 		auto pair = m_resources.emplace(typeid(T), new ResourcesContainer<T>());
-		pair.first->second->Add(filepath, resourcePtr);
+		pair.first->second->Add(resourcePtr);
 	}
 	else
 	{
-		resourceContainerIt->second->Add(filepath, resourcePtr);
+		resourceContainerIt->second->Add(resourcePtr);
 	}
 
 

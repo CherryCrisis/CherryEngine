@@ -33,7 +33,8 @@ public:
     void* GetData() { return m_data; }
 
     //static void Load(std::shared_ptr<Texture> texture, bool flipTexture);
-    static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true, const char* relativePath = "");
+    //static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true);
+    static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true);
     static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     
     void Delete() override;

@@ -180,7 +180,7 @@ void EditorManager::HandleMenuBar()
             }
             if (ImGui::MenuItem("Save", "Ctrl+S")) 
             {
-                if (SceneManager::GetInstance()->m_currentScene->Serialize(SceneManager::GetInstance()->m_currentScene->GetFilepath()))
+                if (SceneManager::GetInstance()->m_currentScene->Serialize(SceneManager::GetInstance()->m_currentScene->GetFilepath().c_str()))
                 {
                     EditorManager::SendNotification("Scene  Saved !", ImGuiToastType::Success, 2.f);
                 }

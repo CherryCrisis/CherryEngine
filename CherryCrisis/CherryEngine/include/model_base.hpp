@@ -46,7 +46,7 @@ public:
 	ModelBase(const char* filename) : Resource(filename), m_rootNode(nullptr) {}
 	~ModelBase() = default;
 
-	static void Load(std::shared_ptr<ModelBase> modelBase, const char* relativePath);
+	static void Load(std::shared_ptr<ModelBase> modelBase);
 	static bool LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models);
 
 	void Delete() override;

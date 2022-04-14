@@ -30,29 +30,17 @@ void Texture::Delete()
 
 //void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
 //{
-//    //TODO: Replace to importTexture
-//    stbi_set_flip_vertically_on_load(flipTexture);
-//
-//    texture->m_data = stbi_load(texture->GetFilepath(), &texture->m_width, &texture->m_height, NULL, STBI_rgb_alpha);
-//
-//    if (!texture->m_data)
-//    {
-//        Debug* debug = Debug::GetInstance();
-//        debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texture->GetFilepath()).c_str());
-//    }
+//    Load(texture, flipTexture, "");
 //}
 
-void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, const char* relativePath)
+void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
 {
-    if (relativePath != "")
-        texture->m_relativePath = relativePath;
-
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
     if (!LoadFromCache(texture, &data, textureHeader))
     {
-        CCImporter::ImportTexture(texture->GetFilepath(), relativePath, &data, textureHeader, flipTexture);
+        CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture);
     }
 
     if (!data)
@@ -71,13 +59,8 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** da
     FILE* file = nullptr;
 
     std::string fullTexturePath(CCImporter::cacheDirectory);
-    fullTexturePath += texture->GetFilepath();
+    fullTexturePath += texture->GetFilesystemPath()->filename().string();
     fullTexturePath += CCImporter::cacheExtension;
-
-    /*texturePath.erase(std::remove_if(texturePath.begin(), texturePath.end(), [](char c) {return c == '\\' || c == '/';}), texturePath.end());*/
-
-    //std::string fullTexturePath(CCImporter::cacheDirectory);
-    //fullTexturePath += texturePath;
     
     Debug* debug = Debug::GetInstance();
     if (fopen_s(&file, fullTexturePath.c_str(), "rb")) //rb = read in binary mode

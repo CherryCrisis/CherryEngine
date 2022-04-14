@@ -10,21 +10,22 @@ ResourcesContainer<ResourceT>* AResourcesContainer::UnwrapResourcesContainer()
 }
 
 template<class ResourceT>
-void AResourcesContainer::Add(const char* filename, std::shared_ptr<ResourceT>& resource)
+void AResourcesContainer::Add(std::shared_ptr<ResourceT>& resource)
 {
 	ResourcesContainer<ResourceT>* resourceContainer = UnwrapResourcesContainer<ResourceT>();
 	assert(resourceContainer != nullptr);
 
-	auto func = CCFunction::BindFunction(&AResourcesContainer::Erase, this, resource->GetFilepath());
+	auto func = CCFunction::BindFunctionUnsafe(&AResourcesContainer::Erase, this, (*resource->GetFilesystemPath()));
 	resource->m_OnDeleted.Bind(&CCFunction::AFunction::Invoke, func.release());
 
-	resourceContainer->Add(filename, resource);
+	resourceContainer->Add(resource);
+	
 }
 
 template<class ResourceT>
-std::shared_ptr<ResourceT>* AResourcesContainer::GetResource(const char* filename)
+std::shared_ptr<ResourceT>* AResourcesContainer::GetResource(const std::filesystem::path& filepath)
 {
-	return UnwrapResourcesContainer<ResourceT>()->GetResource(filename);
+	return UnwrapResourcesContainer<ResourceT>()->GetResource(filepath);
 }
 
 template<class ResourceT, typename... Args>
@@ -34,15 +35,17 @@ void AResourcesContainer::Reload(const char* filename, Args... args)
 }
 
 template<class ResourceT>
-void ResourcesContainer<ResourceT>::Add(const char* filename, std::shared_ptr<ResourceT>& resource)
+void ResourcesContainer<ResourceT>::Add(std::shared_ptr<ResourceT>& resource)
 {
-	m_resources.emplace(filename, std::shared_ptr<ResourceT>(resource));
+	size_t hash = std::hash<std::string>{}(resource->GetFilepath());
+	m_resources.insert({ hash, resource });
 }
 
 template<class ResourceT>
-std::shared_ptr<ResourceT>* ResourcesContainer<ResourceT>::ResourcesContainer::GetResource(const char* filename)
+std::shared_ptr<ResourceT>* ResourcesContainer<ResourceT>::ResourcesContainer::GetResource(const std::filesystem::path& filepath)
 {
-	auto resource = m_resources.find(filename);
+	size_t hash = std::hash<std::string>{}(filepath.generic_string());
+	auto resource = m_resources.find(hash);
 
 	if (resource != m_resources.end())
 	{
@@ -67,9 +70,9 @@ void ResourcesContainer<ResourceT>::Purge()
 }
 
 template<class ResourceT>
-void ResourcesContainer<ResourceT>::Remove(const char* filename)
+void ResourcesContainer<ResourceT>::Remove(const std::filesystem::path& filepath)
 {
-	auto pair = m_resources.find(filename);
+	auto pair = m_resources.find(std::hash<std::string>{}(filepath.generic_string()));
 	if (pair != m_resources.end())
 	{
 		std::shared_ptr<ResourceT> resource = pair->second;
@@ -78,25 +81,25 @@ void ResourcesContainer<ResourceT>::Remove(const char* filename)
 }
 
 template<class ResourceT>
-void ResourcesContainer<ResourceT>::Erase(const char* filename)
+void ResourcesContainer<ResourceT>::Erase(const std::filesystem::path& filepath)
 {
-	m_resources.erase(filename);
+	m_resources.erase(std::hash<std::string>{}(filepath.generic_string()));
 }
 
-template<class ResourceT>
-void ResourcesContainer<ResourceT>::GetResourcesFilepath(std::vector<const char*>& resourcePaths) const
-{
-	for (auto& pair : m_resources)
-	{
-		resourcePaths.push_back(pair.second->GetFilepath());
-	}
-}
+//template<class ResourceT>
+//void ResourcesContainer<ResourceT>::GetResourcesFilepath(std::vector<const char*>& resourcePaths) const
+//{
+//	for (auto& pair : m_resources)
+//	{
+//		resourcePaths.push_back(pair.second->GetFilepath());
+//	}
+//}
 
 template<class ResourceT>
 template<class... Args>
-void ResourcesContainer<ResourceT>::Reload(const char* filename, Args... args)
+void ResourcesContainer<ResourceT>::Reload(const std::filesystem::path& filepath, Args... args)
 {
-	auto pair = m_resources.find(filename);
+	auto pair = m_resources.find(std::hash<std::string>{}(filepath.generic_string()));
 	if (pair != m_resources.end())
 	{
 		std::shared_ptr<ResourceT> resource = pair->second;

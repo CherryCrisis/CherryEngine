@@ -65,7 +65,7 @@ mono::ManagedScriptContext* CsScriptingSystem::CreateContext(char* domainName, c
 void CsScriptingSystem::InitializeAssembly(std::shared_ptr<CsAssembly> assembly, const char* domainName)
 {
 	char* name = (char*)&domainName[0];
-	assembly->m_context = CreateContext(name, assembly->GetFilepath());
+	assembly->m_context = CreateContext(name, assembly->GetFilepath().c_str());
 
 	m_assemblies.push_back(assembly);
 }

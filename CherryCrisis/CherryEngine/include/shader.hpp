@@ -19,7 +19,7 @@ private:
 	unsigned int	m_shaderID;
 	EShader			m_shaderType;
 
-	static std::string ParseShaderFromFile(const char* filepath);
+	static std::string ParseShaderFromFile(std::filesystem::path& filepath);
 	static unsigned int CompileShader(EShader shaderType, const char** shaderStr);
 
 public:

@@ -28,8 +28,8 @@ public:
 
     const std::array<void*, 6>& GetData() { return m_data; }
 
-    static void Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6], const char* relativePath);
-    static void Load(std::shared_ptr<Cubemap> cubemap, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack, const char* relativePath);
+    static void Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6]);
+    static void Load(std::shared_ptr<Cubemap> cubemap, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack);
 
     void Delete() override;
 };

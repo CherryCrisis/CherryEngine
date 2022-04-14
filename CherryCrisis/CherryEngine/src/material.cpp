@@ -27,7 +27,7 @@ void Material::Load(std::shared_ptr<Material> material, const MaterialArgs& mate
 	for (int i = 0; i < materialArgs.m_materialHeader->m_texturesCount; ++i)
 	{
 		std::shared_ptr<Texture> texture =
-			resourceManager->AddResource<Texture>((*materialArgs.m_texturesPath)[i].c_str(), true);
+			resourceManager->AddResource<Texture>((*materialArgs.m_texturesPath)[i].c_str(), true, true);
 
 		material->textures.emplace((ETextureType)(*materialArgs.m_textureType)[i], texture);
 	}

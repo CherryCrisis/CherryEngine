@@ -11,14 +11,12 @@
 #include "mesh.hpp"
 #include "scene.hpp"
 
-void ModelBase::Load(std::shared_ptr<ModelBase> modelBase, const char* relativePath)
+void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 {
-    modelBase->m_relativePath = relativePath;
-
     std::vector<CCImporter::ImportModelUtils> modelsUtils;
     if (!LoadFromCache(modelBase, modelsUtils))
     {
-        CCImporter::ImportModel(modelBase->GetFilepath(), relativePath, modelsUtils);
+        CCImporter::ImportModel(*modelBase->GetFilesystemPath(), modelsUtils);
     }
 
     if (modelsUtils.size() == 0)
@@ -42,10 +40,12 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase, const char* relativeP
 
             std::shared_ptr<Mesh> mesh = resourceManager->AddResource<Mesh>(meshName.c_str(), true, modelUtils.m_vertices, modelUtils.m_indices);
 
-
-            MaterialArgs materialArgs{ .m_materialHeader = &modelUtils.modelHeader.m_materialHeader,
+            MaterialArgs materialArgs
+            { 
+                .m_materialHeader = &modelUtils.modelHeader.m_materialHeader,
                 .m_texturesPath = &modelUtils.m_texturesPathCstr,
-                .m_textureType = &modelUtils.m_texturesType };
+                .m_textureType = &modelUtils.m_texturesType,
+            };
 
             std::shared_ptr<Material> material = resourceManager->AddResource<Material>(materialName.c_str(), true, materialArgs);
             
@@ -85,7 +85,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase, const char* relativeP
 bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models)
 {
     std::string fullFilepath(CCImporter::cacheDirectory);
-    fullFilepath += modelBase->GetFilepath();
+    fullFilepath += modelBase->GetFilesystemPath()->filename().generic_string();
     fullFilepath += CCImporter::cacheExtension;
     //filepath.erase(std::remove_if(filepath.begin(), filepath.end(), [](char c) {return c == '\\' || c == '/'; }), filepath.end());
 

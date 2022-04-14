@@ -14,7 +14,7 @@ void Cubemap::Delete()
    //     stbi_image_free(m_data[i]);
 }
 
-void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6], const char* relativePath)
+void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6])
 {
     //stbi_set_flip_vertically_on_load(false);
 
@@ -27,7 +27,7 @@ void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6], co
     ResourceManager* resourceManager = ResourceManager::GetInstance();
     for (unsigned int i = 0; i < 6; i++)
     {
-        cubemap->m_textures[i] = resourceManager->AddResource<Texture>(textures[i], true, false, relativePath);
+        cubemap->m_textures[i] = resourceManager->AddResource<Texture>(textures[i], true, false);
         cubemap->m_data[i] = cubemap->m_textures[i]->GetData();
     }
 
@@ -36,8 +36,8 @@ void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6], co
         
 }
 
-void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack, const char* relativePath)
+void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack)
 {
     const char* textures[6] = { textureRight, textureLeft, textureTop, textureBottom, textureFront, textureBack };
-    Cubemap::Load(cubemap, textures, relativePath);
+    Cubemap::Load(cubemap, textures);
 }
