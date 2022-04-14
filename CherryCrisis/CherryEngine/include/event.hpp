@@ -32,29 +32,29 @@ public:
 
 	void Bind(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
 	{
-		//m_callbacks.insert(callback);
-		//auto function = CCFunction::BindFunctionUnsafe(&Event<Args...>::AddToCallbacks, this, callback);
-		//m_queries.push(function.release());
+		m_callbacks.insert(callback);
+		auto function = CCFunction::BindFunctionUnsafe(&Event<Args...>::AddToCallbacks, this, callback);
+		m_queries.push(function.release());
 	}
 
 	template<typename T>
 	void Bind(void (T::* func)(Args... type), T* member)
 	{
-		//auto callback = CCCallback::BindCallback(func, member);
-		//Bind(callback);
+		auto callback = CCCallback::BindCallback(func, member);
+		Bind(callback);
 	}
 
 	void Bind(void (*func)(Args... type))
 	{
-		//auto callback = CCCallback::BindCallback(func);
-		//Bind(callback);
+		auto callback = CCCallback::BindCallback(func);
+		Bind(callback);
 	}
 
 	template<typename T>
 	void Unbind(void (T::* func)(Args... type), T* member)
 	{
 		std::shared_ptr<CCCallback::ACallback<Args...>> findedCallback(nullptr);
-		/*for (auto& callback : m_callbacks)
+		for (auto& callback : m_callbacks)
 		{
 			if (auto memberCallback = std::dynamic_pointer_cast<CCCallback::MemberCallback<T, Args...>>(callback))
 			{
@@ -64,7 +64,7 @@ public:
 					break;
 				}
 			}
-		}*/
+		}
 
 		if (findedCallback)
 		{
@@ -76,7 +76,7 @@ public:
 	void Unbind(void (*func)(Args... type))
 	{
 		std::shared_ptr<CCCallback::ACallback<Args...>> findedCallback(nullptr);
-		/*for (auto& callback : m_callbacks)
+		for (auto& callback : m_callbacks)
 		{
 			if (auto nonMemberCallback = std::dynamic_pointer_cast<CCCallback::NonMemberCallback<Args...>>(callback))
 			{
@@ -86,7 +86,7 @@ public:
 					return;
 				}
 			}
-		}*/
+		}
 
 		if (findedCallback)
 		{
