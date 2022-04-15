@@ -11,6 +11,7 @@
 #include <string>
 #include <glad/gl.h>
 #include <stb_image.h>
+#include <stb_image_write.h>
 
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
@@ -100,7 +101,7 @@ namespace CCImporter
     {
         Debug* debug = Debug::GetInstance();
 
-        std::string texturePathStr(filepath.filename().generic_string());
+        std::string texturePathStr(filepath.filename().string());
         texturePathStr += CCImporter::cacheExtension;
 
         FILE* file = nullptr;
@@ -117,6 +118,20 @@ namespace CCImporter
 
         fwrite(&cacheData[0], textureHeader.size, 1, file);
         fclose(file);
+    }
+
+    void WriteTexturePng(const std::filesystem::path& filepath, const unsigned char* cacheData, const TextureHeader& textureHeader)
+    {
+        if (!cacheData)
+            return;
+
+        stbi_flip_vertically_on_write(true);
+
+        std::string filepathStr(filepath.string());
+        if (!stbi_write_png(filepathStr.c_str(), textureHeader.width, textureHeader.height, 4, cacheData, textureHeader.width * 4))
+        {
+            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to write png file : {}", filepathStr).c_str());
+        }
     }
 
     void ImportTextureData(const std::filesystem::path& filepath, const aiTexture* assimpTexture)
@@ -140,6 +155,8 @@ namespace CCImporter
         }
 
         textureHeader.size = textureHeader.height * textureHeader.width * 4;
+
+        WriteTexturePng(filepath, stbiData, textureHeader);
         CacheTextureData(filepath, stbiData, textureHeader);
         stbi_image_free(stbiData);
     }
@@ -150,7 +167,7 @@ namespace CCImporter
 
         TextureHeader textureHeader{};
 
-        std::string texturePath(filepath.generic_string());
+        std::string texturePath(filepath.string());
 
         unsigned char* stbiData = stbi_load(texturePath.c_str(), &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
@@ -207,8 +224,7 @@ namespace CCImporter
 
         stbi_set_flip_vertically_on_load(flipTexture);
 
-        std::string fullTexturePath(filepath.generic_string());
-        //fullTexturePath += filename;
+        std::string fullTexturePath(filepath.string());
 
         *textureData = stbi_load(fullTexturePath.c_str(), &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
 
@@ -225,6 +241,22 @@ namespace CCImporter
     #pragma endregion
 
     #pragma region Material
+
+    void GetFBXTexturePath(std::filesystem::path& textureFilepath, const std::filesystem::path& filepath, const char* texturefbxFilename)
+    {
+        std::filesystem::path texturefbxFilepath(texturefbxFilename);
+
+        std::string textureFilepathStr(filepath.parent_path().string());
+        textureFilepathStr += "/";
+        textureFilepathStr += texturefbxFilepath.filename().string();
+
+        size_t lastindex = textureFilepathStr.find_last_of(".");
+        textureFilepathStr.erase(lastindex, textureFilepathStr.size());
+
+        textureFilepathStr += ".png";
+
+        textureFilepath = textureFilepathStr;
+    }
 
     void ImportMaterialData(const aiScene* assimpScene, const aiNode* assimpNode, int meshIndex, ImportModelUtils& model, const std::filesystem::path& filepath)
     {
@@ -277,20 +309,22 @@ namespace CCImporter
             aiString textureFilename;
             if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &textureFilename) == AI_SUCCESS)
             {
-                std::filesystem::path textureFilepath(filepath.parent_path());
-                textureFilepath += "/";
-                textureFilepath += textureFilename.C_Str();
-
                 if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
                 {
+                    std::filesystem::path textureFilepath;
+                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
 
-                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
-                        ImportTextureData(textureFilepath);
+                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
+                        ImportTextureData(textureFilepath, texture);
 
                     AddTextureDataToModel(model, ETextureType::AMBIENT, textureFilepath);
                 }
                 else
                 {
+                    std::filesystem::path textureFilepath(filepath.parent_path());
+                    textureFilepath += "/";
+                    textureFilepath += textureFilename.C_Str();
+
                     if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
                         ImportTextureData(textureFilepath);
 
@@ -301,20 +335,23 @@ namespace CCImporter
             
             if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_HEIGHT, 0), textureFilename) == AI_SUCCESS)
             {
-                std::filesystem::path textureFilepath(filepath.parent_path());
-                textureFilepath += "/";
-                textureFilepath += textureFilename.C_Str();
 
                 if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
                 {
+                    std::filesystem::path textureFilepath;
+                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
 
-                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
-                        ImportTextureData(textureFilepath);
+                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
+                        ImportTextureData(textureFilepath, texture);
 
                     AddTextureDataToModel(model, ETextureType::NORMAL_MAP, textureFilepath);
                 }
                 else
                 {
+                    std::filesystem::path textureFilepath(filepath.parent_path());
+                    textureFilepath += "/";
+                    textureFilepath += textureFilename.C_Str();
+
                     if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
                         ImportTextureData(textureFilepath);
 
@@ -324,20 +361,23 @@ namespace CCImporter
 
             if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), textureFilename) == AI_SUCCESS)
             {
-                std::filesystem::path textureFilepath(filepath.parent_path());
-                textureFilepath += "/";
-                textureFilepath += textureFilename.C_Str();
 
                 if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
                 {
+                    std::filesystem::path textureFilepath;
+                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
 
-                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
-                        ImportTextureData(textureFilepath);
+                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
+                        ImportTextureData(textureFilepath, texture);
 
                     AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilepath);
                 }
                 else
                 {
+                    std::filesystem::path textureFilepath(filepath.parent_path());
+                    textureFilepath += "/";
+                    textureFilepath += textureFilename.C_Str();
+
                     if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
                         ImportTextureData(textureFilepath);
 

@@ -54,6 +54,7 @@ std::shared_ptr<T> ResourceManager::AddResource(const char* filepath, bool verif
 	{
 		resourcePtr->SetResourceState(EResourceState::LOADING);
 		T::Load(resourcePtr, args...);
+		resourcePtr->IsLoaded(resourcePtr, m_threadpool);
 	}
 
 	return resourcePtr;

@@ -8,6 +8,7 @@
 #include "skybox.hpp"
 
 class ModelBase;
+class ModelNode;
 
 class CCENGINE_API Scene : public Resource<Scene>
 { 
@@ -46,6 +47,7 @@ public:
 	Entity* FindModelEntity(uint32_t id);
 
 	void GenerateEntities(std::shared_ptr<ModelBase> resource);
+	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities);
 
 	std::string GetName() { return GetFilepath(); }
 
