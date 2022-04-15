@@ -160,7 +160,7 @@ void AssetBrowser::ContextCallback()
 
 
                 QuerryBrowser();
-                m_focusedNode = GetNodeByName("NewScene.cherry");
+                m_focusedNode = GetNodeByName("NewScene");
                 m_renaming = true;
             }
 

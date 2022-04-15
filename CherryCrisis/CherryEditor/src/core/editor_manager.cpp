@@ -208,7 +208,7 @@ void EditorManager::HandleMenuBar()
 
 
         float size = ImGui::GetWindowHeight() - 4.f;
-
+        ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg]);
         ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f * 3.f));
 
         if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
@@ -237,7 +237,7 @@ void EditorManager::HandleMenuBar()
         {
 
         }
-
+        ImGui::PopStyleColor(1);
         ImGui::EndMainMenuBar();
     }
 }

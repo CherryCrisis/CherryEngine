@@ -14,7 +14,7 @@ void GameDisplayer::Render()
         return;
 
     m_isHovered = false;
-
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f,0.f });
     if (ImGui::Begin("Game", &m_isOpened))
     {
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
@@ -43,7 +43,8 @@ void GameDisplayer::Render()
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::EndChild();
     }
-
+     
+    ImGui::PopStyleVar(1);
     ImGui::End();
 }
 
