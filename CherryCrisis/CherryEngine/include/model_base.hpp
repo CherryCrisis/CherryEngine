@@ -37,21 +37,18 @@ private:
 	ModelNode* m_rootNode;
 	std::vector<std::shared_ptr<Model>>	m_models;
 
-	std::string m_relativePath;
-
-	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities);
 	void DeleteModelNode(ModelNode* modelNode);
 
 public:
 	ModelBase(const char* filename) : Resource(filename), m_rootNode(nullptr) {}
 	~ModelBase() = default;
 
+	size_t GetModelCount() { return m_models.size(); }
+	ModelNode* GetRootNode() { return m_rootNode; }
+
 	static void Load(std::shared_ptr<ModelBase> modelBase);
 	static bool LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<CCImporter::ImportModelUtils>& models);
 
 	void Delete() override;
 	void Reload();
-
-	//Generate entities with modelBase (model instance)
-	std::vector<Entity*> GenerateEntities(Entity* rootEntity);
 };

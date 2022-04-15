@@ -7,10 +7,6 @@
 #include "model.hpp"
 #include "model_base.hpp"
 #include "mesh.hpp"
-//class Model;
-//struct ModelNode;
-
-//class Vertex;
 
 namespace CCImporter
 {
@@ -99,12 +95,7 @@ namespace CCImporter
     static const char* cacheDirectory("Cache/");
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
-
-    //TODO:
     void ImportTexture(const std::filesystem::path& filepath,
         unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture);
-
-	//void LoadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);
-	//void ReloadModel(const char* filepath, ModelNode** rootModels, std::vector<std::shared_ptr<Model>>& models);
 }
 

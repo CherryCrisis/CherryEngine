@@ -93,17 +93,20 @@ void ThreadPool::Update(EChannelTask channelTask)
 	{
 		std::unique_ptr<Task> task;
 
+		while (!m_mainThreadTasks.empty())
 		{
-			std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
+			{
+				std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
 
-			if (m_mainThreadTasks.empty())
-				return;
+				if (m_mainThreadTasks.empty())
+					return;
 
-			task = std::move(m_mainThreadTasks.front());
-			m_mainThreadTasks.pop();
+				task = std::move(m_mainThreadTasks.front());
+				m_mainThreadTasks.pop();
+			}
+
+			task->m_func->Invoke();
 		}
-
-		task->m_func->Invoke();
 		
 	}
 }

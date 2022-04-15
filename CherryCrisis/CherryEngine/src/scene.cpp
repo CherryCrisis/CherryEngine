@@ -59,6 +59,8 @@ std::string Scene::GetUniqueEntityName(const std::string& entityName)
 
 	auto goIt = m_entities.find(modifiedName);
 
+	//This is not optimized m_entities.find can take a long time!
+	//TODO: CHANGE THIS !
 	for (int count = 1; goIt != m_entities.end(); count++, goIt = m_entities.find(modifiedName))
 		modifiedName = entityName + std::to_string(count);
 
@@ -111,14 +113,42 @@ bool Scene::SaveAs(const char* filepath)
 	return Serializer::SerializeScene(this, filepath);
 }
 
-void Scene::GenerateEntities(std::shared_ptr<ModelBase> resource)
+void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities)
 {
-	Entity* root = new Entity("Root");
-	std::vector<Entity*> children = resource->GenerateEntities(root);
-	AddEntity(root);
+	Entity* entity = new Entity();
+	ModelRenderer* modelRdr = entity->AddBehaviour<ModelRenderer>();
+	Transform* entityTransform = entity->AddBehaviour<Transform>();
 
-	for (Entity* child : children)
-		AddEntity(child);
+	modelRdr->m_transform = entityTransform;
+	modelRdr->SetModel(node->m_model);
+
+	entityTransform->SetPosition(node->m_baseTRS[0]);
+	entityTransform->SetRotation(node->m_baseTRS[1]);
+	entityTransform->SetScale(node->m_baseTRS[2]);
+
+	if (parentEntity)
+	{
+		Transform* parentTransform = parentEntity->GetOrAddBehaviour<Transform>();
+		entityTransform->SetParent(parentTransform);
+	}
+
+	entities.push_back(entity);
+
+	for (ModelNode* childNode : node->m_childrenNode)
+		GenerateEntitiesRecursive(childNode, entity, entities);
+}
+
+void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
+{
+	std::vector<Entity*> entities;
+
+	ModelNode* rootNode = modelBase->GetRootNode();
+
+	if (modelBase->GetModelCount() && rootNode)
+		GenerateEntitiesRecursive(rootNode, nullptr, entities);
+
+	for (Entity* entity : entities)
+		AddEntity(entity);
 }
 
 bool Find(const std::string& string) 
