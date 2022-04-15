@@ -34,7 +34,7 @@ void HierarchyDisplayer::Render()
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
         ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
-        ImGui::Separator();\
+        ImGui::Separator();
 
         for (auto& [entityName, entityRef] : SceneManager::GetInstance()->m_currentScene->m_entities)
         {

@@ -73,7 +73,7 @@ void SceneDisplayer::Render()
         return;
 
     m_isActive = true;
-
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f,0.f });
     if (ImGui::Begin("Scene", &m_isOpened))
     {
         InputManager* IM = InputManager::GetInstance();
@@ -104,7 +104,7 @@ void SceneDisplayer::Render()
             glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
             Pickinger::SetBuffer(&m_framebuffer, &m_camera);
             CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
-            Entity* e = Pickinger::GetEntity(mousePos.x - ImGui::GetWindowPos().x, mousePos.y - ImGui::GetWindowPos().y);
+            Entity* e = Pickinger::GetEntity(mousePos.x - (ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMin().x), mousePos.y - (ImGui::GetWindowPos().y + ImGui::GetWindowContentRegionMin().y));
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
             //TODO: Add multi select CTRL 
@@ -125,9 +125,9 @@ void SceneDisplayer::Render()
             UpdateFramebuffer(wsize.x, wsize.y, m_camera);
 
         uint64_t ViewTex = (uint64_t)m_ViewTex;
-
+  
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
-
+ 
         if (ImGui::BeginDragDropTarget()) 
         {
        
@@ -191,7 +191,7 @@ void SceneDisplayer::Render()
         IM->PopContext();
     }
 
-
+    ImGui::PopStyleVar(1);
     ImGui::End();
 }
 
