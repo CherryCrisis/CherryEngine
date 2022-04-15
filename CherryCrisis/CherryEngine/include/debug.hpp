@@ -37,11 +37,18 @@ public:
 	FullDate	m_date;
 	bool		m_isSelected = false;
 
-	std::source_location m_sourceLocation;
+	uint_least32_t line = 0u;
+	std::string file = "";
+	std::string function = "";
 
 public:
 	Log(LogMessage* logMessage, FullDate fullDate, std::source_location sourceLocation)
-		: m_logMessage(logMessage), m_date(fullDate), m_sourceLocation(sourceLocation) {}
+		: m_logMessage(logMessage), m_date(fullDate),
+		line(sourceLocation.line()), file(sourceLocation.file_name()), function(sourceLocation.file_name()) {}
+
+	Log(LogMessage* logMessage, FullDate fullDate, unsigned int line, const char* file, const char* function)
+		: m_logMessage(logMessage), m_date(fullDate),
+		line(line), file(file), function(function) {}
 };
 
 class CCENGINE_API Debug : public Singleton<Debug>
@@ -68,6 +75,8 @@ public:
 	// Print a string in the console and cache it
 	void AddLog(ELogType logType, const char* message, std::source_location location =
 		std::source_location::current());
+
+	void AddLog(ELogType logType, const char* message, unsigned int line, const char* file, const char* function);
 
 	void Clear();
 };
