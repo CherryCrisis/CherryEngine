@@ -88,6 +88,18 @@
     <Filter Include="Fichiers sources\Serialization">
       <UniqueIdentifier>{afdd0ab2-1029-4166-9f31-55e41b1d6d2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering\Renderpass">
+      <UniqueIdentifier>{afffcb04-38da-4720-bb8b-eb88c35fad49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering\Generator">
+      <UniqueIdentifier>{f4e2d591-1196-4774-b969-80ac6443b808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Rendering\Renderpass">
+      <UniqueIdentifier>{05193d54-7521-4c8e-b1bc-211e2b57fd4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Rendering\Generator">
+      <UniqueIdentifier>{40e61724-b694-4dac-af23-a7b1d61e20e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -396,12 +408,6 @@
     <ClInclude Include="include\singleton.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\gl_manager.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\basic_renderpass.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\model_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
@@ -411,19 +417,10 @@
     <ClInclude Include="include\renderer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\renderpass_interface.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\cherry_macros.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\element_mesh_generator.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\skybox.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\skybox_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\camera_component.hpp">
@@ -1119,14 +1116,32 @@
     <ClInclude Include="include\pickinger.hpp">
       <Filter>Fichiers d%27en-tête\Picking</Filter>
     </ClInclude>
-    <ClInclude Include="include\ebo_tbn_generator.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="include\shadow_renderpass.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\light.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basic_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\postprocess_renderpass_interface.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderpass_interface.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering_renderpass_interface.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\shadow_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skybox_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ebo_tbn_generator.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\element_mesh_generator.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1306,19 +1321,10 @@
     <ClCompile Include="src\render_manager.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\basic_renderpass.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\maths.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\element_mesh_generator.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\skybox.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\skybox_renderpass.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\camera_component.cpp">
@@ -1414,11 +1420,20 @@
     <ClCompile Include="src\sphere_collider.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
-    <ClCompile Include="src\ebo_tbn_generator.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\shadow_renderpass.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skybox_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\basic_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ebo_tbn_generator.cpp">
+      <Filter>Fichiers sources\Rendering\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\element_mesh_generator.cpp">
+      <Filter>Fichiers sources\Rendering\Generator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

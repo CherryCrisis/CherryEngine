@@ -17,7 +17,7 @@ BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
 }
 
 BasicRenderPass::BasicRenderPass(const char* name)
-	: ARenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
+	: ARenderingRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
 {
 	if (m_program)
 	{

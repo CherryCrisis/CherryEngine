@@ -1,6 +1,6 @@
 #pragma once
 
-#include "renderpass_interface.hpp"
+#include "rendering_renderpass_interface.hpp"
 
 #include <unordered_set>
 
@@ -13,7 +13,7 @@
 class ModelRenderer;
 class Light;
 
-class ShadowRenderPass : public ARenderPass
+class ShadowRenderPass : public ARenderingRenderPass
 {
 	std::unordered_set<Light*> m_lights;
 	std::unordered_set<ModelRenderer*> m_models;

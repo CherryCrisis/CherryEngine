@@ -2,6 +2,8 @@
 
 #include <glad/gl.h>
 
+#include "rendering_renderpass_interface.hpp"
+
 #include "element_mesh_generator.hpp"
 
 #include "cubemap.hpp"
@@ -9,7 +11,7 @@
 struct Skybox;
 struct Camera;
 
-class SkyboxRenderPass : public ARenderPass, ElementMeshGenerator
+class SkyboxRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
 	Skybox* m_skybox = nullptr;

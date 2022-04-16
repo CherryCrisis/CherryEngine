@@ -311,7 +311,6 @@
     <ClInclude Include="include\event.hpp" />
     <ClInclude Include="include\framework.hpp" />
     <ClInclude Include="include\function.hpp" />
-    <ClInclude Include="include\gl_manager.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\keycode.hpp" />
@@ -339,7 +338,9 @@
     <ClInclude Include="include\physic_utils.hpp" />
     <ClInclude Include="include\pickinger.hpp" />
     <ClInclude Include="include\picking_renderpass.hpp" />
+    <ClInclude Include="include\postprocess_renderpass_interface.hpp" />
     <ClInclude Include="include\renderer.hpp" />
+    <ClInclude Include="include\rendering_renderpass_interface.hpp" />
     <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
     <ClInclude Include="include\resources_container.hpp" />

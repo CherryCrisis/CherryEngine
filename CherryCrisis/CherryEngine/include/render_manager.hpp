@@ -8,19 +8,21 @@
 
 #include "singleton.hpp"
 
-#include "renderpass_interface.hpp"
+#include "rendering_renderpass_interface.hpp"
+#include "postprocess_renderpass_interface.hpp"
 
 class CCENGINE_API RenderManager : public Singleton<RenderManager>
 {
 	friend class Singleton<RenderManager>;
 
 public:
-	using PipelineDesc = std::function<void(const std::unordered_map<std::type_index, ARenderPass*>&, std::vector<ARenderPass*>&)>;
+	using RenderingRPDesc = std::function<void(std::vector<ARenderingRenderPass*>&)>;
+	using PostprocessRPDesc = std::function<void(std::vector<APostProcessRenderPass*>&)>;
 
 private:
 	std::unordered_map<std::type_index, ARenderPass*>	m_existingRenderpasses;
-	std::vector<ARenderPass*> m_orderedPipeline;
-
+	std::vector<ARenderingRenderPass*> m_orderedRenderingRenderpass;
+	std::vector<APostProcessRenderPass*> m_orderedPostprocessRenderpass;
 
 public:
 	RenderManager();
@@ -33,9 +35,10 @@ public:
 
 	static void DrawScene(Framebuffer& framebuffer, Camera& camera);
 
-	static PipelineDesc DefaultRenderingPipeline();
+	static RenderingRPDesc DefaultRenderingRenderpass();
+	static PostprocessRPDesc DefaultPostprocessRenderpass();
 
-	static void InitializePipeline(const PipelineDesc& pipelineDesc);
+	static void InitializePipeline(const RenderingRPDesc& renderingRenderpasses, const PostprocessRPDesc& postprocessRenderpasses);
 	
 	template <class SubPipelineT>
 	constexpr SubPipelineT* GetSubpipeline();

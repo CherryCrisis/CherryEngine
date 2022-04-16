@@ -20,7 +20,7 @@ ShadowRenderPass::GPUShadowLight::~GPUShadowLight()
 }
 
 ShadowRenderPass::ShadowRenderPass(const char* name)
-	: ARenderPass(name, "Assets/shadowShader.vert", "Assets/shadowShader.frag")
+	: ARenderingRenderPass(name, "Assets/shadowShader.vert", "Assets/shadowShader.frag")
 {
 	if (m_program)
 	{
