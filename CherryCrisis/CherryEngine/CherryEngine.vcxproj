@@ -315,6 +315,7 @@
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\keycode.hpp" />
+    <ClInclude Include="include\light.hpp" />
     <ClInclude Include="include\light_component.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
@@ -350,6 +351,7 @@
     <ClInclude Include="include\serializer.hpp" />
     <ClInclude Include="include\shader.hpp" />
     <ClInclude Include="include\shader_program.hpp" />
+    <ClInclude Include="include\shadow_renderpass.hpp" />
     <ClInclude Include="include\singleton.hpp" />
     <ClInclude Include="include\skybox.hpp" />
     <ClInclude Include="include\skybox_renderpass.hpp" />
@@ -365,8 +367,10 @@
     <ClInclude Include="src\physic_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Assets\basicShader.frag" />
-    <None Include="..\Assets\basicShader.vert" />
+    <None Include="..\x64\Debug\Assets\basicShader.frag" />
+    <None Include="..\x64\Debug\Assets\basicShader.vert" />
+    <None Include="..\x64\Debug\Assets\shadowShader.frag" />
+    <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="externals\include\assimp\color4.inl" />
     <None Include="externals\include\assimp\material.inl" />
     <None Include="externals\include\assimp\matrix3x3.inl" />
@@ -502,6 +506,7 @@
     <ClCompile Include="src\serializer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shader_program.cpp" />
+    <ClCompile Include="src\shadow_renderpass.cpp" />
     <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\skybox_renderpass.cpp" />
     <ClCompile Include="src\sound.cpp" />

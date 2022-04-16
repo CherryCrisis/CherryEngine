@@ -8,6 +8,7 @@
 
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
+#include "shadow_renderpass.hpp"
 
 #include "framebuffer.hpp"
 
@@ -84,9 +85,6 @@ void RenderManager::DrawScene(Framebuffer& framebuffer, Camera& camera)
 	if (RM->m_orderedPipeline.size() == 0 && RM->m_existingRenderpasses.size() > 0)
 		InitializePipeline(DefaultRenderingPipeline());
 
-	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	for (ARenderPass* pipeline : RM->m_orderedPipeline)
 		pipeline->CallOnExecute(framebuffer, camera);
 
@@ -106,6 +104,9 @@ RenderManager::PipelineDesc RenderManager::DefaultRenderingPipeline()
 		std::vector<ARenderPass*>& orderedPipelines)
     {
         
+        ARenderPass* shadow = RenderManager::GetInstance()->LoadSubpipeline<ShadowRenderPass>();
+        orderedPipelines.push_back(shadow);
+
         ARenderPass* lit = RenderManager::GetInstance()->LoadSubpipeline<BasicRenderPass>();
         orderedPipelines.push_back(lit);
         

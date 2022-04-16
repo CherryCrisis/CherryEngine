@@ -2,6 +2,8 @@
 
 #include "maths.hpp"
 
+struct GPULight { };
+
 struct Light
 {
     alignas(16) bool m_enabled = true;
@@ -11,4 +13,6 @@ struct Light
     alignas(16) CCMaths::Vector3 m_diffuse = CCMaths::Vector3::One;
     alignas(16) CCMaths::Vector3 m_specular = CCMaths::Vector3::One;
     alignas(16) CCMaths::Vector3 m_attenuation = CCMaths::Vector3(1.f, 0.f, 0.f);
+
+    std::unique_ptr<GPULight> m_gpuLight = nullptr;
 };

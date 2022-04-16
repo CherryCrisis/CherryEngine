@@ -2,14 +2,17 @@
 
 #include "light_component.hpp"
 
-#include "basic_renderpass.hpp"
 #include "render_manager.hpp"
+
+#include "basic_renderpass.hpp"
+#include "shadow_renderpass.hpp"
 
 #include "maths.hpp"
 #include "transform.hpp"
 
 LightComponent::LightComponent()
 {
+	RenderManager::GetInstance()->SubscribeToPipeline<ShadowRenderPass>(&m_light);
 	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(&m_light);
 
 	PopulateMetadatas();
@@ -17,6 +20,7 @@ LightComponent::LightComponent()
 
 LightComponent::~LightComponent()
 {
+	RenderManager::GetInstance()->SubscribeToPipeline<ShadowRenderPass>(&m_light);
 	RenderManager::GetInstance()->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
 }
 
@@ -44,6 +48,7 @@ void LightComponent::PopulateMetadatas()
 	m_metadatas.SetField<CCMaths::Vector3>("diffuse", m_light.m_diffuse);
 	m_metadatas.SetField<CCMaths::Vector3>("specular", m_light.m_specular);
 	m_metadatas.SetField<CCMaths::Vector3>("attenuation", m_light.m_attenuation);
+	m_metadatas.SetField<bool>("isPoint", m_light.m_isPoint);
 }
 
 void LightComponent::ChangePosition(const CCMaths::Vector3& position)

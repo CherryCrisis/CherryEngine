@@ -236,6 +236,7 @@ namespace CCMaths
 
 	inline Matrix4 Matrix4::Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far)
 	{
+		// TODO: Optimizations
 		return
 		{
 			(Near * 2.f) / (Right - Left),   0.f,                              0.f,                               0.f,
@@ -250,5 +251,35 @@ namespace CCMaths
 		float Top = Near * tanf(FovY * 0.5f);
 		float Right = Top * Aspect;
 		return Matrix4::Frustum(-Right, Right, -Top, Top, Near, Far);
+	}
+
+	inline Matrix4 Matrix4::Orthographic(float left, float right, float bottom, float top, float near, float far)
+	{
+		// Pre-compute divisions
+		float OneOverTopMinusBottom = 1.f / (top - bottom);
+		float OneOverFarMinusNear = 1.f / (far - near);
+		float OneOverRightMinusLeft = 1.f / (right - left);
+
+		return
+		{
+			2.f * OneOverRightMinusLeft, 0.f, 0.f, -(right + left) * OneOverRightMinusLeft,
+			0.f, 2.f * OneOverTopMinusBottom, 0.f, -(top + bottom) * OneOverTopMinusBottom,
+			0.f, 0.f, -2.f * OneOverFarMinusNear, -(far + near) * OneOverFarMinusNear,
+			0.f, 0.f, 0.f, 1.f
+		};
+	}
+
+	inline Matrix4 Matrix4::LookAt(const Vector3& Eye, const Vector3& At, const Vector3& Up)
+	{
+		Vector3 ZAxis = Vector3::Normalized(At - Eye);
+		Vector3 XAxis = Vector3::Normalized(Vector3::Cross(Up, ZAxis));
+		Vector3 YAxis = Vector3::Cross(ZAxis, XAxis);
+
+		return {
+			XAxis.x, YAxis.x, -ZAxis.x, 0.f,
+			XAxis.y, YAxis.y, -ZAxis.y, 0.f,
+			XAxis.z, YAxis.z, -ZAxis.z, 0.f,
+			-Vector3::Dot(XAxis, Eye), -Vector3::Dot(YAxis, Eye), Vector3::Dot(ZAxis, Eye), 1.f
+		};
 	}
 }

@@ -5,6 +5,7 @@
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
 
+#include "shadow_renderpass.hpp"
 #include "basic_renderpass.hpp"
 #include "entity.hpp"
 #include "model.hpp"
@@ -58,12 +59,14 @@ void ModelRenderer::RemoveModel()
 
 void ModelRenderer::SubscribeToRenderPass()
 {
+	RenderManager::GetInstance()->SubscribeToPipeline<ShadowRenderPass>(this);
 	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(this);
 	RenderManager::GetInstance()->SubscribeToPipeline<PickingRenderPass>(this);
 }
 
 void ModelRenderer::UnsubscribeToRenderPass()
 {
+	RenderManager::GetInstance()->UnsubscribeToPipeline<ShadowRenderPass>(this);
 	RenderManager::GetInstance()->UnsubscribeToPipeline<BasicRenderPass>(this);
 	RenderManager::GetInstance()->UnsubscribeToPipeline<PickingRenderPass>(this);
 }

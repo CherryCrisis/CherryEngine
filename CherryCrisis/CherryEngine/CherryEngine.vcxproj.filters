@@ -1122,6 +1122,12 @@
     <ClInclude Include="include\ebo_tbn_generator.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\shadow_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\light.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1171,12 +1177,6 @@
     </None>
     <None Include="include\renderer_manager.inl">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </None>
-    <None Include="..\Assets\basicShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\Assets\basicShader.frag">
-      <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="include\entity.inl">
       <Filter>Fichiers d%27en-tête</Filter>
@@ -1231,6 +1231,18 @@
     </None>
     <None Include="interface\scripted_behaviour.i">
       <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\shadowShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\shadowShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\basicShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\basicShader.vert">
+      <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1403,6 +1415,9 @@
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\ebo_tbn_generator.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shadow_renderpass.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
