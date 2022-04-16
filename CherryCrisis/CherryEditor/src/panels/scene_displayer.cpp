@@ -26,8 +26,8 @@ SceneDisplayer::SceneDisplayer()
     IM->AddActionAxes("UpDown", i);
     IM->AddAxisToAction("UpDown", { Keycode::SPACE, Keycode::LEFT_CONTROL });
 
-    IM->AddActionAxes("BackFront", i);
-    IM->AddAxisToAction("BackFront", { Keycode::S, Keycode::W });
+    IM->AddActionAxes("FrontBack", i);
+    IM->AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
 
     IM->AddActionAxes("RightLeft", i);
     IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
@@ -55,16 +55,29 @@ void SceneDisplayer::UpdateCamera()
     InputManager* IM = InputManager::GetInstance();
     CCMaths::Vector2 deltaMouse = IM->GetMouseDelta();
 
+    CCMaths::Matrix4 view = Matrix4::RotateZXY(m_camera.rotation);
+
+    Vector3 up = Vector3::Up;
+    Vector3 right = view.right;
+    Vector3 forward = -view.back;
+
+    right.y = forward.y = 0.f;
+    right.Normalize(); forward.Normalize();
+
+    Debug::GetInstance()->AddLog(ELogType::INFO, std::format("x {}, y {}, z {}", right.x, right.y, right.z).c_str());
+
     float dt = TimeManager::GetInstance()->GetDeltaTime();
     float speed = dt * m_cameraSpeed;
+
+    // Compute each movement vector
+    Vector3 forwardMove = forward * IM->GetAxis("FrontBack");
+    Vector3 rightwardMove = right * IM->GetAxis("RightLeft");
+    Vector3 upwardMove = up * IM->GetAxis("UpDown");
 
     m_camera.rotation.x += dt * deltaMouse.y;
     m_camera.rotation.y += dt * deltaMouse.x;
     
-    m_camera.position.x += IM->GetAxis("RightLeft") * speed;// * transform.right ;
-    m_camera.position.y += IM->GetAxis("UpDown") * speed;
-    m_camera.position.z += IM->GetAxis("BackFront") * speed; // * transform.forward ;
-
+    m_camera.position += (forwardMove + rightwardMove + upwardMove) * speed;
 }
 
 void SceneDisplayer::Render() 
