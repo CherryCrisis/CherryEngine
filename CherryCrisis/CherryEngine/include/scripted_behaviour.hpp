@@ -49,7 +49,7 @@ public:
 	void Start();
 	void Update();
 
-	void Reload();
+	void Reload(std::shared_ptr<CsAssembly> csAssembly);
 
 	std::string GetScriptPath() { return m_scriptName; }
 

@@ -57,7 +57,7 @@ public:
 
 	void Delete() override;
 
-	void Reload(const aiMesh* assimpMesh);
+	void Reload(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 };
 
 #include "mesh.inl"

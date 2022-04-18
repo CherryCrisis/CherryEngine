@@ -172,7 +172,7 @@ void ScriptedBehaviour::Update()
 	csUpdate->Invoke(managedInstance->RawObject(), &excep);
 }
 
-void ScriptedBehaviour::Reload()
+void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
 {
 	m_metadatas.m_fields.clear();
 	m_metadatas.m_properties.clear();

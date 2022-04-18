@@ -19,7 +19,7 @@
 
 #include "serializer.hpp"
 
-Scene::~Scene()
+void Scene::Delete()
 {
 	for (auto [entityName, entityPtr] : m_entities)
 		delete entityPtr;

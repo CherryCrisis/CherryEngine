@@ -59,7 +59,7 @@ protected:
 
 public:
 	Event<std::shared_ptr<T>> m_OnLoaded {};
-	Event<> m_OnReloaded {};
+	Event<std::shared_ptr<T>> m_OnReloaded {};
 	Event<> m_OnDeleted {};
 
 	Resource(const std::filesystem::path& filepath)
@@ -92,7 +92,7 @@ public:
 	{
 		resource->SetResourceState(EResourceState::LOADING);
 		resource->Reload(args...);
-		resource->m_OnReloaded.Invoke();
+		resource->m_OnReloaded.Invoke(std::move(resource));
 		resource->SetResourceState(EResourceState::LOADED);
 	}
 };

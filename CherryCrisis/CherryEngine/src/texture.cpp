@@ -16,8 +16,6 @@
 #include "debug.hpp"
 
 
-
-
 Texture::Texture(const char* texturePath)
     : Resource(texturePath)
 {
@@ -29,11 +27,6 @@ void Texture::Delete()
     if (m_data)
         delete m_data;
 }
-
-//void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
-//{
-//    Load(texture, flipTexture, "");
-//}
 
 void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
 {
@@ -84,13 +77,27 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** da
     return true;
 }
 
-void Texture::Reload()
+void Texture::Reload(bool flipTexture, std::shared_ptr<Texture> texture)
 {
-    /*if (m_data)
-        free(m_data);
+    unsigned char* data{};
+    CCImporter::TextureHeader textureHeader{};
 
-    stbi_set_flip_vertically_on_load(true);
-    int nrComponents;
+    if (texture)
+    {
+        LoadFromCache(texture, &data, textureHeader);
+    }
+    else
+    {
+        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture);
+    }
 
-    m_data = stbi_load(GetFilepath(), &m_width, &m_height, &nrComponents, STBI_rgb_alpha);*/
+    if (!data)
+    {
+        Debug* debug = Debug::GetInstance();
+        debug->AddLog(ELogType::ERROR, std::format("Failed to load image : {}", GetFilepath()).c_str());
+    }
+
+    m_data = (void*)std::move(data);
+    m_height = textureHeader.height;
+    m_width = textureHeader.width;
 }

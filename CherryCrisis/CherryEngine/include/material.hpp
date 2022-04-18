@@ -48,5 +48,5 @@ public:
 	static void Load(std::shared_ptr<Material> material, const MaterialArgs& materialArgs);
 
 	void Delete() override;
-	void Reload(/*const aiMaterial* assimpMaterial*/);
+	void Reload(const MaterialArgs& materialArgs);
 };
