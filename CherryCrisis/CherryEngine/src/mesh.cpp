@@ -67,9 +67,9 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 
     for (int i = 0; i < 8; i++)
     {
-        int xSign = BoolSign(BoolPattern(i, 2));
-        int ySign = BoolSign(BoolPattern(i, 4));
-        int zSign = BoolSign(BoolPattern(i, 1));
+        int xSign = BoolSign(!BoolPattern(i, 2));
+        int ySign = BoolSign(!BoolPattern(i, 4));
+        int zSign = BoolSign(!BoolPattern(i, 1));
 
         Vertex vertex;
 
@@ -116,12 +116,17 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 
     for (int i = 0; i < 4; i++)
     {
-        int xSign = BoolSign(BoolPattern(i + 1, 2));
-        int ySign = BoolSign(BoolPattern(i, 2));
+        int test = BoolPattern(i, 1);
+
+        int xPattern = !BoolPattern(i + 1, 2);
+        int yPattern = !BoolPattern(i, 2);
 
         Vertex vertex;
-        vertex.uv.x = Remap(xSign, -1, 1, 0, 1);
-        vertex.uv.y = Remap(ySign, -1, 1, 0, 1);
+        vertex.uv.x = xPattern;
+        vertex.uv.y = yPattern;
+
+        int xSign = BoolSign(xPattern);
+        int ySign = BoolSign(yPattern);
 
         vertex.position.x = xSign * xHalfRes;
         vertex.position.y = ySign * yHalfRes;
