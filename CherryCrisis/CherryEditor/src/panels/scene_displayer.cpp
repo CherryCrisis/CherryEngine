@@ -124,7 +124,7 @@ void SceneDisplayer::Render()
         if (m_isActive)
             UpdateFramebuffer(wsize.x, wsize.y, m_camera);
 
-        uint64_t ViewTex = (uint64_t)m_ViewTex;
+        uint64_t ViewTex = (uint64_t)m_framebuffer.TexID;
 
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
 

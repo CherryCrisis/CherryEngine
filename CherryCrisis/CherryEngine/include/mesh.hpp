@@ -25,7 +25,7 @@ struct Vertex
 
 enum class EMeshShape
 {
-	PLANE,
+	QUAD,
 	CUBE,
 	SPHERE,
 };
@@ -49,6 +49,7 @@ public:
 	static void Load(std::shared_ptr<Mesh> mesh, const aiMesh* assimpMesh);
 
 	static void CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes, float zHalfRes);
+	static void CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes);
 
 	template <typename... Args>
 	static void Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, Args... args);

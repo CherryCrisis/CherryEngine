@@ -46,6 +46,8 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 	gpuLight->framebuffer.width = 1000;
 	gpuLight->framebuffer.height = 1000;
 
+	// TODO: Use DSA
+
 	glGenFramebuffers(1, &gpuLight->framebuffer.FBO);
 	glGenTextures(1, &gpuLight->depthTexID);
 	glBindTexture(GL_TEXTURE_2D, gpuLight->depthTexID);

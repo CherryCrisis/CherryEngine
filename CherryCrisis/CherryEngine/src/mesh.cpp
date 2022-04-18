@@ -67,10 +67,15 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 
     for (int i = 0; i < 8; i++)
     {
+        int xSign = BoolSign(BoolPattern(i, 2));
+        int ySign = BoolSign(BoolPattern(i, 4));
+        int zSign = BoolSign(BoolPattern(i, 1));
+
         Vertex vertex;
-        vertex.position.x = BoolSign(BoolPattern(i, 2)) * xHalfRes;
-        vertex.position.y = BoolSign(BoolPattern(i, 4)) *-yHalfRes;
-        vertex.position.z = BoolSign(BoolPattern(i, 1)) * zHalfRes;
+
+        vertex.position.x = xSign * xHalfRes;
+        vertex.position.y = ySign *-yHalfRes;
+        vertex.position.z = zSign * zHalfRes;
         vertices.push_back(vertex);
     }
 
@@ -79,36 +84,59 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 
     /*Above ABC,BCD*/
     indices.push_back(0); indices.push_back(1); indices.push_back(2);
-    //indices.push_back(1); indices.push_back(2); indices.push_back(3);
     indices.push_back(3); indices.push_back(2); indices.push_back(1);
 
     /*Following EFG,FGH*/
-    //indices.push_back(4); indices.push_back(5); indices.push_back(6);
     indices.push_back(6); indices.push_back(5); indices.push_back(4);
     indices.push_back(5); indices.push_back(6); indices.push_back(7);
 
     /*Left ABF,AEF*/
-    //indices.push_back(0); indices.push_back(1); indices.push_back(5);
     indices.push_back(5); indices.push_back(1); indices.push_back(0);
     indices.push_back(0); indices.push_back(4); indices.push_back(5);
 
     /*Right side CDH,CGH*/
     indices.push_back(2); indices.push_back(3); indices.push_back(7);
-    //indices.push_back(2); indices.push_back(6); indices.push_back(7);
     indices.push_back(7); indices.push_back(6); indices.push_back(2);
 
     /*ACG,AEG*/
     indices.push_back(0); indices.push_back(2); indices.push_back(6);
-    //indices.push_back(0); indices.push_back(4); indices.push_back(6);
     indices.push_back(6); indices.push_back(4); indices.push_back(0);
 
     /*Behind BFH,BDH*/
     indices.push_back(1); indices.push_back(5); indices.push_back(7);
-    //indices.push_back(1); indices.push_back(3); indices.push_back(7);
     indices.push_back(7); indices.push_back(3); indices.push_back(1);
 
-   Load(mesh, vertices, indices);
+    Load(mesh, vertices, indices);
 }
+
+void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes)
+{
+    std::vector<Vertex> vertices;
+    vertices.reserve(4);
+
+    for (int i = 0; i < 4; i++)
+    {
+        int xSign = BoolSign(BoolPattern(i + 1, 2));
+        int ySign = BoolSign(BoolPattern(i, 2));
+
+        Vertex vertex;
+        vertex.uv.x = Remap(xSign, -1, 1, 0, 1);
+        vertex.uv.y = Remap(ySign, -1, 1, 0, 1);
+
+        vertex.position.x = xSign * xHalfRes;
+        vertex.position.y = ySign * yHalfRes;
+        vertices.push_back(vertex);
+    }
+
+    std::vector<unsigned int> indices;
+    indices.reserve(6);
+
+    indices.push_back(0); indices.push_back(1); indices.push_back(2);
+    indices.push_back(2); indices.push_back(3); indices.push_back(0);
+
+    Load(mesh, vertices, indices);
+}
+
 
 void Mesh::Reload(const aiMesh* assimpMesh)
 {
