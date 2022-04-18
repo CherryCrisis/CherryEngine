@@ -50,7 +50,12 @@ void Engine::Launch()
 	isPlaying = true;
 	SceneManager::FlipScene();
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
-	
+}
+
+void Engine::LaunchStandalone() 
+{
+	isPlaying = true;
+	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }
 
 void Engine::Stop()

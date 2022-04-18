@@ -12,6 +12,7 @@
 #include "scripted_behaviour.hpp"
 #include "model.hpp"
 
+#include "scene_manager.hpp"
 // to remove
 void Foos(std::shared_ptr<ModelBase>)
 {
@@ -307,5 +308,71 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	for (auto& [entityName, entityRef] : scene->m_entities)
 		entityRef->Initialize();
 
+	return opened;
+}
+
+bool Serializer::SerializeEditor(const char* filepath)
+{
+	std::ofstream myfile;
+	std::string fileName;
+	fileName = std::string(filepath);
+
+	bool opened = false;
+	myfile.open(fileName);
+	if (myfile.is_open())
+	{
+		//Write Editor save infos
+
+		myfile.close();
+		opened = true;
+	}
+
+	return opened;
+}
+
+bool Serializer::SerializeGame(const char* filepath)
+{
+	std::ofstream myfile;
+	std::string fileName;
+	fileName = std::string(filepath);
+
+	bool opened = false;
+	myfile.open(fileName);
+	if (myfile.is_open())
+	{
+		//Write Game Infos such as scenes
+		myfile << "MainScene:";
+		myfile << SceneManager::GetInstance()->m_currentScene->GetFilepath() << std::endl;
+
+		myfile.close();
+		opened = true;
+	}
+
+	return opened;
+}
+
+bool Serializer::UnserializeGame(const char* filepath) 
+{
+	std::ifstream file(filepath);
+
+	bool opened = false;
+	if (file)
+	{
+		std::stringstream buffer;
+		std::string line;
+		std::size_t found;
+
+		buffer << file.rdbuf();
+		file.close();
+
+		while (std::getline(buffer, line))
+		{
+			found = line.find("MainScene:");
+			if (found != std::string::npos)
+				SceneManager::LoadScene(String::ExtractValue(line).c_str());
+		}
+		opened = true;
+	}
+	
 	return opened;
 }

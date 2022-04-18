@@ -30,7 +30,6 @@ namespace String
 			if (i != std::string::npos)
 				str.erase(i, strr.length() + 1);
 		}
-
 		return strr;
 	}
 
@@ -67,5 +66,39 @@ namespace String
 		value.z = std::stof(temp);
 		return value;
 	}
+}
 
+bool CreateFolder(const char* path, const char* name)
+{
+	std::filesystem::path newPath = path;
+	
+	if (!std::filesystem::exists(newPath)) 
+	{
+		// TODO: Debug log file location not valid
+		return false;
+	}
+
+	newPath /= name;
+	if (std::filesystem::exists(newPath))
+		std::filesystem::remove_all(newPath.c_str());
+
+	std::filesystem::create_directory(newPath);
+	
+	return true;
+}
+
+bool CreateFolder(const std::string& path, const std::string& name)
+{
+	return CreateFolder(path.c_str(), name.c_str());
+}
+
+bool CopyFolder(const char* src, const char* dst)
+{
+	std::filesystem::copy(src, dst, std::filesystem::copy_options::recursive);
+	return true;
+}
+
+bool CopyFolder(const std::string& src, const std::string& dst)
+{
+	return CopyFolder(src.c_str(), dst.c_str());
 }

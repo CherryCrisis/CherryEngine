@@ -1,0 +1,37 @@
+Entity:2032779814
+  m_name:Light
+	m_components:
+	-:1067187542
+
+Entity:2425095776
+  m_name:Camera
+	m_components:
+	-:1898849931
+	-:2056100952
+	
+Behaviour:1067187542
+m_type:class LightComponent
+m_owner:2032779814
+position:0.000000/0.000000/0.000000
+ambient:0.000000/0.000000/0.000000
+diffuse:1.000000/1.000000/1.000000
+specular:0.000000/0.000000/0.000000
+attenuation:1.000000/0.000000/0.000000
+
+Behaviour:1898849931
+m_type:class Transform
+m_owner:2425095776
+position:0.000000/0.000000/0.000000
+rotation:0.000000/0.000000/0.000000
+scale:1.000000/1.000000/1.000000
+parent:none
+
+Behaviour:2056100952
+m_type:class CameraComponent
+m_owner:2425095776
+aspect:1.385208
+fovY:1.047198
+near:0.010000
+far:200.000000
+transform:1898849931
+

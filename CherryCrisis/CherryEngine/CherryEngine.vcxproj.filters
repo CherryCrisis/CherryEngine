@@ -1143,6 +1143,9 @@
     <ClInclude Include="include\element_mesh_generator.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\builder.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1434,6 +1437,9 @@
     </ClCompile>
     <ClCompile Include="src\element_mesh_generator.cpp">
       <Filter>Fichiers sources\Rendering\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\builder.cpp">
+      <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

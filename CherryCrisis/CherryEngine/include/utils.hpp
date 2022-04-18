@@ -25,3 +25,10 @@ namespace String
 	int			      CCENGINE_API ExtractInt(const std::string& str);
 	CCMaths::Vector3  CCENGINE_API ExtractVector3(std::string str);
 }
+
+//CreateFolder
+bool CCENGINE_API CreateFolder(const std::string& path, const std::string& name);
+bool CCENGINE_API CreateFolder(const char* path, const char* name);
+
+bool CCENGINE_API CopyFolder(const std::string& src, const std::string& dst);
+bool CCENGINE_API CopyFolder(const char* src, const char* dst);

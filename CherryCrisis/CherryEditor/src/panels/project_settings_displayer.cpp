@@ -68,7 +68,6 @@ void ProjectSettingsDisplayer::Render()
 
 void ProjectSettingsDisplayer::General::Fill()
 {
-    static char name[32] = "Cherry Template";
     IMGUI_LEFT_LABEL(ImGui::InputText, "Game Name :", name, IM_ARRAYSIZE(name));
 
     static char version[32] = "0.0.1";
@@ -508,6 +507,14 @@ void ProjectSettingsDisplayer::ResourceViewer::Fill()
         {
             ImGui::Text(it->second[i]);
         }
-    }
-    
+    }   
+}
+
+BuildSettings ProjectSettingsDisplayer::GetBuildSettings()
+{
+    BuildSettings settings;
+    ProjectSettingsDisplayer::General* g = (ProjectSettingsDisplayer::General*)m_categories[0];
+    settings.m_gameName = g->name;
+
+    return settings;
 }

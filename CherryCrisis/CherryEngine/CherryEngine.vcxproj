@@ -207,6 +207,7 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilSetup.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilTelemetry.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
+    <ClInclude Include="include\builder.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
     <ClInclude Include="include\command.hpp" />
@@ -438,6 +439,7 @@
   <ItemGroup>
     <ClCompile Include="src\behaviour.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
+    <ClCompile Include="src\builder.cpp" />
     <ClCompile Include="src\cell.cpp" />
     <ClCompile Include="src\cell_system.cpp" />
     <ClCompile Include="src\character_controller.cpp" />
