@@ -126,11 +126,10 @@ void LogDisplayer::Render()
                         if (it->m_isSelected)
                         {
                             ImGui::TextWrapped("Details : %s", it->m_logMessage->m_logMessage.c_str());
-                            ImGui::TextWrapped("file %s(%i:%i) : %s", 
-                                it->m_sourceLocation.file_name(),
-                                it->m_sourceLocation.line(),
-                                it->m_sourceLocation.column(),
-                                it->m_sourceLocation.function_name());
+                            ImGui::TextWrapped("file %s(%i) : %s", 
+                                it->file.c_str(),
+                                it->line,
+                                it->function.c_str());
                         }
 
                     }

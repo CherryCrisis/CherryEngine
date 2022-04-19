@@ -11,6 +11,11 @@ Debug::Debug()
 
 void Debug::AddLog(ELogType logType, const char* message, std::source_location location)
 {
+	AddLog(logType, message, location.line(), location.file_name(), location.function_name());
+}
+
+void Debug::AddLog(ELogType logType, const char* message, unsigned int line, const char* file, const char* function)
+{
 	LogMessage* logMessage = nullptr;
 
 	size_t key;
@@ -24,13 +29,13 @@ void Debug::AddLog(ELogType logType, const char* message, std::source_location l
 	}
 	else
 	{
-		auto pair = m_logMessages.emplace(key, LogMessage(message, logType ));
+		auto pair = m_logMessages.emplace(key, LogMessage(message, logType));
 		logMessage = &pair.first->second;
 	}
 
 	m_logTypeCounts[(int)logType]++;
 
-	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime(), location);
+	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime(), line, file, function);
 }
 
 void Debug::Clear()

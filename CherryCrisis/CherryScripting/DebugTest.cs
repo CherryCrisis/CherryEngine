@@ -15,12 +15,15 @@ namespace CCScripting
 		}
 		int oui = 6;
 
-		int SuperOui { set => oui = (int)(value - 7f); get => oui + 6; }
+		Vector3 vec = new Vector3(5, 7, 6);
 
-		public string name = "Debug il sait pas quoi";
+		int SuperOui { set => oui = value; get => oui + 7; }
+
+		public string error = "Je suis un message de debug moins utile !";
 		public void Debugger()
 		{
-			Debug.GetInstance().Log(ELogType.ERROR, name);
+			Debug.GetInstance().Warning(vec);
+			Debug.GetInstance().Error(error);
 		}
 	}
 }

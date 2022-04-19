@@ -50,15 +50,33 @@ public class Debug : global::System.IDisposable {
     return ret;
   }
 
-  public void AddLog(ELogType type, string message) {
-    CherryEnginePINVOKE.Debug_AddLog(swigCPtr, (int)type, message);
+  public void AddLog(ELogType logType, string message, uint line, string file, string function) {
+    CherryEnginePINVOKE.Debug_AddLog(swigCPtr, (int)logType, message, line, file, function);
   }
 
+	public void Log(ELogType type, object message,
+        [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
+        [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+        [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
+            => AddLog(type, message.ToString(), sourceLineNumber, sourceFilePath, memberName);
 
-	public void Log(ELogType type, params object[] messages) => AddLog(type, string.Join(" ; ", messages));
-	public void Info(params object[] messages) => AddLog(ELogType.INFO, string.Join(" ; ", messages));
-	public void Warning(params object[] messages) => AddLog(ELogType.WARNING, string.Join(" ; ", messages));
-	public void Error(params object[] messages) => AddLog(ELogType.ERROR, string.Join(" ; ", messages));
+	public void Info(object message,
+        [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
+        [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+        [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
+            => AddLog(ELogType.INFO, message.ToString(), sourceLineNumber, sourceFilePath, memberName);
+
+	public void Warning(object message,
+        [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
+        [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+        [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
+            => AddLog(ELogType.WARNING, message.ToString(), sourceLineNumber, sourceFilePath, memberName);
+
+	public void Error(object message,
+        [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
+        [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
+        [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
+            => AddLog(ELogType.ERROR, message.ToString(), sourceLineNumber, sourceFilePath, memberName);
 	
   public Debug() : this(CherryEnginePINVOKE.new_Debug(), true) {
   }
