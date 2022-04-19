@@ -191,12 +191,12 @@ void SceneDisplayer::Render()
             CCMaths::Matrix4 mat = t->GetWorldMatrix();
             float p[3], r[3], s[3]; // position, rotation and scale
 
-            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, ImGuizmo::MODE::WORLD, mat.data))
+            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, ImGuizmo::MODE::LOCAL, mat.data))
             {
                 ImGuizmo::DecomposeMatrixToComponents(mat.data, p, r, s);
                 
                 //TODO: Fix operator*(const float) not working
-                CCMaths::Vector3 rot = { r[0]* CCMaths::DEG2RAD ,r[1]* CCMaths::DEG2RAD,r[2]* CCMaths::DEG2RAD };
+                CCMaths::Vector3 rot = { r[0]* CCMaths::DEG2RAD, r[1]* CCMaths::DEG2RAD,r[2]* CCMaths::DEG2RAD };
                 
                 t->SetPosition({p[0],p[1],p[2]}); 
                 t->SetRotation(rot); 
