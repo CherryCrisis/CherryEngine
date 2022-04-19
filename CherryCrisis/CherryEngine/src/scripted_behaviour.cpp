@@ -177,9 +177,6 @@ void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
 	m_metadatas.m_fields.clear();
 	m_metadatas.m_properties.clear();
 	PopulateMetadatas();
-
-	if (managedStart)
-		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
 }
 
 _MonoObject* ScriptedBehaviour::GetRawInstance()

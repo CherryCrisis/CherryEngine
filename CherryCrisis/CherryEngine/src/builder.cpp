@@ -22,8 +22,10 @@ bool Builder::BuildGame(const char* outDir,const char* gameName, bool runGame)
 
 	//Then paste the Assets folder by now, but clearly later paste only the used ones
 	CopyFolder("Assets", path+"\\Assets");
+	CopyFolder("Cache",  path +"\\Cache");
 	//Then paste the exe & co and rename the exe et voila
 	CopyFolder("Internal\\BuildKit", path);
+
 	rename(templatePath.c_str(), exePath.c_str());
 	//Plus run the exe if runGame !
 	if (runGame)

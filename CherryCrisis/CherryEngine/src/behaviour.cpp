@@ -47,6 +47,13 @@ std::string Behaviour::Serialize()
 			continue;
 		}
 
+		if (type == typeid(bool))
+		{
+			bool val = *std::any_cast<bool*>(fieldRef.m_value);
+			value += std::to_string(val) + "\n";
+			continue;
+		}
+
 		if (type == typeid(Behaviour*))
 		{
 			Behaviour** ptrr = std::any_cast<Behaviour**>(fieldRef.m_value);
@@ -104,6 +111,14 @@ std::string Behaviour::Serialize()
 			int val;
 			propRef->Get(&val);
 
+			value += std::to_string(val) + "\n";
+			continue;
+		}
+
+		if (type == typeid(bool))
+		{
+			bool val;
+			propRef->Get(&val);
 			value += std::to_string(val) + "\n";
 			continue;
 		}

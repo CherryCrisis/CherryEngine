@@ -39,6 +39,9 @@ void LightComponent::Initialize()
 		m_transform->m_onRotationChange.Bind(&LightComponent::ChangeRotation, this);
 	}
 
+	ChangePosition(m_transform->GetPosition());
+	ChangeRotation(m_transform->GetRotation());
+
 	GetHost().m_OnAwake.Unbind(&LightComponent::Initialize, this);
 }
 

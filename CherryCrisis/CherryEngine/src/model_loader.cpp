@@ -325,7 +325,7 @@ namespace CCImporter
                     textureFilepath += "/";
                     textureFilepath += textureFilename.C_Str();
 
-                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
                         ImportTextureData(textureFilepath);
 
                     AddTextureDataToModel(model, ETextureType::AMBIENT, textureFilepath);
@@ -352,7 +352,7 @@ namespace CCImporter
                     textureFilepath += "/";
                     textureFilepath += textureFilename.C_Str();
 
-                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
                         ImportTextureData(textureFilepath);
 
                     AddTextureDataToModel(model, ETextureType::NORMAL_MAP, textureFilepath);
@@ -378,7 +378,7 @@ namespace CCImporter
                     textureFilepath += "/";
                     textureFilepath += textureFilename.C_Str();
 
-                    if (!VerifIfTextureCacheExist(textureFilename.C_Str()))
+                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
                         ImportTextureData(textureFilepath);
 
                     AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilepath);

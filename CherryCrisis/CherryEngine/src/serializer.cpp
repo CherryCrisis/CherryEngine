@@ -203,6 +203,14 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 
 						continue;
 					}
+
+					if (propType == typeid(bool))
+					{
+						bool str = String::ExtractInt(parsedValue);
+						prop->Set(&str);
+
+						continue;
+					}
 				}
 
 				if (behaviour->m_metadatas.m_fields.contains(key))
@@ -215,6 +223,13 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					{
 						CCMaths::Vector3* valPtr = std::any_cast<CCMaths::Vector3*>(field.m_value);
 						*valPtr = String::ExtractVector3(parsedValue);
+						continue;
+					}
+
+					if (info == typeid(bool))
+					{
+						bool* valPtr = std::any_cast<bool*>(field.m_value);
+						*valPtr = String::ExtractInt(parsedValue);
 						continue;
 					}
 
@@ -252,12 +267,8 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 		//Then loop over the wrapped component to add them into the entities
 		for (auto& wrappedBehaviour : m_wrappedBehaviours)
 		{
-			Entity* entity = scene->FindEntity(wrappedBehaviour.second->GetOwnerUUID());
-			if (entity)
-			{
+			if (Entity* entity = scene->FindEntity(wrappedBehaviour.second->GetOwnerUUID()))
 				entity->SubscribeComponent(wrappedBehaviour.second);
-				wrappedBehaviour.second->BindToSignals();
-			}
 		}
 
 		//Then loop over the wrapped component again to link the uuids
