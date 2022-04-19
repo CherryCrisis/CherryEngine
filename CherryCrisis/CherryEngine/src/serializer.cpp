@@ -32,6 +32,16 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 	myfile.open(fileName);
 	if (myfile.is_open())
 	{
+		std::map<std::type_index, std::vector<const char*>> pathList;
+		ResourceManager::GetInstance()->GetResourcesPath(pathList);
+		
+		for (const auto& [type, paths] : pathList)
+		{
+			if (type == typeid(ModelBase))
+				for (const auto& path : paths)
+					myfile <<"Res:"<< path << std::endl;
+		}
+
 		for (const auto& m_entity : scene->m_entities)
 			myfile << m_entity.second->Serialized() << std::endl;
 
@@ -48,10 +58,6 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* filepath)
 {
 	scene->Empty();
-
-	// To serialize to load used resources
- 	auto callback = CCCallback::BindCallback(Foos);
-	ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>("Assets/backpack.obj", true, callback);
 
 	//First read the file and populate the entities + a uuid map and the component wrapper list 
 	std::string fileName;
@@ -90,6 +96,17 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 
 		while (std::getline(buffer, line))
 		{
+			std::string key = String::ExtractKey(line);
+			std::string parsedValue = String::ExtractValue(line);
+
+			if (key == "Res") 
+			{
+				const char* value_Cstr = parsedValue.c_str();
+				auto callback = CCCallback::BindCallback(Foos);
+				ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(value_Cstr, true, callback);
+				continue;
+			}
+
 			found = line.find("Entity:");
 			if (found != std::string::npos)
 			{
@@ -141,9 +158,6 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 
 				if (!behaviour)
 					continue;
-
-				std::string key = String::ExtractKey(line);
-				std::string parsedValue = String::ExtractValue(line);
 
 				if (line.size() == 0)
 				{

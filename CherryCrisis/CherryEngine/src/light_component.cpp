@@ -20,7 +20,7 @@ LightComponent::LightComponent()
 
 LightComponent::~LightComponent()
 {
-	RenderManager::GetInstance()->SubscribeToPipeline<ShadowRenderPass>(&m_light);
+	RenderManager::GetInstance()->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
 	RenderManager::GetInstance()->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
 }
 
