@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cherry_macros.hpp"
+
 namespace CCMaths
 {
 	struct Vector2

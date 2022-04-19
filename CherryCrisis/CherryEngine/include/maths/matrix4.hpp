@@ -10,6 +10,18 @@ namespace CCMaths
 		{
 			float data[16];		//!< Pointer on the Matrix4's data
 			Vector4 row[4];		//!< Array of the four row of the Matrix4
+
+			struct
+			{
+				Vector3 right;		//!< Right vector of the Matrix4
+				float m4;
+				Vector3 up;			//!< Up vector of the Matrix4
+				float m8;
+				Vector3 back;		//!< Back vector of the Matrix4
+				float m12;
+				Vector3 position;	//!< Position vector of the Matrix4
+				float uniformScale;  //!< Uniform scale of the Matrix4
+			};
 		};
 
 		/*!
