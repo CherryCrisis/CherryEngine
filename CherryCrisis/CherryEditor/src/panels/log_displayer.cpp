@@ -19,12 +19,12 @@ LogDisplayer::LogDisplayer()
     m_logTextures[1] = RM->AddResource<Texture>("Internal/IconsLog/warning_icon.png", true, false);
     m_logTextures[2] = RM->AddResource<Texture>("Internal/IconsLog/error_icon.png", true, false);
 
-    for (int i = 0; i < 3; ++i)
-    {
-        GenerateGPUTexture(m_logTextures[i]);
-        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_logTextures[i]->m_gpuTexture.get());
-        m_gpuTextureIDs[i] = reinterpret_cast<void*>((uintptr_t)gpuTextureLog->m_ID);
-    }
+    //for (int i = 0; i < 3; ++i)
+    //{
+    //    GenerateGPUTexture(m_logTextures[i]);
+    //    GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_logTextures[i]->m_gpuTexture.get());
+    //    m_gpuTextureIDs[i] = reinterpret_cast<void*>((uintptr_t)gpuTextureLog->m_ID);
+    //}
 }
 
 void LogDisplayer::GenerateGPUTexture(std::shared_ptr<Texture> texture)

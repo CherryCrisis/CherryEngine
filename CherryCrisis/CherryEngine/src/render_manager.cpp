@@ -118,7 +118,7 @@ RenderManager::PostprocessRPDesc RenderManager::DefaultPostprocessRenderpass()
 {
     return [&](std::vector<APostProcessRenderPass*>& orderedRenderpasses)
     {
-        APostProcessRenderPass* postprocess = RenderManager::GetInstance()->LoadSubpipeline<BasicPostProcessRenderPass>();
-        orderedRenderpasses.push_back(postprocess);
+       //APostProcessRenderPass* postprocess = RenderManager::GetInstance()->LoadSubpipeline<BasicPostProcessRenderPass>();
+       //orderedRenderpasses.push_back(postprocess);
     };
 }

@@ -116,9 +116,13 @@ int BasicRenderPass::Subscribe(Texture* toGenerate)
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return -1;
 
-	glTextureStorage2D(gpuTexture->ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
-	glTextureSubImage2D(gpuTexture->ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
+	/*glTextureStorage2D(gpuTexture->ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
+	glTextureSubImage2D(gpuTexture->ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());*/
 
+	glBindTexture(GL_TEXTURE_2D, gpuTexture->ID);
+	glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, 
+		toGenerate->GetWidth(), toGenerate->GetHeight(), 0, toGenerate->GetSize(), toGenerate->GetData());
+	
 	glGenerateTextureMipmap(gpuTexture->ID);
 
 	toGenerate->m_gpuTexture = std::move(gpuTexture);

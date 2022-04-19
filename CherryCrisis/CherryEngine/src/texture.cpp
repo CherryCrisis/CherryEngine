@@ -47,6 +47,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
     texture->m_data = (void*)std::move(data);
     texture->m_height = textureHeader.height;
     texture->m_width = textureHeader.width;
+    texture->m_size = textureHeader.size;
 }
 
 bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader)

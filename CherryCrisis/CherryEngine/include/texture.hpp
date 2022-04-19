@@ -13,6 +13,7 @@ class CCENGINE_API Texture : public Resource<Texture>
 private:
     int     m_width = 0;
     int     m_height = 0;
+    int     m_size = 0;
 
     void*   m_data = nullptr;
 
@@ -24,6 +25,7 @@ public:
 
     int GetWidth()  { return m_width; }
     int GetHeight() { return m_height; }
+    int GetSize()   { return m_size; }
 
     void* GetData() { return m_data; }
 

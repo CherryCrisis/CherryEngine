@@ -12,6 +12,7 @@
 #include <glad/gl.h>
 #include <stb_image.h>
 #include <stb_image_write.h>
+#include <nvtt/nvtt.h>
 
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
@@ -97,8 +98,20 @@ namespace CCImporter
 
     #pragma region Texture
 
-    void CacheTextureData(const std::filesystem::path& filepath, const unsigned char* cacheData, const TextureHeader& textureHeader)
+    void CacheTextureData(const std::filesystem::path& filepath, const unsigned char* cacheData, TextureHeader& textureHeader)
     {
+        nvtt::RefImage img_in;
+        img_in.data = cacheData;
+        img_in.num_channels = 4;
+        img_in.height = textureHeader.height;
+        img_in.width = textureHeader.width;
+
+        nvtt::CPUInputBuffer input_buff(&img_in, nvtt::UINT8);
+        textureHeader.size = input_buff.NumTiles() * 8;
+        void* outBuff = new char[textureHeader.size];
+
+        nvtt::nvtt_encode_bc1a(input_buff, false, outBuff, false, false);
+
         Debug* debug = Debug::GetInstance();
 
         std::string texturePathStr(filepath.filename().string());
@@ -116,7 +129,8 @@ namespace CCImporter
 
         fwrite(&textureHeader, sizeof(TextureHeader), 1, file);
 
-        fwrite(&cacheData[0], textureHeader.size, 1, file);
+        fwrite(&((unsigned char*)outBuff)[0], textureHeader.size, 1, file);
+        //fwrite(&cacheData[0], textureHeader.size, 1, file);
         fclose(file);
     }
 
