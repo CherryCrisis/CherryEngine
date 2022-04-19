@@ -16,6 +16,8 @@ public:
 	bool isPlaying = false;
 
 	void Launch();
+	void LaunchStandalone();
+
 	void Stop();
 
 	void Tick();

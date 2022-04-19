@@ -22,6 +22,7 @@
 #include "render_manager.hpp"
 #include "csscripting_system.hpp"
 
+#include "builder.hpp"
 #include "command.hpp"
 
 //To Replace with Resource Manager Texture Handling
@@ -63,7 +64,7 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 EditorManager::EditorManager() 
 {
     inputs = InputManager::GetInstance();
-    SceneManager::LoadScene("Internal/SampleScene.cherry");
+    SceneManager::LoadScene("Assets/SampleScene.cherry");
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -80,6 +81,8 @@ EditorManager::EditorManager()
         if (!LoadTextureFromFile("Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
             std::cout << "failed to load Stop icon" << std::endl;
     }
+
+    m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
 }
 
 void EditorManager::LinkEngine(Engine* engine) 
@@ -185,7 +188,10 @@ void EditorManager::HandleMenuBar()
             if (ImGui::MenuItem("Preferences"))      { m_preferencesDisplayer.Toggle(true); }
             ImGui::Separator();
             if (ImGui::MenuItem("Build")) { m_buildDisplayer.Toggle(true); } // Open Build Menu 
-            if (ImGui::MenuItem("Build And Run")) {} // If first time, open build menu then just run the build + starts it
+            if (ImGui::MenuItem("Build And Run")) 
+            {
+                Builder::BuildGame(m_buildDisplayer.outDir, m_projSettingsDisplayer.GetBuildSettings().m_gameName.c_str(), true);
+            }
             ImGui::EndMenu();
         }
 
@@ -368,5 +374,13 @@ namespace EditorNotifications
             EditorManager::SendNotification("loading Object", ENotifType::Info);
         else
             EditorManager::SendNotification("Error while loading object", ENotifType::Warning);
+    }
+
+    void BuildGame(bool result) 
+    {
+        if (result)
+            EditorManager::SendNotification("Building game..", ENotifType::Info);
+        else
+            EditorManager::SendNotification("Error while building game, see console", ENotifType::Error);
     }
 }

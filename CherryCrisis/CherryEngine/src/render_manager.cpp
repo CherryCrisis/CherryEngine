@@ -8,6 +8,7 @@
 
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
+#include "shadow_renderpass.hpp"
 
 #include "framebuffer.hpp"
 
@@ -81,35 +82,45 @@ void RenderManager::DrawScene(Framebuffer& framebuffer, Camera& camera)
 	RenderManager* RM = GetInstance();
 	
     // TODO: Move this
-	if (RM->m_orderedPipeline.size() == 0 && RM->m_existingRenderpasses.size() > 0)
-		InitializePipeline(DefaultRenderingPipeline());
+    if (RM->m_orderedRenderingRenderpass.size() == 0 && RM->m_existingRenderpasses.size() > 0)
+		InitializePipeline(DefaultRenderingRenderpass(), DefaultPostprocessRenderpass());
 
-	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	for (ARenderPass* pipeline : RM->m_orderedPipeline)
+	for (ARenderingRenderPass* pipeline : RM->m_orderedRenderingRenderpass)
 		pipeline->CallOnExecute(framebuffer, camera);
+
+    for (APostProcessRenderPass* pipeline : RM->m_orderedPostprocessRenderpass)
+        pipeline->CallOnExecute(framebuffer);
 
 	glUseProgram(0);
 }
 
-void RenderManager::InitializePipeline(const PipelineDesc& pipelineDesc)
+void RenderManager::InitializePipeline(const RenderingRPDesc& renderingRenderpasses, const PostprocessRPDesc& postprocessRenderpasses)
 {
 	RenderManager* RM = GetInstance();
 
-	pipelineDesc(RM->m_existingRenderpasses, RM->m_orderedPipeline);
+    renderingRenderpasses(RM->m_orderedRenderingRenderpass);
+    postprocessRenderpasses(RM->m_orderedPostprocessRenderpass);
 }
 
-RenderManager::PipelineDesc RenderManager::DefaultRenderingPipeline()
+RenderManager::RenderingRPDesc RenderManager::DefaultRenderingRenderpass()
 {
-	return [&](const std::unordered_map<std::type_index, ARenderPass*>& pipelines,
-		std::vector<ARenderPass*>& orderedPipelines)
+	return [&](std::vector<ARenderingRenderPass*>& orderedRenderpasses)
     {
-        
-        ARenderPass* lit = RenderManager::GetInstance()->LoadSubpipeline<BasicRenderPass>();
-        orderedPipelines.push_back(lit);
-        
-        ARenderPass* skybox = RenderManager::GetInstance()->LoadSubpipeline<SkyboxRenderPass>(); 
-        orderedPipelines.push_back(skybox);
+        ARenderingRenderPass* shadow = RenderManager::GetInstance()->LoadSubpipeline<ShadowRenderPass>();
+        orderedRenderpasses.push_back(shadow);
+
+        ARenderingRenderPass* lit = RenderManager::GetInstance()->LoadSubpipeline<BasicRenderPass>();
+        orderedRenderpasses.push_back(lit);
+
+        ARenderingRenderPass* skybox = RenderManager::GetInstance()->LoadSubpipeline<SkyboxRenderPass>();
+        orderedRenderpasses.push_back(skybox);
 	};
+}
+
+RenderManager::PostprocessRPDesc RenderManager::DefaultPostprocessRenderpass()
+{
+    return [&](std::vector<APostProcessRenderPass*>& orderedRenderpasses)
+    {
+
+    };
 }

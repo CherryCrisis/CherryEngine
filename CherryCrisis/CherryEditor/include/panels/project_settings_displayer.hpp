@@ -7,6 +7,11 @@
 #include "core/panel.hpp"
 #include "input_manager.hpp"
 
+struct BuildSettings
+{
+	std::string m_gameName;
+};
+
 class ProjectSettingsDisplayer : public Panel
 {
 private:
@@ -21,6 +26,8 @@ private:
 	public:
 		General(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
+
+		char name[32] = "MyCherryGame";
 	};
 
 	class Input : public PanelCategory
@@ -85,6 +92,9 @@ private:
 public:
 	ProjectSettingsDisplayer(bool spawnOpened);
 	~ProjectSettingsDisplayer();
+
+	BuildSettings GetBuildSettings();
+	
 	void Render() override;
 
 	// All the things + will have to serialize of all this shit

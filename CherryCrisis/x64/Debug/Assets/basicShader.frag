@@ -3,6 +3,10 @@
 //#define BLINN_PHONG
 #define USE_NORMAL_MAP
 
+#define PCF 3
+#define PCFSampleCount (1 + 2 * PCF) * (1 + 2 * PCF)
+#define PCFFactor 1.0 / (PCFSampleCount)
+
 // Varyings
 in VS_OUT
 {
@@ -28,19 +32,65 @@ uniform Material uMaterial;
 
 struct Light
 {
+	bool isEnabled;
 	bool isPoint;
 	vec3 position;
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+	mat4 lightSpace;
 };
 
 #define NBR_LIGHTS 8
+uniform sampler2D uShadowMaps[NBR_LIGHTS];
 uniform Light uLights[NBR_LIGHTS];
 
 uniform vec3 uViewPosition;
 
 out vec4 oColor;
+
+float getDirectionalShadow(int index)
+{
+    // Perspcetive divide
+    vec4 fragPosLightSpace = uLights[index].lightSpace * vec4(fs_in.vFragPosition, 1.0);
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+
+    // Avoid shadow out of the frustum
+    if (projCoords.z > 1.0)
+        return 0.0;
+
+    // [0,1]
+    projCoords = projCoords * 0.5 + 0.5;
+
+    vec3 lightDir = normalize(uLights[index].position.xyz - fs_in.vFragPosition);
+
+    float slopeFactor = 1.0 - dot(fs_in.vNormal, lightDir);
+
+    float minBias = 0.00005;
+    float maxBias = 0.0005;
+    float bias = max(minBias * slopeFactor, maxBias);
+    float currentDepth = projCoords.z - bias;
+
+    // Apply Percentage-Closer filtering to avoid "stair" shadows
+    // Use to soft shadow boders
+    float shadow = 0.0;
+        
+    // Calculate the texel size from the depth texture size
+    vec2 texelSize = 1.0 / textureSize(uShadowMaps[index], 0);
+        
+    for (int x = -PCF; x <= PCF; x++)
+    {
+        for (int y = -PCF; y <= PCF; y++)
+        {
+            float pcfDepth = texture(uShadowMaps[index], projCoords.xy + vec2(x, y) * texelSize).r;
+
+            // Compare pcf and current depth of fragment to determine shadow
+            shadow += float(currentDepth > pcfDepth);
+        }
+    }
+
+    return shadow * PCFFactor;
+}
 
 void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 specular)
 {
@@ -51,6 +101,11 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 	for (int i = 0; i < NBR_LIGHTS; i++)
 	{
 		Light light = uLights[i];
+
+		if (!light.isEnabled)
+			continue;
+
+	    float shadow = 1.0 - getDirectionalShadow(i);
 
 		// Compute ambient
 		ambient += light.ambient;
@@ -72,7 +127,7 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 			continue;
 
 		// Compute diffuse
-		diffuse += diffuseVal * light.diffuse;
+		diffuse += diffuseVal * light.diffuse * shadow;
 
 		// Compute specular
 		#ifdef BLINN_PHONG
@@ -85,7 +140,7 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 			float dotValue = dot(viewDir, reflectDir);
 		#endif
 
-		specular += pow(clamp(dotValue, 0.0, 1.0), uMaterial.shininess) * light.specular;
+		specular += pow(clamp(dotValue, 0.0, 1.0), uMaterial.shininess) * light.specular * shadow;
 	}
 }
 

@@ -8,7 +8,7 @@
 
 class ElementMeshGenerator
 {
-protected:
+public:
 	struct GPUMeshBasic : public GPUMesh
 	{
 		GLuint VAO = 0u, VBO = 0u, EBO = 0u;
@@ -16,7 +16,6 @@ protected:
 		~GPUMeshBasic();
 	};
 
-public:
 	virtual bool Generate(Mesh* toGenerate);
 	virtual bool Destroy(Mesh* toGenerate);
 };

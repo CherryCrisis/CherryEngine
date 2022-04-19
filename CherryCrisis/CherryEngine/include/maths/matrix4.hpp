@@ -423,10 +423,15 @@ namespace CCMaths
 		inline static Matrix4 RotateZ(const float cos, const float sin);
 
 		//! \hiderefs
+		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
+
+		//! \hiderefs
 		inline static Matrix4 Perspective(const float FovY, const float Aspect, const float Near, const float Far);
 
 		//! \hiderefs
-		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
+		inline static Matrix4 Orthographic(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
+
+		inline static Matrix4 LookAt(const Vector3& Eye, const Vector3& At = { 0.f, 0.f, 0.f }, const Vector3& Up = { 0.f, 1.f, 0.f });
 	};
 }
 

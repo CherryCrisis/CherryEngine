@@ -155,6 +155,9 @@
     <ClInclude Include="externals\include\ImGuizmo.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
+    <ClInclude Include="externals\include\portable-file-dialogs.hpp">
+      <Filter>Fichiers externes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CherryEditor.rc">

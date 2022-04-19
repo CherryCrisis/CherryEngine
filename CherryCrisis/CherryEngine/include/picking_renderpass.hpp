@@ -6,6 +6,7 @@
 #include <glad/gl.h>
 
 #include "element_mesh_generator.hpp"
+#include "rendering_renderpass_interface.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -13,7 +14,7 @@
 
 class ModelRenderer;
 
-class PickingRenderPass : public ARenderPass, ElementMeshGenerator
+class PickingRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 

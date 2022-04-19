@@ -57,7 +57,7 @@ public:
 	size_t GetResourceCount() const;
 
 	//To draw filepath in editor (Resource Viewer)
-	void GetResourcesPath(std::map<std::type_index, std::vector<const char*>>& resourcePaths) const;
+	void GetResourcesPath(std::map<std::type_index, std::vector<std::filesystem::path*>> &resourcePaths) const;
 
 	//Unload unused resources
 	void Purge();

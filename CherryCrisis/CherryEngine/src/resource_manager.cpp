@@ -36,13 +36,13 @@ size_t ResourceManager::GetResourceCount() const
 	return resourceCount;
 }
 
-void ResourceManager::GetResourcesPath(std::map<std::type_index, std::vector<const char*>>& resourcePaths) const
+void ResourceManager::GetResourcesPath(std::map<std::type_index, std::vector<std::filesystem::path*>>& resourcePaths) const
 {
-	/*for (auto& pair : m_resources)
+	for (auto& pair : m_resources)
 	{
-		std::vector<const char*> filepaths;
+		std::vector<std::filesystem::path*> filepaths;
 		pair.second->GetResourcesFilepath(filepaths);
 
 		resourcePaths.emplace(pair.first, filepaths);
-	}*/
+	}
 }

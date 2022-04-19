@@ -68,6 +68,7 @@ int main()
     }
     if (GLAD_GL_KHR_debug)
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
     Engine engine{};
     Context context;
     context.inputs = InputManager::GetInstance();
@@ -94,15 +95,9 @@ int main()
 
     InputManager::GetInstance()->HideCursor = HideCursor;
     InputManager::GetInstance()->ShowCursor = ShowCursor;
+    
     Engine::window_handle = window;
-
-    engine.window_handle = window;
-    std::shared_ptr<Scene> scn;
-    scn = ResourceManager::GetInstance()->AddResource<Scene>("scene de ouf", false);
-    SceneManager::GetInstance()->SetCurrentScene(scn);
-
-    SceneManager::GetInstance()->m_currentScene->Unserialize("scn.cherry");
-
+    Serializer::UnserializeGame("master");
     InputManager::GetInstance()->SetCursorHidden();
 
     Framebuffer framebuffer;
@@ -118,7 +113,7 @@ int main()
         RenderManager::DrawScene(framebuffer, SceneManager::GetInstance()->m_currentScene->m_entities["Camera"]->GetBehaviour<CameraComponent>()->m_camera);
 
         engine.TickEngine();
-        engine.Launch();
+        engine.LaunchStandalone();
         if (engine.isPlaying)
             engine.Tick();
 

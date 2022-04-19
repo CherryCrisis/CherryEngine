@@ -108,6 +108,12 @@ void InspectComponents(Entity* entity, int id)
                     ImGui::Checkbox(fieldRef.m_name.c_str(), &val);
                     continue;
                 }
+                if (type == typeid(bool*))
+                {
+                    bool* val = std::any_cast<bool*>(fieldRef.m_value);
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), val);
+                    continue;
+                }
                 if (type == typeid(int*))
                 {
                     int* val = std::any_cast<int*>(fieldRef.m_value);

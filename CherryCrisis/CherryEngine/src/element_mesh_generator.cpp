@@ -8,6 +8,7 @@ ElementMeshGenerator::GPUMeshBasic::~GPUMeshBasic()
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 }
+
 bool ElementMeshGenerator::Generate(Mesh* toGenerate)
 {
 	if (!toGenerate)

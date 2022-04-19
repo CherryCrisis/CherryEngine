@@ -86,14 +86,14 @@ void ResourcesContainer<ResourceT>::Erase(const std::filesystem::path& filepath)
 	m_resources.erase(std::hash<std::string>{}(filepath.generic_string()));
 }
 
-//template<class ResourceT>
-//void ResourcesContainer<ResourceT>::GetResourcesFilepath(std::vector<const char*>& resourcePaths) const
-//{
-//	for (auto& pair : m_resources)
-//	{
-//		resourcePaths.push_back(pair.second->GetFilepath());
-//	}
-//}
+template<class ResourceT>
+void ResourcesContainer<ResourceT>::GetResourcesFilepath(std::vector<std::filesystem::path*>& resourcePaths) const
+{
+	for (auto& pair : m_resources)
+	{
+		resourcePaths.push_back(pair.second->GetFilesystemPath());
+	}
+}
 
 template<class ResourceT>
 template<class... Args>

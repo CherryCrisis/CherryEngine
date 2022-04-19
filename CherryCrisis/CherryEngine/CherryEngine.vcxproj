@@ -207,6 +207,7 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilSetup.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilTelemetry.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
+    <ClInclude Include="include\builder.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
     <ClInclude Include="include\command.hpp" />
@@ -311,10 +312,10 @@
     <ClInclude Include="include\event.hpp" />
     <ClInclude Include="include\framework.hpp" />
     <ClInclude Include="include\function.hpp" />
-    <ClInclude Include="include\gl_manager.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\keycode.hpp" />
+    <ClInclude Include="include\light.hpp" />
     <ClInclude Include="include\light_component.hpp" />
     <ClInclude Include="include\material.hpp" />
     <ClInclude Include="include\maths.hpp" />
@@ -338,7 +339,9 @@
     <ClInclude Include="include\physic_utils.hpp" />
     <ClInclude Include="include\pickinger.hpp" />
     <ClInclude Include="include\picking_renderpass.hpp" />
+    <ClInclude Include="include\postprocess_renderpass_interface.hpp" />
     <ClInclude Include="include\renderer.hpp" />
+    <ClInclude Include="include\rendering_renderpass_interface.hpp" />
     <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
     <ClInclude Include="include\resources_container.hpp" />
@@ -350,6 +353,7 @@
     <ClInclude Include="include\serializer.hpp" />
     <ClInclude Include="include\shader.hpp" />
     <ClInclude Include="include\shader_program.hpp" />
+    <ClInclude Include="include\shadow_renderpass.hpp" />
     <ClInclude Include="include\singleton.hpp" />
     <ClInclude Include="include\skybox.hpp" />
     <ClInclude Include="include\skybox_renderpass.hpp" />
@@ -365,8 +369,10 @@
     <ClInclude Include="src\physic_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Assets\basicShader.frag" />
-    <None Include="..\Assets\basicShader.vert" />
+    <None Include="..\x64\Debug\Assets\basicShader.frag" />
+    <None Include="..\x64\Debug\Assets\basicShader.vert" />
+    <None Include="..\x64\Debug\Assets\shadowShader.frag" />
+    <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="externals\include\assimp\color4.inl" />
     <None Include="externals\include\assimp\material.inl" />
     <None Include="externals\include\assimp\matrix3x3.inl" />
@@ -433,6 +439,7 @@
   <ItemGroup>
     <ClCompile Include="src\behaviour.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
+    <ClCompile Include="src\builder.cpp" />
     <ClCompile Include="src\cell.cpp" />
     <ClCompile Include="src\cell_system.cpp" />
     <ClCompile Include="src\character_controller.cpp" />
@@ -502,6 +509,7 @@
     <ClCompile Include="src\serializer.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shader_program.cpp" />
+    <ClCompile Include="src\shadow_renderpass.cpp" />
     <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\skybox_renderpass.cpp" />
     <ClCompile Include="src\sound.cpp" />

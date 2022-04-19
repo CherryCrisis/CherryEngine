@@ -35,7 +35,7 @@ public:
 	std::shared_ptr<ResourceT>* GetResource(const std::filesystem::path& filepath);
 
 	virtual size_t GetResourceCount() const = 0;
-	//virtual void GetResourcesFilepath(std::vector<const char*>& resourcePaths) const = 0;
+	virtual void GetResourcesFilepath(std::vector<std::filesystem::path*>& resourcePaths) const = 0;
 
 	//Unload unused resources
 	virtual void Purge() = 0;
@@ -67,9 +67,8 @@ public:
 	template<class... Args>
 	void Reload(const std::filesystem::path& filepath, Args... args);
 
-
 	size_t GetResourceCount() const override { return m_resources.size(); }
-	//virtual void GetResourcesFilepath(std::vector<const char*>& resourcePaths) const override;
+	virtual void GetResourcesFilepath(std::vector<std::filesystem::path*>& resourcePaths) const override;
 
 
 };

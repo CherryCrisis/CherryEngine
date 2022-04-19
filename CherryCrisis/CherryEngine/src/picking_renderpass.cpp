@@ -10,7 +10,7 @@
 #include "camera.hpp"
 
 PickingRenderPass::PickingRenderPass(const char* name)
-	: ARenderPass(name, "Assets/picking.vert", "Assets/picking.frag")
+	: ARenderingRenderPass(name, "Assets/picking.vert", "Assets/picking.frag")
 {
 	if (m_program)
 		m_callExecute = CCCallback::BindCallback(&PickingRenderPass::Execute, this);

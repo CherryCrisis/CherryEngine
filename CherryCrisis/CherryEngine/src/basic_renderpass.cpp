@@ -9,13 +9,15 @@
 #include "transform.hpp"
 #include "model.hpp"
 
+#include "shadow_renderpass.hpp"
+
 BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
 {
 	glDeleteTextures(1, &ID);
 }
 
 BasicRenderPass::BasicRenderPass(const char* name)
-	: ARenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
+	: ARenderingRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
 {
 	if (m_program)
 	{
@@ -33,7 +35,7 @@ BasicRenderPass::BasicRenderPass(const char* name)
 template <>
 int BasicRenderPass::Subscribe(Light* toGenerate)
 {
-	if (!toGenerate)
+	if (!toGenerate || !m_program)
 		return -1;
 
 	m_lights.insert(toGenerate);
@@ -150,6 +152,8 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 	glCullFace(GL_BACK);
 
 	glUseProgram(m_program->m_shaderProgram);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// TODO: Change this
 	camera.aspect = (float)framebuffer.width / (float)framebuffer.height;
@@ -166,8 +170,30 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 	const char* lightFormat = "uLights[{}]";
 	for (Light* light : m_lights)
 	{
+		auto* gpuLight = static_cast<ShadowRenderPass::GPUShadowLight*>(light->m_gpuLight.get());
+
+		if (!gpuLight)
+		{
+			lightID++;
+			continue;
+		}
+
+		// TODO: Optimize, compute one time
+		CCMaths::Matrix4 lightView = CCMaths::Matrix4::LookAt(light->m_position);
+		CCMaths::Matrix4 ortho = CCMaths::Matrix4::Transpose(CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f));
+		CCMaths::Matrix4 lightSpace = ortho * lightView;
+
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + lightID, 3 + lightID);
+		glBindTextureUnit(3 + lightID, gpuLight->depthTexID);
+
 		// TODO: Use string view
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
+		GLuint lightSpaceLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightSpace").c_str());
+		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, lightSpace.data);
+
+		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
+		glUniform1i(enableLoc, true);
+
 		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isPoint").c_str());
 		glUniform1i(pointLoc, light->m_isPoint);
 
