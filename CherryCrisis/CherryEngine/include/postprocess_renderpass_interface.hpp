@@ -12,7 +12,7 @@ struct Framebuffer;
 class APostProcessRenderPass : public ARenderPass
 {
 protected:
-	std::unique_ptr<CCCallback::ACallback<Framebuffer&>> m_callExecute = nullptr;
+	std::shared_ptr<CCCallback::ACallback<Framebuffer&>> m_callExecute = nullptr;
 
 public:
 	virtual void InvalidatePass() { m_callExecute = nullptr; }

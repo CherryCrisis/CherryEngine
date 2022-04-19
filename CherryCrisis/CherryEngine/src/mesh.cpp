@@ -143,7 +143,7 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 }
 
 
-void Mesh::Reload(const aiMesh* assimpMesh)
+void Mesh::Reload(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
 {
     m_vertices.clear();
     m_indices.clear();
