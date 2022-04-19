@@ -15,19 +15,65 @@ namespace PhysicSystem
 {
 	void PhysicActor::Update()
 	{
+		if (m_isDynamic ||
+			!m_rigidbody->GetEnabled() ||
+			!m_rigidbody->GetKinematic())
+		{
+			Transform* t = m_owner->GetBehaviour<Transform>();
+			physx::PxTransform pxT = m_pxActor->getGlobalPose();
+			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
+
+			Vector3 pos = t->GetPosition();
+			if (pxT.p.x != m_oldPos.z)
+				pos.x = pxT.p.x;
+
+			if (pxT.p.y != m_oldPos.z)
+				pos.y = pxT.p.y;
+
+			if (pxT.p.z != m_oldPos.z)
+				pos.z = pxT.p.z;
+
+			Vector3 rot = t->GetRotation();
+			if (pxRot.x != m_oldRot.x)
+					rot.x = pxRot.x;
+
+			if (pxRot.y != m_oldRot.y)
+				rot.y = pxRot.y;
+
+			if (pxRot.z != m_oldRot.z)
+				rot.z = pxRot.z;
+
+			t->SetPosition(pos);
+			t->SetRotation(rot);
+		}
+	}
+
+	void PhysicActor::SetActorPosition(const CCMaths::Vector3& position)
+	{
+		m_oldPos = position;
+
 		physx::PxTransform pxT = m_pxActor->getGlobalPose();
+		m_pxActor->setGlobalPose(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z),
+													pxT.q));
+	}
 
-		Transform* t = m_owner->GetBehaviour<Transform>();
+	void PhysicActor::SetActorRotation(const CCMaths::Vector3& rotation)
+	{
+		m_oldRot = rotation;
 
-		Vector3 pos = { pxT.p.x, pxT.p.y, pxT.p.z };
-		t->SetPosition(pos);
-		Vector3 rot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
-		t->SetRotation(rot);
+		Quaternion pxRotQ = Quaternion::FromEuler(rotation);
+
+		physx::PxTransform pxT = m_pxActor->getGlobalPose();
+		m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
+													physx::PxQuat(pxRotQ.x, pxRotQ.y, pxRotQ.z, pxRotQ.w)));
 	}
 
 	void PhysicActor::CreatePxActor()
 	{
 		Transform* t = m_owner->GetBehaviour<Transform>();
+		t->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
+		t->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
+
 		Vector3 pos = t->GetPosition();
 		Quaternion rot = Quaternion::FromEuler(t->GetRotation());
 
@@ -62,7 +108,12 @@ namespace PhysicSystem
 	void PhysicActor::DestroyPxActor()
 	{
 		if (m_pxActor)
+		{
+			Transform* t = m_owner->GetBehaviour<Transform>();
+			t->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
+			t->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
 			PX_RELEASE(m_pxActor);
+		}
 	}
 
 	physx::PxShape* PhysicActor::CreateShape(const physx::PxGeometry& geometry)

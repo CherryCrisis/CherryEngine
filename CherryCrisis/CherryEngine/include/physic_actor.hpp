@@ -27,10 +27,15 @@ namespace PhysicSystem
 		Rigidbody* m_rigidbody = nullptr;
 		std::vector<Collider*> m_colliders;
 
+		CCMaths::Vector3 m_oldPos;
+		CCMaths::Vector3 m_oldRot;
+
 	public:
 		Entity* m_owner = nullptr;
 
 		void Update();
+		void SetActorPosition(const CCMaths::Vector3& position);
+		void SetActorRotation(const CCMaths::Vector3& rotation);
 		
 		void CreatePxActor();
 		void DestroyPxActor();

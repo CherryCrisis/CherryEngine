@@ -171,8 +171,8 @@ namespace CCMaths
 	{
 		return
 		{
-			std::atan2f(2.f * (in.w * in.x + in.y * in.z), 1.f - 2.f * (in.x * in.x + in.y * in.y)),
 			std::asinf(2.f * (in.w * in.y - in.z * in.x)),
+			std::atan2f(2.f * (in.w * in.x + in.y * in.z), 1.f - 2.f * (in.x * in.x + in.y * in.y)),
 			std::atan2f(2.f * (in.w * in.z + in.x * in.y), 1.f - 2.f * (in.y * in.y + in.z * in.z))
 		};
 	}
@@ -239,12 +239,12 @@ namespace CCMaths
 
 	inline Quaternion Quaternion::FromEuler(const float roll, const float pitch, const float yaw)
 	{
-		float rollCos  = std::cosf(roll);
-		float rollSin  = std::sinf(roll);
-		float pitchCos = std::cosf(pitch);
-		float pitchSin = std::sinf(pitch);
-		float yawCos   = std::cosf(yaw);
-		float yawSin   = std::sinf(yaw);
+		float rollCos  = std::cosf(roll	 * 0.5f);
+		float rollSin  = std::sinf(roll	 * 0.5f);
+		float pitchCos = std::cosf(pitch * 0.5f);
+		float pitchSin = std::sinf(pitch * 0.5f);
+		float yawCos   = std::cosf(yaw   * 0.5f);
+		float yawSin   = std::sinf(yaw   * 0.5f);
 
 		return
 		{
