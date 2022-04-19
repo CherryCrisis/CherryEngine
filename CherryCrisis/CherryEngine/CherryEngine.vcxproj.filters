@@ -1143,6 +1143,9 @@
     <ClInclude Include="include\element_mesh_generator.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\basic_postprocess_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
     <ClInclude Include="include\builder.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
@@ -1260,6 +1263,12 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="..\x64\Debug\Assets\basicShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\basicPostProcess.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\basicPostProcess.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
@@ -1437,6 +1446,9 @@
     </ClCompile>
     <ClCompile Include="src\element_mesh_generator.cpp">
       <Filter>Fichiers sources\Rendering\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\basic_postprocess_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
     <ClCompile Include="src\builder.cpp">
       <Filter>Fichiers sources\Core</Filter>

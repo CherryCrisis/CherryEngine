@@ -23,7 +23,6 @@ protected:
 	InputManager* m_inputs = nullptr;
 
 	bool m_isActive = false;
-	unsigned int m_ViewTex = 0u;
 
 	void UpdateFramebuffer(float width, float height, Camera& camera);
 	void Render() override;

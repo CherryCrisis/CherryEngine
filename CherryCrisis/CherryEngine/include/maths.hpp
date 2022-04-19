@@ -28,10 +28,10 @@ namespace CCMaths
 
     constexpr bool BoolPattern(int index, unsigned int pattern = 2u) { return index % (2 * pattern) < pattern; }
 
-    constexpr int BoolSign(bool flag) { return 1 - 2 * flag; }
+    constexpr int BoolSign(bool flag) { return 1 - 2 * !flag; }
 
     template<typename T>
-    T Remap(const T& value, const T& oldMin, const T& oldMax, const T& newMin, const T& newMax)
+    constexpr T Remap(const T& value, const T& oldMin, const T& oldMax, const T& newMin, const T& newMax)
     {
         return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
     }

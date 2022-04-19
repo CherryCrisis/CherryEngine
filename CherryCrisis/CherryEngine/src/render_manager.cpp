@@ -9,6 +9,7 @@
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
 #include "shadow_renderpass.hpp"
+#include "basic_postprocess_renderpass.hpp"
 
 #include "framebuffer.hpp"
 
@@ -66,12 +67,10 @@ RenderManager::RenderManager()
 	if (gladLoaderLoadGL() == 0)
 		printf("gladLoaderLoadGL failed\n");
 
-
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageCallback(debugCallback, NULL);
 
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-
 
     // TODO: Remove this
     LoadSubpipeline<SkyboxRenderPass>();
@@ -90,8 +89,6 @@ void RenderManager::DrawScene(Framebuffer& framebuffer, Camera& camera)
 
     for (APostProcessRenderPass* pipeline : RM->m_orderedPostprocessRenderpass)
         pipeline->CallOnExecute(framebuffer);
-
-	glUseProgram(0);
 }
 
 void RenderManager::InitializePipeline(const RenderingRPDesc& renderingRenderpasses, const PostprocessRPDesc& postprocessRenderpasses)
@@ -121,6 +118,7 @@ RenderManager::PostprocessRPDesc RenderManager::DefaultPostprocessRenderpass()
 {
     return [&](std::vector<APostProcessRenderPass*>& orderedRenderpasses)
     {
-
+        APostProcessRenderPass* postprocess = RenderManager::GetInstance()->LoadSubpipeline<BasicPostProcessRenderPass>();
+        orderedRenderpasses.push_back(postprocess);
     };
 }
