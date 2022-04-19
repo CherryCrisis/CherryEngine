@@ -25,4 +25,5 @@ public:
 	void Unfocus() override;
 
 	ImGuizmo::OPERATION m_operation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE		m_mode		= ImGuizmo::MODE::WORLD;
 };
