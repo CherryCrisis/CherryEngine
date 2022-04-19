@@ -22,7 +22,6 @@ public:
 	Model(const char* filepath) : Resource(filepath) {}
 	~Model() = default;
 
-	std::string					m_modelBasePath;
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Material>	m_material;
 
@@ -30,5 +29,5 @@ public:
 	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh);
 
 	void Delete() override;
-	void Reload(/*const aiScene* assimpScene, const aiNode* assimpNode*/);
+	void Reload(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
 };

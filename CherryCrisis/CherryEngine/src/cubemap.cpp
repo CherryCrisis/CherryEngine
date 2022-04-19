@@ -8,12 +8,6 @@
 
 #include "texture.hpp"
 
-void Cubemap::Delete()
-{
-   // for (int i = 0; i < 6; i++)
-   //     stbi_image_free(m_data[i]);
-}
-
 void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6])
 {
     ResourceManager* resourceManager = ResourceManager::GetInstance();

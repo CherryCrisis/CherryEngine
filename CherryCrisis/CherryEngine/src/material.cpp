@@ -37,28 +37,33 @@ void Material::Load(std::shared_ptr<Material> material, const MaterialArgs& mate
 	}
 }
 
-void Material::Reload(/*const aiMaterial* assimpMaterial*/)
+void Material::Reload(const MaterialArgs& materialArgs)
 {
-	//ResourceManager* resourceManager = ResourceManager::GetInstance();
+	ResourceManager* resourceManager = ResourceManager::GetInstance();
 
-	////Material Color
-	//aiColor3D color(0.f, 0.f, 0.f);
-	//if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
-	//	m_albedo = Vector3(color.r, color.g, color.b);
+	m_ambient = materialArgs.m_materialHeader->m_ambient;
+	m_diffuse = materialArgs.m_materialHeader->m_diffuse;
+	m_specular = materialArgs.m_materialHeader->m_specular;
+	m_emissive = materialArgs.m_materialHeader->m_emissive;
 
-	////Material Texture
-	//{
-	//	aiString texturePath;
-	//	if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &texturePath) == AI_SUCCESS)
-	//	{
-	//		Resource<Texture>::ReloadResource(textures["ambient"]);
-	//	}
+	m_shininess = materialArgs.m_materialHeader->m_shininess;
 
-	//	if (assimpMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == AI_SUCCESS)
-	//	{
-	//		// TODO: Remove this
-	//		std::string path = "Assets/" + std::string(texturePath.C_Str());
-	//		Resource<Texture>::ReloadResource(textures["albedo"]);
-	//	}
-	//}
+	textures.clear();
+
+	for (unsigned int i = 0; i < materialArgs.m_materialHeader->m_texturesCount; ++i)
+	{
+		
+		std::shared_ptr<Texture> texture = resourceManager->GetResource<Texture>((*materialArgs.m_texturesPath)[i].c_str());
+
+		if (texture)
+		{
+			Resource<Texture>::ReloadResource(texture, true);
+		}
+		else
+		{
+			resourceManager->AddResource<Texture>((*materialArgs.m_texturesPath)[i].c_str(), false, true);
+		}
+
+		textures.emplace((ETextureType)(*materialArgs.m_textureType)[i], texture);
+	}
 }

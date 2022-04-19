@@ -5,8 +5,6 @@
 
 class CCENGINE_API Serializer
 {
-private:
-
 public:	
 	// Save scene
 	static bool SerializeScene(Scene* scene, const char* filepath ="");

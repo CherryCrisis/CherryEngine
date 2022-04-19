@@ -46,7 +46,7 @@ namespace CCImporter
     struct MaterialHeader
     {
         bool            m_hasMaterial;
-        size_t          m_matarialId;
+        size_t          m_materialNameSize;
         Vector3         m_ambient;
         Vector3         m_diffuse;
         Vector3         m_specular;
@@ -56,26 +56,34 @@ namespace CCImporter
         unsigned int    m_texturesCount;
     };
 
+    struct MeshHeader
+    {
+        bool            m_hasMesh;
+        size_t          m_meshNameSize;
+        unsigned int    m_verticesCount;
+        unsigned int    m_indicesCount;
+    };
+
     struct ModelHeader
     {
-        size_t          m_modelId;
+        size_t          m_modelNameSize;
         unsigned int    m_index; //Index in list
         int             m_parentIndex;
         Vector3         m_trs[3];
 
         unsigned int    m_childrenCount;
 
-        bool            m_hasMesh;
-        size_t          m_meshId;
-        unsigned int    m_verticesCount;
-        unsigned int    m_indicesCount;
-
+        MeshHeader      m_meshHeader;
         MaterialHeader  m_materialHeader;
     };
 
     struct ImportModelUtils
     {
         ModelHeader modelHeader;
+
+        std::string                 m_modelName;
+        std::string                 m_materialName;
+        std::string                 m_meshName;
 
         std::vector<unsigned int>   m_childrenIndices;
         std::vector<Vertex>         m_vertices;
@@ -84,7 +92,6 @@ namespace CCImporter
         std::vector<unsigned int>   m_texturesPathSize;
         std::vector<unsigned int>   m_texturesType;
         std::vector<char>           m_texturesPath;
-        const char*                 m_textureRelativePath;
 
         //No used in writing
         std::vector <std::string> m_texturesPathCstr;

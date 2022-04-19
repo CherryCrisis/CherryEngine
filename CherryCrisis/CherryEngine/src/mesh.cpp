@@ -6,7 +6,7 @@
 
 void Mesh::Delete()
 {
-
+    m_gpuMesh = nullptr;
 }
 
 void Mesh::Load(std::shared_ptr<Mesh> mesh, const aiMesh* assimpMesh)
@@ -110,50 +110,10 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
    Load(mesh, vertices, indices);
 }
 
-void Mesh::Reload(const aiMesh* assimpMesh)
+void Mesh::Reload(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
 {
     m_vertices.clear();
     m_indices.clear();
-
-    std::vector<Vertex> vertices;
-    vertices.reserve(assimpMesh->mNumVertices);
-
-    for (size_t v = 0u; v < assimpMesh->mNumVertices; v++)
-    {
-        Vertex& vertex = vertices.emplace_back();
-        for (int i = 0; i < 3; ++i)
-        {
-            vertex.position.data[i] = assimpMesh->mVertices[v][i];
-            vertex.normal.data[i] = assimpMesh->mNormals[v][i];
-
-            if (assimpMesh->HasTangentsAndBitangents())
-            {
-                vertex.tangent.data[i] = assimpMesh->mTangents[v][i];
-                vertex.bitangent.data[i] = assimpMesh->mBitangents[v][i];
-            }
-        }
-
-        if (assimpMesh->HasTextureCoords(0)) {
-            vertex.uv.data[0] = assimpMesh->mTextureCoords[0][v].x;
-            vertex.uv.data[1] = assimpMesh->mTextureCoords[0][v].y;
-        }
-        else
-        {
-            vertex.uv = { 0.f };
-        }
-    }
-
-    std::vector<unsigned int> indices;
-    size_t indicesCount = (size_t)(assimpMesh->mNumFaces) * 3u;
-    indices.reserve(indicesCount);
-
-    for (size_t f = 0; f < assimpMesh->mNumFaces; f++)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            indices.push_back(assimpMesh->mFaces[f].mIndices[i]);
-        }
-    }
 
     m_vertices = std::move(vertices);
     m_indices = std::move(indices);

@@ -23,4 +23,6 @@ public:
 	float m_volumeMultiplier = 1.f;
 
 	static void Load(std::shared_ptr<Sound> sound);
+
+	void Delete() override {}
 };

@@ -15,7 +15,7 @@ class CCENGINE_API Scene : public Resource<Scene>
 public:
 	
 	Scene(const char* filePath) : Resource(filePath) { }
-	virtual ~Scene();
+	virtual ~Scene() = default;
 	
 	// TODO: Switch to unique_ptr this is shitty shit shit shit
 	std::unordered_map<std::string, Entity*> m_entities;
@@ -55,4 +55,6 @@ public:
 	bool SaveAs(const char* filepath);
 
 	void Empty();
+
+	void Delete() override;
 };

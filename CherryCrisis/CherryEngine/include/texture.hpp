@@ -31,5 +31,7 @@ public:
     static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     
     void Delete() override;
-    void Reload();
+
+    //put a texture if the texture should not be imported
+    void Reload(bool flipTexture, std::shared_ptr<Texture> texture = nullptr);
 };

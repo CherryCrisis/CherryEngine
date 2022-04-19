@@ -73,14 +73,20 @@ void ResourceManager::AddResourceWithCallback(std::shared_ptr<T> resource,
 	case EResourceState::EMPTY:
 		resource->SetResourceState(EResourceState::LOADING);
 		T::Load(resource, args...);
-		resource->m_OnLoaded.Bind(callback);
+
+		if (callback)
+			resource->m_OnLoaded.Bind(callback);
 		resource->IsLoaded(resource, m_threadpool);
 		break;
 	case EResourceState::LOADING:
-		resource->m_OnLoaded.Bind(callback);
+		if (callback)
+			resource->m_OnLoaded.Bind(callback);
 		break;
 	case EResourceState::LOADED:
 	{
+		if (!callback)
+			return;
+
 		std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
 			wrappedCallback, resource);
 

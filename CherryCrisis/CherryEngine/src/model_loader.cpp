@@ -30,20 +30,20 @@ namespace CCImporter
     {
         if (assimpNode->mNumMeshes == 0)
         {
-            model.modelHeader.m_hasMesh = false;
+            model.modelHeader.m_meshHeader.m_hasMesh = false;
             return;
         }
 
-        model.modelHeader.m_hasMesh = true;
+        model.modelHeader.m_meshHeader.m_hasMesh = true;
 
         size_t meshId = (size_t)assimpNode->mMeshes[meshIndex];
         const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
 
-        std::string meshPath(filepath.generic_string());
-        meshPath += std::string("_");
-        meshPath += std::string(assimpMesh->mName.C_Str());
+        model.m_meshName = filepath.string();
+        model.m_meshName += std::string("/");
+        model.m_meshName += std::string(assimpMesh->mName.C_Str());
 
-        model.modelHeader.m_meshId = std::hash<std::string>{}(meshPath);
+        model.modelHeader.m_meshHeader.m_meshNameSize = model.m_meshName.size();
 
         std::vector<Vertex> vertices;
 
@@ -87,8 +87,8 @@ namespace CCImporter
             }
         }
 
-        model.modelHeader.m_verticesCount = (unsigned int)vertices.size();
-        model.modelHeader.m_indicesCount = (unsigned int)indices.size();
+        model.modelHeader.m_meshHeader.m_verticesCount = (unsigned int)vertices.size();
+        model.modelHeader.m_meshHeader.m_indicesCount = (unsigned int)indices.size();
         model.m_vertices.swap(vertices);
         model.m_indices.swap(indices);
     }
@@ -280,11 +280,11 @@ namespace CCImporter
         if (name.length == 0)
             name = std::format("mat_{}", assimpMesh->mMaterialIndex).c_str();
 
-        std::string materialPath(filepath.string());
-        materialPath += std::string("_");
-        materialPath += std::string(name.C_Str());
+        model.m_materialName = filepath.string();
+        model.m_materialName += std::string("/");
+        model.m_materialName += std::string(name.C_Str());
 
-        materialHeader->m_matarialId = std::hash<std::string>{}(materialPath);
+        materialHeader->m_materialNameSize = model.m_materialName.size();
 
         float matValue = 0.f;
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_SHININESS, matValue))
@@ -396,11 +396,11 @@ namespace CCImporter
     {
             ImportModelUtils model{};
 
-            std::string modelName(filepath.generic_string());
-            modelName += std::string("_");
-            modelName += std::to_string(index);
+            model.m_modelName =filepath.string();
+            model.m_modelName += std::string("/");
+            model.m_modelName += std::to_string(index);
 
-            model.modelHeader.m_modelId = std::hash<std::string>{}(modelName);
+            model.modelHeader.m_modelNameSize = model.m_modelName.size();
             model.modelHeader.m_index = index;
             model.modelHeader.m_parentIndex = modelParentIndex;
 
@@ -466,18 +466,24 @@ namespace CCImporter
         for (const ImportModelUtils& model : models)
         {
             fwrite(&model.modelHeader, sizeof(ModelHeader), 1, file);
+            fwrite(&model.m_modelName[0], model.m_modelName.size(), 1, file);
+
 
             if (model.modelHeader.m_childrenCount)
                 fwrite(&model.m_childrenIndices[0], model.m_childrenIndices.size() * sizeof(unsigned int), 1, file);
 
-            if (model.modelHeader.m_hasMesh)
+            if (model.modelHeader.m_meshHeader.m_hasMesh)
             {
+                fwrite(&model.m_meshName[0], model.m_meshName.size(), 1, file);
+
                 fwrite(&model.m_vertices[0], model.m_vertices.size() * sizeof(Vertex), 1, file);
                 fwrite(&model.m_indices[0], model.m_indices.size() * sizeof(unsigned int), 1, file);
             }
 
             if (model.modelHeader.m_materialHeader.m_hasMaterial)
             {
+                fwrite(&model.m_materialName[0], model.m_materialName.size(), 1, file);
+
                 if (model.modelHeader.m_materialHeader.m_texturesCount)
                 {
 

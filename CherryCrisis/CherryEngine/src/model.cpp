@@ -23,15 +23,8 @@ void Model::Delete()
 	m_material = nullptr;
 }
 
-void Model::Reload()
+void Model::Reload(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material)
 {
-	//ResourceManager* resourceManager = ResourceManager::GetInstance();
-	//
-	//size_t meshId = (size_t)assimpNode->mMeshes[0];
-	//
-	//const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
-	//const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
-	//
-	//Resource<Mesh>::ReloadResource(m_mesh, assimpMesh);
-	//Resource<Material>::ReloadResource(m_material, assimpMaterial);
+	m_mesh = mesh;
+	m_material = material;
 }
