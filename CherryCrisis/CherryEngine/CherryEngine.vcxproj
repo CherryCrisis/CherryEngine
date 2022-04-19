@@ -208,6 +208,7 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilTelemetry.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
     <ClInclude Include="include\basic_postprocess_renderpass.hpp" />
+    <ClInclude Include="include\basic_rendering_pipeline.hpp" />
     <ClInclude Include="include\builder.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
@@ -342,6 +343,7 @@
     <ClInclude Include="include\picking_renderpass.hpp" />
     <ClInclude Include="include\postprocess_renderpass_interface.hpp" />
     <ClInclude Include="include\renderer.hpp" />
+    <ClInclude Include="include\rendering_pipeline_interface.hpp" />
     <ClInclude Include="include\rendering_renderpass_interface.hpp" />
     <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
@@ -441,6 +443,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\basic_postprocess_renderpass.cpp" />
+    <ClCompile Include="src\basic_rendering_pipeline.cpp" />
     <ClCompile Include="src\behaviour.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\builder.cpp" />

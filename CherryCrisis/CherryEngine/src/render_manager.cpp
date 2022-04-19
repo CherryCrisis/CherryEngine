@@ -6,12 +6,9 @@
 
 #include "resource_manager.hpp"
 
-#include "basic_renderpass.hpp"
-#include "skybox_renderpass.hpp"
-#include "shadow_renderpass.hpp"
-#include "basic_postprocess_renderpass.hpp"
-
 #include "framebuffer.hpp"
+
+#include "basic_rendering_pipeline.hpp"
 
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
@@ -72,53 +69,13 @@ RenderManager::RenderManager()
 
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
 
-    // TODO: Remove this
-    LoadSubpipeline<SkyboxRenderPass>();
+    // TODO: free pipeline
+    pipeline = new BasicRPipeline();
 }
 
 void RenderManager::DrawScene(Framebuffer& framebuffer, Camera& camera)
 {
 	RenderManager* RM = GetInstance();
-	
-    // TODO: Move this
-    if (RM->m_orderedRenderingRenderpass.size() == 0 && RM->m_existingRenderpasses.size() > 0)
-		InitializePipeline(DefaultRenderingRenderpass(), DefaultPostprocessRenderpass());
 
-	for (ARenderingRenderPass* pipeline : RM->m_orderedRenderingRenderpass)
-		pipeline->CallOnExecute(framebuffer, camera);
-
-    for (APostProcessRenderPass* pipeline : RM->m_orderedPostprocessRenderpass)
-        pipeline->CallOnExecute(framebuffer);
-}
-
-void RenderManager::InitializePipeline(const RenderingRPDesc& renderingRenderpasses, const PostprocessRPDesc& postprocessRenderpasses)
-{
-	RenderManager* RM = GetInstance();
-
-    renderingRenderpasses(RM->m_orderedRenderingRenderpass);
-    postprocessRenderpasses(RM->m_orderedPostprocessRenderpass);
-}
-
-RenderManager::RenderingRPDesc RenderManager::DefaultRenderingRenderpass()
-{
-	return [&](std::vector<ARenderingRenderPass*>& orderedRenderpasses)
-    {
-        ARenderingRenderPass* shadow = RenderManager::GetInstance()->LoadSubpipeline<ShadowRenderPass>();
-        orderedRenderpasses.push_back(shadow);
-
-        ARenderingRenderPass* lit = RenderManager::GetInstance()->LoadSubpipeline<BasicRenderPass>();
-        orderedRenderpasses.push_back(lit);
-
-        ARenderingRenderPass* skybox = RenderManager::GetInstance()->LoadSubpipeline<SkyboxRenderPass>();
-        orderedRenderpasses.push_back(skybox);
-	};
-}
-
-RenderManager::PostprocessRPDesc RenderManager::DefaultPostprocessRenderpass()
-{
-    return [&](std::vector<APostProcessRenderPass*>& orderedRenderpasses)
-    {
-        APostProcessRenderPass* postprocess = RenderManager::GetInstance()->LoadSubpipeline<BasicPostProcessRenderPass>();
-        orderedRenderpasses.push_back(postprocess);
-    };
+    RM->pipeline->Execute(framebuffer, camera);
 }
