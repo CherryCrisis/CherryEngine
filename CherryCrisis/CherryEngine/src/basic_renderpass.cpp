@@ -159,7 +159,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 	CCMaths::Matrix4 viewProjection = projection * view;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
-	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, camera.position.data);
+	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-view.position).data);
 	
 
 	size_t lightID = 0u;

@@ -55,16 +55,11 @@ void SceneDisplayer::UpdateCamera()
     InputManager* IM = InputManager::GetInstance();
     CCMaths::Vector2 deltaMouse = IM->GetMouseDelta();
 
-    CCMaths::Matrix4 view = Matrix4::RotateZXY(m_camera.rotation);
+    CCMaths::Matrix4 view = Matrix4::RotateYXZ(m_camera.rotation);
 
     Vector3 up = Vector3::Up;
     Vector3 right = view.right;
     Vector3 forward = -view.back;
-
-    right.y = forward.y = 0.f;
-    right.Normalize(); forward.Normalize();
-
-    Debug::GetInstance()->AddLog(ELogType::INFO, std::format("x {}, y {}, z {}", right.x, right.y, right.z).c_str());
 
     float dt = TimeManager::GetInstance()->GetDeltaTime();
     float speed = dt * m_cameraSpeed;
@@ -74,8 +69,8 @@ void SceneDisplayer::UpdateCamera()
     Vector3 rightwardMove = right * IM->GetAxis("RightLeft");
     Vector3 upwardMove = up * IM->GetAxis("UpDown");
 
-    m_camera.rotation.x += dt * deltaMouse.y;
-    m_camera.rotation.y += dt * deltaMouse.x;
+    m_camera.rotation.pitch += dt * deltaMouse.y;
+    m_camera.rotation.yaw += dt * deltaMouse.x;
     
     m_camera.position += (forwardMove + rightwardMove + upwardMove) * speed;
 }

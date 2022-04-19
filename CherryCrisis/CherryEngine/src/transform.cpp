@@ -83,7 +83,7 @@ Matrix4 Transform::GetWorldMatrix()
 
 	m_isDirty = false;
 
-	m_worldMatrix = Matrix4::Translate(m_position) * Matrix4::RotateZXY(m_rotation) * Matrix4::Scale(m_scale);
+	m_worldMatrix = Matrix4::Translate(m_position) * Matrix4::RotateYXZ(m_rotation) * Matrix4::Scale(m_scale);
 
 	if (!m_parent)
 		return m_worldMatrix;
