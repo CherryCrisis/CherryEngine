@@ -15,10 +15,12 @@ namespace PhysicSystem
 {
 	void PhysicActor::Update()
 	{
-		if (m_isDynamic ||
-			!m_rigidbody->GetEnabled() ||
-			!m_rigidbody->GetKinematic())
+		if (m_isDynamic)
 		{
+			if (!m_rigidbody->GetEnabled() ||
+				m_rigidbody->GetKinematic())
+				return;
+			
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });

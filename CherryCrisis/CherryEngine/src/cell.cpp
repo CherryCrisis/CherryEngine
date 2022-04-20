@@ -67,25 +67,22 @@ void Cell::RemoveEntityFromPhysicScene(Entity* newEntity)
 		m_physicCell->RemoveActor(actor);
 }
 
+void Cell::AddPortal()
+{
+	m_portals.push_back(Portal());
+
+	m_portals.back().m_ownerCell = this;
+}
+
+void Cell::LinkPortals(Portal portal1, Portal portal2)
+{
+	portal1.m_linkedPortal = &portal2;
+	portal2.m_linkedPortal = &portal1;
+}
+
 void Cell::MoveCharacter(float deltaTime)
 {
 	m_physicCell->MoveCharacterController(deltaTime);
-
-	for (auto& cell : m_surroundingCells)
-		cell->m_physicCell->MoveCharacterController(deltaTime);
-}
-
-void Cell::LinkToCell(Cell& other)
-{
-	for (size_t i = 0; i < m_surroundingCells.size(); ++i)
-	{
-		if (&other == m_surroundingCells[i])
-		{
-			return;
-		}
-	}
-
-	m_surroundingCells.push_back(&other);
 }
 
 void Cell::SetControllerDesc(physx::PxCapsuleControllerDesc& desc)
