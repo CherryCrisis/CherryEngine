@@ -7,6 +7,8 @@
 #include "physic_manager.hpp"
 #include "cell.hpp"
 
+#include "debug.hpp"
+
 namespace PhysicSystem
 {
 	void PhysicScene::Update(float deltaTime)
@@ -23,6 +25,8 @@ namespace PhysicSystem
 
 	void PhysicScene::CreatePxScene()
 	{
+		static Debug* debug = Debug::GetInstance();
+
 		physx::PxPhysics* pxPhysics = PhysicManager::GetInstance()->Get();
 
 		physx::PxSceneDesc sceneDesc(pxPhysics->getTolerancesScale());
@@ -37,9 +41,11 @@ namespace PhysicSystem
 
 		m_pxScene = pxPhysics->createScene(sceneDesc);
 
-		// TODO: change error (throw -> Log)
 		if (!m_pxScene)
-			throw("PhysicsEngine::Scene::Init, Could not initialise the scene.");
+		{
+			debug->AddLog(ELogType::ERROR, "Could not initialise the PhysX scene");
+			return;
+		}
 
 		m_pxScene->setGravity({ 0.0f, -m_gravity, 0.0f });
 
@@ -51,14 +57,11 @@ namespace PhysicSystem
 			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 		}
 
-		//physx::PxControllerManager* manager = PxCreateControllerManager(*m_pxScene);
-
-		//physx::PxCapsuleControllerDesc desc;
-		//m_cell->SetControllerDesc(desc);
-		//m_playerPxController = manager->createController(desc);
-
 		for (auto& actor : m_actors)
-			m_pxScene->addActor(*actor->Get());
+		{
+			if (actor->Get()) 
+				m_pxScene->addActor(*actor->Get());
+		}
 	}
 
 	void PhysicScene::DestroyPxScene()

@@ -11,7 +11,7 @@
 #include "camera.hpp"
 
 class ModelRenderer;
-class Light;
+struct Light;
 
 class ShadowRenderPass : public ARenderingRenderPass
 {

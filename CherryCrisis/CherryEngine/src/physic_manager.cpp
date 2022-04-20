@@ -92,7 +92,7 @@ namespace PhysicSystem
 	void PhysicManager::Register(Rigidbody* rigidbody)
 	{
 		if (!cell)
-		cell = new Cell();
+			cell = new Cell();
 
 		PhysicActor& actor = FindOrCreateActor(rigidbody->GetHost());
 		

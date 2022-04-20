@@ -63,6 +63,9 @@ void Rigidbody::SetPxActor()
 
 void Rigidbody::SetActorConstraints()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)
@@ -92,6 +95,9 @@ void Rigidbody::SetActorConstraints()
 
 void Rigidbody::SetActorEnabled()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 	
 	if (actor)
@@ -107,6 +113,9 @@ void Rigidbody::SetActorEnabled()
 
 void Rigidbody::SetActorKinematic()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)
@@ -128,6 +137,9 @@ void Rigidbody::SetActorKinematic()
 
 void Rigidbody::SetActorGravity()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)
@@ -144,6 +156,9 @@ void Rigidbody::SetActorGravity()
 
 void Rigidbody::SetActorMaxVelocities()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)

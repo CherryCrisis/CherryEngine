@@ -183,8 +183,8 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 		CCMaths::Matrix4 ortho = CCMaths::Matrix4::Transpose(CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f));
 		CCMaths::Matrix4 lightSpace = ortho * lightView;
 
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + lightID, 3 + lightID);
-		glBindTextureUnit(3 + lightID, gpuLight->depthTexID);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)lightID, 3 + (GLsizei)lightID);
+		glBindTextureUnit(3 + (GLsizei)lightID, gpuLight->depthTexID);
 
 		// TODO: Use string view
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";

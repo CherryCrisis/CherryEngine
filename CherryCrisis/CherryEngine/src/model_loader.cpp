@@ -436,7 +436,7 @@ namespace CCImporter
             if (node->mNumChildren)
                 models[indexBuff].m_childrenIndices.swap(childrenIndexs);
 
-            if (node->mNumMeshes > 1 && node->mNumMeshes > meshIndex + 1)
+            if (node->mNumMeshes > 1 && node->mNumMeshes > (unsigned int)meshIndex + 1)
                 ImportModelDataRecursive(node, model.modelHeader.m_index - index, index, meshIndex + 1, scene, models, filepath);
     }
 

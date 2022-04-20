@@ -79,8 +79,8 @@ std::string Entity::SerializeBehaviours()
 
 	for (auto& [type, behaviour] : m_behaviours)
 	{
-		value += "Behaviour:"+std::to_string(behaviour->GetUUID()) + "\n";
-		value += "m_type:"+ std::string(typeid(*behaviour).name()) + "\n";
+		value += "Behaviour:" + std::to_string(behaviour->GetUUID()) + "\n";
+		value += "m_type:" + std::string(typeid(*behaviour).name()) + "\n";
 		value += behaviour->Serialize() + "\n";
 	}
 

@@ -8,7 +8,7 @@
 #include "skybox.hpp"
 
 class ModelBase;
-class ModelNode;
+struct ModelNode;
 
 class CCENGINE_API Scene : public Resource<Scene>
 { 
