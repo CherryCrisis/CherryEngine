@@ -17,6 +17,7 @@
 #include "box_collider.hpp"
 #include "sphere_collider.hpp"
 #include "bool3.hpp"
+#include "core/imcherry.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -56,14 +57,22 @@ void InspectComponents(Entity* entity, int id)
             if (ImGui::MenuItem("Paste")) {}
             ImGui::EndPopup();
         }
-
-        bool opened = ImGui::TreeNode(bname.c_str());
+        bool opened = false;
+        ScriptedBehaviour* b = (ScriptedBehaviour*)behaviour;
+        if (bname == "ScriptedBehaviour")
+            opened = ImGui::TreeNode(b->GetScriptPath().c_str());
+        else
+            opened = ImGui::TreeNode(bname.c_str());
 
         // check if right clicked
         if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
         {
             ImGui::OpenPopup("context");
         }
+
+        ImVec4 color1 = { 100.f / 255.f, 10.f / 255.f, 10.f / 255.f, 1.f };
+        ImVec4 color2 = { 18.f / 255.f, 120.f / 255.f, 4.f / 255.f, 1.f };
+        ImVec4 color3 = { 12.f / 255.f, 50.f / 255.f, 170.f / 255.f, 1.f };
 
         if (opened)
         {
@@ -75,14 +84,14 @@ void InspectComponents(Entity* entity, int id)
                 if (type == typeid(CCMaths::Vector3))
                 {
                     CCMaths::Vector3 val = std::any_cast<CCMaths::Vector3>(fieldRef.m_value);
-                    ImGui::DragFloat3(fieldRef.m_name.c_str(), val.data, 0.5f);
+                    ImCherry::ColoredDragFloat3(fieldRef.m_name.c_str(), val.data, {1.f,1.f,1.f,1.f}, 0.5f);
                     continue;
                 }
 
                 if (type == typeid(CCMaths::Vector3*))
                 {
                     CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
-                    ImGui::DragFloat3(fieldRef.m_name.c_str(), val->data, 0.5f);
+                    ImCherry::ColoredDragFloat3(fieldRef.m_name.c_str(), val->data, color1, color2, color3, 0.5f);
                     continue;
                 }
 
@@ -90,7 +99,7 @@ void InspectComponents(Entity* entity, int id)
                 {
                     CCMaths::Vector3** val = std::any_cast<CCMaths::Vector3**>(fieldRef.m_value);
                     CCMaths::Vector3* v = *val;
-                    ImGui::DragFloat3(fieldRef.m_name.c_str(), v->data, 0.5f);
+                    ImCherry::ColoredDragFloat3(fieldRef.m_name.c_str(), v->data, color1, color2, color3 , 0.5f);
                     continue;
                 }
 
@@ -150,8 +159,8 @@ void InspectComponents(Entity* entity, int id)
                 if (propType == typeid(CCMaths::Vector3))
                 {
                     CCMaths::Vector3 val;
-                    propRef->Get(&val);
-                    if (ImGui::DragFloat3(propName.c_str(), val.data, 0.5f))
+                    propRef->Get(&val); 
+                    if (ImCherry::ColoredDragFloat3(propName.c_str(), val.data, color1, color2, color3, 0.5f))
                         propRef->Set(&val);
 
                     continue;
