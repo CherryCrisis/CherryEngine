@@ -8,8 +8,6 @@
 
 #include "light.hpp"
 
-#include "camera.hpp"
-
 class ModelRenderer;
 struct Light;
 
@@ -53,5 +51,5 @@ public:
 	template <>
 	void Unsubscribe(Light* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Camera& camera);
+	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

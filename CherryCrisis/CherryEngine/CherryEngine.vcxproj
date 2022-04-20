@@ -208,6 +208,7 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleUtilTelemetry.h" />
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
     <ClInclude Include="include\basic_postprocess_renderpass.hpp" />
+    <ClInclude Include="include\basic_rendering_pipeline.hpp" />
     <ClInclude Include="include\builder.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
@@ -342,6 +343,7 @@
     <ClInclude Include="include\picking_renderpass.hpp" />
     <ClInclude Include="include\postprocess_renderpass_interface.hpp" />
     <ClInclude Include="include\renderer.hpp" />
+    <ClInclude Include="include\rendering_pipeline_interface.hpp" />
     <ClInclude Include="include\rendering_renderpass_interface.hpp" />
     <ClInclude Include="include\render_manager.hpp" />
     <ClInclude Include="include\resource.hpp" />
@@ -367,6 +369,7 @@
     <ClInclude Include="include\transform.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="include\uuid.hpp" />
+    <ClInclude Include="include\viewer.hpp" />
     <ClInclude Include="src\physic_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +379,8 @@
     <None Include="..\x64\Debug\Assets\basicShader.vert" />
     <None Include="..\x64\Debug\Assets\shadowShader.frag" />
     <None Include="..\x64\Debug\Assets\shadowShader.vert" />
+    <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
+    <None Include="..\x64\Debug\Assets\skyboxShader.vert" />
     <None Include="externals\include\assimp\color4.inl" />
     <None Include="externals\include\assimp\material.inl" />
     <None Include="externals\include\assimp\matrix3x3.inl" />
@@ -391,9 +396,9 @@
     <None Include="include\maths\vector2.inl" />
     <None Include="include\maths\vector3.inl" />
     <None Include="include\maths\vector4.inl" />
+    <None Include="include\renderer_manager.inl" />
     <None Include="include\resources_container.inl" />
     <None Include="include\resource_manager.inl" />
-    <None Include="include\renderer_manager.inl" />
     <CustomBuild Include="interface\ccengine.i">
       <FileType>Document</FileType>
       <Command>swig -c++ -python -I..\include -outdir $(OutDir) %(Identity)</Command>
@@ -441,6 +446,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\basic_postprocess_renderpass.cpp" />
+    <ClCompile Include="src\basic_rendering_pipeline.cpp" />
     <ClCompile Include="src\behaviour.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\builder.cpp" />

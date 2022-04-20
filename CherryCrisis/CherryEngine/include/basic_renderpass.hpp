@@ -12,18 +12,15 @@
 #include "light.hpp"
 #include "mesh.hpp"
 
-#include "camera.hpp"
-
 class ModelRenderer;
 class Material;
+class Viewer;
 
 class BasicRenderPass : public ARenderingRenderPass, ElementTBNGenerator
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
 	
-	Camera* m_camera = nullptr;
-
 protected:
 	struct GPUTextureBasic : public GPUTexture
 	{
@@ -51,9 +48,6 @@ public:
 	int Subscribe(Light* toGenerate);
 
 	template <>
-	int Subscribe(Camera* toGenerate);
-
-	template <>
 	int Subscribe(ModelRenderer* toGenerate);
 
 	template <>
@@ -63,13 +57,10 @@ public:
 	int Subscribe(Texture* toGenerate);
 
 	template <>
-	void Unsubscribe(Camera* toGenerate);
-
-	template <>
 	void Unsubscribe(ModelRenderer* toGenerate);
 
 	template <>
 	void Unsubscribe(Light* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Camera& camera);
+	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

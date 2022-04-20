@@ -7,7 +7,7 @@
 #include "model.hpp"
 #include "framebuffer.hpp"
 
-#include "camera.hpp"
+#include "viewer.hpp"
 
 PickingRenderPass::PickingRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/picking.vert", "Assets/picking.frag")
@@ -42,8 +42,11 @@ CCMaths::Vector3 RGB(uint32_t Color)
 	return Res;
 }
 
-void PickingRenderPass::Execute(Framebuffer& fb, Camera& camera)
+void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 {
+	if (!viewer)
+		return;
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
@@ -54,13 +57,7 @@ void PickingRenderPass::Execute(Framebuffer& fb, Camera& camera)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	// TODO: Change this
-	camera.aspect = (float)fb.width / (float)fb.height;
-
-	CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
-	CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation) * Matrix4::Translate(-camera.position);
-
-	CCMaths::Matrix4 viewProjection = projection * view;
+	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
 	for (ModelRenderer* modelRdr : m_modelRenderers)

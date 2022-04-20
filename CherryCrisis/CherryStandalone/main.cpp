@@ -110,7 +110,23 @@ int main()
 
         glfwGetWindowSize(window, &framebuffer.width, &framebuffer.height);
 
-        RenderManager::DrawScene(framebuffer, SceneManager::GetInstance()->m_currentScene->m_entities["Camera"]->GetBehaviour<CameraComponent>()->m_camera);
+
+
+        if (Entity* cameraEntity = SceneManager::GetInstance()->m_currentScene->m_entities["Camera"])
+        {
+            // TODO: Move this
+            if (CameraComponent* cameraComp = cameraEntity->GetBehaviour<CameraComponent>())
+            {
+                Camera* cam = &cameraComp->m_camera;
+
+                float aspect = (float)framebuffer.width / (float)framebuffer.height;
+                cam->m_projectionMatrix = Matrix4::Perspective(cam->fovY, aspect, cam->near, cam->far);
+
+                RenderManager::DrawScene(framebuffer, cam);
+
+            }
+        }
+
 
         engine.TickEngine();
         engine.LaunchStandalone();

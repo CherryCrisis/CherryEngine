@@ -14,6 +14,8 @@
 
 #include "pickinger.hpp"
 
+#include "basic_rendering_pipeline.hpp"
+
 #undef near
 #undef far
 
@@ -53,6 +55,9 @@ SceneDisplayer::SceneDisplayer()
     IM->AddInputToAction("Pick", Keycode::LEFT_CLICK);
 
     IM->PopContext();
+
+
+    m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
 }
 
 void SceneDisplayer::UpdateCamera()
@@ -82,6 +87,8 @@ void SceneDisplayer::UpdateCamera()
     m_camera.rotation.yaw += dt * deltaMouse.x;
     
     m_camera.position += (forwardMove + rightwardMove + upwardMove) * speed;
+
+    m_camera.m_viewMatrix = Matrix4::RotateZXY(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
 }
 
 void SceneDisplayer::Render() 
@@ -191,8 +198,8 @@ void SceneDisplayer::Render()
 
         // matrices view and proj
 
-        CCMaths::Matrix4 projection = Matrix4::Perspective(m_camera.fovY, m_camera.aspect, m_camera.near, m_camera.far);
-        CCMaths::Matrix4 view = Matrix4::RotateZXY(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
+        CCMaths::Matrix4 projection = m_camera.m_projectionMatrix;
+        CCMaths::Matrix4 view = m_camera.m_viewMatrix;
 
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();

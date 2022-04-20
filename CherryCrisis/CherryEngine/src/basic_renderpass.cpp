@@ -10,6 +10,7 @@
 #include "model.hpp"
 
 #include "shadow_renderpass.hpp"
+#include "viewer.hpp"
 
 BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
 {
@@ -40,16 +41,6 @@ int BasicRenderPass::Subscribe(Light* toGenerate)
 
 	m_lights.insert(toGenerate);
 
-	return 1;
-}
-
-template <>
-int BasicRenderPass::Subscribe(Camera* toGenerate)
-{
-	if (!toGenerate)
-		return -1;
-
-	m_camera = toGenerate;
 	return 1;
 }
 
@@ -138,14 +129,11 @@ void BasicRenderPass::Unsubscribe(Light* toGenerate)
 	m_lights.erase(toGenerate);
 }
 
-template <>
-void BasicRenderPass::Unsubscribe(Camera* toGenerate)
+void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 {
-	m_camera = nullptr;
-}
+	if (!viewer)
+		return;
 
-void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
-{
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
@@ -155,16 +143,10 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// TODO: Change this
-	camera.aspect = (float)framebuffer.width / (float)framebuffer.height;
-	CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
-	CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation) * Matrix4::Translate(-camera.position);
-
-	CCMaths::Matrix4 viewProjection = projection * view;
+	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
-	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-view.position).data);
-	
+	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
 
 	size_t lightID = 0u;
 	const char* lightFormat = "uLights[{}]";
@@ -178,18 +160,13 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 			continue;
 		}
 
-		// TODO: Optimize, compute one time
-		CCMaths::Matrix4 lightView = CCMaths::Matrix4::LookAt(light->m_position);
-		CCMaths::Matrix4 ortho = CCMaths::Matrix4::Transpose(CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f));
-		CCMaths::Matrix4 lightSpace = ortho * lightView;
-
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)lightID, 3 + (GLsizei)lightID);
 		glBindTextureUnit(3 + (GLsizei)lightID, gpuLight->depthTexID);
 
 		// TODO: Use string view
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 		GLuint lightSpaceLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightSpace").c_str());
-		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, lightSpace.data);
+		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, light->m_lightSpace.data);
 
 		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
 		glUniform1i(enableLoc, true);
