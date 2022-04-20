@@ -296,6 +296,12 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
         if (ImGui::Button("Reload scripts"))
             CsScriptingSystem::GetInstance()->ReloadContextes();
+
+        if (ImGui::Button("Reload textures"))
+        {
+            if (auto texPtr = ResourceManager::GetInstance()->GetResource<Texture>("Assets/diffuse.jpg"))
+                Resource<Texture>::ReloadResource(texPtr, true);
+        }
         
     }
     ImGui::End();

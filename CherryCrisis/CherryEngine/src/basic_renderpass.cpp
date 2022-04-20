@@ -12,10 +12,50 @@
 #include "shadow_renderpass.hpp"
 #include "viewer.hpp"
 
-BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
+
+void BasicRenderPass::GPUTextureBasic::Generate(Texture* texture)
+{
+	glCreateTextures(GL_TEXTURE_2D, 1, &ID);
+
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glTextureStorage2D(ID, 1, GL_RGBA8, texture->GetWidth(), texture->GetHeight());
+	glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, texture->GetData());
+
+	glGenerateTextureMipmap(ID);
+}
+
+void BasicRenderPass::GPUTextureBasic::Regenerate(Texture* texture)
+{
+	Destroy();
+	Generate(texture);
+}
+
+void BasicRenderPass::GPUTextureBasic::Destroy()
 {
 	glDeleteTextures(1, &ID);
 }
+
+BasicRenderPass::GPUTextureBasic::GPUTextureBasic(Texture* texture)
+{
+	texture->m_OnReloaded.Bind(&GPUTextureBasic::OnReload, this);
+
+	Generate(texture);
+}
+
+BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
+{
+	Destroy();
+}
+
+void BasicRenderPass::GPUTextureBasic::OnReload(std::shared_ptr<Texture> texture)
+{
+	Regenerate(texture.get());
+}
+
 
 BasicRenderPass::BasicRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
@@ -95,24 +135,10 @@ int BasicRenderPass::Subscribe(Texture* toGenerate)
 	if (toGenerate->m_gpuTexture)
 		return 0;
 
-	auto gpuTexture = std::make_unique<GPUTextureBasic>();
-
-	glCreateTextures(GL_TEXTURE_2D, 1, &gpuTexture->ID);
-
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return -1;
 
-	glTextureStorage2D(gpuTexture->ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
-	glTextureSubImage2D(gpuTexture->ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
-
-	glGenerateTextureMipmap(gpuTexture->ID);
-
-	toGenerate->m_gpuTexture = std::move(gpuTexture);
+	toGenerate->m_gpuTexture = std::make_unique<GPUTextureBasic>(toGenerate);
 
 	return 1;
 }

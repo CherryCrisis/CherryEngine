@@ -26,7 +26,13 @@ protected:
 	{
 		GLuint ID = 0u;
 
+		void Generate(Texture* texture);
+		void Regenerate(Texture* texture);
+		void Destroy();
+
+		GPUTextureBasic(Texture* texture);
 		virtual ~GPUTextureBasic();
+		void OnReload(std::shared_ptr<Texture> texture);
 	};
 
 public:
