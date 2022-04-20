@@ -25,27 +25,31 @@ void Foos(std::shared_ptr<ModelBase>)
 namespace YAML {
 	template<>
 	struct convert<CCMaths::Vector3> {
-		static Node encode(const CCMaths::Vector3& rhs) 
+		static Node encode(const CCMaths::Vector3& rhs)
 		{
 			Node node;
 			node = (std::to_string(rhs.x) + '/' + std::to_string(rhs.y) + '/' + std::to_string(rhs.z));
 			return node;
 		}
 
-		static bool decode(const Node& node, CCMaths::Vector3& rhs) 
-		{	
+		static bool decode(const Node& node, CCMaths::Vector3& rhs)
+		{
 			rhs = String::ExtractVector3(node.as<std::string>());
 			return true;
 		}
+	};
 
-		static Node encode(const Object* rhs)
+	template<>
+	struct convert<Object> {
+		static Node encode(const Object& rhs)
 		{
+			//Object obj = rhs;
 			Node node;
-			node = rhs->GetUUID();
+			//node = obj.GetUUID();
 			return node;
 		}
 
-		static bool decode(const Node& node, Behaviour* rhs)
+		static bool decode(const Node& node, Object& rhs)
 		{
 			//rhs = SceneManager::GetInstance()->
 			return true;
@@ -107,16 +111,17 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				{ comp[UUID][fieldName] = *std::any_cast<bool*>(fieldRef.m_value); continue; }
 
 				if (type == typeid(Object*))
-				{ comp[UUID][fieldName] = *std::any_cast<Object**>(fieldRef.m_value); continue; }
+				{ //comp[UUID][fieldName] = *std::any_cast<Object**>(fieldRef.m_value); continue; 
+				}
 
 				if (type == typeid(Behaviour*))
 				{
 					Behaviour* ptr = *std::any_cast<Behaviour**>(fieldRef.m_value);
-
+					/*
 					if (ptr)
 						comp[UUID][fieldName] = (((uint32_t)ptr->GetUUID()));
 					else
-						comp[UUID][fieldName] = "~";
+						comp[UUID][fieldName] = "~";*/
 					continue;
 				}
 				//Unhandled Cases (useful to find them)
@@ -131,42 +136,48 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				if (type == typeid(CCMaths::Vector3))
 				{
 					CCMaths::Vector3 val;
-					propRef->Get(&comp[UUID][propName]);
+					propRef->Get(&val);
+					comp[UUID][propName] = val;
 					continue;
 				}
 
 				if (type == typeid(std::string))
 				{
 					std::string val;
-					propRef->Get(&comp[UUID][propName]);
+					propRef->Get(&val);
+					comp[UUID][propName] = val;
 					continue;
 				}
 
 				if (type == typeid(float))
 				{
 					float val;
-					propRef->Get(&comp[UUID][propName]);
+					propRef->Get(&val);
+					comp[UUID][propName] = val;
 					continue;
 				}
 
 				if (type == typeid(int))
 				{
 					int val;
-					propRef->Get(&comp[UUID][propName]);
+					propRef->Get(&val);
+					comp[UUID][propName] = val;
 					continue;
 				}
 
 				if (type == typeid(bool))
 				{
 					bool val;
-					propRef->Get(&comp[UUID][propName]);
+					propRef->Get(&val);
+					comp[UUID][propName] = val;
 					continue;
 				}
 
 				if (type == typeid(Behaviour*))
 				{
 					Behaviour* ptr;
-					propRef->Get(&comp[UUID][propName]);
+					propRef->Get(&ptr);
+					//comp[UUID][propName] = (Object*)ptr;
 					continue;
 				}
 				/*
