@@ -80,9 +80,6 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glUseProgram(m_program->m_shaderProgram);
 	
-	float aspect = (float)framebuffer.width / (float)framebuffer.height;
-	viewer->m_projectionMatrix = Matrix4::Perspective(DEG2RAD * 90.f, aspect, 0.01f, 200.f);
-
 	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
