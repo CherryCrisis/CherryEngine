@@ -160,18 +160,13 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			continue;
 		}
 
-		// TODO: Optimize, compute one time
-		CCMaths::Matrix4 lightView = CCMaths::Matrix4::LookAt(light->m_position);
-		CCMaths::Matrix4 ortho = CCMaths::Matrix4::Transpose(CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f));
-		CCMaths::Matrix4 lightSpace = ortho * lightView;
-
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + lightID, 3 + lightID);
 		glBindTextureUnit(3 + lightID, gpuLight->depthTexID);
 
 		// TODO: Use string view
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 		GLuint lightSpaceLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightSpace").c_str());
-		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, lightSpace.data);
+		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, light->m_lightSpace.data);
 
 		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
 		glUniform1i(enableLoc, true);

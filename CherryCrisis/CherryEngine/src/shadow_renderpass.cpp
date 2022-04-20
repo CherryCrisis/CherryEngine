@@ -122,17 +122,12 @@ void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->framebuffer.FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		// TODO: Optimize, compute one time
-		CCMaths::Matrix4 lightView = CCMaths::Matrix4::LookAt(light->m_position);
-		CCMaths::Matrix4 ortho = CCMaths::Matrix4::Transpose(CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f));
-		CCMaths::Matrix4 lightSpace = ortho * lightView;
-
 		for (ModelRenderer* modelRdr : m_models)
 		{
 			if (!modelRdr->m_isVisible)
 				continue;
 
-			CCMaths::Matrix4 lightSpaceModel = lightSpace * modelRdr->m_transform->GetWorldMatrix();
+			CCMaths::Matrix4 lightSpaceModel = light->m_lightSpace * modelRdr->m_transform->GetWorldMatrix();
 			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uLightSpaceModel"), 1, GL_FALSE, lightSpaceModel.data);
 
 			Model* model = modelRdr->m_model.get();

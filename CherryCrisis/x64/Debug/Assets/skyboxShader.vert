@@ -9,5 +9,5 @@ uniform mat4 uViewProjection;
 void main()
 {
     vUVW = aPosition;
-    gl_Position = (uViewProjection * vec4(aPosition, 1.0)).xyww;
+    gl_Position = (uViewProjection * vec4(aPosition, 0.0)).xyww;
 }
