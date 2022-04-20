@@ -143,8 +143,9 @@ void SceneDisplayer::Render()
             {
                 const char* c = (const char*)payload->Data;
                 m_manager->m_selectedEntities.clear();
+                std::string str = c + std::string(".cherry");
 
-                EditorNotifications::SceneLoading(SceneManager::LoadScene(c));
+                EditorNotifications::SceneLoading(SceneManager::LoadScene(str.c_str()));
             }
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj") )
             {

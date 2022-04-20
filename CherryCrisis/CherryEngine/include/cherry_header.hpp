@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component.hpp"
+#include "object.hpp"
 #include "debug.hpp"
 #include "engine.hpp"
 #include "model_renderer.hpp"

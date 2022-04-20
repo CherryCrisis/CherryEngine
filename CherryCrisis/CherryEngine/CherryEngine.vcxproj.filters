@@ -450,7 +450,7 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
-    <ClInclude Include="include\component.hpp">
+    <ClInclude Include="include\object.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\behaviour.hpp">
