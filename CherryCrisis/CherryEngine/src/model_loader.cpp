@@ -22,6 +22,7 @@
 #include "mesh.hpp"
 #include "model_base.hpp"
 #include "model.hpp"
+#include "texture.hpp"
 
 namespace CCImporter
 {
@@ -100,38 +101,43 @@ namespace CCImporter
 
     void CacheTextureData(const std::filesystem::path& filepath, const unsigned char* cacheData, TextureHeader& textureHeader)
     {
-        nvtt::RefImage img_in;
-        img_in.data = cacheData;
-        img_in.num_channels = 4;
-        img_in.height = textureHeader.height;
-        img_in.width = textureHeader.width;
-
-        nvtt::CPUInputBuffer input_buff(&img_in, nvtt::UINT8);
-        textureHeader.size = input_buff.NumTiles() * 8;
-        void* outBuff = new char[textureHeader.size];
-
-        nvtt::nvtt_encode_bc1a(input_buff, false, outBuff, false, false);
-
-        Debug* debug = Debug::GetInstance();
-
-        std::string texturePathStr(filepath.filename().string());
-        texturePathStr += CCImporter::cacheExtension;
-
         FILE* file = nullptr;
 
         std::string fullPath(CCImporter::cacheDirectory + texturePathStr);
 
         if (fopen_s(&file, fullPath.c_str(), "wb")) //w+b = write in binary mode
         {
-            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullPath).c_str());
+            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullPath).c_str());
             return;
         }
 
-        fwrite(&textureHeader, sizeof(TextureHeader), 1, file);
 
-        fwrite(&((unsigned char*)outBuff)[0], textureHeader.size, 1, file);
-        //fwrite(&cacheData[0], textureHeader.size, 1, file);
+        fwrite(&textureHeader, sizeof(TextureHeader), 1, file);
+        fwrite(&outputHandler.m_data.data()[0], outputHandler.m_data.size(), 1, file);
+
         fclose(file);
+
+        //context.outputHeader(image, image.countMipmaps(), compressionOptions, outputOptions);
+
+        /*nvtt::RefImage img_in;
+        img_in.data = cacheData;
+        img_in.num_channels = 4;
+        img_in.height = textureHeader.height;
+        img_in.width = textureHeader.width;
+
+        nvtt::SurfaceSet
+
+        nvtt::CPUInputBuffer input_buff(&img_in, nvtt::UINT8);
+        textureHeader.size = input_buff.NumTiles() * 8;
+        void* outBuff = new char[textureHeader.size];
+
+        nvtt::nvtt_encode_bc1a(input_buff, false, outBuff, false, false);*/
+
+
+        //fwrite(&textureHeader, sizeof(TextureHeader), 1, file);
+
+        //fwrite(&((unsigned char*)outBuff)[0], textureHeader.size, 1, file);
+        //fwrite(&cacheData[0], textureHeader.size, 1, file);
     }
 
     void WriteTexturePng(const std::filesystem::path& filepath, const unsigned char* cacheData, const TextureHeader& textureHeader)
@@ -231,9 +237,9 @@ namespace CCImporter
         model.m_texturesPathCstr.push_back(filepathStr);
     }
 
-    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture)
+    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat)
     {
-        if (!textureData)
+        /*if (!textureData)
             return;
 
         stbi_set_flip_vertically_on_load(flipTexture);
@@ -248,7 +254,87 @@ namespace CCImporter
             debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", fullTexturePath).c_str());
         }
 
-        textureHeader.size = textureHeader.height * textureHeader.width * 4;
+        textureHeader.size = textureHeader.height * textureHeader.width * 4;*/
+
+        nvtt::Context context(false);
+
+        nvtt::Surface image;
+        image.load(filepath.string().c_str());
+
+        if (flipTexture)
+            image.flipY();
+
+        nvtt::CompressionOptions compressionOptions;
+
+        textureHeader.internalFormat = textureFormat;
+
+        switch (textureFormat)
+        {
+        case ETextureFormat::RGB:
+            compressionOptions.setFormat(nvtt::Format_RGB);
+            break;
+        case ETextureFormat::RGBA:
+            compressionOptions.setFormat(nvtt::Format_RGBA);
+            break;
+        case ETextureFormat::DXT1:
+            compressionOptions.setFormat(nvtt::Format_BC1);
+            break;
+        case ETextureFormat::DXT1a:
+            compressionOptions.setFormat(nvtt::Format_BC1a);
+            break;
+        case ETextureFormat::DXT3:
+            compressionOptions.setFormat(nvtt::Format_BC3);
+            break;
+        case ETextureFormat::DXT5:
+            compressionOptions.setFormat(nvtt::Format_BC5);
+            break;
+        case ETextureFormat::DXT6:
+            compressionOptions.setFormat(nvtt::Format_BC6S);
+            break;
+        case ETextureFormat::DXT7:
+            compressionOptions.setFormat(nvtt::Format_BC7);
+            break;
+        }
+
+        std::string texturePathStr(filepath.filename().string());
+        texturePathStr += CCImporter::cacheExtension;
+
+        nvtt::OutputOptions outputOptions;
+        outputOptions.setFileName(texturePathStr.c_str());
+
+        textureHeader.mipmapsLevel = image.countMipmaps();
+
+        OuputHandler outputHandler;
+        outputOptions.setOutputHandler(&outputHandler);
+
+        /*https://github.com/nvpro-samples/nvtt_samples/blob/main/mipmap/main.cpp*/
+
+        //context.outputHeader(image, textureHeader.mipmapsLevel, compressionOptions, outputOptions);
+        for (int i = 0; textureHeader.mipmapsLevel; ++i)
+        {
+            context.compress(image, 0, i, compressionOptions, outputOptions);
+
+            if (i == textureHeader.mipmapsLevel - 1) break;
+
+            // Prepare the next mip:
+            // 
+            // Convert to linear premultiplied alpha. Note that toLinearFromSrgb()
+            // will clamp HDR images; consider e.g. toLinear(2.2f) instead.
+            image.toLinearFromSrgb();
+            image.premultiplyAlpha();
+
+            // Resize the image to the next mipmap size.
+            // NVTT has several mipmapping filters; Box is the lowest-quality, but
+            // also the fastest to use.
+            image.buildNextMipmap(nvtt::MipmapFilter_Box);
+            // For general image resizing. use image.resize().
+
+            // Convert back to unpremultiplied sRGB.
+            image.demultiplyAlpha();
+            image.toSrgb();
+        }
+
+        textureHeader.size = outputHandler.m_data.size();
 
         CacheTextureData(filepath, *textureData, textureHeader);
     }

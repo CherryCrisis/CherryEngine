@@ -38,13 +38,16 @@ void HierarchyDisplayer::Render()
 
         for (auto& [entityName, entityRef] : SceneManager::GetInstance()->m_currentScene->m_entities)
         {
-            if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
-                entityTransform && !entityTransform->IsRoot())
-                continue;
-                   
-            std::string name = entityRef->GetName();
-            if (RenderEntity(entityRef))
-                break;   
+            if (entityRef)
+            {
+                if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
+                    entityTransform && !entityTransform->IsRoot())
+                    continue;
+
+                std::string name = entityRef->GetName();
+                if (RenderEntity(entityRef))
+                    break;
+            }
         }
     }
 

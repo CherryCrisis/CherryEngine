@@ -44,7 +44,6 @@ void LogDisplayer::GenerateGPUTexture(std::shared_ptr<Texture> texture)
         return;
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->GetData());
-
     glGenerateMipmap(GL_TEXTURE_2D);
 
     texture->m_gpuTexture = std::move(gpuTexture);

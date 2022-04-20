@@ -8,6 +8,8 @@
 #include "model_base.hpp"
 #include "mesh.hpp"
 
+enum class ETextureFormat;
+
 namespace CCImporter
 {
     /*
@@ -41,6 +43,25 @@ namespace CCImporter
         int height;
         int width;
         int size;
+        ETextureFormat internalFormat;
+        int mipmapsLevel;
+    };
+
+    struct OuputHandler : nvtt::OutputHandler
+    {
+        std::vector<char> m_data;
+
+        virtual void beginImage(int size, int width, int height, int depth, int face, int miplevel) override
+        {
+        }
+
+        bool writeData(const void* data, int size) override
+        {
+            m_data.insert(m_data.end(), &((unsigned char*)data)[0], &((unsigned char*)data)[0] + size);
+            return true;
+        }
+
+        void endImage() override {};
     };
 
     struct MaterialHeader
@@ -103,6 +124,6 @@ namespace CCImporter
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
     void ImportTexture(const std::filesystem::path& filepath,
-        unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture);
+        unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat);
 }
 

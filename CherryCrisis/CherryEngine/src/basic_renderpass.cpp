@@ -116,14 +116,32 @@ int BasicRenderPass::Subscribe(Texture* toGenerate)
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return -1;
 
-	/*glTextureStorage2D(gpuTexture->ID, 1, GL_RGBA8, toGenerate->GetWidth(), toGenerate->GetHeight());
-	glTextureSubImage2D(gpuTexture->ID, 0, 0, 0, toGenerate->GetWidth(), toGenerate->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());*/
-
 	glBindTexture(GL_TEXTURE_2D, gpuTexture->ID);
-	glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, 
-		toGenerate->GetWidth(), toGenerate->GetHeight(), 0, toGenerate->GetSize(), toGenerate->GetData());
-	
-	glGenerateTextureMipmap(gpuTexture->ID);
+
+	int mipmapsCount = toGenerate->GetMipmapCount();
+	int internalFormat = toGenerate->GetInternalFormat();
+	int width = toGenerate->GetWidth();
+	int height = toGenerate->GetHeight();
+	int offset = 0;
+
+	unsigned char* data = (unsigned char*)toGenerate->GetData();
+
+	for (int i = 0; i < mipmapsCount && (width || height); ++i)
+	{
+		if (!width)
+			width = 1;
+
+		if (!height)
+			height = 1;
+
+		int size = ((width + 3) / 4) * ((height + 3) / 4) * 8;
+		glCompressedTexImage2D(GL_TEXTURE_2D, i, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
+			width, height, 0, size, data + offset);
+
+		offset += size;
+		width >>= 1;
+		height >>= 1;
+	}
 
 	toGenerate->m_gpuTexture = std::move(gpuTexture);
 
