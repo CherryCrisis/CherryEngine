@@ -67,6 +67,10 @@ void SceneDisplayer::UpdateCamera()
     Vector3 forward = -view.back;
 
     float dt = TimeManager::GetInstance()->GetDeltaTime();
+    
+    m_cameraSpeed += dt * IM->GetMouseWheel().y * 10.f;
+    m_cameraSpeed = CCMaths::Clamp(m_cameraSpeed, 0.5f, 100.f);
+
     float speed = dt * m_cameraSpeed;
 
     // Compute each movement vector
