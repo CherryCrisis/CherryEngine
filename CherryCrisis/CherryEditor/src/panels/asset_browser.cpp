@@ -301,10 +301,7 @@ void AssetBrowser::RenderNodes()
             {
                 //open Scene and if the last is not saved, warn the user
                 std::string str = "Assets/"+node.m_filename;
-                if (SceneManager::LoadScene(str.c_str()))
-                    EditorManager::SendNotification("Scene Loaded!", ENotifType::Success);
-                else
-                    EditorManager::SendNotification("Scene failed to Load", ENotifType::Error);
+                EditorNotifications::SceneLoading(SceneManager::LoadScene(str.c_str()));
             }
         }
 

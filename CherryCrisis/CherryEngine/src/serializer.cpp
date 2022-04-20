@@ -65,7 +65,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	if (strlen(filepath) > 0)
 		fileName = std::string(filepath);
 	else
-		fileName = scene->GetFilepath();
+		fileName = scene->GetFilepath() + ".cherry";
 
 	std::ifstream file(fileName);
 

@@ -144,7 +144,7 @@ void SceneDisplayer::Render()
                 const char* c = (const char*)payload->Data;
                 m_manager->m_selectedEntities.clear();
 
-                SceneManager::LoadScene(c);
+                EditorNotifications::SceneLoading(SceneManager::LoadScene(c));
             }
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj") )
             {
