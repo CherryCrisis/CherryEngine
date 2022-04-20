@@ -145,6 +145,10 @@ namespace PhysicSystem
 
 	void PhysicActor::AddCollider(Collider* collider, bool isPlaying)
 	{
+		for (auto& coll : m_colliders)
+			if (collider == coll)
+				return;
+
 		m_colliders.push_back(collider);
 
 		if (isPlaying)

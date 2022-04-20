@@ -3,6 +3,7 @@
 // TODO: Change this
 #include "behaviour.hpp"
 #include "transform.hpp"
+#include "bool3.hpp"
 
 std::string Behaviour::Serialize()
 {
@@ -19,6 +20,13 @@ std::string Behaviour::Serialize()
 		if (type == typeid(CCMaths::Vector3))
 		{
 			CCMaths::Vector3 val = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+			value += std::to_string(val.x) + "/" + std::to_string(val.y) + "/" + std::to_string(val.z) + "\n";
+			continue;
+		}
+
+		if (type == typeid(Bool3))
+		{
+			Bool3 val = *std::any_cast<Bool3*>(fieldRef.m_value);
 			value += std::to_string(val.x) + "/" + std::to_string(val.y) + "/" + std::to_string(val.z) + "\n";
 			continue;
 		}
@@ -67,7 +75,7 @@ std::string Behaviour::Serialize()
 		}
 
  		//Unhandled Cases (useful to find them)
-		value += ": " + std::string("#ERROR# ")+ std::string(type.name()) + std::string(" is not handled !") +"\n";
+		value +=  std::string("#ERROR# ")+ std::string(type.name()) + std::string(" is not handled !") +"\n";
 	}
 
 	//Loop on every property to save them
@@ -80,6 +88,14 @@ std::string Behaviour::Serialize()
 		if (type == typeid(CCMaths::Vector3))
 		{
 			CCMaths::Vector3 val;
+			propRef->Get(&val);
+			value += std::to_string(val.x) + "/" + std::to_string(val.y) + "/" + std::to_string(val.z) + "\n";
+			continue;
+		}
+
+		if (type == typeid(Bool3))
+		{
+			Bool3 val;
 			propRef->Get(&val);
 			value += std::to_string(val.x) + "/" + std::to_string(val.y) + "/" + std::to_string(val.z) + "\n";
 			continue;
@@ -148,7 +164,7 @@ std::string Behaviour::Serialize()
 		}
 
 		//UnHandled Cases (useful to find them)
-		value += ": " + std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
+		value += std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
 
 	}
 

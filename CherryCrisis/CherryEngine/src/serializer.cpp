@@ -12,6 +12,10 @@
 #include "scripted_behaviour.hpp"
 #include "model.hpp"
 
+#include "rigidbody.hpp"
+#include "box_collider.hpp"
+#include "sphere_collider.hpp"
+
 #include "scene_manager.hpp"
 // to remove
 void Foos(std::shared_ptr<ModelBase>)
@@ -155,6 +159,21 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				{
 					behaviour = new CameraComponent();
 				}
+				found = line.find("Rigidbody");
+				if (found != std::string::npos)
+				{
+					behaviour = new Rigidbody();
+				}
+				found = line.find("BoxCollider");
+				if (found != std::string::npos)
+				{
+					behaviour = new BoxCollider();
+				}
+				found = line.find("SphereCollider");
+				if (found != std::string::npos)
+				{
+					behaviour = new SphereCollider();
+				}
 
 				if (!behaviour)
 					continue;
@@ -196,6 +215,14 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						continue;
 					}
 
+					if (propType == typeid(Bool3))
+					{
+						Bool3 vec = String::ExtractBool3(parsedValue);
+						prop->Set(&vec);
+
+						continue;
+					}
+
 					if (propType == typeid(std::string))
 					{
 						std::string str = String::ExtractValue(parsedValue);
@@ -223,6 +250,13 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					{
 						CCMaths::Vector3* valPtr = std::any_cast<CCMaths::Vector3*>(field.m_value);
 						*valPtr = String::ExtractVector3(parsedValue);
+						continue;
+					}
+
+					if (info == typeid(Bool3))
+					{
+						Bool3* valPtr = std::any_cast<Bool3*>(field.m_value);
+						*valPtr = String::ExtractBool3(parsedValue);
 						continue;
 					}
 
@@ -330,8 +364,6 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 			}
 		}
 	}
-	for (auto& [entityName, entityRef] : scene->m_entities)
-		entityRef->Initialize();
 
 	return opened;
 }

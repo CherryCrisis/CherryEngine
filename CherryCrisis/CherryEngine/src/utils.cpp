@@ -1,6 +1,7 @@
 #include "pch.hpp"
 
 #include "utils.hpp"
+#include "bool3.hpp"
 
 std::filesystem::path CopyTemporaryFile(const char* path)
 {
@@ -64,6 +65,18 @@ namespace String
 		value.y = std::stof(temp);
 		temp = ExtractKey(str, '/', true);
 		value.z = std::stof(temp);
+		return value;
+	}
+
+	Bool3 ExtractBool3(std::string str)
+	{
+		Bool3 value{};
+		std::string temp = ExtractKey(str, '/', true);
+		value.x = std::stoi(temp);
+		temp = ExtractKey(str, '/', true);
+		value.y = std::stoi(temp);
+		temp = ExtractKey(str, '/', true);
+		value.z = std::stoi(temp);
 		return value;
 	}
 }
