@@ -3,7 +3,8 @@
 #include "skybox_renderpass.hpp"
 
 #include "skybox.hpp"
-#include "camera.hpp"
+#include "viewer.hpp"
+#include "framebuffer.hpp"
 
 SkyboxRenderPass::SkyboxRenderPass(const char* name)
 // TODO: Set real path
@@ -67,8 +68,11 @@ void SkyboxRenderPass::Unsubscribe(Skybox* toGenerate)
 	}
 }
 
-void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
+void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 {
+	if (!viewer)
+		return;
+
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 
@@ -76,10 +80,10 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 
 	glUseProgram(m_program->m_shaderProgram);
 	
-	CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
-	CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation);
+	float aspect = (float)framebuffer.width / (float)framebuffer.height;
+	viewer->m_projectionMatrix = Matrix4::Perspective(DEG2RAD * 90.f, aspect, 0.01f, 200.f);
 
-	CCMaths::Matrix4 viewProjection = projection * view;
+	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
 	Mesh* mesh = m_skybox->m_mesh.get();
@@ -98,21 +102,4 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-template <>
-int SkyboxRenderPass::Subscribe(Camera* toGenerate)
-{
-	if (!toGenerate)
-		return -1;
-
-	m_camera = toGenerate;
-
-	return 1;
-}
-
-template <>
-void SkyboxRenderPass::Unsubscribe(Camera* toGenerate)
-{
-	m_camera = nullptr;
 }

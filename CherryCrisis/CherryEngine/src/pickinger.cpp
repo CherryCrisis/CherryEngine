@@ -8,6 +8,8 @@
 #include "render_manager.hpp"
 #include "scene_manager.hpp"
 
+#include "viewer.hpp"
+
 template <>
 Pickinger* Singleton<Pickinger>::currentInstance = nullptr;
 
@@ -18,7 +20,7 @@ Entity* Pickinger::GetEntity(float x, float y)
 	// flip texture
 	y = (float)instance->m_fbo->height - y;
 
-	instance->m_renderpass->Execute(*instance->m_fbo, *instance->m_camera);
+	instance->m_renderpass->Execute(*instance->m_fbo, instance->m_viewer);
 
 	glFlush();
 	glFinish();
@@ -40,10 +42,10 @@ Entity* Pickinger::GetEntity(const CCMaths::Vector2& position)
 	return GetEntity(position.x, position.y);
 }
 
-void Pickinger::SetBuffer(Framebuffer* buffer, Camera* camera) 
+void Pickinger::SetBuffer(Framebuffer* buffer, Viewer* camera) 
 {
 	Pickinger* instance = GetInstance();
 	
-	instance->m_fbo = buffer; instance->m_camera = camera;
-	instance->m_renderpass = RenderManager::GetInstance()->LoadSubpipeline<PickingRenderPass>();
+	instance->m_fbo = buffer; instance->m_viewer = camera;
+	instance->m_renderpass = camera->m_pipeline->LoadSubpipeline<PickingRenderPass>();
 }

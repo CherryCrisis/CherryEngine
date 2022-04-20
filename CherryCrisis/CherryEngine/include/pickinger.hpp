@@ -7,19 +7,19 @@
 struct Framebuffer;
 class Entity;
 class PickingRenderPass;
-struct Camera;
+struct Viewer;
 
 class CCENGINE_API Pickinger : public Singleton<Pickinger>
 {
 	friend class Singleton<Pickinger>;
 
-	Framebuffer*			  m_fbo = nullptr;
-	PickingRenderPass* m_renderpass = nullptr;
-	Camera*			       m_camera = nullptr;
+	Framebuffer*		m_fbo = nullptr;
+	PickingRenderPass*	m_renderpass = nullptr;
+	Viewer*			    m_viewer = nullptr;
 public:
 
 	static Entity* GetEntity(float x, float y);
 	static Entity* GetEntity(const CCMaths::Vector2& position);
 
-	static void SetBuffer(Framebuffer* buffer, Camera* camera);
+	static void SetBuffer(Framebuffer* buffer, Viewer* camera);
 };

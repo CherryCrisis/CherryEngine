@@ -5,14 +5,14 @@
 #include "event.hpp"
 #include "callback.hpp"
 
-#include "camera.hpp"
+#include "viewer.hpp"
 
 struct Framebuffer;
 
 class ARenderingRenderPass : public ARenderPass
 {
 protected:
-	std::shared_ptr<CCCallback::ACallback<Framebuffer&, Camera&>> m_callExecute = nullptr;
+	std::shared_ptr<CCCallback::ACallback<Framebuffer&, Viewer*&>> m_callExecute = nullptr;
 
 public:
 	virtual void InvalidatePass() { m_callExecute = nullptr; }
@@ -24,10 +24,10 @@ public:
 			m_program->m_OnDeleted.Bind(&ARenderingRenderPass::InvalidatePass, this);
 	}
 
-	void CallOnExecute(Framebuffer& framebuffer, Camera& camera)
+	void CallOnExecute(Framebuffer& framebuffer, Viewer* viewer)
 	{
 		if (m_callExecute)
-			m_callExecute->Invoke(framebuffer, camera);
+			m_callExecute->Invoke(framebuffer, viewer);
 	}
 
 	virtual ~ARenderingRenderPass()

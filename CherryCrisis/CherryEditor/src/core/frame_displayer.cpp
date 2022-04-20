@@ -21,7 +21,7 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera
 
     glViewport(0, 0, (GLsizei)width, (GLsizei)height);
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-    RenderManager::DrawScene(m_framebuffer, camera);
+    RenderManager::DrawScene(m_framebuffer, &camera);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

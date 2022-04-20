@@ -8,7 +8,8 @@
 
 #include "framebuffer.hpp"
 
-#include "basic_rendering_pipeline.hpp"
+#include "viewer.hpp"
+#include "camera.hpp"
 
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
@@ -68,14 +69,12 @@ RenderManager::RenderManager()
 	glDebugMessageCallback(debugCallback, NULL);
 
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-
-    // TODO: free pipeline
-    pipeline = new BasicRPipeline();
 }
 
-void RenderManager::DrawScene(Framebuffer& framebuffer, Camera& camera)
+void RenderManager::DrawScene(Framebuffer& framebuffer, Viewer* viewer)
 {
 	RenderManager* RM = GetInstance();
 
-    RM->pipeline->Execute(framebuffer, camera);
+    if (auto pipeline = viewer->m_pipeline.get())
+        pipeline->Execute(framebuffer, viewer);
 }

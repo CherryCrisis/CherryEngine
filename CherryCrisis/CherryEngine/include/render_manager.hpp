@@ -2,41 +2,30 @@
 
 #include "cherry_macros.hpp"
 
-#include <unordered_map>
-#include <functional>
+#include <set>
 #include <memory>
 
 #include "singleton.hpp"
 
-#include "rendering_pipeline_interface.hpp"
-
-#include "rendering_pipeline_interface.hpp"
+class Framebuffer;
+class Viewer;
 
 class CCENGINE_API RenderManager : public Singleton<RenderManager>
 {
 	friend class Singleton<RenderManager>;
 
 public:
-	using RenderingRPipelineDesc = std::function<void(ARenderingPipeline*)>;
+	std::set<Viewer*> m_viewers;
 
-	ARenderingPipeline* pipeline = nullptr;
-
-public:
 	RenderManager();
-
-	static void DrawScene(Framebuffer& framebuffer, Camera& camera);
-	
-	template <class SubPipelineT>
-	constexpr SubPipelineT* GetSubpipeline();
-
-	template <class SubPipelineT>
-	constexpr SubPipelineT* LoadSubpipeline();
 
 	template <class SubPipelineT, class RendererT>
 	void SubscribeToPipeline(RendererT* renderer);
 
 	template <class SubPipelineT, class RendererT>
 	void UnsubscribeToPipeline(RendererT* renderer);
+
+	static void DrawScene(Framebuffer& framebuffer, Viewer* viewer);
 };
 
 #include "renderer_manager.inl"

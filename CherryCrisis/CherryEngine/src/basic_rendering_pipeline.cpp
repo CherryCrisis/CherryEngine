@@ -17,11 +17,11 @@ BasicRPipeline::BasicRPipeline()
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
 }
 
-void BasicRPipeline::Execute(Framebuffer& fb, Camera& cam)
+void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 {
-	m_shadowPass->CallOnExecute(fb, cam);
-	m_basicPass->CallOnExecute(fb, cam);
-	m_skyboxPass->CallOnExecute(fb, cam);
+	m_shadowPass->CallOnExecute(fb, viewer);
+	m_basicPass->CallOnExecute(fb, viewer);
+	m_skyboxPass->CallOnExecute(fb, viewer);
 
 	//m_postprocessPass->CallOnExecute(fb);
 }

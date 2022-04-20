@@ -6,7 +6,7 @@
 #include "renderpass_interface.hpp"
 
 struct Framebuffer;
-struct Camera;
+struct Viewer;
 
 class ARenderingRenderPass;
 class APostProcessRenderPass;
@@ -60,5 +60,5 @@ public:
 			subPipeline->Unsubscribe(renderer);
 	}
 
-	virtual void Execute(Framebuffer& frambuffer, Camera& camera) = 0;
+	virtual void Execute(Framebuffer& frambuffer, Viewer* viewer) = 0;
 };

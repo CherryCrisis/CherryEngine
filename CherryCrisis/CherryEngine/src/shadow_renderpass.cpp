@@ -10,6 +10,8 @@
 #include "model.hpp"
 #include "mesh.hpp"
 
+#include "viewer.hpp"
+
 ShadowRenderPass::GPUShadowLight::~GPUShadowLight()
 {
 	if (depthTexID)
@@ -100,7 +102,7 @@ void ShadowRenderPass::Unsubscribe(Light* toGenerate)
 	m_lights.erase(toGenerate);
 }
 
-void ShadowRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
+void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 {
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);

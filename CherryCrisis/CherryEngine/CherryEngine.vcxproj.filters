@@ -1161,6 +1161,9 @@
     <ClInclude Include="include\rendering_pipeline_interface.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="include\viewer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1207,9 +1210,6 @@
     </None>
     <None Include="externals\include\assimp\vector3.inl">
       <Filter>Fichiers externes\Assimp</Filter>
-    </None>
-    <None Include="include\renderer_manager.inl">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </None>
     <None Include="include\entity.inl">
       <Filter>Fichiers d%27en-tête</Filter>
@@ -1281,6 +1281,15 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="..\x64\Debug\Assets\basicPostProcess.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="include\renderer_manager.inl">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\skyboxShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\skyboxShader.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>

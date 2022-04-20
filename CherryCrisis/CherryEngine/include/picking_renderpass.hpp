@@ -13,6 +13,7 @@
 #include "mesh.hpp"
 
 class ModelRenderer;
+class Viewer;
 
 class PickingRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
@@ -46,5 +47,5 @@ public:
 	template <>
 	void Unsubscribe(ModelRenderer* toGenerate);
 
-	void Execute(Framebuffer& fb, Camera& camera);
+	void Execute(Framebuffer& fb, Viewer*& viewer);
 };
