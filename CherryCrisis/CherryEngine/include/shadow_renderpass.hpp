@@ -8,10 +8,8 @@
 
 #include "light.hpp"
 
-#include "camera.hpp"
-
 class ModelRenderer;
-class Light;
+struct Light;
 
 class ShadowRenderPass : public ARenderingRenderPass
 {
@@ -53,5 +51,5 @@ public:
 	template <>
 	void Unsubscribe(Light* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Camera& camera);
+	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

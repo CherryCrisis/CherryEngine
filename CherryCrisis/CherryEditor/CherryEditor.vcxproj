@@ -33,6 +33,7 @@
     <ClCompile Include="src\core\frame_displayer.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\panel.cpp" />
+    <ClCompile Include="src\panels\assets_settings.cpp" />
     <ClCompile Include="src\panels\asset_browser.cpp" />
     <ClCompile Include="src\panels\build_displayer.cpp" />
     <ClCompile Include="src\panels\game_displayer.cpp" />
@@ -52,6 +53,7 @@
     <ClInclude Include="include\core\frame_displayer.hpp" />
     <ClInclude Include="include\core\imgui_style.hpp" />
     <ClInclude Include="include\core\panel.hpp" />
+    <ClInclude Include="include\panels\assets_settings.hpp" />
     <ClInclude Include="include\panels\asset_browser.hpp" />
     <ClInclude Include="include\panels\build_displayer.hpp" />
     <ClInclude Include="include\panels\game_displayer.hpp" />

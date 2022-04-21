@@ -262,10 +262,10 @@ namespace CCMaths
 
 		return
 		{
-			2.f * OneOverRightMinusLeft, 0.f, 0.f, -(right + left) * OneOverRightMinusLeft,
-			0.f, 2.f * OneOverTopMinusBottom, 0.f, -(top + bottom) * OneOverTopMinusBottom,
-			0.f, 0.f, -2.f * OneOverFarMinusNear, -(far + near) * OneOverFarMinusNear,
-			0.f, 0.f, 0.f, 1.f
+			2.f * OneOverRightMinusLeft,				0.f,										0.f,									0.f,
+			0.f,										2.f * OneOverTopMinusBottom,				0.f,									0.f,
+			0.f,										0.f,										-2.f * OneOverFarMinusNear,				0.f,
+			-(right + left) * OneOverRightMinusLeft,	-(top + bottom) * OneOverTopMinusBottom,	-(far + near) * OneOverFarMinusNear,	1.f
 		};
 	}
 

@@ -50,6 +50,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
     texture->m_size = textureHeader.size;
     texture->m_mipmapLevels = textureHeader.mipmapsLevel;
     texture->m_internalFormat = textureHeader.internalFormat;
+    texture->m_blockSize = textureHeader.blockSize;
 }
 
 #include "nvtt/nvtt.h"
@@ -94,7 +95,7 @@ void Texture::Reload(bool flipTexture, std::shared_ptr<Texture> texture)
     }
     else
     {
-        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, ETextureFormat::RGBA);
+        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat);
     }
 
     if (!data)

@@ -64,7 +64,7 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 EditorManager::EditorManager() 
 {
     inputs = InputManager::GetInstance();
-    SceneManager::LoadScene("Assets/SampleScene.cherry");
+    SceneManager::LoadScene("Assets/SampleScene");
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -168,7 +168,7 @@ void EditorManager::HandleMenuBar()
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("Save", "Ctrl+S")) 
-                EditorNotifications::SceneLoading(SceneManager::SaveCurrentScene());
+                EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
 
             if (ImGui::MenuItem("Save As..")) {}
 

@@ -34,7 +34,7 @@ namespace CCMaths
 		*	}
 		*	```
 		*/
-		const static Matrix4 Identity;
+		CCENGINE_API static const Matrix4 Identity;
 
 		//! Mutliply the Matrix4 by the Vector4
 		/*!

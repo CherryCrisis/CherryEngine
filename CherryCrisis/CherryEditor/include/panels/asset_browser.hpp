@@ -5,6 +5,8 @@
 #include <filesystem>
 #include <unordered_map>
 
+#include "Panels/assets_settings.hpp"
+
 class AssetBrowser : public Panel
 {
 private :
@@ -51,7 +53,9 @@ private :
 
 	//Display the asset list
 	void RenderNodes();
-
+	
+	std::unique_ptr<AssetsSettings> m_assetsSettings = nullptr;
+	void RenderAssetsSettings();
 	
 public:
 

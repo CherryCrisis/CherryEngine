@@ -7,6 +7,8 @@
 
 std::filesystem::path CopyTemporaryFile(const char* path);
 
+struct Bool3;
+
 namespace String
 {
 	//return the string chunk after the separator
@@ -24,6 +26,7 @@ namespace String
 	float			  CCENGINE_API ExtractFloat(const std::string& str);
 	int			      CCENGINE_API ExtractInt(const std::string& str);
 	CCMaths::Vector3  CCENGINE_API ExtractVector3(std::string str);
+	Bool3			  CCENGINE_API ExtractBool3(std::string str);
 }
 
 //CreateFolder

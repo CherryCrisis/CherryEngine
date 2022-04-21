@@ -9,13 +9,12 @@
 #include "cubemap.hpp"
 
 struct Skybox;
-struct Camera;
+class Viewer;
 
 class SkyboxRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
 	Skybox* m_skybox = nullptr;
-	Camera* m_camera = nullptr;
 
 	struct GPUSkyboxCubemap : GPUCubemap
 	{
@@ -43,11 +42,5 @@ public:
 	template <>
 	void Unsubscribe(Skybox* toGenerate);
 
-	template <>
-	int Subscribe(Camera* toGenerate);
-
-	template <>
-	void Unsubscribe(Camera* toGenerate);
-
-	void Execute(Framebuffer& framebuffer, Camera& canera);
+	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

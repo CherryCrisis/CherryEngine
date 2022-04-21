@@ -8,12 +8,11 @@ struct GPUTexture
     virtual ~GPUTexture() = default;
 };
 
+
 enum class ETextureFormat
 {
     // https://www.reedbeta.com/blog/understanding-bcn-texture-compression-formats/
 
-    //RGB     = 0x1907,
-    //RGBA    = 0x1908,
     RGB     = 0x80E0,
     RGBA    = 0x80E1,
     DXT1    = 0x83F0, //Compressed RGB
@@ -26,6 +25,8 @@ enum class ETextureFormat
     //DXT4, //Compressed Grayscale for height maps, gloss maps any grayscale image
 };
 
+
+
 class CCENGINE_API Texture : public Resource<Texture>
 {
 private:
@@ -33,6 +34,7 @@ private:
     int             m_height = 0;
     int             m_size = 0;
     int             m_mipmapLevels = 0;
+    int             m_blockSize = 0;
     ETextureFormat  m_internalFormat = ETextureFormat::RGBA;
 
     void*   m_data = nullptr;
@@ -47,7 +49,9 @@ public:
     int GetHeight() { return m_height; }
     int GetSize()   { return m_size; }
     int GetMipmapCount() { return m_mipmapLevels; }
+    int GetBlockSize() { return m_blockSize; }
     ETextureFormat GetInternalFormat() { return m_internalFormat; }
+    void SetInternalFormat(ETextureFormat textureFormat) { m_internalFormat = textureFormat; }
 
     void* GetData() { return m_data; }
 

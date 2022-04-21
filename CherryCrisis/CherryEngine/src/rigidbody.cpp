@@ -63,6 +63,9 @@ void Rigidbody::SetPxActor()
 
 void Rigidbody::SetActorConstraints()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)
@@ -86,14 +89,19 @@ void Rigidbody::SetActorConstraints()
 				actor->setRigidDynamicLockFlag((physx::PxRigidDynamicLockFlag::Enum)(2 ^ (i + 3)), true);
 		}
 
-		actor->wakeUp();
+
+		if (actor->getScene())
+			actor->wakeUp();
 	}
 }
 
 void Rigidbody::SetActorEnabled()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
-	
+
 	if (actor)
 	{
 		if (!m_isEnabled)
@@ -101,12 +109,16 @@ void Rigidbody::SetActorEnabled()
 		else
 			actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_SIMULATION, false);
 
-		actor->wakeUp();
+		if (actor->getScene())
+			actor->wakeUp();
 	}
 }
 
 void Rigidbody::SetActorKinematic()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)
@@ -122,12 +134,17 @@ void Rigidbody::SetActorKinematic()
 			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES, false);
 		}
 
-		actor->wakeUp();
+
+		if (actor->getScene())
+			actor->wakeUp();
 	}
 }
 
 void Rigidbody::SetActorGravity()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)
@@ -136,14 +153,18 @@ void Rigidbody::SetActorGravity()
 			actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, true);
 		else
 			actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, false);
-		
-		actor->wakeUp();
-	}
 
+
+		if (actor->getScene())
+			actor->wakeUp();
+	}
 }
 
 void Rigidbody::SetActorMaxVelocities()
 {
+	if (!m_physicActor)
+		return;
+
 	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	if (actor)

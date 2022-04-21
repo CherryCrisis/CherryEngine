@@ -21,7 +21,12 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera
 
     glViewport(0, 0, (GLsizei)width, (GLsizei)height);
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-    RenderManager::DrawScene(m_framebuffer, camera);
+
+    // TODO: Move this
+    float aspect = (float)width / (float)height;
+    camera.m_projectionMatrix = Matrix4::Perspective(camera.fovY, aspect, camera.near, camera.far);
+
+    RenderManager::DrawScene(m_framebuffer, &camera);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

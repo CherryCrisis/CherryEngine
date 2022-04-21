@@ -73,7 +73,8 @@ namespace PhysicSystem
 		m_scenes.clear();
 
 		// TODO: Remove
-		delete cell;
+		if (cell)
+			delete cell;
 
 		PX_RELEASE(m_physics);
 
@@ -91,34 +92,18 @@ namespace PhysicSystem
 
 	void PhysicManager::Register(Rigidbody* rigidbody)
 	{
-		if (!cell)
-		cell = new Cell();
-
 		PhysicActor& actor = FindOrCreateActor(rigidbody->GetHost());
 		
 		rigidbody->m_physicActor = &actor;
 		actor.AddRigidbody(rigidbody, m_isPlaying);
-
-		if (!actor.m_owner->m_cell)
-			actor.m_owner->m_cell = cell;
-
-		actor.m_owner->m_cell->AddEntity(actor.m_owner);
 	}
 
 	void PhysicManager::Register(Collider* collider)
 	{
-		if (!cell)
-			cell = new Cell();
-
 		PhysicActor& actor = FindOrCreateActor(collider->GetHost());
 
 		collider->m_physicActor = &actor;
 		actor.AddCollider(collider, m_isPlaying);
-		
-		if (!actor.m_owner->m_cell)
-			actor.m_owner->m_cell = cell;
-
-		actor.m_owner->m_cell->AddEntity(actor.m_owner);
 	}
 
 	void PhysicManager::Unregister(Rigidbody* rigidbody)
@@ -154,6 +139,17 @@ namespace PhysicSystem
 		m_physicActors.push_back(new PhysicActor());
 		PhysicActor& newActor = *m_physicActors.back();
 		newActor.m_owner = &owningEntity;
+
+		if (!cell)
+			cell = new Cell();
+
+		// TODO: Change that with the right cell when cell system is done
+		//		 and move it away -> where the entity will be added or moved in the scene
+		newActor.m_owner->m_cell = cell;
+		newActor.m_owner->m_cell->AddEntity(newActor.m_owner);
+
+		newActor.m_owner->m_cell->AddEntityToPhysicScene(newActor.m_owner);
+
 		return newActor;
 	}
 

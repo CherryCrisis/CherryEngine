@@ -149,34 +149,42 @@ namespace CCImporter
         }
     }
 
-    void SetTextureFormat(nvtt::CompressionOptions& compressionOptions, ETextureFormat textureFormat)
+    void SetTextureFormat(nvtt::CompressionOptions& compressionOptions, TextureHeader& textureHeader)
     {
-        switch (textureFormat)
+        switch (textureHeader.internalFormat)
         {
         case ETextureFormat::RGB:
             compressionOptions.setFormat(nvtt::Format_RGB);
             compressionOptions.setPixelFormat(8, 8, 8, 0);
+            textureHeader.blockSize = 8;
             break;
         case ETextureFormat::RGBA:
             compressionOptions.setFormat(nvtt::Format_RGBA);
+            textureHeader.blockSize = 8;
             break;
         case ETextureFormat::DXT1:
             compressionOptions.setFormat(nvtt::Format_BC1);
+            textureHeader.blockSize = 8;
             break;
         case ETextureFormat::DXT1a:
             compressionOptions.setFormat(nvtt::Format_BC1a);
+            textureHeader.blockSize = 8;
             break;
         case ETextureFormat::DXT3:
             compressionOptions.setFormat(nvtt::Format_BC3);
+            textureHeader.blockSize = 16;
             break;
         case ETextureFormat::DXT5:
             compressionOptions.setFormat(nvtt::Format_BC5);
+            textureHeader.blockSize = 16;
             break;
         case ETextureFormat::DXT6:
             compressionOptions.setFormat(nvtt::Format_BC6S);
+            textureHeader.blockSize = 16;
             break;
         case ETextureFormat::DXT7:
             compressionOptions.setFormat(nvtt::Format_BC7);
+            textureHeader.blockSize = 16;
             break;
         }
     }
@@ -185,9 +193,11 @@ namespace CCImporter
     {
         nvtt::OutputOptions outputOptions;
         outputOptions.setFileName(texturePath.c_str());
-
         nvtt::CompressionOptions compressionOptions;
-        SetTextureFormat(compressionOptions, textureHeader.internalFormat);
+        SetTextureFormat(compressionOptions, textureHeader);
+
+        if (textureHeader.internalFormat == ETextureFormat::DXT5)
+            image.setNormalMap(true);
 
         textureHeader.mipmapsLevel = image.countMipmaps();
 
@@ -318,7 +328,7 @@ namespace CCImporter
         if (!textureData)
             return;
 
-        nvtt::Context context(false);
+        nvtt::Context context;
 
         nvtt::Surface image;
         image.load(filepath.string().c_str());
@@ -536,7 +546,7 @@ namespace CCImporter
             if (node->mNumChildren)
                 models[indexBuff].m_childrenIndices.swap(childrenIndexs);
 
-            if (node->mNumMeshes > 1 && node->mNumMeshes > meshIndex + 1)
+            if (node->mNumMeshes > 1 && node->mNumMeshes > (unsigned int)meshIndex + 1)
                 ImportModelDataRecursive(node, model.modelHeader.m_index - index, index, meshIndex + 1, scene, models, filepath);
     }
 

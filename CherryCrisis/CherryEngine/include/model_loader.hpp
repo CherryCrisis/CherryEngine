@@ -47,6 +47,7 @@ namespace CCImporter
         int size;
         ETextureFormat internalFormat;
         int mipmapsLevel;
+        int blockSize;
     };
 
     struct MaterialHeader

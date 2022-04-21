@@ -17,5 +17,4 @@ public:
 
 	void AddCell(const std::string& name);
 	void RemoveCell(const std::string& name);
-	void LinkCells(Cell& lhs, Cell& rhs);
 };

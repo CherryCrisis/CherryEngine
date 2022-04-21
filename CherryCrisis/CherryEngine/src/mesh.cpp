@@ -122,8 +122,8 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
         int yPattern = !BoolPattern(i, 2);
 
         Vertex vertex;
-        vertex.uv.x = xPattern;
-        vertex.uv.y = yPattern;
+        vertex.uv.x = (float)xPattern;
+        vertex.uv.y = (float)yPattern;
 
         int xSign = BoolSign(xPattern);
         int ySign = BoolSign(yPattern);

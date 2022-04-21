@@ -2,7 +2,9 @@
 
 #include "maths.hpp"
 
-struct Camera
+#include "viewer.hpp"
+
+struct Camera : public Viewer
 {
 	enum Type
 	{

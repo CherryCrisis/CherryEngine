@@ -2,9 +2,14 @@
 
 #include "cherry_macros.hpp"
 
-#include <deque>
-
 class Entity;
+class Cell;
+
+struct Portal
+{
+	Portal* m_linkedPortal = nullptr;
+	Cell*	m_ownerCell = nullptr;
+};
 
 namespace physx
 {
@@ -19,8 +24,8 @@ namespace PhysicSystem
 class CCENGINE_API Cell
 {
 private:
-	std::deque<Entity*>	m_entities;
-	std::deque<Cell*>	m_surroundingCells;
+	std::vector<Entity*> m_entities;
+	std::vector<Portal> m_portals;
 
 public:
 	PhysicSystem::PhysicScene* m_physicCell = nullptr;
@@ -33,10 +38,12 @@ public:
 	void RemoveEntity(Entity* newEntity);
 	void RemoveEntityFromPhysicScene(Entity* newEntity);
 
+	void AddPortal();
+
+	void LinkPortals(Portal portal1, Portal portal2);
+
 	// TODO: Add info of movement (direction, speed, ...)
 	void MoveCharacter(float deltaTime);
-	
-	void LinkToCell(Cell& other);
 
 	void SetControllerDesc(physx::PxCapsuleControllerDesc& desc);
 };

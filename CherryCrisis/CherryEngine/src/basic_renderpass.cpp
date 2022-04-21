@@ -10,11 +10,87 @@
 #include "model.hpp"
 
 #include "shadow_renderpass.hpp"
+#include "viewer.hpp"
 
-BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
+void BasicRenderPass::GPUTextureBasic::Generate(Texture* texture)
+{
+	glCreateTextures(GL_TEXTURE_2D, 1, &ID);
+
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	ETextureFormat textureFormat = texture->GetInternalFormat();
+
+	if (textureFormat == ETextureFormat::RGB || textureFormat == ETextureFormat::RGBA)
+	{
+		unsigned int internalFormat = GL_RGBA8;
+		if (textureFormat == ETextureFormat::RGB)
+			internalFormat = GL_RGB8;
+
+		glTextureStorage2D(ID, 1, internalFormat, texture->GetWidth(), texture->GetHeight());
+		glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (unsigned int)textureFormat, GL_UNSIGNED_BYTE, texture->GetData());
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, ID);
+
+		int mipmapsCount = texture->GetMipmapCount();
+		int width = texture->GetWidth();
+		int height = texture->GetHeight();
+		int offset = 0;
+		unsigned char* data = (unsigned char*)texture->GetData();
+
+		for (int mipmapId = 0; mipmapId < mipmapsCount && (width || height); ++mipmapId)
+		{
+			CCMaths::Min(width, 1);
+			CCMaths::Min(height, 1);
+
+			int size = ((width + 3) / 4) * ((height + 3) / 4) * texture->GetBlockSize();
+			glCompressedTexImage2D(GL_TEXTURE_2D, mipmapId, (unsigned int)textureFormat,
+				width, height, 0, size, data + offset);
+
+
+			offset += size;
+			width >>= 1;
+			height >>= 1;
+		}
+	}
+
+
+
+	glGenerateTextureMipmap(ID);
+}
+
+void BasicRenderPass::GPUTextureBasic::Regenerate(Texture* texture)
+{
+	Destroy();
+	Generate(texture);
+}
+
+void BasicRenderPass::GPUTextureBasic::Destroy()
 {
 	glDeleteTextures(1, &ID);
 }
+
+BasicRenderPass::GPUTextureBasic::GPUTextureBasic(Texture* texture)
+{
+	texture->m_OnReloaded.Bind(&GPUTextureBasic::OnReload, this);
+
+	Generate(texture);
+}
+
+BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
+{
+	Destroy();
+}
+
+void BasicRenderPass::GPUTextureBasic::OnReload(std::shared_ptr<Texture> texture)
+{
+	Regenerate(texture.get());
+}
+
 
 BasicRenderPass::BasicRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
@@ -40,16 +116,6 @@ int BasicRenderPass::Subscribe(Light* toGenerate)
 
 	m_lights.insert(toGenerate);
 
-	return 1;
-}
-
-template <>
-int BasicRenderPass::Subscribe(Camera* toGenerate)
-{
-	if (!toGenerate)
-		return -1;
-
-	m_camera = toGenerate;
 	return 1;
 }
 
@@ -104,49 +170,10 @@ int BasicRenderPass::Subscribe(Texture* toGenerate)
 	if (toGenerate->m_gpuTexture)
 		return 0;
 
-	auto gpuTexture = std::make_unique<GPUTextureBasic>();
-
-	glCreateTextures(GL_TEXTURE_2D, 1, &gpuTexture->ID);
-
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTextureParameteri(gpuTexture->ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return -1;
 
-	/*glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, toGenerate->GetWidth(), toGenerate->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, toGenerate->GetData());
-	glGenerateMipmap(GL_TEXTURE_2D);*/
-
-	glBindTexture(GL_TEXTURE_2D, gpuTexture->ID);
-
-	int mipmapsCount = toGenerate->GetMipmapCount();
-	int width = toGenerate->GetWidth();
-	int height = toGenerate->GetHeight();
-	int offset = 0;
-
-	unsigned char* data = (unsigned char*)toGenerate->GetData();
-
-	for (int i = 0; i < mipmapsCount && (width || height); ++i)
-	{
-		if (!width)
-			width = 1;
-
-		if (!height)
-			height = 1;
-
-		int size = ((width + 3) / 4) * ((height + 3) / 4) * 8;
-		glCompressedTexImage2D(GL_TEXTURE_2D, i, (GLenum)toGenerate->GetInternalFormat(),
-			width, height, 0, size, data + offset);
-
-
-		offset += size;
-		width >>= 1;
-		height >>= 1;
-	}
-
-	toGenerate->m_gpuTexture = std::move(gpuTexture);
+	toGenerate->m_gpuTexture = std::make_unique<GPUTextureBasic>(toGenerate);
 
 	return 1;
 }
@@ -163,14 +190,11 @@ void BasicRenderPass::Unsubscribe(Light* toGenerate)
 	m_lights.erase(toGenerate);
 }
 
-template <>
-void BasicRenderPass::Unsubscribe(Camera* toGenerate)
+void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 {
-	m_camera = nullptr;
-}
+	if (!viewer)
+		return;
 
-void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
-{
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
@@ -180,16 +204,10 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// TODO: Change this
-	camera.aspect = (float)framebuffer.width / (float)framebuffer.height;
-	CCMaths::Matrix4 projection = Matrix4::Perspective(camera.fovY, camera.aspect, camera.near, camera.far);
-	CCMaths::Matrix4 view = Matrix4::RotateZXY(-camera.rotation) * Matrix4::Translate(-camera.position);
-
-	CCMaths::Matrix4 viewProjection = projection * view;
+	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
-	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-view.position).data);
-	
+	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
 
 	size_t lightID = 0u;
 	const char* lightFormat = "uLights[{}]";
@@ -203,18 +221,13 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Camera& camera)
 			continue;
 		}
 
-		// TODO: Optimize, compute one time
-		CCMaths::Matrix4 lightView = CCMaths::Matrix4::LookAt(light->m_position);
-		CCMaths::Matrix4 ortho = CCMaths::Matrix4::Transpose(CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f));
-		CCMaths::Matrix4 lightSpace = ortho * lightView;
-
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + lightID, 3 + lightID);
-		glBindTextureUnit(3 + lightID, gpuLight->depthTexID);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)lightID, 3 + (GLsizei)lightID);
+		glBindTextureUnit(3 + (GLsizei)lightID, gpuLight->depthTexID);
 
 		// TODO: Use string view
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 		GLuint lightSpaceLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightSpace").c_str());
-		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, lightSpace.data);
+		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, light->m_lightSpace.data);
 
 		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
 		glUniform1i(enableLoc, true);
