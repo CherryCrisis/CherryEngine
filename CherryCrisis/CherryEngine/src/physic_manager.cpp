@@ -8,7 +8,7 @@
 #include "collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
-#include "cell.hpp"
+#include "cell_system.hpp"
 
 #include "debug.hpp"
 
@@ -71,10 +71,6 @@ namespace PhysicSystem
 		}
 
 		m_scenes.clear();
-
-		// TODO: Remove
-		if (cell)
-			delete cell;
 
 		PX_RELEASE(m_physics);
 
@@ -139,14 +135,6 @@ namespace PhysicSystem
 		m_physicActors.push_back(new PhysicActor());
 		PhysicActor& newActor = *m_physicActors.back();
 		newActor.m_owner = &owningEntity;
-
-		if (!cell)
-			cell = new Cell();
-
-		// TODO: Change that with the right cell when cell system is done
-		//		 and move it away -> where the entity will be added or moved in the scene
-		newActor.m_owner->m_cell = cell;
-		newActor.m_owner->m_cell->AddEntity(newActor.m_owner);
 
 		newActor.m_owner->m_cell->AddEntityToPhysicScene(newActor.m_owner);
 

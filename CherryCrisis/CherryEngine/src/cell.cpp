@@ -4,25 +4,33 @@
 
 #include <PxPhysicsAPI.h>
 
+#include "debug.hpp"
 #include "physic_manager.hpp"
 #include "entity.hpp"
 
 Cell::Cell()
 {
-	PhysicSystem::PhysicManager* pxManager = PhysicSystem::PhysicManager::GetInstance();
+	m_debug = Debug::GetInstance();
+	m_pxManager = PhysicSystem::PhysicManager::GetInstance();
 
-	pxManager->Register(this);
+	m_pxManager->Register(this);
 }
 
 Cell::~Cell()
 {
-	PhysicSystem::PhysicManager* pxManager = PhysicSystem::PhysicManager::GetInstance();
-
-	pxManager->Unregister(this);
+	m_pxManager->Unregister(this);
 }
 
 void Cell::AddEntity(Entity* newEntity)
 {
+	if (!this)
+		return;
+
+	int index = PossessEntity(newEntity);
+
+	if (index != -1)
+		return;
+
 	m_entities.push_back(newEntity);
 	newEntity->m_cell = this;
 
@@ -31,11 +39,13 @@ void Cell::AddEntity(Entity* newEntity)
 
 void Cell::AddEntityToPhysicScene(Entity* newEntity)
 {
-	PhysicSystem::PhysicManager* pxManager = PhysicSystem::PhysicManager::GetInstance();
-	PhysicSystem::PhysicActor* actor = pxManager->FindActor(*newEntity);
+	if (!this)
+		return;
 
 	if (!m_physicCell)
 		return;
+
+	PhysicSystem::PhysicActor* actor = m_pxManager->FindActor(*newEntity);
 
 	if (actor)
 		m_physicCell->AddActor(actor);
@@ -43,6 +53,14 @@ void Cell::AddEntityToPhysicScene(Entity* newEntity)
 
 void Cell::RemoveEntity(Entity* newEntity)
 {
+	if (!this)
+		return;
+
+	int index = PossessEntity(newEntity);
+
+	if (index == -1)
+		return;
+
 	for (size_t i = 0; i < m_entities.size(); ++i)
 	{
 		if (newEntity == m_entities[i])
@@ -57,14 +75,25 @@ void Cell::RemoveEntity(Entity* newEntity)
 
 void Cell::RemoveEntityFromPhysicScene(Entity* newEntity)
 {
-	PhysicSystem::PhysicManager* pxManager = PhysicSystem::PhysicManager::GetInstance();
-	PhysicSystem::PhysicActor* actor = pxManager->FindActor(*newEntity);
-
 	if (!m_physicCell)
 		return;
 
+	PhysicSystem::PhysicActor* actor = m_pxManager->FindActor(*newEntity);
+
 	if (actor)
 		m_physicCell->RemoveActor(actor);
+}
+
+int Cell::PossessEntity(Entity* entity)
+{
+	int index = 0;
+	for (auto& current : m_entities)
+	{
+		if (entity == current)
+			return index;
+		index++;
+	}
+	return -1;
 }
 
 void Cell::AddPortal()
@@ -87,8 +116,6 @@ void Cell::MoveCharacter(float deltaTime)
 
 void Cell::SetControllerDesc(physx::PxCapsuleControllerDesc& desc)
 {
-	//PhysicSystem::PhysicManager* physics = PhysicSystem::PhysicManager::GetInstance();
-
 	//CCMaths::Vector3& p = m_playerController.position;
 	//desc.position		= physx::PxExtendedVec3(p.x, p.y, p.z);
 	//desc.radius			= m_playerController.radius;

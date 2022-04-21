@@ -23,7 +23,7 @@ private:
 public:
 	Cell* m_cell = nullptr;
 
-	Entity() = default;
+	Entity();
 	Entity(const std::string& name, CCUUID m_uuid = {});
 	virtual ~Entity();
 

@@ -4,18 +4,28 @@
 
 #include "behaviour.hpp"
 #include "transform.hpp"
+#include "cell_system.hpp"
 
 #include <typeinfo>
+Entity::Entity()
+{
+	CellSystem::GetInstance()->AddEntityToDefault(this);
+}
+
 Entity::Entity(const std::string& name, CCUUID id)
 	: m_name(name)
 {
 	m_uuid = id;
+
+	CellSystem::GetInstance()->AddEntityToDefault(this);
 }
 
 Entity::~Entity()
 {
 	for (auto& [type, behaviour] : m_behaviours)
 		delete behaviour;
+
+	m_cell->RemoveEntity(this);
 }
 
 void Entity::Initialize() 

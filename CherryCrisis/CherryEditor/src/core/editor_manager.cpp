@@ -105,6 +105,7 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_sceneDisplayer.Render();
     m_inspector.Render();
     m_gameDisplayer.Render();
+    m_cellSystemDisplayer.Render();
     m_hierarchyDisplayer.Render();
     m_preferencesDisplayer.Render();
     m_projSettingsDisplayer.Render();

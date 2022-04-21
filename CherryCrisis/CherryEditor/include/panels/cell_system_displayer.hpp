@@ -2,27 +2,32 @@
 
 #include "core/frame_displayer.hpp"
 #include "camera.hpp"
-#include "input_manager.hpp"
+#include "cell_system.hpp"
 #include "ImGuizmo.h"
 
 class EditorManager;
-class SceneDisplayer : public FrameDisplayer
+class CellSystemDisplayer : public FrameDisplayer
 {
 private:
 	Camera m_camera = {};
 	float m_cameraSpeed = 1.f;
 
+	CellSystem* m_cellSystem = nullptr;
+	Cell* m_selectedCell = nullptr;
+	Cell* m_rightClickedCell = nullptr;
+	int m_selectedCategory = 0;
+
 public:
 	EditorManager* m_manager = nullptr;
 	
-	SceneDisplayer();
+	CellSystemDisplayer();
 	
+	void CreateCell();
+	bool Context();
+
 	void UpdateCamera();
 	void Render() override;
 
 	void Focus() override;
 	void Unfocus() override;
-
-	ImGuizmo::OPERATION m_operation = ImGuizmo::OPERATION::TRANSLATE;
-	ImGuizmo::MODE		m_mode		= ImGuizmo::MODE::WORLD;
 };
