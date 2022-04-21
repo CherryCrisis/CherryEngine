@@ -265,11 +265,11 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Debug")]
   public static extern void delete_Debug(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Component")]
-  public static extern global::System.IntPtr new_Component();
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Object")]
+  public static extern global::System.IntPtr new_Object();
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Component")]
-  public static extern void delete_Component(global::System.Runtime.InteropServices.HandleRef jarg1);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Object")]
+  public static extern void delete_Object(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Behaviour")]
   public static extern void delete_Behaviour(global::System.Runtime.InteropServices.HandleRef jarg1);
@@ -999,6 +999,9 @@ class CherryEnginePINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_ScriptedBehaviour_SWIGUpcast")]
   public static extern global::System.IntPtr ScriptedBehaviour_SWIGUpcast(global::System.IntPtr jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_SWIGUpcast")]
+  public static extern global::System.IntPtr Entity_SWIGUpcast(global::System.IntPtr jarg1);
 }
 
 }

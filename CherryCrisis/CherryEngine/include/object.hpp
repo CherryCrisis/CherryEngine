@@ -2,6 +2,7 @@
 
 #include <cherry_macros.hpp>
 #include "uuid.hpp"
+#include "metadata.hpp"
 
 // General Object used by the engine such as entity or behaviour
 class CCENGINE_API Object
@@ -16,4 +17,6 @@ public:
 	virtual ~Object() = default;
 
 	uint32_t GetUUID() const { return (uint32_t)m_uuid; }
+
+	Metadata m_metadatas;
 };

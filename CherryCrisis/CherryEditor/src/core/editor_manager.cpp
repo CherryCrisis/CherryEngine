@@ -65,6 +65,7 @@ EditorManager::EditorManager()
 {
     inputs = InputManager::GetInstance();
     SceneManager::LoadScene("Assets/SampleScene.cherry");
+    SceneManager::GetInstance()->m_currentScene->PopulateEmpty();
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;

@@ -3,8 +3,12 @@
 #include <cherry_macros.hpp>
 #include "scene.hpp"
 
+class Behaviour;
+
 class CCENGINE_API Serializer
 {
+private:
+	static bool CreateBehaviour(const std::string& type, uint32_t uuid, Behaviour** outBehaviour);
 public:	
 	// Save scene
 	static bool SerializeScene(Scene* scene, const char* filepath ="");
@@ -16,4 +20,6 @@ public:
 	static bool SerializeGame(const char* filepath);
 
 	static bool UnserializeGame(const char* filepath);
+
+	
 };

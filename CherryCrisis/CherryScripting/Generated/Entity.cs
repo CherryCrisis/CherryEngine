@@ -10,12 +10,10 @@
 
 namespace CCEngine {
 
-public class Entity : global::System.IDisposable {
+public class Entity : Object {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
-  protected bool swigCMemOwn;
 
-  internal Entity(global::System.IntPtr cPtr, bool cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
+  internal Entity(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.Entity_SWIGUpcast(cPtr), cMemoryOwn) {
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
@@ -23,16 +21,7 @@ public class Entity : global::System.IDisposable {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~Entity() {
-    Dispose(false);
-  }
-
-  public void Dispose() {
-    Dispose(true);
-    global::System.GC.SuppressFinalize(this);
-  }
-
-  protected virtual void Dispose(bool disposing) {
+  protected override void Dispose(bool disposing) {
     lock(this) {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
@@ -41,6 +30,7 @@ public class Entity : global::System.IDisposable {
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
+      base.Dispose(disposing);
     }
   }
 
@@ -137,7 +127,7 @@ public class Entity : global::System.IDisposable {
 
 	public override string ToString() => name;
 
-	public Component AddComponent(System.Type type)
+	public Behaviour AddComponent(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return AddTransform();
@@ -148,9 +138,9 @@ public class Entity : global::System.IDisposable {
 		return AddScript(type.Name);
 	}
 
-	public T AddComponent<T>() where T : Component => AddComponent(typeof(T)) as T;
+	public T AddComponent<T>() where T : Behaviour => AddComponent(typeof(T)) as T;
 
-	public Component GetComponent(System.Type type)
+	public Behaviour GetComponent(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return GetTransform();
@@ -161,7 +151,7 @@ public class Entity : global::System.IDisposable {
 		return GetScript(type.Name);
 	}
 
-	public T GetComponent<T>() where T : Component => GetComponent(typeof(T)) as T;
+	public T GetComponent<T>() where T : Behaviour => GetComponent(typeof(T)) as T;
 	
 }
 

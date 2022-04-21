@@ -17,15 +17,15 @@ class CCENGINE_API Behaviour : public Object
 private:
 	Entity* m_owner = nullptr;
 protected:
-	Metadata m_metadatas;
+
 
 	virtual void PopulateMetadatas()
 	{
-		m_metadatas.SetField<Object*>("owner", m_owner);
+		m_metadatas.SetProperty("m_owner", &owner);
 	}
 public:
 	Behaviour() = default;
-	Behaviour(CCUUID& owner) : Object(owner) {}
+	Behaviour(CCUUID& id) : Object(id) {}
 	virtual ~Behaviour() = default;
 
 	virtual void LateUpdate() {}
@@ -39,4 +39,8 @@ public:
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }
+
+	Entity* GetHostPtr() { return m_owner; }
+	void SetHostPtr(Entity* newOwner);
+	CCProperty::CopyProperty<Behaviour, Entity*> owner{ this, &Behaviour::SetHostPtr, &Behaviour::GetHostPtr};
 };

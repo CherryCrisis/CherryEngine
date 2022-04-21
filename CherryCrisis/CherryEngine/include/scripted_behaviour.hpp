@@ -41,6 +41,7 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 public:
 	ScriptedBehaviour();
+	ScriptedBehaviour(CCUUID& id);
 	~ScriptedBehaviour();
 
 	void SetScriptClass(const std::string& scriptName);

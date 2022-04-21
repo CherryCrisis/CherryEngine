@@ -2,4 +2,9 @@
 
 // TODO: Change this
 #include "behaviour.hpp"
-#include "transform.hpp"
+
+void Behaviour::SetHostPtr(Entity* newOwner)
+{
+	m_owner = newOwner; 
+	m_owner->SubscribeComponent(this);
+}

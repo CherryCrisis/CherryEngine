@@ -383,13 +383,14 @@ namespace Swig {
 
 
 	#include "behaviour.hpp"
-	#include "component.hpp"
+	#include "object.hpp"
 
 
-	#include "component.hpp"
+	#include "object.hpp"
 
 
 	#include "entity.hpp"
+	#include "object.hpp"
 
 
 #include <typeinfo>
@@ -1088,20 +1089,20 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Debug(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Component() {
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Object() {
   void * jresult ;
-  Component *result = 0 ;
+  Object *result = 0 ;
   
-  result = (Component *)new Component();
+  result = (Object *)new Object();
   jresult = (void *)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Component(void * jarg1) {
-  Component *arg1 = (Component *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Object(void * jarg1) {
+  Object *arg1 = (Object *) 0 ;
   
-  arg1 = (Component *)jarg1; 
+  arg1 = (Object *)jarg1; 
   delete arg1;
 }
 
@@ -4252,8 +4253,8 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfTransform(void * ja
 }
 
 
-SWIGEXPORT Component * SWIGSTDCALL CSharp_CCEngine_Behaviour_SWIGUpcast(Behaviour *jarg1) {
-    return (Component *)jarg1;
+SWIGEXPORT Object * SWIGSTDCALL CSharp_CCEngine_Behaviour_SWIGUpcast(Behaviour *jarg1) {
+    return (Object *)jarg1;
 }
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_Transform_SWIGUpcast(Transform *jarg1) {
@@ -4266,6 +4267,10 @@ SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_CameraComponent_SWIGUpcast(Ca
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_SWIGUpcast(ScriptedBehaviour *jarg1) {
     return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Object * SWIGSTDCALL CSharp_CCEngine_Entity_SWIGUpcast(Entity *jarg1) {
+    return (Object *)jarg1;
 }
 
 #ifdef __cplusplus

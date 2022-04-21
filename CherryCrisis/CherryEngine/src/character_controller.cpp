@@ -4,6 +4,8 @@
 
 void CharacterController::PopulateMetadatas()
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetProperty("m_radius",			&radius);
 	m_metadatas.SetProperty("m_height",			&height);
 	m_metadatas.SetProperty("m_slopeLimit",		&slopeLimit);

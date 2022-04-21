@@ -16,6 +16,7 @@ public:
 	Transform*	m_transform = nullptr;
 
 	LightComponent();
+	LightComponent(CCUUID& id);
 	~LightComponent();
 
 	void Initialize();

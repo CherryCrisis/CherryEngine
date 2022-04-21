@@ -18,6 +18,14 @@ LightComponent::LightComponent()
 	PopulateMetadatas();
 }
 
+LightComponent::LightComponent(CCUUID& id) : Behaviour(id)
+{
+	RenderManager::GetInstance()->SubscribeToPipeline<ShadowRenderPass>(&m_light);
+	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(&m_light);
+
+	PopulateMetadatas();
+}
+
 LightComponent::~LightComponent()
 {
 	RenderManager::GetInstance()->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
@@ -47,6 +55,8 @@ void LightComponent::Initialize()
 
 void LightComponent::PopulateMetadatas()
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetField<CCMaths::Vector3>("ambient", m_light.m_ambient);
 	m_metadatas.SetField<CCMaths::Vector3>("diffuse", m_light.m_diffuse);
 	m_metadatas.SetField<CCMaths::Vector3>("specular", m_light.m_specular);

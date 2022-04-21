@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-	<Compile Include="..\x64\Debug\Assets\*.cs" />
+    <Compile Include="..\x64\Debug\Assets\*.cs" />
     <Compile Include="BackpackBehaviour.cs" />
     <Compile Include="CameraController.cs" />
     <Compile Include="DebugTest.cs" />
@@ -50,12 +50,12 @@
     <Compile Include="Generated\CameraComponentVector.cs" />
     <Compile Include="Generated\CherryEngine.cs" />
     <Compile Include="Generated\CherryEnginePINVOKE.cs" />
-    <Compile Include="Generated\Component.cs" />
     <Compile Include="Generated\Debug.cs" />
     <Compile Include="Generated\ELogType.cs" />
     <Compile Include="Generated\Entity.cs" />
     <Compile Include="Generated\InputManager.cs" />
     <Compile Include="Generated\Keycode.cs" />
+    <Compile Include="Generated\Object.cs" />
     <Compile Include="Generated\ScriptedBehaviour.cs" />
     <Compile Include="Generated\ScriptedBehaviourVector.cs" />
     <Compile Include="Generated\SWIGTYPE_p_Camera.cs" />

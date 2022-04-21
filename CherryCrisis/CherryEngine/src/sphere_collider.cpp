@@ -38,6 +38,8 @@ void SphereCollider::Unregister()
 
 void SphereCollider::PopulateMetadatas()
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetProperty("Enabled", &isEnabled);
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
 	m_metadatas.SetProperty("Scale", &editableScale);

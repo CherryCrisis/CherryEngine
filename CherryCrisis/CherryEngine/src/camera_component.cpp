@@ -18,6 +18,16 @@ CameraComponent::CameraComponent()
 	PopulateMetadatas();
 }
 
+CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
+{
+	auto RM = RenderManager::GetInstance();
+
+	RM->SubscribeToPipeline<BasicRenderPass>(&m_camera);
+	RM->SubscribeToPipeline<SkyboxRenderPass>(&m_camera);
+
+	PopulateMetadatas();
+}
+
 CameraComponent::~CameraComponent()
 {
 	auto RM = RenderManager::GetInstance();
@@ -32,11 +42,13 @@ CameraComponent::~CameraComponent()
 
 void CameraComponent::PopulateMetadatas()
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetField<float>("aspect", m_camera.aspect);
 	m_metadatas.SetField<float>("near", m_camera.near);
 	m_metadatas.SetField<float>("far", m_camera.far);
 	m_metadatas.SetField<float>("fovY", m_camera.fovY);
-	m_metadatas.SetField<Behaviour*>("transform", m_transform);
+	m_metadatas.SetField<Object*>("transform", m_transform);
 }
 
 void CameraComponent::BindToSignals()

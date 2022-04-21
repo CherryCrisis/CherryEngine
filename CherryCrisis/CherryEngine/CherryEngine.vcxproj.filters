@@ -1229,7 +1229,7 @@
     <None Include="interface\transform_comp.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
-    <None Include="interface\component.i">
+    <None Include="interface\object.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
     <None Include="interface\camera_comp.i">

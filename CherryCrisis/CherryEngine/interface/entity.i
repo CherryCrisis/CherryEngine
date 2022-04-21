@@ -1,5 +1,6 @@
 %{
 	#include "entity.hpp"
+	#include "object.hpp"
 %}
 
 %include std_string.i
@@ -8,6 +9,7 @@
 %include transform_comp.i
 %include camera_comp.i
 %include scripted_behaviour.i
+%include object.i
 
 %define COMP_STD_WRAP(COMP_T)
 namespace std
@@ -31,7 +33,7 @@ COMP_STD_WRAP(CameraComponent)
 COMP_STD_WRAP(Transform)
 COMP_STD_WRAP(ScriptedBehaviour)
 
-class Entity
+class Entity : public Object
 {
 	%csmethodmodifiers GetName() "private";
 
@@ -97,7 +99,7 @@ public:
 
 	public override string ToString() => name;
 
-	public Component AddComponent(System.Type type)
+	public Behaviour AddComponent(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return AddTransform();
@@ -108,9 +110,9 @@ public:
 		return AddScript(type.Name);
 	}
 
-	public T AddComponent<T>() where T : Component => AddComponent(typeof(T)) as T;
+	public T AddComponent<T>() where T : Behaviour => AddComponent(typeof(T)) as T;
 
-	public Component GetComponent(System.Type type)
+	public Behaviour GetComponent(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return GetTransform();
@@ -121,6 +123,6 @@ public:
 		return GetScript(type.Name);
 	}
 
-	public T GetComponent<T>() where T : Component => GetComponent(typeof(T)) as T;
+	public T GetComponent<T>() where T : Behaviour => GetComponent(typeof(T)) as T;
 	%}
 };
