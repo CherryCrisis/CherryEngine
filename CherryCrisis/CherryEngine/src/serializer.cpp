@@ -46,13 +46,6 @@ namespace YAML {
 		{
 			Node node;
 			return node = rhs.GetUUID();
-			//return node = rhs ? rhs->GetUUID() : '~';
-		}
-
-		static bool decode(const Node& node, Object& rhs)
-		{
-			//rhs = SceneManager::GetInstance()->
-			return true;
 		}
 	};
 }
@@ -112,10 +105,8 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				else if (type == typeid(Object*)) 
 				{
 					Object* obj = *std::any_cast<Object**>(fieldRef.m_value);
-					save["components"][UUID][fieldName] = obj ? YAML::Node(*obj) : YAML::Node('~');
+					save["components"][UUID][fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
 				}
-					
-
 				else //Unhandled Cases (useful to find them)
 					save["components"][UUID][fieldName] = std::format(parseError, type.name());
 			}
@@ -176,32 +167,31 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 	return opened;
 }
 
-bool Serializer::CreateBehaviour(const std::string& type, uint32_t uuid, Behaviour** outBehaviour)
+Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 {
 	CCUUID id(uuid);
+	Behaviour* b = nullptr;
 
-	if      (type == "Transform")	      *outBehaviour = new Transform(id);
-	else if (type == "LightComponent")    *outBehaviour = new LightComponent(id);
-	else if (type == "ModelRenderer")     *outBehaviour = new ModelRenderer(id);
-	else if (type == "ScriptedBehaviour") *outBehaviour = new ScriptedBehaviour(id);
-	else if (type == "CameraComponent")   *outBehaviour = new CameraComponent(id);
+	if      (type == "Transform")	      b = new Transform(id);
+	else if (type == "LightComponent")    b = new LightComponent(id);
+	else if (type == "ModelRenderer")     b = new ModelRenderer(id);
+	else if (type == "ScriptedBehaviour") b = new ScriptedBehaviour(id);
+	else if (type == "CameraComponent")   b = new CameraComponent(id);
 
-	return *outBehaviour;
+	return b;
 }
 
 bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* filepath)
 {
 	// First clean the scene container
 	scene->Empty();
-
-	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	
 	// first is the uuid and the behaviour pointer 
 	std::unordered_map<uint32_t, Object*> m_wrappedBehaviours;
 	// first is the behaviour uuid and the uuid to link in 
 	std::unordered_map<uint32_t, std::unordered_map<std::string, uint32_t>> m_wrappedUUIDs;
-
 	// Then unpack the YAML
+	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	YAML::Node loader = YAML::LoadFile(fileName);
 
 
@@ -216,7 +206,6 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 		}
 	}
 
-
 	// Iterates on Entities entries
 	if (loader["entities"])
 	{
@@ -224,6 +213,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 		{
 			Entity* empty = new Entity(it->second["name"].as<std::string>(), it->first.as<uint32_t>());
 			scene->AddEntity(empty);
+			m_wrappedBehaviours[empty->GetUUID()] = empty;
 		}
 	}
 
@@ -232,29 +222,29 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	{
 		for (YAML::const_iterator it = loader["components"].begin(); it != loader["components"].end(); ++it)
 		{
-			Behaviour** b = nullptr;
+			Behaviour* behaviourPtr = CreateBehaviour(it->second["type"].as<std::string>(), it->first.as<uint32_t>());
 
 			//Create Behaviour by its type,
-			if (!CreateBehaviour(it->second["type"].as<std::string>(), it->first.as<uint32_t>(), b))
+			if (!behaviourPtr)
 				continue;
-
-			Behaviour* behaviour = *b;
-
-			//Set owner by sceneManager raw 
+ 
 			for (YAML::const_iterator entry = it->second.begin(); entry != it->second.end(); ++entry)
 			{
 				std::string key = entry->first.as<std::string>();
 				YAML::Node value = entry->second;
 
-				if (behaviour->m_metadatas.m_properties.contains(key)) 
+				if (value.as<std::string>() == "null")
+					continue;
+
+				if (behaviourPtr->m_metadatas.m_properties.contains(key))
 				{
-					CCProperty::IClearProperty* prop = behaviour->m_metadatas.m_properties[key];
+					CCProperty::IClearProperty* prop = behaviourPtr->m_metadatas.m_properties[key];
 
 					auto& propType = prop->GetGetType();
 					
 					if (propType == typeid(Transform*) || propType == typeid(Entity*))
 					{
-						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, it->second.as<uint32_t>()});
+						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, value.as<uint32_t>()});
 					}
 					else if (propType == typeid(CCMaths::Vector3))
 					{
@@ -273,10 +263,10 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					}
 				}
 
-				if (behaviour->m_metadatas.m_fields.contains(key))
+				if (behaviourPtr->m_metadatas.m_fields.contains(key))
 				{
-					auto& info = behaviour->m_metadatas.m_fields[key].m_type;
-					Field& field = behaviour->m_metadatas.m_fields[key];
+					auto& info = behaviourPtr->m_metadatas.m_fields[key].m_type;
+					Field& field = behaviourPtr->m_metadatas.m_fields[key];
 
 					if (info == typeid(CCMaths::Vector3))
 					{
@@ -290,14 +280,14 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					}
 					else if (info == typeid(Object*))
 					{
-						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, it->second.as<uint32_t>() });
+						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, value.as<uint32_t>() });
 					}
 					else if (info == typeid(std::string))
 					{
 						std::string* valPtr = std::any_cast<std::string*>(field.m_value);
 						*valPtr = value.as<std::string>();
 
-						ModelRenderer* renderer = (ModelRenderer*)behaviour;
+						ModelRenderer* renderer = (ModelRenderer*)behaviourPtr;
 						if (renderer)
 						{
 							std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(value.as<std::string>().c_str());
@@ -309,14 +299,8 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					}
 				}
 			}
+			m_wrappedBehaviours[behaviourPtr->GetUUID()] = behaviourPtr;
 		}
-	}
-	// Do the links
-	//Then loop over the wrapped component to add them into the entities
-	for (auto& wrappedBehaviour : m_wrappedBehaviours)
-	{
-		//if (Entity* entity = scene->FindEntity(wrappedBehaviour.second->GetOwnerUUID()))
-		//	entity->SubscribeComponent(wrappedBehaviour.second);
 	}
 
 	//Then loop over the wrapped component again to link the uuids
@@ -377,290 +361,10 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 			}
 		}
 	}
+
 	for (auto& [entityName, entityRef] : scene->m_entities)
-	{
 		entityRef->Initialize();
-	}
 
-	/*
-
-
-
-
-
-
-	
-
-	std::ifstream file(fileName);
-
-	// first is the uuid and the behaviour pointer 
-	std::unordered_map<uint32_t, Object*> m_wrappedBehaviours;
-	// first is the behaviour uuid and the uuid to link in 
-	std::unordered_map<uint32_t, std::unordered_map<std::string, uint32_t>> m_wrappedUUIDs;
-
-	bool opened = false;
-	if (file)
-	{
-		std::stringstream buffer;
-
-		buffer << file.rdbuf();
-
-		file.close();
-		opened = true;
-
-		// operations on the buffer...
-		std::string line;
-		std::size_t found;
-		bool isParsingComponent = false;
-		Behaviour* behaviour = nullptr;
-
-		// need to get the actual serialized uuid 
-		uint32_t actualUUID;
-		uint32_t parent;
-
-		while (std::getline(buffer, line))
-		{
-			std::string key = String::ExtractKey(line);
-			std::string parsedValue = String::ExtractValue(line);
-
-			if (key == "Res") 
-			{
-				const char* value_Cstr = parsedValue.c_str();
-				auto callback = CCCallback::BindCallback(Foos);
-				ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(value_Cstr, true, callback);
-				continue;
-			}
-
-			found = line.find("Entity:");
-			if (found != std::string::npos)
-			{
-				isParsingComponent = false;
-				actualUUID = (uint32_t)String::ExtractUUID(line);
-
-				std::getline(buffer, line);
-				std::string name = String::ExtractValue(line);
-				Entity* empty = new Entity(name, CCUUID(actualUUID));
-
-				m_wrappedBehaviours[actualUUID] = empty;
-				scene->AddEntity(empty);
-
-				continue;
-			}
-
-			found = line.find("Behaviour:");
-			if (found != std::string::npos)
-			{
-				isParsingComponent = true;
-				actualUUID = (uint32_t)String::ExtractUUID(line);
-			}
-			else if (isParsingComponent)
-			{
-				found = line.find("Transform");
-				if (found != std::string::npos)
-				{
-					behaviour = new Transform();
-				}
-				found = line.find("LightComponent");
-				if (found != std::string::npos)
-				{
-					behaviour = new LightComponent();
-				}
-				found = line.find("ModelRenderer");
-				if (found != std::string::npos)
-				{
-					behaviour = new ModelRenderer();
-				}
-				found = line.find("ScriptedBehaviour");
-				if (found != std::string::npos)
-				{
-					behaviour = new ScriptedBehaviour();
-				}
-				found = line.find("CameraComponent");
-				if (found != std::string::npos)
-				{
-					behaviour = new CameraComponent();
-				}
-
-				if (!behaviour)
-					continue;
-
-				if (line.size() == 0)
-				{
-					behaviour->m_uuid = actualUUID;
-					m_wrappedBehaviours[actualUUID] = behaviour;
-					behaviour = nullptr;
-					continue;
-				}
-
-				if (key == "m_owner")
-				{
-					//if (behaviour)
-					//	behaviour->m_owner = (uint32_t)String::ExtractUUID(line);
-				}
-
-				if (behaviour->m_metadatas.m_properties.contains(key))
-				{
-					CCProperty::IClearProperty* prop = behaviour->m_metadatas.m_properties[key];
-
-					auto& propType = prop->GetGetType();
-
-					if (propType == typeid(Transform*) || propType == typeid(Entity*))
-					{
-						uint32_t refUUID = (uint32_t)String::ExtractUUID(line);
-						if (refUUID != 0)
-							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
-
-						continue;
-					}
-
-					if (propType == typeid(CCMaths::Vector3))
-					{
-						Vector3 vec = String::ExtractVector3(parsedValue);
-						prop->Set(&vec);
-
-						continue;
-					}
-
-					if (propType == typeid(std::string))
-					{
-						std::string str = String::ExtractValue(parsedValue);
-						prop->Set(&str);
-
-						continue;
-					}
-
-					if (propType == typeid(bool))
-					{
-						bool str = String::ExtractInt(parsedValue);
-						prop->Set(&str);
-
-						continue;
-					}
-				}
-
-				if (behaviour->m_metadatas.m_fields.contains(key))
-				{
-					auto& info = behaviour->m_metadatas.m_fields[key].m_type;
-
-					Field& field = behaviour->m_metadatas.m_fields[key];
-
-					if (info == typeid(CCMaths::Vector3))
-					{
-						CCMaths::Vector3* valPtr = std::any_cast<CCMaths::Vector3*>(field.m_value);
-						*valPtr = String::ExtractVector3(parsedValue);
-						continue;
-					}
-
-					if (info == typeid(bool))
-					{
-						bool* valPtr = std::any_cast<bool*>(field.m_value);
-						*valPtr = String::ExtractInt(parsedValue);
-						continue;
-					}
-
-					if (info == typeid(Object*))
-					{
-						uint32_t refUUID = (uint32_t)String::ExtractUUID(line);
-						if (refUUID != 0)
-							m_wrappedUUIDs[actualUUID].insert({ key, refUUID });
-
-						continue;
-					}
-
-					if (info == typeid(std::string))
-					{
-						std::string* valPtr = std::any_cast<std::string*>(field.m_value);
-						*valPtr = parsedValue;
-
-						ModelRenderer* renderer = (ModelRenderer*)behaviour;
-						if (renderer)
-						{
-							std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(parsedValue.c_str());
-							if (model->GetResourceState() == EResourceState::LOADED)
-								renderer->SetModel(model);
-							else
-								model->m_OnLoaded.Bind(&ModelRenderer::SetModel, renderer);
-						}
-
-						continue;
-					}
-				}
-
-			}
-		}
-
-		//Then loop over the wrapped component to add them into the entities
-		for (auto& wrappedBehaviour : m_wrappedBehaviours)
-		{
-			//if (Entity* entity = scene->FindEntity(wrappedBehaviour.second->GetOwnerUUID()))
-			//	entity->SubscribeComponent(wrappedBehaviour.second);
-		}
-
-		//Then loop over the wrapped component again to link the uuids
-		for (const auto& [UUID, behaviourRef] : m_wrappedBehaviours)
-		{
-			//Find the UUID list of the actual behaviour
-			auto grave = m_wrappedUUIDs.find(UUID);
-			if (grave == m_wrappedUUIDs.end())
-				continue;
-
-			//Loop over the fields of the behaviour
-			for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
-			{
-				auto& info = fieldRef.m_type;
-				if (info == typeid(Object*))
-				{
-					//find the field in the UUID list of the behaviour
-					auto refIt = grave->second.find(fieldName);
-
-					if (refIt == grave->second.end())
-						continue;
-
-					//finally find the behaviour in the behaviour list by its uuid
-					auto behaviourIt = m_wrappedBehaviours.find(refIt->second);
-
-					if (behaviourIt == m_wrappedBehaviours.end())
-						continue;
-
-					Object** valuePtr = std::any_cast<Object**>(fieldRef.m_value);
-
-					Object* bhave = behaviourIt->second;
-
-					*valuePtr = bhave;
-				}
-			}
-			
-			//Loop over the fields of the behaviour
-			for (auto& [propName, propRef] : behaviourRef->m_metadatas.m_properties)
-			{
-				auto& propType = propRef->GetGetType();
-
-				if (propType == typeid(Entity*) || propType == typeid(Transform*))
-				{
-					//find the field in the UUID list of the behaviour
-					auto refIt = grave->second.find(propName);
-
-					if (refIt == grave->second.end())
-						continue;
-
-					//finally find the behaviour in the behaviour list by its uuid
-					auto behaviourIt = m_wrappedBehaviours.find(refIt->second);
-
-					if (behaviourIt == m_wrappedBehaviours.end())
-						continue;
-
-					Object* bhave = behaviourIt->second;
-					propRef->Set(&bhave);
-				}
-			}
-		}
-	}
-	for (auto& [entityName, entityRef] : scene->m_entities) 
-	{
-
-		entityRef->Initialize();
-	}
-	*/
 	return true;
 }
 

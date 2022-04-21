@@ -8,7 +8,7 @@ class Behaviour;
 class CCENGINE_API Serializer
 {
 private:
-	static bool CreateBehaviour(const std::string& type, uint32_t uuid, Behaviour** outBehaviour);
+	static Behaviour* CreateBehaviour(const std::string& type, uint32_t uuid);
 public:	
 	// Save scene
 	static bool SerializeScene(Scene* scene, const char* filepath ="");
