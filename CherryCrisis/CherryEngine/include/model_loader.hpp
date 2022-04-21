@@ -10,6 +10,8 @@
 
 enum class ETextureFormat;
 
+
+
 namespace CCImporter
 {
     /*
@@ -45,23 +47,6 @@ namespace CCImporter
         int size;
         ETextureFormat internalFormat;
         int mipmapsLevel;
-    };
-
-    struct OuputHandler : nvtt::OutputHandler
-    {
-        std::vector<char> m_data;
-
-        virtual void beginImage(int size, int width, int height, int depth, int face, int miplevel) override
-        {
-        }
-
-        bool writeData(const void* data, int size) override
-        {
-            m_data.insert(m_data.end(), &((unsigned char*)data)[0], &((unsigned char*)data)[0] + size);
-            return true;
-        }
-
-        void endImage() override {};
     };
 
     struct MaterialHeader

@@ -13,7 +13,7 @@ void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6])
     ResourceManager* resourceManager = ResourceManager::GetInstance();
     for (unsigned int i = 0; i < 6; i++)
     {
-        cubemap->m_textures[i] = resourceManager->AddResource<Texture>(textures[i], true, false);
+        cubemap->m_textures[i] = resourceManager->AddResource<Texture>(textures[i], true, false, ETextureFormat::RGB);
         cubemap->m_data[i] = cubemap->m_textures[i]->GetData();
     }
 

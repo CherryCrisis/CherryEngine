@@ -12,10 +12,12 @@ enum class ETextureFormat
 {
     // https://www.reedbeta.com/blog/understanding-bcn-texture-compression-formats/
 
-    RGB     = 0x1907,
-    RGBA    = 0x1908,
-    DXT1    = 0x83F0, //Compressed RGB + 1 bit alpha
-    DXT1a   = 0x83F1, //Compressed RGB
+    //RGB     = 0x1907,
+    //RGBA    = 0x1908,
+    RGB     = 0x80E0,
+    RGBA    = 0x80E1,
+    DXT1    = 0x83F0, //Compressed RGB
+    DXT1a   = 0x83F1, //Compressed RGB + 1 bit alpha
     DXT3    = 0x83F2, //Compressed RGBA
     DXT5    = 0x83F3, // Compressed 2xGrayscale for tangent-space normal maps
     DXT6    = 0x8E8E, //Compressed RGB, floating point for HDR images
@@ -27,11 +29,11 @@ enum class ETextureFormat
 class CCENGINE_API Texture : public Resource<Texture>
 {
 private:
-    int     m_width = 0;
-    int     m_height = 0;
-    int     m_size = 0;
-    int     m_mipmapLevels = 0;
-    int     m_internalFormat = 0;
+    int             m_width = 0;
+    int             m_height = 0;
+    int             m_size = 0;
+    int             m_mipmapLevels = 0;
+    ETextureFormat  m_internalFormat = ETextureFormat::RGBA;
 
     void*   m_data = nullptr;
 
@@ -45,7 +47,7 @@ public:
     int GetHeight() { return m_height; }
     int GetSize()   { return m_size; }
     int GetMipmapCount() { return m_mipmapLevels; }
-    int GetInternalFormat() { return m_internalFormat; }
+    ETextureFormat GetInternalFormat() { return m_internalFormat; }
 
     void* GetData() { return m_data; }
 

@@ -35,7 +35,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
 
     if (!LoadFromCache(texture, &data, textureHeader))
     {
-       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture);
+       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat);
     }
 
     if (!data)
@@ -94,7 +94,7 @@ void Texture::Reload(bool flipTexture, std::shared_ptr<Texture> texture)
     }
     else
     {
-        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture);
+        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, ETextureFormat::RGBA);
     }
 
     if (!data)

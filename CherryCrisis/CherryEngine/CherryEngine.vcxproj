@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="externals\include\nvtt\nvtt.h" />
+    <ClInclude Include="externals\include\nvtt\nvtt_lowlevel.h" />
+    <ClInclude Include="externals\include\nvtt\nvtt_wrapper.h" />
     <ClInclude Include="externals\include\PhysX\characterkinematic\PxBoxController.h" />
     <ClInclude Include="externals\include\PhysX\characterkinematic\PxCapsuleController.h" />
     <ClInclude Include="externals\include\PhysX\characterkinematic\PxController.h" />
