@@ -7,6 +7,9 @@
 #define PCFSampleCount (1 + 2 * PCF) * (1 + 2 * PCF)
 #define PCFFactor 1.0 / (PCFSampleCount)
 
+layout (location = 0) out vec4 oColor;
+layout (location = 1) out vec4 oBrightColor;
+
 // Varyings
 in VS_OUT
 {
@@ -47,7 +50,6 @@ uniform Light uLights[NBR_LIGHTS];
 
 uniform vec3 uViewPosition;
 
-out vec4 oColor;
 
 float getDirectionalShadow(int index)
 {
@@ -173,5 +175,13 @@ void main()
 	#else 
 	vec3 shadedColor = getShadedColor(normalize(fs_in.vNormal));
 	#endif
+
+	float brightness = dot(shadedColor, vec3(0.2126, 0.7152, 0.0722));
+    if (brightness > 1.0)
+        oBrightColor = vec4(shadedColor, 1.0);
+    else
+        oBrightColor = vec4(0.0, 0.0, 0.0, 1.0);
+
+
     oColor = vec4(shadedColor, 1.0);
 }

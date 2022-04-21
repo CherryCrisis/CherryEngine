@@ -370,6 +370,7 @@
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="include\uuid.hpp" />
     <ClInclude Include="include\viewer.hpp" />
+    <ClInclude Include="include\bloom_renderpass.hpp" />
     <ClInclude Include="src\physic_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +378,10 @@
     <None Include="..\x64\Debug\Assets\basicPostProcess.vert" />
     <None Include="..\x64\Debug\Assets\basicShader.frag" />
     <None Include="..\x64\Debug\Assets\basicShader.vert" />
+    <None Include="..\x64\Debug\Assets\bloomShader.frag" />
+    <None Include="..\x64\Debug\Assets\bloomShader.vert" />
+    <None Include="..\x64\Debug\Assets\hdrShader.frag" />
+    <None Include="..\x64\Debug\Assets\hdrShader.vert" />
     <None Include="..\x64\Debug\Assets\shadowShader.frag" />
     <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
@@ -448,6 +453,7 @@
     <ClCompile Include="src\basic_postprocess_renderpass.cpp" />
     <ClCompile Include="src\basic_rendering_pipeline.cpp" />
     <ClCompile Include="src\behaviour.cpp" />
+    <ClCompile Include="src\bloom_renderpass.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\builder.cpp" />
     <ClCompile Include="src\cell.cpp" />

@@ -9,14 +9,16 @@
 class ShadowRenderPass;
 class BasicRenderPass;
 class SkyboxRenderPass;
+class BloomRenderPass;
 
 class BasicPostProcessRenderPass;
 
 class CCENGINE_API BasicRPipeline : public ARenderingPipeline
 {
-	ShadowRenderPass*	m_shadowPass = nullptr;
-	BasicRenderPass*	m_basicPass = nullptr;
-	SkyboxRenderPass* m_skyboxPass = nullptr;
+	ShadowRenderPass*			m_shadowPass = nullptr;
+	BasicRenderPass*			m_basicPass = nullptr;
+	SkyboxRenderPass*			m_skyboxPass = nullptr;
+	BloomRenderPass*			m_bloomPass = nullptr;
 	BasicPostProcessRenderPass*	m_postprocessPass = nullptr;
 
 public:

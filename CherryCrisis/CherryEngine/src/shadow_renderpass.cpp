@@ -45,15 +45,15 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 
 	auto gpuLight = std::make_unique<GPUShadowLight>();
 
-	gpuLight->framebuffer.width = 1000;
-	gpuLight->framebuffer.height = 1000;
+	gpuLight->framebuffer.colorTex.width = 1000;
+	gpuLight->framebuffer.colorTex.height = 1000;
 
 	// TODO: Use DSA
 
 	glGenFramebuffers(1, &gpuLight->framebuffer.FBO);
 	glGenTextures(1, &gpuLight->depthTexID);
 	glBindTexture(GL_TEXTURE_2D, gpuLight->depthTexID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gpuLight->framebuffer.width, gpuLight->framebuffer.height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gpuLight->framebuffer.colorTex.width, gpuLight->framebuffer.colorTex.height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -118,7 +118,7 @@ void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!gpuLight)
 			continue;
 
-		glViewport(0, 0, gpuLight->framebuffer.width, gpuLight->framebuffer.height);
+		glViewport(0, 0, gpuLight->framebuffer.colorTex.width, gpuLight->framebuffer.colorTex.height);
 		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->framebuffer.FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -151,7 +151,7 @@ void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		}
 	}
 
-	glViewport(0, 0, framebuffer.width, framebuffer.height);
+	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glCullFace(GL_BACK);

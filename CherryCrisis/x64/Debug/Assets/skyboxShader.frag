@@ -2,11 +2,13 @@
 
 in  vec3 vUVW;
 
-out vec4 FragColor;
+layout (location = 0) out vec4 oColor;
+layout (location = 1) out vec4 oBrightColor;
 
 uniform samplerCube uTexture;
 
 void main()
 {    
-    FragColor = texture(uTexture, vUVW);
+    oColor = texture(uTexture, vUVW);
+    oBrightColor = vec4(0.0);
 }

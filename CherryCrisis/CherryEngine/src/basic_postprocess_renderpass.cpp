@@ -17,16 +17,16 @@ BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 
 	Generate(m_quadMesh.get());
 
-	m_framebuffer.width = 1920; m_framebuffer.height = 1080;
+	m_framebuffer.colorTex.width = 1920; m_framebuffer.colorTex.height = 1080;
 
 	// TODO: Use DSA
 	// TODO: Optimize
 	glGenFramebuffers(1, &m_framebuffer.FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
 
-	glGenTextures(1, &m_framebuffer.TexID);
-	glBindTexture(GL_TEXTURE_2D, m_framebuffer.TexID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.width, m_framebuffer.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glGenTextures(1, &m_framebuffer.colorTex.texID);
+	glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -34,12 +34,7 @@ BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_framebuffer.TexID, 0);
-
-	glGenRenderbuffers(1, &m_framebuffer.RBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_framebuffer.RBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_framebuffer.width, m_framebuffer.height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_framebuffer.RBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_framebuffer.colorTex.texID, 0);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -48,20 +43,15 @@ BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 
 void BasicPostProcessRenderPass::Execute(Framebuffer& frambuffer)
 {
-	if (frambuffer.width != m_framebuffer.width ||
-		frambuffer.height != m_framebuffer.height)
+	if (frambuffer.colorTex.width != m_framebuffer.colorTex.width ||
+		frambuffer.colorTex.height != m_framebuffer.colorTex.height)
 	{
-		// TODO: Set one renderpass for each cam to avoid switching at each frame
-		m_framebuffer.width = frambuffer.width; m_framebuffer.height = frambuffer.height;
+		m_framebuffer.colorTex.width = frambuffer.colorTex.width; m_framebuffer.colorTex.height = frambuffer.colorTex.height;
 
-		glBindRenderbuffer(GL_RENDERBUFFER, m_framebuffer.RBO);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_framebuffer.width, m_framebuffer.height);
-
-		glBindTexture(GL_TEXTURE_2D, m_framebuffer.TexID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.width, m_framebuffer.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	}
 
 	auto gpuMesh = static_cast<GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
@@ -75,11 +65,11 @@ void BasicPostProcessRenderPass::Execute(Framebuffer& frambuffer)
 	glCullFace(GL_BACK);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-	glViewport(0, 0, m_framebuffer.width, m_framebuffer.height);
+	glViewport(0, 0, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height);
 	glClearColor(1.f, 1.f, 1.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glBindTexture(GL_TEXTURE_2D, frambuffer.TexID);
+	glBindTexture(GL_TEXTURE_2D, frambuffer.colorTex.texID);
 
 	glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uOffset"), 1.f / 300.f);
 	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uTransformType"), (GLint)transformType);
@@ -96,5 +86,14 @@ void BasicPostProcessRenderPass::Execute(Framebuffer& frambuffer)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// TODO: Make real swap
-	std::swap(frambuffer, m_framebuffer);
+	std::swap(frambuffer.colorTex.texID, m_framebuffer.colorTex.texID);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, frambuffer.FBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frambuffer.colorTex.texID, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_framebuffer.colorTex.texID, 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 }
