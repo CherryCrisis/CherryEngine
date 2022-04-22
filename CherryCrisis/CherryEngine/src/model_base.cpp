@@ -28,6 +28,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
+
         ModelNode* modelNode = new ModelNode();
         std::swap(modelNode->m_baseTRS, modelUtils.modelHeader.m_trs);
 
@@ -64,7 +65,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         for (unsigned int i = 0; i < modelUtils.modelHeader.m_childrenCount; ++i)
             modelNode->m_childrenNode.push_back(modelNodes[modelUtils.m_childrenIndices[i]]);
 
-        if (modelUtils.modelHeader.m_parentIndex != -1)
+        if (modelUtils.modelHeader.m_parentIndex >= 0)
         {
             modelNode->m_parentNode = modelNodes[modelUtils.modelHeader.m_parentIndex];
         }

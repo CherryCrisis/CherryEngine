@@ -58,7 +58,9 @@ namespace CCImporter
             for (int i = 0; i < 3; ++i)
             {
                 vertex.position.data[i] = assimpMesh->mVertices[v][i];
-                vertex.normal.data[i] = assimpMesh->mNormals[v][i];
+
+                if (assimpMesh->HasNormals())
+                    vertex.normal.data[i] = assimpMesh->mNormals[v][i];
 
                 if (assimpMesh->HasTangentsAndBitangents())
                 {
@@ -519,9 +521,9 @@ namespace CCImporter
 
             for (int i = 0; i < 3; ++i)
             {
-                for (int comp = 0; comp < 3; ++comp)
+                for (int j = 0; j < 3; ++j)
                 {
-                    model.modelHeader.m_trs[i] = trs[i][comp];
+                    model.modelHeader.m_trs[i].data[j] = trs[i][j];
                 }
             }
 
@@ -612,7 +614,6 @@ namespace CCImporter
         Assimp::Importer importer = Assimp::Importer();
 
         const aiScene* scene = importer.ReadFile(filepath.string().c_str(), aiProcess_Triangulate |
-            aiProcess_JoinIdenticalVertices |
             aiProcess_SortByPType |
             aiProcess_GenNormals |
             aiProcess_GenUVCoords |
