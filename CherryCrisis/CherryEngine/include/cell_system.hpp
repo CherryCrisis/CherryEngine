@@ -21,6 +21,7 @@ public:
 
 	Cell*	AddOrGetCell(const std::string& name);
 	Cell*	GetCell(const std::string& name);
+	bool	RenameCell(const std::string& oldName, const std::string& newName);
 	bool	RemoveCell(const std::string& name);
 
 	void	AddEntityToDefault(Entity* entity);

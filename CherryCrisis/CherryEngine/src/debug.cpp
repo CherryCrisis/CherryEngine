@@ -36,6 +36,8 @@ void Debug::AddLog(ELogType logType, const char* message, unsigned int line, con
 	m_logTypeCounts[(int)logType]++;
 
 	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime(), line, file, function);
+
+	m_isLogAdded = true;
 }
 
 void Debug::Clear()

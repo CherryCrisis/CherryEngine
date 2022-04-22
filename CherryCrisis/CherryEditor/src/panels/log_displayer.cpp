@@ -91,10 +91,12 @@ void LogDisplayer::Render()
             {
                 std::vector<Log>* logs = m_debug->GetLogs();
 
-                if (m_isAutoScrolling)
+                if (m_isAutoScrolling && m_debug->IsLogAdded())
+                {
                     ImGui::SetScrollY(static_cast<float>(logs->size() * 25));
+                    m_debug->ResetLogAddded();
+                }
                 
-                //int id = logs->size() - 1;
                 int id = 0;
                 for (auto it = logs->begin(); it != logs->end(); ++it)
                 {

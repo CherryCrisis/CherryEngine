@@ -23,7 +23,7 @@ FullDate TimeManager::GetCurrentTime()
 {
     auto tp = std::chrono::zoned_time{ m_currentZone, std::chrono::system_clock::now() }.get_local_time();
     auto dp = floor<std::chrono::days>(tp);
-    
+
     std::chrono::year_month_day ymd{ dp };
 
     std::chrono::hh_mm_ss time{ floor<std::chrono::milliseconds>(tp - dp) };

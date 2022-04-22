@@ -136,6 +136,9 @@ namespace PhysicSystem
 		PhysicActor& newActor = *m_physicActors.back();
 		newActor.m_owner = &owningEntity;
 
+		if (m_isPlaying)
+			newActor.CreatePxActor();
+
 		newActor.m_owner->m_cell->AddEntityToPhysicScene(newActor.m_owner);
 
 		return newActor;
@@ -202,6 +205,10 @@ namespace PhysicSystem
 
 		m_scenes.push_back(new PhysicScene());
 		PhysicScene& newScene = *m_scenes.back();
+
+		if (m_isPlaying)
+			newScene.CreatePxScene();
+
 		return newScene;
 	}
 

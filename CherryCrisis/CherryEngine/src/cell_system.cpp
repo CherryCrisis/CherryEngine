@@ -32,6 +32,26 @@ Cell* CellSystem::GetCell(const std::string& name)
 	return &m_cells[name];
 }
 
+bool CellSystem::RenameCell(const std::string& oldName, const std::string& newName)
+{
+	if (oldName == m_defaultCell)
+	{
+		m_debug->AddLog(ELogType::WARNING, "Cannot rename default cell");
+		return false;
+	}
+
+	if (m_cells.contains(oldName) && !m_cells.contains(newName))
+	{
+		auto cell = m_cells.extract(oldName);
+		cell.key() = newName;
+		m_cells.insert(move(cell));
+		m_cells[newName].SetName(newName);
+
+		return true;
+	}
+	return false;
+}
+
 bool CellSystem::RemoveCell(const std::string& name)
 {
 	if (name == m_defaultCell)

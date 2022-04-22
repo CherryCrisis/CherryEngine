@@ -13,9 +13,11 @@ private:
 	float m_cameraSpeed = 1.f;
 
 	CellSystem* m_cellSystem = nullptr;
-	Cell* m_selectedCell = nullptr;
-	Cell* m_rightClickedCell = nullptr;
-	int m_selectedCategory = 0;
+	Cell*		m_selectedCell = nullptr;
+	Cell*		m_rightClickedCell = nullptr;
+	Entity*		m_selectedEntity = nullptr;
+
+	bool m_renameCell = false;
 
 public:
 	EditorManager* m_manager = nullptr;
@@ -23,10 +25,13 @@ public:
 	CellSystemDisplayer();
 	
 	void CreateCell();
+	void RenameCell();
 	bool Context();
 
 	void UpdateCamera();
 	void Render() override;
+	void RenderCells();
+	void RenderEntities();
 
 	void Focus() override;
 	void Unfocus() override;
