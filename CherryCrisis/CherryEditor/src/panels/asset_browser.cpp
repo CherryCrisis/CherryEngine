@@ -89,6 +89,12 @@ std::filesystem::path AssetBrowser::FindPath(const std::string& folderName)
     return pathIt;
 }
 
+void AssetBrowser::AssetNode::MoveTo(const std::filesystem::path& path)
+{
+    CopyFolder(GetFullPath(),path.string());
+    std::filesystem::remove(GetFullPath());
+}
+
 void AssetBrowser::Render()
 {
     if (!m_isOpened) return;
@@ -106,6 +112,15 @@ void AssetBrowser::Render()
             {
                 m_currentDirectory = FindPath(pathIt.filename().string());
                 QuerryBrowser();
+            }
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".cherry"))
+                {
+                    const char* c = (const char*)payload->Data;
+                    GetNodeByFile(c)->MoveTo(pathIt);
+                    QuerryBrowser();
+                }
             }
         }
 
@@ -247,6 +262,14 @@ AssetBrowser::AssetNode* AssetBrowser::GetNodeByName(const std::string& name)
 
     return nullptr;
 }
+AssetBrowser::AssetNode* AssetBrowser::GetNodeByFile(const std::string& file)
+{
+    for (auto& [nodeName, nodeRef] : m_nodes)
+        if (file == std::string(nodeRef.m_filename+nodeRef.m_extension))
+            return &nodeRef;
+
+    return nullptr;
+}
 
 void AssetBrowser::RenderNodes()
 {
@@ -276,6 +299,23 @@ void AssetBrowser::RenderNodes()
             ImGui::SetDragDropPayload(node.m_extension.c_str(), path,length+1, ImGuiCond_Once);
             ImGui::Text(path);
             ImGui::EndDragDropSource();
+        }
+
+        //Drag and drop node in folder
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".cherry")) 
+            {
+                if (node.m_isDirectory) 
+                {
+                    const char* c = (const char*)payload->Data;
+                    GetNodeByFile(c)->MoveTo(node.m_relativePath/node.m_filename);
+                    QuerryBrowser();
+                    ImGui::PopID();
+                    return;
+                }
+            }
+            ImGui::EndDragDropTarget();
         }
 
         ImGui::PopID();
