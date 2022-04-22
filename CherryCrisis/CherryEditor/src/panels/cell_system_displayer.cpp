@@ -89,7 +89,7 @@ void CellSystemDisplayer::RenderCells()
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf;
         if (m_selectedCell == &cell.second) { flags |= ImGuiTreeNodeFlags_Selected; }
 
-        if (ImGui::TreeNodeEx((void*)i, flags, cell.first.c_str()))
+        if (ImGui::TreeNodeEx((void*)(intptr_t)i, flags, cell.first.c_str()))
         {
             if (!Context())
             {

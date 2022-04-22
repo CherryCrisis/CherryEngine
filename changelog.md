@@ -1,6 +1,33 @@
 Changelog
 ===
 
+*22-04-2022*
+-
+**[Adding]**:
+* Cell System (Added cell manager, moving object between cells and physic per scene)
+* Resources (Added texture generation from .fbx, texture compression)
+* Picking (object picking in scene)
+* Editor (Display current scene name, drag & drop of .fbx)
+* Rendering (Renderpass system refont, Added normal map, Added shadow map, added post-process effects: HDR, bloom)
+* Scripting (Added debugging info in C#)
+* Release (Added Build/Build & Run)
+
+**[Change]**
+* Serialization (System refont)
+* Editor (Change graphic chart)
+* Resources (Changed Hot-reload)
+* PhysX (Object transform no longer overrided by physx tranformed)
+
+**[Fixing]**:
+* Camera movement
+* Editor: Guizmo (fix guizmo rotation, added edition in local or global referential)
+* Editor: Camera (fix rotation matrix calculation)
+* Resource (Fixed asset reloading)
+
+**[Other]**
+* Remove warning related to PhysX
+* Fix some warnings
+
 *08-04-2022*
 -
 **[Adding]**:

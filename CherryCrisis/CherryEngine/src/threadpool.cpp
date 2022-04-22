@@ -83,6 +83,7 @@ void ThreadPool::Update(EChannelTask channelTask)
 			}
 			catch (const std::exception& exception)
 			{
+				exception.~exception();
 				std::exception_ptr exceptionPtr = std::current_exception();
 				auto exeptionFunc = CCFunction::BindFunctionUnsafe(&ThreadPool::RethrowExceptions, this, exceptionPtr);
 				CreateTask(exeptionFunc, EChannelTask::MAINTHREAD);

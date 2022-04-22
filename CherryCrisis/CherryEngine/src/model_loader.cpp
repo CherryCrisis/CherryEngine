@@ -233,7 +233,7 @@ namespace CCImporter
             image.toSrgb();
         }
 
-        textureHeader.size = outputHandler.m_data.size();
+        textureHeader.size = (int)outputHandler.m_data.size();
 
         *textureData = new unsigned char[textureHeader.size];
         std::move(outputHandler.m_data.begin(), outputHandler.m_data.end(), *textureData);
