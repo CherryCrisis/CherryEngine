@@ -26,7 +26,7 @@ BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 
 	glGenTextures(1, &m_framebuffer.colorTex.texID);
 	glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -50,7 +50,7 @@ void BasicPostProcessRenderPass::Execute(Framebuffer& framebuffer)
 		m_framebuffer.colorTex.height = framebuffer.colorTex.height;
 
 		glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 

@@ -73,7 +73,10 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	if (!viewer)
 		return;
 
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_FRONT);
 
 	glDepthFunc(GL_LEQUAL);
