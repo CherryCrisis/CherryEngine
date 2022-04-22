@@ -25,5 +25,5 @@ class BasicPostProcessRenderPass : public APostProcessRenderPass, public Element
 public:
 	BasicPostProcessRenderPass(const char* name);
 
-	void Execute(Framebuffer& frambuffer);
+	void Execute(Framebuffer& framebuffer);
 };

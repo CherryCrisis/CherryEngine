@@ -317,6 +317,7 @@
     <ClInclude Include="include\event.hpp" />
     <ClInclude Include="include\framework.hpp" />
     <ClInclude Include="include\function.hpp" />
+    <ClInclude Include="include\hdr_renderpass.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\keycode.hpp" />
@@ -373,6 +374,7 @@
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="include\uuid.hpp" />
     <ClInclude Include="include\viewer.hpp" />
+    <ClInclude Include="include\bloom_renderpass.hpp" />
     <ClInclude Include="src\physic_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -380,6 +382,10 @@
     <None Include="..\x64\Debug\Assets\basicPostProcess.vert" />
     <None Include="..\x64\Debug\Assets\basicShader.frag" />
     <None Include="..\x64\Debug\Assets\basicShader.vert" />
+    <None Include="..\x64\Debug\Assets\bloomShader.frag" />
+    <None Include="..\x64\Debug\Assets\bloomShader.vert" />
+    <None Include="..\x64\Debug\Assets\hdrShader.frag" />
+    <None Include="..\x64\Debug\Assets\hdrShader.vert" />
     <None Include="..\x64\Debug\Assets\shadowShader.frag" />
     <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
@@ -453,6 +459,7 @@
     <ClCompile Include="src\basic_postprocess_renderpass.cpp" />
     <ClCompile Include="src\basic_rendering_pipeline.cpp" />
     <ClCompile Include="src\behaviour.cpp" />
+    <ClCompile Include="src\bloom_renderpass.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\builder.cpp" />
     <ClCompile Include="src\cell.cpp" />
@@ -475,6 +482,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\ebo_tbn_generator.cpp" />
+    <ClCompile Include="src\hdr_renderpass.cpp" />
     <ClCompile Include="src\physic_actor.cpp" />
     <ClCompile Include="src\physic_scene.cpp" />
     <ClCompile Include="src\physic_manager.cpp" />

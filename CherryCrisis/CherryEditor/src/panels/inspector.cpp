@@ -237,11 +237,12 @@ void Inspector::Render()
 
     if (ImGui::Begin("Inspector", &m_isOpened))
     {
-        for (size_t i = 0; i < m_manager->m_selectedEntities.size(); i++)
+        size_t selectedEntityCount = m_manager->m_selectedEntities.size();
+        for (size_t i = 0u; i < selectedEntityCount; i++)
         {
             InspectComponents(m_manager->m_selectedEntities[i], static_cast<int>(i));
         }
-        if (m_manager->m_selectedEntities.size() > 0) 
+        if (selectedEntityCount > 0)
         {
             if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
             {

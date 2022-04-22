@@ -18,7 +18,7 @@ Entity* Pickinger::GetEntity(float x, float y)
 	Pickinger* instance = GetInstance();
 
 	// flip texture
-	y = (float)instance->m_fbo->height - y;
+	y = (float)instance->m_fbo->colorTex.height - y;
 
 	instance->m_renderpass->Execute(*instance->m_fbo, instance->m_viewer);
 

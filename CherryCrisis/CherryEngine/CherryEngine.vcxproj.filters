@@ -1170,6 +1170,12 @@
     <ClInclude Include="include\viewer.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="include\bloom_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hdr_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1292,8 +1298,24 @@
     <None Include="..\x64\Debug\Assets\basicPostProcess.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
-    <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
-    <None Include="..\x64\Debug\Assets\skyboxShader.vert" />
+    <None Include="..\x64\Debug\Assets\bloomShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\bloomShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\hdrShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\hdrShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\skyboxShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\skyboxShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entity.cpp">
@@ -1478,6 +1500,12 @@
     </ClCompile>
     <ClCompile Include="src\basic_rendering_pipeline.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bloom_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hdr_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
