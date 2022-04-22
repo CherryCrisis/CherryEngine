@@ -377,16 +377,12 @@ void AssetBrowser::RenderNodes()
         if (ImGui::Button("Delete", ImVec2(120, 0)))
         {
             ImGui::CloseCurrentPopup();
-            std::string str = AssetPath.string();
-            str = str + "/" + m_focusedNode->m_filename;
-            if (m_focusedNode->m_isDirectory)
-                std::filesystem::remove_all(str.c_str());
-            else
-                remove(str.c_str());
+            if (m_focusedNode->m_isDirectory)  std::filesystem::remove_all(m_focusedNode->GetFullPath());
+            else                               remove(m_focusedNode->GetFullPath().c_str());
             QuerryBrowser();
             m_deleting = false;
         }
-        ImGui::SetItemDefaultFocus();
+
         ImGui::SameLine();
         if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_deleting = false;  ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
