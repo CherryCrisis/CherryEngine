@@ -3,29 +3,24 @@
 // Varyings
 in vec2 vUV;
 
-uniform float exposure = 0.5;
+uniform float uExposure = 0.5;
+uniform float uGamma = 2.2;
 
 // Uniforms
-uniform sampler2D hdrBuffer;
-uniform sampler2D bloomBlur;
+uniform sampler2D uHdrBuffer;
+uniform sampler2D uBloomBlur;
 
 // Shader outputs
-out vec4 oColor;
+layout (location = 0) out vec3 oColor;
 
 void main()
 {             
-    vec3 pureColor = texture(hdrBuffer, vUV).rgb;
-    vec3 bloomColor = texture(bloomBlur, vUV).rgb;
+    vec3 pureColor = texture(uHdrBuffer, vUV).rgb;
+    vec3 bloomColor = texture(uBloomBlur, vUV).rgb;
 
-    pureColor += bloomColor; // additive blending
+    pureColor += bloomColor;
+    
+    vec3 hdrColor = vec3(1.0) - exp(-uExposure * pureColor);
 
-    vec3 hdrColor = pureColor;
-    const float gamma = 2.2;
-    
-    vec3 result;
-    
-    hdrColor = vec3(1.0) - exp(-pureColor * exposure);
-    
-    result = pow(hdrColor, vec3(1.0/gamma));
-    oColor = vec4(result, 1.0);
-} 
+    oColor = pow(hdrColor, vec3(1.0/uGamma));
+}

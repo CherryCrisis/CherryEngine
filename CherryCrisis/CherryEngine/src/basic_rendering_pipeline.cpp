@@ -7,6 +7,7 @@
 #include "basic_renderpass.hpp"
 
 #include "bloom_renderpass.hpp"
+#include "hdr_renderpass.hpp"
 #include "basic_postprocess_renderpass.hpp"
 
 BasicRPipeline::BasicRPipeline()
@@ -16,6 +17,7 @@ BasicRPipeline::BasicRPipeline()
 	m_skyboxPass = LoadSubpipeline<SkyboxRenderPass>();
 
 	m_bloomPass = LoadSubpipeline<BloomRenderPass>();
+	m_hdrPass = LoadSubpipeline<HDRRenderPass>();
 
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
 }
@@ -27,6 +29,9 @@ void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 	m_skyboxPass->CallOnExecute(fb, viewer);
 
 	m_bloomPass->CallOnExecute(fb);
+
+	if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
+		m_hdrPass->CallOnExecute(fb);
 
 	//m_postprocessPass->CallOnExecute(fb);
 }

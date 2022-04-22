@@ -8,21 +8,13 @@
 BloomRenderPass::BloomRenderPass(const char* name)
 	: APostProcessRenderPass(name, "Assets/bloomShader.vert", "Assets/bloomShader.frag")
 {
-	if (m_hdrProgram = ResourceManager::GetInstance()->AddResource<ShaderProgram>("hdrProgram", true, "Assets/hdrShader.vert", "Assets/hdrShader.frag"))
+	if (m_program)
 	{
-		glUseProgram(m_hdrProgram->m_shaderProgram);
-		glUniform1i(glGetUniformLocation(m_hdrProgram->m_shaderProgram, "hdrBuffer"), 0);
-		glUniform1i(glGetUniformLocation(m_hdrProgram->m_shaderProgram, "bloomBlur"), 1);
+		glUseProgram(m_program->m_shaderProgram);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "brightImage"), 0);
 
-		if (m_program)
-		{
-			glUseProgram(m_program->m_shaderProgram);
-			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "brightImage"), 0);
-
-			m_callExecute = CCCallback::BindCallback(&BloomRenderPass::Execute, this);
-		}
+		m_callExecute = CCCallback::BindCallback(&BloomRenderPass::Execute, this);
 	}
-
 
 	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
 
@@ -54,18 +46,18 @@ BloomRenderPass::BloomRenderPass(const char* name)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void BloomRenderPass::Execute(Framebuffer& frambuffer)
+void BloomRenderPass::Execute(Framebuffer& framebuffer)
 {
 	for (int i = 0; i < 2; i++)
 	{
 		bool hasChanged = false;
-		Framebuffer& framebuffer = m_pingpongFramebuffers[i];
-		if (frambuffer.colorTex.width != framebuffer.colorTex.width || frambuffer.colorTex.height != framebuffer.colorTex.height)
+		Framebuffer& curFramebuffer = m_pingpongFramebuffers[i];
+		if (framebuffer.colorTex.width != curFramebuffer.colorTex.width || framebuffer.colorTex.height != curFramebuffer.colorTex.height)
 		{
-			framebuffer.colorTex.width = frambuffer.colorTex.width; framebuffer.colorTex.height = frambuffer.colorTex.height;
+			curFramebuffer.colorTex.width = framebuffer.colorTex.width; curFramebuffer.colorTex.height = framebuffer.colorTex.height;
 
-			glBindTexture(GL_TEXTURE_2D, framebuffer.colorTex.texID);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, framebuffer.colorTex.width, framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+			glBindTexture(GL_TEXTURE_2D, curFramebuffer.colorTex.texID);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, curFramebuffer.colorTex.width, curFramebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
 			hasChanged = true;
 		}
@@ -78,6 +70,9 @@ void BloomRenderPass::Execute(Framebuffer& frambuffer)
 
 	if (!gpuMesh)
 		return;
+
+	glDisable(GL_DEPTH_TEST);
+	glCullFace(GL_BACK);
 
 	glUseProgram(m_program->m_shaderProgram);
 
@@ -92,7 +87,7 @@ void BloomRenderPass::Execute(Framebuffer& frambuffer)
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "horizontal"), horizontal);
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, first_iteration ? frambuffer.brightnessTex.texID : m_pingpongFramebuffers[!horizontal].colorTex.texID);
+		glBindTexture(GL_TEXTURE_2D, first_iteration ? framebuffer.brightnessTex.texID : m_pingpongFramebuffers[!horizontal].colorTex.texID);
 
 		glDrawElements(GL_TRIANGLES, (GLsizei)m_quadMesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
 
@@ -101,36 +96,7 @@ void BloomRenderPass::Execute(Framebuffer& frambuffer)
 			first_iteration = false;
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, m_pingpongFramebuffers[horizontal].FBO);
-
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glUseProgram(m_hdrProgram->m_shaderProgram);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, frambuffer.colorTex.texID);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, m_pingpongFramebuffers[!horizontal].colorTex.texID);
-	glActiveTexture(GL_TEXTURE0);
-
-	glUniform1f(glGetUniformLocation(m_hdrProgram->m_shaderProgram, "exposure"), 0.5f);
-
-	glDrawElements(GL_TRIANGLES, (GLsizei)m_quadMesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+	outBrightness = &m_pingpongFramebuffers[horizontal].colorTex;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glUseProgram(0);
-
-	std::swap(frambuffer.colorTex, m_pingpongFramebuffers[horizontal].colorTex);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, frambuffer.FBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frambuffer.colorTex.texID, 0);
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, m_pingpongFramebuffers[horizontal].FBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_pingpongFramebuffers[horizontal].colorTex.texID, 0);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
 }

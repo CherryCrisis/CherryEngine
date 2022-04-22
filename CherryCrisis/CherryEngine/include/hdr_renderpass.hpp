@@ -7,17 +7,15 @@
 
 class Mesh;
 
-class BloomRenderPass : public APostProcessRenderPass, public ElementMeshGenerator
+class HDRRenderPass : public APostProcessRenderPass, public ElementMeshGenerator
 {
-    Framebuffer m_pingpongFramebuffers[2];
+    Framebuffer m_framebuffer;
     std::shared_ptr<Mesh> m_quadMesh;
 
 public:
-    int m_iterations = 3;
+    TextureDisplayer* inBrightness = nullptr;
 
-    TextureDisplayer* outBrightness = nullptr;
-
-    BloomRenderPass(const char* name);
+    HDRRenderPass(const char* name);
 
     void Execute(Framebuffer& framebuffer);
 };

@@ -10,7 +10,7 @@ uniform bool horizontal;
 uniform float weight[5] = float[] (0.2270270270, 0.1945945946, 0.1216216216, 0.0540540541, 0.0162162162);
 
 // Shader outputs
-layout (location = 0) out vec4 oColor;
+layout (location = 0) out vec3 oColor;
 
 void main()
 {             
@@ -28,5 +28,5 @@ void main()
         result += texture(brightImage, vUV - uvoffset).rgb * weight[i];
     }
 
-     oColor = vec4(result, 1.0);
+     oColor = result;
 }

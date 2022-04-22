@@ -1167,6 +1167,9 @@
     <ClInclude Include="include\bloom_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
+    <ClInclude Include="include\hdr_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1493,6 +1496,9 @@
       <Filter>Fichiers sources\Rendering\Pipeline</Filter>
     </ClCompile>
     <ClCompile Include="src\bloom_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hdr_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
   </ItemGroup>

@@ -314,6 +314,7 @@
     <ClInclude Include="include\event.hpp" />
     <ClInclude Include="include\framework.hpp" />
     <ClInclude Include="include\function.hpp" />
+    <ClInclude Include="include\hdr_renderpass.hpp" />
     <ClInclude Include="include\input_manager.hpp" />
     <ClInclude Include="include\keyboard_context.hpp" />
     <ClInclude Include="include\keycode.hpp" />
@@ -476,6 +477,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\ebo_tbn_generator.cpp" />
+    <ClCompile Include="src\hdr_renderpass.cpp" />
     <ClCompile Include="src\physic_actor.cpp" />
     <ClCompile Include="src\physic_scene.cpp" />
     <ClCompile Include="src\physic_manager.cpp" />
