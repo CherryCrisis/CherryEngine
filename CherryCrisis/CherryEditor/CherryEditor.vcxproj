@@ -31,6 +31,7 @@
     <ClCompile Include="externals\src\stb_image.cpp" />
     <ClCompile Include="src\core\editor_manager.cpp" />
     <ClCompile Include="src\core\frame_displayer.cpp" />
+    <ClCompile Include="src\core\imcherry.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\panel.cpp" />
     <ClCompile Include="src\panels\asset_browser.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="externals\include\portable-file-dialogs.hpp" />
     <ClInclude Include="include\core\editor_manager.hpp" />
     <ClInclude Include="include\core\frame_displayer.hpp" />
+    <ClInclude Include="include\core\imcherry.hpp" />
     <ClInclude Include="include\core\imgui_style.hpp" />
     <ClInclude Include="include\core\panel.hpp" />
     <ClInclude Include="include\panels\asset_browser.hpp" />
