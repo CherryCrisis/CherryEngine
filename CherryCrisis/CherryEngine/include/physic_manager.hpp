@@ -46,7 +46,6 @@ namespace PhysicSystem
 
 		bool m_isPlaying = false;
 
-		Cell* cell = nullptr;
 	public:
 		PhysicManager();
 		~PhysicManager();

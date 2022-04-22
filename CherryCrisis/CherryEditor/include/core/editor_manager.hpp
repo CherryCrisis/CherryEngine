@@ -14,6 +14,7 @@
 #include "panels/scene_displayer.hpp"
 #include "panels/hierarchy_displayer.hpp"
 #include "panels/preferences_displayer.hpp"
+#include "panels/cell_system_displayer.hpp"
 #include "panels/project_settings_displayer.hpp"
 #include "panels/build_displayer.hpp"
 
@@ -35,6 +36,7 @@ private:
     Inspector                m_inspector             {true, this};
     GameDisplayer            m_gameDisplayer         {};
     SceneDisplayer           m_sceneDisplayer        {};
+    CellSystemDisplayer      m_cellSystemDisplayer   {};
     HierarchyDisplayer       m_hierarchyDisplayer    {true, this};
     PreferencesDisplayer     m_preferencesDisplayer  {false};
     ProjectSettingsDisplayer m_projSettingsDisplayer {false};

@@ -37,6 +37,7 @@
     <ClCompile Include="src\panels\assets_settings.cpp" />
     <ClCompile Include="src\panels\asset_browser.cpp" />
     <ClCompile Include="src\panels\build_displayer.cpp" />
+    <ClCompile Include="src\panels\cell_system_displayer.cpp" />
     <ClCompile Include="src\panels\game_displayer.cpp" />
     <ClCompile Include="src\panels\hierarchy_displayer.cpp" />
     <ClCompile Include="src\panels\inspector.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="include\panels\assets_settings.hpp" />
     <ClInclude Include="include\panels\asset_browser.hpp" />
     <ClInclude Include="include\panels\build_displayer.hpp" />
+    <ClInclude Include="include\panels\cell_system_displayer.hpp" />
     <ClInclude Include="include\panels\game_displayer.hpp" />
     <ClInclude Include="include\panels\hierarchy_displayer.hpp" />
     <ClInclude Include="include\panels\inspector.hpp" />

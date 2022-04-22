@@ -58,6 +58,7 @@ private:
 	//key size_t = hash of (string) message and (int) logType
 	std::map<size_t, LogMessage>	m_logMessages;
 	std::vector<Log>				m_logs;
+	bool							m_isLogAdded = false;
 	
 	std::array<int, 3>				m_logTypeCounts{0,0,0};
 
@@ -66,6 +67,7 @@ private:
 	inline void GetKeyOfLog(std::size_t& key, const std::string& message, const ELogType& logType);
 
 public:
+
 	Debug();
 
 	std::vector<Log>* GetLogs() { return &m_logs; }
@@ -79,6 +81,9 @@ public:
 	void AddLog(ELogType logType, const char* message, unsigned int line, const char* file, const char* function);
 
 	void Clear();
+
+	bool IsLogAdded() { return m_isLogAdded; }
+	void ResetLogAddded() { m_isLogAdded = false; }
 };
 
 inline void Debug::GetKeyOfLog(std::size_t& key, const std::string& message, const ELogType& logType)
