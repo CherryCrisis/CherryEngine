@@ -12,6 +12,7 @@
 #include <glad/gl.h>
 #include <stb_image.h>
 #include <stb_image_write.h>
+#include <nvtt/nvtt.h>
 
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
@@ -21,6 +22,7 @@
 #include "mesh.hpp"
 #include "model_base.hpp"
 #include "model.hpp"
+#include "texture.hpp"
 
 namespace CCImporter
 {
@@ -99,26 +101,39 @@ namespace CCImporter
 
     #pragma region Texture
 
-    void CacheTextureData(const std::filesystem::path& filepath, const unsigned char* cacheData, const TextureHeader& textureHeader)
+    struct OuputHandler : nvtt::OutputHandler
     {
-        Debug* debug = Debug::GetInstance();
+        std::vector<char> m_data;
 
-        std::string texturePathStr(filepath.filename().string());
-        texturePathStr += CCImporter::cacheExtension;
+        virtual void beginImage(int size, int width, int height, int depth, int face, int miplevel) override
+        {
+        }
 
+        bool writeData(const void* data, int size) override
+        {
+            m_data.insert(m_data.end(), &((unsigned char*)data)[0], &((unsigned char*)data)[0] + size);
+            return true;
+        }
+
+        void endImage() override {};
+    };
+
+    void CacheTextureData(const std::string& filepath, const unsigned char* cacheData, TextureHeader& textureHeader)
+    {
         FILE* file = nullptr;
 
-        std::string fullPath(CCImporter::cacheDirectory + texturePathStr);
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += filepath;
 
-        if (fopen_s(&file, fullPath.c_str(), "wb")) //w+b = write in binary mode
+        if (fopen_s(&file, fullFilepath.c_str(), "wb")) //w+b = write in binary mode
         {
-            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullPath).c_str());
+            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullFilepath).c_str());
             return;
         }
 
         fwrite(&textureHeader, sizeof(TextureHeader), 1, file);
-
         fwrite(&cacheData[0], textureHeader.size, 1, file);
+
         fclose(file);
     }
 
@@ -134,6 +149,94 @@ namespace CCImporter
         {
             Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to write png file : {}", filepathStr).c_str());
         }
+    }
+
+    void SetTextureFormat(nvtt::CompressionOptions& compressionOptions, TextureHeader& textureHeader)
+    {
+        switch (textureHeader.internalFormat)
+        {
+        case ETextureFormat::RGB:
+            compressionOptions.setFormat(nvtt::Format_RGB);
+            compressionOptions.setPixelFormat(8, 8, 8, 0);
+            textureHeader.blockSize = 8;
+            break;
+        case ETextureFormat::RGBA:
+            compressionOptions.setFormat(nvtt::Format_RGBA);
+            textureHeader.blockSize = 8;
+            break;
+        case ETextureFormat::DXT1:
+            compressionOptions.setFormat(nvtt::Format_BC1);
+            textureHeader.blockSize = 8;
+            break;
+        case ETextureFormat::DXT1a:
+            compressionOptions.setFormat(nvtt::Format_BC1a);
+            textureHeader.blockSize = 8;
+            break;
+        case ETextureFormat::DXT3:
+            compressionOptions.setFormat(nvtt::Format_BC3);
+            textureHeader.blockSize = 16;
+            break;
+        case ETextureFormat::DXT5:
+            compressionOptions.setFormat(nvtt::Format_BC5);
+            textureHeader.blockSize = 16;
+            break;
+        case ETextureFormat::DXT6:
+            compressionOptions.setFormat(nvtt::Format_BC6S);
+            textureHeader.blockSize = 16;
+            break;
+        case ETextureFormat::DXT7:
+            compressionOptions.setFormat(nvtt::Format_BC7);
+            textureHeader.blockSize = 16;
+            break;
+        }
+    }
+    
+    void CompressTexture(nvtt::Context& context, nvtt::Surface& image, std::string& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
+    {
+        nvtt::OutputOptions outputOptions;
+        outputOptions.setFileName(texturePath.c_str());
+        nvtt::CompressionOptions compressionOptions;
+        SetTextureFormat(compressionOptions, textureHeader);
+
+        if (textureHeader.internalFormat == ETextureFormat::DXT5)
+            image.setNormalMap(true);
+
+        textureHeader.mipmapsLevel = image.countMipmaps();
+
+        OuputHandler outputHandler;
+        outputOptions.setOutputHandler(((nvtt::OutputHandler*)&outputHandler));
+
+        /*https://github.com/nvpro-samples/nvtt_samples/blob/main/mipmap/main.cpp*/
+
+        //context.outputHeader(image, textureHeader.mipmapsLevel, compressionOptions, outputOptions);
+        for (int i = 0; textureHeader.mipmapsLevel; ++i)
+        {
+            context.compress(image, 0, i, compressionOptions, outputOptions);
+
+            if (i == textureHeader.mipmapsLevel - 1) break;
+
+            // Prepare the next mip:
+            // 
+            // Convert to linear premultiplied alpha. Note that toLinearFromSrgb()
+            // will clamp HDR images; consider e.g. toLinear(2.2f) instead.
+            image.toLinearFromSrgb();
+            image.premultiplyAlpha();
+
+            // Resize the image to the next mipmap size.
+            // NVTT has several mipmapping filters; Box is the lowest-quality, but
+            // also the fastest to use.
+            image.buildNextMipmap(nvtt::MipmapFilter_Box);
+            // For general image resizing. use image.resize().
+
+            // Convert back to unpremultiplied sRGB.
+            image.demultiplyAlpha();
+            image.toSrgb();
+        }
+
+        textureHeader.size = outputHandler.m_data.size();
+
+        *textureData = new unsigned char[textureHeader.size];
+        std::move(outputHandler.m_data.begin(), outputHandler.m_data.end(), *textureData);
     }
 
     void ImportTextureData(const std::filesystem::path& filepath, const aiTexture* assimpTexture)
@@ -159,30 +262,33 @@ namespace CCImporter
         textureHeader.size = textureHeader.height * textureHeader.width * 4;
 
         WriteTexturePng(filepath, stbiData, textureHeader);
-        CacheTextureData(filepath, stbiData, textureHeader);
+
+        nvtt::Context context(false);
+
+        nvtt::Surface image;
+        image.load(filepath.string().c_str());
+        image.setImage2D(nvtt::Format_RGBA, textureHeader.width, textureHeader.height, stbiData);
+
+        textureHeader.internalFormat = ETextureFormat::RGBA;
+
+        std::string texturePathStr(filepath.filename().string());
+        texturePathStr += CCImporter::cacheExtension;
+
+        unsigned char* textureData;
+
+        CompressTexture(context, image, texturePathStr, textureHeader, &textureData);
+        CacheTextureData(texturePathStr, textureData, textureHeader);
+
+        delete textureData;
         stbi_image_free(stbiData);
     }
 
     void ImportTextureData(const std::filesystem::path& filepath)
     {
-        stbi_set_flip_vertically_on_load(true);
-
-        TextureHeader textureHeader{};
-
-        std::string texturePath(filepath.string());
-
-        unsigned char* stbiData = stbi_load(texturePath.c_str(), &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
-
-        if (!stbiData)
-        {
-            Debug* debug = Debug::GetInstance();
-            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", texturePath).c_str());
-            return;
-        }
-
-        textureHeader.size = textureHeader.height * textureHeader.width * STBI_rgb_alpha;
-
-        CacheTextureData(filepath, stbiData, textureHeader);
+        unsigned char* data;
+        TextureHeader textureHeader;
+        ImportTexture(filepath, &data, textureHeader, true, ETextureFormat::RGBA);
+        delete data;
     }
 
     bool VerifIfTextureCacheExist(const char* textureFilename)
@@ -219,26 +325,30 @@ namespace CCImporter
         model.m_texturesPathCstr.push_back(filepathStr);
     }
 
-    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture)
+    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat)
     {
         if (!textureData)
             return;
 
-        stbi_set_flip_vertically_on_load(flipTexture);
+        nvtt::Context context;
 
-        std::string fullTexturePath(filepath.string());
+        nvtt::Surface image;
+        image.load(filepath.string().c_str());
 
-        *textureData = stbi_load(fullTexturePath.c_str(), &textureHeader.width, &textureHeader.height, 0, STBI_rgb_alpha);
+        if (flipTexture)
+            image.flipY();
 
-        if (!textureData)
-        {
-            Debug* debug = Debug::GetInstance();
-            debug->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to load image", fullTexturePath).c_str());
-        }
+        //textureHeader.internalFormat = textureFormat;
+        textureHeader.internalFormat = textureFormat;
+        textureHeader.width = image.width();
+        textureHeader.height = image.height();
 
-        textureHeader.size = textureHeader.height * textureHeader.width * 4;
+        std::string texturePathStr(filepath.filename().string());
+        texturePathStr += CCImporter::cacheExtension;
 
-        CacheTextureData(filepath, *textureData, textureHeader);
+        CompressTexture(context, image, texturePathStr, textureHeader, textureData);
+
+        CacheTextureData(texturePathStr, *textureData, textureHeader);
     }
     #pragma endregion
 
@@ -525,6 +635,3 @@ namespace CCImporter
     #pragma endregion
 
 }
-
-
-

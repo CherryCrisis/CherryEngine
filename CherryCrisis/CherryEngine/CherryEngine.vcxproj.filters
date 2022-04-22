@@ -100,11 +100,8 @@
     <Filter Include="Fichiers sources\Rendering\Generator">
       <UniqueIdentifier>{40e61724-b694-4dac-af23-a7b1d61e20e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
-      <UniqueIdentifier>{cab37020-be78-423d-ba9d-eed32daf4b1f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Rendering\Pipeline">
-      <UniqueIdentifier>{28e665cd-f60b-4936-b15d-17923a593787}</UniqueIdentifier>
+    <Filter Include="Fichiers externes\nvtt">
+      <UniqueIdentifier>{f3959fbe-f37a-4750-95ff-f813408a43d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1155,14 +1152,14 @@
     <ClInclude Include="include\builder.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\basic_rendering_pipeline.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    <ClInclude Include="externals\include\nvtt\nvtt.h">
+      <Filter>Fichiers externes\nvtt</Filter>
     </ClInclude>
-    <ClInclude Include="include\rendering_pipeline_interface.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    <ClInclude Include="externals\include\nvtt\nvtt_lowlevel.h">
+      <Filter>Fichiers externes\nvtt</Filter>
     </ClInclude>
-    <ClInclude Include="include\viewer.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    <ClInclude Include="externals\include\nvtt\nvtt_wrapper.h">
+      <Filter>Fichiers externes\nvtt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1210,6 +1207,9 @@
     </None>
     <None Include="externals\include\assimp\vector3.inl">
       <Filter>Fichiers externes\Assimp</Filter>
+    </None>
+    <None Include="include\renderer_manager.inl">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </None>
     <None Include="include\entity.inl">
       <Filter>Fichiers d%27en-tête</Filter>
@@ -1281,15 +1281,6 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="..\x64\Debug\Assets\basicPostProcess.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="include\renderer_manager.inl">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\skyboxShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\skyboxShader.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
@@ -1473,9 +1464,6 @@
     </ClCompile>
     <ClCompile Include="src\builder.cpp">
       <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\basic_rendering_pipeline.cpp">
-      <Filter>Fichiers sources\Rendering\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

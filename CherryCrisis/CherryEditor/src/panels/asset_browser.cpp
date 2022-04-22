@@ -122,6 +122,7 @@ void AssetBrowser::Render()
         }
 
         RenderNodes();
+        RenderAssetsSettings();
     }
     ImGui::End();
 }
@@ -303,6 +304,11 @@ void AssetBrowser::RenderNodes()
                 std::string str = "Assets/"+node.m_filename;
                 EditorNotifications::SceneLoading(SceneManager::LoadScene(str.c_str()));
             }
+            if (node.m_extension.compare(".jpg") || node.m_extension.compare(".png"))
+            {
+                std::string str = "Assets/" + node.m_filename + node.m_extension;
+                m_assetsSettings = std::unique_ptr<AssetsSettings>(new TextureSettings(str));
+            }
         }
 
         ImGui::Text(path);
@@ -425,5 +431,16 @@ void AssetBrowser::RenderNodes()
         ImGui::SameLine();
         if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_creating = false;  ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
+    }
+}
+
+void AssetBrowser::RenderAssetsSettings()
+{
+    if (m_assetsSettings)
+    {
+        if (!m_assetsSettings.get()->Update())
+        {
+            m_assetsSettings.reset();
+        }
     }
 }

@@ -28,14 +28,14 @@ void Texture::Delete()
         delete m_data;
 }
 
-void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
+void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureFormat textureFormat)
 {
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
     if (!LoadFromCache(texture, &data, textureHeader))
     {
-        CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture);
+       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat);
     }
 
     if (!data)
@@ -47,15 +47,22 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture)
     texture->m_data = (void*)std::move(data);
     texture->m_height = textureHeader.height;
     texture->m_width = textureHeader.width;
+    texture->m_size = textureHeader.size;
+    texture->m_mipmapLevels = textureHeader.mipmapsLevel;
+    texture->m_internalFormat = textureHeader.internalFormat;
+    texture->m_blockSize = textureHeader.blockSize;
 }
+
+#include "nvtt/nvtt.h"
 
 bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader)
 {
-    FILE* file = nullptr;
-
     std::string fullTexturePath(CCImporter::cacheDirectory);
     fullTexturePath += texture->GetFilesystemPath()->filename().string();
     fullTexturePath += CCImporter::cacheExtension;
+
+    FILE* file = nullptr;
+
     
     Debug* debug = Debug::GetInstance();
     if (fopen_s(&file, fullTexturePath.c_str(), "rb")) //rb = read in binary mode
@@ -88,7 +95,7 @@ void Texture::Reload(bool flipTexture, std::shared_ptr<Texture> texture)
     }
     else
     {
-        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture);
+        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat);
     }
 
     if (!data)

@@ -8,6 +8,10 @@
 #include "model_base.hpp"
 #include "mesh.hpp"
 
+enum class ETextureFormat;
+
+
+
 namespace CCImporter
 {
     /*
@@ -41,6 +45,9 @@ namespace CCImporter
         int height;
         int width;
         int size;
+        ETextureFormat internalFormat;
+        int mipmapsLevel;
+        int blockSize;
     };
 
     struct MaterialHeader
@@ -103,6 +110,6 @@ namespace CCImporter
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
     void ImportTexture(const std::filesystem::path& filepath,
-        unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture);
+        unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat);
 }
 

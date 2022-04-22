@@ -12,7 +12,6 @@
 #include "shadow_renderpass.hpp"
 #include "viewer.hpp"
 
-
 void BasicRenderPass::GPUTextureBasic::Generate(Texture* texture)
 {
 	glCreateTextures(GL_TEXTURE_2D, 1, &ID);
@@ -22,8 +21,44 @@ void BasicRenderPass::GPUTextureBasic::Generate(Texture* texture)
 	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTextureStorage2D(ID, 1, GL_RGBA8, texture->GetWidth(), texture->GetHeight());
-	glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, texture->GetData());
+	ETextureFormat textureFormat = texture->GetInternalFormat();
+
+	if (textureFormat == ETextureFormat::RGB || textureFormat == ETextureFormat::RGBA)
+	{
+		unsigned int internalFormat = GL_RGBA8;
+		if (textureFormat == ETextureFormat::RGB)
+			internalFormat = GL_RGB8;
+
+		glTextureStorage2D(ID, 1, internalFormat, texture->GetWidth(), texture->GetHeight());
+		glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (unsigned int)textureFormat, GL_UNSIGNED_BYTE, texture->GetData());
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, ID);
+
+		int mipmapsCount = texture->GetMipmapCount();
+		int width = texture->GetWidth();
+		int height = texture->GetHeight();
+		int offset = 0;
+		unsigned char* data = (unsigned char*)texture->GetData();
+
+		for (int mipmapId = 0; mipmapId < mipmapsCount && (width || height); ++mipmapId)
+		{
+			CCMaths::Min(width, 1);
+			CCMaths::Min(height, 1);
+
+			int size = ((width + 3) / 4) * ((height + 3) / 4) * texture->GetBlockSize();
+			glCompressedTexImage2D(GL_TEXTURE_2D, mipmapId, (unsigned int)textureFormat,
+				width, height, 0, size, data + offset);
+
+
+			offset += size;
+			width >>= 1;
+			height >>= 1;
+		}
+	}
+
+
 
 	glGenerateTextureMipmap(ID);
 }
