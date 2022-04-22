@@ -38,6 +38,8 @@ void Rigidbody::Unregister()
 
 void Rigidbody::PopulateMetadatas()
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetProperty("Density", &density);
 	m_metadatas.SetProperty("Enabled", &isEnabled);
 	m_metadatas.SetProperty("Kinematic", &isKinematic);

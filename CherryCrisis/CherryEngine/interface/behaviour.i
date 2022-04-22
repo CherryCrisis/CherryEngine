@@ -1,13 +1,13 @@
 %{
 	#include "behaviour.hpp"
-	#include "component.hpp"
+	#include "object.hpp"
 %}
 
-%include component.i
+%include object.i
 
 %feature("director") Behaviour;
 
-class Behaviour : public Component
+class Behaviour : public Object
 {
 private:
 	Entity& m_owner;
@@ -22,11 +22,11 @@ public:
 
 	public override string ToString() => System.String.Format("{0} ({1})", base.ToString(), host);
 
-	public Component GetComponent(System.Type type) => host.GetComponent(type);
-	public T GetComponent<T>() where T : Component => host.GetComponent<T>();
+	public Behaviour GetComponent(System.Type type) => host.GetComponent(type);
+	public T GetComponent<T>() where T : Behaviour => host.GetComponent<T>();
 
-	public Component AddComponent(System.Type type) => host.AddComponent(type);
-	public T AddComponent<T>() where T : Component => host.AddComponent<T>();
+	public Behaviour AddComponent(System.Type type) => host.AddComponent(type);
+	public T AddComponent<T>() where T : Behaviour => host.AddComponent<T>();
 	%}
 };
 

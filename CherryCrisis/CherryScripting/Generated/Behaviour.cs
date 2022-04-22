@@ -10,7 +10,7 @@
 
 namespace CCEngine {
 
-public class Behaviour : Component {
+public class Behaviour : Object {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
 
   internal Behaviour(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.Behaviour_SWIGUpcast(cPtr), cMemoryOwn) {
@@ -43,11 +43,11 @@ public class Behaviour : Component {
 
 	public override string ToString() => System.String.Format("{0} ({1})", base.ToString(), host);
 
-	public Component GetComponent(System.Type type) => host.GetComponent(type);
-	public T GetComponent<T>() where T : Component => host.GetComponent<T>();
+	public Behaviour GetComponent(System.Type type) => host.GetComponent(type);
+	public T GetComponent<T>() where T : Behaviour => host.GetComponent<T>();
 
-	public Component AddComponent(System.Type type) => host.AddComponent(type);
-	public T AddComponent<T>() where T : Component => host.AddComponent<T>();
+	public Behaviour AddComponent(System.Type type) => host.AddComponent(type);
+	public T AddComponent<T>() where T : Behaviour => host.AddComponent<T>();
 	
   public Behaviour() : this(CherryEnginePINVOKE.new_Behaviour(), true) {
     SwigDirectorConnect();

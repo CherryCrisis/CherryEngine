@@ -17,6 +17,7 @@ public:
 	Transform*	m_transform = nullptr;
 
 	CameraComponent();
+	CameraComponent(CCUUID& id);
 	~CameraComponent();
 
 	void Initialize();

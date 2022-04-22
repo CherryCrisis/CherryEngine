@@ -20,6 +20,13 @@ ModelRenderer::ModelRenderer()
 	count++;
 }
 
+ModelRenderer::ModelRenderer(CCUUID& id) : Behaviour(id)
+{
+	PopulateMetadatas();
+	m_id = count;
+	count++;
+}
+
 ModelRenderer::~ModelRenderer()
 {
 	RemoveModel();
@@ -27,7 +34,9 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::PopulateMetadatas()
 {
-	m_metadatas.SetField<Behaviour*>("transform", m_transform);
+	Behaviour::PopulateMetadatas();
+
+	m_metadatas.SetField<Object*>("transform", m_transform);
 	m_metadatas.SetField<std::string>("file", model_path);
 }
 
@@ -71,3 +80,15 @@ void ModelRenderer::UnsubscribeToRenderPass()
 	RenderManager::GetInstance()->UnsubscribeToPipeline<PickingRenderPass>(this);
 }
 
+void ModelRenderer::Initialize() 
+{
+	if (m_model)
+		SubscribeToRenderPass();
+
+	GetHost().m_OnAwake.Unbind(&ModelRenderer::Initialize, this);
+}
+
+void ModelRenderer::BindToSignals() 
+{
+	GetHost().m_OnAwake.Bind(&ModelRenderer::Initialize, this);
+}

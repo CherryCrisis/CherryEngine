@@ -35,7 +35,7 @@ namespace CCScripting
 		public void Update()
 		{
 			i++;
-		   time += 0.05f;
+			time += Time.GetInstance().GetDeltaTime();
 
 			SetRotation();
 

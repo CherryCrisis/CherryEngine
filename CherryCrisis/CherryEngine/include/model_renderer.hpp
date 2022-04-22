@@ -22,7 +22,11 @@ public:
 	std::shared_ptr<Model> m_model;
 	std::string model_path = "null";
 	ModelRenderer();
+	ModelRenderer(CCUUID& id);
 	~ModelRenderer();
+
+	void Initialize();
+	void BindToSignals() override;
 
 	void SetModel(std::shared_ptr<Model> newModel);
 	void RemoveModel();

@@ -9,17 +9,16 @@
 
 #include "uuid.hpp"
 #include "event.hpp"
+#include "object.hpp"
 
 class Behaviour;
 class Cell;
 
-class CCENGINE_API Entity 
+class CCENGINE_API Entity : public Object
 {
 private:
 	std::string m_name = "Entity";
 	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
-	CCUUID m_uuid = {};
-
 public:
 	Cell* m_cell = nullptr;
 
@@ -62,9 +61,6 @@ public:
 
 	void SetName(std::string name) { m_name = name; }
 	std::string GetName() { return m_name; }
-	uint32_t	GetUUID() { return (uint32_t)m_uuid; }
-	std::string Serialized();
-	std::string SerializeBehaviours();
 };
 
 #include "entity.inl"

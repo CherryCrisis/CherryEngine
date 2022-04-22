@@ -7,8 +7,8 @@ Transform::Transform()
 	PopulateMetadatas();
 }
 
-Transform::Transform(CCUUID& owner)
-	: Behaviour(owner)
+Transform::Transform(CCUUID& id)
+	: Behaviour(id)
 {
 	PopulateMetadatas();
 }
@@ -16,6 +16,8 @@ Transform::Transform(CCUUID& owner)
 
 void Transform::PopulateMetadatas() 
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetProperty("position", &position);
 	m_metadatas.SetProperty("rotation", &rotation);
 	m_metadatas.SetProperty("scale", &scale);

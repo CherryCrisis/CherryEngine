@@ -456,7 +456,7 @@
     <ClInclude Include="externals\include\GLFW\glfw3.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
-    <ClInclude Include="include\component.hpp">
+    <ClInclude Include="include\object.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\behaviour.hpp">
@@ -1241,7 +1241,7 @@
     <None Include="interface\transform_comp.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
-    <None Include="interface\component.i">
+    <None Include="interface\object.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
     <None Include="interface\camera_comp.i">

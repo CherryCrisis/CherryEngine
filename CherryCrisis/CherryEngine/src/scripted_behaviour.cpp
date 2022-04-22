@@ -23,8 +23,19 @@ ScriptedBehaviour::ScriptedBehaviour()
 		m_assembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
 		m_assembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
 	}
+}
 
+ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
+{
+	// TODO: Change path
+	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
+	m_metadatas.SetProperty("scriptName", &scriptPath);
 
+	if (m_assembly)
+	{
+		m_assembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
+		m_assembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
+	}
 }
 
 ScriptedBehaviour::~ScriptedBehaviour()
@@ -78,6 +89,8 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
 	const auto& fields = managedClass->Fields();
