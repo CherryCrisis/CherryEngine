@@ -8,11 +8,13 @@
 #include "core/editor_manager.hpp"
 #include "command.hpp"
 
+//move this thing
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 #include "scene_manager.hpp"
 #include "utils.hpp"
 
+#pragma region ScriptTemplate
 const char* scriptTemplate = 
 R"CS(using CCEngine;
 
@@ -37,19 +39,7 @@ namespace CCScripting
         }
     }
 })CS";
-
-void replaceAll(std::string& str, const std::string& from, const std::string& to) 
-{
-    if (from.empty())
-        return;
-
-    size_t start_pos = 0;
-    while ((start_pos = str.find(from, start_pos)) != std::string::npos) 
-    {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-    }
-}
+#pragma endregion
 
 AssetBrowser::AssetBrowser()
 {
@@ -75,38 +65,50 @@ void AssetBrowser::QuerryBrowser()
     m_nodes.clear();
 
     if (std::filesystem::exists(m_currentDirectory)) 
-        for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(m_currentDirectory)) 
+        for (const std::filesystem::directory_entry& entry : std::filesystem::directory_iterator(m_currentDirectory))
+        {
             GenerateNode(entry);
+        }
+}
+
+std::string AssetBrowser::Find(std::filesystem::path path)
+{
+    std::filesystem::path pathIt = m_currentDirectory;
+    while (pathIt.parent_path() != path) 
+        pathIt = pathIt.parent_path();
+
+    return pathIt.filename().string();
+}
+
+std::filesystem::path AssetBrowser::FindPath(const std::string& folderName) 
+{
+    std::filesystem::path pathIt = m_currentDirectory;
+    while (pathIt.filename() != folderName)
+        pathIt = pathIt.parent_path();
+
+    return pathIt;
 }
 
 void AssetBrowser::Render()
 {
-    if (!m_isOpened)
-        return;
+    if (!m_isOpened) return;
 
     ImGui::SetNextWindowSize(ImVec2(500, 440), ImGuiCond_FirstUseEver);
     if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
-        // Change this into an interactable directory displayer
-        //------------------------------------------------------------------------------------------------------
-        if (m_currentDirectory != m_solutionDirectory)
-            if (ImGui::Button("<-"))
+        std::filesystem::path pathIt = m_solutionDirectory.parent_path();
+        while (pathIt != m_currentDirectory)
+        {
+            pathIt /= Find(pathIt);
+            ImGui::SameLine(); ImGui::Text("/"); ImGui::SameLine();
+
+            if (ImGui::Button(pathIt.filename().string().c_str())) 
             {
-                m_currentDirectory = m_currentDirectory.parent_path();
+                m_currentDirectory = FindPath(pathIt.filename().string());
                 QuerryBrowser();
             }
-        ImGui::SameLine();
-        ImGui::Text(m_currentDirectory.string().c_str());
-        /*std::filesystem::path path_iterator = m_currentDirectory;
-        while (path_iterator != m_solutionDirectory.parent_path())
-        {
-            ImGui::SameLine(); ImGui::Text("/"); ImGui::SameLine();
-            std::string name = path_iterator.filename().string();
-            ImGui::Text(name.c_str());
+        }
 
-            path_iterator = path_iterator.parent_path();
-        }*/
-        //------------------------------------------------------------------------------------------------------
         ContextCallback();
 
         if (ImGui::IsWindowHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
@@ -196,11 +198,6 @@ void AssetBrowser::ContextCallback()
     }
 }
 
-std::string AssetBrowser::AssetNode::GetFullPath() 
-{
-    return m_path.string() + "\\" + m_filename + m_extension;
-}
-
 void AssetBrowser::CheckThings()
 {
     for (auto& couple : m_nodes)
@@ -215,46 +212,39 @@ void AssetBrowser::CheckThings()
     }
 }
 
-void AssetBrowser::GenerateNode(const std::filesystem::directory_entry& entry)
+AssetBrowser::AssetNode AssetBrowser::GenerateNode(const std::filesystem::directory_entry& entry)
 {
     AssetNode node;
 
     node.m_isDirectory  = entry.is_directory();
     node.m_icon         = entry.is_directory() ? m_browserIcon : m_fileIcon; // To Change
     node.m_path         = entry.path().parent_path();
-    node.m_relativePath = entry.path();
-     
+    node.m_relativePath = String::ExtractValueStr(entry.path().string(), "Assets\\");
+    
     std::string filename = entry.path().filename().string();
+    node.m_relativePath = String::ExtractKeyStr(node.m_relativePath.string(), filename.c_str());
+    
     node.m_filename = String::ExtractKey(filename, '.');
-
     node.m_extension = entry.path().extension().string();
-
-    m_nodes[node.m_relativePath.string()] = node;
+    
+    m_nodes[node.GetFullPath()] = node;
+    return node;
 }
 
 AssetBrowser::AssetNode* AssetBrowser::GetNodeByPath(std::filesystem::path path)
 {
-    for (auto& couple : m_nodes)
-    {
-        AssetNode& node = couple.second;
-        if (path == node.m_path)
-        {
-            return &node;
-        }
-    }
+    for (auto& [nodeName, nodeRef] : m_nodes)
+        if (path == nodeName)
+            return &nodeRef;
+
     return nullptr;
 }
-
 AssetBrowser::AssetNode* AssetBrowser::GetNodeByName(const std::string& name)
 {
-    for (auto& couple : m_nodes)
-    {
-        AssetNode& node = couple.second;
-        if (name == node.m_filename)
-        {
-            return &node;
-        }
-    }
+    for (auto& [nodeName, nodeRef] : m_nodes)
+        if (name == nodeRef.m_filename)
+            return &nodeRef;
+
     return nullptr;
 }
 
@@ -410,12 +400,12 @@ void AssetBrowser::RenderNodes()
         {
             ImGui::CloseCurrentPopup();
             std::ofstream myfile;
-            std::string fileName = "Assets/"+std::string(newName)+".cs";
+            std::string fileName = m_currentDirectory.string()+"\\"+std::string(newName) + ".cs";
 
             bool opened = false;
             myfile.open(fileName);
             std::string str = scriptTemplate;
-            replaceAll(str, "%s", newName);
+            String::ReplaceAll(str, "%s", newName);
             if (myfile.is_open())
             {
                 myfile << str;

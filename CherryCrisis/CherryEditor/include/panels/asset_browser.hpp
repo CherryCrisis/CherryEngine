@@ -22,20 +22,27 @@ private :
 		std::filesystem::path m_relativePath; // path starting at Assets without filename
 		std::string m_filename; // filename without extension
 		std::string m_extension; // extension
-		
 
-		std::string GetFullPath();
+		std::string GetFullPath() { return m_path.string() + "\\" + m_filename + m_extension; }
+
+
+	};
+	template <typename T>
+	class ResourceNode : public AssetNode
+	{
+		std::shared_ptr<T> m_resource;
 	};
 
 	void CheckThings();
 
-	void GenerateNode(const std::filesystem::directory_entry& entry);
+	AssetBrowser::AssetNode GenerateNode(const std::filesystem::directory_entry& entry);
 	AssetNode* GetNodeByPath(std::filesystem::path path);
 	AssetNode* GetNodeByName(const std::string& name);
-	
+	std::string Find(std::filesystem::path path);
+	std::filesystem::path FindPath(const std::string& folderName);
 	// Control Variables
 	float m_padding = 16.f;
-	float m_thumbnailSize = 180.f;
+	float m_thumbnailSize = 64.f;
 
 	//not clean at all but anyway imgui internal logic problem solving
 	bool m_deleting = false;

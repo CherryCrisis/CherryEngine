@@ -20,6 +20,15 @@ namespace String
 		return str.substr(str.find_first_of(key) + 1);
 	}
 
+	std::string ExtractValueStr(const std::string& str, const char* key)
+	{
+		std::string string = str;
+		std::string token = str.substr(0, str.find(key));
+		size_t pos = str.find(token);
+		string.erase(pos, token.length());
+		return string;
+	}
+
 	std::string ExtractKey(std::string& str, const char key, bool erase)
 	{
 		std::string strr = str.substr(0, str.find(key));
@@ -32,6 +41,24 @@ namespace String
 				str.erase(i, strr.length() + 1);
 		}
 		return strr;
+	}
+
+	std::string ExtractKeyStr(const std::string& str, const char* key)
+	{
+		return str.substr(0, str.find(key));
+	}
+
+	void ReplaceAll(std::string& str, const std::string& from, const std::string& to)
+	{
+		if (from.empty())
+			return;
+
+		size_t start_pos = 0;
+		while ((start_pos = str.find(from, start_pos)) != std::string::npos)
+		{
+			str.replace(start_pos, from.length(), to);
+			start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+		}
 	}
 
 	uint64_t ExtractUUID(const std::string& str)
