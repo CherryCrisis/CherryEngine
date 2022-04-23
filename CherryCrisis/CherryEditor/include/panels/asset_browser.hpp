@@ -24,6 +24,7 @@ private :
 		std::string m_extension; // extension
 
 		std::string GetFullPath() { return m_path.string() + "\\" + m_filename + m_extension; }
+
 		void MoveTo(const std::filesystem::path& newFolder); // newFolder = new Fullpath
 
 	};
@@ -39,6 +40,8 @@ private :
 	AssetNode* GetNodeByPath(std::filesystem::path path);
 	AssetNode* GetNodeByName(const std::string& name);
 	AssetNode* GetNodeByFile(const std::string& file); // filename+extension
+	AssetNode* GetNodeByRelativePath(const std::string& file); 
+
 	std::string Find(std::filesystem::path path);
 	std::filesystem::path FindPath(const std::string& folderName);
 	// Control Variables

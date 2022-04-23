@@ -16,6 +16,8 @@
 
 #include "basic_rendering_pipeline.hpp"
 
+#include "utils.hpp"
+
 #undef near
 #undef far
 
@@ -152,51 +154,30 @@ void SceneDisplayer::Render()
             UpdateFramebuffer(wsize.x, wsize.y, m_camera);
 
         uint64_t ViewTex = (uint64_t)m_framebuffer.TexID;
-
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
  
+        //Receive Drag&Drop
         if (ImGui::BeginDragDropTarget()) 
         {
-       
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".cherry")) 
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE")) 
             {
                 const char* c = (const char*)payload->Data;
-                m_manager->m_selectedEntities.clear();
+                std::string extension = String::ExtractValue(c, '.');
 
-                EditorNotifications::SceneLoading(SceneManager::LoadScene(c));
+                if (extension == "cherry") 
+                {
+                    m_manager->m_selectedEntities.clear();
+                    EditorNotifications::SceneLoading(SceneManager::LoadScene(c));
+                }
+                else if (extension == "obj" || extension == "fbx" || extension == "gltf")
+                {
+                    auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
+                    ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(c, true, cb);
+                    EditorManager::SendNotification("Adding object ...", ENotifType::Info);
+                }
             }
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj") )
-            {
-                const char* c = (const char*)payload->Data;
-                std::string str = "Assets/" + std::string(c);
-                const char* string = str.c_str();
-                auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-                ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
-                EditorManager::SendNotification("Adding object ...", ENotifType::Info);
-            }
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".fbx"))
-            {
-                const char* c = (const char*)payload->Data;
-                std::string str = "Assets/" + std::string(c);
-                const char* string = str.c_str();
-                auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-                ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
-                EditorManager::SendNotification("Adding object ...", ENotifType::Info);
-            }
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".gltf"))
-            {
-                const char* c = (const char*)payload->Data;
-                std::string str = "Assets/" + std::string(c);
-                const char* string = str.c_str();
-                auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-                ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
-                EditorManager::SendNotification("Adding object ...", ENotifType::Info);
-            }
-
             ImGui::EndDragDropTarget();
         }
-
-        // matrices view and proj
 
         CCMaths::Matrix4 projection = m_camera.m_projectionMatrix;
         CCMaths::Matrix4 view = m_camera.m_viewMatrix;
