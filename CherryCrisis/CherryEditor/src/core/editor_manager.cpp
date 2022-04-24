@@ -61,7 +61,7 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
     return true;
 }
 
-EditorManager::EditorManager() 
+EditorManager::EditorManager(const std::string& projectPath) 
 {
     inputs = InputManager::GetInstance();
     Serializer::UnserializeEditor("editor.meta");
@@ -83,6 +83,9 @@ EditorManager::EditorManager()
     }
 
     m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
+
+    if (projectPath.size() > 0)
+        m_browser.m_currentDirectory = projectPath;
 }
 
 void EditorManager::LinkEngine(Engine* engine) 

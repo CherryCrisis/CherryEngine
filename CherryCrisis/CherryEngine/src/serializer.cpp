@@ -63,6 +63,7 @@ namespace YAML {
 	};
 }
 
+std::string Serializer::m_path = "";
 
 bool Serializer::SerializeScene(Scene* scene, const char* filepath) 
 {
@@ -179,7 +180,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 		}
 	}
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
-	std::ofstream out(fileName);
+	std::ofstream out(m_path+fileName);
 
 	bool opened = out.is_open();
 	out << save;
@@ -406,7 +407,7 @@ bool Serializer::SerializeEditor(const char* filepath)
 	save["General"]["LastOpenedScene"] = SceneManager::GetInstance()->m_currentScene->m_filepath.string();
 	//Save project settings
 	//Save preferences
-	std::ofstream out("editor.meta");
+	std::ofstream out(m_path+"editor.meta");
 
 	bool opened = out.is_open();
 	out << save;
@@ -420,7 +421,7 @@ bool Serializer::UnserializeEditor(const char* filepath)
 
 	if (!std::filesystem::exists(filepath)) 
 	{
-		SceneManager::LoadEmptyScene("Assets/");
+		SceneManager::LoadEmptyScene(m_path.c_str());
 		return false;
 	}
 
@@ -433,7 +434,7 @@ bool Serializer::UnserializeEditor(const char* filepath)
 	}
 	else 
 	{
-		SceneManager::LoadEmptyScene("Assets/");
+		SceneManager::LoadEmptyScene(m_path.c_str());
 	}
 
 	//Save project settings

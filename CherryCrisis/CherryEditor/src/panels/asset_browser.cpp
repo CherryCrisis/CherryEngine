@@ -41,10 +41,10 @@ namespace CCScripting
 })CS";
 #pragma endregion
 
-AssetBrowser::AssetBrowser()
+AssetBrowser::AssetBrowser(const std::string& projectPath)
 {
     //Set Full Path to Assets
-    m_currentDirectory = std::filesystem::current_path();
+    m_currentDirectory = projectPath.size() > 0 ? projectPath : std::filesystem::current_path();
     m_currentDirectory /= "Assets";
     m_solutionDirectory = m_currentDirectory;
 

@@ -67,7 +67,7 @@ public:
 
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
     
-    EditorManager();
+    EditorManager(const std::string& projectPath="");
     void DisplayEditorUI(GLFWwindow* window);
 
     void LinkEngine(Engine* engine);
