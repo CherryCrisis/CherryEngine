@@ -21,6 +21,7 @@ private:
 
 public:
 	SphereCollider();
+	SphereCollider(CCUUID& id);
 	~SphereCollider();
 
 	void BindToSignals() override;

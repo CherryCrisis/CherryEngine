@@ -42,6 +42,7 @@ public:
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
 	
 	Rigidbody();
+	Rigidbody(CCUUID& id);
 	~Rigidbody();
 
 	void	BindToSignals() override;

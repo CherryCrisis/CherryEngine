@@ -45,4 +45,7 @@ public:
 	boolProperty isEnabled{ this, &Collider::SetEnabled, &Collider::GetEnabled };
 	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };
 	floatProperty contactOffset{ this, &Collider::SetContact, &Collider::GetContact };
+
+	Collider() = default;
+	Collider(CCUUID& id) : Behaviour(id) {}
 };

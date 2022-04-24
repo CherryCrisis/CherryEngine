@@ -11,6 +11,9 @@
 #include "model_renderer.hpp"
 #include "camera_component.hpp"
 #include "scripted_behaviour.hpp"
+#include "rigidbody.hpp"
+#include "box_collider.hpp"
+#include "sphere_collider.hpp"
 #include "model.hpp"
 
 #include "scene_manager.hpp"
@@ -46,6 +49,22 @@ namespace YAML {
 		{
 			Node node;
 			return node = rhs.GetUUID();
+		}
+	};
+
+	template<>
+	struct convert<Bool3> {
+		static Node encode(const Bool3& rhs)
+		{
+			Node node;
+			node = (std::to_string(rhs.x) + '/' + std::to_string(rhs.y) + '/' + std::to_string(rhs.z));
+			return node;
+		}
+
+		static bool decode(const Node& node, Bool3& rhs)
+		{
+			rhs = String::ExtractBool3(node.as<std::string>());
+			return true;
 		}
 	};
 }
@@ -89,6 +108,9 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 
 				if (type == typeid(CCMaths::Vector3))
 					save["components"][UUID][fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+				
+				else if (type == typeid(Bool3))
+					save["components"][UUID][fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
 
 				else if (type == typeid(std::string))
 					save["components"][UUID][fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
@@ -119,6 +141,12 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				if (type == typeid(CCMaths::Vector3))
 				{
 					CCMaths::Vector3 val;
+					propRef->Get(&val);
+					save["components"][UUID][propName] = val;
+				}
+				else if (type == typeid(Bool3))
+				{
+					Bool3 val;
 					propRef->Get(&val);
 					save["components"][UUID][propName] = val;
 				}
@@ -177,6 +205,9 @@ Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 	else if (type == "ModelRenderer")     b = new ModelRenderer(id);
 	else if (type == "ScriptedBehaviour") b = new ScriptedBehaviour(id);
 	else if (type == "CameraComponent")   b = new CameraComponent(id);
+	else if (type == "Rigidbody")		  b = new Rigidbody(id); 
+	else if (type == "SphereCollider")    b = new SphereCollider(id);
+	else if (type == "BoxCollider")       b = new BoxCollider(id);
 
 	return b;
 }
@@ -249,6 +280,11 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					else if (propType == typeid(CCMaths::Vector3))
 					{
 						Vector3 vec = value.as<CCMaths::Vector3>();
+						prop->Set(&vec);
+					}
+					else if (propType == typeid(Bool3))
+					{
+						Bool3 vec = value.as<Bool3>();
 						prop->Set(&vec);
 					}
 					else if (propType == typeid(std::string))
