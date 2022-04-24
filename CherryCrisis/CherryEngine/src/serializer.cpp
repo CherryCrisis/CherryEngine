@@ -20,12 +20,6 @@
 #include "object.hpp"
 #include "yaml-cpp/yaml.h"
 
-// to remove
-void Foos(std::shared_ptr<ModelBase>)
-{
-
-}
-
 namespace YAML {
 	template<>
 	struct convert<CCMaths::Vector3> {
@@ -73,7 +67,6 @@ namespace YAML {
 bool Serializer::SerializeScene(Scene* scene, const char* filepath) 
 {
 	YAML::Node save;
-	YAML::Node ressources;
 
 	std::map<std::type_index, std::vector<std::filesystem::path*>> pathList;
 	ResourceManager::GetInstance()->GetResourcesPath(pathList);
@@ -224,7 +217,6 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	// Then unpack the YAML
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	YAML::Node loader = YAML::LoadFile(fileName);
-
 
 	// Iterates on Resources  entries
 	if (loader["resources"]) 
@@ -406,21 +398,47 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 
 bool Serializer::SerializeEditor(const char* filepath)
 {
-	std::ofstream myfile;
-	std::string fileName;
-	fileName = std::string(filepath);
+	// Better change all of this shit
 
-	bool opened = false;
-	myfile.open(fileName);
-	if (myfile.is_open())
-	{
-		//Write Editor save infos
+	YAML::Node save;
 
-		myfile.close();
-		opened = true;
-	}
+	//Save scene
+	save["General"]["LastOpenedScene"] = SceneManager::GetInstance()->m_currentScene->m_filepath.string();
+	//Save project settings
+	//Save preferences
+	std::ofstream out("editor.meta");
+
+	bool opened = out.is_open();
+	out << save;
+	out.close();
 
 	return opened;
+}
+
+bool Serializer::UnserializeEditor(const char* filepath)
+{
+
+	if (!std::filesystem::exists(filepath)) 
+	{
+		SceneManager::LoadEmptyScene("Assets/");
+		return false;
+	}
+
+	YAML::Node loader = YAML::LoadFile(filepath);
+
+	//Loads Scene
+	if (loader["General"]["LastOpenedScene"] && std::filesystem::exists((loader["General"]["LastOpenedScene"].as<std::string>())))
+	{
+		SceneManager::LoadScene(loader["General"]["LastOpenedScene"].as<std::string>().c_str());
+	}
+	else 
+	{
+		SceneManager::LoadEmptyScene("Assets/");
+	}
+
+	//Save project settings
+	//Save preferences
+	return true;
 }
 
 bool Serializer::SerializeGame(const char* filepath)

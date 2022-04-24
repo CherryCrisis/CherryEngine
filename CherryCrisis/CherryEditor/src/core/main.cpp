@@ -145,6 +145,8 @@ int main()
 
         glfwSwapBuffers(window);
     }
+    //Save editor file
+    Serializer::SerializeEditor();
 
     io.Fonts->ClearFonts();
 

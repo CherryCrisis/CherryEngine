@@ -4,6 +4,8 @@
 #include "resource_manager.hpp"
 #include "serializer.hpp"
 
+#include "utils.hpp"
+
 template <>
 SceneManager* Singleton<SceneManager>::currentInstance = nullptr;
 
@@ -35,6 +37,13 @@ bool SceneManager::LoadScene(const char* filepath)
 
 	return mng->m_currentScene != nullptr;
 }
+
+bool SceneManager::LoadEmptyScene(const char* filepath) 
+{
+	CopyFolder("Internal/SampleScene.cherry", "Assets/Empty.cherry");
+	return LoadScene("Assets/Empty.cherry");
+}
+
 
 bool SceneManager::SaveCurrentScene() 
 {

@@ -64,7 +64,7 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 EditorManager::EditorManager() 
 {
     inputs = InputManager::GetInstance();
-    SceneManager::LoadScene("Assets/SampleScene.cherry");
+    Serializer::UnserializeEditor("editor.meta");
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;

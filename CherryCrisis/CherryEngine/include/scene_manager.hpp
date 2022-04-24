@@ -21,6 +21,9 @@ public:
 	static bool LoadScene(const char* filepath);
 	// Save the current scene into its file
 	static bool SaveCurrentScene();
+	
+	static bool LoadEmptyScene(const char* filepath);
+
 
 	static void ResetScene();
 	static void FlipScene();
