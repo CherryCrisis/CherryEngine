@@ -184,7 +184,7 @@ void SceneDisplayer::Render()
                 ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
                 EditorManager::SendNotification("Adding object ...", ENotifType::Info);
             }
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".gltf"))
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".glb"))
             {
                 const char* c = (const char*)payload->Data;
                 std::string str = "Assets/" + std::string(c);

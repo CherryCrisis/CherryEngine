@@ -33,7 +33,6 @@ struct ModelNode
 class CCENGINE_API ModelBase : public Resource<ModelBase>
 {
 private:
-
 	ModelNode* m_rootNode;
 	std::vector<std::shared_ptr<Model>>	m_models;
 

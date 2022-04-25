@@ -521,9 +521,9 @@ namespace CCImporter
 
             for (int i = 0; i < 3; ++i)
             {
-                for (int comp = 0; comp < 3; ++comp)
+                for (int j = 0; j < 3; ++j)
                 {
-                    model.modelHeader.m_trs[i] = trs[i][comp];
+                    model.modelHeader.m_trs[i].data[j] = trs[i][j];
                 }
             }
 
