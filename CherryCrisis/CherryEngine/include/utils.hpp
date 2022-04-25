@@ -36,6 +36,9 @@ namespace String
 	int			      CCENGINE_API ExtractInt(const std::string& str);
 	CCMaths::Vector3  CCENGINE_API ExtractVector3(std::string str);
 	Bool3			  CCENGINE_API ExtractBool3(std::string str);
+
+	std::string CCENGINE_API ToLower(const std::string& str);
+	std::string CCENGINE_API ToUpper(const std::string& str);
 }
 
 //CreateFolder

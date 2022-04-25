@@ -103,6 +103,7 @@ void AssetBrowser::Render()
     if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
         std::filesystem::path pathIt = m_solutionDirectory.parent_path();
+        
         while (pathIt != m_currentDirectory)
         {
             pathIt /= Find(pathIt);
@@ -123,6 +124,9 @@ void AssetBrowser::Render()
                 }
             }
         }
+        ImGui::SameLine();
+        static char name[32] = "";
+        ImGui::InputText("Search", name, IM_ARRAYSIZE(name));
 
         ContextCallback();
 
@@ -138,7 +142,7 @@ void AssetBrowser::Render()
             m_thumbnailSize += InputManager::GetInstance()->GetMouseWheel().y * 2;
         }
 
-        RenderNodes();
+        RenderNodes(name);
         RenderAssetsSettings();
     }
     ImGui::End();
@@ -217,6 +221,8 @@ void AssetBrowser::ContextCallback()
                 call(0, m_currentDirectory.string().c_str());
 
         }
+        ImGui::Separator();
+        if (ImGui::MenuItem("Reload"))  QuerryBrowser();
 
         ImGui::EndPopup();
     }
@@ -288,7 +294,7 @@ AssetBrowser::AssetNode* AssetBrowser::GetNodeByRelativePath(const std::string& 
     return nullptr;
 }
 
-void AssetBrowser::RenderNodes()
+void AssetBrowser::RenderNodes(const char* name)
 {
     float width = ImGui::GetContentRegionAvail().x;
 
@@ -302,21 +308,24 @@ void AssetBrowser::RenderNodes()
         i++;
         AssetNode& node = couple.second;
 
+        std::string fullName = node.m_filename + node.m_extension;
+        
+        if (strlen(name) > 0 && String::ToLower(fullName).find(String::ToLower(name)) == std::string::npos)
+            continue;
+
         ImGui::PushID(i);
         ImGui::ImageButton((void*)(intptr_t)node.m_icon, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
 
         node.m_ImGuiID = ImGui::GetItemID();
 
-        std::string name = node.m_filename + node.m_extension;
-
         if (ImGui::BeginDragDropSource()) 
         {
-            std::string fullRelativePath = node.m_relativePath.string() + name;
+            std::string fullRelativePath = node.m_relativePath.string() + fullName;
             const char* path = fullRelativePath.c_str();
             size_t length = fullRelativePath.size();
 
             ImGui::SetDragDropPayload("NODE", path, length + 1, ImGuiCond_Once);
-            ImGui::Text(name.c_str());
+            ImGui::Text(fullName.c_str());
             ImGui::EndDragDropSource();
         }
 
@@ -343,7 +352,7 @@ void AssetBrowser::RenderNodes()
             if (!ImGui::IsMouseDragging(0)) 
             {
                 ImGui::BeginTooltip();
-                ImGui::Text(name.c_str());
+                ImGui::Text(fullName.c_str());
                 ImGui::EndTooltip();
             }
             if (ImGui::IsKeyPressed(ImGuiKey_F2))
@@ -372,7 +381,7 @@ void AssetBrowser::RenderNodes()
             }
         }
         
-        ImGui::Text(name.c_str());
+        ImGui::Text(fullName.c_str());
 
         if (ImGui::IsItemHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Left) == 2)
         {

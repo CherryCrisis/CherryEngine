@@ -1,5 +1,9 @@
 #include "pch.hpp"
 
+#include <algorithm>
+#include <cctype>
+#include <string>
+
 #include "utils.hpp"
 #include "bool3.hpp"
 
@@ -104,6 +108,22 @@ namespace String
 		value.y = std::stoi(temp);
 		temp = ExtractKey(str, '/', true);
 		value.z = std::stoi(temp);
+		return value;
+	}
+
+	std::string ToLower(const std::string& str) 
+	{
+		std::string value = str;
+		std::transform(value.begin(), value.end(), value.begin(),
+			[](unsigned char c) { return std::tolower(c); });
+		return value;
+	}
+
+	std::string ToUpper(const std::string& str) 
+	{
+		std::string value = str;
+		std::transform(value.begin(), value.end(), value.begin(),
+			[](unsigned char c) { return std::toupper(c); });
 		return value;
 	}
 }

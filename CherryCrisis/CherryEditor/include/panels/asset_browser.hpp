@@ -63,7 +63,7 @@ private :
 	AssetNode* m_focusedNode = nullptr;
 
 	//Display the asset list
-	void RenderNodes();
+	void RenderNodes(const char* name="");
 	
 	std::unique_ptr<AssetsSettings> m_assetsSettings = nullptr;
 	void RenderAssetsSettings();

@@ -74,7 +74,6 @@ int main()
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
     Engine engine{};
-    std::cout << "here is ok" << std::endl;
     EditorManager editor{};
 
     glfwSetWindowUserPointer(window, &editor);
