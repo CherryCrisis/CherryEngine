@@ -11,17 +11,14 @@
 #include "model_renderer.hpp"
 #include "camera_component.hpp"
 #include "scripted_behaviour.hpp"
+#include "rigidbody.hpp"
+#include "box_collider.hpp"
+#include "sphere_collider.hpp"
 #include "model.hpp"
 
 #include "scene_manager.hpp"
 #include "object.hpp"
 #include "yaml-cpp/yaml.h"
-
-// to remove
-void Foos(std::shared_ptr<ModelBase>)
-{
-
-}
 
 namespace YAML {
 	template<>
@@ -48,13 +45,29 @@ namespace YAML {
 			return node = rhs.GetUUID();
 		}
 	};
+
+	template<>
+	struct convert<Bool3> {
+		static Node encode(const Bool3& rhs)
+		{
+			Node node;
+			node = (std::to_string(rhs.x) + '/' + std::to_string(rhs.y) + '/' + std::to_string(rhs.z));
+			return node;
+		}
+
+		static bool decode(const Node& node, Bool3& rhs)
+		{
+			rhs = String::ExtractBool3(node.as<std::string>());
+			return true;
+		}
+	};
 }
 
+std::string Serializer::m_path = "";
 
 bool Serializer::SerializeScene(Scene* scene, const char* filepath) 
 {
 	YAML::Node save;
-	YAML::Node ressources;
 
 	std::map<std::type_index, std::vector<std::filesystem::path*>> pathList;
 	ResourceManager::GetInstance()->GetResourcesPath(pathList);
@@ -89,6 +102,9 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 
 				if (type == typeid(CCMaths::Vector3))
 					save["components"][UUID][fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+				
+				else if (type == typeid(Bool3))
+					save["components"][UUID][fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
 
 				else if (type == typeid(std::string))
 					save["components"][UUID][fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
@@ -119,6 +135,12 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				if (type == typeid(CCMaths::Vector3))
 				{
 					CCMaths::Vector3 val;
+					propRef->Get(&val);
+					save["components"][UUID][propName] = val;
+				}
+				else if (type == typeid(Bool3))
+				{
+					Bool3 val;
 					propRef->Get(&val);
 					save["components"][UUID][propName] = val;
 				}
@@ -158,7 +180,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 		}
 	}
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
-	std::ofstream out(fileName);
+	std::ofstream out(m_path+fileName);
 
 	bool opened = out.is_open();
 	out << save;
@@ -177,6 +199,9 @@ Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 	else if (type == "ModelRenderer")     b = new ModelRenderer(id);
 	else if (type == "ScriptedBehaviour") b = new ScriptedBehaviour(id);
 	else if (type == "CameraComponent")   b = new CameraComponent(id);
+	else if (type == "Rigidbody")		  b = new Rigidbody(id); 
+	else if (type == "SphereCollider")    b = new SphereCollider(id);
+	else if (type == "BoxCollider")       b = new BoxCollider(id);
 
 	return b;
 }
@@ -193,7 +218,6 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	// Then unpack the YAML
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	YAML::Node loader = YAML::LoadFile(fileName);
-
 
 	// Iterates on Resources  entries
 	if (loader["resources"]) 
@@ -249,6 +273,11 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					else if (propType == typeid(CCMaths::Vector3))
 					{
 						Vector3 vec = value.as<CCMaths::Vector3>();
+						prop->Set(&vec);
+					}
+					else if (propType == typeid(Bool3))
+					{
+						Bool3 vec = value.as<Bool3>();
 						prop->Set(&vec);
 					}
 					else if (propType == typeid(std::string))
@@ -370,21 +399,47 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 
 bool Serializer::SerializeEditor(const char* filepath)
 {
-	std::ofstream myfile;
-	std::string fileName;
-	fileName = std::string(filepath);
+	// Better change all of this shit
 
-	bool opened = false;
-	myfile.open(fileName);
-	if (myfile.is_open())
-	{
-		//Write Editor save infos
+	YAML::Node save;
 
-		myfile.close();
-		opened = true;
-	}
+	//Save scene
+	save["General"]["LastOpenedScene"] = SceneManager::GetInstance()->m_currentScene->m_filepath.string();
+	//Save project settings
+	//Save preferences
+	std::ofstream out(m_path+"editor.meta");
+
+	bool opened = out.is_open();
+	out << save;
+	out.close();
 
 	return opened;
+}
+
+bool Serializer::UnserializeEditor(const char* filepath)
+{
+
+	if (!std::filesystem::exists(filepath)) 
+	{
+		SceneManager::LoadEmptyScene(m_path.c_str());
+		return false;
+	}
+
+	YAML::Node loader = YAML::LoadFile(filepath);
+
+	//Loads Scene
+	if (loader["General"]["LastOpenedScene"] && std::filesystem::exists((loader["General"]["LastOpenedScene"].as<std::string>())))
+	{
+		SceneManager::LoadScene(loader["General"]["LastOpenedScene"].as<std::string>().c_str());
+	}
+	else 
+	{
+		SceneManager::LoadEmptyScene(m_path.c_str());
+	}
+
+	//Save project settings
+	//Save preferences
+	return true;
 }
 
 bool Serializer::SerializeGame(const char* filepath)

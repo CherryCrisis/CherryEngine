@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <iostream>
+#include <filesystem>
 
 #include <imgui_impl_opengl3.h>
 #include "ImGuizmo.h"
@@ -61,10 +62,10 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
     return true;
 }
 
-EditorManager::EditorManager() 
+EditorManager::EditorManager(const std::string& projectPath) 
 {
     inputs = InputManager::GetInstance();
-    SceneManager::LoadScene("Assets/SampleScene.cherry");
+    Serializer::UnserializeEditor("editor.meta");
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -83,6 +84,15 @@ EditorManager::EditorManager()
     }
 
     m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
+
+    m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
+    
+    if (projectPath.size() > 0)
+    {
+        std::filesystem::current_path(projectPath);
+        m_browser.m_currentDirectory = projectPath;
+        m_browser.m_solutionDirectory = projectPath;
+    }
 }
 
 void EditorManager::LinkEngine(Engine* engine) 

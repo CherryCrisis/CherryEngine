@@ -12,6 +12,11 @@ BoxCollider::BoxCollider()
 	PopulateMetadatas();
 }
 
+BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
+{
+	PopulateMetadatas();
+}
+
 BoxCollider::~BoxCollider()
 {
 	Unregister();

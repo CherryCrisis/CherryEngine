@@ -12,6 +12,11 @@ Rigidbody::Rigidbody()
 	PopulateMetadatas();
 }
 
+Rigidbody::Rigidbody(CCUUID& id) : Behaviour(id)
+{
+	PopulateMetadatas();
+}
+
 Rigidbody::~Rigidbody()
 {
 	Unregister();

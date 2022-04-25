@@ -47,3 +47,6 @@ bool CCENGINE_API CreateFolder(const char* path, const char* name);
 
 bool CCENGINE_API CopyFolder(const std::string& src, const std::string& dst);
 bool CCENGINE_API CopyFolder(const char* src, const char* dst);
+
+bool CCENGINE_API CopyFile(const std::string& src, const std::string& dst);
+bool CCENGINE_API CopyFile(const char* src, const char* dst);

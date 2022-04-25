@@ -69,7 +69,7 @@ public:
 
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
     
-    EditorManager();
+    EditorManager(const std::string& projectPath="");
     void DisplayEditorUI(GLFWwindow* window);
 
     void LinkEngine(Engine* engine);
@@ -85,6 +85,8 @@ public:
 
     //Selected Entities in hierarchy
     std::vector<Entity*> m_selectedEntities;
+
+    std::string m_projectPath = "";
 };
 
 namespace EditorNotifications 

@@ -21,6 +21,7 @@ private:
 
 public:
 	BoxCollider();
+	BoxCollider(CCUUID& id);
 	~BoxCollider();
 
 	void BindToSignals() override;

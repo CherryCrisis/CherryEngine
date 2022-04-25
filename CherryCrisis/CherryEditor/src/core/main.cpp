@@ -41,7 +41,7 @@ void drop_callback(GLFWwindow* window, int count, const char** paths)
         EditorNotifications::ResourceImporting(CopyFolder(paths[i], "Assets/"));
 }
 
-int main()
+int main(int argc, char** argv)
 {
     // Check for leak
     //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -80,8 +80,17 @@ int main()
     io.Fonts->AddFontFromMemoryTTF((void*)tahoma, sizeof(tahoma), 17.f, &font_cfg);
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
+    std::string projectPath = ""; 
+    if (argc > 1) 
+    {
+        projectPath = argv[1];
+
+        std::cout << projectPath << std::endl;
+    }
+
+    Serializer::m_path = argc > 1 ? projectPath : std::filesystem::current_path().string();
     Engine engine{};
-    EditorManager editor{};
+    EditorManager editor{projectPath};
 
     glfwSetWindowUserPointer(window, &editor);
     glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
@@ -132,13 +141,13 @@ int main()
         TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.f, 0.f, 0.f, 1.f);
 
         editor.DisplayEditorUI(window);
 
@@ -153,6 +162,8 @@ int main()
 
         glfwSwapBuffers(window);
     }
+    //Save editor file
+    Serializer::SerializeEditor();
 
     io.Fonts->ClearFonts();
 

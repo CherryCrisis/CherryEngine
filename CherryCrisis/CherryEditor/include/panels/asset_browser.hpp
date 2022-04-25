@@ -54,8 +54,7 @@ private :
 	bool m_creating = false;
 	std::string m_renamingName = "";
 
-	std::filesystem::path m_currentDirectory;
-	std::filesystem::path m_solutionDirectory;
+
 
 	std::unordered_map<std::string, AssetNode> m_nodes;
 	//-------------------
@@ -73,11 +72,13 @@ public:
 	void Render() override;
 	void ContextCallback() override;
 
+	std::filesystem::path m_currentDirectory;
+	std::filesystem::path m_solutionDirectory;
 
 	//Refresh the asset list
 	void QuerryBrowser();
 
-	AssetBrowser();
+	AssetBrowser(const std::string& projectPath="");
 
 	//DEPRECATED : Replace with resource manager references
 	uint64_t m_fileIcon = 0u;

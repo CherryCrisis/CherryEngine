@@ -18,7 +18,6 @@ std::filesystem::path CopyTemporaryFile(const char* path)
 
 namespace String
 {
-
 	std::string ExtractValue(const std::string& str, const char key)
 	{
 		return str.substr(str.find_first_of(key) + 1);
@@ -157,6 +156,18 @@ bool CopyFolder(const char* src, const char* dst)
 	std::filesystem::copy(src, dst, std::filesystem::copy_options::recursive);
 	return true;
 }
+
+bool CopyFile(const char* src, const char* dst)
+{
+	std::filesystem::copy(src, dst, std::filesystem::copy_options::overwrite_existing);
+	return true;
+}
+
+bool CopyFile(const std::string& src, const std::string& dst)
+{
+	return CopyFile(src.c_str(), dst.c_str());
+}
+
 
 bool CopyFolder(const std::string& src, const std::string& dst)
 {

@@ -12,6 +12,11 @@ SphereCollider::SphereCollider()
 	PopulateMetadatas();
 }
 
+SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
+{
+	PopulateMetadatas();
+}
+
 SphereCollider::~SphereCollider()
 {
 	Unregister();
