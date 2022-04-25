@@ -11,10 +11,14 @@
 #include "render_manager.hpp"
 #include "threadpool.hpp"
 
-Skybox::Skybox()
+#include "rendering_pipeline_interface.hpp"
+#include "viewer.hpp"
+#include "cell.hpp"
+
+Skybox::Skybox(Cell* cell)
+	: m_cell(cell)
 {
-	auto function = CCFunction::BindFunction(&Skybox::Load, this);
-	ThreadPool::GetInstance()->CreateTask(function, EChannelTask::MAINTHREAD);
+
 }
 
 Skybox::~Skybox()
@@ -29,13 +33,17 @@ Skybox::~Skybox()
 void Skybox::RemoveMesh()
 {
 	m_mesh = nullptr;
-	UnsubscribeToRenderPass();
+
+	// Move to function
+	m_cell->RemoveRenderer(this);
 }
 
 void Skybox::RemoveCubemap()
 {
 	m_mesh = nullptr;
-	UnsubscribeToRenderPass();
+
+	// Move to function
+	m_cell->RemoveRenderer(this);
 }
 
 void Skybox::Load()
@@ -49,15 +57,16 @@ void Skybox::Load()
 	m_cubemap = ResourceManager::GetInstance()->AddResource<Cubemap>("skyCubemap", true, textures);
 	m_cubemap->m_OnDeleted.Bind(&Skybox::RemoveCubemap, this);
 
-	SubscribeToRenderPass();
+	// Move to function
+	m_cell->AddRenderer(this);
 }
 
-void Skybox::SubscribeToRenderPass()
+void Skybox::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	RenderManager::GetInstance()->SubscribeToPipeline<SkyboxRenderPass>(this);
+	pipeline->SubscribeToPipeline<SkyboxRenderPass>(this);
 }
 
-void Skybox::UnsubscribeToRenderPass()
+void Skybox::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	RenderManager::GetInstance()->UnsubscribeToPipeline<SkyboxRenderPass>(this);
+	pipeline->UnsubscribeToPipeline<SkyboxRenderPass>(this);
 }

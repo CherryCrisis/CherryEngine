@@ -2,6 +2,8 @@
 
 #include "cherry_macros.hpp"
 
+#include <unordered_set>
+
 class Entity;
 class Cell;
 class Debug;
@@ -32,7 +34,11 @@ private:
 	PhysicSystem::PhysicManager* m_pxManager = nullptr;
 
 	std::vector<Entity*> m_entities;
+	std::unordered_set<class Viewer*> m_viewers;
+	std::unordered_set<class ARenderer*> m_renderers;
 	std::vector<Portal> m_portals;
+
+	class Skybox* m_skybox = nullptr;
 
 public:
 	PhysicSystem::PhysicScene* m_physicCell = nullptr;
@@ -40,10 +46,16 @@ public:
 	Cell();
 	~Cell();
 
+	void Initialize();
+
 	void	AddEntity(Entity* newEntity);
 	void	AddEntityToPhysicScene(Entity* newEntity);
+	void	AddRenderer(ARenderer* renderer);
+	void	AddViewer(Viewer* viewer);
 	void	RemoveEntity(Entity* newEntity);
 	void	RemoveEntityFromPhysicScene(Entity* newEntity);
+	void	RemoveRenderer(ARenderer* renderer);
+	void	RemoveViewer(Viewer* viewer);
 	int		PossessEntity(Entity* entity);
 
 

@@ -117,23 +117,23 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 {
 	Entity* entity = new Entity();
 	ModelRenderer* modelRdr = entity->AddBehaviour<ModelRenderer>();
-	Transform* entityTransform = entity->AddBehaviour<Transform>();
+	Transform* transform = entity->GetOrAddBehaviour<Transform>();
+
+	modelRdr->m_transform = transform;
+	modelRdr->SetModel(node->m_model);
+
+	transform->SetPosition(node->m_baseTRS[0]);
+	transform->SetRotation(node->m_baseTRS[1]);
+	transform->SetScale(node->m_baseTRS[2]);
+
+	modelRdr->BindToSignals();
+	transform->BindToSignals();
 
 	if (parentEntity)
 	{
 		Transform* parentTransform = parentEntity->GetOrAddBehaviour<Transform>();
-		entityTransform->SetParent(parentTransform);
+		transform->SetParent(parentTransform);
 	}
-
-	modelRdr->m_transform = entityTransform;
-
-	entityTransform->SetPosition(node->m_baseTRS[0]);
-	entityTransform->SetRotation(node->m_baseTRS[1]);
-	entityTransform->SetScale(node->m_baseTRS[2]);
-
-	modelRdr->SetModel(node->m_model);
-
-
 
 	entities.push_back(entity);
 

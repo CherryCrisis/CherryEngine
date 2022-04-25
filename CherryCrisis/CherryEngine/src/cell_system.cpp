@@ -16,10 +16,12 @@ CellSystem::CellSystem()
 
 Cell* CellSystem::AddOrGetCell(const std::string& name)
 {
+	// TODO: cache variables
 	if (!m_cells.contains(name))
 		m_cells[name] = Cell();
 
 	m_cells[name].SetName(name);
+	m_cells[name].Initialize();
 
 	return &m_cells[name];
 }

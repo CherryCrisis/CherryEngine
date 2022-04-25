@@ -103,6 +103,9 @@
     <Filter Include="Fichiers externes\nvtt">
       <UniqueIdentifier>{f3959fbe-f37a-4750-95ff-f813408a43d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Rendering\Pipeline">
+      <UniqueIdentifier>{771c2369-649c-4f8a-88af-df15d8b36069}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -1167,14 +1170,14 @@
     <ClInclude Include="include\rendering_pipeline_interface.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\viewer.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\bloom_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
     <ClInclude Include="include\hdr_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\viewer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1498,14 +1501,17 @@
     <ClCompile Include="src\builder.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\basic_rendering_pipeline.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\bloom_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
     <ClCompile Include="src\hdr_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\basic_rendering_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering_pipeline_interface.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@
 
 class Transform;
 
-class LightComponent : public Behaviour
+class LightComponent : public Behaviour, public ARenderer
 {
 protected:
 	void PopulateMetadatas() override;
@@ -24,4 +24,7 @@ public:
 
 	void ChangePosition(const CCMaths::Vector3& position);
 	void ChangeRotation(const CCMaths::Vector3& rotation);
+
+	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
+	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 };

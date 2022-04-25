@@ -5,7 +5,6 @@
 
 #include "resource.hpp"
 #include "entity.hpp"
-#include "skybox.hpp"
 
 class ModelBase;
 struct ModelNode;
@@ -19,8 +18,6 @@ public:
 	
 	// TODO: Switch to unique_ptr this is shitty shit shit shit
 	std::unordered_map<std::string, Entity*> m_entities;
-
-	Skybox m_skybox;
 
 	//Call entities Initialize 
 	void Initialize();
