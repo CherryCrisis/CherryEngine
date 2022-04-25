@@ -87,11 +87,14 @@ EditorManager::EditorManager(const std::string& projectPath)
 
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
     
+    // TODO: beurk ! change this
     if (projectPath.size() > 0)
     {
         std::filesystem::current_path(projectPath);
         m_browser.m_currentDirectory = projectPath;
-        m_browser.m_solutionDirectory = projectPath;
+        m_browser.m_currentDirectory /= "Assets";
+        std::cout << m_browser.m_currentDirectory << std::endl;
+        m_browser.m_solutionDirectory = m_browser.m_currentDirectory;
     }
 }
 

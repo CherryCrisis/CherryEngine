@@ -38,7 +38,7 @@ void ShowCursor(void* window)
 void drop_callback(GLFWwindow* window, int count, const char** paths)
 {
     for (int i = 0; i < count; i++) 
-        EditorNotifications::ResourceImporting(CopyFolder(paths[i], "Assets/"));
+        EditorNotifications::ResourceImporting(CopyFile(paths[i], "Assets/"));
 }
 
 int main(int argc, char** argv)
@@ -88,7 +88,6 @@ int main(int argc, char** argv)
         std::cout << projectPath << std::endl;
     }
 
-    Serializer::m_path = argc > 1 ? projectPath : std::filesystem::current_path().string();
     Engine engine{};
     EditorManager editor{projectPath};
 

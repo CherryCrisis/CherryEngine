@@ -25,6 +25,4 @@ public:
 	static bool SerializeGame(const char* filepath);
 	//Load game related info for build
 	static bool UnserializeGame(const char* filepath);
-
-	static std::string m_path;
 };
