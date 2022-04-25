@@ -35,7 +35,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         if (modelUtils.modelHeader.m_meshHeader.m_hasMesh)
         {
             std::shared_ptr<Mesh> mesh = resourceManager->AddResource<Mesh>(modelUtils.m_meshName.c_str(), 
-                true, modelUtils.m_vertices, modelUtils.m_indices);
+                false, modelUtils.m_vertices, modelUtils.m_indices);
 
             MaterialArgs materialArgs
             { 

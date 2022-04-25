@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-#include <crtdbg.h>
+//#include <crtdbg.h>
 #include "scene_manager.hpp"
 #include "camera_component.hpp"
 #include "framebuffer.hpp"
@@ -44,7 +44,7 @@ void window_size_callback(GLFWwindow* window, int width, int height)
 int main()
 {
     // Check for leak
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+   // _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     int screenWidth = 1200;
     int screenHeight = 1000;

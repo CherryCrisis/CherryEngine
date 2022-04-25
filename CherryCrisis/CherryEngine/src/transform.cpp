@@ -113,6 +113,56 @@ void Transform::SetScale(const Vector3& scale)
 	SetDirty();
 }
 
+void Transform::SetGlobalPosition(const Vector3& position)
+{
+	if (!m_parent)
+	{
+		SetPosition(position);
+		return;
+	}
+	
+	m_position = position - m_parent->GetGlobalPosition();
+	
+	SetDirty();
+	m_onPositionChange.Invoke(position);
+}
+
+void Transform::SetGlobalRotation(const Vector3& rotation)
+{
+	if (!m_parent)
+	{	
+		SetRotation(rotation);
+		return;
+	}
+	
+	m_rotation = rotation - m_parent->GetGlobalRotation();
+
+	SetDirty();
+	m_onRotationChange.Invoke(rotation);
+}
+
+void Transform::SetGlobalScale(const Vector3& scale)
+{
+	Vector3 parentScale;
+
+	if (!m_parent)
+	{
+		SetScale(scale);
+		return;
+	}
+	
+	parentScale = m_parent->GetGlobalScale();
+
+	for (int i = 0; i < 3; ++i)
+	{
+		if (parentScale.data[i] == 0)
+			m_scale.data[i] = 0;
+		else
+			m_scale.data[i] = scale.data[i] / parentScale.data[i];
+	}
+	SetDirty();
+}
+
 void Transform::AddChildren(Transform* transform)
 {
 	m_children.push_back(transform);

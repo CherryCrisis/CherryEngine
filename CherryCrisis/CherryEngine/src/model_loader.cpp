@@ -18,11 +18,11 @@
 #include "resource_manager.hpp"
 #include "debug.hpp"
 
-
 #include "mesh.hpp"
 #include "model_base.hpp"
 #include "model.hpp"
 #include "texture.hpp"
+#include "utils.hpp"
 
 namespace CCImporter
 {
@@ -122,12 +122,12 @@ namespace CCImporter
     {
         FILE* file = nullptr;
 
-        std::string fullFilepath(CCImporter::cacheDirectory);
-        fullFilepath += filepath;
+        if (!std::filesystem::exists(CCImporter::cacheDirectory))
+            std::filesystem::create_directory(CCImporter::cacheDirectory);
 
-        if (fopen_s(&file, fullFilepath.c_str(), "wb")) //w+b = write in binary mode
+        if (fopen_s(&file, filepath.c_str(), "wb")) //w+b = write in binary mode
         {
-            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullFilepath).c_str());
+            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", filepath).c_str());
             return;
         }
 
@@ -271,13 +271,14 @@ namespace CCImporter
 
         textureHeader.internalFormat = ETextureFormat::RGBA;
 
-        std::string texturePathStr(filepath.filename().string());
-        texturePathStr += CCImporter::cacheExtension;
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += filepath.filename().string();
+        fullFilepath += CCImporter::cacheExtension;
 
         unsigned char* textureData;
 
-        CompressTexture(context, image, texturePathStr, textureHeader, &textureData);
-        CacheTextureData(texturePathStr, textureData, textureHeader);
+        CompressTexture(context, image, fullFilepath, textureHeader, &textureData);
+        CacheTextureData(fullFilepath, textureData, textureHeader);
 
         delete textureData;
         stbi_image_free(stbiData);
@@ -343,12 +344,14 @@ namespace CCImporter
         textureHeader.width = image.width();
         textureHeader.height = image.height();
 
-        std::string texturePathStr(filepath.filename().string());
-        texturePathStr += CCImporter::cacheExtension;
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += filepath.filename().string();
+        fullFilepath += CCImporter::cacheExtension;
 
-        CompressTexture(context, image, texturePathStr, textureHeader, textureData);
+        //std::string texturePathStr(filepath.filename().string());
+        CompressTexture(context, image, fullFilepath, textureHeader, textureData);
 
-        CacheTextureData(texturePathStr, *textureData, textureHeader);
+        CacheTextureData(fullFilepath, *textureData, textureHeader);
     }
     #pragma endregion
 
@@ -508,7 +511,7 @@ namespace CCImporter
     {
             ImportModelUtils model{};
 
-            model.m_modelName =filepath.string();
+            model.m_modelName = filepath.string();
             model.m_modelName += std::string("/");
             model.m_modelName += std::to_string(index);
 
@@ -518,6 +521,7 @@ namespace CCImporter
 
             aiVector3D trs[3];
             node->mTransformation.Decompose(trs[2], trs[1], trs[0]);
+
 
             for (int i = 0; i < 3; ++i)
             {
@@ -546,10 +550,14 @@ namespace CCImporter
             }
 
             if (node->mNumChildren)
-                models[indexBuff].m_childrenIndices.swap(childrenIndexs);
+                models[indexBuff].m_childrenIndices.insert(models[indexBuff].m_childrenIndices.end(), childrenIndexs.begin(), childrenIndexs.end());
 
             if (node->mNumMeshes > 1 && node->mNumMeshes > (unsigned int)meshIndex + 1)
-                ImportModelDataRecursive(node, model.modelHeader.m_index - index, index, meshIndex + 1, scene, models, filepath);
+            {
+                models[modelParentIndex].modelHeader.m_childrenCount++;
+                models[modelParentIndex].m_childrenIndices.push_back(index);
+                ImportModelDataRecursive(node, modelParentIndex, index, meshIndex + 1, scene, models, filepath);
+            }
     }
 
     void ImportModelData(const aiScene* scene, std::vector<ImportModelUtils>& models, const std::filesystem::path& filepath)
@@ -566,6 +574,9 @@ namespace CCImporter
         fullFilepath += filepath.filename().generic_string();
         fullFilepath += CCImporter::cacheExtension;
 
+        if (!std::filesystem::exists(CCImporter::cacheDirectory))
+            std::filesystem::create_directory(CCImporter::cacheDirectory);
+
         if (fopen_s(&file, fullFilepath.c_str(), "wb"))
         {
             Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", fullFilepath).c_str());
@@ -579,7 +590,6 @@ namespace CCImporter
         {
             fwrite(&model.modelHeader, sizeof(ModelHeader), 1, file);
             fwrite(&model.m_modelName[0], model.m_modelName.size(), 1, file);
-
 
             if (model.modelHeader.m_childrenCount)
                 fwrite(&model.m_childrenIndices[0], model.m_childrenIndices.size() * sizeof(unsigned int), 1, file);

@@ -20,7 +20,7 @@
 
 #include <iostream>
 
-#include <crtdbg.h>
+//#include <crtdbg.h>
 
 void HideCursor(void* window) 
 {
