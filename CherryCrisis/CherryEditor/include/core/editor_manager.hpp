@@ -92,5 +92,6 @@ namespace EditorNotifications
     void SceneSaving(bool result);
     void SceneLoading(bool result);
     void ObjectLoading(bool result);
+    void ResourceImporting(bool result);
     void BuildGame(bool result);
 }

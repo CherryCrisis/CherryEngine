@@ -17,6 +17,15 @@ namespace String
 	//return the string chunk before the separator
 	std::string CCENGINE_API ExtractKey(std::string& str, const char key = ':', bool erase = false);
 
+	//return the string chunk before the substring
+	std::string CCENGINE_API ExtractKeyStr(const std::string& str, const char* key = "");
+
+	//return the string chunk after the substring
+	std::string CCENGINE_API ExtractValueStr(const std::string& str, const char* key = "");
+
+	//Replace "from" string to "to" string in the str
+	void CCENGINE_API ReplaceAll(std::string& str, const std::string& from, const std::string& to);
+
 	//-----------------------------------------------------
 	// Extract the given value in the string and 
 	// Casts it into the signature function
@@ -27,6 +36,9 @@ namespace String
 	int			      CCENGINE_API ExtractInt(const std::string& str);
 	CCMaths::Vector3  CCENGINE_API ExtractVector3(std::string str);
 	Bool3			  CCENGINE_API ExtractBool3(std::string str);
+
+	std::string CCENGINE_API ToLower(const std::string& str);
+	std::string CCENGINE_API ToUpper(const std::string& str);
 }
 
 //CreateFolder

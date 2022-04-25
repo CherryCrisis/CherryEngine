@@ -19,8 +19,9 @@
 #include "time_manager.hpp"
 
 #include <iostream>
+#include <crtdbg.h>
 
-//#include <crtdbg.h>
+#include "utils.hpp"
 
 void HideCursor(void* window) 
 {
@@ -32,6 +33,12 @@ void ShowCursor(void* window)
 {
     GLFWwindow* castedWindow = (GLFWwindow*)window;
     glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void drop_callback(GLFWwindow* window, int count, const char** paths)
+{
+    for (int i = 0; i < count; i++) 
+        EditorNotifications::ResourceImporting(CopyFolder(paths[i], "Assets/"));
 }
 
 int main()
@@ -47,7 +54,7 @@ int main()
         printf("glfwInit failed\n");
         return -1;
     }
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Cherry Crisis", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Cherry Crisis Engine", nullptr, nullptr);
     if (window == nullptr)
     {
         printf("glfwCreateWindow failed\n");
@@ -74,7 +81,6 @@ int main()
     ImGui::MergeIconsWithLatestFont(16.f, false);
 
     Engine engine{};
-    std::cout << "here is ok" << std::endl;
     EditorManager editor{};
 
     glfwSetWindowUserPointer(window, &editor);
@@ -99,6 +105,8 @@ int main()
         static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
     });
     ImGui_ImplGlfw_InitForOpenGL(window, true);
+
+    glfwSetDropCallback(window, drop_callback);
 
     InputManager::GetInstance()->HideCursor = HideCursor;
     InputManager::GetInstance()->ShowCursor = ShowCursor;

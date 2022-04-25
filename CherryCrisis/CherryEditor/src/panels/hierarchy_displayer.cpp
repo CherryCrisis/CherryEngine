@@ -90,22 +90,6 @@ void HierarchyDisplayer::Render()
         ImGui::EndPopup();
     }
 
-
-    if (ImGui::BeginDragDropTarget())
-    {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(".obj"))
-        {
-            const char* c = (const char*)payload->Data;
-            std::string str = "Assets/" + std::string(c);
-            const char* string = str.c_str();
-            auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-            ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(string, true, cb);
-        }
-
-        ImGui::EndDragDropTarget();
-    }
-
-
     ImGui::End();
 }
 
@@ -144,11 +128,31 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
             draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
             m_manager->m_selectedEntities.clear();
-            ImGui::TreePop();
+            if (opened) ImGui::TreePop();
             return true;
         }
 
         ImGui::EndDragDropTarget();
+    }
+    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive)
+    {
+        ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;
+        if (payload->IsDataType("HIERARCHY_DROP")) 
+        {
+            Entity* draggedEntity = static_cast<Entity*>(payload->Data);
+            if (draggedEntity)
+            {
+                Transform* draggedTransform = draggedEntity->GetBehaviour<Transform>();
+                if (draggedTransform && draggedTransform == entityTransform)
+                {
+                    draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr);
+                    m_manager->m_selectedEntities.clear();
+                    if (opened) ImGui::TreePop();
+                    return true;
+                }
+            }
+        }
+       
     }
 
     if (opened && entityTransform)

@@ -377,6 +377,14 @@ namespace EditorNotifications
             EditorManager::SendNotification("Error while loading object", ENotifType::Warning);
     }
 
+    void ResourceImporting(bool result)
+    {
+        if (result)
+            EditorManager::SendNotification("importing Asset", ENotifType::Success);
+        else
+            EditorManager::SendNotification("Error while importing the asset", ENotifType::Warning);
+    }
+
     void BuildGame(bool result) 
     {
         if (result)
