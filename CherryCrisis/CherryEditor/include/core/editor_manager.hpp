@@ -83,6 +83,8 @@ public:
 
     //Selected Entities in hierarchy
     std::vector<Entity*> m_selectedEntities;
+
+    std::string m_projectPath = "";
 };
 
 namespace EditorNotifications 

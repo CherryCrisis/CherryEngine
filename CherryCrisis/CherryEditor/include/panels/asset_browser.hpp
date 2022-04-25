@@ -55,7 +55,6 @@ private :
 	std::string m_renamingName = "";
 
 
-	std::filesystem::path m_solutionDirectory;
 
 	std::unordered_map<std::string, AssetNode> m_nodes;
 	//-------------------
@@ -74,6 +73,7 @@ public:
 	void ContextCallback() override;
 
 	std::filesystem::path m_currentDirectory;
+	std::filesystem::path m_solutionDirectory;
 
 	//Refresh the asset list
 	void QuerryBrowser();

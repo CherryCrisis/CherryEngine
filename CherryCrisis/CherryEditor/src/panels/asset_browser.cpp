@@ -44,7 +44,7 @@ namespace CCScripting
 AssetBrowser::AssetBrowser(const std::string& projectPath)
 {
     //Set Full Path to Assets
-    m_currentDirectory = projectPath.size() > 0 ? projectPath : std::filesystem::current_path();
+    m_currentDirectory = std::filesystem::current_path();
     m_currentDirectory /= "Assets";
     m_solutionDirectory = m_currentDirectory;
 
