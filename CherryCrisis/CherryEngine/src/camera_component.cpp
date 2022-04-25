@@ -2,11 +2,13 @@
 
 #include "camera_component.hpp"
 
+#include "cell.hpp"
+
+#include "transform.hpp"
+
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
-
-#include "transform.hpp"
 
 #include "basic_rendering_pipeline.hpp"
 
@@ -24,7 +26,7 @@ CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
 
 CameraComponent::~CameraComponent()
 {
-
+	GetHost().m_cell->RemoveViewer(&m_camera);
 }
 
 void CameraComponent::PopulateMetadatas()
@@ -41,6 +43,8 @@ void CameraComponent::PopulateMetadatas()
 void CameraComponent::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&CameraComponent::Initialize, this);
+
+	GetHost().m_cell->AddViewer(&m_camera);
 }
 
 void CameraComponent::Initialize() 

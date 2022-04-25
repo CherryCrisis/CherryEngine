@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <typeinfo>
+#include <string>
 
 #include "cherry_macros.hpp"
 #include "renderpass_interface.hpp"
@@ -14,38 +15,39 @@ class APostProcessRenderPass;
 
 class CCENGINE_API ARenderingPipeline
 {
-	std::unordered_map<std::type_index, ARenderPass*>	m_existingRenderpasses;
+private:
+	//std::unordered_map<std::string, std::unique_ptr<ARenderPass>> m_existingRenderpasses;
+	std::unordered_map<std::string, ARenderPass*> m_existingRenderpasses;
+
 public:
+	virtual ~ARenderingPipeline();
+
+	ARenderPass* GetRenderpass(const char* typeName);
+
 	template <class SubPipelineT>
 	constexpr SubPipelineT* GetSubpipeline()
 	{
 		static_assert(std::is_base_of_v<ARenderPass, SubPipelineT>, "SubPipelineT is not inherited of ASubPipeline");
 
-		const std::type_index typeID = typeid(SubPipelineT);
-
-		const auto& pipelineIt = m_existingRenderpasses.find(typeID);
-
-		if (pipelineIt == m_existingRenderpasses.end())
-			return nullptr;
-
-		return static_cast<SubPipelineT*>(pipelineIt->second);
+		return static_cast<SubPipelineT*>(GetRenderpass(typeid(SubPipelineT).name()));
 	}
 
 	template <class SubPipelineT>
 	constexpr SubPipelineT* LoadSubpipeline()
 	{
-		SubPipelineT* subPipeline = GetSubpipeline<SubPipelineT>();
-
-		if (subPipeline)
+		if (SubPipelineT* subPipeline = GetSubpipeline<SubPipelineT>())
 			return subPipeline;
 
-		const std::type_index typeID = typeid(SubPipelineT);
+		const char* typeName = typeid(SubPipelineT).name();
 
-		// TODO: Add clear / use smart pointers
-		subPipeline = new SubPipelineT(typeID.name());
-		m_existingRenderpasses[typeID] = subPipeline;
+		//auto renderpassPtr = std::make_unique<SubPipelineT>(typeName);
+		//SubPipelineT* rawPtr = renderpassPtr.get();
+		//m_existingRenderpasses.emplace(typeName, std::move(renderpassPtr));
 
-		return subPipeline;
+		SubPipelineT* rawPtr = new SubPipelineT(typeName);
+		m_existingRenderpasses.emplace(typeName, std::move(rawPtr));
+
+		return rawPtr;
 	}
 
 	template <class SubPipelineT, class RendererT>

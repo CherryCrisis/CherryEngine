@@ -488,6 +488,7 @@
     <ClCompile Include="src\physic_manager.cpp" />
     <ClCompile Include="src\pickinger.cpp" />
     <ClCompile Include="src\picking_renderpass.cpp" />
+    <ClCompile Include="src\rendering_pipeline_interface.cpp" />
     <ClCompile Include="src\rigidbody.cpp" />
     <ClCompile Include="src\scripted_behaviour.cpp" />
     <ClCompile Include="interface\ccengine_wrap.cxx">

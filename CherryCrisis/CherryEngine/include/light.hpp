@@ -2,6 +2,8 @@
 
 #include "maths.hpp"
 
+#include "renderer.hpp"
+
 struct GPULight { };
 
 struct Light

@@ -13,6 +13,7 @@
 #include "resource_manager.hpp"
 
 #include "pickinger.hpp"
+#include "cell_system.hpp"
 
 #include "basic_rendering_pipeline.hpp"
 
@@ -58,6 +59,12 @@ SceneDisplayer::SceneDisplayer()
 
 
     m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
+    CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
+}
+
+SceneDisplayer::~SceneDisplayer()
+{
+    CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
 }
 
 void SceneDisplayer::UpdateCamera()

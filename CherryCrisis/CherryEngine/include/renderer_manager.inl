@@ -6,7 +6,7 @@ void RenderManager::SubscribeToPipeline(RendererT* renderer)
 	for (Viewer* viewer : m_viewers)
 	{
 		if (auto pipeline = viewer->m_pipeline.get())
-			pipeline->SubscribeToPipeline<SubPipelineT>(renderer);
+			renderer->SubscribeToPipeline(pipeline);
 	}
 }
 
@@ -16,6 +16,6 @@ void RenderManager::UnsubscribeToPipeline(RendererT* renderer)
 	for (Viewer* viewer : m_viewers)
 	{
 		if (auto pipeline = viewer->m_pipeline.get())
-			pipeline->UnsubscribeToPipeline<SubPipelineT>(renderer);
+			renderer->UnsubscribeToPipeline(pipeline);
 	}
 }

@@ -6,7 +6,11 @@
 
 #include "debug.hpp"
 #include "physic_manager.hpp"
+
 #include "entity.hpp"
+#include "viewer.hpp"
+#include "skybox.hpp"
+#include "renderer.hpp"
 
 Cell::Cell()
 {
@@ -19,6 +23,12 @@ Cell::Cell()
 Cell::~Cell()
 {
 	m_pxManager->Unregister(this);
+}
+
+void Cell::Initialize()
+{
+	m_skybox = new Skybox(this);
+	m_skybox->Load();
 }
 
 void Cell::AddEntity(Entity* newEntity)
@@ -49,6 +59,54 @@ void Cell::AddEntityToPhysicScene(Entity* newEntity)
 
 	if (actor)
 		m_physicCell->AddActor(actor);
+}
+
+void Cell::AddRenderer(ARenderer* renderer)
+{
+	m_renderers.insert(renderer);
+
+	for (Viewer* viewer : m_viewers)
+	{
+		if (auto pipeline = viewer->m_pipeline.get())
+			renderer->SubscribeToPipeline(pipeline);
+	}
+}
+
+void Cell::AddViewer(Viewer* viewer)
+{
+	m_viewers.insert(viewer);
+
+	auto pipeline = viewer->m_pipeline.get();
+
+	if (!pipeline)
+		return;
+
+	for (ARenderer* renderer : m_renderers)
+		renderer->SubscribeToPipeline(pipeline);
+}
+
+void Cell::RemoveRenderer(ARenderer* renderer)
+{
+	m_renderers.erase(renderer);
+
+	for (Viewer* viewer : m_viewers)
+	{
+		if (auto pipeline = viewer->m_pipeline.get())
+			renderer->UnsubscribeToPipeline(pipeline);
+	}
+}
+
+void Cell::RemoveViewer(Viewer* viewer)
+{
+	m_viewers.erase(viewer);
+
+	auto pipeline = viewer->m_pipeline.get();
+
+	if (!pipeline)
+		return;
+
+	for (ARenderer* renderer : m_renderers)
+		renderer->UnsubscribeToPipeline(pipeline);
 }
 
 void Cell::RemoveEntity(Entity* newEntity)

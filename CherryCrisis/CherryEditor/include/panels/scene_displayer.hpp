@@ -16,6 +16,7 @@ public:
 	EditorManager* m_manager = nullptr;
 	
 	SceneDisplayer();
+	~SceneDisplayer();
 	
 	void UpdateCamera();
 	void Render() override;

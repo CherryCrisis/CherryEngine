@@ -10,31 +10,28 @@
 #include "maths.hpp"
 #include "transform.hpp"
 
+#include "cell.hpp"
+
 LightComponent::LightComponent()
 {
-	RenderManager::GetInstance()->SubscribeToPipeline<ShadowRenderPass>(&m_light);
-	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(&m_light);
-
 	PopulateMetadatas();
 }
 
 LightComponent::LightComponent(CCUUID& id) : Behaviour(id)
 {
-	RenderManager::GetInstance()->SubscribeToPipeline<ShadowRenderPass>(&m_light);
-	RenderManager::GetInstance()->SubscribeToPipeline<BasicRenderPass>(&m_light);
-
 	PopulateMetadatas();
 }
 
 LightComponent::~LightComponent()
 {
-	RenderManager::GetInstance()->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
-	RenderManager::GetInstance()->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
+	GetHost().m_cell->RemoveRenderer(this);
 }
 
 void LightComponent::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&LightComponent::Initialize, this);
+
+	GetHost().m_cell->AddRenderer(this);
 }
 
 void LightComponent::Initialize()
@@ -77,4 +74,16 @@ void LightComponent::ChangePosition(const CCMaths::Vector3& position)
 void LightComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 {
 	//m_light.rotation = rotation;
+}
+
+void LightComponent::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->SubscribeToPipeline<ShadowRenderPass>(&m_light);
+	pipeline->SubscribeToPipeline<BasicRenderPass>(&m_light);
+}
+
+void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
+	pipeline->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
 }

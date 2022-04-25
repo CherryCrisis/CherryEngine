@@ -7,6 +7,8 @@
 
 #include "maths.hpp"
 
+struct Cell;
+
 class Viewer
 {
 public:

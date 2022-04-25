@@ -15,4 +15,6 @@ public:
 	{
 		m_program = ResourceManager::GetInstance()->AddResource<ShaderProgram>(pipelineName, true, vert, frag);
 	}
+
+	~ARenderPass() = default;
 };

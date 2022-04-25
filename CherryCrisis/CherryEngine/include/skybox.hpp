@@ -13,14 +13,18 @@ private:
 	void RemoveMesh();
 	void RemoveCubemap();
 
+	class Cell* m_cell;
+
 public:
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Cubemap>	m_cubemap;
 
-	Skybox();
+	Skybox(Cell* cell);
 	~Skybox();
 
+
 	void Load();
-	void SubscribeToRenderPass();
-	void UnsubscribeToRenderPass();
+
+	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
+	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 };
