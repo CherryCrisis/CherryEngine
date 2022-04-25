@@ -26,12 +26,12 @@ void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 {
 	m_shadowPass->CallOnExecute(fb, viewer);
 	m_basicPass->CallOnExecute(fb, viewer);
-	m_skyboxPass->CallOnExecute(fb, viewer);
 
 	m_bloomPass->CallOnExecute(fb);
 
 	if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
 		m_hdrPass->CallOnExecute(fb);
 
+	m_skyboxPass->CallOnExecute(fb, viewer);
 	//m_postprocessPass->CallOnExecute(fb);
 }

@@ -32,7 +32,7 @@ BloomRenderPass::BloomRenderPass(const char* name)
 
 		glGenTextures(1, &framebuffer.colorTex.texID);
 		glBindTexture(GL_TEXTURE_2D, framebuffer.colorTex.texID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, framebuffer.colorTex.width, framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, framebuffer.colorTex.width, framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -57,7 +57,7 @@ void BloomRenderPass::Execute(Framebuffer& framebuffer)
 			curFramebuffer.colorTex.width = framebuffer.colorTex.width; curFramebuffer.colorTex.height = framebuffer.colorTex.height;
 
 			glBindTexture(GL_TEXTURE_2D, curFramebuffer.colorTex.texID);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, curFramebuffer.colorTex.width, curFramebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, curFramebuffer.colorTex.width, curFramebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
 
 			hasChanged = true;
 		}

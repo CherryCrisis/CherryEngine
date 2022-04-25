@@ -39,7 +39,7 @@ void FrameDisplayer::Init()
 
     glGenTextures(1, &m_framebuffer.colorTex.texID);
     glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -48,7 +48,7 @@ void FrameDisplayer::Init()
 
     glGenTextures(1, &m_framebuffer.brightnessTex.texID);
     glBindTexture(GL_TEXTURE_2D, m_framebuffer.brightnessTex.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.brightnessTex.width, m_framebuffer.brightnessTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.brightnessTex.width, m_framebuffer.brightnessTex.height, 0, GL_RGB, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -81,10 +81,10 @@ void FrameDisplayer::UpdateTextureSize(float width, float height)
     m_framebuffer.colorTex.height = m_framebuffer.brightnessTex.height = (GLsizei)height;
 
     glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
 
     glBindTexture(GL_TEXTURE_2D, m_framebuffer.brightnessTex.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_framebuffer.brightnessTex.width, m_framebuffer.brightnessTex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.brightnessTex.width, m_framebuffer.brightnessTex.height, 0, GL_RGB, GL_FLOAT, NULL);
 
     glBindRenderbuffer(GL_RENDERBUFFER, m_framebuffer.RBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
