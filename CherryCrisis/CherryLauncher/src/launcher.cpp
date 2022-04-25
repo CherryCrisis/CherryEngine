@@ -23,16 +23,16 @@ void Launcher::AddProjectPath()
 		return;
 
 	const char* cSelection = selection[0].c_str();
-	
-	std::string str = String::ExtractValue(selection[0], '.');
-	if (str != "cherryproject") 
+	std::filesystem::path path = cSelection;
+
+	if (path.extension() != ".cherryproject") 
 	{
 		AddProjectPath();
 		return;
 	}
 
-	project.path = cSelection;
-	project.name = project.path.filename().string();
+	project.path = path;
+	project.name = path.filename().string();
 
 	m_projects.push_back(project);
 }
@@ -86,12 +86,33 @@ void Launcher::DeleteProject()
 
 void Launcher::ReadLauncherInfos() 
 {
+	if (!std::filesystem::exists("launcher.meta"))
+		return;
 
+	YAML::Node loader = YAML::LoadFile("launcher.meta");
+
+	for (YAML::const_iterator it = loader["projects"].begin(); it != loader["projects"].end(); ++it) 
+	{
+		Project project{};
+
+		project.path = it->as<std::string>();
+		project.name = project.path.filename().string();
+
+		m_projects.push_back(project);
+	}
 }
 
 void Launcher::WriteLauncherInfos() 
 {
+	YAML::Node save;
+	for (const Project& project : m_projects) 
+	{
+		save["projects"].push_back(project.path.string());
+	}
+	std::ofstream out("launcher.meta");
 
+	out << save;
+	out.close();
 }
 
 std::vector<Project> Launcher::GetProjectList() const

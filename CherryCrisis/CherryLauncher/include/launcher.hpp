@@ -28,7 +28,7 @@ class Launcher
 	std::string version = "1.0.0";
 
 public:
-	Launcher(GLFWwindow* window) : m_window(window) {}
+	Launcher(GLFWwindow* window) : m_window(window) { ReadLauncherInfos(); }
 
 	void AddProjectPath();
 	void RemoveProjectPath();

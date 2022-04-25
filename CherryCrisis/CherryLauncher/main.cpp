@@ -143,6 +143,7 @@ int main()
         glfwSwapBuffers(window);
     }
 
+    launcher.WriteLauncherInfos();
     // Terminate glfw
     glfwDestroyWindow(window);
     glfwTerminate();
