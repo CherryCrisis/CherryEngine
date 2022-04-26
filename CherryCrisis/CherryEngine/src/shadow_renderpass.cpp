@@ -147,7 +147,7 @@ void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 			glBindVertexArray(gpuMesh->VAO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-			glDrawElements(GL_TRIANGLES, (GLsizei)mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 		}
 	}
 

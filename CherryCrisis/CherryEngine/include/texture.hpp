@@ -21,8 +21,6 @@ enum class ETextureFormat
     DXT5    = 0x83F3, // Compressed 2xGrayscale for tangent-space normal maps
     DXT6    = 0x8E8E, //Compressed RGB, floating point for HDR images
     DXT7    = 0x8E8C, //Compressed RGB/RGBA for High-quality color maps, color maps with full alpha
-
-    //DXT4, //Compressed Grayscale for height maps, gloss maps any grayscale image
 };
 
 
@@ -43,7 +41,7 @@ public:
     std::unique_ptr<GPUTexture> m_gpuTexture = nullptr;
 
     Texture(const char* texturePath);
-    virtual ~Texture() = default;
+    virtual ~Texture();
 
     int GetWidth()  { return m_width; }
     int GetHeight() { return m_height; }
@@ -54,6 +52,7 @@ public:
     void SetInternalFormat(ETextureFormat textureFormat) { m_internalFormat = textureFormat; }
 
     void* GetData() { return m_data; }
+    void ClearData();
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true, 
         ETextureFormat textureFormat = ETextureFormat::RGBA);

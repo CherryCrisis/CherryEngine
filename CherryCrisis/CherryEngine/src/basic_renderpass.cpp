@@ -31,6 +31,8 @@ void BasicRenderPass::GPUTextureBasic::Generate(Texture* texture)
 
 		glTextureStorage2D(ID, 1, internalFormat, texture->GetWidth(), texture->GetHeight());
 		glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (unsigned int)textureFormat, GL_UNSIGNED_BYTE, texture->GetData());
+
+		glGenerateTextureMipmap(ID);
 	}
 	else
 	{
@@ -58,9 +60,7 @@ void BasicRenderPass::GPUTextureBasic::Generate(Texture* texture)
 		}
 	}
 
-
-
-	glGenerateTextureMipmap(ID);
+	texture->ClearData();
 }
 
 void BasicRenderPass::GPUTextureBasic::Regenerate(Texture* texture)
@@ -196,6 +196,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		return;
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
 
 	glCullFace(GL_BACK);
@@ -302,7 +303,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-		glDrawElements(GL_TRIANGLES, (GLsizei)mesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 
 	glUseProgram(0);

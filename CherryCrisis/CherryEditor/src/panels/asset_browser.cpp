@@ -373,7 +373,9 @@ void AssetBrowser::RenderNodes(const char* name)
                     std::string str = node.m_relativePath.string() + node.m_filename + node.m_extension;
 
                     if (!node.m_extension.compare(".cherry"))
+                    {
                         EditorNotifications::SceneLoading(SceneManager::LoadScene(str.c_str()));
+                    }
 
                     else if (!node.m_extension.compare(".jpg") || !node.m_extension.compare(".png"))
                         m_assetsSettings = std::unique_ptr<AssetsSettings>(new TextureSettings(str));

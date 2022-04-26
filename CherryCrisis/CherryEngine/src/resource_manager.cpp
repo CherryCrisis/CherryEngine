@@ -19,9 +19,14 @@ void ResourceManager::Purge()
 {
 	std::lock_guard<std::mutex> lock(m_lockResources);
 
-	for (auto& pair : m_resources)
+	size_t resourceTypeSize = m_resources.size();
+
+	for (int i = 0; i < resourceTypeSize; ++i)
 	{
-		pair.second->Purge();
+		for (auto& pair : m_resources)
+		{
+			pair.second->Purge();
+		}
 	}
 }
 

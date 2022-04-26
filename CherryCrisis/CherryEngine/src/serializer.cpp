@@ -389,8 +389,8 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 		}
 	}
 
-	for (auto& [entityName, entityRef] : scene->m_entities)
-		entityRef->Initialize();
+	//for (auto& [entityName, entityRef] : scene->m_entities)
+	//	entityRef->Initialize();
 
 	return true;
 }

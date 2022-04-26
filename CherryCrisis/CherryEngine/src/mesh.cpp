@@ -6,7 +6,7 @@
 
 void Mesh::Delete()
 {
-    m_gpuMesh = nullptr;
+    m_gpuMesh.reset();
 }
 
 void Mesh::Load(std::shared_ptr<Mesh> mesh, const aiMesh* assimpMesh)
@@ -142,11 +142,16 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
     Load(mesh, vertices, indices);
 }
 
-
-void Mesh::Reload(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+void Mesh::ClearData()
 {
     m_vertices.clear();
     m_indices.clear();
+}
+
+
+void Mesh::Reload(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+{
+    ClearData();
 
     m_vertices = std::move(vertices);
     m_indices = std::move(indices);

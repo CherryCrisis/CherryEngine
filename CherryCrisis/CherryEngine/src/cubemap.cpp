@@ -27,3 +27,14 @@ void Cubemap::Load(std::shared_ptr<Cubemap> cubemap, const char* textureRight, c
     const char* textures[6] = { textureRight, textureLeft, textureTop, textureBottom, textureFront, textureBack };
     Cubemap::Load(cubemap, textures);
 }
+
+void Cubemap::ClearData()
+{
+    for (unsigned int i = 0; i < 6; i++)
+    {
+        if (m_textures[i])
+            m_textures[i]->ClearData();
+
+        m_data[i] = nullptr;
+    }
+}

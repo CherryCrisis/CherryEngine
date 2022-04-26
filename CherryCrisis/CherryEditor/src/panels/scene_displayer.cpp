@@ -66,7 +66,7 @@ SceneDisplayer::SceneDisplayer()
 
 SceneDisplayer::~SceneDisplayer()
 {
-    CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
+    CellSystem::GetInstance()->AddOrGetCell("Default")->RemoveViewer(&m_camera);
 }
 
 void SceneDisplayer::UpdateCamera()
