@@ -91,6 +91,15 @@ void HierarchyDisplayer::Render()
     }
 
     ImGui::End();
+
+    if (ImGui::IsKeyDown(ImGuiKey_Delete) && m_manager->m_selectedEntities.size() > 0) 
+    {
+        for (Entity* entity : m_manager->m_selectedEntities) 
+        {
+            SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
+            m_manager->m_selectedEntities.clear();
+        }
+    }
 }
 
 bool HierarchyDisplayer::RenderEntity(Entity* entity) 

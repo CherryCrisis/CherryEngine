@@ -115,24 +115,28 @@ void SceneDisplayer::Render()
 
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
             if (IM->GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
-        
-        if (m_isFocused) 
+
+        if (m_isFocused)
         {
             if (IM->GetKey(Keycode::RIGHT_CLICK)) { UpdateCamera(); }
             if (IM->GetKeyUp(Keycode::RIGHT_CLICK)) { Unfocus(); }
         }
 
-        if (ImGui::IsWindowFocused(ImGuiHoveredFlags_ChildWindows) && !IM->GetKey(Keycode::RIGHT_CLICK))
+        if (!IM->GetKey(Keycode::RIGHT_CLICK))
         {
-            if (IM->GetKeyDown("Translate"))   m_operation = ImGuizmo::OPERATION::TRANSLATE;
-            if (IM->GetKeyDown("Rotate"))      m_operation = ImGuizmo::OPERATION::ROTATE;
-            if (IM->GetKeyDown("Scale"))       m_operation = ImGuizmo::OPERATION::SCALE;
+            if (IM->GetKeyDown("Save"))
+                EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
 
-            if (IM->GetKeyDown("World"))       m_mode = ImGuizmo::MODE::WORLD;
-            if (IM->GetKeyDown("Local"))       m_mode = ImGuizmo::MODE::LOCAL;
+            if (ImGui::IsWindowFocused(ImGuiHoveredFlags_ChildWindows))
+            {
+                if (IM->GetKeyDown("Translate"))   m_operation = ImGuizmo::OPERATION::TRANSLATE;
+                if (IM->GetKeyDown("Rotate"))      m_operation = ImGuizmo::OPERATION::ROTATE;
+                if (IM->GetKeyDown("Scale"))       m_operation = ImGuizmo::OPERATION::SCALE;
+
+                if (IM->GetKeyDown("World"))       m_mode = ImGuizmo::MODE::WORLD;
+                if (IM->GetKeyDown("Local"))       m_mode = ImGuizmo::MODE::LOCAL;
+            }
         }
-
-        if (IM->GetKeyDown("Save"))      EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
 
         if (InputManager::GetInstance()->GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
             && !ImGuizmo::IsOver())
