@@ -10,11 +10,16 @@
 #include "hdr_renderpass.hpp"
 #include "basic_postprocess_renderpass.hpp"
 
+#include "environment_map_renderpass.hpp"
+#include "skydome_renderpass.hpp"
+
 BasicRPipeline::BasicRPipeline()
 {
 	m_shadowPass = LoadSubpipeline<ShadowRenderPass>();
 	m_basicPass = LoadSubpipeline<BasicRenderPass>();
-	m_skyboxPass = LoadSubpipeline<SkyboxRenderPass>();
+	//m_skyboxPass = LoadSubpipeline<SkyboxRenderPass>();
+	m_envMapPass = LoadSubpipeline<EnvironmentMapRenderPass>();
+	m_skydomePass = LoadSubpipeline<SkydomeRenderPass>();
 
 	m_bloomPass = LoadSubpipeline<BloomRenderPass>();
 	m_hdrPass = LoadSubpipeline<HDRRenderPass>();
@@ -32,6 +37,13 @@ void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 	if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
 		m_hdrPass->CallOnExecute(fb);
 
-	m_skyboxPass->CallOnExecute(fb, viewer);
+	//if (!isGenerated)
+	//{
+		m_envMapPass->Execute();
+		isGenerated = true;
+	//}
+
+	//m_skyboxPass->CallOnExecute(fb, viewer);
+	m_skydomePass->CallOnExecute(fb, viewer);
 	//m_postprocessPass->CallOnExecute(fb);
 }

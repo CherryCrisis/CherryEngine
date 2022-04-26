@@ -106,6 +106,9 @@
     <Filter Include="Fichiers sources\Rendering\Pipeline">
       <UniqueIdentifier>{771c2369-649c-4f8a-88af-df15d8b36069}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
+      <UniqueIdentifier>{dee2d53b-44b3-4ff9-bca8-b54466731a9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\entity.hpp">
@@ -1164,12 +1167,6 @@
     <ClInclude Include="externals\include\nvtt\nvtt_wrapper.h">
       <Filter>Fichiers externes\nvtt</Filter>
     </ClInclude>
-    <ClInclude Include="include\basic_rendering_pipeline.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="include\rendering_pipeline_interface.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\bloom_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
@@ -1178,6 +1175,27 @@
     </ClInclude>
     <ClInclude Include="include\viewer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basic_rendering_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering_pipeline_interface.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pbr_rendering_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skydome_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\spheremap.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skydome.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\environment_map_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1512,6 +1530,21 @@
     </ClCompile>
     <ClCompile Include="src\rendering_pipeline_interface.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pbr_rendering_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spheremap.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skydome_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skydome.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\environment_map_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

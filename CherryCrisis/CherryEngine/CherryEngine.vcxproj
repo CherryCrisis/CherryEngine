@@ -217,6 +217,7 @@
     <ClInclude Include="include\cell_system.hpp" />
     <ClInclude Include="include\command.hpp" />
     <ClInclude Include="include\ebo_tbn_generator.hpp" />
+    <ClInclude Include="include\environment_map_renderpass.hpp" />
     <ClInclude Include="include\framebuffer.hpp" />
     <ClInclude Include="include\collider.hpp" />
     <ClInclude Include="include\csassembly.hpp" />
@@ -338,6 +339,7 @@
     <ClInclude Include="include\model_loader.hpp" />
     <ClInclude Include="include\model_renderer.hpp" />
     <ClInclude Include="include\monowrapper.hpp" />
+    <ClInclude Include="include\pbr_rendering_pipeline.hpp" />
     <ClInclude Include="include\pch.hpp" />
     <ClInclude Include="include\physic_actor.hpp" />
     <ClInclude Include="include\physic_scene.hpp" />
@@ -365,8 +367,11 @@
     <ClInclude Include="include\skybox.hpp" />
     <ClInclude Include="include\skybox_renderpass.hpp" />
     <ClInclude Include="include\renderpass_interface.hpp" />
+    <ClInclude Include="include\skydome.hpp" />
+    <ClInclude Include="include\skydome_renderpass.hpp" />
     <ClInclude Include="include\sound.hpp" />
     <ClInclude Include="include\sound_manager.hpp" />
+    <ClInclude Include="include\spheremap.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\time_manager.hpp" />
@@ -482,7 +487,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\ebo_tbn_generator.cpp" />
+    <ClCompile Include="src\environment_map_renderpass.cpp" />
     <ClCompile Include="src\hdr_renderpass.cpp" />
+    <ClCompile Include="src\pbr_rendering_pipeline.cpp" />
     <ClCompile Include="src\physic_actor.cpp" />
     <ClCompile Include="src\physic_scene.cpp" />
     <ClCompile Include="src\physic_manager.cpp" />
@@ -536,8 +543,11 @@
     <ClCompile Include="src\shadow_renderpass.cpp" />
     <ClCompile Include="src\skybox.cpp" />
     <ClCompile Include="src\skybox_renderpass.cpp" />
+    <ClCompile Include="src\skydome.cpp" />
+    <ClCompile Include="src\skydome_renderpass.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\sound_manager.cpp" />
+    <ClCompile Include="src\spheremap.cpp" />
     <ClCompile Include="src\sphere_collider.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\time_manager.cpp" />
