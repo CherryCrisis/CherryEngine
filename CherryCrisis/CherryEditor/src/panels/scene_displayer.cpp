@@ -5,6 +5,7 @@
 
 #include <imgui.h>
 #include <comdef.h>
+#include <algorithm>
 
 #include "time_manager.hpp"
 #include "core/editor_manager.hpp"
@@ -113,8 +114,10 @@ void SceneDisplayer::Render()
 
         IM->PushContext("Editor Context");
 
-        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)) 
+        {
             if (IM->GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
+        }
 
         if (m_isFocused)
         {
@@ -149,9 +152,25 @@ void SceneDisplayer::Render()
 
             //TODO: Add multi select CTRL 
 
-            m_manager->m_selectedEntities.clear();
-            if (e)
-                m_manager->m_selectedEntities.push_back(e);
+            if (e) 
+            {
+                Entity* root = e->GetBehaviour<Transform>()->GetRootParent()->GetHostPtr();
+                if (std::find(m_manager->m_selectedEntities.begin(), m_manager->m_selectedEntities.end(), root) != m_manager->m_selectedEntities.end() ||
+                    (e->GetBehaviour<Transform>()->IsChildOf(root->GetBehaviour<Transform>()) && m_manager->m_selectedEntities.size() > 0 && m_manager->m_selectedEntities[0]->GetBehaviour<Transform>()->IsChildOf(root->GetBehaviour<Transform>())))
+                {
+                    m_manager->m_selectedEntities.clear();
+                    m_manager->m_selectedEntities.push_back(e);
+                }
+                else 
+                {
+                    m_manager->m_selectedEntities.clear();
+                    m_manager->m_selectedEntities.push_back(root);
+                }
+            }
+            else 
+            {
+                m_manager->m_selectedEntities.clear();
+            }
 
         }
 

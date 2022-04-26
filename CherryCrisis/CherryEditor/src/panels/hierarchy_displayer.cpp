@@ -90,6 +90,11 @@ void HierarchyDisplayer::Render()
         ImGui::EndPopup();
     }
 
+    if (ImGui::IsKeyDown(ImGuiKey_F2) && m_manager->m_selectedEntities.size() > 0 && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
+    {
+        m_renaming = true;
+    }
+
     ImGui::End();
 
     if (ImGui::IsKeyDown(ImGuiKey_Delete) && m_manager->m_selectedEntities.size() > 0) 
@@ -100,6 +105,7 @@ void HierarchyDisplayer::Render()
             m_manager->m_selectedEntities.clear();
         }
     }
+
 }
 
 bool HierarchyDisplayer::RenderEntity(Entity* entity) 

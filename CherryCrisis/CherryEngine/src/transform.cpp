@@ -2,6 +2,8 @@
 
 #include "transform.hpp"
 
+#include <algorithm>
+
 Transform::Transform()
 {
 	PopulateMetadatas();
@@ -57,6 +59,16 @@ void Transform::SetParent(Transform* transform)
 
 	m_parent = transform;
 	SetDirty();
+}
+
+Transform* Transform::GetRootParent() 
+{
+	Transform* rootParent = this;
+
+	if (m_parent)
+		rootParent = m_parent->GetRootParent();
+
+	return rootParent;
 }
 
 void Transform::UpdateMatrix()
@@ -166,4 +178,27 @@ void Transform::SetGlobalScale(const Vector3& scale)
 void Transform::AddChildren(Transform* transform)
 {
 	m_children.push_back(transform);
+}
+
+bool Transform::IsChildOf(Transform* parent, bool recursive) 
+{
+	bool value = false;
+
+	std::vector<Transform*> childrens = parent->GetChildren();
+	if (childrens.size() > 0) 
+	{
+		if (std::find(childrens.begin(), childrens.end(), this) != childrens.end()) 
+		{
+			return true;
+		}
+		if (recursive) 
+		{
+			for (Transform* t : childrens)
+			{
+				value |= IsChildOf(t, true);
+			}
+		}
+		return value;
+	}
+	return false;
 }
