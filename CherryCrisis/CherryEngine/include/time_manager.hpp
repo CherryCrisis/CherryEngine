@@ -23,6 +23,21 @@ struct CCENGINE_API FullDate
 	unsigned int day;
 };
 
+class CCENGINE_API Chrono
+{
+private :
+	unsigned int m_oldTime = 0;
+	
+	//max chrono time < 1h
+	unsigned int GetCurrentTimeInMs();
+
+public:
+	Chrono() = default;
+
+	void Start();
+	unsigned int Stop();
+};
+
 class CCENGINE_API TimeManager : public Singleton<TimeManager>
 {
 private:
@@ -37,8 +52,8 @@ private:
 
 public:
 	TimeManager();
-	//GETTER AND SETTERS
 
+	//GETTER AND SETTERS
 	FullDate GetCurrentTime();
 	float GetDeltaTime()	  { return m_deltaTime; }
 	float GetTimeScale()	  { return m_timeScale; }
@@ -47,7 +62,6 @@ public:
 
 	void  SetTimeScale(float newTime)      { m_timeScale = newTime; }
 	void  SetFixedDeltaTime(float newTime) { m_fixedDeltaTime = newTime; }
-    //
 
 	void  Update(const float time);
 };

@@ -38,3 +38,19 @@ FullDate TimeManager::GetCurrentTime()
         .day = static_cast<unsigned int>(ymd.day()),
     };
 }
+
+unsigned int Chrono::GetCurrentTimeInMs()
+{
+    FullDate date = TimeManager::GetInstance()->GetCurrentTime();
+    return date.milliseconds + date.seconds * 1000 + date.minutes * 60000;
+}
+
+void Chrono::Start()
+{
+    m_oldTime = GetCurrentTimeInMs();
+}
+
+unsigned int Chrono::Stop()
+{
+    return GetCurrentTimeInMs() - m_oldTime;
+}
