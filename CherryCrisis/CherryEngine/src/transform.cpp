@@ -167,3 +167,21 @@ void Transform::AddChildren(Transform* transform)
 {
 	m_children.push_back(transform);
 }
+
+void Transform::BindToSignals()
+{
+	GetHost().m_OnCellAdded.Bind(&Transform::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&Transform::OnCellRemoved, this);
+}
+
+void Transform::OnCellAdded(Cell* newCell)
+{
+	for (Transform* child : m_children)
+		child->GetHost().m_OnCellAdded.Invoke(std::forward<Cell*>(newCell));
+}
+
+void Transform::OnCellRemoved(Cell* newCell)
+{
+	for (Transform* child : m_children)
+		child->GetHost().m_OnCellRemoved.Invoke(std::forward<Cell*>(newCell));
+}

@@ -43,6 +43,9 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 	if (!toGenerate)
 		return -1;
 
+	if (toGenerate->m_gpuLight)
+		return true;
+
 	auto gpuLight = std::make_unique<GPUShadowLight>();
 
 	gpuLight->framebuffer.colorTex.width = 1000;

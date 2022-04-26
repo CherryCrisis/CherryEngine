@@ -19,6 +19,7 @@ class CCENGINE_API Entity : public Object
 private:
 	std::string m_name = "Entity";
 	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
+
 public:
 	Cell* m_cell = nullptr;
 
@@ -54,6 +55,8 @@ public:
 	Event<> m_OnAwake;
 	Event<> m_OnStart;
 	Event<> m_OnTick;
+	Event<Cell*> m_OnCellAdded;
+	Event<Cell*> m_OnCellRemoved;
 
 	void Initialize();
 	void Update();

@@ -209,10 +209,21 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
 
-	size_t lightID = 0u;
 	const char* lightFormat = "uLights[{}]";
-	for (Light* light : m_lights)
+	std::unordered_set<Light*>::iterator lightIt = m_lights.begin();
+	for (size_t lightID = 0u; lightID < 8; lightID++)
 	{
+		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
+
+		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
+		glUniform1i(enableLoc, false);
+		
+		if (lightIt == m_lights.end())
+			break;
+
+		Light* light = *lightIt;
+		glUniform1i(enableLoc, light->m_enabled);
+
 		auto* gpuLight = static_cast<ShadowRenderPass::GPUShadowLight*>(light->m_gpuLight.get());
 
 		if (!gpuLight)
@@ -225,12 +236,8 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		glBindTextureUnit(3 + (GLsizei)lightID, gpuLight->depthTexID);
 
 		// TODO: Use string view
-		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 		GLuint lightSpaceLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightSpace").c_str());
 		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, light->m_lightSpace.data);
-
-		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
-		glUniform1i(enableLoc, true);
 
 		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isPoint").c_str());
 		glUniform1i(pointLoc, light->m_isPoint);
@@ -248,6 +255,8 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		glUniform3fv(specularLoc, 1, light->m_specular.data);
 
 		lightID++;
+
+		lightIt = std::next(m_lights.begin(), lightID);
 	}
 
 	for (ModelRenderer* modelRdr : m_modelRenderers)

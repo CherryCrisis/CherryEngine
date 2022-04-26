@@ -30,6 +30,8 @@ LightComponent::~LightComponent()
 void LightComponent::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&LightComponent::Initialize, this);
+	GetHost().m_OnCellAdded.Bind(&LightComponent::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&LightComponent::OnCellRemoved, this);
 
 	GetHost().m_cell->AddRenderer(this);
 }
@@ -86,4 +88,14 @@ void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
+}
+
+void LightComponent::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(this);
+}
+
+void LightComponent::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(this);
 }

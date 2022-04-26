@@ -1,16 +1,12 @@
-
 #include "panels/cell_system_displayer.hpp"
 
 #include "scene_manager.hpp"
 
 #include <imgui.h>
-#include <comdef.h>
 
-#include "time_manager.hpp"
 #include "core/editor_manager.hpp"
 #include "transform.hpp"
-#include "maths.hpp"
-#include "resource_manager.hpp"
+#include "camera.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -43,7 +39,6 @@ void CellSystemDisplayer::Render()
     if (!m_isOpened)
         return;
 
-    m_isActive = true;
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f,0.f });
     if (ImGui::Begin("Cell System", &m_isOpened))
     {
@@ -106,7 +101,18 @@ void CellSystemDisplayer::RenderCells()
             {
                 if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
                 {
-                    m_selectedCell = &cell.second;
+                    if (m_selectedCell != &cell.second)
+                    {
+                        Cell* lastCell = m_selectedCell;
+                        m_selectedCell = &cell.second;
+
+                        if (m_selectedCell && lastCell)
+                        {
+                            lastCell->RemoveViewer(m_camera);
+                            m_selectedCell->AddViewer(m_camera);
+                        }
+                    }
+
                     itemSelected = true;
                 }
 
@@ -241,20 +247,6 @@ void CellSystemDisplayer::RenameCell()
     }
 }
 
-void CellSystemDisplayer::Focus()
-{
-    m_isFocused = true;
-    m_inputs->SetCursorHidden();
-    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
-    ImGui::SetWindowFocus("Scene");
-}
-
-void CellSystemDisplayer::Unfocus()
-{
-    m_isFocused = false;
-    m_inputs->SetCursorDisplayed();
-    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
-}
 
 bool CellSystemDisplayer::Context()
 {

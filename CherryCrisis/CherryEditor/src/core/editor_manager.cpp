@@ -84,6 +84,7 @@ EditorManager::EditorManager(const std::string& projectPath)
     }
 
     m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
+    m_cellSystemDisplayer.m_camera = &m_sceneDisplayer.m_camera;
 
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
     

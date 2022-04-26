@@ -78,78 +78,15 @@ void CellSystem::AddEntityToDefault(Entity* entity)
 	m_cells[m_defaultCell].AddEntity(entity);
 }
 
-void CellSystem::MoveEntityFromCellToCell(const std::string& fromCell, const std::string& toCell, Entity* entity)
+void CellSystem::MoveEntityFromCellToCell(const std::string& fromCellName, const std::string& toCellName, Entity* entity)
 {
-	if (!m_cells.contains(fromCell) || !m_cells.contains(toCell))
-		return;
-
-	int i = m_cells[fromCell].PossessEntity(entity);
-	if (i == -1)
-	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to remove an entity from a cell not owning it");
-		return;
-	}
-
-	i = m_cells[toCell].PossessEntity(entity);
-	if (i != -1)
-	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to move an entity to a cell already owning it");
-		return;
-	}
-
-	m_cells[fromCell].RemoveEntity(entity);
-	m_cells[toCell].AddEntity(entity);
-}
-
-void CellSystem::MoveEntityFromCellToCell(Cell* fromCell, const std::string& toCell, Entity* entity)
-{
-	if (!fromCell || !m_cells.contains(toCell))
-		return;
-
-	int i = fromCell->PossessEntity(entity);
-	if (i == -1)
-	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to remove an entity from a cell not owning it");
-		return;
-	}
-
-	i = m_cells[toCell].PossessEntity(entity);
-	if (i != -1)
-	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to move an entity to a cell already owning it");
-		return;
-	}
-
-	fromCell->RemoveEntity(entity);
-	m_cells[toCell].AddEntity(entity);
-}
-
-void CellSystem::MoveEntityFromCellToCell(const std::string& fromCell, Cell* toCell, Entity* entity)
-{
-	if (!toCell || !m_cells.contains(fromCell))
-		return;
-
-	int i = m_cells[fromCell].PossessEntity(entity);
-	if (i == -1)
-	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to remove an entity from a cell not owning it");
-		return;
-	}
-
-	i = toCell->PossessEntity(entity);
-	if (i != -1)
-	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to move an entity to a cell already owning it");
-		return;
-	}
-
-	m_cells[fromCell].RemoveEntity(entity);
-	toCell->AddEntity(entity);
+	if (m_cells.contains(fromCellName) && m_cells.contains(toCellName))
+		MoveEntityFromCellToCell(&m_cells[fromCellName], &m_cells[toCellName], entity);
 }
 
 void CellSystem::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entity)
 {
-	if (!toCell || !fromCell)
+	if (!m_cells.contains(fromCell->GetName()) || !m_cells.contains(toCell->GetName()))
 		return;
 
 	int i = fromCell->PossessEntity(entity);
@@ -167,5 +104,8 @@ void CellSystem::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* 
 	}
 
 	fromCell->RemoveEntity(entity);
+	entity->m_OnCellRemoved.Invoke(&*fromCell);
+
 	toCell->AddEntity(entity);
+	entity->m_OnCellAdded.Invoke(&*toCell);
 }
