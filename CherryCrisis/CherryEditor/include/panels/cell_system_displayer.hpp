@@ -6,7 +6,8 @@
 #include "ImGuizmo.h"
 
 class EditorManager;
-class Camera;
+struct Camera;
+
 class CellSystemDisplayer : public Panel
 {
 private:

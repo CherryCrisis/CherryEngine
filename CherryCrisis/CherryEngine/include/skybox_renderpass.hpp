@@ -8,7 +8,7 @@
 
 #include "cubemap.hpp"
 
-struct Skybox;
+class Skybox;
 class Viewer;
 
 class SkyboxRenderPass : public ARenderingRenderPass, ElementMeshGenerator
