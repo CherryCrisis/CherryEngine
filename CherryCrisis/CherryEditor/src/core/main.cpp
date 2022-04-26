@@ -82,11 +82,7 @@ int main(int argc, char** argv)
 
     std::string projectPath = ""; 
     if (argc > 1) 
-    {
         projectPath = argv[1];
-
-        std::cout << projectPath << std::endl;
-    }
 
     Engine engine{};
     EditorManager editor{projectPath};

@@ -70,59 +70,82 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 	std::map<std::type_index, std::vector<std::filesystem::path*>> pathList;
 	ResourceManager::GetInstance()->GetResourcesPath(pathList);
 
+	YAML::Node resources = save["resources"];
 	//Resources Saving
 	for (const auto& [type, paths] : pathList)
 	{
 		if (type == typeid(ModelBase))
 			for (const auto& path : paths)
-				save["resources"].push_back(path->string());
+				resources.push_back(path->string());
 	}
 
 	//Entities Saving
+	YAML::Node entities = save["entities"];
 	for (const auto& [eName, eRef] : scene->m_entities) 
 	{
-		YAML::Node entity;
-		save["entities"][eRef->GetUUID()]["name"] = eRef->GetName();
+		entities[eRef->GetUUID()]["name"] = eName;
 	}
 
 	const char* parseError = "#ERROR {}  is not handled !";//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
 	//Components Saving
+	YAML::Node components = save["components"];
 	for (const auto& [eName, eRef] : scene->m_entities)
 	{
-		for (const auto& behaviour : eRef->GetAllBehaviours()) 
+		std::vector<Behaviour*> behaviours = eRef->GetAllBehaviours();
+		for (const auto& behaviour : behaviours) 
 		{	
 			uint32_t UUID = behaviour->GetUUID();
-			save["components"][UUID]["type"] = String::ExtractValue(typeid(*behaviour).name(), ' ');
+			YAML::Node node = components[UUID];
+			node["type"] = String::ExtractValue(typeid(*behaviour).name(), ' ');
 			// Field Saving
 			for (const auto& [fieldName, fieldRef] : behaviour->m_metadatas.m_fields)
 			{
 				const std::type_index& type = fieldRef.m_type;
 
 				if (type == typeid(CCMaths::Vector3))
-					save["components"][UUID][fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+				{
+					node[fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+				 continue;
+				}
 				
-				else if (type == typeid(Bool3))
-					save["components"][UUID][fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
+				if (type == typeid(Bool3)) 
+				{
+					node[fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
+					continue;
+				}
 
-				else if (type == typeid(std::string))
-					save["components"][UUID][fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
+				if (type == typeid(std::string)) 
+				{
+					node[fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
+					continue;
+				}
 
-				else if (type == typeid(float))
-					save["components"][UUID][fieldName] = *std::any_cast<float*>(fieldRef.m_value);
+				if (type == typeid(float)) 
+				{
+					node[fieldName] = *std::any_cast<float*>(fieldRef.m_value);
+					continue;
+				}
 
-				else if (type == typeid(int))
-					save["components"][UUID][fieldName] = *std::any_cast<int*>(fieldRef.m_value);
+				if (type == typeid(int)) 
+				{
+					node[fieldName] = *std::any_cast<int*>(fieldRef.m_value);
+					continue;
+				}
 
-				else if (type == typeid(bool))
-					save["components"][UUID][fieldName] = *std::any_cast<bool*>(fieldRef.m_value);
+				if (type == typeid(bool)) 
+				{
+					node[fieldName] = *std::any_cast<bool*>(fieldRef.m_value);
+					continue;
+				}
 
-				else if (type == typeid(Object*)) 
+				if (type == typeid(Object*)) 
 				{
 					Object* obj = *std::any_cast<Object**>(fieldRef.m_value);
-					save["components"][UUID][fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
+					node[fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
+					continue;
 				}
-				else //Unhandled Cases (useful to find them)
-					save["components"][UUID][fieldName] = std::format(parseError, type.name());
+				//Unhandled Cases (useful to find them)
+					node[fieldName] = std::format(parseError, type.name());
 			}
 
 			//Properties saving
@@ -134,49 +157,57 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				{
 					CCMaths::Vector3 val;
 					propRef->Get(&val);
-					save["components"][UUID][propName] = val;
+					node[propName] = val;
+					continue;
 				}
-				else if (type == typeid(Bool3))
+				if (type == typeid(Bool3))
 				{
 					Bool3 val;
 					propRef->Get(&val);
-					save["components"][UUID][propName] = val;
+					node[propName] = val;
+					continue;
 				}
-				else if (type == typeid(std::string))
+				if (type == typeid(std::string))
 				{
 					std::string val;
 					propRef->Get(&val);
-					save["components"][UUID][propName] = val;
+					node[propName] = val;
+					continue;
 				}
-				else if (type == typeid(float))
+				if (type == typeid(float))
 				{
 					float val;
 					propRef->Get(&val);
-					save["components"][UUID][propName] = val;
+					node[propName] = val;
+					continue;
 				}
-				else if (type == typeid(int))
+				if (type == typeid(int))
 				{
 					int val;
 					propRef->Get(&val);
-					save["components"][UUID][propName] = val;
+					node[propName] = val;
+					continue;
 				}
-				else if (type == typeid(bool))
+				if (type == typeid(bool))
 				{
 					bool val;
 					propRef->Get(&val);
-					save["components"][UUID][propName] = val;
+					node[propName] = val;
+					continue;
 				}
-				else if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
+				if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
 				{
 					Object* ptr;
 					propRef->Get(&ptr);
-					save["components"][UUID][propName] = ptr ? YAML::Node(*ptr) : YAML::Node();
+					node[propName] = ptr ? YAML::Node(*ptr) : YAML::Node();
+					continue;
 				}
-				else //Unhandled Cases (useful to find them)
-					save["components"][UUID][propName] = std::format(parseError, type.name());
+				//Unhandled Cases (useful to find them)
+					node[propName] = std::format(parseError, type.name());
 			}
 		}
 	}
+
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	std::ofstream out(fileName);
 
