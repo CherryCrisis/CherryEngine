@@ -5,7 +5,9 @@
 #undef far
 #undef near
 #undef ERROR
+#undef CopyFile()
 #define GLFW_INCLUDE_NONE
+
 
 #include <GLFW/glfw3.h> 
 #include <fstream>
@@ -59,7 +61,9 @@ void Launcher::CreateProject(const std::string& path, const std::string& name)
 	
 	CreateFolder(newPath, "Assets");
 	CreateFolder(newPath, "Cache");
-	
+	CreateFolder(newPath, "Internal");
+	CopyFile("imgui.ini", newPath+"/imgui.ini");
+
 	//Create cherryproject 
 	std::ofstream out(projectfilePath);
 
@@ -74,14 +78,14 @@ void Launcher::CreateProject(const std::string& path, const std::string& name)
 	project.Open();
 }
 
-void Launcher::OpenProject()
+void Launcher::OpenProjectLocation()
 {
-
+	//nsm
 }
 
-void Launcher::DeleteProject() 
+void Launcher::DeleteProject(const Project& project) 
 {
-
+	std::filesystem::remove_all(project.path);
 }
 
 void Launcher::ReadLauncherInfos() 
@@ -123,5 +127,6 @@ std::vector<Project> Launcher::GetProjectList() const
 void Project::Open() const
 {
 	std::filesystem::path folderPath = std::filesystem::path(path).parent_path();
-	call("open", "CherryEditor.exe", folderPath.string().c_str());
+	std::string cPath = '"'+folderPath.string()+'"';
+	call("open", "CherryEditor.exe", cPath.c_str());
 }

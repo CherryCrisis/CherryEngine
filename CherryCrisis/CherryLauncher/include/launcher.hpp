@@ -36,8 +36,9 @@ public:
 	void StartProjectCreation(); 
 	
 	void CreateProject(const std::string& path, const std::string& name);
-	void OpenProject();
-	void DeleteProject();
+	
+	void OpenProjectLocation();
+	void DeleteProject(const Project& project);
 
 	void WriteLauncherInfos();
 	void ReadLauncherInfos();

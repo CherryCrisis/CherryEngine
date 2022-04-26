@@ -65,7 +65,7 @@ bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_text
 EditorManager::EditorManager(const std::string& projectPath) 
 {
     inputs = InputManager::GetInstance();
-    Serializer::UnserializeEditor("editor.meta");
+
     
     { // To Replace with Resource Manager Texture Handler
         int null = 0;
@@ -96,6 +96,8 @@ EditorManager::EditorManager(const std::string& projectPath)
         std::cout << m_browser.m_currentDirectory << std::endl;
         m_browser.m_solutionDirectory = m_browser.m_currentDirectory;
     }
+
+    Serializer::UnserializeEditor("editor.meta");
 }
 
 void EditorManager::LinkEngine(Engine* engine) 

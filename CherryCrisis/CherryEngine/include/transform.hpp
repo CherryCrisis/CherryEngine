@@ -37,7 +37,7 @@ public:
 
 	void SetParent(Transform* transform);
 	Transform* GetParent() { return m_parent; }
-
+	Transform* GetRootParent();
 	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
 	void UpdateMatrix();
@@ -75,4 +75,6 @@ public:
 	void AddChildren(Transform* transform);
 
 	Matrix4 GetWorldMatrix();
+
+	bool IsChildOf(Transform* parent, bool recursive=true);
 };
