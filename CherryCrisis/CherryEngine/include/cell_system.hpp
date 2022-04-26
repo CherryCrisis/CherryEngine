@@ -26,7 +26,5 @@ public:
 
 	void	AddEntityToDefault(Entity* entity);
 	void	MoveEntityFromCellToCell(const std::string& fromCell, const std::string& toCell, Entity* entity);
-	void	MoveEntityFromCellToCell(Cell* fromCell, const std::string& toCell, Entity* entity);
-	void	MoveEntityFromCellToCell(const std::string& fromCell, Cell* toCell, Entity* entity);
 	void	MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entity);
 };

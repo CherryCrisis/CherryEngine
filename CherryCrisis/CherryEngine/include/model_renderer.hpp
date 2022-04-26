@@ -36,4 +36,6 @@ public:
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
+	void OnCellAdded(Cell* newCell);
+	void OnCellRemoved(Cell* newCell);
 };

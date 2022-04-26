@@ -87,7 +87,7 @@ void FrameDisplayer::UpdateTextureSize(float width, float height)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.brightnessTex.width, m_framebuffer.brightnessTex.height, 0, GL_RGB, GL_FLOAT, NULL);
 
     glBindRenderbuffer(GL_RENDERBUFFER, m_framebuffer.RBO);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (GLsizei)width, (GLsizei)height);
 
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);

@@ -7,7 +7,7 @@
 #include "cubemap.hpp"
 #include "mesh.hpp"
 
-struct Skybox : public ARenderer
+class Skybox : public ARenderer
 {
 private:
 	void RemoveMesh();

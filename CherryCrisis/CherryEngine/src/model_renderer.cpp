@@ -106,6 +106,20 @@ void ModelRenderer::Initialize()
 void ModelRenderer::BindToSignals() 
 {
 	GetHost().m_OnAwake.Bind(&ModelRenderer::Initialize, this);
+	GetHost().m_OnCellAdded.Bind(&ModelRenderer::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&ModelRenderer::OnCellRemoved, this);
 
 	GetHost().m_cell->AddRenderer(this);
+}
+
+void ModelRenderer::OnCellAdded(Cell* newCell)
+{
+	if (m_model)
+		newCell->AddRenderer(this);
+}
+
+void ModelRenderer::OnCellRemoved(Cell* newCell)
+{
+	if (m_model)
+		newCell->RemoveRenderer(this);
 }

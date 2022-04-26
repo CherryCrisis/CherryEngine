@@ -74,6 +74,11 @@ public:
 	std::vector<Transform*> GetChildren() { return m_children; }
 	void AddChildren(Transform* transform);
 
+	void BindToSignals() override;
+
+	void OnCellAdded(Cell* newCell);
+	void OnCellRemoved(Cell* newCell);
+
 	Matrix4 GetWorldMatrix();
 
 	bool IsChildOf(Transform* parent, bool recursive=true);

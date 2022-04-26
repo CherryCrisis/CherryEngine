@@ -6,13 +6,15 @@
 #include "ImGuizmo.h"
 
 class EditorManager;
+
 class SceneDisplayer : public FrameDisplayer
 {
 private:
-	Camera m_camera = {};
 	float m_cameraSpeed = 1.f;
 
 public:
+	Camera m_camera = {};
+
 	EditorManager* m_manager = nullptr;
 	
 	SceneDisplayer();
