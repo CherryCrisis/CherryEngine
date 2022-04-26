@@ -108,6 +108,9 @@
     <ClCompile Include="src\core\imcherry.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\panels\cell_system_displayer.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -168,6 +171,9 @@
       <Filter>Fichiers externes</Filter>
     </ClInclude>
     <ClInclude Include="include\panels\assets_settings.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\cell_system_displayer.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
   </ItemGroup>

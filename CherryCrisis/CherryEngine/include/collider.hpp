@@ -29,6 +29,7 @@ public:
 
 	virtual void BindToSignals() override {}
 	virtual void Unregister() {}
+	virtual void SetEntityScale(const Vector3&) {}
 	virtual void SetPxShape() {}
 	virtual void ClearPxShape() {}
 	virtual void ResetPxShape() {}

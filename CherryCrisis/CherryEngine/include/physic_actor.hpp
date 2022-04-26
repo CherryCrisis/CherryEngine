@@ -53,6 +53,7 @@ namespace PhysicSystem
 		void Update();
 		void SetActorPosition(const CCMaths::Vector3& position);
 		void SetActorRotation(const CCMaths::Vector3& rotation);
+		void SetActorScale(const CCMaths::Vector3& scale);
 		
 		void CreatePxActor();
 		void DestroyPxActor();

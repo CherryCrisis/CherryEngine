@@ -192,7 +192,7 @@ namespace PhysicSystem
 
 		cellScene->m_cell = nullptr;
 
-		IsSceneEmpty(*cellScene);
+		//IsSceneEmpty(*cellScene);
 	}
 
 	PhysicScene& PhysicManager::FindOrCreateScene(Cell* cell)

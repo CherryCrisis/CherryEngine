@@ -16,6 +16,7 @@
 #include "rigidbody.hpp"
 #include "box_collider.hpp"
 #include "sphere_collider.hpp"
+#include "capsule_collider.hpp"
 #include "bool3.hpp"
 #include "core/imcherry.hpp"
 
@@ -260,11 +261,12 @@ void Inspector::Render()
 
 
             // TODO: Replace with list of available components
-            if (ImGui::MenuItem("Transform"))      { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
-            if (ImGui::MenuItem("Camera"))     { }
-            if (ImGui::MenuItem("Rigidbody")) { auto rigidbody = m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); rigidbody->BindToSignals(); }
-            if (ImGui::MenuItem("BoxCollider")) { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); collider->BindToSignals(); }
-            if (ImGui::MenuItem("SphereCollider")) { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); collider->BindToSignals(); }
+            if (ImGui::MenuItem("Transform"))           { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
+            if (ImGui::MenuItem("Camera"))              { }
+            if (ImGui::MenuItem("Rigidbody"))           { auto rigidbody = m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); rigidbody->BindToSignals(); }
+            if (ImGui::MenuItem("Box Collider"))        { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); collider->BindToSignals(); }
+            if (ImGui::MenuItem("Sphere Collider"))     { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); collider->BindToSignals(); }
+            if (ImGui::MenuItem("Capsule Collider"))    { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<CapsuleCollider>(); collider->BindToSignals(); }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))

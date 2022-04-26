@@ -111,6 +111,7 @@ void Transform::SetScale(const Vector3& scale)
 {
 	m_scale = scale;
 	SetDirty();
+	m_onScaleChange.Invoke(scale);
 }
 
 void Transform::AddChildren(Transform* transform)

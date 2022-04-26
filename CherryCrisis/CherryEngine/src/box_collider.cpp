@@ -23,6 +23,9 @@ void BoxCollider::BindToSignals()
 
 	physicManager->Register(this);
 	m_isRegistered = true;
+
+	Transform* t = m_physicActor->m_owner->GetBehaviour<Transform>();
+	SetEntityScale(t->GetScale());
 }
 
 void BoxCollider::Unregister()
@@ -46,6 +49,11 @@ void BoxCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
+void BoxCollider::SetEntityScale(const Vector3& scale)
+{
+	m_entityScale = scale;
+}
+
 void BoxCollider::SetPxShape()
 {
 	if (m_pxShape)
@@ -56,6 +64,8 @@ void BoxCollider::SetPxShape()
 
 	CCMaths::Vector3 scale = m_baseEntityScale;
 	scale *= m_editableScale;
+	scale *= m_entityScale;
+
 	physx::PxVec3 scalePx = { scale.x, scale.y, scale.z };
 	m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(scalePx));
 	SetPxData();

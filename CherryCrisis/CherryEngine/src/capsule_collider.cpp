@@ -1,23 +1,23 @@
 #include "pch.hpp"
 
-#include "sphere_collider.hpp"
+#include "capsule_collider.hpp"
 
 #include <PxPhysicsAPI.h>
 
 #include "physic_manager.hpp"
 #include "transform.hpp"
 
-SphereCollider::SphereCollider()
+CapsuleCollider::CapsuleCollider()
 {
 	PopulateMetadatas();
 }
 
-SphereCollider::~SphereCollider()
+CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
 }
 
-void SphereCollider::BindToSignals()
+void CapsuleCollider::BindToSignals()
 {
 	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
 
@@ -26,9 +26,10 @@ void SphereCollider::BindToSignals()
 
 	Transform* t = m_physicActor->m_owner->GetBehaviour<Transform>();
 	SetEntityScale(t->GetScale());
+
 }
 
-void SphereCollider::Unregister()
+void CapsuleCollider::Unregister()
 {
 	if (m_isRegistered)
 	{
@@ -39,22 +40,24 @@ void SphereCollider::Unregister()
 	}
 }
 
-void SphereCollider::PopulateMetadatas()
+void CapsuleCollider::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
 	m_metadatas.SetProperty("Enabled", &isEnabled);
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
-	m_metadatas.SetProperty("Scale", &editableScale);
+	m_metadatas.SetProperty("Half height", &editableScale);
+	m_metadatas.SetProperty("Radius", &radius);
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
-void SphereCollider::SetEntityScale(const CCMaths::Vector3& scale)
+void CapsuleCollider::SetEntityScale(const Vector3& scale)
 {
-	m_entityScale = scale.Length();
+	m_entityRadius = CCMaths::Min(scale.x, scale.z);
+	m_entityScale = CCMaths::Max(0.01f, (scale.y - m_entityRadius));
 }
 
-void SphereCollider::SetPxShape()
+void CapsuleCollider::SetPxShape()
 {
 	if (m_pxShape)
 	{
@@ -62,12 +65,14 @@ void SphereCollider::SetPxShape()
 		m_pxShape = nullptr;
 	}
 
-	float scale = m_baseEntityScale * m_editableScale * m_entityScale;
-	m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(scale));
+	float scale = m_editableScale * m_entityScale;
+	float totalRadius = m_editableRadius * m_entityRadius;
+
+	m_pxShape = m_physicActor->CreateShape(physx::PxCapsuleGeometry(totalRadius, scale));
 	SetPxData();
 }
 
-void SphereCollider::ClearPxShape()
+void CapsuleCollider::ClearPxShape()
 {
 	if (m_pxShape)
 	{
@@ -76,13 +81,13 @@ void SphereCollider::ClearPxShape()
 	}
 }
 
-void SphereCollider::ResetPxShape()
+void CapsuleCollider::ResetPxShape()
 {
 	ClearPxShape();
 	SetPxData();
 }
 
-void SphereCollider::SetPxData()
+void CapsuleCollider::SetPxData()
 {
 	if (m_pxShape)
 	{

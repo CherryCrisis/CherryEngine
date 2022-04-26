@@ -25,16 +25,18 @@ namespace PhysicSystem
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
 
+			// TODO: Change with world tranform
 			Vector3 pos = t->GetPosition();
 			pos.x = pxT.p.x != m_oldPos.x ? pxT.p.x : pos.x;
 			pos.y = pxT.p.y != m_oldPos.y ? pxT.p.y : pos.y;
 			pos.z = pxT.p.z != m_oldPos.z ? pxT.p.z : pos.z;
 
 			Vector3 rot = t->GetRotation();
-			rot.x = pxRot.x != m_oldPos.x ? pxRot.x : rot.x;
-			rot.y = pxRot.y != m_oldPos.y ? pxRot.y : rot.y;
-			rot.z = pxRot.z != m_oldPos.z ? pxRot.z : rot.z;
+			rot.x = pxRot.x != m_oldRot.x ? pxRot.x : rot.x;
+			rot.y = pxRot.y != m_oldRot.y ? pxRot.y : rot.y;
+			rot.z = pxRot.z != m_oldRot.z ? pxRot.z : rot.z;
 
+			// TODO: Change with world tranform
 			t->SetPosition(pos);
 			t->SetRotation(rot);
 		}
@@ -60,11 +62,21 @@ namespace PhysicSystem
 													physx::PxQuat(pxRotQ.x, pxRotQ.y, pxRotQ.z, pxRotQ.w)));
 	}
 
+	void PhysicActor::SetActorScale(const CCMaths::Vector3& scale)
+	{
+		for (auto& collider : m_colliders)
+		{
+			collider->SetEntityScale(scale);
+			collider->ResetPxShape();
+		}
+	}
+
 	void PhysicActor::CreatePxActor()
 	{
 		Transform* t = m_owner->GetBehaviour<Transform>();
 		t->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
 		t->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
+		t->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
 
 		Vector3 pos = t->GetPosition();
 		Quaternion rot = Quaternion::FromEuler(t->GetRotation());
@@ -115,6 +127,7 @@ namespace PhysicSystem
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			t->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
 			t->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
+			t->m_onScaleChange.Unbind(&PhysicActor::SetActorScale, this);
 			PX_RELEASE(m_pxActor);
 		}
 	}
