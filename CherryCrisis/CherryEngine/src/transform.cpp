@@ -202,7 +202,6 @@ bool Transform::IsChildOf(Transform* parent, bool recursive)
 	}
 	return false;
 }
-}
 
 void Transform::BindToSignals()
 {
