@@ -81,7 +81,7 @@ void BloomRenderPass::Execute(Framebuffer& framebuffer)
 
 	bool horizontal = true, first_iteration = true;
 	int amount = 11;
-	for (unsigned int i = 0; i < amount; i++)
+	for (int i = 0; i < amount; i++)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_pingpongFramebuffers[horizontal].FBO);
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "horizontal"), horizontal);

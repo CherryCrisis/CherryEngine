@@ -58,6 +58,7 @@ void BoxCollider::SetPxShape()
 	scale *= m_editableScale;
 	physx::PxVec3 scalePx = { scale.x, scale.y, scale.z };
 	m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(scalePx));
+	SetPxData();
 }
 
 void BoxCollider::ClearPxShape()
@@ -95,8 +96,8 @@ void BoxCollider::SetPxData()
 		}
 		else
 		{
-			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, true);
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eTRIGGER_SHAPE, false);
+			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, true);
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}

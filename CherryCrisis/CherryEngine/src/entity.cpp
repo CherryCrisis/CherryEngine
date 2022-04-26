@@ -53,6 +53,16 @@ void Entity::Update()
 	m_OnTick.Invoke();
 }
 
+void Entity::OnTriggerEnter(Entity* other)
+{
+	m_OnTrigger.Invoke();
+}
+
+void Entity::OnCollisionEnter(Entity* other)
+{
+	m_OnCollision.Invoke();
+}
+
 void Entity::Destroy()
 {
 	delete this;

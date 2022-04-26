@@ -14,15 +14,6 @@
 #define PX_RELEASE(x)	if(x)	{ x->release(); x = nullptr; }
 #define CCPhysicManager PhysicSystem::PhysicManager
 
-namespace physx
-{
-	class PxFoundation;
-	class PxPvd;
-	class PxPhysics;
-	class PxMaterial;
-	class PxTransform;
-}
-
 namespace CCMaths
 {
 	struct Vector3;
@@ -61,15 +52,13 @@ namespace PhysicSystem
 		PhysicActor& FindOrCreateActor(Entity& owningEntity);
 		PhysicActor* FindActor(Entity& owningEntity);
 		bool IsActorEmpty(PhysicActor& actor);
-	
-		// TODO: Implement follozing functions when Cell system is done
 
 		void Register(Cell* cell);
 		void Unregister(Cell* cell);
 		
 		PhysicScene& FindOrCreateScene(Cell* cell);
 		PhysicScene* FindScene(Cell* cell);
-		bool IsSceneEmpty(PhysicScene&);  // -> might be replace by just a destroy because a PhysicScene should only have one Cell
+		bool IsSceneEmpty(PhysicScene&);
 
 		// Instantiate physx for registered scenes and actors
 		void Launch();
@@ -81,6 +70,9 @@ namespace PhysicSystem
 		void Simulate(float deltaTime);
 
 		Raycast RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+
+		
+
 		void MoveObjectFromScnToScn(PhysicScene* from, PhysicScene* to, PhysicActor* actor);
 
 		physx::PxMaterial* GetMaterial(const uint32_t& index = 0);

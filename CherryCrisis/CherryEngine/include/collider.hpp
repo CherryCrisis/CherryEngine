@@ -20,7 +20,7 @@ protected:
 	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;
 	bool	m_isTrigger = false;
-	float	m_contactOffset = 2.f;
+	float	m_contactOffset = 0.1f;
 
 	virtual void PopulateMetadatas() override {}
 

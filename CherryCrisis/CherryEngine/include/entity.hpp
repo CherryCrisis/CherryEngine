@@ -55,8 +55,15 @@ public:
 	Event<> m_OnStart;
 	Event<> m_OnTick;
 
+	Event<> m_OnTrigger;
+	Event<> m_OnCollision;
+
 	void Initialize();
 	void Update();
+
+	void OnTriggerEnter(Entity* other);
+	void OnCollisionEnter(Entity* other);
+
 	void Destroy();
 
 	void SetName(std::string name) { m_name = name; }

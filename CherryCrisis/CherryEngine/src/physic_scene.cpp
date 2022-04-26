@@ -2,7 +2,6 @@
 
 #include "physic_scene.hpp"
 
-#include <PxPhysicsAPI.h>
 
 #include "physic_manager.hpp"
 #include "cell.hpp"
@@ -16,11 +15,34 @@ namespace PhysicSystem
 		if (m_paused)
 			return;
 
-		m_pxScene->simulate(deltaTime);
+		m_pxScene->collide(deltaTime);
+		m_pxScene->fetchCollision(true);
+		m_pxScene->advance();
 		m_pxScene->fetchResults(true);
 
 		for (auto& actor : m_actors)
 			actor->Update();
+	}
+
+	physx::PxFilterFlags FilterShader(
+		physx::PxFilterObjectAttributes attributes0, physx::PxFilterData filterData0,
+		physx::PxFilterObjectAttributes attributes1, physx::PxFilterData filterData1,
+		physx::PxPairFlags& pairFlags, const void* constantBlock, physx::PxU32 constantBlockSize)
+	{
+		// let triggers through
+		if (physx::PxFilterObjectIsTrigger(attributes0) || physx::PxFilterObjectIsTrigger(attributes1))
+		{
+			pairFlags = physx::PxPairFlag::eTRIGGER_DEFAULT;
+			return physx::PxFilterFlag::eDEFAULT;
+		}
+		// generate contacts for all that were not filtered above
+		pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
+
+		// trigger the contact callback for pairs (A,B) where 
+		// the filtermask of A contains the ID of B and vice versa.
+		pairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
+
+		return physx::PxFilterFlag::eDEFAULT;
 	}
 
 	void PhysicScene::CreatePxScene()
@@ -37,7 +59,9 @@ namespace PhysicSystem
 			sceneDesc.cpuDispatcher = mCpuDispatcher;
 		}
 
-		sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+		sceneDesc.filterShader = FilterShader;
+		sceneDesc.simulationEventCallback = this;
+		//sceneDesc.flags |= physx::PxSceneFlag::eREQUIRE_RW_LOCK;
 
 		m_pxScene = pxPhysics->createScene(sceneDesc);
 
@@ -72,11 +96,6 @@ namespace PhysicSystem
 	void PhysicScene::AddCell(Cell* cell)
 	{
 		m_cell = cell;
-	}
-
-	void PhysicScene::RemoveCell(Cell* cell)
-	{
-		cell = nullptr;
 	}
 
 	void PhysicScene::AddActor(PhysicActor* actor)
@@ -121,6 +140,39 @@ namespace PhysicSystem
 		}
 		return -1;
 	}
+
+	void PhysicScene::onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs)
+	{
+		for (physx::PxU32 i = 0; i < nbPairs; i++)
+		{
+			const physx::PxContactPair& cp = pairs[i];
+
+			if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+			{
+				PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(pairHeader.actors[0]->userData);
+				PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairHeader.actors[1]->userData);
+
+				actor1->m_owner->OnCollisionEnter(actor2->m_owner);
+				actor2->m_owner->OnCollisionEnter(actor1->m_owner);
+			}
+		}
+	}
+
+	void PhysicScene::onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count)
+	{
+		for (physx::PxU32 i = 0; i < count; i++)
+		{
+			// ignore pairs when shapes have been deleted
+			if (pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER))
+				continue;
+
+			PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(pairs[i].triggerActor->userData);
+			PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairs[i].otherActor->userData);
+
+			actor1->m_owner->OnTriggerEnter(actor2->m_owner);
+		}
+	}
+
 
 	void PhysicScene::MoveCharacterController(float deltaTime)
 	{

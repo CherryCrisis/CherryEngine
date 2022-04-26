@@ -63,6 +63,9 @@ void ScriptedBehaviour::BindToSignals()
 
 	if (managedStart)
 		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
+
+	GetHost().m_OnTrigger.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
+	GetHost().m_OnCollision.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
 }
 
 void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
@@ -183,6 +186,18 @@ void ScriptedBehaviour::Update()
 {
 	MonoException* excep = nullptr;
 	csUpdate->Invoke(managedInstance->RawObject(), &excep);
+}
+
+void ScriptedBehaviour::OnTriggerEnter()
+{
+	//MonoException* excep = nullptr;
+	//csTrigger->Invoke(managedInstance->RawObject(), &excep);
+}
+
+void ScriptedBehaviour::OnCollisionEnter()
+{
+	//MonoException* excep = nullptr;
+	//csCollide->Invoke(managedInstance->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)

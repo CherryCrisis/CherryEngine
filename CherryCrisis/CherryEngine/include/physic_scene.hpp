@@ -2,21 +2,26 @@
 
 #include "cherry_macros.hpp"
 
+#include <PxPhysicsAPI.h>
+
 #include "behaviour.hpp"
 
-namespace physx
-{
-	class PxScene;
-	class PxController;
-}
 
 class Cell;
+
+struct FilterGroup
+{
+	enum Enum
+	{
+		eACTOR = (1 << 0),
+	};
+};
 
 namespace PhysicSystem
 {
 	class PhysicActor;
 
-	class CCENGINE_API PhysicScene
+	class PhysicScene : public physx::PxSimulationEventCallback
 	{
 	private:
 		physx::PxScene* m_pxScene = nullptr;
@@ -36,12 +41,18 @@ namespace PhysicSystem
 		void	DestroyPxScene();
 
 		void	AddCell(Cell* cell);
-		void	RemoveCell(Cell* cell);
 
 		void	AddActor(PhysicActor* actor);
 		bool	RemoveActor(PhysicActor* actor);
 		int		PossessActor(PhysicActor* actor);
 
+		// Implements PxSimulationEventCallback		
+		virtual void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs);
+		virtual void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count);
+		virtual void onConstraintBreak(physx::PxConstraintInfo*, physx::PxU32) {}
+		virtual void onWake(physx::PxActor**, physx::PxU32) {}
+		virtual void onSleep(physx::PxActor**, physx::PxU32) {}
+		virtual void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) {}
 		void	MoveCharacterController(float deltaTime);
 
 		void			Pause(bool value)	{ m_paused = value; }
