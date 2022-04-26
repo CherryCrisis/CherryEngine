@@ -57,6 +57,7 @@ public:
 	static void Load(std::shared_ptr<Mesh> mesh, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 
 	void Delete() override;
+	void ClearData();
 
 	void Reload(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 };

@@ -35,6 +35,8 @@ bool SceneManager::LoadScene(const char* filepath)
 	mng->m_currentScene =  ResourceManager::GetInstance()->AddResource<Scene>(filepath, false);
 	mng->Initialize();
 
+	ResourceManager::GetInstance()->Purge();
+
 	return mng->m_currentScene != nullptr;
 }
 

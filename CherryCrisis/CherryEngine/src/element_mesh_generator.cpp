@@ -21,10 +21,10 @@ bool ElementMeshGenerator::Generate(Mesh* toGenerate)
 
 	// Generate EBO
 	{
-		size_t indicesCount = toGenerate->m_indices.size();
+		gpuMesh->indicesCount = toGenerate->m_indices.size();
 
 		glCreateBuffers(1, &gpuMesh->EBO);
-		glNamedBufferData(gpuMesh->EBO, indicesCount * sizeof(unsigned int), toGenerate->m_indices.data(), GL_STATIC_DRAW);
+		glNamedBufferData(gpuMesh->EBO, gpuMesh->indicesCount * sizeof(unsigned int), toGenerate->m_indices.data(), GL_STATIC_DRAW);
 	}
 
 	// Generate VBO
@@ -34,6 +34,8 @@ bool ElementMeshGenerator::Generate(Mesh* toGenerate)
 		glCreateBuffers(1, &gpuMesh->VBO);
 		glNamedBufferData(gpuMesh->VBO, verticesCount * sizeof(Vertex), toGenerate->m_vertices.data(), GL_STATIC_DRAW);
 	}
+
+	toGenerate->ClearData();
 
 	// Generate VAO and link buffers
 	{

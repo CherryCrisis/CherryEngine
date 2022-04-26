@@ -19,9 +19,11 @@ HDRRenderPass::HDRRenderPass(const char* name)
 
 	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
 
-	Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
-
-	Generate(m_quadMesh.get());
+	if (!m_quadMesh->m_gpuMesh)
+	{
+		Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
+		Generate(m_quadMesh.get());
+	}
 
 	// TODO: Use DSA
 	// TODO: Optimize
@@ -76,7 +78,7 @@ void HDRRenderPass::Execute(Framebuffer& framebuffer)
 	glBindTextureUnit(0, framebuffer.colorTex.texID);
 	glBindTextureUnit(1, inBrightness->texID);
 
-	glDrawElements(GL_TRIANGLES, (GLsizei)m_quadMesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

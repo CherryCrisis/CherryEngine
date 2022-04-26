@@ -18,9 +18,11 @@ BloomRenderPass::BloomRenderPass(const char* name)
 
 	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
 
-	Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
-
-	Generate(m_quadMesh.get());
+	if (!m_quadMesh->m_gpuMesh)
+	{
+		Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
+		Generate(m_quadMesh.get());
+	}
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -89,7 +91,7 @@ void BloomRenderPass::Execute(Framebuffer& framebuffer)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, first_iteration ? framebuffer.brightnessTex.texID : m_pingpongFramebuffers[!horizontal].colorTex.texID);
 
-		glDrawElements(GL_TRIANGLES, (GLsizei)m_quadMesh->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 
 		horizontal = !horizontal;
 		if (first_iteration)

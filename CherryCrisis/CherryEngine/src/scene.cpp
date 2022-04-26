@@ -25,6 +25,12 @@ void Scene::Delete()
 		delete entityPtr;
 }
 
+Scene::~Scene()
+{
+	if (GetResourceState() != EResourceState::DESTROYED)
+		Delete();
+}
+
 void Scene::Initialize()
 {
 	for (auto& [eName, entity] : m_entities)

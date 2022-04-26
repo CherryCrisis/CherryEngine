@@ -61,6 +61,12 @@ void Skybox::Load()
 	m_cell->AddRenderer(this);
 }
 
+void Skybox::ClearData()
+{
+	m_mesh->ClearData();
+	m_cubemap->ClearData();
+}
+
 void Skybox::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->SubscribeToPipeline<SkyboxRenderPass>(this);

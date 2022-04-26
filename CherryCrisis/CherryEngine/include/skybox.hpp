@@ -24,6 +24,7 @@ public:
 
 
 	void Load();
+	void ClearData();
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;

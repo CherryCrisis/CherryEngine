@@ -22,10 +22,16 @@ Texture::Texture(const char* texturePath)
 
 }
 
+Texture::~Texture()
+{
+    if (GetResourceState() == EResourceState::DESTROYED)
+        Delete();
+}
+
 void Texture::Delete()
 {
-    if (m_data)
-        delete m_data;
+    ClearData();
+    m_gpuTexture.reset();
 }
 
 void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureFormat textureFormat)
@@ -82,6 +88,14 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** da
     }
 
     return true;
+}
+
+void Texture::ClearData()
+{
+    if (m_data)
+        delete m_data;
+
+    m_data = nullptr;
 }
 
 void Texture::Reload(bool flipTexture, std::shared_ptr<Texture> texture)
