@@ -69,10 +69,12 @@ void Cell::AddRenderer(ARenderer* renderer)
 
 	m_renderers.insert(renderer);
 
+	Viewer* rendererAsViewer = dynamic_cast<Viewer*>(renderer);
+
 	for (Viewer* viewer : m_viewers)
 	{
 		if (auto pipeline = viewer->m_pipeline.get();
-			pipeline && static_cast<void*>(viewer) != static_cast<void*>(renderer))
+			pipeline && viewer != rendererAsViewer)
 			renderer->SubscribeToPipeline(pipeline);
 	}
 }
@@ -91,9 +93,11 @@ void Cell::AddViewer(Viewer* viewer)
 	if (!pipeline)
 		return;
 
+	ARenderer* viewerAsRenderer = dynamic_cast<ARenderer*>(viewer);
+
 	for (ARenderer* renderer : m_renderers)
 	{
-		if (static_cast<void*>(viewer) != static_cast<void*>(renderer))
+		if (renderer != viewerAsRenderer)
 			renderer->SubscribeToPipeline(pipeline);
 	}
 }

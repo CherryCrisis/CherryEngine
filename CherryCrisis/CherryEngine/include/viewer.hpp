@@ -7,9 +7,11 @@
 
 #include "maths.hpp"
 
+#include "property.hpp"
+
 class Cell;
 
-class Viewer
+class CCENGINE_API Viewer
 {
 public:
 	Cell* m_ownerCell = nullptr;
@@ -20,5 +22,5 @@ public:
 	std::unique_ptr<ARenderingPipeline> m_pipeline;
 
 	Viewer() { RenderManager::GetInstance()->m_viewers.insert(this); }
-	~Viewer() { RenderManager::GetInstance()->m_viewers.erase(this);  }
+	virtual ~Viewer() { RenderManager::GetInstance()->m_viewers.erase(this);  }
 };

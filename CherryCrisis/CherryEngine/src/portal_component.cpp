@@ -27,6 +27,7 @@ PortalComponent::PortalComponent(CCUUID& id) : Behaviour(id)
 PortalComponent::~PortalComponent()
 {
 	GetHost().m_cell->RemoveViewer(&m_portal);
+	GetHost().m_cell->RemoveRenderer(&m_portal);
 }
 
 void PortalComponent::PopulateMetadatas()
@@ -42,6 +43,7 @@ void PortalComponent::BindToSignals()
 	GetHost().m_OnAwake.Bind(&PortalComponent::Initialize, this);
 
 	GetHost().m_cell->AddViewer(&m_portal);
+	GetHost().m_cell->AddRenderer(&m_portal);
 }
 
 void PortalComponent::Initialize()

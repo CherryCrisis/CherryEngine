@@ -112,6 +112,9 @@
     <Filter Include="Fichiers sources\Entity">
       <UniqueIdentifier>{60ec3e5f-64a8-463c-984d-a0b0ae0d8e2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
+      <UniqueIdentifier>{6784c658-a388-408c-889c-bebf3d6edeee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\maths\matrix3.hpp">
@@ -1167,12 +1170,6 @@
     <ClInclude Include="externals\include\nvtt\nvtt_wrapper.h">
       <Filter>Fichiers externes\nvtt</Filter>
     </ClInclude>
-    <ClInclude Include="include\basic_rendering_pipeline.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="include\rendering_pipeline_interface.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\bloom_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
@@ -1190,6 +1187,15 @@
     </ClInclude>
     <ClInclude Include="include\portal.hpp">
       <Filter>Fichiers d%27en-tête\Cells</Filter>
+    </ClInclude>
+    <ClInclude Include="include\basic_rendering_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering_pipeline_interface.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\portal_render_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1527,6 +1533,12 @@
     </ClCompile>
     <ClCompile Include="src\portal_component.cpp">
       <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\portal_render_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\portal.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

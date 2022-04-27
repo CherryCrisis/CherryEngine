@@ -5,6 +5,7 @@
 #include "shadow_renderpass.hpp"
 #include "skybox_renderpass.hpp"
 #include "basic_renderpass.hpp"
+#include "portal_render_renderpass.hpp"
 
 #include "bloom_renderpass.hpp"
 #include "hdr_renderpass.hpp"
@@ -12,6 +13,7 @@
 
 BasicRPipeline::BasicRPipeline()
 {
+	m_portalPass = LoadSubpipeline<PortalRenderPass>();
 	m_shadowPass = LoadSubpipeline<ShadowRenderPass>();
 	m_basicPass = LoadSubpipeline<BasicRenderPass>();
 	m_skyboxPass = LoadSubpipeline<SkyboxRenderPass>();
@@ -24,6 +26,8 @@ BasicRPipeline::BasicRPipeline()
 
 void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 {
+	m_portalPass->CallOnExecute(fb, viewer);
+
 	m_shadowPass->CallOnExecute(fb, viewer);
 	m_basicPass->CallOnExecute(fb, viewer);
 
