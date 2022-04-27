@@ -12,17 +12,19 @@
 #include "light.hpp"
 #include "mesh.hpp"
 
+#include <cherry_macros.hpp>
+
 class ModelRenderer;
 class Material;
 class Viewer;
 
-class BasicRenderPass : public ARenderingRenderPass, ElementTBNGenerator
+class CCENGINE_API BasicRenderPass : public ARenderingRenderPass, ElementTBNGenerator
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
 	
-protected:
-	struct GPUTextureBasic : public GPUTexture
+public:
+	struct CCENGINE_API GPUTextureBasic : public GPUTexture
 	{
 		GLuint ID = 0u;
 
