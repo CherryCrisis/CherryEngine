@@ -11,6 +11,7 @@
 #include "transform.hpp"
 #include "light_component.hpp"
 #include "camera_component.hpp"
+#include "portal_component.hpp"
 #include "scripted_behaviour.hpp"
 #include "csscripting_system.hpp"
 #include "rigidbody.hpp"
@@ -265,6 +266,7 @@ void Inspector::Render()
             if (ImGui::MenuItem("Rigidbody")) { auto rigidbody = m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); rigidbody->BindToSignals(); }
             if (ImGui::MenuItem("BoxCollider")) { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); collider->BindToSignals(); }
             if (ImGui::MenuItem("SphereCollider")) { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); collider->BindToSignals(); }
+            if (ImGui::MenuItem("PortalComponent")) { auto portal = m_manager->m_selectedEntities[0]->AddBehaviour<PortalComponent>(); portal->BindToSignals(); }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))

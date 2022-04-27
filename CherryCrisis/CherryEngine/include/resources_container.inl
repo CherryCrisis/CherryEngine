@@ -63,7 +63,7 @@ void ResourcesContainer<ResourceT>::Purge()
 	{
 		if (pair.second.use_count() <= 2)
 		{
-			if (pair.second->GetResourceState() != EResourceState::DESTROYED)
+			if (pair.second->GetResourceState() == EResourceState::LOADED)
 				pair.second->DeleteResource();
 		}
 	}

@@ -106,11 +106,14 @@
     <Filter Include="Fichiers sources\Rendering\Pipeline">
       <UniqueIdentifier>{771c2369-649c-4f8a-88af-df15d8b36069}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Entity">
+      <UniqueIdentifier>{58329cb3-d73d-4c08-92c4-36ca53a70d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Entity">
+      <UniqueIdentifier>{60ec3e5f-64a8-463c-984d-a0b0ae0d8e2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\entity.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\maths\matrix3.hpp">
       <Filter>Fichiers d%27en-tête\Maths</Filter>
     </ClInclude>
@@ -1179,6 +1182,15 @@
     <ClInclude Include="include\viewer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\entity.hpp">
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="include\portal_component.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\portal.hpp">
+      <Filter>Fichiers d%27en-tête\Cells</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1228,9 +1240,6 @@
     </None>
     <None Include="include\renderer_manager.inl">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </None>
-    <None Include="include\entity.inl">
-      <Filter>Fichiers d%27en-tête</Filter>
     </None>
     <None Include="interface\entity.i">
       <Filter>Fichiers sources\Interface</Filter>
@@ -1319,11 +1328,11 @@
     <None Include="..\x64\Debug\Assets\skyboxShader.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
+    <None Include="include\entity.inl">
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\entity.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\transform.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
@@ -1510,8 +1519,14 @@
     <ClCompile Include="src\basic_rendering_pipeline.cpp">
       <Filter>Fichiers sources\Rendering\Pipeline</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity.cpp">
+      <Filter>Fichiers sources\Entity</Filter>
+    </ClCompile>
     <ClCompile Include="src\rendering_pipeline_interface.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\portal_component.cpp">
+      <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ class Cell;
 
 class CCENGINE_API Entity : public Object
 {
-private:
+protected:
 	std::string m_name = "Entity";
 	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
 

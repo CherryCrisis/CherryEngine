@@ -7,12 +7,7 @@
 class Entity;
 class Cell;
 class Debug;
-
-struct Portal
-{
-	Portal* m_linkedPortal = nullptr;
-	Cell*	m_ownerCell = nullptr;
-};
+class Portal;
 
 namespace physx
 {
@@ -36,7 +31,7 @@ private:
 	std::vector<Entity*> m_entities;
 	std::unordered_set<class Viewer*> m_viewers;
 	std::unordered_set<class ARenderer*> m_renderers;
-	std::vector<Portal> m_portals;
+	std::vector<Portal*> m_portals;
 
 	class Skybox* m_skybox = nullptr;
 
@@ -61,8 +56,8 @@ public:
 
 	const std::vector<Entity*> GetEntities() { return m_entities; }
 
-	void	AddPortal();
-	void	LinkPortals(Portal portal1, Portal portal2);
+	void	LinkPortal(Portal* toLink);
+	void	LinkPortals(Portal* portal1, Portal* portal2);
 
 	// TODO: Add info of movement (direction, speed, ...)
 	// TODO: Choose if using pxCharacterController or personal one

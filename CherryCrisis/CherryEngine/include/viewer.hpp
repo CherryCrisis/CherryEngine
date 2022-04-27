@@ -12,6 +12,8 @@ class Cell;
 class Viewer
 {
 public:
+	Cell* m_ownerCell = nullptr;
+
 	CCMaths::Matrix4 m_viewMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_projectionMatrix = CCMaths::Matrix4::Identity;
 

@@ -7,6 +7,7 @@
 #include "debug.hpp"
 #include "physic_manager.hpp"
 
+#include "portal.hpp"
 #include "entity.hpp"
 #include "viewer.hpp"
 #include "skybox.hpp"
@@ -63,17 +64,26 @@ void Cell::AddEntityToPhysicScene(Entity* newEntity)
 
 void Cell::AddRenderer(ARenderer* renderer)
 {
+	if (!renderer)
+		return;
+
 	m_renderers.insert(renderer);
 
 	for (Viewer* viewer : m_viewers)
 	{
-		if (auto pipeline = viewer->m_pipeline.get())
+		if (auto pipeline = viewer->m_pipeline.get();
+			pipeline && static_cast<void*>(viewer) != static_cast<void*>(renderer))
 			renderer->SubscribeToPipeline(pipeline);
 	}
 }
 
 void Cell::AddViewer(Viewer* viewer)
 {
+	if (!viewer)
+		return;
+
+	viewer->m_ownerCell = this;
+
 	m_viewers.insert(viewer);
 
 	auto pipeline = viewer->m_pipeline.get();
@@ -82,11 +92,17 @@ void Cell::AddViewer(Viewer* viewer)
 		return;
 
 	for (ARenderer* renderer : m_renderers)
-		renderer->SubscribeToPipeline(pipeline);
+	{
+		if (static_cast<void*>(viewer) != static_cast<void*>(renderer))
+			renderer->SubscribeToPipeline(pipeline);
+	}
 }
 
 void Cell::RemoveRenderer(ARenderer* renderer)
 {
+	if (!renderer)
+		return;
+
 	m_renderers.erase(renderer);
 
 	for (Viewer* viewer : m_viewers)
@@ -98,6 +114,12 @@ void Cell::RemoveRenderer(ARenderer* renderer)
 
 void Cell::RemoveViewer(Viewer* viewer)
 {
+	if (!viewer)
+		return;
+
+	if (viewer->m_ownerCell == this)
+		viewer->m_ownerCell = nullptr;
+
 	m_viewers.erase(viewer);
 
 	auto pipeline = viewer->m_pipeline.get();
@@ -154,17 +176,16 @@ int Cell::PossessEntity(Entity* entity)
 	return -1;
 }
 
-void Cell::AddPortal()
+void Cell::LinkPortal(Portal* toLink)
 {
-	m_portals.push_back(Portal());
+	m_portals.push_back(toLink);
 
-	m_portals.back().m_ownerCell = this;
+	m_portals.back()->m_ownerCell = this;
 }
 
-void Cell::LinkPortals(Portal portal1, Portal portal2)
+void Cell::LinkPortals(Portal* portal1, Portal* portal2)
 {
-	portal1.m_linkedPortal = &portal2;
-	portal2.m_linkedPortal = &portal1;
+	portal1->Link(portal2);
 }
 
 void Cell::MoveCharacter(float deltaTime)

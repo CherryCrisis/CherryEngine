@@ -56,6 +56,10 @@ void SceneManager::ResetScene()
 {
 	SceneManager* mng = GetInstance();
 	Serializer::UnserializeScene(mng->m_currentScene, "Internal/temp");
+
+	mng->Initialize();
+
+	ResourceManager::GetInstance()->Purge();
 }
 
 void SceneManager::FlipScene() 
