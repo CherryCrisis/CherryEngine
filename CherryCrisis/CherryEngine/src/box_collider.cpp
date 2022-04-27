@@ -54,7 +54,7 @@ void BoxCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
-void BoxCollider::SetEntityScale(const Vector3& scale)
+void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
 {
 	m_entityScale = scale;
 }

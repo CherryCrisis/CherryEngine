@@ -54,13 +54,13 @@ public:
 	Vector3 GetScale() { return m_scale; }
 
 	void SetGlobalPosition(const Vector3& position);
-	Vector3 GetGlobalPosition() { return m_position + (m_parent == nullptr ? Vector3::Zero : m_parent->GetGlobalPosition()); }
+	Vector3 GetGlobalPosition();
 
 	void SetGlobalRotation(const Vector3& rotation);
-	Vector3 GetGlobalRotation() { return m_rotation + (m_parent == nullptr ? Vector3::Zero : m_parent->GetGlobalRotation()); }
+	Vector3 GetGlobalRotation();
 
 	void SetGlobalScale(const Vector3& scale);
-	Vector3 GetGlobalScale() { return m_scale * (m_parent == nullptr ? Vector3::One : m_parent->GetGlobalScale()); }
+	Vector3 GetGlobalScale();
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };

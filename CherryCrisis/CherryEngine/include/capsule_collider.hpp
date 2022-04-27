@@ -29,7 +29,7 @@ public:
 	void BindToSignals() override;
 	void Unregister() override;
 
-	void SetEntityScale(const Vector3& scale) override;
+	void SetEntityScale(const CCMaths::Vector3& scale) override;
 	void SetPxShape() override;
 	void ClearPxShape() override;
 	void ResetPxShape() override;

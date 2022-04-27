@@ -39,6 +39,10 @@ void Transform::SetParent(Transform* transform)
 	if (m_parent == transform) // Guard to prevent parent re-set
 		return;
 
+	CCMaths::Vector3 position	= GetGlobalPosition();
+	CCMaths::Vector3 rotation	= GetGlobalRotation();
+	CCMaths::Vector3 scale		= GetGlobalScale();
+
 	if (m_parent) // Remove the transform from the last parent
 	{
 		size_t childrenSize = m_parent->m_children.size();
@@ -58,6 +62,11 @@ void Transform::SetParent(Transform* transform)
 	}
 
 	m_parent = transform;
+
+	SetGlobalPosition(position);
+	SetGlobalRotation(rotation);
+	SetGlobalScale(scale);
+
 	SetDirty();
 }
 
@@ -140,6 +149,18 @@ void Transform::SetGlobalPosition(const Vector3& position)
 	m_onPositionChange.Invoke(position);
 }
 
+Vector3 Transform::GetGlobalPosition()
+{
+	CCMaths::Vector3 tempRot;
+	CCMaths::Vector3 tempScale;
+
+	CCMaths::Vector3 outPos;
+
+	Matrix4::Decompose(GetWorldMatrix(), outPos, tempRot, tempScale);
+
+	return outPos;
+}
+
 void Transform::SetGlobalRotation(const Vector3& rotation)
 {
 	if (!m_parent)
@@ -152,6 +173,18 @@ void Transform::SetGlobalRotation(const Vector3& rotation)
 
 	SetDirty();
 	m_onRotationChange.Invoke(rotation);
+}
+
+Vector3 Transform::GetGlobalRotation()
+{
+	CCMaths::Vector3 tempPos;
+	CCMaths::Vector3 tempScale;
+
+	CCMaths::Vector3 outRot;
+
+	Matrix4::Decompose(GetWorldMatrix(), tempPos, outRot, tempScale);
+
+	return outRot;
 }
 
 void Transform::SetGlobalScale(const Vector3& scale)
@@ -174,6 +207,18 @@ void Transform::SetGlobalScale(const Vector3& scale)
 			m_scale.data[i] = scale.data[i] / parentScale.data[i];
 	}
 	SetDirty();
+}
+
+Vector3 Transform::GetGlobalScale()
+{
+	CCMaths::Vector3 tempPos;
+	CCMaths::Vector3 tempRot;
+
+	CCMaths::Vector3 outScale;
+
+	Matrix4::Decompose(GetWorldMatrix(), tempPos, tempRot, outScale);
+
+	return outScale;
 }
 
 void Transform::AddChildren(Transform* transform)
