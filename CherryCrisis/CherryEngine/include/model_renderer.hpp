@@ -9,6 +9,8 @@
 #include "model_base.hpp"
 
 class Transform;
+class Material;
+class Texture;
 
 class CCENGINE_API ModelRenderer : public Behaviour, public ARenderer
 {
@@ -34,8 +36,14 @@ public:
 	void SetModel(std::shared_ptr<Model> newModel);
 	void RemoveModel();
 
+	void SetMaterial(Material* newMat);
+	void ReloadTexture(std::shared_ptr<Texture> newTex);
+
+
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
+
+	Event<Material*> m_onMaterialSet;
 };

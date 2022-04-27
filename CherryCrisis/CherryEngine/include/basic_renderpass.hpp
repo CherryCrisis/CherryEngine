@@ -58,8 +58,7 @@ public:
 	template <>
 	int Subscribe(ModelRenderer* toGenerate);
 
-	template <>
-	int Subscribe(Material* toGenerate);
+	void Generate(Material* toGenerate);
 
 	template <>
 	int Subscribe(Texture* toGenerate);

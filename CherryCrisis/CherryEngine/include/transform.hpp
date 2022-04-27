@@ -32,7 +32,7 @@ private:
 public:
 	Transform();
 	Transform(CCUUID& owner);
-
+	~Transform() { SetParent(nullptr); }
 	bool IsRoot() { return !m_parent; }
 
 	void SetParent(Transform* transform);

@@ -10,6 +10,7 @@
 #include "entity.hpp"
 #include "model.hpp"
 #include "picking_renderpass.hpp"
+#include "texture.hpp"
 
 #include "cell.hpp"
 
@@ -57,7 +58,14 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 	model_path = m_model->GetFilepath();
 	
 	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
-
+	if (m_model->m_material) 
+	{
+		SetMaterial(m_model->m_material.get());
+	}
+	else 
+	{
+		m_model->m_onMaterialSet.Bind(&ModelRenderer::SetMaterial, this);
+	}
 	// Move to function
 	if (m_initialized)
 		GetHost().m_cell->AddRenderer(this);
@@ -122,4 +130,15 @@ void ModelRenderer::OnCellRemoved(Cell* newCell)
 {
 	if (m_model)
 		newCell->RemoveRenderer(this);
+}
+
+void ModelRenderer::SetMaterial(Material* newMat)
+{
+	newMat->m_onTextureSet.Bind(&ModelRenderer::ReloadTexture, this);
+	m_onMaterialSet.Invoke(&*newMat);
+}
+
+void ModelRenderer::ReloadTexture(std::shared_ptr<Texture> newTex) 
+{
+	m_onMaterialSet.Invoke(m_model->m_material.get());
 }

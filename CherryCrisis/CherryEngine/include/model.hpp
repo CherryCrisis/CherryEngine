@@ -30,4 +30,8 @@ public:
 
 	void Delete() override;
 	void Reload(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
+
+	Event<Material*> m_onMaterialSet;
+
+	void SetMaterial(const std::shared_ptr<Material>& newMat);
 };
