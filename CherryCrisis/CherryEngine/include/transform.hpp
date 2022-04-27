@@ -81,6 +81,7 @@ public:
 	void OnCellRemoved(Cell* newCell);
 
 	Matrix4 GetWorldMatrix();
+	Matrix4 GetLocalMatrix();
 
 	bool IsChildOf(Transform* parent, bool recursive=true);
 };

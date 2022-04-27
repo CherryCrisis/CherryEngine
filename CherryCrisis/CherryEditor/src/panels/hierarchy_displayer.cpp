@@ -133,8 +133,11 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
         ImGui::Text(entity->GetName().c_str());
         ImGui::EndDragDropSource();
+        m_draggedEntities[entity] = 2;
     }
-    Transform* toAdd = nullptr;
+    else if (m_draggedEntities.contains(entity))
+        m_draggedEntities[entity]--;
+
     if (entityTransform && ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
@@ -143,31 +146,36 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
             draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
             m_manager->m_selectedEntities.clear();
+            m_draggedEntities.erase(entity);
             if (opened) ImGui::TreePop();
             return true;
         }
 
         ImGui::EndDragDropTarget();
     }
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive)
+    else if (m_draggedEntities.contains(entity))
     {
-        ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;
-        if (payload->IsDataType("HIERARCHY_DROP")) 
+        if ((ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive && !m_draggedEntities.at(entity)) || m_draggedEntities[entity] < 0)
         {
-            Entity* draggedEntity = static_cast<Entity*>(payload->Data);
-            if (draggedEntity)
+            m_draggedEntities.erase(entity);
+
+            ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;
+            if (payload->IsDataType("HIERARCHY_DROP"))
             {
-                Transform* draggedTransform = draggedEntity->GetBehaviour<Transform>();
-                if (draggedTransform && draggedTransform == entityTransform)
+                Entity* draggedEntity = static_cast<Entity*>(payload->Data);
+                if (draggedEntity)
                 {
-                    draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr);
-                    m_manager->m_selectedEntities.clear();
-                    if (opened) ImGui::TreePop();
-                    return true;
+                    Transform* draggedTransform = draggedEntity->GetBehaviour<Transform>();
+                    if (draggedTransform && draggedTransform == entityTransform)
+                    {
+                        draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr);
+                        m_manager->m_selectedEntities.clear();
+                        if (opened) ImGui::TreePop();
+                        return true;
+                    }
                 }
             }
         }
-       
     }
 
     if (opened && entityTransform)

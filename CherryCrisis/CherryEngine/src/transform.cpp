@@ -114,6 +114,14 @@ Matrix4 Transform::GetWorldMatrix()
 	return m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 }
 
+Matrix4 Transform::GetLocalMatrix()
+{
+	if (!m_parent)
+		return m_worldMatrix;
+
+	return CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * m_worldMatrix;
+}
+
 void Transform::SetPosition(const Vector3& position)
 {
 	m_position = position;
@@ -137,13 +145,10 @@ void Transform::SetScale(const Vector3& scale)
 
 void Transform::SetGlobalPosition(const Vector3& position)
 {
-	if (!m_parent)
-	{
-		SetPosition(position);
-		return;
-	}
-	
-	m_position = position - m_parent->GetGlobalPosition();
+	CCMaths::Vector3 tempRot;
+	CCMaths::Vector3 tempScale;
+
+	Matrix4::Decompose(GetLocalMatrix(), m_position, tempRot, tempScale);
 	
 	SetDirty();
 	m_onPositionChange.Invoke(position);
@@ -163,13 +168,10 @@ Vector3 Transform::GetGlobalPosition()
 
 void Transform::SetGlobalRotation(const Vector3& rotation)
 {
-	if (!m_parent)
-	{	
-		SetRotation(rotation);
-		return;
-	}
-	
-	m_rotation = rotation - m_parent->GetGlobalRotation();
+	CCMaths::Vector3 tempPos;
+	CCMaths::Vector3 tempScale;
+
+	Matrix4::Decompose(GetLocalMatrix(), tempPos, m_rotation, tempScale);
 
 	SetDirty();
 	m_onRotationChange.Invoke(rotation);
@@ -189,23 +191,11 @@ Vector3 Transform::GetGlobalRotation()
 
 void Transform::SetGlobalScale(const Vector3& scale)
 {
-	Vector3 parentScale;
+	CCMaths::Vector3 tempPos;
+	CCMaths::Vector3 tempRot;
 
-	if (!m_parent)
-	{
-		SetScale(scale);
-		return;
-	}
-	
-	parentScale = m_parent->GetGlobalScale();
+	Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, m_scale);
 
-	for (int i = 0; i < 3; ++i)
-	{
-		if (parentScale.data[i] == 0)
-			m_scale.data[i] = 0;
-		else
-			m_scale.data[i] = scale.data[i] / parentScale.data[i];
-	}
 	SetDirty();
 }
 

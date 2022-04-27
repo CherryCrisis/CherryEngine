@@ -221,7 +221,6 @@ void SceneDisplayer::Render()
             Transform* t = m_manager->m_selectedEntities[0]->GetBehaviour<Transform>();
             CCMaths::Matrix4 mat = t->GetWorldMatrix();
 
-            float p[3], r[3], s[3]; // position, rotation and scale
 
             if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, mat.data))
             {
@@ -230,11 +229,12 @@ void SceneDisplayer::Render()
                 if (parent)
                     mat = CCMaths::Matrix4::Inverse(parent->GetWorldMatrix()) * mat;
 
-                ImGuizmo::DecomposeMatrixToComponents(mat.data, p, r, s);
+                CCMaths::Vector3 p, r, s; // position, rotation and scale
+                CCMaths::Matrix4::Decompose(mat, p, r, s);
 
-                t->SetPosition(CCMaths::Vector3(p[0],p[1],p[2])); 
-                t->SetRotation(CCMaths::Vector3(r[0], r[1], r[2]));
-                t->SetScale(CCMaths::Vector3(s[0],s[1],s[2]));
+                t->SetPosition(p); 
+                t->SetRotation(r);
+                t->SetScale(s);
             }            
         }
 
