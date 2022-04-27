@@ -1,4 +1,5 @@
 #include <cmath>
+#include "matrix4.hpp"
 
 namespace CCMaths
 {
@@ -232,6 +233,27 @@ namespace CCMaths
 			0.f, 0.f, 1.f, 0.f,
 			0.f, 0.f, 0.f, 1.f,
 		};
+	}
+
+	inline void Matrix4::Decompose(const Matrix4& matrix, Vector3& outPos, Vector3& outRot, Vector3& outScale)
+	{
+		Matrix4 mat = matrix;
+
+		outScale.data[0] = mat.right.Length();
+		outScale.data[1] = mat.up.Length();
+		outScale.data[2] = mat.back.Length();
+
+		mat.right.Normalize();
+		mat.up.Normalize();
+		mat.back.Normalize();
+
+		outRot.data[0] = atan2f(mat.row[1].data[2], mat.row[2].data[2]);
+		outRot.data[1] = atan2f(-mat.row[0].data[2], sqrtf(mat.row[1].data[2] * mat.row[1].data[2] + mat.row[2].data[2] * mat.row[2].data[2]));
+		outRot.data[2] = atan2f(mat.row[0].data[1], mat.row[0].data[0]);
+
+		outPos.data[0] = mat.position.x;
+		outPos.data[1] = mat.position.y;
+		outPos.data[2] = mat.position.z;
 	}
 
 	inline Matrix4 Matrix4::Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far)

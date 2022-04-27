@@ -51,7 +51,7 @@ void CapsuleCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
-void CapsuleCollider::SetEntityScale(const Vector3& scale)
+void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& scale)
 {
 	m_entityRadius = CCMaths::Min(scale.x, scale.z);
 	m_entityScale = CCMaths::Max(0.01f, (scale.y - m_entityRadius));

@@ -35,9 +35,9 @@ namespace PhysicSystem
 		Bool3	m_positionConstraints;
 		Bool3	m_rotationConstraints;
 
-		Vector3 m_velocity = Vector3::Zero;
-		Vector3 m_angularVelocity = Vector3::Zero;
-		Vector3 m_InertiaTensor = Vector3::Zero;
+		CCMaths::Vector3 m_velocity			= CCMaths::Vector3::Zero;
+		CCMaths::Vector3 m_angularVelocity	= CCMaths::Vector3::Zero;
+		CCMaths::Vector3 m_InertiaTensor	= CCMaths::Vector3::Zero;
 
 		float	m_density = 10.0f;
 		float	m_maxLinearVelocity = (float)1.00000003e+16;

@@ -434,6 +434,8 @@ namespace CCMaths
 		*/
 		inline static Matrix4 RotateZ(const float cos, const float sin);
 
+		inline static void Decompose(const Matrix4& matrix, Vector3& outPos, Vector3& outRot, Vector3& outScale);
+
 		//! \hiderefs
 		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
 
