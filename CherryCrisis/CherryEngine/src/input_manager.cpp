@@ -175,7 +175,7 @@ void InputManager::SetPollContext(InputContext* context)
 		m_pollContext->m_mouseDelta = { 0.f, 0.f };
 		m_pollContext->m_mouseWheel = { 0.f, 0.f };
 	}
-	// TODO: separate in an other function
+
 	m_pollContext = context;
 }
 
@@ -647,9 +647,10 @@ void InputManager::Axis::SetNegativeKey(Keycode key)
 {
 	InputContext* context = InputManager::GetInstance()->m_fetchContext.top();
 
-	// TODO: Unbind old key update
+	// Unbind update of previous key
 	context->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
 
+	// Bind update of new key
 	m_negativeKey = key;
 	context->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
 }

@@ -123,6 +123,7 @@ void Transform::SetScale(const Vector3& scale)
 {
 	m_scale = scale;
 	SetDirty();
+	m_onScaleChange.Invoke(scale);
 }
 
 void Transform::SetGlobalPosition(const Vector3& position)

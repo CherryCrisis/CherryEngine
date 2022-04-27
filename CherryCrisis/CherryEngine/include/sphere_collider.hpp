@@ -15,6 +15,7 @@ private:
 	physx::PxShape* m_pxShape = nullptr;
 
 	float m_baseEntityScale = 1.f;
+	float m_entityScale = 1.f;
 	float m_editableScale = 1.f;
 
 	void PopulateMetadatas() override;
@@ -27,6 +28,7 @@ public:
 	void BindToSignals() override;
 	void Unregister() override;
 
+	void SetEntityScale(const CCMaths::Vector3& scale) override;
 	void SetPxShape() override;
 	void ClearPxShape() override;
 	void ResetPxShape() override;

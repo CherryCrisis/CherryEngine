@@ -20,7 +20,7 @@ protected:
 	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;
 	bool	m_isTrigger = false;
-	float	m_contactOffset = 2.f;
+	float	m_contactOffset = 0.02f;
 
 	virtual void PopulateMetadatas() override {}
 
@@ -29,6 +29,7 @@ public:
 
 	virtual void BindToSignals() override {}
 	virtual void Unregister() {}
+	virtual void SetEntityScale(const Vector3&) {}
 	virtual void SetPxShape() {}
 	virtual void ClearPxShape() {}
 	virtual void ResetPxShape() {}

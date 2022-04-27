@@ -1,28 +1,23 @@
 #include "pch.hpp"
 
-#include "box_collider.hpp"
+#include "capsule_collider.hpp"
 
 #include <PxPhysicsAPI.h>
 
 #include "physic_manager.hpp"
 #include "transform.hpp"
 
-BoxCollider::BoxCollider()
+CapsuleCollider::CapsuleCollider()
 {
 	PopulateMetadatas();
 }
 
-BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
-{
-	PopulateMetadatas();
-}
-
-BoxCollider::~BoxCollider()
+CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
 }
 
-void BoxCollider::BindToSignals()
+void CapsuleCollider::BindToSignals()
 {
 	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
 
@@ -31,9 +26,10 @@ void BoxCollider::BindToSignals()
 
 	Transform* t = m_physicActor->m_owner->GetBehaviour<Transform>();
 	SetEntityScale(t->GetScale());
+
 }
 
-void BoxCollider::Unregister()
+void CapsuleCollider::Unregister()
 {
 	if (m_isRegistered)
 	{
@@ -44,22 +40,24 @@ void BoxCollider::Unregister()
 	}
 }
 
-void BoxCollider::PopulateMetadatas()
+void CapsuleCollider::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
 	m_metadatas.SetProperty("Enabled", &isEnabled);
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
-	m_metadatas.SetProperty("Scale", &editableScale);
+	m_metadatas.SetProperty("Half height", &editableScale);
+	m_metadatas.SetProperty("Radius", &radius);
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
-void BoxCollider::SetEntityScale(const Vector3& scale)
+void CapsuleCollider::SetEntityScale(const Vector3& scale)
 {
-	m_entityScale = scale;
+	m_entityRadius = CCMaths::Min(scale.x, scale.z);
+	m_entityScale = CCMaths::Max(0.01f, (scale.y - m_entityRadius));
 }
 
-void BoxCollider::SetPxShape()
+void CapsuleCollider::SetPxShape()
 {
 	if (m_pxShape)
 	{
@@ -67,16 +65,14 @@ void BoxCollider::SetPxShape()
 		m_pxShape = nullptr;
 	}
 
-	CCMaths::Vector3 scale = m_baseEntityScale;
-	scale *= m_editableScale;
-	scale *= m_entityScale;
+	float scale = m_editableScale * m_entityScale;
+	float totalRadius = m_editableRadius * m_entityRadius;
 
-	physx::PxVec3 scalePx = { scale.x, scale.y, scale.z };
-	m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(scalePx));
+	m_pxShape = m_physicActor->CreateShape(physx::PxCapsuleGeometry(totalRadius, scale));
 	SetPxData();
 }
 
-void BoxCollider::ClearPxShape()
+void CapsuleCollider::ClearPxShape()
 {
 	if (m_pxShape)
 	{
@@ -85,13 +81,13 @@ void BoxCollider::ClearPxShape()
 	}
 }
 
-void BoxCollider::ResetPxShape()
+void CapsuleCollider::ResetPxShape()
 {
 	ClearPxShape();
 	SetPxData();
 }
 
-void BoxCollider::SetPxData()
+void CapsuleCollider::SetPxData()
 {
 	if (m_pxShape)
 	{

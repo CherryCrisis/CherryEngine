@@ -58,133 +58,94 @@ void Rigidbody::PopulateMetadatas()
 	m_metadatas.SetProperty("Max depenetration velocity", &maxDepenetrationVelocity);
 }
 
-void Rigidbody::SetPxActor()
+#pragma region Set&Get
+void Rigidbody::SetEnabled(const bool& isEnabled)
 {
-	SetActorConstraints();
-	SetActorEnabled();
-	SetActorKinematic();
-	SetActorGravity();
-	SetActorMaxVelocities();
-	SetActorDensity();
+	m_physicActor->SetEnabled(isEnabled);
 }
 
-void Rigidbody::SetActorConstraints()
+bool Rigidbody::GetEnabled()
 {
-	if (!m_physicActor)
-		return;
-
-	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
-
-	if (actor)
-	{
-		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_X, false);
-		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Y, false);
-		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Z, false);
-		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_X, false);
-		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Y, false);
-		actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Z, false);
-
-		for (int i = 0; i < 3; ++i)
-		{
-			if (m_positionConstraints.data[i])
-				actor->setRigidDynamicLockFlag((physx::PxRigidDynamicLockFlag::Enum)(2 ^ i), true);
-		}
-
-		for (int i = 0; i < 3; ++i)
-		{
-			if (m_rotationConstraints.data[i])
-				actor->setRigidDynamicLockFlag((physx::PxRigidDynamicLockFlag::Enum)(2 ^ (i + 3)), true);
-		}
-
-
-		if (actor->getScene())
-			actor->wakeUp();
-	}
+	return m_physicActor->GetEnabled();
 }
 
-void Rigidbody::SetActorEnabled()
+void Rigidbody::Rigidbody::SetKinematic(const bool& isKinematic)
 {
-	if (!m_physicActor)
-		return;
-
-	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
-
-	if (actor)
-	{
-		if (!m_isEnabled)
-			actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_SIMULATION, true);
-		else
-			actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_SIMULATION, false);
-
-		if (actor->getScene())
-			actor->wakeUp();
-	}
+	m_physicActor->SetKinematic(isKinematic);
 }
 
-void Rigidbody::SetActorKinematic()
+bool Rigidbody::Rigidbody::GetKinematic()
 {
-	if (!m_physicActor)
-		return;
-
-	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
-
-	if (actor)
-	{
-		if (m_isKinematic)
-		{
-			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eKINEMATIC, true);
-			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES, true);
-		}
-		else
-		{
-			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eKINEMATIC, false);
-			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES, false);
-		}
-
-
-		if (actor->getScene())
-			actor->wakeUp();
-	}
+	return m_physicActor->GetKinematic();
 }
 
-void Rigidbody::SetActorGravity()
+void Rigidbody::SetGravity(const bool& useGravity)
 {
-	if (!m_physicActor)
-		return;
-
-	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
-
-	if (actor)
-	{
-		if (!m_useGravity)
-			actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, true);
-		else
-			actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, false);
-
-
-		if (actor->getScene())
-			actor->wakeUp();
-	}
+	m_physicActor->SetGravity(useGravity);
 }
 
-void Rigidbody::SetActorMaxVelocities()
+bool Rigidbody::GetGravity()
 {
-	if (!m_physicActor)
-		return;
-
-	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
-
-	if (actor)
-	{
-		actor->setMaxLinearVelocity(m_maxLinearVelocity);
-
-		actor->setMaxAngularVelocity(m_maxAngularVelocity);
-
-		actor->setMaxDepenetrationVelocity(m_maxDepenetrationVelocity);
-	}
+	return m_physicActor->GetGravity();
+}
+	 
+void Rigidbody::SetPosContraints(const Bool3& constraints)
+{
+	m_physicActor->SetPosContraints(constraints);
 }
 
-void Rigidbody::SetActorDensity()
+Bool3 Rigidbody::GetPosConstraints()
 {
-	m_physicActor->SetDensity(m_density);
+	return m_physicActor->GetPosConstraints();
 }
+
+void Rigidbody::SetRotContraints(const Bool3& constraints)
+{
+	m_physicActor->SetRotContraints(constraints);
+}
+
+Bool3 Rigidbody::GetRotConstraints()
+{
+	return m_physicActor->GetRotConstraints();
+}
+
+void Rigidbody::SetDensity(const float& density)
+{
+	m_physicActor->SetDensity(density);
+}
+
+float Rigidbody::GetDensity()
+{
+	return m_physicActor->GetDensity();
+}
+
+void Rigidbody::SetMaxVel(const float& velocity)
+{
+	m_physicActor->SetMaxVel(velocity);
+}
+
+float Rigidbody::GetMaxVel()
+{
+	return m_physicActor->GetMaxVel();
+}
+
+void Rigidbody::SetMaxAngVel(const float& velocity)
+{
+	m_physicActor->SetMaxAngVel(velocity);
+}
+
+float Rigidbody::GetMaxAngVel()
+{
+	return m_physicActor->GetMaxAngVel();
+}
+
+void Rigidbody::SetMaxDepVel(const float& velocity)
+{
+	m_physicActor->SetMaxDepVel(velocity);
+}
+
+float Rigidbody::GetMaxDepVel()
+{
+	return m_physicActor->GetMaxDepVel();
+}
+#pragma endregion

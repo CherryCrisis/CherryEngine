@@ -212,7 +212,9 @@
     <ClInclude Include="externals\include\PhysX\vehicle\PxVehicleWheels.h" />
     <ClInclude Include="include\basic_postprocess_renderpass.hpp" />
     <ClInclude Include="include\basic_rendering_pipeline.hpp" />
+    <ClInclude Include="include\box_collider.hpp" />
     <ClInclude Include="include\builder.hpp" />
+    <ClInclude Include="include\capsule_collider.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
     <ClInclude Include="include\command.hpp" />
@@ -367,6 +369,7 @@
     <ClInclude Include="include\renderpass_interface.hpp" />
     <ClInclude Include="include\sound.hpp" />
     <ClInclude Include="include\sound_manager.hpp" />
+    <ClInclude Include="include\sphere_collider.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\time_manager.hpp" />
@@ -462,6 +465,7 @@
     <ClCompile Include="src\bloom_renderpass.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\builder.cpp" />
+    <ClCompile Include="src\capsule_collider.cpp" />
     <ClCompile Include="src\cell.cpp" />
     <ClCompile Include="src\cell_system.cpp" />
     <ClCompile Include="src\character_controller.cpp" />

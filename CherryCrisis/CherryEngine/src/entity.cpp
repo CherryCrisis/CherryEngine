@@ -53,6 +53,31 @@ void Entity::Update()
 	m_OnTick.Invoke();
 }
 
+void Entity::OnCollisionEnter(Entity* other)
+{
+	m_OnCollisionEnter.Invoke();
+}
+
+void Entity::OnCollisionStay(Entity* other)
+{
+	m_OnCollisionStay.Invoke();
+}
+
+void Entity::OnCollisionExit(Entity* other)
+{
+	m_OnCollisionExit.Invoke();
+}
+
+void Entity::OnTriggerEnter(Entity* other)
+{
+	m_OnTriggerEnter.Invoke();
+}
+
+void Entity::OnTriggerExit(Entity* other)
+{
+	m_OnTriggerExit.Invoke();
+}
+
 void Entity::Destroy()
 {
 	delete this;

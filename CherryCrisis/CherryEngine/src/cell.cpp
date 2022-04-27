@@ -33,9 +33,6 @@ void Cell::Initialize()
 
 void Cell::AddEntity(Entity* newEntity)
 {
-	if (!this)
-		return;
-
 	int index = PossessEntity(newEntity);
 
 	if (index != -1)
@@ -49,9 +46,6 @@ void Cell::AddEntity(Entity* newEntity)
 
 void Cell::AddEntityToPhysicScene(Entity* newEntity)
 {
-	if (!this)
-		return;
-
 	if (!m_physicCell)
 		return;
 
@@ -111,9 +105,6 @@ void Cell::RemoveViewer(Viewer* viewer)
 
 void Cell::RemoveEntity(Entity* newEntity)
 {
-	if (!this)
-		return;
-
 	int index = PossessEntity(newEntity);
 
 	if (index == -1)

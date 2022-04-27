@@ -18,33 +18,25 @@ namespace PhysicSystem
 		if (m_isDynamic)
 		{
 			if (!m_rigidbody->GetEnabled() ||
-				m_rigidbody->GetKinematic())
+				GetKinematic())
 				return;
 			
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
 
+			// TODO: Change with world tranform
 			Vector3 pos = t->GetPosition();
-			if (pxT.p.x != m_oldPos.z)
-				pos.x = pxT.p.x;
-
-			if (pxT.p.y != m_oldPos.z)
-				pos.y = pxT.p.y;
-
-			if (pxT.p.z != m_oldPos.z)
-				pos.z = pxT.p.z;
+			pos.x = pxT.p.x != m_oldPos.x ? pxT.p.x : pos.x;
+			pos.y = pxT.p.y != m_oldPos.y ? pxT.p.y : pos.y;
+			pos.z = pxT.p.z != m_oldPos.z ? pxT.p.z : pos.z;
 
 			Vector3 rot = t->GetRotation();
-			if (pxRot.x != m_oldRot.x)
-					rot.x = pxRot.x;
+			rot.x = pxRot.x != m_oldRot.x ? pxRot.x : rot.x;
+			rot.y = pxRot.y != m_oldRot.y ? pxRot.y : rot.y;
+			rot.z = pxRot.z != m_oldRot.z ? pxRot.z : rot.z;
 
-			if (pxRot.y != m_oldRot.y)
-				rot.y = pxRot.y;
-
-			if (pxRot.z != m_oldRot.z)
-				rot.z = pxRot.z;
-
+			// TODO: Change with world tranform
 			t->SetPosition(pos);
 			t->SetRotation(rot);
 		}
@@ -70,11 +62,21 @@ namespace PhysicSystem
 													physx::PxQuat(pxRotQ.x, pxRotQ.y, pxRotQ.z, pxRotQ.w)));
 	}
 
+	void PhysicActor::SetActorScale(const CCMaths::Vector3& scale)
+	{
+		for (auto& collider : m_colliders)
+		{
+			collider->SetEntityScale(scale);
+			collider->ResetPxShape();
+		}
+	}
+
 	void PhysicActor::CreatePxActor()
 	{
 		Transform* t = m_owner->GetBehaviour<Transform>();
 		t->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
 		t->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
+		t->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
 
 		Vector3 pos = t->GetPosition();
 		Quaternion rot = Quaternion::FromEuler(t->GetRotation());
@@ -83,20 +85,31 @@ namespace PhysicSystem
 
 		physx::PxPhysics* physics = PhysicSystem::PhysicManager::GetInstance()->Get();
 
-		if (m_rigidbody)
+		if (m_isStatic)
+		{
+			m_isDynamic = false;
+
+			m_pxActor = physics->createRigidStatic(transform);
+		}
+		else if (m_rigidbody)
 		{
 			m_isDynamic = true;
+			m_useGravity = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
-			m_rigidbody->SetPxActor();
+			SetPxActor();
 
 			physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidDynamic*>(m_pxActor), m_density);
 		}
 		else if (!m_pxActor || m_isDynamic)
 		{
 			m_isDynamic = false;
+			m_isKinematic = true;
 
-			m_pxActor = physics->createRigidStatic(transform);
+			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
+			SetPxActor();
+
+			physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidDynamic*>(m_pxActor), m_density);
 		}
 
 		m_pxActor->userData = this;
@@ -114,6 +127,7 @@ namespace PhysicSystem
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			t->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
 			t->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
+			t->m_onScaleChange.Unbind(&PhysicActor::SetActorScale, this);
 			PX_RELEASE(m_pxActor);
 		}
 	}
@@ -208,5 +222,103 @@ namespace PhysicSystem
 	bool PhysicActor::HasColliders()
 	{
 		return !m_colliders.empty();
+	}
+
+
+	void PhysicActor::SetPxActor()
+	{
+		SetActorConstraints();
+		SetActorEnabled();
+		SetActorKinematic();
+		SetActorGravity();
+		SetActorMaxVelocities();
+	}
+
+	void PhysicActor::SetActorConstraints()
+	{
+		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+
+		if (actor)
+		{
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_X, m_positionConstraints.x);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Y, m_positionConstraints.y);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Z, m_positionConstraints.z);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_X, m_rotationConstraints.x);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Y, m_rotationConstraints.y);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Z, m_rotationConstraints.z);
+
+			if (actor->getScene() && !GetKinematic())
+				actor->wakeUp();
+		}
+	}
+
+	void PhysicActor::SetActorEnabled()
+	{
+		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+
+		if (actor)
+		{
+			if (!m_isEnabled)
+				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_SIMULATION, true);
+			else
+				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_SIMULATION, false);
+
+			if (actor->getScene() && !GetKinematic())
+				actor->wakeUp();
+		}
+	}
+
+	void PhysicActor::SetActorKinematic()
+	{
+		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+
+		if (actor)
+		{
+			if (GetKinematic())
+			{
+				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eKINEMATIC, true);
+				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES, true);
+			}
+			else
+			{
+				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eKINEMATIC, false);
+				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES, false);
+			}
+
+
+			if (actor->getScene() && !GetKinematic())
+				actor->wakeUp();
+		}
+	}
+
+	void PhysicActor::SetActorGravity()
+	{
+		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+
+		if (actor)
+		{
+			if (!m_useGravity)
+				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, true);
+			else
+				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, false);
+
+
+			if (actor->getScene() && !GetKinematic())
+				actor->wakeUp();
+		}
+	}
+
+	void PhysicActor::SetActorMaxVelocities()
+	{
+		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+
+		if (actor)
+		{
+			actor->setMaxLinearVelocity(m_maxLinearVelocity);
+
+			actor->setMaxAngularVelocity(m_maxAngularVelocity);
+
+			actor->setMaxDepenetrationVelocity(m_maxDepenetrationVelocity);
+		}
 	}
 }

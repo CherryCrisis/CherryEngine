@@ -15,6 +15,7 @@ private:
 	physx::PxShape* m_pxShape = nullptr;
 
 	CCMaths::Vector3 m_baseEntityScale = CCMaths::Vector3::One;
+	CCMaths::Vector3 m_entityScale = CCMaths::Vector3::One;
 	CCMaths::Vector3 m_editableScale = CCMaths::Vector3::One;
 
 	void PopulateMetadatas() override;
@@ -27,6 +28,7 @@ public:
 	void BindToSignals() override;
 	void Unregister() override;
 
+	void SetEntityScale(const CCMaths::Vector3& scale) override;
 	void SetPxShape() override;
 	void ClearPxShape() override;
 	void ResetPxShape() override;

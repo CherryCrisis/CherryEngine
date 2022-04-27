@@ -34,6 +34,11 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
 	mono::ManagedThunk<void, struct _MonoObject*>* csStart;
+	mono::ManagedThunk<void, struct _MonoObject*>* csCollideIn;
+	mono::ManagedThunk<void, struct _MonoObject*>* csCollideStay;
+	mono::ManagedThunk<void, struct _MonoObject*>* csCollideOut;
+	mono::ManagedThunk<void, struct _MonoObject*>* csTriggerIn;
+	mono::ManagedThunk<void, struct _MonoObject*>* csTriggerOut;
 
 	void PopulateMetadatas() override;
 
@@ -49,6 +54,12 @@ public:
 	void Initialize();
 	void Start();
 	void Update();
+
+	void OnCollisionEnter();
+	void OnCollisionStay();
+	void OnCollisionExit();
+	void OnTriggerEnter();
+	void OnTriggerExit();
 
 	void Reload(std::shared_ptr<CsAssembly> csAssembly);
 

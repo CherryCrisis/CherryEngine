@@ -58,8 +58,21 @@ public:
 	Event<Cell*> m_OnCellAdded;
 	Event<Cell*> m_OnCellRemoved;
 
+	Event<> m_OnCollisionEnter;
+	Event<> m_OnCollisionStay;
+	Event<> m_OnCollisionExit;
+	Event<> m_OnTriggerEnter;
+	Event<> m_OnTriggerExit;
+
 	void Initialize();
 	void Update();
+
+	void OnCollisionEnter(Entity* other);
+	void OnCollisionStay(Entity* other);
+	void OnCollisionExit(Entity* other);
+	void OnTriggerEnter(Entity* other);
+	void OnTriggerExit(Entity* other);
+
 	void Destroy();
 
 	void SetName(std::string name) { m_name = name; }

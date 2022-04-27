@@ -28,6 +28,9 @@ void SphereCollider::BindToSignals()
 
 	physicManager->Register(this);
 	m_isRegistered = true;
+
+	Transform* t = m_physicActor->m_owner->GetBehaviour<Transform>();
+	SetEntityScale(t->GetScale());
 }
 
 void SphereCollider::Unregister()
@@ -51,6 +54,11 @@ void SphereCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
+void SphereCollider::SetEntityScale(const CCMaths::Vector3& scale)
+{
+	m_entityScale = scale.Length();
+}
+
 void SphereCollider::SetPxShape()
 {
 	if (m_pxShape)
@@ -59,8 +67,9 @@ void SphereCollider::SetPxShape()
 		m_pxShape = nullptr;
 	}
 
-	float scale = m_baseEntityScale * m_editableScale;
+	float scale = m_baseEntityScale * m_editableScale * m_entityScale;
 	m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(scale));
+	SetPxData();
 }
 
 void SphereCollider::ClearPxShape()
@@ -98,8 +107,8 @@ void SphereCollider::SetPxData()
 		}
 		else
 		{
-			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, true);
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eTRIGGER_SHAPE, false);
+			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, true);
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}
