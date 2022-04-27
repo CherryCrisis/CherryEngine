@@ -36,11 +36,10 @@ namespace PhysicSystem
 			return physx::PxFilterFlag::eDEFAULT;
 		}
 		// generate contacts for all that were not filtered above
-		pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
-
-		// trigger the contact callback for pairs (A,B) where 
-		// the filtermask of A contains the ID of B and vice versa.
-		pairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
+		pairFlags = physx::PxPairFlag::eCONTACT_DEFAULT |
+					physx::PxPairFlag::eNOTIFY_TOUCH_FOUND |
+					physx::PxPairFlag::eNOTIFY_TOUCH_LOST |
+					physx::PxPairFlag::eNOTIFY_TOUCH_PERSISTS;
 
 		return physx::PxFilterFlag::eDEFAULT;
 	}
@@ -61,7 +60,6 @@ namespace PhysicSystem
 
 		sceneDesc.filterShader = FilterShader;
 		sceneDesc.simulationEventCallback = this;
-		//sceneDesc.flags |= physx::PxSceneFlag::eREQUIRE_RW_LOCK;
 
 		m_pxScene = pxPhysics->createScene(sceneDesc);
 
@@ -146,14 +144,28 @@ namespace PhysicSystem
 		for (physx::PxU32 i = 0; i < nbPairs; i++)
 		{
 			const physx::PxContactPair& cp = pairs[i];
+			
+			PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(pairHeader.actors[0]->userData);
+			PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairHeader.actors[1]->userData);
+
+			if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_PERSISTS)
+			{
+				actor1->m_owner->OnCollisionStay(actor2->m_owner);
+				actor2->m_owner->OnCollisionStay(actor1->m_owner);
+				continue;
+			}
 
 			if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 			{
-				PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(pairHeader.actors[0]->userData);
-				PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairHeader.actors[1]->userData);
-
 				actor1->m_owner->OnCollisionEnter(actor2->m_owner);
 				actor2->m_owner->OnCollisionEnter(actor1->m_owner);
+				continue;
+			}
+			
+			if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+			{
+				actor1->m_owner->OnCollisionExit(actor2->m_owner);
+				actor2->m_owner->OnCollisionExit(actor1->m_owner);
 			}
 		}
 	}
@@ -162,14 +174,16 @@ namespace PhysicSystem
 	{
 		for (physx::PxU32 i = 0; i < count; i++)
 		{
-			// ignore pairs when shapes have been deleted
-			if (pairs[i].flags & (physx::PxTriggerPairFlag::eREMOVED_SHAPE_TRIGGER | physx::PxTriggerPairFlag::eREMOVED_SHAPE_OTHER))
-				continue;
+			const physx::PxTriggerPair& cp = pairs[i];
 
 			PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(pairs[i].triggerActor->userData);
 			PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairs[i].otherActor->userData);
 
-			actor1->m_owner->OnTriggerEnter(actor2->m_owner);
+			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+				actor1->m_owner->OnTriggerEnter(actor2->m_owner);
+
+			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+				actor1->m_owner->OnTriggerExit(actor2->m_owner);
 		}
 	}
 

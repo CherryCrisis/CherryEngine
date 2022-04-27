@@ -6,6 +6,8 @@
 
 #include "behaviour.hpp"
 
+#include <set>
+
 
 class Cell;
 

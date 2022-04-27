@@ -55,14 +55,20 @@ public:
 	Event<> m_OnStart;
 	Event<> m_OnTick;
 
-	Event<> m_OnTrigger;
-	Event<> m_OnCollision;
+	Event<> m_OnCollisionEnter;
+	Event<> m_OnCollisionStay;
+	Event<> m_OnCollisionExit;
+	Event<> m_OnTriggerEnter;
+	Event<> m_OnTriggerExit;
 
 	void Initialize();
 	void Update();
 
-	void OnTriggerEnter(Entity* other);
 	void OnCollisionEnter(Entity* other);
+	void OnCollisionStay(Entity* other);
+	void OnCollisionExit(Entity* other);
+	void OnTriggerEnter(Entity* other);
+	void OnTriggerExit(Entity* other);
 
 	void Destroy();
 

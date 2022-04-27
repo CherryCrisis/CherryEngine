@@ -64,8 +64,11 @@ void ScriptedBehaviour::BindToSignals()
 	if (managedStart)
 		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
 
-	GetHost().m_OnTrigger.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
-	GetHost().m_OnCollision.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
+	GetHost().m_OnCollisionEnter.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
+	GetHost().m_OnCollisionStay.Bind(&ScriptedBehaviour::OnCollisionStay, this);
+	GetHost().m_OnCollisionExit.Bind(&ScriptedBehaviour::OnCollisionExit, this);
+	GetHost().m_OnTriggerEnter.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
+	GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
 }
 
 void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
@@ -188,16 +191,34 @@ void ScriptedBehaviour::Update()
 	csUpdate->Invoke(managedInstance->RawObject(), &excep);
 }
 
-void ScriptedBehaviour::OnTriggerEnter()
-{
-	//MonoException* excep = nullptr;
-	//csTrigger->Invoke(managedInstance->RawObject(), &excep);
-}
-
 void ScriptedBehaviour::OnCollisionEnter()
 {
 	//MonoException* excep = nullptr;
-	//csCollide->Invoke(managedInstance->RawObject(), &excep);
+	//csCollideIn->Invoke(managedInstance->RawObject(), &excep);
+}
+
+void ScriptedBehaviour::OnCollisionStay()
+{
+	//MonoException* excep = nullptr;
+	//csCollideStay->Invoke(managedInstance->RawObject(), &excep);
+}
+
+void ScriptedBehaviour::OnCollisionExit()
+{
+	//MonoException* excep = nullptr;
+	//csCollideOut->Invoke(managedInstance->RawObject(), &excep);
+}
+
+void ScriptedBehaviour::OnTriggerEnter()
+{
+	//MonoException* excep = nullptr;
+	//csTriggerIn->Invoke(managedInstance->RawObject(), &excep);
+}
+
+void ScriptedBehaviour::OnTriggerExit()
+{
+	//MonoException* excep = nullptr;
+	//csTriggerOut->Invoke(managedInstance->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
