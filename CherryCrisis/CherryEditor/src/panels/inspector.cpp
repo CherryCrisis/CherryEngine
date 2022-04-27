@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <string>
 #include <typeinfo>
+#include <algorithm>
 
 #include "cherry_header.hpp"
 #include "core/editor_manager.hpp"
@@ -19,6 +20,8 @@
 #include "capsule_collider.hpp"
 #include "bool3.hpp"
 #include "core/imcherry.hpp"
+#include "utils.hpp"
+#include "basic_renderpass.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -37,6 +40,7 @@ void InspectComponents(Entity* entity, int id)
 {
     std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 
+    ModelRenderer* renderer = nullptr;
     for (Behaviour* behaviour : behaviours)
     {
         ImGui::PushID(static_cast<int>(behaviour->GetUUID()));
@@ -64,7 +68,8 @@ void InspectComponents(Entity* entity, int id)
             opened = ImGui::TreeNode(b->GetScriptPath().c_str());
         else
             opened = ImGui::TreeNode(bname.c_str());
-
+        if (bname == "ModelRenderer")
+            renderer = (ModelRenderer*)behaviour;
         // check if right clicked
         if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
         {
@@ -228,6 +233,64 @@ void InspectComponents(Entity* entity, int id)
         }
         ImGui::Separator();
         ImGui::PopID();
+    }
+    
+    //Inspect Material
+    if (renderer && renderer->m_model && renderer->m_model->m_material)
+    {
+        std::shared_ptr<Material> mat = renderer->m_model->m_material;
+        if (ImGui::TreeNode("Material"))
+        {
+            ImGui::Text(mat->GetFilepath().c_str());
+            ImGui::DragFloat3("Ambient", mat->m_ambient.data, 0.1f);
+            ImGui::DragFloat3("Diffuse", mat->m_diffuse.data, 0.1f);
+            ImGui::DragFloat3("Specular", mat->m_specular.data, 0.1f);
+            ImGui::DragFloat3("Emissive", mat->m_emissive.data, 0.1f);
+            ImGui::DragFloat("Shininess", &mat->m_shininess, 0.1f);
+            
+            if (ImGui::BeginTable("texturesTable", 2)) 
+            {
+                for (const auto& [texType, tex] : mat->textures)
+                {
+                    ImGui::TableNextColumn();
+                    if (texType == ETextureType::ALBEDO)
+                        ImGui::Text("Albedo");
+                    else if (texType == ETextureType::AMBIENT)
+                        ImGui::Text("Ambient");
+                    else if (texType == ETextureType::NORMAL_MAP)
+                        ImGui::Text("Normal Map");
+
+                    ImGui::TableNextColumn();
+                    BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
+                    if (tex.get() && tex->m_gpuTexture) 
+                    {
+                        GPUtex = static_cast<BasicRenderPass::GPUTextureBasic*>
+                        (tex->m_gpuTexture.get());
+                    }
+
+                    unsigned int texID = GPUtex ? GPUtex->ID : 0;
+
+                    ImGui::ImageButton((ImTextureID)texID, { 50,50 });
+
+                    if (ImGui::BeginDragDropTarget()) 
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                        {
+                            const char* c = (const char*)payload->Data;
+                            std::string extension = String::ExtractValue(c, '.');
+
+                            if (extension == ".jpg") 
+                            {
+                                EditorManager::SendNotification("WIP", ENotifType::Info);
+                            }
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+                }
+                ImGui::EndTable();
+            }
+            ImGui::TreePop();
+        }
     }
 }
 

@@ -185,6 +185,15 @@ void AssetBrowser::ContextCallback()
                 m_focusedNode = GetNodeByName("NewScene");
                 m_renaming = true;
             }
+            if (ImGui::MenuItem("Material"))
+            {
+                //Create file and Copy basic material template
+                //std::ofstream stream{"Assets/nsm.mat"};
+                //stream >> std::string("newMat");
+
+
+                //ResourceManager::GetInstance()->AddResource<Material>("Assets/nsm.mat", true);
+            }
 
 
             ImGui::EndMenu();
