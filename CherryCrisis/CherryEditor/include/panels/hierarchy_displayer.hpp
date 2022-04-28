@@ -8,12 +8,13 @@ class Scene;
 class EditorManager;
 class Entity;
 
-class HierarchyDisplayer : public Panel 
+class HierarchyDisplayer : public Panel
 {
 private:
-	EditorManager*	m_manager = nullptr;
+	EditorManager* m_manager = nullptr;
 
-	std::unordered_map<Entity*, int> m_draggedEntities;
+	Entity* m_draggedEntity = nullptr;
+	bool	m_isEntityDragged = false;
 
 	bool m_renaming = false;
 
@@ -23,6 +24,6 @@ public:
 
 	bool RenderEntity(Entity* entity);
 
-	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr) : 
-	Panel(spawnOpened), m_manager(manager) {}
+	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr) :
+		Panel(spawnOpened), m_manager(manager) {}
 };

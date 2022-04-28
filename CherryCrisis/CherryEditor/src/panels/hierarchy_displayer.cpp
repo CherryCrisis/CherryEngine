@@ -26,7 +26,7 @@ bool Contains(std::vector<T>& vec, const T& elem)
     return result;
 }
 
-void HierarchyDisplayer::Render() 
+void HierarchyDisplayer::Render()
 {
     if (!m_isOpened)
         return;
@@ -97,9 +97,9 @@ void HierarchyDisplayer::Render()
 
     ImGui::End();
 
-    if (ImGui::IsKeyDown(ImGuiKey_Delete) && m_manager->m_selectedEntities.size() > 0) 
+    if (ImGui::IsKeyDown(ImGuiKey_Delete) && m_manager->m_selectedEntities.size() > 0)
     {
-        for (Entity* entity : m_manager->m_selectedEntities) 
+        for (Entity* entity : m_manager->m_selectedEntities)
         {
             SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
             m_manager->m_selectedEntities.clear();
@@ -108,18 +108,18 @@ void HierarchyDisplayer::Render()
 
 }
 
-bool HierarchyDisplayer::RenderEntity(Entity* entity) 
+bool HierarchyDisplayer::RenderEntity(Entity* entity)
 {
     Transform* entityTransform = entity->GetBehaviour<Transform>();
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-    if (Contains(m_manager->m_selectedEntities, entity))                { flags |= ImGuiTreeNodeFlags_Selected; }
+    if (Contains(m_manager->m_selectedEntities, entity)) { flags |= ImGuiTreeNodeFlags_Selected; }
     if (!entityTransform || entityTransform->GetChildren().size() <= 0) { flags |= ImGuiTreeNodeFlags_Leaf; }
 
 
     bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
-   
-    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered()) 
+
+    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered())
     {
         if (!InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) // Clear selection when CTRL is not held
             m_manager->m_selectedEntities.clear();
@@ -133,47 +133,50 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
         ImGui::Text(entity->GetName().c_str());
         ImGui::EndDragDropSource();
-        m_draggedEntities[entity] = 2;
+        m_isEntityDragged = true;
     }
-    else if (m_draggedEntities.contains(entity))
-        m_draggedEntities[entity]--;
 
     if (entityTransform && ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
         {
-            Entity* draggedEntity = (Entity*)payload->Data;
+            m_draggedEntity = (Entity*)payload->Data;
 
-            draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
+            m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
             m_manager->m_selectedEntities.clear();
-            m_draggedEntities.erase(entity);
+            m_isEntityDragged = false;
+            m_draggedEntity = nullptr;
             if (opened) ImGui::TreePop();
             return true;
         }
 
         ImGui::EndDragDropTarget();
     }
-    else if (m_draggedEntities.contains(entity))
+    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive)
     {
-        if ((ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive && !m_draggedEntities.at(entity)) || m_draggedEntities[entity] < 0)
+        ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;
+        if (payload->IsDataType("HIERARCHY_DROP"))
         {
-            m_draggedEntities.erase(entity);
-
-            ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;
-            if (payload->IsDataType("HIERARCHY_DROP"))
+            m_draggedEntity = static_cast<Entity*>(payload->Data);
+        }
+    }
+    else if (m_draggedEntity)
+    {
+        Transform* draggedTransform = m_draggedEntity->GetBehaviour<Transform>();
+        if (draggedTransform && draggedTransform == entityTransform)
+        {
+            if (m_isEntityDragged)
             {
-                Entity* draggedEntity = static_cast<Entity*>(payload->Data);
-                if (draggedEntity)
-                {
-                    Transform* draggedTransform = draggedEntity->GetBehaviour<Transform>();
-                    if (draggedTransform && draggedTransform == entityTransform)
-                    {
-                        draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr);
-                        m_manager->m_selectedEntities.clear();
-                        if (opened) ImGui::TreePop();
-                        return true;
-                    }
-                }
+                m_isEntityDragged = false;
+                m_draggedEntity = entity;
+            }
+            else
+            {
+                m_draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr);
+                m_manager->m_selectedEntities.clear();
+                m_draggedEntity = nullptr;
+                if (opened) ImGui::TreePop();
+                return true;
             }
         }
     }
@@ -181,7 +184,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
     if (opened && entityTransform)
         for (const auto& child : entityTransform->GetChildren())
             if (RenderEntity(&child->GetHost())) { ImGui::TreePop(); return true; }
-        
+
     if (opened)
         ImGui::TreePop();
 
@@ -197,7 +200,7 @@ void HierarchyDisplayer::ContextCallback()
         if (ImGui::BeginMenu("New"))
         {
 
-            if (ImGui::MenuItem("Empty")) 
+            if (ImGui::MenuItem("Empty"))
             {
                 Entity* empty = new Entity("Empty");
                 SceneManager::GetInstance()->m_currentScene->AddEntity(empty);
@@ -208,12 +211,12 @@ void HierarchyDisplayer::ContextCallback()
             if (ImGui::MenuItem("Audio Source")) {}
             if (ImGui::BeginMenu("Shapes"))
             {
-                if (ImGui::MenuItem("Cube")) 
+                if (ImGui::MenuItem("Cube"))
                 {
                     Entity* cube = new Entity("Cube");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCube");
-                    Mesh::CreateCube(mesh,1,1,1);
-                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube",true,mesh);
+                    Mesh::CreateCube(mesh, 1, 1, 1);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube", true, mesh);
                     Transform* tr = cube->AddBehaviour<Transform>();
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
@@ -221,7 +224,7 @@ void HierarchyDisplayer::ContextCallback()
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
-                if (ImGui::MenuItem("Sphere")) 
+                if (ImGui::MenuItem("Sphere"))
                 {
                     Entity* cube = new Entity("Sphere");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedSphere");
@@ -234,7 +237,7 @@ void HierarchyDisplayer::ContextCallback()
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
-                if (ImGui::MenuItem("Cone")) 
+                if (ImGui::MenuItem("Cone"))
                 {
                     Entity* cube = new Entity("Cone");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCone");
@@ -247,7 +250,7 @@ void HierarchyDisplayer::ContextCallback()
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
-                if (ImGui::MenuItem("Plane")) 
+                if (ImGui::MenuItem("Plane"))
                 {
                     Entity* cube = new Entity("Plane");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedPlane");
@@ -269,12 +272,12 @@ void HierarchyDisplayer::ContextCallback()
         if (m_manager->m_selectedEntities.size() > 0)
         {
             ImGui::Separator();
-            
+
 
             if (ImGui::MenuItem("Rename")) { m_renaming = true; }
-            if (ImGui::MenuItem("Delete")) 
+            if (ImGui::MenuItem("Delete"))
             {
-                for (auto& entity : m_manager->m_selectedEntities) 
+                for (auto& entity : m_manager->m_selectedEntities)
                 {
                     SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
                     //To Change
@@ -290,4 +293,4 @@ void HierarchyDisplayer::ContextCallback()
 
         ImGui::EndPopup();
     }
-} 
+}

@@ -148,7 +148,7 @@ void Transform::SetGlobalPosition(const Vector3& position)
 	CCMaths::Vector3 tempRot;
 	CCMaths::Vector3 tempScale;
 
-	Matrix4::Decompose(GetLocalMatrix(), m_position, tempRot, tempScale);
+	CCMaths::Matrix4::Decompose(GetLocalMatrix(), m_position, tempRot, tempScale);
 	
 	SetDirty();
 	m_onPositionChange.Invoke(position);
@@ -161,7 +161,7 @@ Vector3 Transform::GetGlobalPosition()
 
 	CCMaths::Vector3 outPos;
 
-	Matrix4::Decompose(GetWorldMatrix(), outPos, tempRot, tempScale);
+	CCMaths::Matrix4::Decompose(GetWorldMatrix(), outPos, tempRot, tempScale);
 
 	return outPos;
 }
@@ -171,7 +171,7 @@ void Transform::SetGlobalRotation(const Vector3& rotation)
 	CCMaths::Vector3 tempPos;
 	CCMaths::Vector3 tempScale;
 
-	Matrix4::Decompose(GetLocalMatrix(), tempPos, m_rotation, tempScale);
+	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, m_rotation, tempScale);
 
 	SetDirty();
 	m_onRotationChange.Invoke(rotation);
@@ -184,7 +184,7 @@ Vector3 Transform::GetGlobalRotation()
 
 	CCMaths::Vector3 outRot;
 
-	Matrix4::Decompose(GetWorldMatrix(), tempPos, outRot, tempScale);
+	CCMaths::Matrix4::Decompose(GetWorldMatrix(), tempPos, outRot, tempScale);
 
 	return outRot;
 }
@@ -194,7 +194,7 @@ void Transform::SetGlobalScale(const Vector3& scale)
 	CCMaths::Vector3 tempPos;
 	CCMaths::Vector3 tempRot;
 
-	Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, m_scale);
+	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, m_scale);
 
 	SetDirty();
 }
@@ -206,7 +206,7 @@ Vector3 Transform::GetGlobalScale()
 
 	CCMaths::Vector3 outScale;
 
-	Matrix4::Decompose(GetWorldMatrix(), tempPos, tempRot, outScale);
+	CCMaths::Matrix4::Decompose(GetWorldMatrix(), tempPos, tempRot, outScale);
 
 	return outScale;
 }
