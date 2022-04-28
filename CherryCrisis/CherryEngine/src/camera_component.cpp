@@ -11,16 +11,19 @@
 #include "render_manager.hpp"
 
 #include "basic_rendering_pipeline.hpp"
+#include "pbr_rendering_pipeline.hpp"
 
 CameraComponent::CameraComponent()
 {
-	m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
+	//m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
+	m_camera.m_pipeline = std::make_unique<PBRRPipeline>();
 	PopulateMetadatas();
 }
 
 CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
 {
-	m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
+	//m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
+	m_camera.m_pipeline = std::make_unique<PBRRPipeline>();
 	PopulateMetadatas();
 }
 

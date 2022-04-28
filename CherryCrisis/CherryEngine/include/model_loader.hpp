@@ -50,6 +50,14 @@ namespace CCImporter
         int blockSize;
     };
 
+    /*vec3  albedo;
+    float specular;
+    float metallic;
+    float roughness;
+    float ao;
+
+    float clearCoat;
+    float clearCoatRoughness;*/
     struct MaterialHeader
     {
         bool            m_hasMaterial;
@@ -59,6 +67,14 @@ namespace CCImporter
         Vector3         m_specular;
         Vector3         m_emissive;
         float           m_shininess;
+
+        //-- PBR --//
+        float m_specularFactor;
+        float m_metallicFactor;
+        float m_roughnessFactor;
+        float m_ao;
+        float m_clearCoatFactor;
+        float m_clearCoatRoughnessFactor;
 
         unsigned int    m_texturesCount;
     };

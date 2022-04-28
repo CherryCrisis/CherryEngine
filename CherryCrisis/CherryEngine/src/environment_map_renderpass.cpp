@@ -65,8 +65,8 @@ int EnvironmentMapRenderPass::Subscribe(Skydome* toGenerate)
 	m_skydome = toGenerate;
 	toGenerate->ClearData();
 
-	/*if (m_skydome && m_program)
-		m_callExecute = CCCallback::BindCallback(&EnvironmentMapRenderPass::Execute, this);*/
+	if (m_skydome && m_program)
+		m_callExecute = CCCallback::BindCallback(&EnvironmentMapRenderPass::Execute, this);
 
 	return 1;
 }
@@ -81,7 +81,7 @@ void EnvironmentMapRenderPass::Unsubscribe(Skydome* toGenerate)
 	}
 }
 
-void EnvironmentMapRenderPass::Execute()
+void EnvironmentMapRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 {
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
@@ -98,6 +98,7 @@ void EnvironmentMapRenderPass::Execute()
 
 	//Setup spheremap
 	{
+		glCullFace(GL_BACK);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// convert HDR equirectangular environment map to cubemap equivalent
@@ -119,6 +120,7 @@ void EnvironmentMapRenderPass::Execute()
 		
 		for (unsigned int i = 0; i < 6; ++i)
 		{
+
 			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, captureViews[i].data);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, gpuCubemap->ID, 0);
@@ -135,6 +137,6 @@ void EnvironmentMapRenderPass::Execute()
 		glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
 		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
-		glViewport(0, 0, 1920, 1080);
+		glViewport(0, 0, fb.colorTex.width, fb.colorTex.height);
 	}
 }

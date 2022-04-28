@@ -11,23 +11,21 @@
 class Skydome;
 class Viewer;
 
-class EnvironmentMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
+class BRDFRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
-	Skydome* m_skydome = nullptr;
-	
-	const int width = 1024;
-	const int height = 1024;
+
+	Skydome*	m_skydome		= nullptr;
+	const int	m_resolution	= 520;
+
 
 public:
-	struct GPUSkydomeSpheremap : GPUSpheremap
+	struct GPUBRDFSphereMap : GPUBRDF
 	{
-		GLuint ID = 0u;
-		GLuint FBO = 0u;
-		GLuint RBO = 0u;
+		GLuint		ID = 0u;
 	};
 
-	EnvironmentMapRenderPass(const char* name);
+	BRDFRenderPass(const char* name);
 
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)

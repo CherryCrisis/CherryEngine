@@ -11,23 +11,22 @@
 class Skydome;
 class Viewer;
 
-class EnvironmentMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
+class PrefilterMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
 	Skydome* m_skydome = nullptr;
-	
-	const int width = 1024;
-	const int height = 1024;
+
+	const int	m_maxMipLevels = 5;
+	const int	m_mipMapResolution = 128;
+
 
 public:
-	struct GPUSkydomeSpheremap : GPUSpheremap
+	struct GPUPrefilterMapSphereMap : GPUPrefilterMap
 	{
-		GLuint ID = 0u;
-		GLuint FBO = 0u;
-		GLuint RBO = 0u;
+		GLuint		ID = 0u;
 	};
 
-	EnvironmentMapRenderPass(const char* name);
+	PrefilterMapRenderPass(const char* name);
 
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)

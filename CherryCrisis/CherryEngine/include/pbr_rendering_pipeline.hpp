@@ -4,18 +4,22 @@
 
 class EnvironmentMapRenderPass;
 class SkydomeRenderPass;
-class IrradianceRenderPass;
-class PrefilterRenderPass;
-class BDRFRenderPass;
+class IrradianceMapRenderPass;
+class PrefilterMapRenderPass;
+class BRDFRenderPass;
+class PBRRenderPass;
 
 //PBR Rendering Pipeline
 class CCENGINE_API PBRRPipeline : public ARenderingPipeline
 {
-	EnvironmentMapRenderPass* m_environmentMapPass	= nullptr;
-	SkydomeRenderPass*		m_skyspherePass			= nullptr;
-	IrradianceRenderPass*	m_irradiancePass		= nullptr;
-	PrefilterRenderPass*	m_prefilterPass			= nullptr;
-	BDRFRenderPass*			m_bdrf					= nullptr;
+	EnvironmentMapRenderPass*	m_environmentMapPass	= nullptr;
+	SkydomeRenderPass*			m_skydomePass			= nullptr;
+	IrradianceMapRenderPass*	m_irradianceMapPass		= nullptr;
+	PrefilterMapRenderPass*		m_prefilterPass			= nullptr;
+	BRDFRenderPass*				m_brdfPass				= nullptr;
+	PBRRenderPass*				m_pbrPass				= nullptr;
+
+	bool m_isGenerated = false;
 
 public:
 	PBRRPipeline();

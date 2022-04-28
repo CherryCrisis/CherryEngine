@@ -8,9 +8,7 @@
 
 class ShadowRenderPass;
 class BasicRenderPass;
-//class SkyboxRenderPass;
-class EnvironmentMapRenderPass;
-class SkydomeRenderPass;
+class SkyboxRenderPass;
 class BloomRenderPass;
 class HDRRenderPass;
 
@@ -20,11 +18,7 @@ class CCENGINE_API BasicRPipeline : public ARenderingPipeline
 {
 	ShadowRenderPass*			m_shadowPass = nullptr;
 	BasicRenderPass*			m_basicPass = nullptr;
-	//SkyboxRenderPass*			m_skyboxPass = nullptr;
-	EnvironmentMapRenderPass*	m_envMapPass = nullptr;
-	SkydomeRenderPass*			m_skydomePass = nullptr;
-	bool isGenerated = false;
-
+	SkyboxRenderPass*			m_skyboxPass = nullptr;
 	BloomRenderPass*			m_bloomPass = nullptr;
 	HDRRenderPass*				m_hdrPass = nullptr;
 	BasicPostProcessRenderPass* m_postprocessPass = nullptr;

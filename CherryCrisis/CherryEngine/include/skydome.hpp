@@ -15,6 +15,7 @@ private:
 	class Cell* m_cell;
 
 public:
+	std::shared_ptr<Mesh>		m_quad;
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Spheremap>	m_spheremap;
 
