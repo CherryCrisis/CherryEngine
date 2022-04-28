@@ -32,12 +32,14 @@ private:
 public:
 	Transform();
 	Transform(CCUUID& owner);
-	~Transform() { SetParent(nullptr); }
+	~Transform();
 	bool IsRoot() { return !m_parent; }
 
 	void SetParent(Transform* transform);
 	Transform* GetParent() { return m_parent; }
 	Transform* GetRootParent();
+	bool IsEqualToParent(Transform* transform);
+	void ClearChildParenting();
 	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
 	void UpdateMatrix();

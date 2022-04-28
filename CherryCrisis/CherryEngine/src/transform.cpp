@@ -15,6 +15,14 @@ Transform::Transform(CCUUID& id)
 	PopulateMetadatas();
 }
 
+Transform::~Transform()
+{
+	SetParent(nullptr);
+	
+	while (!m_children.empty())
+		ClearChildParenting();
+}
+
 
 void Transform::PopulateMetadatas() 
 {
@@ -34,9 +42,23 @@ void Transform::SetDirty()
 		child->SetDirty();
 }
 
+bool Transform::IsEqualToParent(Transform* transform)
+{
+	if (!m_parent)
+		return false;
+
+	if (m_parent == transform)
+		return true;
+
+	return m_parent->IsEqualToParent(transform);
+}
+
 void Transform::SetParent(Transform* transform)
 {
-	if (m_parent == transform) // Guard to prevent parent re-set
+	if (IsEqualToParent(transform)) // Guard to prevent parent re-set
+		return;
+
+	if (transform && transform->IsEqualToParent(this))
 		return;
 
 	CCMaths::Vector3 position	= GetGlobalPosition();
@@ -68,6 +90,16 @@ void Transform::SetParent(Transform* transform)
 	SetGlobalScale(scale);
 
 	SetDirty();
+}
+
+void Transform::ClearChildParenting()
+{
+	size_t childrenSize = m_children.size();
+	for (size_t i = 0; i < childrenSize; ++i)
+	{
+		m_children[i]->SetParent(nullptr);
+		break;
+	}
 }
 
 Transform* Transform::GetRootParent() 
