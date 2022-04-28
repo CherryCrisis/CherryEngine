@@ -28,3 +28,10 @@ void Model::Reload(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> materia
 	m_mesh = mesh;
 	m_material = material;
 }
+
+void Model::SetMaterial(const std::shared_ptr<Material>& newMat) 
+{
+	m_material = newMat;
+	m_onMaterialSet.Invoke(m_material.get());
+}
+

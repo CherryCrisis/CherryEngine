@@ -135,30 +135,29 @@ int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 		m_modelRenderers.insert(toGenerate);
 	}
 
+	toGenerate->m_onMaterialSet.Bind(&BasicRenderPass::Generate, this);
+
 	// Generate GPU textures
 	{
 		if (Material* material = model->m_material.get())
-			Subscribe(material);
+			Generate(material);
 	}
 
 	return 1;
 }
 
-template <>
-int BasicRenderPass::Subscribe(Material* toGenerate)
+void BasicRenderPass::Generate(Material* toGenerate)
 {
 	if (!toGenerate)
-		return -1;
+		return;
 
 	// Albedo texture
-	if (Texture* albedoTexture = toGenerate->textures[ETextureType::ALBEDO].get())
+	if (Texture* albedoTexture = toGenerate->m_textures[ETextureType::ALBEDO].get())
 		Subscribe(albedoTexture);
 
 	// Normal texture
-	if (Texture* normalMap = toGenerate->textures[ETextureType::NORMAL_MAP].get())
+	if (Texture* normalMap = toGenerate->m_textures[ETextureType::NORMAL_MAP].get())
 		Subscribe(normalMap);
-
-	return 1;
 }
 
 template <>
@@ -283,7 +282,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.emissiveCol"), 1, material->m_emissive.data);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.shininess"), material->m_shininess);
 
-			if (Texture* albedoTexture = material->textures[ETextureType::ALBEDO].get())
+			if (Texture* albedoTexture = material->m_textures[ETextureType::ALBEDO].get())
 			{
 				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture.get()))
 				{
@@ -291,7 +290,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 				}
 			}
 
-			if (Texture* normalMap = material->textures[ETextureType::NORMAL_MAP].get())
+			if (Texture* normalMap = material->m_textures[ETextureType::NORMAL_MAP].get())
 			{
 				if (auto gpuNormalMap = static_cast<GPUTextureBasic*>(normalMap->m_gpuTexture.get()))
 				{

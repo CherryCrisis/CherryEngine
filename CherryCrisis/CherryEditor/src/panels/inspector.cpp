@@ -250,7 +250,7 @@ void InspectComponents(Entity* entity, int id)
             
             if (ImGui::BeginTable("texturesTable", 2)) 
             {
-                for (const auto& [texType, tex] : mat->textures)
+                for (auto& [texType, texRef] : mat->m_textures)
                 {
                     ImGui::TableNextColumn();
                     if (texType == ETextureType::ALBEDO)
@@ -262,10 +262,10 @@ void InspectComponents(Entity* entity, int id)
 
                     ImGui::TableNextColumn();
                     BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
-                    if (tex.get() && tex->m_gpuTexture) 
+                    if (texRef.get() && texRef->m_gpuTexture)
                     {
                         GPUtex = static_cast<BasicRenderPass::GPUTextureBasic*>
-                        (tex->m_gpuTexture.get());
+                        (texRef->m_gpuTexture.get());
                     }
 
                     unsigned int texID = GPUtex ? GPUtex->ID : 0;
@@ -279,9 +279,9 @@ void InspectComponents(Entity* entity, int id)
                             const char* c = (const char*)payload->Data;
                             std::string extension = String::ExtractValue(c, '.');
 
-                            if (extension == ".jpg") 
-                            {
-                                EditorManager::SendNotification("WIP", ENotifType::Info);
+                            if (extension == "jpg") 
+                            {   
+                                mat->SetTexture(texType, c);
                             }
                         }
                         ImGui::EndDragDropTarget();

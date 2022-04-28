@@ -7,6 +7,7 @@
 
 #include "resource.hpp"
 #include "maths.hpp"
+#include "event.hpp"
 
 //Forward declaration
 namespace CCImporter
@@ -40,7 +41,7 @@ public:
 	Vector3 m_emissive = { 0.0f, 0.0f, 0.0f };
 	float	m_shininess = 0.f;
 
-	std::unordered_map<ETextureType, std::shared_ptr<Texture>> textures;
+	std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
 
 	Material(const char* materialName) : Resource(materialName) {}
 	~Material() = default;
@@ -49,4 +50,10 @@ public:
 
 	void Delete() override;
 	void Reload(const MaterialArgs& materialArgs);
+
+	void SetTexture(ETextureType type, const std::shared_ptr<Texture>& newTexture);
+	void SetTexture(ETextureType type, const char* filepath);
+
+	Event<std::shared_ptr<Texture>> m_onTextureSet;
+
 };

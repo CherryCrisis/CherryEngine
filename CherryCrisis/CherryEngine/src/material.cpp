@@ -14,7 +14,7 @@
 
 void Material::Delete()
 {
-	textures.clear();
+	m_textures.clear();
 }
 
 void Material::Load(std::shared_ptr<Material> material, const MaterialArgs& materialArgs)
@@ -33,7 +33,7 @@ void Material::Load(std::shared_ptr<Material> material, const MaterialArgs& mate
 		std::shared_ptr<Texture> texture =
 			resourceManager->AddResource<Texture>((*materialArgs.m_texturesPath)[i].c_str(), true, true);
 
-		material->textures.emplace((ETextureType)(*materialArgs.m_textureType)[i], texture);
+		material->m_textures.emplace((ETextureType)(*materialArgs.m_textureType)[i], texture);
 	}
 }
 
@@ -48,7 +48,7 @@ void Material::Reload(const MaterialArgs& materialArgs)
 
 	m_shininess = materialArgs.m_materialHeader->m_shininess;
 
-	textures.clear();
+	m_textures.clear();
 
 	for (unsigned int i = 0; i < materialArgs.m_materialHeader->m_texturesCount; ++i)
 	{
@@ -64,6 +64,18 @@ void Material::Reload(const MaterialArgs& materialArgs)
 			resourceManager->AddResource<Texture>((*materialArgs.m_texturesPath)[i].c_str(), false, true);
 		}
 
-		textures.emplace((ETextureType)(*materialArgs.m_textureType)[i], texture);
+		m_textures.emplace((ETextureType)(*materialArgs.m_textureType)[i], texture);
 	}
+}
+
+void Material::SetTexture(ETextureType type, const std::shared_ptr<Texture>& newTexture) 
+{
+	m_textures[type] = newTexture;
+	m_onTextureSet.Invoke(std::forward<std::shared_ptr<Texture>>(m_textures[type]));
+}
+
+void Material::SetTexture(ETextureType type, const char* filepath)
+{
+	std::shared_ptr<Texture> newTex = ResourceManager::GetInstance()->AddResource<Texture>(filepath, true);
+	SetTexture(type, newTex);
 }
