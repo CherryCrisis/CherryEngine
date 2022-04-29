@@ -157,7 +157,7 @@ namespace CCMaths
 
 		//! Inverse the Matrix4
 		/*!
-		*	\attention Use as an independant method of the struct (not relative to a specific object)
+		*	\attention Used as an independant method of the struct (not relative to a specific object)
 		*
 		*	\param lhs: Matrix4 given as parameter
 		*
@@ -231,7 +231,7 @@ namespace CCMaths
 
 		//! Rotation Matrix
 		/*!
-		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*	\param in: Vector3 euler angle in radians of the rotation { pitch, yaw, roll }
 		*
 		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
 		*
@@ -245,7 +245,7 @@ namespace CCMaths
 
 		//! Rotation Matrix
 		/*!
-		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*	\param in: Vector3 euler angle in radians of the rotation { pitch, yaw, roll }
 		*
 		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
 		*
@@ -259,7 +259,7 @@ namespace CCMaths
 
 		//! Rotation Matrix
 		/*!
-		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*	\param in: Vector3 euler angle in radians of the rotation { pitch, yaw, roll }
 		*
 		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
 		*
@@ -273,7 +273,7 @@ namespace CCMaths
 
 		//! Rotation Matrix
 		/*!
-		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*	\param in: Vector3 euler angle in radians of the rotation { pitch, yaw, roll }
 		*
 		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
 		*
@@ -287,7 +287,7 @@ namespace CCMaths
 
 		//! Rotation Matrix
 		/*!
-		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*	\param in: Vector3 euler angle in radians of the rotation { pitch, yaw, roll }
 		*
 		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
 		*
@@ -301,7 +301,7 @@ namespace CCMaths
 
 		//! Rotation Matrix
 		/*!
-		*	\param in: Vector3 euler angle in radians of the rotation { roll, pitch, yaw }
+		*	\param in: Vector3 euler angle in radians of the rotation { pitch, yaw, roll }
 		*
 		*	Create a new Matrix4 \b out with the product of the rotation on the 3 axis
 		*
@@ -434,6 +434,16 @@ namespace CCMaths
 		*/
 		inline static Matrix4 RotateZ(const float cos, const float sin);
 
+		//! Decompose the Transform Matrix
+		/*!
+		*	\param matrix:	 Matrix4 to decompose
+		*	\param outPos:	 Ref of Vector3 of the position in the matrix
+		*	\param outRot:	 Ref of Vector3 of the euler angles in the matrix
+		*	\param outScale: Ref of Vector3 of the scale in the matrix
+		* 
+		*	Decompose the Matrix4 into a scale vector, an euler angles vector and a translation/position vector
+		*	The 3 vectors' ref are modified with those values
+		*/
 		inline static void Decompose(const Matrix4& matrix, Vector3& outPos, Vector3& outRot, Vector3& outScale);
 
 		//! \hiderefs
@@ -445,6 +455,16 @@ namespace CCMaths
 		//! \hiderefs
 		inline static Matrix4 Orthographic(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
 
+		//! Look at Matrix4
+		/*!
+		*	\param Eye: Origin of the look at = position of the \b object
+		*	\param At:	Target of the look at = position of the \b target
+		*	\param Up:	Vector3 Up of the \b object
+		* 
+		*	Create a new Matrix4 \b out corresponding to the \b object looking at the \b target
+		* 
+		*	\return Matrix4 \b out
+		*/
 		inline static Matrix4 LookAt(const Vector3& Eye, const Vector3& At = { 0.f, 0.f, 0.f }, const Vector3& Up = { 0.f, 1.f, 0.f });
 	};
 }

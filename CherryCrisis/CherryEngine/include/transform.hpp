@@ -55,13 +55,13 @@ public:
 	void SetScale(const Vector3& scale);
 	Vector3 GetScale() { return m_scale; }
 
-	void SetGlobalPosition(const Vector3& position);
+	void ReapplyPosition();
 	Vector3 GetGlobalPosition();
 
-	void SetGlobalRotation(const Vector3& rotation);
+	void ReapplyRotation();
 	Vector3 GetGlobalRotation();
 
-	void SetGlobalScale(const Vector3& scale);
+	void ReapplyScale();
 	Vector3 GetGlobalScale();
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };

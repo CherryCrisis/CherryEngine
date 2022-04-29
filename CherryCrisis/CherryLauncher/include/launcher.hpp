@@ -19,6 +19,7 @@ public:
 	std::string name;
 
 	void Open() const ;
+	void OpenLocation() const;
 };
 
 class Launcher
@@ -31,17 +32,18 @@ public:
 	Launcher(GLFWwindow* window) : m_window(window) { ReadLauncherInfos(); }
 
 	void AddProjectPath();
-	void RemoveProjectPath();
+	void RemoveProjectPath(const Project& project);
 
 	void StartProjectCreation(); 
 	
 	void CreateProject(const std::string& path, const std::string& name);
-	
-	void OpenProjectLocation();
 	void DeleteProject(const Project& project);
 
 	void WriteLauncherInfos();
 	void ReadLauncherInfos();
+
+	Project* FindProject(const std::filesystem::path& path);
+	int FindProjectIndex(const std::filesystem::path& path);
 
 	std::vector<Project> GetProjectList() const;
 

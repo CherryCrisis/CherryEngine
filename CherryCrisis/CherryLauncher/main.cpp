@@ -98,12 +98,17 @@ int main()
 
             for (const Project& project : launcher.GetProjectList())
             {
-                if (ImGui::MenuItem(project.name.c_str()))
+                if (ImGui::BeginMenu(project.name.c_str()))
                 {
-                    project.Open();
+                    if (ImGui::MenuItem("Open"))   project.Open();
+                    if (ImGui::MenuItem("Open Project Folder")) project.OpenLocation();
+                    if (ImGui::MenuItem("Remove From list")) launcher.RemoveProjectPath(project);
+                    if (ImGui::MenuItem("Delete")) launcher.DeleteProject(project);
+                    ImGui::EndMenu();
                 }
             }
         }
+
         else if (launcher.state == ELauncherState::CREATION) 
         {
             ImGui::Text("Create Project:");

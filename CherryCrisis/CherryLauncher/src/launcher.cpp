@@ -12,10 +12,10 @@
 #include <GLFW/glfw3.h> 
 #include <fstream>
 #include <yaml-cpp/yaml.h>
+#include <algorithm>
 
 #include "command.hpp"
 #include "utils.hpp"
-
 void Launcher::AddProjectPath()
 {
 	Project project{};
@@ -36,12 +36,15 @@ void Launcher::AddProjectPath()
 	project.path = path;
 	project.name = path.filename().string();
 
+	if (FindProject(path))
+		return;
+
 	m_projects.push_back(project);
 }
 
-void Launcher::RemoveProjectPath()
+void Launcher::RemoveProjectPath(const Project& project)
 {
-
+	m_projects.erase(m_projects.begin() + FindProjectIndex(project.path));
 }
 
 void Launcher::StartProjectCreation()
@@ -78,14 +81,10 @@ void Launcher::CreateProject(const std::string& path, const std::string& name)
 	project.Open();
 }
 
-void Launcher::OpenProjectLocation()
-{
-	//nsm
-}
-
 void Launcher::DeleteProject(const Project& project) 
 {
-	std::filesystem::remove_all(project.path);
+	std::filesystem::remove_all(project.path.parent_path());
+	RemoveProjectPath(project);
 }
 
 void Launcher::ReadLauncherInfos() 
@@ -129,4 +128,29 @@ void Project::Open() const
 	std::filesystem::path folderPath = std::filesystem::path(path).parent_path();
 	std::string cPath = '"'+folderPath.string()+'"';
 	call("open", "CherryEditor.exe", cPath.c_str());
+}
+
+void Project::OpenLocation() const
+{
+	std::filesystem::path folderPath = std::filesystem::path(path).parent_path();
+	call("open", folderPath.string().c_str());
+}
+
+Project* Launcher::FindProject(const std::filesystem::path& path) 
+{
+	for (Project& project : m_projects) 
+		if (!project.path.compare(path))
+			return &project;
+
+	return nullptr;
+}
+
+int Launcher::FindProjectIndex(const std::filesystem::path& path)
+{
+	
+	for (unsigned int i = 0 ; i < m_projects.size(); i++)
+		if (!m_projects[i].path.compare(path))
+			return (int)i;
+
+	return -1;
 }
