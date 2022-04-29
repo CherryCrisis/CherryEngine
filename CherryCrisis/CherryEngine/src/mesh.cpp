@@ -60,6 +60,23 @@ void Mesh::Load(std::shared_ptr<Mesh> mesh, std::vector<Vertex>& vertices, std::
     mesh->m_indices = std::move(indices);
 }
 
+void Mesh::Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, float xHalfRes, float yHalfRes, float zHalfRes)
+{
+    switch (shapeType)
+    {
+    case EMeshShape::QUAD:
+        CreateQuad(mesh, xHalfRes, yHalfRes);
+        break;
+
+    case EMeshShape::CUBE:
+        CreateCube(mesh, xHalfRes, yHalfRes, zHalfRes);
+        break;
+
+    default:
+        return;
+    }
+}
+
 void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes, float zHalfRes)
 {
     std::vector<Vertex> vertices;

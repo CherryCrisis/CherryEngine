@@ -115,6 +115,9 @@
     <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
       <UniqueIdentifier>{6784c658-a388-408c-889c-bebf3d6edeee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
+      <UniqueIdentifier>{dee2d53b-44b3-4ff9-bca8-b54466731a9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\maths\matrix3.hpp">
@@ -1194,6 +1197,33 @@
     <ClInclude Include="include\rendering_pipeline_interface.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="include\pbr_rendering_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skydome_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\spheremap.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="include\skydome.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\environment_map_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\irradiance_map_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prefilter_map_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\brdf_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pbr_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
     <ClInclude Include="include\portal_render_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
@@ -1551,6 +1581,33 @@
     </ClCompile>
     <ClCompile Include="src\capsule_collider.cpp">
       <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pbr_rendering_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spheremap.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skydome_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\skydome.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\environment_map_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\irradiance_map_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\prefilter_map_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\brdf_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pbr_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

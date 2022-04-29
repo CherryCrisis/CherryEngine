@@ -51,8 +51,7 @@ public:
 	static void CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes, float zHalfRes);
 	static void CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes);
 
-	template <typename... Args>
-	static void Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, Args... args);
+	static void Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, float xHalfRes, float yHalfRes, float zHalfRes = 0);
 
 	static void Load(std::shared_ptr<Mesh> mesh, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 

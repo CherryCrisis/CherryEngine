@@ -7,6 +7,7 @@
 
 #include "shadow_renderpass.hpp"
 #include "basic_renderpass.hpp"
+#include "pbr_renderpass.hpp"
 #include "entity.hpp"
 #include "model.hpp"
 #include "picking_renderpass.hpp"
@@ -92,6 +93,7 @@ void ModelRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 		return;
 
 	pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
+	pipeline->SubscribeToPipeline<PBRRenderPass>(this);
 	pipeline->SubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->SubscribeToPipeline<PickingRenderPass>(this);
 }
@@ -99,6 +101,7 @@ void ModelRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 void ModelRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(this);
+	pipeline->UnsubscribeToPipeline<PBRRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PickingRenderPass>(this);
 }

@@ -19,7 +19,7 @@ struct Camera : public Viewer
 	float far = 1500.f;
 	float fovY = CCMaths::PI / 3.f;
 
-	CCMaths::Vector3 position;
+	//CCMaths::Vector3 position;
 	CCMaths::Vector3 rotation;
 
 	CCMaths::Vector3 lastPosition;

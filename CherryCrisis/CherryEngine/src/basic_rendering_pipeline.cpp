@@ -17,7 +17,6 @@ BasicRPipeline::BasicRPipeline()
 	m_shadowPass = LoadSubpipeline<ShadowRenderPass>();
 	m_basicPass = LoadSubpipeline<BasicRenderPass>();
 	m_skyboxPass = LoadSubpipeline<SkyboxRenderPass>();
-
 	m_bloomPass = LoadSubpipeline<BloomRenderPass>();
 	m_hdrPass = LoadSubpipeline<HDRRenderPass>();
 
@@ -38,4 +37,5 @@ void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 
 	m_skyboxPass->CallOnExecute(fb, viewer);
 	//m_postprocessPass->CallOnExecute(fb);
+	
 }

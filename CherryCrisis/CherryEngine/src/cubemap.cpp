@@ -2,8 +2,6 @@
 
 #include "cubemap.hpp"
 
-#include <stb_image.h>
-
 #include "resource_manager.hpp"
 
 #include "texture.hpp"
