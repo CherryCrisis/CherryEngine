@@ -194,6 +194,9 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	if (!viewer)
 		return;
 
+	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);

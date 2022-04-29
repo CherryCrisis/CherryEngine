@@ -20,7 +20,6 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera
         UpdateTextureSize(width, height);
 
     glViewport(0, 0, (GLsizei)width, (GLsizei)height);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
 
     // TODO: Move this
     float aspect = (float)width / (float)height;
