@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 // Attributes
 layout(location = 0) in vec3 aPosition;
@@ -11,7 +11,6 @@ layout(location = 4) in vec3 aBitangent;
 uniform mat4 uProjection;
 uniform mat4 uModel;
 uniform mat4 uView;
-uniform mat4 uModelNormalMatrix;
 
 // Varyings
 out vec2 vUV;

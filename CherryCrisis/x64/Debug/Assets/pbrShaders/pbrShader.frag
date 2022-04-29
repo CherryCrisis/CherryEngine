@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 // Varyings
 in vec2 vUV;
@@ -14,7 +14,7 @@ mat3 TBN;
 vec3 Pos;
 
 // Light structure
-struct light
+struct Light
 {
 	int lightType; //off/dir/point/spot
     vec4 position;
@@ -24,7 +24,7 @@ struct light
 
 };
 
-struct material
+struct Material
 {
     sampler2D albedoMap;
     sampler2D normalMap;
@@ -46,14 +46,14 @@ struct material
 };
 
 #define NBR_LIGHTS 8
-light uLights[NBR_LIGHTS];
+uniform Light uLights[NBR_LIGHTS];
 // Uniform blocks
 //layout(std140) uniform uLightsBlock
 //{
 //	light uLights[NBR_LIGHTS];
 //};
 
-uniform material uMaterial;
+uniform Material uMaterial;
 
 uniform samplerCube irradianceMap;
 uniform samplerCube prefilterMap;
@@ -300,7 +300,7 @@ void main()
     /* --------- */
 
     float NdotV = max(dot(N, V), 0.0);
-
+ 
     /* -- IBL Irradiance -- */
     vec3 ambient;
     if (hasIrradianceMap)
@@ -340,5 +340,6 @@ void main()
     color = pow(color, vec3(1.0/2.2));  //Gamma correction
 
     color = color * (1.0 - uMaterial.clearCoat * clearCoatFresnel) + clearCoat;
-    oColor = vec4(color, 1.0);
+
+    oColor = vec4(color.xyz, 1.0);
 }

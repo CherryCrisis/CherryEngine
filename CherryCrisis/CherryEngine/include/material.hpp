@@ -58,6 +58,7 @@ public:
 	~Material() = default;
 
 	static void Load(std::shared_ptr<Material> material, const MaterialArgs& materialArgs);
+	static void Load(std::shared_ptr<Material> material) {} //Empty material
 
 	void Delete() override;
 	void Reload(const MaterialArgs& materialArgs);

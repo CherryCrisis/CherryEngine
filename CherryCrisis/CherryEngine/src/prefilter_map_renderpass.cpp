@@ -36,7 +36,7 @@ int PrefilterMapRenderPass::Subscribe(Skydome* toGenerate)
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // to combatting visible dots artifact in the reflectance
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		for (unsigned int i = 0; i < 6; ++i)
@@ -47,6 +47,7 @@ int PrefilterMapRenderPass::Subscribe(Skydome* toGenerate)
 		}
 
 		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
 		glUseProgram(m_program->m_shaderProgram);
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "environmentMap"), 0);
 

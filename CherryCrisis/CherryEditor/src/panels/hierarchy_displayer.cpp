@@ -203,13 +203,19 @@ void HierarchyDisplayer::ContextCallback()
                 if (ImGui::MenuItem("Cube")) 
                 {
                     Entity* cube = new Entity("Cube");
-                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCube");
-                    Mesh::CreateCube(mesh,1,1,1);
-                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube",true,mesh);
+                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 1, 1, 1);
+                    //Mesh::CreateCube(mesh,1,1,1);
+                    std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResource<Material>("CC_MatPBR", true);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube", true, mesh, material);
                     Transform* tr = cube->AddBehaviour<Transform>();
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
+
+                    tr->BindToSignals();
+                    rdr->BindToSignals();
+                    cube->Initialize();
+                    
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
@@ -223,6 +229,11 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
+
+                    tr->BindToSignals();
+                    rdr->BindToSignals();
+                    cube->Initialize();
+
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }

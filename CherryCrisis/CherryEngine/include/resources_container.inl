@@ -44,7 +44,7 @@ void ResourcesContainer<ResourceT>::Add(std::shared_ptr<ResourceT>& resource)
 template<class ResourceT>
 std::shared_ptr<ResourceT>* ResourcesContainer<ResourceT>::ResourcesContainer::GetResource(const std::filesystem::path& filepath)
 {
-	size_t hash = std::hash<std::string>{}(filepath.generic_string());
+	size_t hash = std::hash<std::string>{}(filepath.string());
 	auto resource = m_resources.find(hash);
 
 	if (resource != m_resources.end())

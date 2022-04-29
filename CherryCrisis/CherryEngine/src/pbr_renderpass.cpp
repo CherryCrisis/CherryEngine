@@ -280,8 +280,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, viewer->m_projectionMatrix.data);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, viewer->m_viewMatrix.data);
-	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
-
+	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, viewer->position.data);
 
 	const char* lightFormat = "uLights[{}]";
 	std::unordered_set<Light*>::iterator lightIt = m_lights.begin();
@@ -306,17 +305,19 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 		// TODO: Use string view
 
+		Vector4 lightPos = Vector4(light->m_position, 1);
 		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "position").c_str());
-		glUniform3fv(posLoc, 1, light->m_position.data);
+		glUniform4fv(posLoc, 1, lightPos.data);
 
 		GLuint dirLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "direction").c_str());
-		glUniform3fv(posLoc, 1, light->m_position.data);
+		glUniform3fv(dirLoc, 1, light->m_position.data);
 
 		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "diffuse").c_str());
 		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
 
-		GLuint IntensityLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "params.z").c_str()); //Intensity
-		glUniform1f(diffLoc, 1);
+		Vector3 test = { 0.0f, 0.0f, 1.0f };
+		GLuint IntensityLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "params").c_str()); //Intensity
+		glUniform3fv(IntensityLoc, 1, test.data);
 
 		lightID++;
 
@@ -325,6 +326,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	for (ModelRenderer* modelRdr : m_modelRenderers)
 	{
+
 		if (!modelRdr->m_isVisible)
 			continue;
 
@@ -336,14 +338,10 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-		CCMaths::Matrix4 modelNormalMat = CCMaths::Matrix4::Transpose(CCMaths::Matrix4::Inverse(modelMat));
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModelNormalMatrix"), 1, GL_FALSE, modelNormalMat.data);
-
 		if (Material* material = model->m_material.get())
 		{
-
-			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), 1);
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
+			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), 0);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedo"), 1, material->m_diffuse.data);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specular"), material->m_specularFactor);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.metallic"), material->m_metallicFactor);

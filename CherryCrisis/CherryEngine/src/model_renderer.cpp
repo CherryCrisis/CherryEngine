@@ -82,16 +82,16 @@ void ModelRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 		return;
 
 	pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
-	pipeline->SubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->SubscribeToPipeline<PBRRenderPass>(this);
+	pipeline->SubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->SubscribeToPipeline<PickingRenderPass>(this);
 }
 
 void ModelRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(this);
-	pipeline->UnsubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(this);
+	pipeline->UnsubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PickingRenderPass>(this);
 }
 

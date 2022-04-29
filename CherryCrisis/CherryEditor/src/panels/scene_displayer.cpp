@@ -100,7 +100,7 @@ void SceneDisplayer::UpdateCamera()
     
     m_camera.position += (forwardMove + rightwardMove + upwardMove) * speed;
 
-    m_camera.m_viewMatrix = Matrix4::RotateZXY(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
+    m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
 }
 
 void SceneDisplayer::Render() 

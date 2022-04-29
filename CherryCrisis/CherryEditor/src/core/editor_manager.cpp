@@ -313,6 +313,20 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
         if (ImGui::Button("Reload scripts"))
             CsScriptingSystem::GetInstance()->ReloadContextes();
+
+        std::shared_ptr<Material> mat = ResourceManager::GetInstance()->GetResource<Material>("Assets\\CC_ModelPBR.fbx/CC_MatPBR");
+        //std::shared_ptr<Material> mat = ResourceManager::GetInstance()->GetResource<Material>("Assets\\backpack.obj/Scene_-_Root");
+
+        if (mat)
+        {
+            ImGui::SliderFloat("Specular", &mat->m_specularFactor, 0, 1);
+            ImGui::SliderFloat("Metallic", &mat->m_metallicFactor, 0, 1);
+            ImGui::SliderFloat("Roughness", &mat->m_roughnessFactor, 0, 1);
+            ImGui::SliderFloat("AO", &mat->m_ao, 0, 1);
+            ImGui::SliderFloat("Clear coat", &mat->m_clearCoatFactor, 0, 1);
+            ImGui::SliderFloat("Clear coat roughness", &mat->m_clearCoatRoughnessFactor, 0, 1);
+            ImGui::SliderFloat3("Diffuse", mat->m_diffuse.data, 0, 1);
+        }
         
     }
     ImGui::End();

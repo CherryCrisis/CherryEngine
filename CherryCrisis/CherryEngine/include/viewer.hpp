@@ -14,6 +14,7 @@ class Viewer
 public:
 	CCMaths::Matrix4 m_viewMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_projectionMatrix = CCMaths::Matrix4::Identity;
+	CCMaths::Vector3 position;
 
 	std::unique_ptr<ARenderingPipeline> m_pipeline;
 
