@@ -26,6 +26,28 @@ static const std::filesystem::path AssetPath = "Assets";
 struct GLFWwindow;
 class Entity;
 
+struct EntitySelector
+{
+    std::vector<Entity*> m_entities;
+
+    bool Add(Entity* entity);
+    bool Remove(Entity* entity);
+    bool Clear();
+    bool IsEmpty() { return m_entities.size() <= 0; }
+    bool Contains(Entity* entity);
+
+    void SetEndRange();
+    void SetStartRange(Entity* entity);
+    int Count() const { return static_cast<int>(m_entities.size()); }
+
+    //std::unordered_map<type, Behaviour*> GetSimilarComponents();
+
+    void ApplyRange();
+
+    Entity* m_startRange = nullptr;
+    Entity* m_endRange = nullptr;
+};
+
 class EditorManager 
 {
 private:
@@ -64,8 +86,8 @@ private:
 
     InputManager::InputContext* m_editorContext;
 public:
-    // TODO: Temporary, to replace with scene engine handling
-    std::shared_ptr<Scene> scene;
+
+    EntitySelector m_entitySelector;
 
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
     

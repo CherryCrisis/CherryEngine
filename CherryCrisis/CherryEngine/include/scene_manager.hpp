@@ -12,7 +12,6 @@ public:
 	void SetCurrentScene(std::shared_ptr<Scene> scene);
 
 	std::shared_ptr<Scene> m_currentScene;
-	std::shared_ptr<Scene> m_scenePreset;
 
 	void Initialize();
 	void Update();

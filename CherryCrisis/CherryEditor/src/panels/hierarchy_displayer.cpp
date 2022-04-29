@@ -2,6 +2,7 @@
 #include "panels/hierarchy_displayer.hpp"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 
 #include "scene.hpp"
 #include "transform.hpp"
@@ -36,17 +37,17 @@ void HierarchyDisplayer::Render()
         ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
         ImGui::Separator();
 
-        for (auto& [entityName, entityRef] : SceneManager::GetInstance()->m_currentScene->m_entities)
+        for (Entity* entity: SceneManager::GetInstance()->m_currentScene->m_entities)
         {
-            if (entityRef)
+            if (entity)
             {
-                if (Transform* entityTransform = entityRef->GetBehaviour<Transform>();
+                if (Transform* entityTransform = entity->GetBehaviour<Transform>();
                     entityTransform && !entityTransform->IsRoot())
                     continue;
 
-                std::string name = entityRef->GetName();
-                if (RenderEntity(entityRef))
-                    break;
+                std::string name = entity->GetName();
+                if (RenderEntity(entity))
+                    break;              
             }
         }
     }
@@ -67,7 +68,7 @@ void HierarchyDisplayer::Render()
     if (ImGui::BeginPopupModal("Rename", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
         std::string str = "Renaming ";
-        str += m_manager->m_selectedEntities[0]->GetName();
+        str += m_manager->m_entitySelector.m_entities[0]->GetName();
         str += " ? \n\n";
         ImGui::Text(str.c_str());
         ImGui::Separator();
@@ -80,7 +81,7 @@ void HierarchyDisplayer::Render()
         if (ImGui::Button("Rename", ImVec2(120, 0)))
         {
             ImGui::CloseCurrentPopup();
-            m_manager->m_selectedEntities[0]->SetName(newName);
+            m_manager->m_entitySelector.m_entities[0]->SetName(newName);
             memset(newName, 0, sizeof(char) * strlen(newName));
             m_renaming = false;
         }
@@ -90,42 +91,54 @@ void HierarchyDisplayer::Render()
         ImGui::EndPopup();
     }
 
-    if (ImGui::IsKeyDown(ImGuiKey_F2) && m_manager->m_selectedEntities.size() > 0 && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
-    {
+    if (ImGui::IsKeyDown(ImGuiKey_F2) && !m_manager->m_entitySelector.IsEmpty()  && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
         m_renaming = true;
-    }
 
     ImGui::End();
 
-    if (ImGui::IsKeyDown(ImGuiKey_Delete) && m_manager->m_selectedEntities.size() > 0)
+    if (ImGui::IsKeyDown(ImGuiKey_Delete) && !m_manager->m_entitySelector.IsEmpty())
     {
-        for (Entity* entity : m_manager->m_selectedEntities)
-        {
+        for (Entity* entity : m_manager->m_entitySelector.m_entities)
             SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-            m_manager->m_selectedEntities.clear();
-        }
+            
+        m_manager->m_entitySelector.Clear();
     }
-
 }
 
 bool HierarchyDisplayer::RenderEntity(Entity* entity)
 {
+    EntitySelector* selector = &m_manager->m_entitySelector;
+
     Transform* entityTransform = entity->GetBehaviour<Transform>();
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-
-    if (Contains(m_manager->m_selectedEntities, entity)) { flags |= ImGuiTreeNodeFlags_Selected; }
-    if (!entityTransform || entityTransform->GetChildren().size() <= 0) { flags |= ImGuiTreeNodeFlags_Leaf; }
-
+    
+    if (selector->Contains(entity))                                     flags |= ImGuiTreeNodeFlags_Selected;
+    if (!entityTransform || entityTransform->GetChildren().size() <= 0) flags |= ImGuiTreeNodeFlags_Leaf; 
 
     bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
 
     if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered())
     {
-        if (!InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) // Clear selection when CTRL is not held
-            m_manager->m_selectedEntities.clear();
+        if (InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) 
+        {
+            if (!selector->Contains(entity))
+                selector->Add(entity);
+            else
+                selector->Remove(entity);
+        }
+        else if (InputManager::GetInstance()->GetKey(Keycode::LEFT_SHIFT))
+        {
+            selector->SetEndRange();
+            selector->SetStartRange(entity);
+            selector->ApplyRange();
+        }
+        else 
+        {
+            selector->Clear();
+            selector->Add(entity);
+        }
 
-        if (!Contains(m_manager->m_selectedEntities, entity))
-            m_manager->m_selectedEntities.push_back(entity);
+        selector->SetStartRange(entity);
     }
 
     if (entityTransform && ImGui::BeginDragDropSource())
@@ -210,7 +223,7 @@ void HierarchyDisplayer::ContextCallback()
             if (ImGui::MenuItem("Particle System")) {}
             if (ImGui::MenuItem("Audio Source")) {}
             if (ImGui::BeginMenu("Shapes"))
-            {
+            { // TODO: Change this
                 if (ImGui::MenuItem("Cube"))
                 {
                     Entity* cube = new Entity("Cube");

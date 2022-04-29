@@ -301,18 +301,14 @@ void Inspector::Render()
 
     if (ImGui::Begin("Inspector", &m_isOpened))
     {
-        size_t selectedEntityCount = m_manager->m_selectedEntities.size();
-        for (size_t i = 0u; i < selectedEntityCount; i++)
-        {
-            InspectComponents(m_manager->m_selectedEntities[i], static_cast<int>(i));
-        }
-        if (selectedEntityCount > 0)
-        {
+        EntitySelector& selector = m_manager->m_entitySelector;
+
+        for (int i = 0; i < selector.Count(); i++)
+            InspectComponents(selector.m_entities[i], i);
+
+        if (selector.Count() > 0)
             if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
-            {
                 ImGui::OpenPopup("Add Component");
-            }
-        }
 
 
         ImVec2 center = { InputManager::GetInstance()->GetMousePos().x, InputManager::GetInstance()->GetMousePos().y };

@@ -27,16 +27,10 @@ void GameDisplayer::Render()
         FrameDisplayer::Render();
         ImGui::BeginChild("GameFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
-        // TODO: LELOU: replace this shit
-        if (m_isActive) 
-        {  
-            Entity* entity = SceneManager::GetInstance()->m_currentScene->m_entities["Camera"];
-            if (entity) 
-            {
-                Camera* cam = &entity->GetBehaviour<CameraComponent>()->m_camera;
+
+        if (m_isActive && CameraComponent::GetMainCamera())
+            if (Camera* cam = &CameraComponent::GetMainCamera()->m_camera)
                 UpdateFramebuffer(wsize.x, wsize.y, *cam);
-            }
-        }
 
         uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
 

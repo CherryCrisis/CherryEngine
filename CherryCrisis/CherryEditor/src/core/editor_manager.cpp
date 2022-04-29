@@ -409,3 +409,67 @@ namespace EditorNotifications
             EditorManager::SendNotification("Error while building game, see console", ENotifType::Error);
     }
 }
+
+bool EntitySelector::Add(Entity* entity) 
+{
+    if (std::count(m_entities.begin(), m_entities.end(), entity))
+        return false;
+
+    m_entities.push_back(entity);
+    return true;
+}
+
+bool EntitySelector::Remove(Entity* entity) 
+{
+    for (auto it = m_entities.begin(); it != m_entities.end(); it++)
+    {
+        if (*it == entity)
+        {
+            m_entities.erase(it);
+            break;
+        }
+    }
+
+    return Contains(entity);
+}
+
+bool EntitySelector::Clear() 
+{
+    m_entities.clear();
+    return m_entities.size() <= 0;
+}
+
+bool EntitySelector::Contains(Entity* entity) 
+{
+    return std::count(m_entities.begin(), m_entities.end(), entity);
+}
+
+void EntitySelector::SetStartRange(Entity* entity) 
+{
+    m_startRange = entity;
+}
+
+void EntitySelector::SetEndRange() 
+{
+    m_endRange = m_startRange;
+}
+
+void EntitySelector::ApplyRange() 
+{
+    if (!m_endRange)
+        return;
+
+    std::vector<Entity*>& entities = SceneManager::GetInstance()->m_currentScene->m_entities;
+
+    auto startIt = std::find(entities.begin(), entities.end(), m_startRange);
+    auto endIt   = std::find(entities.begin(), entities.end(), m_endRange);
+    
+     if (startIt - entities.begin() > endIt - entities.begin())
+        for (auto it = endIt; it != startIt+1; it++)
+            Add(*it);
+    else
+        for (auto it = startIt; it != endIt+1; it++)
+            Add(*it);
+    
+    m_endRange = nullptr;
+}

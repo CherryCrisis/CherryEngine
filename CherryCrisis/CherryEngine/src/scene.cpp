@@ -21,8 +21,8 @@
 
 void Scene::Delete()
 {
-	for (auto [entityName, entityPtr] : m_entities)
-		delete entityPtr;
+	for (const Entity* entity : m_entities)
+		delete entity;
 }
 
 Scene::~Scene()
@@ -33,13 +33,13 @@ Scene::~Scene()
 
 void Scene::Initialize()
 {
-	for (auto& [eName, entity] : m_entities)
+	for (Entity* entity : m_entities)
 		entity->Initialize();
 }
 
 void Scene::Update()
 {
- 	for (auto& [eName, entity] : m_entities)
+ 	for (Entity* entity : m_entities)
 		entity->Update();
 }
 
@@ -58,26 +58,9 @@ void Scene::PopulateEmpty()
 	AddEntity(camera);
 }
 
-std::string Scene::GetUniqueEntityName(const std::string& entityName)
-{
-	// TODO: Try using string view
-	std::string modifiedName = entityName;
-
-	auto goIt = m_entities.find(modifiedName);
-
-	//This is not optimized m_entities.find can take a long time!
-	//TODO: CHANGE THIS !
-	for (int count = 1; goIt != m_entities.end(); count++, goIt = m_entities.find(modifiedName))
-		modifiedName = entityName + std::to_string(count);
-
-	return modifiedName;
-}
-
 void Scene::AddEntity(Entity* toAdd)
 {
-	std::string name = GetUniqueEntityName(toAdd->GetName());
-	m_entities[name] = toAdd;
-	toAdd->SetName(name);
+	m_entities.push_back(toAdd);
 }
 
 void Scene::RemoveEntity(Entity* toRemove) 
@@ -95,13 +78,13 @@ void Scene::RemoveEntity(Entity* toRemove)
 			RemoveEntity(&children[i]->GetHost());
 	}
 
-	m_entities.erase(toRemove->GetName());
+	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove), m_entities.end());
 	toRemove->Destroy();
 }
 
 void Scene::RemoveEntity(const std::string& name)
 {
-	
+	//TODO: Do this
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)
@@ -169,10 +152,11 @@ bool Find(const std::string& string)
 
 Entity* Scene::FindEntity(uint32_t id)
 {
-	for (const auto& entity : m_entities)
+	// TODO: Change this to unordered map of all uuid containers
+	for (Entity* entity : m_entities)
 	{
-		if ((uint32_t)entity.second->GetUUID() == id)
-			return entity.second;
+		if ((uint32_t)entity->GetUUID() == id)
+			return entity;
 	}
 
 	return nullptr;
@@ -180,19 +164,19 @@ Entity* Scene::FindEntity(uint32_t id)
 
 Entity* Scene::FindModelEntity(uint32_t id)
 {
-	for (const auto& [entityName, entityRef]: m_entities)
+	for (Entity* entity : m_entities)
 	{
-		if (ModelRenderer* rdr = entityRef->GetBehaviour<ModelRenderer>(); rdr && rdr->m_id == id) 
-			return entityRef;
-
+		if (ModelRenderer* rdr = entity->GetBehaviour<ModelRenderer>(); rdr && rdr->m_id == id)
+			return entity;
 	}
 	return nullptr;
 }
 
 void Scene::Empty() 
 {
-	for (auto entityIt = m_entities.begin(); entityIt != m_entities.end(); entityIt = m_entities.erase(entityIt))
+	for (Entity* entity : m_entities)
 	{
-		entityIt->second->Destroy();
+		entity->Destroy();
+		m_entities.erase(m_entities.begin());
 	}
 }

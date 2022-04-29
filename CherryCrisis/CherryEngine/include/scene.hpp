@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 #include "resource.hpp"
 #include "entity.hpp"
@@ -16,8 +16,7 @@ public:
 	Scene(const char* filePath) : Resource(filePath) { }
 	virtual ~Scene();
 	
-	// TODO: Switch to unique_ptr this is shitty shit shit shit
-	std::unordered_map<std::string, Entity*> m_entities;
+	std::vector<Entity*> m_entities;
 
 	//Call entities Initialize 
 	void Initialize();

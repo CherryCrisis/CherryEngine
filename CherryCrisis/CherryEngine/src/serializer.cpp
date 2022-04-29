@@ -81,17 +81,17 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 
 	//Entities Saving
 	YAML::Node entities = save["entities"];
-	for (const auto& [eName, eRef] : scene->m_entities) 
+	for (const Entity* entity : scene->m_entities) 
 	{
-		entities[eRef->GetUUID()]["name"] = eName;
+		entities[entity->GetUUID()]["name"] = entity->GetName();
 	}
 
 	const char* parseError = "#ERROR {}  is not handled !";//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
 	//Components Saving
 	YAML::Node components = save["components"];
-	for (const auto& [eName, eRef] : scene->m_entities)
+	for (Entity* entity : scene->m_entities)
 	{
-		std::vector<Behaviour*> behaviours = eRef->GetAllBehaviours();
+		std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 		for (const auto& behaviour : behaviours) 
 		{	
 			uint32_t UUID = behaviour->GetUUID();
