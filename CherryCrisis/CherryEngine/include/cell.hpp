@@ -5,9 +5,8 @@
 #include <unordered_set>
 
 class Entity;
-class Cell;
 class Debug;
-class Portal;
+struct Portal;
 
 namespace physx
 {

@@ -12,6 +12,7 @@
 
 class Mesh;
 class Material;
+class ModelBase;
 
 struct aiScene;
 struct aiNode;
@@ -23,8 +24,10 @@ public:
 	~Model() = default;
 
 	std::shared_ptr<Mesh>		m_mesh;
+	std::shared_ptr<ModelBase>	m_base;
 	std::shared_ptr<Material>	m_material;
 
+	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<ModelBase> base);
 	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
 	static void Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh);
 

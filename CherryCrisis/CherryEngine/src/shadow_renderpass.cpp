@@ -44,7 +44,10 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 		return -1;
 
 	if (toGenerate->m_gpuLight)
+	{
+		m_lights.insert(toGenerate);
 		return true;
+	}
 
 	auto gpuLight = std::make_unique<GPUShadowLight>();
 

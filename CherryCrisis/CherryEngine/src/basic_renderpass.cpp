@@ -212,7 +212,9 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	const char* lightFormat = "uLights[{}]";
 	std::unordered_set<Light*>::iterator lightIt = m_lights.begin();
-	for (size_t lightID = 0u; lightID < 8; lightID++)
+
+	// TODO: Set shader define as upper bound
+	for (size_t lightID = 0u; lightID < m_lights.size(); lightID++)
 	{
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 

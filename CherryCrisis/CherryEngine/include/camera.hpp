@@ -6,13 +6,13 @@
 
 struct Camera : public Viewer
 {
-	enum EType
+	enum class EType
 	{
 		PERSPECTIVE,
 		ORTHOGRAPHIC
 	};
 
-	EType type = PERSPECTIVE;
+	EType type = EType::PERSPECTIVE;
 
 	float aspect = 4.f / 3.f;
 	float near = 0.01f;
