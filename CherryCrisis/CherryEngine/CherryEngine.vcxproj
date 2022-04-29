@@ -411,7 +411,6 @@
     <None Include="include\maths\vector2.inl" />
     <None Include="include\maths\vector3.inl" />
     <None Include="include\maths\vector4.inl" />
-    <None Include="include\renderer_manager.inl" />
     <None Include="include\resources_container.inl" />
     <None Include="include\resource_manager.inl" />
     <CustomBuild Include="interface\ccengine.i">

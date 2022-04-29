@@ -40,5 +40,7 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		return;
 
 	for (Portal* portal : m_portals)
+	{
 		portal->m_pipeline->Execute(framebuffer, portal);
+	}
 }

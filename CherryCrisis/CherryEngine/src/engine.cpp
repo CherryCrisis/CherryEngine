@@ -7,6 +7,7 @@
 #include "csscripting_system.hpp"
 
 #include "resource_manager.hpp"
+#include "render_manager.hpp"
 #include "time_manager.hpp"
 #include "input_manager.hpp"
 #include "physic_manager.hpp"
@@ -20,6 +21,7 @@ void* Engine::window_handle = nullptr;
 Engine::Engine() 
 {
 	CsScriptingSystem::GetInstance()->Init();
+	RenderManager::GetInstance();
 }
 
 Engine::~Engine()
@@ -32,6 +34,7 @@ Engine::~Engine()
 	SceneManager::Kill();
 	CellSystem::Kill();
 	CsScriptingSystem::Kill();
+	RenderManager::Kill();
 	Debug::Kill(); 
 }
 

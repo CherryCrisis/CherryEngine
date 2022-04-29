@@ -1253,9 +1253,6 @@
     <None Include="externals\include\assimp\vector3.inl">
       <Filter>Fichiers externes\Assimp</Filter>
     </None>
-    <None Include="include\renderer_manager.inl">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </None>
     <None Include="interface\entity.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
