@@ -6,10 +6,16 @@
 #include "mesh.hpp"
 #include "material.hpp"
 
+void Model::Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<ModelBase> base)
+{
+	model->m_base = base;
+	Load(model, mesh, material);
+}
+
 void Model::Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material)
 {
-	model->m_mesh = mesh;
 	model->m_material = material;
+	Load(model, mesh);
 }
 
 void Model::Load(std::shared_ptr<Model> model, std::shared_ptr<Mesh> mesh) 

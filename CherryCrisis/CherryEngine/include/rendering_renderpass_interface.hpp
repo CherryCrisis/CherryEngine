@@ -9,7 +9,7 @@
 
 struct Framebuffer;
 
-class ARenderingRenderPass : public ARenderPass
+class CCENGINE_API ARenderingRenderPass : public ARenderPass
 {
 protected:
 	std::shared_ptr<CCCallback::ACallback<Framebuffer&, Viewer*&>> m_callExecute = nullptr;

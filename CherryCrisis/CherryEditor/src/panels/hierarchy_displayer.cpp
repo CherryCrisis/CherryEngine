@@ -221,6 +221,9 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
+                    tr->BindToSignals();
+                    rdr->BindToSignals();
+                    cube->Initialize();
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
@@ -234,6 +237,9 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
+                    tr->BindToSignals();
+                    rdr->BindToSignals();
+                    cube->Initialize();
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
@@ -247,6 +253,9 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
+                    tr->BindToSignals();
+                    rdr->BindToSignals();
+                    cube->Initialize();
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }
@@ -260,6 +269,9 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(model);
+                    tr->BindToSignals();
+                    rdr->BindToSignals();
+                    cube->Initialize();
                     SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
                     m_manager->FocusEntity(cube);
                 }

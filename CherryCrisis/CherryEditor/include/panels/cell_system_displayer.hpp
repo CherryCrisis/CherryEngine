@@ -13,6 +13,7 @@ class CellSystemDisplayer : public Panel
 private:
 
 	CellSystem* m_cellSystem = nullptr;
+	Cell*		m_displayedCell = nullptr;
 	Cell*		m_selectedCell = nullptr;
 	Cell*		m_rightClickedCell = nullptr;
 	Entity*		m_selectedEntity = nullptr;

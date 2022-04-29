@@ -157,14 +157,10 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
 		GenerateEntitiesRecursive(rootNode, nullptr, entities);
 
 	for (Entity* entity : entities)
+	{
 		AddEntity(entity);
-}
-
-bool Find(const std::string& string) 
-{
-	bool found = false;
-
-	return found;
+		entity->Initialize();
+	}
 }
 
 Entity* Scene::FindEntity(uint32_t id)

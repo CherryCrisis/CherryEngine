@@ -5,7 +5,7 @@
 #include "shader_program.hpp"
 #include "resource_manager.hpp"
 
-class ARenderPass
+class CCENGINE_API ARenderPass
 {
 protected:
 	std::shared_ptr<ShaderProgram> m_program;

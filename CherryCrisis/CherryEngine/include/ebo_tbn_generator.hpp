@@ -8,7 +8,7 @@
 
 class Mesh;
 
-class ElementTBNGenerator : public ElementMeshGenerator
+class CCENGINE_API ElementTBNGenerator : public ElementMeshGenerator
 {
 public:
 	bool Generate(Mesh* toGenerate) override;

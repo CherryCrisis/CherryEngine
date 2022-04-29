@@ -21,7 +21,7 @@ bool ElementMeshGenerator::Generate(Mesh* toGenerate)
 
 	// Generate EBO
 	{
-		gpuMesh->indicesCount = toGenerate->m_indices.size();
+		gpuMesh->indicesCount = (GLsizei)toGenerate->m_indices.size();
 
 		glCreateBuffers(1, &gpuMesh->EBO);
 		glNamedBufferData(gpuMesh->EBO, gpuMesh->indicesCount * sizeof(unsigned int), toGenerate->m_indices.data(), GL_STATIC_DRAW);

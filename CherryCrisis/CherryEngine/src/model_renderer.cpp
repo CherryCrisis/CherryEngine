@@ -32,7 +32,10 @@ ModelRenderer::ModelRenderer(CCUUID& id) : Behaviour(id)
 
 ModelRenderer::~ModelRenderer()
 {
-	RemoveModel();
+//	RemoveModel();
+	if (m_model)
+		GetHost().m_cell->RemoveRenderer(this);
+
 
 	GetHost().m_cell->RemoveRenderer(this);
 }
@@ -73,11 +76,11 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 void ModelRenderer::RemoveModel() 
 {
-	// TODO: Add pipeline remove
-	if (m_model)
-		m_model->m_OnDeleted.Unbind(&ModelRenderer::RemoveModel, this);
+	if (!m_model)
+		return;
 
-	// Move to function
+	m_model->m_OnDeleted.Unbind(&ModelRenderer::RemoveModel, this);
+
 	GetHost().m_cell->RemoveRenderer(this);
 
 	m_model = nullptr;
@@ -116,8 +119,6 @@ void ModelRenderer::BindToSignals()
 	GetHost().m_OnAwake.Bind(&ModelRenderer::Initialize, this);
 	GetHost().m_OnCellAdded.Bind(&ModelRenderer::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Bind(&ModelRenderer::OnCellRemoved, this);
-
-	GetHost().m_cell->AddRenderer(this);
 }
 
 void ModelRenderer::OnCellAdded(Cell* newCell)

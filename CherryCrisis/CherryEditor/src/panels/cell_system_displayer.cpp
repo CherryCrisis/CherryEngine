@@ -101,15 +101,17 @@ void CellSystemDisplayer::RenderCells()
             {
                 if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
                 {
-                    if (m_selectedCell != &cell.second)
-                    {
-                        Cell* lastCell = m_selectedCell;
-                        m_selectedCell = &cell.second;
+                    Cell* lastCell = m_displayedCell ? m_displayedCell : m_selectedCell;
+                    m_selectedCell = &cell.second;
 
+                    if (m_displayedCell != m_selectedCell)
+                    {
                         if (m_selectedCell && lastCell)
                         {
+                            m_displayedCell = m_selectedCell;
+
                             lastCell->RemoveViewer(m_camera);
-                            m_selectedCell->AddViewer(m_camera);
+                            m_displayedCell->AddViewer(m_camera);
                         }
                     }
 
@@ -271,7 +273,7 @@ bool CellSystemDisplayer::Context()
 
 		if (ImGui::MenuItem("Add Portal To Cell"))
 		{
-			m_rightClickedCell->AddPortal();
+			//m_rightClickedCell->AddPortal();
 		}
 
         ImGui::EndPopup();

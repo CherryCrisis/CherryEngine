@@ -6,7 +6,7 @@
 
 #include "mesh.hpp"
 
-class ElementMeshGenerator
+class CCENGINE_API ElementMeshGenerator
 {
 public:
 	struct GPUMeshBasic : public GPUMesh

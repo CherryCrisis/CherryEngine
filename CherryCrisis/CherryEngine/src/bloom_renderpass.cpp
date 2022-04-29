@@ -82,8 +82,9 @@ void BloomRenderPass::Execute(Framebuffer& framebuffer)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 
 	bool horizontal = true, first_iteration = true;
-	int amount = 11;
-	for (int i = 0; i < amount; i++)
+	// TODO: Change this all
+	unsigned int amount = 11u;
+	for (unsigned int i = 0; i < amount; i++)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_pingpongFramebuffers[horizontal].FBO);
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "horizontal"), horizontal);

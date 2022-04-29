@@ -12,6 +12,7 @@
 #include "transform.hpp"
 #include "light_component.hpp"
 #include "camera_component.hpp"
+#include "portal_component.hpp"
 #include "scripted_behaviour.hpp"
 #include "csscripting_system.hpp"
 #include "rigidbody.hpp"
@@ -268,7 +269,7 @@ void InspectComponents(Entity* entity, int id)
                         (texRef->m_gpuTexture.get());
                     }
 
-                    unsigned int texID = GPUtex ? GPUtex->ID : 0;
+                    uint64_t texID = GPUtex ? (uint64_t)GPUtex->ID : 0u;
 
                     ImGui::ImageButton((ImTextureID)texID, { 50,50 });
 
@@ -330,6 +331,7 @@ void Inspector::Render()
             if (ImGui::MenuItem("Box Collider"))        { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); collider->BindToSignals(); }
             if (ImGui::MenuItem("Sphere Collider"))     { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); collider->BindToSignals(); }
             if (ImGui::MenuItem("Capsule Collider"))    { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<CapsuleCollider>(); collider->BindToSignals(); }
+            if (ImGui::MenuItem("PortalComponent"))		{ auto portal = m_manager->m_selectedEntities[0]->AddBehaviour<PortalComponent>(); portal->BindToSignals(); }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))

@@ -49,7 +49,7 @@ void CameraComponent::BindToSignals()
 
 void CameraComponent::Initialize() 
 {
-	m_transform = GetHost().GetBehaviour<Transform>();
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
 
 	m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
 	m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);

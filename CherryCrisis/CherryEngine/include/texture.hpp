@@ -3,7 +3,7 @@
 #include "resource.hpp"
 #include "model_loader.hpp"
 
-struct GPUTexture
+struct CCENGINE_API GPUTexture
 {
     virtual ~GPUTexture() = default;
 };
