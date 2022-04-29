@@ -1,6 +1,24 @@
 Changelog
 ===
 
+*29-04-2022*
+-
+**[Adding]**:
+* Assets browser (Drag & drop in sub-folders, from explorer to engine browser, search bar)
+* File management (F2 as shortcut for renaming, display filename when hovered)
+* Launcher
+* Cell System (Entity display depending on current selected cell)
+* PhysX (Callbacks for trigger and collision enter and exit, and collision stay)
+* Editor (Material inspection)
+
+**[Change]**:
+* Serialization (Improve speed (optimization), purge chen changing scene)
+
+**[Fixing]**:
+* Parenting (Entity in hierarchie can now become child of entity after it, Entities keep their world transform when becoming child instead of local)
+* Viewer (Subscribe/unsubscribe, light and models disapearing on game stop/restart)
+* Cell system (Creating two physicScene for each cell -> now creates one)
+
 *22-04-2022*
 -
 **[Adding]**:
@@ -12,7 +30,7 @@ Changelog
 * Scripting (Added debugging info in C#)
 * Release (Added Build/Build & Run)
 
-**[Change]**
+**[Change]**:
 * Serialization (System refont)
 * Editor (Change graphic chart)
 * Resources (Changed Hot-reload)
