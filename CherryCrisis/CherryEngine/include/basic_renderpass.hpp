@@ -20,9 +20,12 @@ class Viewer;
 
 class CCENGINE_API BasicRenderPass : public ARenderingRenderPass, ElementTBNGenerator
 {
+private:
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
 	
+	std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_defaultTextures;
+
 public:
 	struct CCENGINE_API GPUTextureBasic : public GPUTexture
 	{
@@ -36,6 +39,8 @@ public:
 		virtual ~GPUTextureBasic();
 		void OnReload(std::shared_ptr<Texture> texture);
 	};
+
+	void BindTexture(Material* material, ETextureType textureType, int id);
 
 public:
 	BasicRenderPass(const char* name);

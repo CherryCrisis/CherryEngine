@@ -211,70 +211,54 @@ void HierarchyDisplayer::ContextCallback()
             if (ImGui::MenuItem("Audio Source")) {}
             if (ImGui::BeginMenu("Shapes"))
             {
+                Entity* newEntity = nullptr;
+                std::shared_ptr<Model> newModel = nullptr;
                 if (ImGui::MenuItem("Cube"))
                 {
-                    Entity* cube = new Entity("Cube");
+                    newEntity = new Entity("Cube");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCube");
                     Mesh::CreateCube(mesh, 1, 1, 1);
-                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube", true, mesh);
-                    Transform* tr = cube->AddBehaviour<Transform>();
-                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
-                    rdr->m_transform = tr;
-                    rdr->SetModel(model);
-                    tr->BindToSignals();
-                    rdr->BindToSignals();
-                    cube->Initialize();
-                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
-                    m_manager->FocusEntity(cube);
+                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube", true, mesh);
                 }
+
                 if (ImGui::MenuItem("Sphere"))
                 {
-                    Entity* cube = new Entity("Sphere");
+                    newEntity = new Entity("Sphere");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedSphere");
                     Mesh::CreateCube(mesh, 1, 1, 1);
-                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedSphere", true, mesh);
-                    Transform* tr = cube->AddBehaviour<Transform>();
-                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
-                    rdr->m_transform = tr;
-                    rdr->SetModel(model);
-                    tr->BindToSignals();
-                    rdr->BindToSignals();
-                    cube->Initialize();
-                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
-                    m_manager->FocusEntity(cube);
+                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedSphere", true, mesh);
                 }
                 if (ImGui::MenuItem("Cone"))
                 {
-                    Entity* cube = new Entity("Cone");
+                    newEntity = new Entity("Cone");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCone");
                     Mesh::CreateCube(mesh, 1, 1, 1);
-                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCone", true, mesh);
-                    Transform* tr = cube->AddBehaviour<Transform>();
-                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
-                    rdr->m_transform = tr;
-                    rdr->SetModel(model);
-                    tr->BindToSignals();
-                    rdr->BindToSignals();
-                    cube->Initialize();
-                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
-                    m_manager->FocusEntity(cube);
+                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCone", true, mesh);
                 }
                 if (ImGui::MenuItem("Plane"))
                 {
-                    Entity* cube = new Entity("Plane");
+                    newEntity = new Entity("Plane");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedPlane");
-                    Mesh::CreateCube(mesh, 1, 1, 1);
-                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedPlane", true, mesh);
-                    Transform* tr = cube->AddBehaviour<Transform>();
-                    ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
-                    rdr->m_transform = tr;
-                    rdr->SetModel(model);
-                    tr->BindToSignals();
-                    rdr->BindToSignals();
-                    cube->Initialize();
-                    SceneManager::GetInstance()->m_currentScene->AddEntity(cube);
-                    m_manager->FocusEntity(cube);
+                    Mesh::CreateQuad(mesh, 1, 1);
+                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedPlane", true, mesh);
                 }
+
+                if (newEntity && newModel)
+                {
+                    std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResourceRef<Material>("CC_Mat");
+
+                    newModel->SetMaterial(material);
+                    Transform* tr = newEntity->AddBehaviour<Transform>();
+                    ModelRenderer* rdr = newEntity->AddBehaviour<ModelRenderer>();
+                    rdr->m_transform = tr;
+                    rdr->SetModel(newModel);
+
+                    newEntity->Initialize();
+
+                    SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
+                    m_manager->FocusEntity(newEntity);
+                }
+
                 ImGui::EndMenu();
             }
             ImGui::Separator();

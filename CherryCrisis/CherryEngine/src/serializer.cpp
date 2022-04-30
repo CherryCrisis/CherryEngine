@@ -347,13 +347,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 
 						ModelRenderer* renderer = (ModelRenderer*)behaviourPtr;
 						if (renderer)
-						{
-							std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(value.as<std::string>().c_str());
-							if (model->GetResourceState() == EResourceState::LOADED)
-								renderer->SetModel(model);
-							else
-								model->m_OnLoaded.Bind(&ModelRenderer::SetModel, renderer);
-						}
+							renderer->SetModelFromPath(value.as<std::string>());
 					}
 				}
 			}

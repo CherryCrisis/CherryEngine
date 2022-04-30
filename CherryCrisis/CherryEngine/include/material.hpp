@@ -61,7 +61,7 @@ public:
 
 	std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
 
-	EPipelineType m_pipelineType = EPipelineType::PBR;
+	EPipelineType m_pipelineType = EPipelineType::LIT;
 
 	Material(const char* materialName) : Resource(materialName) {}
 	~Material() = default;

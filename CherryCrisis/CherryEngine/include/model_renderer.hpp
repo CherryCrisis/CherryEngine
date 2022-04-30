@@ -33,6 +33,8 @@ public:
 	void Initialize();
 	void BindToSignals() override;
 
+	void SetModelFromPath(const std::string& modelPath);
+	void OnModelLoaded(std::shared_ptr<Model> model);
 	void SetModel(std::shared_ptr<Model> newModel);
 	void RemoveModel();
 

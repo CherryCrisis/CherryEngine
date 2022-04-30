@@ -14,13 +14,13 @@
 
 CameraComponent::CameraComponent()
 {
-	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
+	m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
 	PopulateMetadatas();
 }
 
 CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
 {
-	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
+	m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
 	PopulateMetadatas();
 }
 

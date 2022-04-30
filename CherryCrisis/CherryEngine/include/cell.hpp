@@ -32,8 +32,8 @@ private:
 	std::unordered_set<class ARenderer*> m_renderers;
 	std::vector<Portal*> m_portals;
 
-	//class Skybox* m_skybox = nullptr;
-	class Skydome* m_skydome = nullptr;
+	class Skybox* m_skybox = nullptr;
+	//class Skydome* m_skydome = nullptr;
 
 public:
 	PhysicSystem::PhysicScene* m_physicCell = nullptr;

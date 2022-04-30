@@ -105,7 +105,29 @@ BasicRenderPass::BasicRenderPass(const char* name)
 		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
 
 		glUseProgram(0);
+
+		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
+		m_defaultTextures[ETextureType::ALBEDO] = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
+
+		unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
+		m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
+
+		for (auto& [texType, texRef] : m_defaultTextures)
+			Subscribe(texRef.get());
 	}
+}
+
+void BasicRenderPass::BindTexture(Material* material, ETextureType textureType, int id)
+{
+	// Get correct texture from type
+	Texture* texture = material->m_textures[textureType].get();
+
+	// TODO: Add multiple default textures
+	// If is does not exist and its gpuTex too, get the default texture
+	auto& gpuTexPtr = texture && texture->m_gpuTexture ? texture->m_gpuTexture : m_defaultTextures[textureType]->m_gpuTexture;
+
+	auto gpuTexture = static_cast<GPUTextureBasic*>(gpuTexPtr.get());
+	glBindTextureUnit(id, gpuTexture->ID);
 }
 
 template <>
@@ -269,7 +291,6 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-
 		Model* model = modelRdr->m_model.get();
 
 		if (!model)
@@ -277,28 +298,14 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 		if (Material* material = model->m_material.get())
 		{
-
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.ambientCol"), 1, material->m_ambient.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.diffuseCol"), 1, material->m_diffuse.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specularCol"), 1, material->m_specular.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.emissiveCol"), 1, material->m_emissive.data);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.shininess"), material->m_shininess);
 
-			if (Texture* albedoTexture = material->m_textures[ETextureType::ALBEDO].get())
-			{
-				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture.get()))
-				{
-					glBindTextureUnit(0, gpuAlbedoTexture->ID);
-				}
-			}
-
-			if (Texture* normalMap = material->m_textures[ETextureType::NORMAL_MAP].get())
-			{
-				if (auto gpuNormalMap = static_cast<GPUTextureBasic*>(normalMap->m_gpuTexture.get()))
-				{
-					glBindTextureUnit(1, gpuNormalMap->ID);
-				}
-			}
+			BindTexture(material, ETextureType::ALBEDO, 0);
+			BindTexture(material, ETextureType::NORMAL_MAP, 1);
 		}
 
 		Mesh* mesh = model->m_mesh.get();

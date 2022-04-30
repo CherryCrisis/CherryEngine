@@ -35,8 +35,11 @@ ModelRenderer::~ModelRenderer()
 {
 //	RemoveModel();
 	if (m_model)
+	{
 		GetHost().m_cell->RemoveRenderer(this);
-
+		m_model->m_OnLoaded.Unbind(&ModelRenderer::OnModelLoaded, this);
+		m_model->m_OnDeleted.Unbind(&ModelRenderer::RemoveModel, this);
+	}
 
 	GetHost().m_cell->RemoveRenderer(this);
 }
@@ -49,6 +52,33 @@ void ModelRenderer::PopulateMetadatas()
 	m_metadatas.SetField<std::string>("file", model_path);
 }
 
+void ModelRenderer::SetModelFromPath(const std::string& modelPath)
+{
+	SetModel(ResourceManager::GetInstance()->AddResourceRef<Model>(modelPath.c_str()));
+}
+
+void ModelRenderer::OnModelLoaded(std::shared_ptr<Model> model)
+{
+	model->m_OnLoaded.Unbind(&ModelRenderer::OnModelLoaded, this);
+
+	model_path = m_model->GetFilepath();
+
+	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
+
+	if (m_model->m_material)
+	{
+		SetMaterial(m_model->m_material.get());
+	}
+	else
+	{
+		m_model->m_onMaterialSet.Bind(&ModelRenderer::SetMaterial, this);
+	}
+
+	// Move to function
+	if (m_initialized)
+		GetHost().m_cell->AddRenderer(this);
+}
+
 void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 {
 	if (!newModel)
@@ -59,20 +89,13 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 
 	m_model = newModel;
 
-	model_path = m_model->GetFilepath();
-	
-	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
-	if (m_model->m_material) 
+	if (m_model->GetResourceState() == EResourceState::LOADED)
 	{
-		SetMaterial(m_model->m_material.get());
+		OnModelLoaded(m_model);
+		return;
 	}
-	else 
-	{
-		m_model->m_onMaterialSet.Bind(&ModelRenderer::SetMaterial, this);
-	}
-	// Move to function
-	if (m_initialized)
-		GetHost().m_cell->AddRenderer(this);
+
+	m_model->m_OnLoaded.Bind(&ModelRenderer::OnModelLoaded, this);
 }
 
 void ModelRenderer::RemoveModel() 
@@ -89,27 +112,28 @@ void ModelRenderer::RemoveModel()
 
 void ModelRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	if (!m_model)
+	if (!m_model || m_model->GetResourceState() != EResourceState::LOADED)
 		return;
+
+	pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
+	pipeline->SubscribeToPipeline<PickingRenderPass>(this);
 
 	if (Material* material = m_model->m_material.get())
 	{
-		pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
-
 		switch (material->m_pipelineType)
 		{
+		default:
 		case EPipelineType::LIT:
 			pipeline->SubscribeToPipeline<BasicRenderPass>(this);
 			break;
+
 		case EPipelineType::PBR:
 			pipeline->SubscribeToPipeline<PBRRenderPass>(this);
 			break;
-		default:
-			break;
 		}
-		
-		pipeline->SubscribeToPipeline<PickingRenderPass>(this);
 	}
+	else
+		pipeline->SubscribeToPipeline<BasicRenderPass>(this);
 
 }
 
@@ -125,8 +149,8 @@ void ModelRenderer::Initialize()
 {
 	m_initialized = true;
 
-	if (m_model)
-		// Move to function
+	// Move to function
+	if (m_model && m_model->GetResourceState() == EResourceState::LOADED)
 		GetHost().m_cell->AddRenderer(this);
 
 	GetHost().m_OnAwake.Unbind(&ModelRenderer::Initialize, this);
@@ -141,13 +165,13 @@ void ModelRenderer::BindToSignals()
 
 void ModelRenderer::OnCellAdded(Cell* newCell)
 {
-	if (m_model)
+	if (m_model && m_model->GetResourceState() == EResourceState::LOADED)
 		newCell->AddRenderer(this);
 }
 
 void ModelRenderer::OnCellRemoved(Cell* newCell)
 {
-	if (m_model)
+	if (m_model && m_model->GetResourceState() == EResourceState::LOADED)
 		newCell->RemoveRenderer(this);
 }
 
