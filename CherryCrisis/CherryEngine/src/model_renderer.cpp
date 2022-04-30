@@ -49,19 +49,24 @@ void ModelRenderer::PopulateMetadatas()
 	Behaviour::PopulateMetadatas();
 
 	m_metadatas.SetField<Object*>("transform", m_transform);
-	m_metadatas.SetField<std::string>("file", model_path);
+	m_metadatas.SetProperty("file", &m_ModelPath);
 }
 
-void ModelRenderer::SetModelFromPath(const std::string& modelPath)
+void ModelRenderer::SetModelFromPath(const char* modelPath)
 {
-	SetModel(ResourceManager::GetInstance()->AddResourceRef<Model>(modelPath.c_str()));
+	m_modelPath = modelPath;
+	SetModel(ResourceManager::GetInstance()->AddResourceRef<Model>(modelPath));
+}
+
+const char* ModelRenderer::GetModelPath()
+{
+	return m_model ? m_modelPath.c_str() : nullptr;
 }
 
 void ModelRenderer::OnModelLoaded(std::shared_ptr<Model> model)
 {
+	m_modelPath = model->GetFilepath();
 	model->m_OnLoaded.Unbind(&ModelRenderer::OnModelLoaded, this);
-
-	model_path = m_model->GetFilepath();
 
 	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
 

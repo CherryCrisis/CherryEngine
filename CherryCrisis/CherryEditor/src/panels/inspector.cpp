@@ -229,6 +229,26 @@ void InspectComponents(Entity* entity, int id)
 
                     continue;
                 }
+
+                if (propType == typeid(char*))
+                {
+                    char* val;
+                    propRef->Get(&val);
+                    if (ImGui::InputText(propName.c_str(), val, strlen(val) + 2))
+                        propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (propType == typeid(const char*))
+                {
+                    const char* val = nullptr;
+                    propRef->Get(&val);
+
+                    ImGui::Text("%s %s", propName.c_str(), val ? val : "X");
+
+                    continue;
+                }
             }
             ImGui::TreePop();
         }
