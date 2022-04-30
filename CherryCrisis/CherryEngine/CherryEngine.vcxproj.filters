@@ -1236,6 +1236,9 @@
     <ClInclude Include="include\sphere_collider.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\mixed_rendering_pipeline.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1608,6 +1611,9 @@
     </ClCompile>
     <ClCompile Include="src\pbr_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mixed_rendering_pipeline.cpp">
+      <Filter>Fichiers sources\Rendering\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

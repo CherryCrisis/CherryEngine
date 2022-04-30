@@ -92,10 +92,25 @@ void ModelRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 	if (!m_model)
 		return;
 
-	pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
-	pipeline->SubscribeToPipeline<PBRRenderPass>(this);
-	pipeline->SubscribeToPipeline<BasicRenderPass>(this);
-	pipeline->SubscribeToPipeline<PickingRenderPass>(this);
+	if (Material* material = m_model->m_material.get())
+	{
+		pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
+
+		switch (material->m_pipelineType)
+		{
+		case EPipelineType::LIT:
+			pipeline->SubscribeToPipeline<BasicRenderPass>(this);
+			break;
+		case EPipelineType::PBR:
+			pipeline->SubscribeToPipeline<PBRRenderPass>(this);
+			break;
+		default:
+			break;
+		}
+		
+		pipeline->SubscribeToPipeline<PickingRenderPass>(this);
+	}
+
 }
 
 void ModelRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)

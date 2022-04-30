@@ -16,8 +16,7 @@
 #include "pickinger.hpp"
 #include "cell_system.hpp"
 
-#include "basic_rendering_pipeline.hpp"
-#include "pbr_rendering_pipeline.hpp"
+#include "mixed_rendering_pipeline.hpp"
 
 #include "utils.hpp"
 
@@ -61,8 +60,7 @@ SceneDisplayer::SceneDisplayer()
 
     IM->PopContext();
 
-    //m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
-    m_camera.m_pipeline = std::make_unique<PBRRPipeline>();
+    m_camera.m_pipeline = std::make_unique<MixedPipeline>();
     CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
 }
 

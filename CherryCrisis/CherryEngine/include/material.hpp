@@ -36,6 +36,12 @@ enum class ETextureType : unsigned int
 	AO,
 };
 
+enum class EPipelineType : unsigned int
+{
+	LIT,
+	PBR,
+};
+
 class CCENGINE_API Material : public Resource<Material>
 {
 public:
@@ -54,6 +60,8 @@ public:
 	float m_clearCoatRoughnessFactor = 0.f;
 
 	std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
+
+	EPipelineType m_pipelineType = EPipelineType::PBR;
 
 	Material(const char* materialName) : Resource(materialName) {}
 	~Material() = default;

@@ -50,14 +50,6 @@ namespace CCImporter
         int blockSize;
     };
 
-    /*vec3  albedo;
-    float specular;
-    float metallic;
-    float roughness;
-    float ao;
-
-    float clearCoat;
-    float clearCoatRoughness;*/
     struct MaterialHeader
     {
         bool            m_hasMaterial;
@@ -122,10 +114,14 @@ namespace CCImporter
 
     static const char* assetsDirectory("Assets/");
     static const char* cacheExtension(".ccfile");
+    static const char* materialExtension(".ccmat");
     static const char* cacheDirectory("Cache/");
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
     void ImportTexture(const std::filesystem::path& filepath,
         unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat);
+
+    //void ImportMaterial(const std::filesystem::path& filepath, MaterialArgs& materialArgs);
+    void SaveMaterial(const std::filesystem::path& filepath, const MaterialHeaderV2& materialHeader/*, const std::vector<unsigned int> textureType, const std::vector<std::string> texturePath*/);
 }
 

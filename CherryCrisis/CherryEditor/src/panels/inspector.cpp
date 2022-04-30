@@ -242,12 +242,49 @@ void InspectComponents(Entity* entity, int id)
         std::shared_ptr<Material> mat = renderer->m_model->m_material;
         if (ImGui::TreeNode("Material"))
         {
-            ImGui::Text(mat->GetFilepath().c_str());
-            ImGui::DragFloat3("Ambient", mat->m_ambient.data, 0.1f);
-            ImGui::DragFloat3("Diffuse", mat->m_diffuse.data, 0.1f);
-            ImGui::DragFloat3("Specular", mat->m_specular.data, 0.1f);
-            ImGui::DragFloat3("Emissive", mat->m_emissive.data, 0.1f);
-            ImGui::DragFloat("Shininess", &mat->m_shininess, 0.1f);
+            
+            const char* label = "Material Pipeline";
+            const char* list[] = { "LIT", "PBR"};
+
+            unsigned int currentId = (unsigned int)mat->m_pipelineType;
+
+            if (ImGui::BeginCombo(label, list[currentId]))
+            {
+                size_t listSize = std::size(list);
+                for (size_t n = 0; n < listSize; n++)
+                {
+                    const bool is_selected = (currentId == n);
+                    if (ImGui::Selectable(list[n], is_selected))
+                    {
+                        mat->m_pipelineType = (EPipelineType)n;
+                    }
+
+                    if (is_selected)
+                        ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+
+            if (EPipelineType::LIT == mat->m_pipelineType)
+            {
+                ImGui::Text(mat->GetFilepath().c_str());
+                ImGui::DragFloat3("Ambient", mat->m_ambient.data, 0.1f);
+                ImGui::DragFloat3("Diffuse", mat->m_diffuse.data, 0.1f);
+                ImGui::DragFloat3("Specular", mat->m_specular.data, 0.1f);
+                ImGui::DragFloat3("Emissive", mat->m_emissive.data, 0.1f);
+                ImGui::DragFloat("Shininess", &mat->m_shininess, 0.1f);
+            }
+            else if (EPipelineType::PBR == mat->m_pipelineType)
+            {
+                ImGui::Text(mat->GetFilepath().c_str());
+                ImGui::DragFloat3("Albedo", mat->m_diffuse.data, 0.1f);
+                ImGui::DragFloat("Specular factor", &mat->m_specularFactor, 0.1f);
+                ImGui::DragFloat("Metallic factor", &mat->m_metallicFactor, 0.1f);
+                ImGui::DragFloat("Roughness factor", &mat->m_roughnessFactor, 0.1f);
+                ImGui::DragFloat("Ambiant occlusion", &mat->m_ao, 0.1f);
+                ImGui::DragFloat("Clear coat factor", &mat->m_clearCoatFactor, 0.1f);
+                ImGui::DragFloat("Clear coat roughness factor", &mat->m_clearCoatRoughnessFactor, 0.1f);
+            }
             
             if (ImGui::BeginTable("texturesTable", 2)) 
             {
@@ -260,6 +297,7 @@ void InspectComponents(Entity* entity, int id)
                         ImGui::Text("Ambient");
                     else if (texType == ETextureType::NORMAL_MAP)
                         ImGui::Text("Normal Map");
+
 
                     ImGui::TableNextColumn();
                     BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
@@ -280,7 +318,7 @@ void InspectComponents(Entity* entity, int id)
                             const char* c = (const char*)payload->Data;
                             std::string extension = String::ExtractValue(c, '.');
 
-                            if (extension == "jpg") 
+                            if (extension == "jpg" || extension == "png")
                             {   
                                 mat->SetTexture(texType, c);
                             }
