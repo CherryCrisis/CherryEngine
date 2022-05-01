@@ -51,3 +51,12 @@ void ResourceManager::GetResourcesPath(std::map<std::type_index, std::vector<std
 		resourcePaths.emplace(pair.first, filepaths);
 	}
 }
+
+void ResourceManager::Rename(const std::type_index& typeID, const std::filesystem::path& filepath, const char* newFilepath)
+{
+	auto resourceContainerIt = m_resources.find(typeID);
+	if (resourceContainerIt != m_resources.end())
+	{
+		resourceContainerIt->second->Rename(filepath, newFilepath);
+	}
+}

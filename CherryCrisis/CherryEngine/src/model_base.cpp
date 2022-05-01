@@ -48,7 +48,6 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
             
             std::shared_ptr<Model> model = resourceManager->AddResource<Model>(modelUtils.m_modelName.c_str(), true, mesh, material, modelBase);
 
-            
             modelNode->m_model = model;
             modelBase->m_models.push_back(model);
         }

@@ -215,8 +215,9 @@ void HierarchyDisplayer::ContextCallback()
                 {
                     Entity* cube = new Entity("Cube");
                     std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCube");
+                    std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResourceRef<Material>("CC_Mat");
                     Mesh::CreateCube(mesh, 1, 1, 1);
-                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube", true, mesh);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube", true, mesh, material);
                     Transform* tr = cube->AddBehaviour<Transform>();
                     ModelRenderer* rdr = cube->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;

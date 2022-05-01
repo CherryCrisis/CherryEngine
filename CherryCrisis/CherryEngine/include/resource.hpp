@@ -36,11 +36,13 @@ public:
 
 	virtual ~AResource() = default;
 
+	void SetFilepath(const char* filepath) { m_filepath = filepath; }
 	std::string GetFilepath() { return m_filepath.string(); }
 	std::filesystem::path* GetFilesystemPath() { return &m_filepath; }
 
 	EResourceState GetResourceState() { return m_resourceState.load(); }
 	void SetResourceState(EResourceState resourceState) { m_resourceState.store(resourceState); }
+
 
 };
 

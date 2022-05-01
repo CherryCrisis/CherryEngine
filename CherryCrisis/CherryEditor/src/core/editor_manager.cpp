@@ -87,16 +87,6 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_cellSystemDisplayer.m_camera = &m_sceneDisplayer.m_camera;
 
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
-    
-    // TODO: beurk ! change this
-    if (projectPath.size() > 0)
-    {
-        std::filesystem::current_path(projectPath);
-        m_browser.m_currentDirectory = projectPath;
-        m_browser.m_currentDirectory /= "Assets";
-        std::cout << m_browser.m_currentDirectory << std::endl;
-        m_browser.m_solutionDirectory = m_browser.m_currentDirectory;
-    }
 
     Serializer::UnserializeEditor("editor.meta");
 }
@@ -216,7 +206,7 @@ void EditorManager::HandleMenuBar()
         {
             if (ImGui::BeginMenu("Open"))
             {
-                if (ImGui::MenuItem("Browser"))   { m_browser.Toggle(true); }
+                if (ImGui::MenuItem("Browser")) { m_browser.Toggle(true); }
                 if (ImGui::MenuItem("Hierarchy")) { m_hierarchyDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Log"))       { m_logDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Inspector")) { m_inspector.Toggle(true); }

@@ -84,9 +84,6 @@
     <ClCompile Include="src\panels\hierarchy_displayer.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
-    <ClCompile Include="src\panels\asset_browser.cpp">
-      <Filter>Fichiers sources\Panels</Filter>
-    </ClCompile>
     <ClCompile Include="src\panels\preferences_displayer.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
@@ -111,6 +108,9 @@
     <ClCompile Include="src\panels\cell_system_displayer.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\panels\asset_browser.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -124,9 +124,6 @@
     </ClInclude>
     <ClInclude Include="include\core\panel.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\panels\asset_browser.hpp">
-      <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
     <ClInclude Include="include\panels\log_displayer.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
@@ -174,6 +171,9 @@
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
     <ClInclude Include="include\panels\cell_system_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\asset_browser.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
   </ItemGroup>

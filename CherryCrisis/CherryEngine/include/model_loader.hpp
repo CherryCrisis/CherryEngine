@@ -112,6 +112,12 @@ namespace CCImporter
         std::vector <std::string> m_texturesPathCstr;
     };
 
+    struct AABBHeader
+    {
+        Vector3 min;
+        Vector3 max;
+    };
+
     static const char* assetsDirectory("Assets/");
     static const char* cacheExtension(".ccfile");
     static const char* materialExtension(".ccmat");
@@ -122,6 +128,5 @@ namespace CCImporter
         unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat);
 
     //void ImportMaterial(const std::filesystem::path& filepath, MaterialArgs& materialArgs);
-    void SaveMaterial(const std::filesystem::path& filepath, const MaterialHeaderV2& materialHeader/*, const std::vector<unsigned int> textureType, const std::vector<std::string> texturePath*/);
 }
 

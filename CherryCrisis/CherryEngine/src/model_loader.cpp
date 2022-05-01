@@ -598,10 +598,11 @@ namespace CCImporter
 
         const aiScene* scene = importer.ReadFile(filepath.string().c_str(), aiProcess_Triangulate |
             aiProcess_SortByPType |
-            aiProcess_GenNormals |
+            aiProcess_ForceGenNormals |
             aiProcess_GenUVCoords |
             aiProcess_FlipUVs |
-            aiProcess_CalcTangentSpace);
+            aiProcess_CalcTangentSpace |
+            aiProcess_GenBoundingBoxes);
 
         if (scene)
         {
