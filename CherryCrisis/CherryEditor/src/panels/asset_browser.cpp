@@ -132,6 +132,12 @@ void AssetBrowser::RenderNodes()
 
         for (const auto& assetNode : directory->m_assetNodes)
         {
+            if (assetNode->m_previewTexture->GetResourceState() != EResourceState::LOADED)
+            {
+                ImGui::EndTable();
+                return;
+            }
+
             //-- Research input --//
             std::string fullFilename(assetNode->m_filename + assetNode->m_extension);
             if (strlen(m_researchInput) > 0)
@@ -197,8 +203,10 @@ void AssetBrowser::RenderNodes()
 
                 //-- Draw preview image --//
                 {
-                    GPUTexturePreview* gpuTexturePreview = static_cast<GPUTexturePreview*>(assetNode->m_previewTexture->m_gpuTextureEditor.get());
-                    ImGui::Image((void*)gpuTexturePreview->m_ID, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
+                    if (GPUTexturePreview* gpuTexturePreview = static_cast<GPUTexturePreview*>(assetNode->m_previewTexture->m_gpuTextureEditor.get()))
+                    {
+                        ImGui::Image((void*)gpuTexturePreview->m_ID, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
+                    }
                 }
 
                 //-- Drag and drop file or folder in folder --//

@@ -116,7 +116,7 @@ namespace CCScripting
 
 		void ReloadPreviewTexture(std::shared_ptr<ResourceT> resource)
 		{
-			UploadPreviewTexture();
+			//UploadPreviewTexture();
 		}
 
 		void Reload() override
@@ -169,8 +169,8 @@ namespace CCScripting
 		CREATING,
 	};
 
-	const std::vector<std::string> m_textureExtensions = {".jpg", ".png"};
-	const std::vector<std::string> m_modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf" };
+	const std::vector<std::string> m_textureExtensions = {".jpg", ".png", ".hdr"};
+	const std::vector<std::string> m_modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf"};
 	const std::vector<std::string> m_shaderExtensions = { ".frag", ".vert" };
 	const std::vector<std::string> m_soundExtensions = { ".wav" };
 	const std::vector<std::string> m_scriptExtensions = { ".cs" };
@@ -192,7 +192,6 @@ namespace CCScripting
 	AssetNode* m_focusedNode = nullptr;
 	EBrowserAction m_browserAction = EBrowserAction::NONE;
 	std::string m_popupAssetType;
-
 
 	void SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode);
 	AssetNode* RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory); //return m_assetsDirectoryNode 
