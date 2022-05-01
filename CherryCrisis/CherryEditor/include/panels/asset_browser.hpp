@@ -173,7 +173,8 @@ namespace CCScripting
 	const std::vector<std::string> m_modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf"};
 	const std::vector<std::string> m_shaderExtensions = { ".frag", ".vert" };
 	const std::vector<std::string> m_soundExtensions = { ".wav" };
-	const std::vector<std::string> m_scriptExtensions = { ".cs" };
+	const std::string m_scriptExtensions = ".cs";
+	const std::string m_sceneExtensions = ".cherry";
 
 	std::filesystem::path m_assetsDirectory;
 

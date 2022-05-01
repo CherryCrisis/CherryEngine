@@ -732,7 +732,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<ModelBase> modelBase = resourceManager->AddResource<ModelBase>(filepath.c_str(), true);
                 modelNode.m_resource = modelBase;
 
-                modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+                modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true);
 
                 auto pair = m_allAssetNode.insert({ modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) });
                 AssetNode* assetNode = pair.first->second.get();
@@ -755,7 +755,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<Shader> shader = resourceManager->AddResource<Shader>(filepath.c_str(), true);
                 shaderNode.m_resource = shader;
 
-                shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+                shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true);
 
                 auto pair = m_allAssetNode.insert({ shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) });
                 return pair.first->second.get();
@@ -763,20 +763,28 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         }
 
         //-- Script --//
-        for (int i = 0; i < m_scriptExtensions.size(); ++i)
+        if (!m_scriptExtensions.compare(extension))
         {
-            if (!m_scriptExtensions[i].compare(extension))
-            {
-                ScriptNode scriptNode;
-                SetAssetNode(m_path, scriptNode);
+            ScriptNode scriptNode;
+            SetAssetNode(m_path, scriptNode);
 
-                std::string filepath(scriptNode.m_relativePath.string() + scriptNode.m_filename + scriptNode.m_extension);
+            std::string filepath(scriptNode.m_relativePath.string() + scriptNode.m_filename + scriptNode.m_extension);
 
-                scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+            scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true);
 
-                auto pair = m_allAssetNode.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
-                return pair.first->second.get();
-            }
+            auto pair = m_allAssetNode.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
+            return pair.first->second.get();
+        }
+
+        if (!m_sceneExtensions.compare(extension))
+        {
+            EmptyNode emptyNode;
+            SetAssetNode(m_path, emptyNode);
+
+            emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true);
+
+            auto pair = m_allAssetNode.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode) });
+            return pair.first->second.get();
         }
 
         //-- Sound --//
@@ -790,7 +798,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::string filepath(soundNode.m_relativePath.string() + soundNode.m_filename + soundNode.m_extension);
                 soundNode.m_resource = resourceManager->AddResource<Sound>(filepath.c_str(), true);
 
-                soundNode.m_icon = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+                soundNode.m_icon = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true);
 
                 auto pair = m_allAssetNode.insert(std::make_unique<SoundNode>(soundNode));
                 return pair.first->get();
