@@ -30,20 +30,19 @@ const std::map<const int, const ETextureFormat> textureFormatByID
     {7, ETextureFormat::DXT7},
 };
 
-TextureSettings::TextureSettings(const std::filesystem::path& resourceFilepath)
+TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
+    : m_texture(texture)
 {
-	ResourceManager* resourceManager = ResourceManager::GetInstance();
-    m_texture = resourceManager->GetResource<Texture>(resourceFilepath.string().c_str());
-
     if (!m_texture)
         return;
 
     m_currentId = IdOfTextureFormat.at(m_texture->GetInternalFormat());
-    ImGui::OpenPopup(m_popupName);
 }
 
 bool TextureSettings::Update()
 {
+    ImGui::OpenPopup(m_popupName);
+
     bool isOpen;
 
     const ImVec2 center = ImGui::GetMainViewport()->GetCenter();
@@ -76,6 +75,8 @@ bool TextureSettings::Update()
         if (ImGui::Button("Close"))
         {
             ImGui::CloseCurrentPopup();
+            ImGui::EndPopup();
+            return false;
         }
 
         ImGui::SameLine();
@@ -87,8 +88,11 @@ bool TextureSettings::Update()
                 m_texture->SetInternalFormat(textureFormatByID.at(m_currentId));
                 Resource<Texture>::ReloadResource(m_texture, true);
                 ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
+                return false;
             }
         }
+
         ImGui::EndPopup();
     }
 

@@ -15,7 +15,6 @@ public :
 	virtual bool Update() = 0;
 };
 
-
 class TextureSettings : public AssetsSettings
 {
 private:
@@ -26,7 +25,7 @@ private:
 	std::shared_ptr<Texture> m_texture;
 
 public:
-	TextureSettings(const std::filesystem::path& resourceFilepath);
+	TextureSettings(std::shared_ptr<Texture> texture);
 	bool Update() override;
 
 };

@@ -40,8 +40,20 @@ void AssetBrowser::Render()
 
         BrowserAction();
 
+        RenderAssetsSettingsPopUp();
+
     }
     ImGui::End();
+}
+
+void AssetBrowser::RenderAssetsSettingsPopUp()
+{
+    if (!m_currentAssetsSettings)
+        return;
+
+    if (!m_currentAssetsSettings->Update())
+        m_currentAssetsSettings.reset();
+
 }
 
 void AssetBrowser::RenderMenuBar()
@@ -646,6 +658,8 @@ void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode& as
     assetNode.m_relativePath = String::ExtractKeyStr(assetNode.m_relativePath.string(), filename.c_str());
     assetNode.m_filename = String::ExtractKey(filename, '.');
     assetNode.m_extension = path.extension().string();
+
+    assetNode.m_assetBrowser = this;
 }
 
 AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory)
@@ -657,7 +671,6 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         DirectoryNode directoryNode;
         SetAssetNode(m_path, directoryNode);
 
-        directoryNode.m_assetBrowser = this;
         directoryNode.m_parentDirectory = parentDirectory;
 
         directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true);

@@ -15,6 +15,7 @@
 #include "texture.hpp"
 #include "sound.hpp"
 #include "shader.hpp"
+#include "assets_settings.hpp"
 
 class AResource;
 class ModelBase;
@@ -70,7 +71,8 @@ namespace CCScripting
 		std::string				m_filename; // filename without extension
 		std::string				m_extension; // extension
 
-		bool					m_isHovered = false;
+		bool					m_isHovered;
+		AssetBrowser*			m_assetBrowser = nullptr;
 
 		void UploadPreviewTexture();
 
@@ -83,8 +85,6 @@ namespace CCScripting
 	struct DirectoryNode : public AssetNode
 	{
 		std::set<AssetNode*> m_assetNodes {};
-
-		AssetBrowser*		m_assetBrowser = nullptr;
 		DirectoryNode*		m_parentDirectory = nullptr;
 
 		void Rename(const char* newFilepath) override {};
@@ -140,7 +140,10 @@ namespace CCScripting
 
 	struct TextureNode : public ResourceAssetNode<Texture>
 	{
-		void Action() override {};
+		void Action() override 
+		{
+			m_assetBrowser->SetCurrentAssetsSettingsPopUp(new TextureSettings(m_resource));
+		};
 	};
 
 	struct ModelNode : public ResourceAssetNode<ModelBase>
@@ -177,6 +180,8 @@ namespace CCScripting
 	DirectoryNode* m_assetsDirectoryNode = nullptr;
 	DirectoryNode* m_currentDirectoryNode = nullptr;
 
+	std::unique_ptr<AssetsSettings> m_currentAssetsSettings = nullptr;
+
 	std::map<std::string, std::unique_ptr<AssetNode>> m_allAssetNode;
 
 	const float m_padding = 55.f;
@@ -202,10 +207,13 @@ namespace CCScripting
 	void BrowserActionDelete();
 	void BrowserAction();
 
+	void RenderAssetsSettingsPopUp();
+
 public :
 	AssetBrowser();
 
-	void SetCurrentDirectory(DirectoryNode* directoryNode) { m_currentDirectoryNode = directoryNode; };
+	void SetCurrentDirectory(DirectoryNode* directoryNode) { m_currentDirectoryNode = directoryNode; }
+	void SetCurrentAssetsSettingsPopUp(AssetsSettings* assetSettings) { m_currentAssetsSettings.reset(assetSettings); }
 
 	void Render() override;
 	void ContextCallback() override;
