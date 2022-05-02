@@ -209,11 +209,16 @@ namespace CCScripting
 	void BrowserAction();
 
 	void RenderAssetsSettingsPopUp();
+	bool DragAndDropTarget(AssetNode* assetNode);
 
 public :
 	AssetBrowser();
 
-	void SetCurrentDirectory(DirectoryNode* directoryNode) { m_currentDirectoryNode = directoryNode; }
+	void SetCurrentDirectory(DirectoryNode* directoryNode) 
+	{ 
+		m_currentDirectoryNode = directoryNode; 
+		strcpy_s(m_researchInput, "");
+	}
 	void SetCurrentAssetsSettingsPopUp(AssetsSettings* assetSettings) { m_currentAssetsSettings.reset(assetSettings); }
 
 	void Render() override;

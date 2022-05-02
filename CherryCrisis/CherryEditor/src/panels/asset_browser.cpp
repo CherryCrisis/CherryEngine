@@ -104,12 +104,68 @@ void AssetBrowser::RenderDirectoryBar()
             m_currentDirectoryNode = directory;
         }
 
+        if (DragAndDropTarget(directory))
+            return;
+
         directoryOrderNode.pop_front();
 
         if (!directoryOrderNode.empty())
             ImGui::SameLine();
     }
 
+}
+
+bool AssetBrowser::DragAndDropTarget(AssetNode* assetNode)
+{
+    //-- Drag and drop file or folder in folder --//
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+        {
+            if (DirectoryNode* directoryNode = dynamic_cast<DirectoryNode*>(assetNode))
+            {
+                const char* draggedPath = static_cast<const char*>(payload->Data);
+
+                std::string fullPath = m_assetsDirectoryNode->m_path.parent_path().parent_path().string() + "\\" + draggedPath;
+                auto it = m_assetNodes.find(fullPath);
+
+                if (it != m_assetNodes.end() && it->second.get() != assetNode && it->second.get()->m_path.parent_path().compare(directoryNode->m_path))
+                {
+                    AssetNode* draggedAssetNode = it->second.get();
+
+                    std::string draggedAssetPath = draggedAssetNode->m_path.string();
+
+                    if (DirectoryNode* draggedDirectoryNode = dynamic_cast<DirectoryNode*>(draggedAssetNode))
+                    {
+                        std::filesystem::path newPath = assetNode->m_path.string() + "\\" + draggedAssetNode->m_filename;
+
+                        if (!std::filesystem::exists(newPath))
+                            std::filesystem::create_directory(newPath);
+
+                        CopyFolder(draggedAssetPath, newPath.string().c_str());
+
+                        std::filesystem::remove_all(draggedDirectoryNode->m_path);
+                    }
+                    else
+                    {
+                        CopyFolder(draggedAssetPath, assetNode->m_path.string());
+                        remove(draggedAssetPath.c_str());
+                    }
+
+                    std::string fullFilename(draggedAssetNode->m_filename + draggedAssetNode->m_extension);
+                    draggedAssetNode->Rename((directoryNode->m_relativePath.string() + fullFilename).c_str());
+
+                    QuerryBrowser();
+
+                    ImGui::EndDragDropTarget();
+                    return true;
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+
+    return false;
 }
 
 void AssetBrowser::RenderNodes()
@@ -209,54 +265,11 @@ void AssetBrowser::RenderNodes()
                     }
                 }
 
-                //-- Drag and drop file or folder in folder --//
-                if (ImGui::BeginDragDropTarget())
+                if (DragAndDropTarget(assetNode))
                 {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-                    {
-                        if (DirectoryNode* directoryNode = dynamic_cast<DirectoryNode*>(assetNode))
-                        {
-                            const char* draggedPath = static_cast<const char*>(payload->Data);
-
-                            std::string fullPath = m_assetsDirectoryNode->m_path.parent_path().parent_path().string() + "\\" + draggedPath;
-                            auto it = m_assetNodes.find(fullPath);
-
-                            if (it != m_assetNodes.end() && it->second.get() != assetNode)
-                            {
-                                AssetNode* draggedAssetNode = it->second.get();
-
-                                std::string draggedAssetPath = draggedAssetNode->m_path.string();
-
-                                if (DirectoryNode* draggedDirectoryNode = dynamic_cast<DirectoryNode*>(draggedAssetNode))
-                                {
-                                    std::filesystem::path newPath = assetNode->m_path.string() + "\\" + draggedAssetNode->m_filename;
-
-                                    if (!std::filesystem::exists(newPath))
-                                        std::filesystem::create_directory(newPath);
-
-                                    CopyFolder(draggedAssetPath, newPath.string().c_str());
-
-                                    std::filesystem::remove_all(draggedDirectoryNode->m_path);
-                                }
-                                else
-                                {
-                                    CopyFolder(draggedAssetPath, assetNode->m_path.string());
-                                    remove(draggedAssetPath.c_str());
-                                }
-
-                                std::string fullFilename(draggedAssetNode->m_filename + draggedAssetNode->m_extension);
-                                draggedAssetNode->Rename((directoryNode->m_relativePath.string() + fullFilename).c_str());
-
-                                QuerryBrowser();
-
-                                ImGui::PopID();
-                                ImGui::EndDragDropTarget();
-                                ImGui::EndTable();
-                                return;
-                            }
-                        }
-                    }
-                    ImGui::EndDragDropTarget();
+                    ImGui::PopID();
+                    ImGui::EndTable();
+                    return;
                 }
 
                 //-- Text center alignment --//

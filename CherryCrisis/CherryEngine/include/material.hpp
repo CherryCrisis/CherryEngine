@@ -10,18 +10,7 @@
 #include "event.hpp"
 
 //Forward declaration
-namespace CCImporter
-{
-	struct MaterialHeader;
-}
 class Texture;
-
-struct MaterialArgs
-{
-	CCImporter:: MaterialHeader*	m_materialHeader;
-	std::vector<std::string>*		m_texturesPath;
-	std::vector<unsigned int>*		m_textureType;
-};
 
 using namespace CCMaths;
 
@@ -66,11 +55,11 @@ public:
 	Material(const char* materialName) : Resource(materialName) {}
 	~Material() = default;
 
-	static void Load(std::shared_ptr<Material> material, const MaterialArgs& materialArgs);
-	static void Load(std::shared_ptr<Material> material) {} //Empty material
+	static void Load(std::shared_ptr<Material> material);
+	//static void Load(std::shared_ptr<Material> material) {} //Empty material
 
 	void Delete() override;
-	void Reload(const MaterialArgs& materialArgs);
+	void Reload();
 
 	void SetTexture(ETextureType type, const std::shared_ptr<Texture>& newTexture);
 	void SetTexture(ETextureType type, const char* filepath);

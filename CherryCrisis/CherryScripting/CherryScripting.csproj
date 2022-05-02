@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\x64\Debug\Assets\*.cs" />
     <Compile Include="BackpackBehaviour.cs" />
     <Compile Include="CameraController.cs" />
     <Compile Include="DebugTest.cs" />
