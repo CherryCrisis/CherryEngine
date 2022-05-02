@@ -183,7 +183,8 @@ namespace CCScripting
 
 	std::unique_ptr<AssetsSettings> m_currentAssetsSettings = nullptr;
 
-	std::map<std::string, std::unique_ptr<AssetNode>> m_allAssetNode;
+	std::map<std::string, std::unique_ptr<AssetNode>> m_assetNodes;
+	std::set<AssetNode*> m_allAssetNode; //To research in all directories
 
 	const float m_padding = 55.f;
 	const float m_upPadding = 5.f;

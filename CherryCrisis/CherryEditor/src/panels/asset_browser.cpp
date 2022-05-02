@@ -128,9 +128,9 @@ void AssetBrowser::RenderNodes()
         int columnID = columnCount;
         int assetID = 0;
 
-        DirectoryNode* directory = strlen(m_researchInput) > 0 ? m_assetsDirectoryNode : m_currentDirectoryNode;
+        std::set<AssetNode*>& assetNodes = strlen(m_researchInput) > 0 ? m_allAssetNode : m_currentDirectoryNode->m_assetNodes;
 
-        for (const auto& assetNode : directory->m_assetNodes)
+        for (const auto& assetNode : assetNodes)
         {
             if (assetNode->m_previewTexture->GetResourceState() != EResourceState::LOADED)
             {
@@ -219,9 +219,9 @@ void AssetBrowser::RenderNodes()
                             const char* draggedPath = static_cast<const char*>(payload->Data);
 
                             std::string fullPath = m_assetsDirectoryNode->m_path.parent_path().parent_path().string() + "\\" + draggedPath;
-                            auto it = m_allAssetNode.find(fullPath);
+                            auto it = m_assetNodes.find(fullPath);
 
-                            if (it != m_allAssetNode.end() && it->second.get() != assetNode)
+                            if (it != m_assetNodes.end() && it->second.get() != assetNode)
                             {
                                 AssetNode* draggedAssetNode = it->second.get();
 
@@ -685,7 +685,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
         auto directory_iterator = std::filesystem::directory_iterator(m_path);
 
-        auto pair = m_allAssetNode.insert({ directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode)});
+        auto pair = m_assetNodes.insert({ directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode)});
         AssetNode* assetNode = pair.first->second.get();
 
         for (const std::filesystem::directory_entry& entry : directory_iterator)
@@ -715,7 +715,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
                 textureNode.m_previewTexture = std::dynamic_pointer_cast<Texture>(textureNode.m_resource);
 
-                auto pair = m_allAssetNode.insert({ textureNode.m_path.string(), std::make_unique<TextureNode>(textureNode) });
+                auto pair = m_assetNodes.insert({ textureNode.m_path.string(), std::make_unique<TextureNode>(textureNode) });
                 return pair.first->second.get();
             }
         }
@@ -734,7 +734,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
                 modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true);
 
-                auto pair = m_allAssetNode.insert({ modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) });
+                auto pair = m_assetNodes.insert({ modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) });
                 AssetNode* assetNode = pair.first->second.get();
 
                 modelBase->m_OnReloaded.Bind(&AssetBrowser::ResourceAssetNode<ModelBase>::ReloadPreviewTexture, static_cast<ResourceAssetNode<ModelBase>*>(assetNode));
@@ -757,7 +757,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
                 shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true);
 
-                auto pair = m_allAssetNode.insert({ shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) });
+                auto pair = m_assetNodes.insert({ shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) });
                 return pair.first->second.get();
             }
         }
@@ -772,7 +772,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
             scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true);
 
-            auto pair = m_allAssetNode.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
+            auto pair = m_assetNodes.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
             return pair.first->second.get();
         }
 
@@ -783,7 +783,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
             emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true);
 
-            auto pair = m_allAssetNode.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode) });
+            auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode) });
             return pair.first->second.get();
         }
 
@@ -812,7 +812,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
     emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
 
-    auto pair = m_allAssetNode.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode)});
+    auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode)});
     return pair.first->second.get();
 }
 
@@ -832,9 +832,10 @@ void AssetBrowser::QuerryBrowser()
        m_currentDirectoryNode = m_assetsDirectoryNode;
     }
 
-    for (const auto& assetNode : m_allAssetNode)
+    for (const auto& assetNode : m_assetNodes)
     {
         assetNode.second->UploadPreviewTexture();
+        m_allAssetNode.insert(assetNode.second.get());
     }
 
     ResourceManager::GetInstance()->Purge();
