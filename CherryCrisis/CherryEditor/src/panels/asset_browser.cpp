@@ -820,7 +820,8 @@ void AssetBrowser::QuerryBrowser()
 {
 	m_currentDirectoryNode = nullptr;
 	m_assetsDirectoryNode = nullptr;
-	m_allAssetNode.clear();
+	m_assetNodes.clear();
+    m_allAssetNode.clear();
 
     RenderManager::GetInstance(); //TODO: Erase when renderer manager instance is initialized in ENGINE
 
