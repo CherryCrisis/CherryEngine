@@ -57,6 +57,7 @@ namespace CCImporter
         float           m_shininess;
 
         //-- PBR --//
+        bool m_hasNormal = true;
         float m_specularFactor = 1.f;
         float m_metallicFactor = 1.f;
         float m_roughnessFactor = 1.f;

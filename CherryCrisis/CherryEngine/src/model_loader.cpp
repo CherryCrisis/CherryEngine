@@ -13,6 +13,8 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 #include <nvtt/nvtt.h>
+#include <yaml-cpp/yaml.h>
+#include <any>
 
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
@@ -23,6 +25,26 @@
 #include "model.hpp"
 #include "texture.hpp"
 #include "utils.hpp"
+
+namespace YAML
+{
+    template<>
+    struct convert<CCMaths::Vector3>
+    {
+        static Node encode(const CCMaths::Vector3& rhs)
+        {
+            Node node;
+            node = (std::to_string(rhs.x) + '/' + std::to_string(rhs.y) + '/' + std::to_string(rhs.z));
+            return node;
+        }
+
+        static bool decode(const Node& node, CCMaths::Vector3& rhs)
+        {
+            rhs = String::ExtractVector3(node.as<std::string>());
+            return true;
+        }
+    };
+}
 
 namespace CCImporter
 {
@@ -394,12 +416,53 @@ namespace CCImporter
         }
     }
 
-    void SaveMaterial(const std::filesystem::path& path, const MaterialArgs& materialArgs)
+    void SaveMaterial(const std::filesystem::path& path, const MaterialArgs& materialArgs, bool saveInAssetDirectory = true)
     {
-        //TODO: Add material in cache
+        if (saveInAssetDirectory)
+        {
+            //-- Save in assets directory --//
+            YAML::Node yamlSave;
+
+            YAML::Node settingsSave = yamlSave["settings"];
+            settingsSave["ambient"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_ambient);
+            settingsSave["diffuse"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_diffuse);
+            settingsSave["specular"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_specular);
+            settingsSave["emissive"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_emissive);
+            settingsSave["shininess"] = std::any_cast<float>(materialArgs.m_materialHeader.m_shininess);
+            settingsSave["hasNormal"] = std::any_cast<bool>(materialArgs.m_materialHeader.m_hasNormal);
+            settingsSave["specularFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_specularFactor);
+            settingsSave["metallicFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_metallicFactor);
+            settingsSave["roughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_roughnessFactor);
+            settingsSave["ao"] = std::any_cast<float>(materialArgs.m_materialHeader.m_ao);
+            settingsSave["clearCoatFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatFactor);
+            settingsSave["clearCoatRoughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatRoughnessFactor);
+            settingsSave["texturesCount"] = std::any_cast<unsigned int>(materialArgs.m_materialHeader.m_texturesCount);
+
+            for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+            {
+                std::string textureId = std::format("texture_{}", i).c_str();
+                std::string textureTypeId = std::format("textureTypes_{}", i);
+
+                settingsSave[textureId.c_str()] = std::any_cast<std::string>(materialArgs.m_texturesPath[i]);
+                settingsSave[textureTypeId.c_str()] = std::any_cast<unsigned int>(materialArgs.m_texturesType[i]);
+            }
+
+            std::ofstream out(path.string().c_str());
+            bool opened = out.is_open();
+            out << yamlSave;
+            out.close();
+        }
+
+        //-- Save cache --//
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += path.filename().string();
+
+        if (!std::filesystem::exists(CCImporter::cacheDirectory))
+            std::filesystem::create_directory(CCImporter::cacheDirectory);
+
         FILE* file = nullptr;
 
-        if (fopen_s(&file, path.string().c_str(), "wb"))
+        if (fopen_s(&file, fullFilepath.c_str(), "wb"))
         {
             Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", path.string()).c_str());
             return;
@@ -538,38 +601,35 @@ namespace CCImporter
 
     bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs)
     {
-        //TODO: import material from cache
-        FILE* file = nullptr;
+        YAML::Node loader = YAML::LoadFile(path.string().c_str());
 
-        if (fopen_s(&file, path.string().c_str(), "rb"))
-            return false;
+        YAML::Node settingsLoaded = loader["settings"];
 
-        fread(&materialArgs.m_materialHeader, sizeof(MaterialHeader), 1, file);
+        materialArgs.m_materialHeader.m_ambient = settingsLoaded["ambient"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_diffuse = settingsLoaded["diffuse"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_specular = settingsLoaded["specular"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_emissive = settingsLoaded["emissive"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_shininess = settingsLoaded["shininess"].as<float>();
 
-        unsigned int textureCount = materialArgs.m_materialHeader.m_texturesCount;
-        if (textureCount)
+        materialArgs.m_materialHeader.m_hasNormal = settingsLoaded["hasNormal"].as<bool>();
+        materialArgs.m_materialHeader.m_specularFactor = settingsLoaded["specularFactor"].as<float>();
+        materialArgs.m_materialHeader.m_metallicFactor = settingsLoaded["metallicFactor"].as<float>();
+        materialArgs.m_materialHeader.m_roughnessFactor = settingsLoaded["roughnessFactor"].as<float>();
+        materialArgs.m_materialHeader.m_ao = settingsLoaded["ao"].as<float>();
+        materialArgs.m_materialHeader.m_clearCoatFactor = settingsLoaded["clearCoatFactor"].as<float>();
+        materialArgs.m_materialHeader.m_clearCoatRoughnessFactor = settingsLoaded["clearCoatRoughnessFactor"].as<float>();
+        materialArgs.m_materialHeader.m_texturesCount = settingsLoaded["texturesCount"].as<unsigned int>();
+
+        for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
         {
-            std::vector<unsigned int> texturesPathSize;
+            std::string textureId = std::format("texture_{}", i).c_str();
+            std::string textureTypeId = std::format("textureTypes_{}", i);
 
-            texturesPathSize.resize(textureCount);
-            materialArgs.m_texturesType.resize(textureCount);
-
-            fread(&texturesPathSize[0], textureCount * sizeof(unsigned int), 1, file);
-            fread(&materialArgs.m_texturesType[0], textureCount * sizeof(unsigned int), 1, file);
-
-            for (unsigned int i = 0; i < textureCount; ++i)
-            {
-                std::string texturePath;
-                texturePath.resize(texturesPathSize[i]);
-
-                fread(&texturePath[0], texturesPathSize[i], 1, file);
-
-                materialArgs.m_texturesPath.push_back(texturePath);
-            }
+            materialArgs.m_texturesPath.push_back(settingsLoaded[textureId.c_str()].as<std::string>());
+            materialArgs.m_texturesType.push_back(settingsLoaded[textureTypeId.c_str()].as<unsigned int>());
         }
 
-        fclose(file);
-
+        SaveMaterial(path, materialArgs, false);
         return true;
     }
 

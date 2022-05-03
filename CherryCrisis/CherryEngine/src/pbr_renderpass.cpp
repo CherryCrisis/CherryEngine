@@ -341,7 +341,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (Material* material = model->m_material.get())
 		{
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
-			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), 0);
+			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), material->m_hasNormal);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedo"), 1, material->m_diffuse.data);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specular"), material->m_specularFactor);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.metallic"), material->m_metallicFactor);

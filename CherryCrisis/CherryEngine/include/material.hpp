@@ -9,8 +9,14 @@
 #include "maths.hpp"
 #include "event.hpp"
 
+
 //Forward declaration
 class Texture;
+namespace CCImporter
+{
+	struct MaterialArgs;
+}
+//class CCImporter::MaterialArgs;
 
 using namespace CCMaths;
 
@@ -41,6 +47,7 @@ public:
 	float	m_shininess = 0.f;
 
 	//-- PBR --//
+	bool  m_hasNormal = true;
 	float m_specularFactor = 1.f;
 	float m_metallicFactor = 1.f;
 	float m_roughnessFactor = 1.f;
@@ -56,7 +63,7 @@ public:
 	~Material() = default;
 
 	static void Load(std::shared_ptr<Material> material);
-	//static void Load(std::shared_ptr<Material> material) {} //Empty material
+	static bool LoadFromCache(std::shared_ptr<Material> material, CCImporter::MaterialArgs& materialArgs);
 
 	void Delete() override;
 	void Reload();
