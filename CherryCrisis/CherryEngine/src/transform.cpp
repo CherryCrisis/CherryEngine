@@ -53,12 +53,12 @@ bool Transform::IsEqualToParent(Transform* transform)
 	return m_parent->IsEqualToParent(transform);
 }
 
-void Transform::SetParent(Transform* transform)
+void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyRotation, bool reapplyScale)
 {
-	if (IsEqualToParent(transform)) // Guard to prevent parent re-set
+	if (IsEqualToParent(parent)) // Guard to prevent parent re-set
 		return;
 
-	if (transform && transform->IsEqualToParent(this))
+	if (parent && parent->IsEqualToParent(this))
 		return;
 
 	if (m_parent) // Remove the transform from the last parent
@@ -74,18 +74,23 @@ void Transform::SetParent(Transform* transform)
 			}
 		}
 	}
-	if (transform) // Subscribe to the new parent if there is one
+	if (parent) // Subscribe to the new parent if there is one
 	{
-		transform->m_children.push_back(this);
+		parent->m_children.push_back(this);
 	}
 
-	m_parent = transform;
+	m_parent = parent;
 
-	ReapplyPosition();
-	ReapplyRotation();
-	ReapplyScale();
+	if (reapplyPosition) ReapplyPosition();
+	if (reapplyRotation) ReapplyRotation();
+	if (reapplyScale)    ReapplyScale();
 
 	SetDirty();
+}
+
+void Transform::SetParent(Transform* transform)
+{
+	SetParent(transform, false, false, false);
 }
 
 void Transform::ClearChildParenting()
@@ -225,6 +230,7 @@ void Transform::ReapplyScale()
 	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, m_scale);
 
 	SetDirty();
+	m_onScaleChange.Invoke(m_scale);
 }
 
 Vector3 Transform::GetGlobalScale()

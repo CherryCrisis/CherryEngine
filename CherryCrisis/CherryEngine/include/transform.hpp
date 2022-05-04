@@ -35,7 +35,8 @@ public:
 	~Transform();
 	bool IsRoot() { return !m_parent; }
 
-	void SetParent(Transform* transform);
+	void SetParent(Transform* parent, bool reapplyPosition, bool reapplyRot = false, bool reapplyScale = false);
+	void SetParent(Transform* parent);
 	Transform* GetParent() { return m_parent; }
 	Transform* GetRootParent();
 	bool IsEqualToParent(Transform* transform);

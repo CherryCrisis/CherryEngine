@@ -142,7 +142,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         {
             m_draggedEntity = (Entity*)payload->Data;
 
-            m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
+            m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform, true, true, true);
             m_manager->m_selectedEntities.clear();
             m_isEntityDragged = false;
             m_draggedEntity = nullptr;
@@ -172,7 +172,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
             }
             else
             {
-                m_draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr);
+                m_draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr, true, true, true);
                 m_manager->m_selectedEntities.clear();
                 m_draggedEntity = nullptr;
                 if (opened) ImGui::TreePop();
