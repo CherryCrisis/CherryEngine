@@ -61,9 +61,6 @@ void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
 
 void BoxCollider::SetPxShape()
 {
-	if (m_pxShape)
-		return;
-
 	CCMaths::Vector3 scale = m_baseEntityScale;
 	scale *= m_editableScale;
 	scale *= m_entityScale;

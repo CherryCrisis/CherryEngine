@@ -12,6 +12,11 @@ CapsuleCollider::CapsuleCollider()
 	PopulateMetadatas();
 }
 
+CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
+{
+	PopulateMetadatas();
+}
+
 CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
@@ -26,7 +31,6 @@ void CapsuleCollider::BindToSignals()
 
 	Transform* t = m_physicActor->m_owner->GetBehaviour<Transform>();
 	SetEntityScale(t->GetScale());
-
 }
 
 void CapsuleCollider::Unregister()
@@ -59,9 +63,6 @@ void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& scale)
 
 void CapsuleCollider::SetPxShape()
 {
-	if (m_pxShape)
-		return;
-
 	float scale = m_editableScale * m_entityScale;
 	float totalRadius = m_editableRadius * m_entityRadius;
 

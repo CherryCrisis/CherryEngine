@@ -23,7 +23,7 @@ namespace PhysicSystem
 			
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
-			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
+			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.y, pxT.q.x, pxT.q.z });
 
 			// TODO: Change with world tranform
 			Vector3 pos = t->GetPosition();
@@ -46,9 +46,12 @@ namespace PhysicSystem
 	{
 		m_oldPos = position;
 
-		physx::PxTransform pxT = m_pxActor->getGlobalPose();
-		m_pxActor->setGlobalPose(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z),
-													pxT.q));
+		if (m_pxActor)
+		{
+			physx::PxTransform pxT = m_pxActor->getGlobalPose();
+			m_pxActor->setGlobalPose(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z),
+														pxT.q));
+		}
 	}
 
 	void PhysicActor::SetActorRotation(const CCMaths::Vector3& rotation)
@@ -57,9 +60,13 @@ namespace PhysicSystem
 
 		Quaternion pxRotQ = Quaternion::FromEuler(rotation);
 
-		physx::PxTransform pxT = m_pxActor->getGlobalPose();
-		m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
-													physx::PxQuat(pxRotQ.x, pxRotQ.y, pxRotQ.z, pxRotQ.w)));
+
+		if (m_pxActor)
+		{
+			physx::PxTransform pxT = m_pxActor->getGlobalPose();
+			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
+				physx::PxQuat(pxRotQ.y, pxRotQ.x, pxRotQ.z, pxRotQ.w)));
+		}
 	}
 
 	void PhysicActor::SetActorScale(const CCMaths::Vector3& scale)
@@ -81,7 +88,7 @@ namespace PhysicSystem
 		Vector3 pos = t->GetPosition();
 		Quaternion rot = Quaternion::FromEuler(t->GetRotation());
 
-		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.x, rot.y, rot.z, rot.w));
+		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.y, rot.x, rot.z, rot.w));
 
 		physx::PxPhysics* physics = PhysicSystem::PhysicManager::GetInstance()->Get();
 
@@ -118,12 +125,16 @@ namespace PhysicSystem
 		{
 			collider->SetPxShape();
 		}
+
+		m_owner->m_cell->m_physicCell->AddPxActor(this);
 	}
 
 	void PhysicActor::DestroyPxActor()
 	{
 		if (m_pxActor)
 		{
+			m_owner->m_cell->m_physicCell->RemovePxActor(this);
+
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			t->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
 			t->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
@@ -152,9 +163,8 @@ namespace PhysicSystem
 			m_rigidbody = rigidbody;
 			if (isPlaying)
 			{
-				m_owner->m_cell->m_physicCell->RemoveActor(this);
+				DestroyPxActor();
 				CreatePxActor();
-				m_owner->m_cell->m_physicCell->AddActor(this);
 			}
 		}
 	}
@@ -168,7 +178,10 @@ namespace PhysicSystem
 		m_colliders.push_back(collider);
 
 		if (isPlaying)
+		{
+			DestroyPxActor();
 			CreatePxActor();
+		}
 	}
 
 	void PhysicActor::RemoveRigidbody(Rigidbody* rigidbody)
@@ -179,9 +192,8 @@ namespace PhysicSystem
 
 			if (m_pxActor)
 			{
-				m_owner->m_cell->m_physicCell->RemoveActor(this);
+				DestroyPxActor();
 				CreatePxActor();
-				m_owner->m_cell->m_physicCell->AddActor(this);
 			}
 		}
 	}

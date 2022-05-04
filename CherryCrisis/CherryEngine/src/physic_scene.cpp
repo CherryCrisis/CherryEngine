@@ -78,12 +78,6 @@ namespace PhysicSystem
 			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
 			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
 		}
-
-		for (auto& actor : m_actors)
-		{
-			if (actor->Get()) 
-				m_pxScene->addActor(*actor->Get());
-		}
 	}
 
 	void PhysicScene::DestroyPxScene()
@@ -104,10 +98,13 @@ namespace PhysicSystem
 			return;
 
 		m_actors.push_back(actor);
+	}
 
+	void PhysicScene::AddPxActor(PhysicActor* actor)
+	{
 		if (m_pxScene)
 		{
-			m_pxScene->addActor(*m_actors.back()->Get());
+			m_pxScene->addActor(*actor->Get());
 		}
 	}
 
@@ -118,13 +115,16 @@ namespace PhysicSystem
 		if (index == -1)
 			return false;
 
-		if (m_pxScene)
-			m_pxScene->removeActor(*m_actors[index]->Get());
-
 		m_actors[index] = m_actors.back();
 		m_actors.pop_back();
 
 		return true;
+	}
+
+	void PhysicScene::RemovePxActor(PhysicActor* actor)
+	{
+		if (m_pxScene)
+			m_pxScene->removeActor(*actor->Get());
 	}
 
 	int PhysicScene::PossessActor(PhysicActor* actor)

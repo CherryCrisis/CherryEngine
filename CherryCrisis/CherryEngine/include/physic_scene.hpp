@@ -45,7 +45,9 @@ namespace PhysicSystem
 		void	AddCell(Cell* cell);
 
 		void	AddActor(PhysicActor* actor);
+		void	AddPxActor(PhysicActor* actor);
 		bool	RemoveActor(PhysicActor* actor);
+		void	RemovePxActor(PhysicActor* actor);
 		int		PossessActor(PhysicActor* actor);
 
 		// Implements PxSimulationEventCallback		

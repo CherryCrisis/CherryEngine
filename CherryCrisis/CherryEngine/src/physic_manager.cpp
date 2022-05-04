@@ -23,7 +23,7 @@ namespace PhysicSystem
 	PhysicManager::~PhysicManager()
 	{
 		if (m_physics)
-			DestroyPhysX();
+			Stop();
 
 		for (auto& actor : m_physicActors)
 		{
@@ -254,11 +254,11 @@ namespace PhysicSystem
 
 		CreatePhysX();
 
-		for (auto& actor : m_physicActors)
-			actor->CreatePxActor();
-
 		for (auto& scene : m_scenes)
 			scene->CreatePxScene();
+
+		for (auto& actor : m_physicActors)
+			actor->CreatePxActor();
 	}
 
 	void PhysicManager::Stop()

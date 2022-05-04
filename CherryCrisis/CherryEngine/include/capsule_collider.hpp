@@ -24,6 +24,7 @@ private:
 
 public:
 	CapsuleCollider();
+	CapsuleCollider(CCUUID& id);
 	~CapsuleCollider();
 
 	void BindToSignals() override;

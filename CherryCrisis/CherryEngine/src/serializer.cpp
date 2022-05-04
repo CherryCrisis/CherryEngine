@@ -14,6 +14,7 @@
 #include "rigidbody.hpp"
 #include "box_collider.hpp"
 #include "sphere_collider.hpp"
+#include "capsule_collider.hpp"
 #include "model.hpp"
 
 #include "scene_manager.hpp"
@@ -229,8 +230,9 @@ Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 	else if (type == "ScriptedBehaviour") b = new ScriptedBehaviour(id);
 	else if (type == "CameraComponent")   b = new CameraComponent(id);
 	else if (type == "Rigidbody")		  b = new Rigidbody(id); 
-	else if (type == "SphereCollider")    b = new SphereCollider(id);
 	else if (type == "BoxCollider")       b = new BoxCollider(id);
+	else if (type == "SphereCollider")    b = new SphereCollider(id);
+	else if (type == "CapsuleCollider")   b = new CapsuleCollider(id);
 
 	return b;
 }
