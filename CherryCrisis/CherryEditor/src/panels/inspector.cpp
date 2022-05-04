@@ -324,6 +324,7 @@ void InspectMultiComponents(std::vector<Entity*> entities)
         ImGui::Text("Transforms are differents !");
     else
     {
+        /*
         CCMaths::Vector3 position = first->GetPosition();
         CCMaths::Vector3 rotation = first->GetRotation();
         CCMaths::Vector3 scale = first->GetScale();
@@ -361,7 +362,8 @@ void InspectMultiComponents(std::vector<Entity*> entities)
                 if (found)
                     found->GetProperties()["scale"]->Set(&scale);
             }
-        }
+        }*/
+        ImGui::Text("Transforms are the same !");
     }
 }
 
