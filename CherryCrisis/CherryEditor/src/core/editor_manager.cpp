@@ -454,3 +454,11 @@ void EntitySelector::ApplyRange()
     
     m_endRange = nullptr;
 }
+
+void EntitySelector::GetSimilarComponents() 
+{
+    for (Entity* entity : m_entities)
+    {
+        
+    }
+}

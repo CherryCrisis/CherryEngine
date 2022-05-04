@@ -37,7 +37,7 @@ struct EntitySelector
     void SetStartRange(Entity* entity);
     int Count() const { return static_cast<int>(m_entities.size()); }
 
-    //std::unordered_map<type, Behaviour*> GetSimilarComponents();
+    void GetSimilarComponents();
 
     void ApplyRange();
 

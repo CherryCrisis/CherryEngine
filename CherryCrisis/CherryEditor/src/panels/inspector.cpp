@@ -295,6 +295,76 @@ void InspectComponents(Entity* entity, int id)
     }
 }
 
+void InspectMultiComponents(std::vector<Entity*> entities)
+{
+    bool areDifferents = false;
+
+    Transform* first = nullptr;
+
+    for (Entity* entity : entities) 
+    {
+        Transform* found = nullptr;
+        entity->TryGetBehaviour<Transform>(found);
+        if (found) 
+        {
+            if (!first) first = found;
+            else 
+            {
+                areDifferents |= first->GetPosition() != found->GetPosition();
+                areDifferents |= first->GetRotation() != found->GetRotation();
+                areDifferents |= first->GetScale()    != found->GetScale();
+            }
+
+        }
+    }
+
+
+   
+    if (areDifferents)
+        ImGui::Text("Transforms are differents !");
+    else
+    {
+        CCMaths::Vector3 position = first->GetPosition();
+        CCMaths::Vector3 rotation = first->GetRotation();
+        CCMaths::Vector3 scale = first->GetScale();
+
+        ImVec4 color1 = { 100.f / 255.f, 10.f / 255.f, 10.f / 255.f, 1.f };
+        ImVec4 color2 = { 18.f / 255.f, 120.f / 255.f, 4.f / 255.f, 1.f };
+        ImVec4 color3 = { 12.f / 255.f, 50.f / 255.f, 170.f / 255.f, 1.f };
+
+        if (ImCherry::ColoredDragFloat3("position", position.data, color1, color2, color3, 0.5f))
+        {
+            for (Entity* entity : entities)
+            {
+                Transform* found = nullptr;
+                entity->TryGetBehaviour<Transform>(found);
+                if (found)
+                    found->GetProperties()["position"]->Set(&position);
+            }
+        }
+        if (ImCherry::ColoredDragFloat3("rotation", rotation.data, color1, color2, color3, 0.5f))
+        {
+            for (Entity* entity : entities)
+            {
+                Transform* found = nullptr;
+                entity->TryGetBehaviour<Transform>(found);
+                if (found)
+                    found->GetProperties()["rotation"]->Set(&rotation);
+            }
+        }
+        if (ImCherry::ColoredDragFloat3("scale", scale.data, color1, color2, color3, 0.5f))
+        {
+            for (Entity* entity : entities)
+            {
+                Transform* found = nullptr;
+                entity->TryGetBehaviour<Transform>(found);
+                if (found)
+                    found->GetProperties()["scale"]->Set(&scale);
+            }
+        }
+    }
+}
+
 void Inspector::Render() 
 {
     if (!m_isOpened)
@@ -303,14 +373,16 @@ void Inspector::Render()
     if (ImGui::Begin("Inspector", &m_isOpened))
     {
         EntitySelector& selector = m_manager->m_entitySelector;
+        if (!selector.IsEmpty()) 
+        {
+            if (selector.Count() == 1)
+                InspectComponents(selector.m_entities[0], 0);
+            else
+                InspectMultiComponents(selector.m_entities);
 
-        for (int i = 0; i < selector.Count(); i++)
-            InspectComponents(selector.m_entities[i], i);
-
-        if (selector.Count() > 0)
             if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                 ImGui::OpenPopup("Add Component");
-
+        }
 
         ImVec2 center = { InputManager::GetInstance()->GetMousePos().x, InputManager::GetInstance()->GetMousePos().y };
         ImGui::SetNextWindowPos(center, ImGuiCond_Appearing);
@@ -368,8 +440,6 @@ void Inspector::Render()
                     }
                 }
             }  
-
-
             //---------------------------------------------------
 
             ImGui::SetItemDefaultFocus();
