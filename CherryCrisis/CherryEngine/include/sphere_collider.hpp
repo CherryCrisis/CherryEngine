@@ -35,7 +35,7 @@ public:
 
 	void SetPxData() override;
 
-	void SetScale(const float& scale) { m_editableScale = scale; SetPxData(); }
+	void SetScale(const float& scale) { m_editableScale = scale; ResetPxShape(); }
 	float GetScale() { return m_editableScale; }
 
 	floatProperty editableScale{ this, &SphereCollider::SetScale, &SphereCollider::GetScale };

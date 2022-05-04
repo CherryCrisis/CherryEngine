@@ -62,10 +62,7 @@ void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
 void BoxCollider::SetPxShape()
 {
 	if (m_pxShape)
-	{
-		m_physicActor->RemoveShape(m_pxShape);
-		m_pxShape = nullptr;
-	}
+		return;
 
 	CCMaths::Vector3 scale = m_baseEntityScale;
 	scale *= m_editableScale;
@@ -87,8 +84,11 @@ void BoxCollider::ClearPxShape()
 
 void BoxCollider::ResetPxShape()
 {
+	if (!m_pxShape)
+		return;
+
 	ClearPxShape();
-	SetPxData();
+	SetPxShape();
 }
 
 void BoxCollider::SetPxData()

@@ -61,7 +61,8 @@ void Rigidbody::PopulateMetadatas()
 #pragma region Set&Get
 void Rigidbody::SetEnabled(const bool& isEnabled)
 {
-	m_physicActor->SetEnabled(isEnabled);
+	if (m_physicActor)
+		m_physicActor->SetEnabled(isEnabled);
 }
 
 bool Rigidbody::GetEnabled()
@@ -71,7 +72,8 @@ bool Rigidbody::GetEnabled()
 
 void Rigidbody::Rigidbody::SetKinematic(const bool& isKinematic)
 {
-	m_physicActor->SetKinematic(isKinematic);
+	if (m_physicActor)
+		m_physicActor->SetKinematic(isKinematic);
 }
 
 bool Rigidbody::Rigidbody::GetKinematic()
@@ -81,7 +83,8 @@ bool Rigidbody::Rigidbody::GetKinematic()
 
 void Rigidbody::SetGravity(const bool& useGravity)
 {
-	m_physicActor->SetGravity(useGravity);
+	if (m_physicActor)
+		m_physicActor->SetGravity(useGravity);
 }
 
 bool Rigidbody::GetGravity()
@@ -91,7 +94,8 @@ bool Rigidbody::GetGravity()
 	 
 void Rigidbody::SetPosContraints(const Bool3& constraints)
 {
-	m_physicActor->SetPosContraints(constraints);
+	if (m_physicActor)
+		m_physicActor->SetPosContraints(constraints);
 }
 
 Bool3 Rigidbody::GetPosConstraints()
@@ -101,7 +105,8 @@ Bool3 Rigidbody::GetPosConstraints()
 
 void Rigidbody::SetRotContraints(const Bool3& constraints)
 {
-	m_physicActor->SetRotContraints(constraints);
+	if (m_physicActor)
+		m_physicActor->SetRotContraints(constraints);
 }
 
 Bool3 Rigidbody::GetRotConstraints()
@@ -111,7 +116,8 @@ Bool3 Rigidbody::GetRotConstraints()
 
 void Rigidbody::SetDensity(const float& density)
 {
-	m_physicActor->SetDensity(density);
+	if (m_physicActor)
+		m_physicActor->SetDensity(density);
 }
 
 float Rigidbody::GetDensity()
@@ -121,7 +127,8 @@ float Rigidbody::GetDensity()
 
 void Rigidbody::SetMaxVel(const float& velocity)
 {
-	m_physicActor->SetMaxVel(velocity);
+	if (m_physicActor)
+		m_physicActor->SetMaxVel(velocity);
 }
 
 float Rigidbody::GetMaxVel()
@@ -131,7 +138,8 @@ float Rigidbody::GetMaxVel()
 
 void Rigidbody::SetMaxAngVel(const float& velocity)
 {
-	m_physicActor->SetMaxAngVel(velocity);
+	if (m_physicActor)
+		m_physicActor->SetMaxAngVel(velocity);
 }
 
 float Rigidbody::GetMaxAngVel()
@@ -141,7 +149,8 @@ float Rigidbody::GetMaxAngVel()
 
 void Rigidbody::SetMaxDepVel(const float& velocity)
 {
-	m_physicActor->SetMaxDepVel(velocity);
+	if (m_physicActor)
+		m_physicActor->SetMaxDepVel(velocity);
 }
 
 float Rigidbody::GetMaxDepVel()

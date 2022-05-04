@@ -60,15 +60,16 @@ void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& scale)
 void CapsuleCollider::SetPxShape()
 {
 	if (m_pxShape)
-	{
-		m_physicActor->RemoveShape(m_pxShape);
-		m_pxShape = nullptr;
-	}
+		return;
 
 	float scale = m_editableScale * m_entityScale;
 	float totalRadius = m_editableRadius * m_entityRadius;
 
 	m_pxShape = m_physicActor->CreateShape(physx::PxCapsuleGeometry(totalRadius, scale));
+	physx::PxTransform transform = m_pxShape->getLocalPose();
+	physx::PxTransform relativeRot = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
+	m_pxShape->setLocalPose(transform * relativeRot);
+
 	SetPxData();
 }
 
@@ -83,8 +84,11 @@ void CapsuleCollider::ClearPxShape()
 
 void CapsuleCollider::ResetPxShape()
 {
+	if (!m_pxShape)
+		return;
+
 	ClearPxShape();
-	SetPxData();
+	SetPxShape();
 }
 
 void CapsuleCollider::SetPxData()

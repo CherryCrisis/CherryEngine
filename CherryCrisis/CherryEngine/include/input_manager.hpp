@@ -28,7 +28,7 @@ enum class EPriorKey
 
 class CCENGINE_API InputManager : public Singleton<InputManager>
 {
-private:
+public:
 	class Input
 	{
 	private:
@@ -122,7 +122,6 @@ private:
 		const std::vector<Axis*>& Axes() { return m_axes; }
 	};
 
-public:
 	struct InputContext
 	{
 		//list of keys (intern glfw callback update key statut)

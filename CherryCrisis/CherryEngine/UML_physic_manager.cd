@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PhysicSystem::PhysicActor">
+    <Position X="0.5" Y="6.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AEUIlBCCgAGIREBAIgqQAoIAyAgAADQQaiEAEAyFAsA=</HashCode>
+      <FileName>include\physic_actor.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PhysicSystem::PhysicManager">
+    <Position X="1.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAEAAEAAQAAEEAJAAIABAgAC0gAVAAAIIAAQBAAAECA=</HashCode>
+      <FileName>include\physic_manager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PhysicSystem::PhysicScene">
+    <Position X="3" Y="6.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAYgFgAAQAAEAABIAAQAgEAAAAgACABoDAAgAAAAAAE=</HashCode>
+      <FileName>include\physic_scene.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SphereCollider">
+    <Position X="7.5" Y="7" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAACAACAAAAABIAAAQQAAAAAEAAggIAAAIgCAFAA=</HashCode>
+      <FileName>include\sphere_collider.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rigidbody">
+    <Position X="14.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAIAASAgCAYQQBQAAgQAIAAAAgAASgQIigAAAQFGIA=</HashCode>
+      <FileName>include\rigidbody.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Collider">
+    <Position X="9.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>oABAABCAEGAQAQAIAAgAAQQAAAAFAAgwgAAAAAAAGIA=</HashCode>
+      <FileName>include\collider.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CapsuleCollider">
+    <Position X="10" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AIBAAACACCAAAAAAAAAAQQAAAAAECAikIAAAIgiAFAA=</HashCode>
+      <FileName>include\capsule_collider.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BoxCollider">
+    <Position X="12" Y="7" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AABAAACAACAAAAAAAAAAQQAAACAEAAggIAAAIgCQFAA=</HashCode>
+      <FileName>include\box_collider.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

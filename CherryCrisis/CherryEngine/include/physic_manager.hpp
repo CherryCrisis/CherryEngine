@@ -41,6 +41,9 @@ namespace PhysicSystem
 		PhysicManager();
 		~PhysicManager();
 
+		void CreatePhysX();
+		void DestroyPhysX();
+
 		physx::PxMaterial* CreateMaterial(float sf = 0.0f, float df = 0.0f, float cr = 0.0f);
 
 		void Register(Rigidbody* rigidbody);
