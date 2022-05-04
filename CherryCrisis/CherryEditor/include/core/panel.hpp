@@ -28,13 +28,10 @@ private:
 
 	std::string m_name = "";
 
-protected:
-	//Override this to implements the imgui stuff
-
 public:
 
 	PanelCategory(std::string name = "default") : m_name(name) {}
-
+	//Override this to implements the imgui stuff
 	virtual void Fill() = 0;
 
 	void DisplayCategory();

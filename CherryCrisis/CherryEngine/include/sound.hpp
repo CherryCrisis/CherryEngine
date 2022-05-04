@@ -25,4 +25,5 @@ public:
 	static void Load(std::shared_ptr<Sound> sound);
 
 	void Delete() override {}
+	void Reload() {}
 };

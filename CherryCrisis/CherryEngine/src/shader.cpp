@@ -9,6 +9,19 @@ void Shader::Delete()
 	glDeleteShader(m_shaderID);
 }
 
+void Shader::Load(std::shared_ptr<Shader> shader)
+{
+	std::string extension = shader->GetFilesystemPath()->extension().string();
+	if (!extension.compare(".frag"))
+	{
+		Load(shader, EShader::FRAGMENT);
+	}
+	else
+	{
+		Load(shader, EShader::VERTEX);
+	}
+}
+
 void Shader::Load(std::shared_ptr<Shader> shader, EShader shaderType)
 {
 	shader->m_shaderType = shaderType;

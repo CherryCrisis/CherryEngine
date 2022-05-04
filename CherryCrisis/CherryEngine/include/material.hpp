@@ -9,19 +9,14 @@
 #include "maths.hpp"
 #include "event.hpp"
 
+
 //Forward declaration
+class Texture;
 namespace CCImporter
 {
-	struct MaterialHeader;
+	struct MaterialArgs;
 }
-class Texture;
-
-struct MaterialArgs
-{
-	CCImporter:: MaterialHeader*	m_materialHeader;
-	std::vector<std::string>*		m_texturesPath;
-	std::vector<unsigned int>*		m_textureType;
-};
+//class CCImporter::MaterialArgs;
 
 using namespace CCMaths;
 
@@ -36,6 +31,12 @@ enum class ETextureType : unsigned int
 	AO,
 };
 
+enum class EPipelineType : unsigned int
+{
+	LIT,
+	PBR,
+};
+
 class CCENGINE_API Material : public Resource<Material>
 {
 public:
@@ -46,6 +47,7 @@ public:
 	float	m_shininess = 0.f;
 
 	//-- PBR --//
+	bool  m_hasNormal = true;
 	float m_specularFactor = 1.f;
 	float m_metallicFactor = 1.f;
 	float m_roughnessFactor = 1.f;
@@ -55,14 +57,16 @@ public:
 
 	std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
 
+	EPipelineType m_pipelineType = EPipelineType::PBR;
+
 	Material(const char* materialName) : Resource(materialName) {}
 	~Material() = default;
 
-	static void Load(std::shared_ptr<Material> material, const MaterialArgs& materialArgs);
-	static void Load(std::shared_ptr<Material> material) {} //Empty material
+	static void Load(std::shared_ptr<Material> material);
+	static bool LoadFromCache(std::shared_ptr<Material> material, CCImporter::MaterialArgs& materialArgs);
 
 	void Delete() override;
-	void Reload(const MaterialArgs& materialArgs);
+	void Reload();
 
 	void SetTexture(ETextureType type, const std::shared_ptr<Texture>& newTexture);
 	void SetTexture(ETextureType type, const char* filepath);

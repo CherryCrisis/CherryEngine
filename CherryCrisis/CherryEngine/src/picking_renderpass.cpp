@@ -33,12 +33,12 @@ void PickingRenderPass::Unsubscribe(ModelRenderer* toGenerate)
 	m_modelRenderers.erase(toGenerate);
 }
 
-CCMaths::Vector3 RGB(uint32_t Color)
+CCMaths::Vector3 RGB(uint32_t ID)
 {
 	CCMaths::Vector3 Res = {};
-	Res.b = ((Color & 0x00ff0000) >> 16) / 255.f;
-	Res.g = ((Color & 0x0000ff00) >> 8) / 255.f;
-	Res.r = ((Color & 0x000000ff) >> 0) / 255.f;
+	Res.b = ((ID & 0x00ff0000) >> 16) / 255.f;
+	Res.g = ((ID & 0x0000ff00) >> 8) / 255.f;
+	Res.r = ((ID & 0x000000ff) >> 0) / 255.f;
 	return Res;
 }
 

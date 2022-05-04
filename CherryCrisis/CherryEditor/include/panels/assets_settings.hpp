@@ -15,18 +15,19 @@ public :
 	virtual bool Update() = 0;
 };
 
-
 class TextureSettings : public AssetsSettings
 {
 private:
 	int m_currentId = 0;
+	bool m_isFlipped = true;
 	bool m_settingsChanged = false;
+
 
 	const char* m_popupName = "Texture Settings";
 	std::shared_ptr<Texture> m_texture;
 
 public:
-	TextureSettings(const std::filesystem::path& resourceFilepath);
+	TextureSettings(std::shared_ptr<Texture> texture);
 	bool Update() override;
 
 };

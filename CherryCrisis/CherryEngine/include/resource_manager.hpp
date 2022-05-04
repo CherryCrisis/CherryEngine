@@ -67,6 +67,10 @@ public:
 
 	template<class T, typename... Args>
 	void Reload(const char* filepath, Args... args);
+
+	template<class T>
+	void Rename(const std::filesystem::path& filepath, const char* newFilepath);
+	void Rename(const std::type_index& typeID, const std::filesystem::path& filepath, const char* newFilepath);
 };
 
 

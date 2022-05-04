@@ -30,20 +30,20 @@ const std::map<const int, const ETextureFormat> textureFormatByID
     {7, ETextureFormat::DXT7},
 };
 
-TextureSettings::TextureSettings(const std::filesystem::path& resourceFilepath)
+TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
+    : m_texture(texture)
 {
-	ResourceManager* resourceManager = ResourceManager::GetInstance();
-    m_texture = resourceManager->GetResource<Texture>(resourceFilepath.string().c_str());
-
     if (!m_texture)
         return;
 
     m_currentId = IdOfTextureFormat.at(m_texture->GetInternalFormat());
-    ImGui::OpenPopup(m_popupName);
+    m_isFlipped = m_texture->IsFlipped();
 }
 
 bool TextureSettings::Update()
 {
+    ImGui::OpenPopup(m_popupName);
+
     bool isOpen;
 
     const ImVec2 center = ImGui::GetMainViewport()->GetCenter();
@@ -72,10 +72,15 @@ bool TextureSettings::Update()
             }
             ImGui::EndCombo();
         }
+
+        if (ImGui::Checkbox("Flip", &m_isFlipped))
+            m_settingsChanged = true;
         
         if (ImGui::Button("Close"))
         {
             ImGui::CloseCurrentPopup();
+            ImGui::EndPopup();
+            return false;
         }
 
         ImGui::SameLine();
@@ -85,10 +90,13 @@ bool TextureSettings::Update()
             if (ImGui::Button("Save"))
             {
                 m_texture->SetInternalFormat(textureFormatByID.at(m_currentId));
-                Resource<Texture>::ReloadResource(m_texture, true);
+                Resource<Texture>::ReloadResource(m_texture, m_isFlipped);
                 ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
+                return false;
             }
         }
+
         ImGui::EndPopup();
     }
 

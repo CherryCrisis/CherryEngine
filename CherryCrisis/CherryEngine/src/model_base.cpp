@@ -37,18 +37,13 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
             std::shared_ptr<Mesh> mesh = resourceManager->AddResource<Mesh>(modelUtils.m_meshName.c_str(), 
                 false, modelUtils.m_vertices, modelUtils.m_indices);
 
-            MaterialArgs materialArgs
-            { 
-                .m_materialHeader = &modelUtils.modelHeader.m_materialHeader,
-                .m_texturesPath = &modelUtils.m_texturesPathCstr,
-                .m_textureType = &modelUtils.m_texturesType,
-            };
+            std::shared_ptr<Material> material;
 
-            std::shared_ptr<Material> material = resourceManager->AddResource<Material>(modelUtils.m_materialName.c_str(), true, materialArgs);
-            
+            if (modelUtils.modelHeader.m_hasMaterial)
+                material = resourceManager->AddResource<Material>(modelUtils.m_materialPath.c_str(), true);
+
             std::shared_ptr<Model> model = resourceManager->AddResource<Model>(modelUtils.m_modelName.c_str(), true, mesh, material, modelBase);
 
-            
             modelNode->m_model = model;
             modelBase->m_models.push_back(model);
         }
@@ -94,9 +89,6 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
 
     for (int i = 0; i < modelCount; ++i)
     {
-        if (i == 2)
-            int j = 0;
-
         CCImporter::ImportModelUtils model;
 
         fread(&model.modelHeader, sizeof(CCImporter::ModelHeader), 1, file);
@@ -124,31 +116,10 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
             fread(&model.m_indices[0], sizeof(unsigned int) * meshHeader.m_indicesCount, 1, file);
         }
 
-        if (model.modelHeader.m_materialHeader.m_hasMaterial)
+        if (model.modelHeader.m_hasMaterial)
         {
-            const CCImporter::MaterialHeader& materialHeader = model.modelHeader.m_materialHeader;
-
-            model.m_materialName.resize(materialHeader.m_materialNameSize);
-            fread(&model.m_materialName[0], materialHeader.m_materialNameSize, 1, file);
-
-            unsigned int texturesCount = materialHeader.m_texturesCount;
-            if (texturesCount)
-            {
-                model.m_texturesPathSize.resize(texturesCount);
-                model.m_texturesType.resize(texturesCount);
-
-                fread(&model.m_texturesPathSize[0], texturesCount * sizeof(unsigned int), 1, file);
-                fread(&model.m_texturesType[0], texturesCount * sizeof(unsigned int), 1, file);
-                
-                for (unsigned int i = 0; i < materialHeader.m_texturesCount; ++i)
-                {
-                    std::string texturePath;
-                    texturePath.resize(model.m_texturesPathSize[i]);
-
-                    fread(&texturePath[0], model.m_texturesPathSize[i], 1, file);
-                    model.m_texturesPathCstr.push_back(std::move(texturePath));
-                }
-            }
+            model.m_materialPath.resize(model.modelHeader.m_materialPathSize);
+            fread(&model.m_materialPath[0], model.modelHeader.m_materialPathSize, 1, file);
         }
 
         models.push_back(model);
@@ -215,14 +186,7 @@ void ModelBase::Reload()
                     false, modelUtils.m_vertices, modelUtils.m_indices);
             }
 
-            MaterialArgs materialArgs
-            {
-                .m_materialHeader = &modelUtils.modelHeader.m_materialHeader,
-                .m_texturesPath = &modelUtils.m_texturesPathCstr,
-                .m_textureType = &modelUtils.m_texturesType,
-            };
-
-            std::shared_ptr<Material> material = resourceManager->GetResource<Material>(modelUtils.m_materialName.c_str());
+            std::shared_ptr<Material> material = resourceManager->GetResource<Material>(modelUtils.m_materialPath.c_str());
 
             if (material)
             {
@@ -238,13 +202,13 @@ void ModelBase::Reload()
 
                 if (!reloaded)
                 {
-                    Resource<Material>::ReloadResource(material, materialArgs);
+                    Resource<Material>::ReloadResource(material);
                     materialsReloaded.push_back(material);
                 }
             }
             else
             {
-                material = resourceManager->AddResource<Material>(modelUtils.m_materialName.c_str(), true, materialArgs);
+                material = resourceManager->AddResource<Material>(modelUtils.m_materialPath.c_str(), true);
             }
                 
             

@@ -16,8 +16,7 @@
 #include "pickinger.hpp"
 #include "cell_system.hpp"
 
-#include "basic_rendering_pipeline.hpp"
-#include "pbr_rendering_pipeline.hpp"
+#include "mixed_rendering_pipeline.hpp"
 
 #include "utils.hpp"
 
@@ -61,8 +60,7 @@ SceneDisplayer::SceneDisplayer()
 
     IM->PopContext();
 
-    //m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
-    m_camera.m_pipeline = std::make_unique<PBRRPipeline>();
+    m_camera.m_pipeline = std::make_unique<MixedPipeline>();
     CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
 }
 
@@ -147,8 +145,10 @@ void SceneDisplayer::Render()
         {
             glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
             Pickinger::SetBuffer(&m_framebuffer, &m_camera);
-            CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
-            Entity* e = Pickinger::GetEntity(mousePos.x - (ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMin().x), mousePos.y - (ImGui::GetWindowPos().y + ImGui::GetWindowContentRegionMin().y));
+            CCMaths::Vector2 mousePos  = InputManager::GetInstance()->GetMousePos();
+            ImVec2 bufferPos = ImGui::GetWindowContentRegionMin();
+            CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y)};
+            Entity* e = Pickinger::GetEntity(mousebufferPos);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
             //TODO: Add multi select CTRL 

@@ -13,6 +13,14 @@
 template <>
 Pickinger* Singleton<Pickinger>::currentInstance = nullptr;
 
+uint32_t ColorToID(unsigned char color[3]) 
+{
+		return 
+		color[0] +
+		color[1] * 256 +
+		color[2] * 256 * 256;
+}
+
 Entity* Pickinger::GetEntity(float x, float y) 
 {
 	Pickinger* instance = GetInstance();
@@ -27,13 +35,8 @@ Entity* Pickinger::GetEntity(float x, float y)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	unsigned char data[3];
 	glReadPixels((int)x, (int)y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
-	
-	uint32_t pickedID =
-		data[0] +
-		data[1] * 256 +
-		data[2] * 256 * 256;
 
-	return SceneManager::GetInstance()->m_currentScene->FindModelEntity(pickedID);
+	return SceneManager::GetInstance()->m_currentScene->FindModelEntity(ColorToID(data));
 }
 
 

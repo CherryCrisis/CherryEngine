@@ -72,7 +72,7 @@ void ResourcesContainer<ResourceT>::Purge()
 template<class ResourceT>
 void ResourcesContainer<ResourceT>::Remove(const std::filesystem::path& filepath)
 {
-	auto pair = m_resources.find(std::hash<std::string>{}(filepath.generic_string()));
+	auto pair = m_resources.find(std::hash<std::string>{}(filepath.string()));
 	if (pair != m_resources.end())
 	{
 		std::shared_ptr<ResourceT> resource = pair->second;
@@ -83,7 +83,17 @@ void ResourcesContainer<ResourceT>::Remove(const std::filesystem::path& filepath
 template<class ResourceT>
 void ResourcesContainer<ResourceT>::Erase(const std::filesystem::path& filepath)
 {
-	m_resources.erase(std::hash<std::string>{}(filepath.generic_string()));
+	m_resources.erase(std::hash<std::string>{}(filepath.string()));
+}
+
+template<class ResourceT>
+void ResourcesContainer<ResourceT>::Rename(const std::filesystem::path& filepath, const char* newFilepath)
+{
+	std::shared_ptr<ResourceT> resource = *GetResource(filepath);
+	resource->SetFilepath(newFilepath);
+
+	Erase(filepath);
+	Add(resource);
 }
 
 template<class ResourceT>

@@ -10,20 +10,17 @@
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
-#include "basic_rendering_pipeline.hpp"
-#include "pbr_rendering_pipeline.hpp"
+#include "mixed_rendering_pipeline.hpp"
 
 CameraComponent::CameraComponent()
 {
-	//m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
-	m_camera.m_pipeline = std::make_unique<PBRRPipeline>();
+	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
 }
 
 CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
 {
-	//m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
-	m_camera.m_pipeline = std::make_unique<PBRRPipeline>();
+	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
 }
 

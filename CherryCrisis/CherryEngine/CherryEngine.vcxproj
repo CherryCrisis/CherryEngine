@@ -313,6 +313,7 @@
     <ClInclude Include="include\cherry_header.hpp" />
     <ClInclude Include="include\cherry_macros.hpp" />
     <ClInclude Include="include\irradiance_map_renderpass.hpp" />
+    <ClInclude Include="include\mixed_rendering_pipeline.hpp" />
     <ClInclude Include="include\object.hpp" />
     <ClInclude Include="include\cubemap.hpp" />
     <ClInclude Include="include\debug.hpp" />
@@ -502,6 +503,7 @@
     <ClCompile Include="src\environment_map_renderpass.cpp" />
     <ClCompile Include="src\hdr_renderpass.cpp" />
     <ClCompile Include="src\irradiance_map_renderpass.cpp" />
+    <ClCompile Include="src\mixed_rendering_pipeline.cpp" />
     <ClCompile Include="src\pbr_rendering_pipeline.cpp" />
     <ClCompile Include="src\pbr_renderpass.cpp" />
     <ClCompile Include="src\physic_actor.cpp" />

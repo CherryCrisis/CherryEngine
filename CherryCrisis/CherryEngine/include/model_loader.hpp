@@ -10,8 +10,6 @@
 
 enum class ETextureFormat;
 
-
-
 namespace CCImporter
 {
     /*
@@ -50,18 +48,8 @@ namespace CCImporter
         int blockSize;
     };
 
-    /*vec3  albedo;
-    float specular;
-    float metallic;
-    float roughness;
-    float ao;
-
-    float clearCoat;
-    float clearCoatRoughness;*/
     struct MaterialHeader
     {
-        bool            m_hasMaterial;
-        size_t          m_materialNameSize;
         Vector3         m_ambient;
         Vector3         m_diffuse;
         Vector3         m_specular;
@@ -69,14 +57,22 @@ namespace CCImporter
         float           m_shininess;
 
         //-- PBR --//
-        float m_specularFactor;
-        float m_metallicFactor;
-        float m_roughnessFactor;
-        float m_ao;
-        float m_clearCoatFactor;
-        float m_clearCoatRoughnessFactor;
+        bool m_hasNormal = true;
+        float m_specularFactor = 1.f;
+        float m_metallicFactor = 1.f;
+        float m_roughnessFactor = 1.f;
+        float m_ao = 1.f;
+        float m_clearCoatFactor = 0.f;
+        float m_clearCoatRoughnessFactor = 0.f;
 
         unsigned int    m_texturesCount;
+    };
+
+    struct MaterialArgs
+    {
+        MaterialHeader m_materialHeader;
+        std::vector<std::string> m_texturesPath;
+        std::vector<unsigned int> m_texturesType;
     };
 
     struct MeshHeader
@@ -97,7 +93,9 @@ namespace CCImporter
         unsigned int    m_childrenCount;
 
         MeshHeader      m_meshHeader;
-        MaterialHeader  m_materialHeader;
+
+        bool            m_hasMaterial;
+        unsigned int    m_materialPathSize;
     };
 
     struct ImportModelUtils
@@ -105,27 +103,24 @@ namespace CCImporter
         ModelHeader modelHeader;
 
         std::string                 m_modelName;
-        std::string                 m_materialName;
+        std::string                 m_materialPath;
         std::string                 m_meshName;
 
         std::vector<unsigned int>   m_childrenIndices;
         std::vector<Vertex>         m_vertices;
         std::vector<unsigned int>   m_indices;
-
-        std::vector<unsigned int>   m_texturesPathSize;
-        std::vector<unsigned int>   m_texturesType;
-        std::vector<char>           m_texturesPath;
-
-        //No used in writing
-        std::vector <std::string> m_texturesPathCstr;
     };
 
     static const char* assetsDirectory("Assets/");
     static const char* cacheExtension(".ccfile");
+    static const char* materialExtension(".ccmat");
     static const char* cacheDirectory("Cache/");
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
     void ImportTexture(const std::filesystem::path& filepath,
         unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat);
+
+    void SaveMaterial(Material* material);
+    bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs);
 }
 

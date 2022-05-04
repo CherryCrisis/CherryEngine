@@ -108,7 +108,7 @@ int main()
         TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
-        glfwGetWindowSize(window, &framebuffer.width, &framebuffer.height);
+        glfwGetWindowSize(window, &framebuffer.colorTex.width, &framebuffer.colorTex.height);
 
 
 
@@ -119,7 +119,7 @@ int main()
             {
                 Camera* cam = &cameraComp->m_camera;
 
-                float aspect = (float)framebuffer.width / (float)framebuffer.height;
+                float aspect = (float)framebuffer.colorTex.width / (float)framebuffer.colorTex.height;
                 cam->m_projectionMatrix = Matrix4::Perspective(cam->fovY, aspect, cam->near, cam->far);
 
                 RenderManager::DrawScene(framebuffer, cam);

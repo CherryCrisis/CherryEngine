@@ -150,20 +150,21 @@ int PBRRenderPass::Subscribe(ModelRenderer* toGenerate)
 		m_modelRenderers.insert(toGenerate);
 	}
 
+	toGenerate->m_onMaterialSet.Bind(&PBRRenderPass::Generate, this);
+
 	// Generate GPU textures
 	{
 		if (Material* material = model->m_material.get())
-			Subscribe(material);
+			Generate(material);
 	}
 
 	return 1;
 }
 
-template <>
-int PBRRenderPass::Subscribe(Material* toGenerate)
+void PBRRenderPass::Generate(Material* toGenerate)
 {
 	if (!toGenerate)
-		return -1;
+		return;
 
 	// Albedo texture
 	if (Texture* albedoTexture = toGenerate->m_textures[ETextureType::ALBEDO].get())
@@ -184,9 +185,6 @@ int PBRRenderPass::Subscribe(Material* toGenerate)
 
 	if (Texture* aoMap = toGenerate->m_textures[ETextureType::AO].get())
 		Subscribe(aoMap);
-
-
-	return 1;
 }
 
 template <>
@@ -275,8 +273,8 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glCullFace(GL_BACK);
 
 	glUseProgram(m_program->m_shaderProgram);
-	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClearColor(0.f, 0.f, 0.f, 1.f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, viewer->m_projectionMatrix.data);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, viewer->m_viewMatrix.data);
@@ -341,7 +339,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (Material* material = model->m_material.get())
 		{
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
-			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), 0);
+			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), material->m_hasNormal);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedo"), 1, material->m_diffuse.data);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specular"), material->m_specularFactor);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.metallic"), material->m_metallicFactor);

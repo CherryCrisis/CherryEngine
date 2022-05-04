@@ -3,6 +3,8 @@
 #include <string>
 
 #include "resource.hpp"
+#include "cherry_macros.hpp"
+
 
 enum class EShader
 {
@@ -12,7 +14,7 @@ enum class EShader
 	GEOMETRY = 0x8DD9
 };
 
-class Shader : public Resource<Shader>
+class CCENGINE_API Shader : public Resource<Shader>
 {
 private:
 
@@ -27,6 +29,7 @@ public:
 
 	~Shader() = default;
 
+	static void Load(std::shared_ptr<Shader> shader);
 	static void Load(std::shared_ptr<Shader> shader, EShader shaderType);
 	void Delete() override;
 	void Reload();

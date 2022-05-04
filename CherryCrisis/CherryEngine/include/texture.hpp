@@ -23,8 +23,6 @@ enum class ETextureFormat
     DXT7    = 0x8E8C, //Compressed RGB/RGBA for High-quality color maps, color maps with full alpha
 };
 
-
-
 class CCENGINE_API Texture : public Resource<Texture>
 {
 private:
@@ -35,10 +33,13 @@ private:
     int             m_blockSize = 0;
     ETextureFormat  m_internalFormat = ETextureFormat::RGBA;
 
+    bool            m_isFlipped = true;
+
     void*   m_data = nullptr;
 
 public:
     std::unique_ptr<GPUTexture> m_gpuTexture = nullptr;
+    std::unique_ptr<GPUTexture> m_gpuTextureEditor = nullptr;
 
     Texture(const char* texturePath);
     virtual ~Texture();
@@ -62,5 +63,7 @@ public:
     void Delete() override;
 
     //put a texture if the texture should not be imported
-    void Reload(bool flipTexture, std::shared_ptr<Texture> texture = nullptr);
+    void Reload(bool flipTexture = true, std::shared_ptr<Texture> texture = nullptr);
+
+    bool IsFlipped() const { return m_isFlipped; }
 };

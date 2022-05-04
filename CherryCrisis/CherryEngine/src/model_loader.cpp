@@ -13,6 +13,8 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 #include <nvtt/nvtt.h>
+#include <yaml-cpp/yaml.h>
+#include <any>
 
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
@@ -23,6 +25,26 @@
 #include "model.hpp"
 #include "texture.hpp"
 #include "utils.hpp"
+
+namespace YAML
+{
+    template<>
+    struct convert<CCMaths::Vector3>
+    {
+        static Node encode(const CCMaths::Vector3& rhs)
+        {
+            Node node;
+            node = (std::to_string(rhs.x) + '/' + std::to_string(rhs.y) + '/' + std::to_string(rhs.z));
+            return node;
+        }
+
+        static bool decode(const Node& node, CCMaths::Vector3& rhs)
+        {
+            rhs = String::ExtractVector3(node.as<std::string>());
+            return true;
+        }
+    };
+}
 
 namespace CCImporter
 {
@@ -310,20 +332,11 @@ namespace CCImporter
         }
     }
 
-    void AddTextureDataToModel(ImportModelUtils& model, ETextureType textureType, const std::filesystem::path& filepath)
+    void AddTextureDataToMaterial(MaterialArgs& materialArgs, ETextureType textureType, const std::filesystem::path& filepath)
     {
-        MaterialHeader* materialHeader = &model.modelHeader.m_materialHeader;
-
-        ++materialHeader->m_texturesCount;
-
-        model.m_texturesType.push_back((unsigned int)textureType);
-
-        std::string filepathStr(filepath.string());
-        size_t texturePathSize = filepathStr.size();
-
-        model.m_texturesPathSize.push_back(static_cast<unsigned int>(texturePathSize));
-        model.m_texturesPath.insert(model.m_texturesPath.end(), &filepathStr[0], &filepathStr[texturePathSize]);
-        model.m_texturesPathCstr.push_back(filepathStr);
+        materialArgs.m_materialHeader.m_texturesCount++;
+        materialArgs.m_texturesType.push_back((unsigned int)textureType);
+        materialArgs.m_texturesPath.push_back(filepath.string());
     }
 
     void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat)
@@ -373,20 +386,152 @@ namespace CCImporter
         textureFilepath = textureFilepathStr;
     }
 
+    void ImportMaterialTextureData(const aiScene* assimpScene, const aiMaterial* assimpMaterial, const aiTextureType assimpTextureType, 
+        const ETextureType textureType, MaterialArgs& materialArgs, const std::filesystem::path& filepath)
+    {
+        aiString textureFilename;
+        if (assimpMaterial->GetTexture(assimpTextureType, 0, &textureFilename) == AI_SUCCESS)
+        {
+            if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
+            {
+                std::filesystem::path textureFilepath;
+                GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
+
+                if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
+                    ImportTextureData(textureFilepath, texture);
+
+                AddTextureDataToMaterial(materialArgs, textureType, textureFilepath);
+            }
+            else
+            {
+                std::filesystem::path textureFilepath(filepath.parent_path());
+                textureFilepath += "/";
+                textureFilepath += textureFilename.C_Str();
+
+                if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
+                    ImportTextureData(textureFilepath);
+
+                AddTextureDataToMaterial(materialArgs, textureType, textureFilepath);
+            }
+        }
+    }
+
+    void SaveMaterial(const std::filesystem::path& path, const MaterialArgs& materialArgs, bool saveInAssetDirectory = true)
+    {
+        if (saveInAssetDirectory)
+        {
+            //-- Save in assets directory --//
+            YAML::Node yamlSave;
+
+            YAML::Node settingsSave = yamlSave["settings"];
+            settingsSave["ambient"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_ambient);
+            settingsSave["diffuse"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_diffuse);
+            settingsSave["specular"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_specular);
+            settingsSave["emissive"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_emissive);
+            settingsSave["shininess"] = std::any_cast<float>(materialArgs.m_materialHeader.m_shininess);
+            settingsSave["hasNormal"] = std::any_cast<bool>(materialArgs.m_materialHeader.m_hasNormal);
+            settingsSave["specularFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_specularFactor);
+            settingsSave["metallicFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_metallicFactor);
+            settingsSave["roughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_roughnessFactor);
+            settingsSave["ao"] = std::any_cast<float>(materialArgs.m_materialHeader.m_ao);
+            settingsSave["clearCoatFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatFactor);
+            settingsSave["clearCoatRoughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatRoughnessFactor);
+            settingsSave["texturesCount"] = std::any_cast<unsigned int>(materialArgs.m_materialHeader.m_texturesCount);
+
+            for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+            {
+                std::string textureId = std::format("texture_{}", i).c_str();
+                std::string textureTypeId = std::format("textureTypes_{}", i);
+
+                settingsSave[textureId.c_str()] = std::any_cast<std::string>(materialArgs.m_texturesPath[i]);
+                settingsSave[textureTypeId.c_str()] = std::any_cast<unsigned int>(materialArgs.m_texturesType[i]);
+            }
+
+            std::ofstream out(path.string().c_str());
+            bool opened = out.is_open();
+            out << yamlSave;
+            out.close();
+        }
+
+        //-- Save cache --//
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += path.filename().string();
+
+        if (!std::filesystem::exists(CCImporter::cacheDirectory))
+            std::filesystem::create_directory(CCImporter::cacheDirectory);
+
+        FILE* file = nullptr;
+
+        if (fopen_s(&file, fullFilepath.c_str(), "wb"))
+        {
+            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", path.string()).c_str());
+            return;
+        }
+
+        fwrite(&materialArgs.m_materialHeader, sizeof(MaterialHeader), 1, file);
+
+        if (materialArgs.m_materialHeader.m_texturesCount)
+        {
+            std::vector<unsigned int> texturesPathSize;
+
+            for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+            {
+                texturesPathSize.push_back(materialArgs.m_texturesPath[i].size());
+            }
+
+            fwrite(&texturesPathSize[0], texturesPathSize.size() * sizeof(unsigned int), 1, file);
+            fwrite(&materialArgs.m_texturesType[0], materialArgs.m_texturesType.size() * sizeof(unsigned int), 1, file);
+
+            for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+            {
+                fwrite(&materialArgs.m_texturesPath[i][0], texturesPathSize[i], 1, file);
+            }
+        }
+
+        fclose(file);
+    }
+
+    void SaveMaterial(Material* material)
+    {
+        MaterialArgs materialArgs;
+
+        for (auto pair : material->m_textures)
+        {
+            materialArgs.m_texturesType.push_back(static_cast<unsigned int>(pair.first));
+            materialArgs.m_texturesPath.push_back(pair.second->GetFilepath());
+        }
+
+        materialArgs.m_materialHeader =
+        {
+            .m_ambient = material->m_ambient,
+            .m_diffuse = material->m_diffuse,
+            .m_specular = material->m_specular,
+            .m_emissive = material->m_emissive,
+            .m_shininess = material->m_shininess,
+            .m_specularFactor = material->m_specularFactor,
+            .m_metallicFactor = material->m_metallicFactor,
+            .m_roughnessFactor = material->m_roughnessFactor,
+            .m_ao = material->m_ao,
+            .m_clearCoatFactor = material->m_clearCoatFactor,
+            .m_clearCoatRoughnessFactor = material->m_clearCoatRoughnessFactor,
+            .m_texturesCount = static_cast<unsigned int>(material->m_textures.size()),
+        };
+
+        SaveMaterial(*material->GetFilesystemPath(), materialArgs);
+    }
+
     void ImportMaterialData(const aiScene* assimpScene, const aiNode* assimpNode, int meshIndex, ImportModelUtils& model, const std::filesystem::path& filepath)
     {
         if (assimpNode->mNumMeshes == 0)
         {
-            model.modelHeader.m_materialHeader.m_hasMaterial = false;
+            model.modelHeader.m_hasMaterial = false;
             return;
         }
 
-        model.modelHeader.m_materialHeader.m_hasMaterial = true;
-
-        MaterialHeader* materialHeader = &model.modelHeader.m_materialHeader;
+        model.modelHeader.m_hasMaterial = true;
 
         size_t meshId = (size_t)assimpNode->mMeshes[meshIndex];
-        
+
         const aiMesh* assimpMesh = assimpScene->mMeshes[meshId];
         const aiMaterial* assimpMaterial = assimpScene->mMaterials[assimpMesh->mMaterialIndex];
 
@@ -395,233 +540,97 @@ namespace CCImporter
         if (name.length == 0)
             name = std::format("mat_{}", assimpMesh->mMaterialIndex).c_str();
 
-        model.m_materialName = filepath.string();
-        model.m_materialName += std::string("/");
-        model.m_materialName += std::string(name.C_Str());
+        model.m_materialPath = filepath.parent_path().string();
+        model.m_materialPath += "\\";
+        model.m_materialPath += name.C_Str();
+        model.m_materialPath += CCImporter::materialExtension;
+        model.modelHeader.m_materialPathSize = model.m_materialPath.size();
 
-        materialHeader->m_materialNameSize = model.m_materialName.size();
+        if (std::filesystem::exists(model.m_materialPath))
+            return;
+
+        MaterialArgs materialArgs {};
 
         float matValue = 0.f;
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_SHININESS, matValue))
-            materialHeader->m_shininess = matValue;
+            materialArgs.m_materialHeader.m_shininess = matValue;
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_SPECULAR_FACTOR, matValue))
-            materialHeader->m_specularFactor = matValue;
+            materialArgs.m_materialHeader.m_specularFactor = matValue;
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_METALLIC_FACTOR, matValue))
-            materialHeader->m_metallicFactor = matValue;
+            materialArgs.m_materialHeader.m_metallicFactor = matValue;
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_ROUGHNESS_FACTOR, matValue))
-            materialHeader->m_roughnessFactor = matValue;
+            materialArgs.m_materialHeader.m_roughnessFactor = matValue;
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_CLEARCOAT_FACTOR, matValue))
-            materialHeader->m_clearCoatFactor = matValue;
+            materialArgs.m_materialHeader.m_clearCoatFactor = matValue;
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR, matValue))
-            materialHeader->m_clearCoatRoughnessFactor = matValue;
+            materialArgs.m_materialHeader.m_clearCoatRoughnessFactor = matValue;
 
         //Material Color
         aiColor3D color(0.f, 0.f, 0.f);
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_AMBIENT, color))
         {
-            materialHeader->m_ambient = Vector3(color.r, color.g, color.b);
-            materialHeader->m_ao = color.r;
+            materialArgs.m_materialHeader.m_ambient = Vector3(color.r, color.g, color.b);
+            materialArgs.m_materialHeader.m_ao = color.r;
         }
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, color))
-            materialHeader->m_diffuse = Vector3(color.r, color.g, color.b);
+            materialArgs.m_materialHeader.m_diffuse = Vector3(color.r, color.g, color.b);
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_SPECULAR, color))
-            materialHeader->m_specular = Vector3(color.r, color.g, color.b);
+            materialArgs.m_materialHeader.m_specular = Vector3(color.r, color.g, color.b);
 
         if (AI_SUCCESS == assimpMaterial->Get(AI_MATKEY_COLOR_EMISSIVE, color))
-            materialHeader->m_emissive = Vector3(color.r, color.g, color.b);
+            materialArgs.m_materialHeader.m_emissive = Vector3(color.r, color.g, color.b);
 
-        //Material Texture
+
+        ImportMaterialTextureData(assimpScene, assimpMaterial, aiTextureType_AMBIENT, ETextureType::AMBIENT, materialArgs, filepath);
+        ImportMaterialTextureData(assimpScene, assimpMaterial, aiTextureType_HEIGHT, ETextureType::NORMAL_MAP, materialArgs, filepath);
+        ImportMaterialTextureData(assimpScene, assimpMaterial, aiTextureType_DIFFUSE, ETextureType::ALBEDO, materialArgs, filepath);
+        ImportMaterialTextureData(assimpScene, assimpMaterial, aiTextureType_METALNESS, ETextureType::METALLIC, materialArgs, filepath);
+        ImportMaterialTextureData(assimpScene, assimpMaterial, aiTextureType_DIFFUSE_ROUGHNESS, ETextureType::ROUGHNESS, materialArgs, filepath);
+        ImportMaterialTextureData(assimpScene, assimpMaterial, aiTextureType_SPECULAR, ETextureType::SPECULAR, materialArgs, filepath);
+        ImportMaterialTextureData(assimpScene, assimpMaterial, aiTextureType_AMBIENT_OCCLUSION, ETextureType::AO, materialArgs, filepath);
+
+        SaveMaterial(model.m_materialPath, materialArgs);
+    }
+
+    bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs)
+    {
+        YAML::Node loader = YAML::LoadFile(path.string().c_str());
+
+        YAML::Node settingsLoaded = loader["settings"];
+
+        materialArgs.m_materialHeader.m_ambient = settingsLoaded["ambient"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_diffuse = settingsLoaded["diffuse"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_specular = settingsLoaded["specular"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_emissive = settingsLoaded["emissive"].as<CCMaths::Vector3>();
+        materialArgs.m_materialHeader.m_shininess = settingsLoaded["shininess"].as<float>();
+
+        materialArgs.m_materialHeader.m_hasNormal = settingsLoaded["hasNormal"].as<bool>();
+        materialArgs.m_materialHeader.m_specularFactor = settingsLoaded["specularFactor"].as<float>();
+        materialArgs.m_materialHeader.m_metallicFactor = settingsLoaded["metallicFactor"].as<float>();
+        materialArgs.m_materialHeader.m_roughnessFactor = settingsLoaded["roughnessFactor"].as<float>();
+        materialArgs.m_materialHeader.m_ao = settingsLoaded["ao"].as<float>();
+        materialArgs.m_materialHeader.m_clearCoatFactor = settingsLoaded["clearCoatFactor"].as<float>();
+        materialArgs.m_materialHeader.m_clearCoatRoughnessFactor = settingsLoaded["clearCoatRoughnessFactor"].as<float>();
+        materialArgs.m_materialHeader.m_texturesCount = settingsLoaded["texturesCount"].as<unsigned int>();
+
+        for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
         {
-            aiString textureFilename;
-            if (assimpMaterial->GetTexture(aiTextureType_AMBIENT, 0, &textureFilename) == AI_SUCCESS)
-            {
-                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
-                {
-                    std::filesystem::path textureFilepath;
-                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
+            std::string textureId = std::format("texture_{}", i).c_str();
+            std::string textureTypeId = std::format("textureTypes_{}", i);
 
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath, texture);
-
-                    AddTextureDataToModel(model, ETextureType::AMBIENT, textureFilepath);
-                }
-                else
-                {
-                    std::filesystem::path textureFilepath(filepath.parent_path());
-                    textureFilepath += "/";
-                    textureFilepath += textureFilename.C_Str();
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath);
-
-                    AddTextureDataToModel(model, ETextureType::AMBIENT, textureFilepath);
-                }
-            }
-
-            
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_HEIGHT, 0), textureFilename) == AI_SUCCESS)
-            {
-
-                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
-                {
-                    std::filesystem::path textureFilepath;
-                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath, texture);
-
-                    AddTextureDataToModel(model, ETextureType::NORMAL_MAP, textureFilepath);
-                }
-                else
-                {
-                    std::filesystem::path textureFilepath(filepath.parent_path());
-                    textureFilepath += "/";
-                    textureFilepath += textureFilename.C_Str();
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath);
-
-                    AddTextureDataToModel(model, ETextureType::NORMAL_MAP, textureFilepath);
-                }
-            }
-
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), textureFilename) == AI_SUCCESS)
-            {
-
-                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
-                {
-                    std::filesystem::path textureFilepath;
-                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath, texture);
-
-                    AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilepath);
-                }
-                else
-                {
-                    std::filesystem::path textureFilepath(filepath.parent_path());
-                    textureFilepath += "/";
-                    textureFilepath += textureFilename.C_Str();
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath);
-
-                    AddTextureDataToModel(model, ETextureType::ALBEDO, textureFilepath);
-                }
-            }
-
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_METALNESS, 0), textureFilename) == AI_SUCCESS)
-            {
-
-                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
-                {
-                    std::filesystem::path textureFilepath;
-                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath, texture);
-
-                    AddTextureDataToModel(model, ETextureType::METALLIC, textureFilepath);
-                }
-                else
-                {
-                    std::filesystem::path textureFilepath(filepath.parent_path());
-                    textureFilepath += "/";
-                    textureFilepath += textureFilename.C_Str();
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath);
-
-                    AddTextureDataToModel(model, ETextureType::METALLIC, textureFilepath);
-                }
-            }
-
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE_ROUGHNESS, 0), textureFilename) == AI_SUCCESS)
-            {
-
-                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
-                {
-                    std::filesystem::path textureFilepath;
-                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath, texture);
-
-                    AddTextureDataToModel(model, ETextureType::ROUGHNESS, textureFilepath);
-                }
-                else
-                {
-                    std::filesystem::path textureFilepath(filepath.parent_path());
-                    textureFilepath += "/";
-                    textureFilepath += textureFilename.C_Str();
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath);
-
-                    AddTextureDataToModel(model, ETextureType::ROUGHNESS, textureFilepath);
-                }
-            }
-
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_SPECULAR, 0), textureFilename) == AI_SUCCESS)
-            {
-
-                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
-                {
-                    std::filesystem::path textureFilepath;
-                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath, texture);
-
-                    AddTextureDataToModel(model, ETextureType::SPECULAR, textureFilepath);
-                }
-                else
-                {
-                    std::filesystem::path textureFilepath(filepath.parent_path());
-                    textureFilepath += "/";
-                    textureFilepath += textureFilename.C_Str();
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath);
-
-                    AddTextureDataToModel(model, ETextureType::SPECULAR, textureFilepath);
-                }
-            }
-
-            if (assimpMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_AMBIENT_OCCLUSION, 0), textureFilename) == AI_SUCCESS)
-            {
-
-                if (auto texture = assimpScene->GetEmbeddedTexture(textureFilename.C_Str()))
-                {
-                    std::filesystem::path textureFilepath;
-                    GetFBXTexturePath(textureFilepath, filepath, textureFilename.C_Str());
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath, texture);
-
-                    AddTextureDataToModel(model, ETextureType::AO, textureFilepath);
-                }
-                else
-                {
-                    std::filesystem::path textureFilepath(filepath.parent_path());
-                    textureFilepath += "/";
-                    textureFilepath += textureFilename.C_Str();
-
-                    if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
-                        ImportTextureData(textureFilepath);
-
-                    AddTextureDataToModel(model, ETextureType::AO, textureFilepath);
-                }
-            }
+            materialArgs.m_texturesPath.push_back(settingsLoaded[textureId.c_str()].as<std::string>());
+            materialArgs.m_texturesType.push_back(settingsLoaded[textureTypeId.c_str()].as<unsigned int>());
         }
+
+        SaveMaterial(path, materialArgs, false);
+        return true;
     }
 
     #pragma endregion
@@ -723,17 +732,9 @@ namespace CCImporter
                 fwrite(&model.m_indices[0], model.m_indices.size() * sizeof(unsigned int), 1, file);
             }
 
-            if (model.modelHeader.m_materialHeader.m_hasMaterial)
+            if (model.modelHeader.m_hasMaterial)
             {
-                fwrite(&model.m_materialName[0], model.m_materialName.size(), 1, file);
-
-                if (model.modelHeader.m_materialHeader.m_texturesCount)
-                {
-
-                    fwrite(&model.m_texturesPathSize[0], model.m_texturesPathSize.size() * sizeof(unsigned int), 1, file);
-                    fwrite(&model.m_texturesType[0], model.m_texturesType.size() * sizeof(unsigned int), 1, file);
-                    fwrite(&model.m_texturesPath[0], model.m_texturesPath.size(), 1, file);
-                }
+                fwrite(&model.m_materialPath[0], model.m_materialPath.size(), 1, file);
             }
         }
 
@@ -746,10 +747,11 @@ namespace CCImporter
 
         const aiScene* scene = importer.ReadFile(filepath.string().c_str(), aiProcess_Triangulate |
             aiProcess_SortByPType |
-            aiProcess_GenNormals |
+            aiProcess_ForceGenNormals |
             aiProcess_GenUVCoords |
             aiProcess_FlipUVs |
-            aiProcess_CalcTangentSpace);
+            aiProcess_CalcTangentSpace |
+            aiProcess_GenBoundingBoxes);
 
         if (scene)
         {
