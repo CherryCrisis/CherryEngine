@@ -17,6 +17,7 @@
 #include "panels/cell_system_displayer.hpp"
 #include "panels/project_settings_displayer.hpp"
 #include "panels/build_displayer.hpp"
+#include "panels/asset_settings.hpp"
 
 #include "maths.hpp"
 
@@ -31,7 +32,8 @@ class EditorManager
 private:
 
     //Panel's Classes
-    AssetBrowser             m_browser               {};
+    AssetSettingsDisplayer   m_assetSettingsDisplayer{};
+    AssetBrowser             m_browser               {&m_assetSettingsDisplayer};
     LogDisplayer             m_logDisplayer          {};
     Inspector                m_inspector             {true, this};
     GameDisplayer            m_gameDisplayer         {};

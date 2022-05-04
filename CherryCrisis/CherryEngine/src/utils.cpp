@@ -34,16 +34,42 @@ namespace String
 
 	std::string ExtractKey(std::string& str, const char key, bool erase)
 	{
-		std::string strr = str.substr(0, str.find(key));
+		int len = str.find(key);
 
-		if (erase)
+		std::string strr = str;
+
+		if (len > 0)
 		{
-			std::string::size_type i = str.find(strr);
+			if (erase)
+			{
+				str.erase(str.begin(), str.begin() + len + 1);
+			}
 
-			if (i != std::string::npos)
-				str.erase(i, strr.length() + 1);
+			strr.erase(strr.begin() + len, strr.end());
+			return strr;
 		}
-		return strr;
+
+		return str;
+	}
+
+	std::string ExtractLastKey(std::string& str, const char key, bool erase)
+	{
+		int len = str.find_last_of(key);
+
+		std::string strr = str;
+
+		if (len > 0)
+		{
+			if (erase)
+			{
+				str.erase(str.begin(), str.begin() + len + 1);
+			}
+
+			strr.erase(strr.begin() + len, strr.end());
+			return strr;
+		}
+
+		return str;
 	}
 
 	std::string ExtractKeyStr(const std::string& str, const char* key)

@@ -292,6 +292,7 @@ namespace CCImporter
         image.setImage2D(nvtt::Format_RGBA, textureHeader.width, textureHeader.height, stbiData);
 
         textureHeader.internalFormat = ETextureFormat::RGBA;
+        textureHeader.flipped = true;
 
         std::string fullFilepath(CCImporter::cacheDirectory);
         fullFilepath += filepath.filename().string();
@@ -352,16 +353,15 @@ namespace CCImporter
         if (flipTexture)
             image.flipY();
 
-        //textureHeader.internalFormat = textureFormat;
         textureHeader.internalFormat = textureFormat;
         textureHeader.width = image.width();
         textureHeader.height = image.height();
+        textureHeader.flipped = flipTexture;
 
         std::string fullFilepath(CCImporter::cacheDirectory);
         fullFilepath += filepath.filename().string();
         fullFilepath += CCImporter::cacheExtension;
 
-        //std::string texturePathStr(filepath.filename().string());
         CompressTexture(context, image, fullFilepath, textureHeader, textureData);
 
         CacheTextureData(fullFilepath, *textureData, textureHeader);
@@ -375,7 +375,7 @@ namespace CCImporter
         std::filesystem::path texturefbxFilepath(texturefbxFilename);
 
         std::string textureFilepathStr(filepath.parent_path().string());
-        textureFilepathStr += "/";
+        textureFilepathStr += "\\";
         textureFilepathStr += texturefbxFilepath.filename().string();
 
         size_t lastindex = textureFilepathStr.find_last_of(".");
@@ -405,7 +405,7 @@ namespace CCImporter
             else
             {
                 std::filesystem::path textureFilepath(filepath.parent_path());
-                textureFilepath += "/";
+                textureFilepath += "\\";
                 textureFilepath += textureFilename.C_Str();
 
                 if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
@@ -456,6 +456,7 @@ namespace CCImporter
         //-- Save cache --//
         std::string fullFilepath(CCImporter::cacheDirectory);
         fullFilepath += path.filename().string();
+        fullFilepath += CCImporter::cacheMaterialExtension;
 
         if (!std::filesystem::exists(CCImporter::cacheDirectory))
             std::filesystem::create_directory(CCImporter::cacheDirectory);
@@ -464,7 +465,7 @@ namespace CCImporter
 
         if (fopen_s(&file, fullFilepath.c_str(), "wb"))
         {
-            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", path.string()).c_str());
+            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", fullFilepath.c_str()).c_str());
             return;
         }
 
@@ -495,10 +496,15 @@ namespace CCImporter
     {
         MaterialArgs materialArgs;
 
+        unsigned int textureCount = 0;
         for (auto pair : material->m_textures)
         {
-            materialArgs.m_texturesType.push_back(static_cast<unsigned int>(pair.first));
-            materialArgs.m_texturesPath.push_back(pair.second->GetFilepath());
+            if (pair.second)
+            {
+                textureCount++;
+                materialArgs.m_texturesType.push_back(static_cast<unsigned int>(pair.first));
+                materialArgs.m_texturesPath.push_back(pair.second->GetFilepath());
+            }
         }
 
         materialArgs.m_materialHeader =
@@ -514,7 +520,7 @@ namespace CCImporter
             .m_ao = material->m_ao,
             .m_clearCoatFactor = material->m_clearCoatFactor,
             .m_clearCoatRoughnessFactor = material->m_clearCoatRoughnessFactor,
-            .m_texturesCount = static_cast<unsigned int>(material->m_textures.size()),
+            .m_texturesCount = textureCount,
         };
 
         SaveMaterial(*material->GetFilesystemPath(), materialArgs);
@@ -545,9 +551,6 @@ namespace CCImporter
         model.m_materialPath += name.C_Str();
         model.m_materialPath += CCImporter::materialExtension;
         model.modelHeader.m_materialPathSize = model.m_materialPath.size();
-
-        if (std::filesystem::exists(model.m_materialPath))
-            return;
 
         MaterialArgs materialArgs {};
 
@@ -601,6 +604,9 @@ namespace CCImporter
 
     bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs)
     {
+        if (!std::filesystem::exists(path))
+            return false;
+
         YAML::Node loader = YAML::LoadFile(path.string().c_str());
 
         YAML::Node settingsLoaded = loader["settings"];

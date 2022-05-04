@@ -44,8 +44,8 @@ void PreferencesDisplayer::Render()
 
         m_categories[m_selectedCategory]->DisplayCategory();
 
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 void PreferencesDisplayer::Cutstomization::Fill()

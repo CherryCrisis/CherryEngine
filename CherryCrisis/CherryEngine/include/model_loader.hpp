@@ -46,6 +46,7 @@ namespace CCImporter
         ETextureFormat internalFormat;
         int mipmapsLevel;
         int blockSize;
+        bool flipped;
     };
 
     struct MaterialHeader
@@ -113,7 +114,8 @@ namespace CCImporter
 
     static const char* assetsDirectory("Assets/");
     static const char* cacheExtension(".ccfile");
-    static const char* materialExtension(".ccmat");
+    static const char* cacheMaterialExtension(".ccmat");
+    static const char* materialExtension(".mat");
     static const char* cacheDirectory("Cache/");
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);

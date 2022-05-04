@@ -64,11 +64,11 @@ void ModelRenderer::SetModel(std::shared_ptr<Model> newModel)
 	m_model->m_OnDeleted.Bind(&ModelRenderer::RemoveModel, this);
 	if (m_model->m_material) 
 	{
-		SetMaterial(m_model->m_material.get());
+		OnSetMaterial(m_model->m_material.get());
 	}
 	else 
 	{
-		m_model->m_onMaterialSet.Bind(&ModelRenderer::SetMaterial, this);
+		m_model->m_onMaterialSet.Bind(&ModelRenderer::OnSetMaterial, this);
 	}
 	// Move to function
 	if (m_initialized)
@@ -115,6 +115,7 @@ void ModelRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 
 void ModelRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
+
 	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(this);
@@ -151,8 +152,15 @@ void ModelRenderer::OnCellRemoved(Cell* newCell)
 		newCell->RemoveRenderer(this);
 }
 
-void ModelRenderer::SetMaterial(Material* newMat)
+void ModelRenderer::OnReloadMaterial(std::shared_ptr<Material> material)
 {
+	GetHost().m_cell->RemoveRenderer(this);
+	GetHost().m_cell->AddRenderer(this);
+}
+
+void ModelRenderer::OnSetMaterial(Material* newMat)
+{
+	newMat->m_OnReloaded.Bind(&ModelRenderer::OnReloadMaterial, this);
 	newMat->m_onTextureSet.Bind(&ModelRenderer::ReloadTexture, this);
 	m_onMaterialSet.Invoke(&*newMat);
 }

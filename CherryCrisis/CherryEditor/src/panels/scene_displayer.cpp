@@ -217,6 +217,7 @@ void SceneDisplayer::Render()
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();
         ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
         if (m_manager->m_selectedEntities.size() > 0 && m_manager->m_selectedEntities[0]->GetBehaviour<Transform>() != nullptr) 
         {
             Transform* t = m_manager->m_selectedEntities[0]->GetBehaviour<Transform>();

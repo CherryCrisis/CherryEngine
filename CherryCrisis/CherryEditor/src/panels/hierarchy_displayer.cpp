@@ -50,6 +50,7 @@ void HierarchyDisplayer::Render()
             }
         }
     }
+    ImGui::End();
 
     ContextCallback();
 
@@ -94,8 +95,6 @@ void HierarchyDisplayer::Render()
     {
         m_renaming = true;
     }
-
-    ImGui::End();
 
     if (ImGui::IsKeyDown(ImGuiKey_Delete) && m_manager->m_selectedEntities.size() > 0)
     {

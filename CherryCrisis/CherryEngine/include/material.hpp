@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_map>
+#include <map>
 #include <memory>
 
 #include "cherry_macros.hpp"
@@ -29,6 +29,8 @@ enum class ETextureType : unsigned int
 	ROUGHNESS,
 	SPECULAR,
 	AO,
+
+	COUNT,
 };
 
 enum class EPipelineType : unsigned int
@@ -55,7 +57,7 @@ public:
 	float m_clearCoatFactor = 0.f;
 	float m_clearCoatRoughnessFactor = 0.f;
 
-	std::unordered_map<ETextureType, std::shared_ptr<Texture>> m_textures;
+	std::map<ETextureType, std::shared_ptr<Texture>> m_textures;
 
 	EPipelineType m_pipelineType = EPipelineType::PBR;
 
@@ -66,7 +68,7 @@ public:
 	static bool LoadFromCache(std::shared_ptr<Material> material, CCImporter::MaterialArgs& materialArgs);
 
 	void Delete() override;
-	void Reload();
+	void Reload(bool saveOnly = false);
 
 	void SetTexture(ETextureType type, const std::shared_ptr<Texture>& newTexture);
 	void SetTexture(ETextureType type, const char* filepath);

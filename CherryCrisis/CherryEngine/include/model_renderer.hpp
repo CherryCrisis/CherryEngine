@@ -36,9 +36,9 @@ public:
 	void SetModel(std::shared_ptr<Model> newModel);
 	void RemoveModel();
 
-	void SetMaterial(Material* newMat);
+	void OnSetMaterial(Material* newMat);
+	void OnReloadMaterial(std::shared_ptr<Material> material);
 	void ReloadTexture(std::shared_ptr<Texture> newTex);
-
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;

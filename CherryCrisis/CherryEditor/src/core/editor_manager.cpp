@@ -107,6 +107,7 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
 
     HandleMenuBar();
     m_browser.Render();
+    m_assetSettingsDisplayer.Render();
     m_logDisplayer.Render();
     m_sceneDisplayer.Render();
     m_inspector.Render();
@@ -210,6 +211,7 @@ void EditorManager::HandleMenuBar()
                 if (ImGui::MenuItem("Hierarchy")) { m_hierarchyDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Log"))       { m_logDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Inspector")) { m_inspector.Toggle(true); }
+                if (ImGui::MenuItem("Asset Settings")) { m_assetSettingsDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Game"))      { m_gameDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Scene"))     { m_sceneDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Featurer"))  { m_isFeaturerOpened = true; }
@@ -303,20 +305,6 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
         if (ImGui::Button("Reload scripts"))
             CsScriptingSystem::GetInstance()->ReloadContextes();
-
-        std::shared_ptr<Material> mat = ResourceManager::GetInstance()->GetResource<Material>("Assets\\CC_ModelPBR.fbx/CC_MatPBR");
-        //std::shared_ptr<Material> mat = ResourceManager::GetInstance()->GetResource<Material>("Assets\\backpack.obj/Scene_-_Root");
-
-        if (mat)
-        {
-            ImGui::SliderFloat("Specular", &mat->m_specularFactor, 0, 1);
-            ImGui::SliderFloat("Metallic", &mat->m_metallicFactor, 0, 1);
-            ImGui::SliderFloat("Roughness", &mat->m_roughnessFactor, 0, 1);
-            ImGui::SliderFloat("AO", &mat->m_ao, 0, 1);
-            ImGui::SliderFloat("Clear coat", &mat->m_clearCoatFactor, 0, 1);
-            ImGui::SliderFloat("Clear coat roughness", &mat->m_clearCoatRoughnessFactor, 0, 1);
-            ImGui::SliderFloat3("Diffuse", mat->m_diffuse.data, 0, 1);
-        }
         
     }
     ImGui::End();
