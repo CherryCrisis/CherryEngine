@@ -22,7 +22,7 @@ HDRRenderPass::HDRRenderPass(const char* name)
 	if (!m_quadMesh->m_gpuMesh)
 	{
 		Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
-		Generate(m_quadMesh.get());
+		m_meshGenerator.Generate(m_quadMesh.get());
 	}
 
 	// TODO: Use DSA
@@ -59,7 +59,7 @@ void HDRRenderPass::Execute(Framebuffer& framebuffer)
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	auto gpuMesh = static_cast<GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
+	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
 
 	if (!gpuMesh)
 		return;

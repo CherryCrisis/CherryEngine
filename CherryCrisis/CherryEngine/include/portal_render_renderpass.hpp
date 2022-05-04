@@ -16,7 +16,7 @@
 
 class Viewer;
 
-class PortalRenderPass : public ARenderingRenderPass, ElementMeshGenerator
+class PortalRenderPass : public ARenderingRenderPass
 {
 private:
 	struct GPUBasicPortal : public GPUPortal
@@ -30,6 +30,8 @@ private:
 	std::shared_ptr<Mesh> m_quadMesh;
 
 protected:
+	ElementMeshGenerator m_meshGenerator;
+
 	struct GPUTextureBasic : public GPUTexture
 	{
 		GLuint ID = 0u;

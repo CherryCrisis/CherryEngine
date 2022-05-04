@@ -1349,6 +1349,8 @@
     <None Include="..\x64\Debug\Assets\portalShader.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
+    <None Include="Rendering.cd" />
+    <None Include="Scripting.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">
@@ -1554,6 +1556,9 @@
     </ClCompile>
     <ClCompile Include="src\capsule_collider.cpp">
       <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture_generator.cpp">
+      <Filter>Fichiers sources\Rendering\Generator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

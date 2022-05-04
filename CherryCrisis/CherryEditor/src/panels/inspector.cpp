@@ -262,10 +262,10 @@ void InspectComponents(Entity* entity, int id)
                         ImGui::Text("Normal Map");
 
                     ImGui::TableNextColumn();
-                    BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
+                    TextureGenerator::GPUTextureBasic* GPUtex = nullptr;
                     if (texRef.get() && texRef->m_gpuTexture)
                     {
-                        GPUtex = static_cast<BasicRenderPass::GPUTextureBasic*>
+                        GPUtex = static_cast<TextureGenerator::GPUTextureBasic*>
                         (texRef->m_gpuTexture.get());
                     }
 

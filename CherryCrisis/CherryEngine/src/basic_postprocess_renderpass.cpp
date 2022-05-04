@@ -15,7 +15,7 @@ BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 
 	Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
 
-	Generate(m_quadMesh.get());
+	m_meshGenerator.Generate(m_quadMesh.get());
 
 	m_framebuffer.colorTex.width = 1920; m_framebuffer.colorTex.height = 1080;
 
@@ -54,7 +54,7 @@ void BasicPostProcessRenderPass::Execute(Framebuffer& framebuffer)
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	auto gpuMesh = static_cast<GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
+	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
 
 	if (!gpuMesh)
 		return;

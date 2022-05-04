@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PhysicSystem::PhysicScene" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAYgFgAAQAAEAABIAAQAgEAAAAgACABoDAAgAAAAAAE=</HashCode>
+      <FileName>include\physic_scene.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cell">
+    <Position X="1" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAoQAAAAARAQAEIAVBBABAAAAIAAAAEIAIQkQAhgg=</HashCode>
+      <FileName>include\cell.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellSystem">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAQAQQgAABBAAAAAAAAAIAAAgAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>include\cell_system.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Portal">
+    <Position X="3" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAACAAAAAAAAAAAAAAAAAgAAAAAAABQAEAIAA=</HashCode>
+      <FileName>include\portal.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

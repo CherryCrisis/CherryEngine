@@ -398,6 +398,8 @@
     <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
     <None Include="..\x64\Debug\Assets\skyboxShader.vert" />
+    <None Include="Scripting.cd" />
+    <None Include="Rendering.cd" />
     <None Include="externals\include\assimp\color4.inl" />
     <None Include="externals\include\assimp\material.inl" />
     <None Include="externals\include\assimp\matrix3x3.inl" />
@@ -551,6 +553,7 @@
     <ClCompile Include="src\sound_manager.cpp" />
     <ClCompile Include="src\sphere_collider.cpp" />
     <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\texture_generator.cpp" />
     <ClCompile Include="src\time_manager.cpp" />
     <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />

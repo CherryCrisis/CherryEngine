@@ -7,8 +7,10 @@
 
 class Mesh;
 
-class BasicPostProcessRenderPass : public APostProcessRenderPass, public ElementMeshGenerator
+class BasicPostProcessRenderPass : public APostProcessRenderPass 
 {
+    ElementMeshGenerator m_meshGenerator;
+
 	Framebuffer m_framebuffer;
 
     enum class EColorTransform : GLuint
