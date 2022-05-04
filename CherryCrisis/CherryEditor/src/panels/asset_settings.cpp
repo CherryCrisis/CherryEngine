@@ -1,6 +1,7 @@
 #include "Panels/asset_settings.hpp"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 
 #include "resource_manager.hpp"
 
@@ -182,7 +183,8 @@ void MaterialSettings::Render()
             ImGui::DragFloat("Roughness factor", &m_material->m_roughnessFactor, 0.1f, 0.f, 1.f) +
             ImGui::DragFloat("Ambiant occlusion", &m_material->m_ao, 0.1f, 0.f, 1.f) +
             ImGui::DragFloat("Clear coat factor", &m_material->m_clearCoatFactor, 0.1f, 0.f, 1.f) +
-            ImGui::DragFloat("Clear coat roughness factor", &m_material->m_clearCoatRoughnessFactor, 0.1f, 0.f, 1.f);
+            ImGui::DragFloat("Clear coat roughness factor", &m_material->m_clearCoatRoughnessFactor, 0.1f, 0.f, 1.f) +
+            ImGui::Checkbox("Use normal map", &m_material->m_hasNormal);
     }
 
     if (ImGui::BeginTable("texturesTable", 2))
@@ -191,7 +193,6 @@ void MaterialSettings::Render()
         {
             ImGui::TableNextColumn();
             ImGui::Text(TextureTypeToStr[static_cast<int>(texType)].c_str());
-
             ImGui::TableNextColumn();
 
             BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
@@ -203,7 +204,36 @@ void MaterialSettings::Render()
 
             uint64_t texID = GPUtex ? (uint64_t)GPUtex->ID : 0u;
 
-            ImGui::ImageButton((ImTextureID)texID, { 50,50 });
+
+            //-- Highlight --//
+            {
+                ImGuiContext& g = *GImGui;
+                const ImGuiStyle& style = g.Style;
+                ImGuiWindow* window = ImGui::GetCurrentWindow();
+                const ImGuiID id = window->GetID("texturesTable");
+                float cellWidth = ImGui::GetContentRegionAvail().x;
+                ImVec2 pos = window->DC.CursorPos;
+                ImVec2 size = ImGui::CalcItemSize({ 50, 50 }, 0, 0);
+
+                ImVec2 posSize(pos.x + size.x, pos.y + size.y);
+                ImRect bb(pos, posSize);
+                ImVec2 posMin(bb.Min.x, bb.Min.y);
+                ImVec2 posMax(bb.Max.x, bb.Max.y);
+
+                bool held, hovered;
+                bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held, 0);
+
+                if (hovered)
+                    m_textureTypeFoccused = static_cast<int>(texType);
+
+                // Render
+                const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive :
+                    hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+
+                ImVec4 imageColor = hovered == true ? ImVec4{ 1, 1, 1, 1 } : ImVec4{ 0.5f, 0.5f, 0.5f, 1 };
+                ImGui::Image((ImTextureID)texID, { 50,50 }, { 0,0 }, { 1,1 }, { 1, 1, 1, 1 }, imageColor);
+            }
+
 
             if (ImGui::BeginDragDropTarget())
             {
@@ -215,12 +245,14 @@ void MaterialSettings::Render()
                     auto it = textureExtensions.find("." + extension);
                     if (it != textureExtensions.end())
                     {
-                        auto textureIt = m_material->m_textures.find(texType);
-                        if (textureIt != m_material->m_textures.end())
+                        auto textureIt = m_textures.find(texType);
+                        if (textureIt != m_textures.end())
                         {
                             if (std::shared_ptr<Texture> texture = ResourceManager::GetInstance()->GetResource<Texture>(texturePath))
                             {
                                 textureIt->second = texture;
+
+                                m_material->m_textures = m_textures;
                                 m_settingsChanged = true;
                             }
                         }
@@ -240,6 +272,48 @@ void MaterialSettings::Render()
         m_settingsChanged = false;
     }
 
+    ContextCallback();
+}
+
+void MaterialSettings::ContextCallback()
+{
+    static bool focusedNodeisHovered = false;
+    if (ImGui::IsWindowHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
+    {
+        ImGui::OpenPopup("context");
+    }
+
+    if (ImGui::BeginPopupContextItem("context"))
+    {
+        ImGui::Text("Actions ...");
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Clear"))
+        {
+            auto textureIt = m_textures.find(static_cast<ETextureType>(m_textureTypeFoccused));
+            if (textureIt != m_textures.end())
+            {
+                textureIt->second = nullptr;
+
+                m_material->m_textures = m_textures;
+                m_settingsChanged = true;
+            }
+        }
+
+        if (ImGui::MenuItem("Texture Settings"))
+        {
+            auto textureIt = m_textures.find(static_cast<ETextureType>(m_textureTypeFoccused));
+            if (textureIt != m_textures.end())
+            {
+                if (textureIt->second)
+                {
+                    m_assetSettingsDisplayer->SetAssetSettings(new TextureSettings(textureIt->second));
+                }
+            }
+        }
+
+        ImGui::EndPopup();
+    }
 }
 
 #pragma endregion

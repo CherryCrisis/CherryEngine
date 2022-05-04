@@ -35,7 +35,7 @@ private:
     AssetSettingsDisplayer   m_assetSettingsDisplayer{};
     AssetBrowser             m_browser               {&m_assetSettingsDisplayer};
     LogDisplayer             m_logDisplayer          {};
-    Inspector                m_inspector             {true, this};
+    Inspector                m_inspector             {true, this, &m_assetSettingsDisplayer};
     GameDisplayer            m_gameDisplayer         {};
     SceneDisplayer           m_sceneDisplayer        {};
     CellSystemDisplayer      m_cellSystemDisplayer   {};

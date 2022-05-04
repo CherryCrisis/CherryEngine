@@ -7,6 +7,7 @@
 #include "model.hpp"
 #include "model_base.hpp"
 #include "mesh.hpp"
+#include "cherry_macros.hpp"
 
 enum class ETextureFormat;
 
@@ -122,7 +123,7 @@ namespace CCImporter
     void ImportTexture(const std::filesystem::path& filepath,
         unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat);
 
-    void SaveMaterial(Material* material);
+    void CCENGINE_API SaveMaterial(Material* material);
     bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs);
 }
 

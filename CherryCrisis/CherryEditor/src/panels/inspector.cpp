@@ -22,12 +22,13 @@
 #include "bool3.hpp"
 #include "core/imcherry.hpp"
 #include "utils.hpp"
-#include "basic_renderpass.hpp"
+#include "panels/asset_settings.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 
-Inspector::Inspector(bool spawnOpened, EditorManager* manager) : Panel(spawnOpened), m_manager(manager)
+Inspector::Inspector(bool spawnOpened, EditorManager* manager, AssetSettingsDisplayer* assetSettingsDisplayer) 
+    : Panel(spawnOpened), m_manager(manager), m_assetSettingsDisplayer(assetSettingsDisplayer)
 {
     
 }
@@ -37,7 +38,7 @@ std::string ExtractValue(std::string str, const char key = ':')
     return str.substr(str.find_first_of(key) + 1);
 }
 
-void InspectComponents(Entity* entity, int id)
+void Inspector::InspectComponents(Entity* entity, int id)
 {
     std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 
@@ -242,92 +243,30 @@ void InspectComponents(Entity* entity, int id)
         std::shared_ptr<Material> mat = renderer->m_model->m_material;
         if (ImGui::TreeNode("Material"))
         {
-            
-            const char* label = "Material Pipeline";
-            const char* list[] = { "LIT", "PBR"};
-
-            unsigned int currentId = (unsigned int)mat->m_pipelineType;
-
-            if (ImGui::BeginCombo(label, list[currentId]))
+            if (ImGui::Button(mat->GetFilesystemPath()->filename().string().c_str()))
             {
-                size_t listSize = std::size(list);
-                for (size_t n = 0; n < listSize; n++)
+                if (m_assetSettingsDisplayer)
+                    m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(mat));
+            }
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
                 {
-                    const bool is_selected = (currentId == n);
-                    if (ImGui::Selectable(list[n], is_selected))
+                    const char* materialPath = (const char*)payload->Data;
+                    std::string extension = String::ExtractValue(materialPath, '.');
+
+                    if (!matExtensions.compare("." + extension))
                     {
-                        mat->m_pipelineType = (EPipelineType)n;
-                    }
+                        std::shared_ptr<Material> newMaterial = ResourceManager::GetInstance()->GetResource<Material>(materialPath);
 
-                    if (is_selected)
-                        ImGui::SetItemDefaultFocus();
-                }
-                ImGui::EndCombo();
-            }
-
-            if (EPipelineType::LIT == mat->m_pipelineType)
-            {
-                ImGui::Text(mat->GetFilepath().c_str());
-                ImGui::DragFloat3("Ambient", mat->m_ambient.data, 0.1f);
-                ImGui::DragFloat3("Diffuse", mat->m_diffuse.data, 0.1f);
-                ImGui::DragFloat3("Specular", mat->m_specular.data, 0.1f);
-                ImGui::DragFloat3("Emissive", mat->m_emissive.data, 0.1f);
-                ImGui::DragFloat("Shininess", &mat->m_shininess, 0.1f);
-            }
-            else if (EPipelineType::PBR == mat->m_pipelineType)
-            {
-                ImGui::Text(mat->GetFilepath().c_str());
-                ImGui::DragFloat3("Albedo", mat->m_diffuse.data, 0.1f);
-                ImGui::DragFloat("Specular factor", &mat->m_specularFactor, 0.1f);
-                ImGui::DragFloat("Metallic factor", &mat->m_metallicFactor, 0.1f);
-                ImGui::DragFloat("Roughness factor", &mat->m_roughnessFactor, 0.1f);
-                ImGui::DragFloat("Ambiant occlusion", &mat->m_ao, 0.1f);
-                ImGui::DragFloat("Clear coat factor", &mat->m_clearCoatFactor, 0.1f);
-                ImGui::DragFloat("Clear coat roughness factor", &mat->m_clearCoatRoughnessFactor, 0.1f);
-            }
-            
-            if (ImGui::BeginTable("texturesTable", 2)) 
-            {
-                for (auto& [texType, texRef] : mat->m_textures)
-                {
-                    ImGui::TableNextColumn();
-                    if (texType == ETextureType::ALBEDO)
-                        ImGui::Text("Albedo");
-                    else if (texType == ETextureType::AMBIENT)
-                        ImGui::Text("Ambient");
-                    else if (texType == ETextureType::NORMAL_MAP)
-                        ImGui::Text("Normal Map");
-
-
-                    ImGui::TableNextColumn();
-                    BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
-                    if (texRef.get() && texRef->m_gpuTexture)
-                    {
-                        GPUtex = static_cast<BasicRenderPass::GPUTextureBasic*>
-                        (texRef->m_gpuTexture.get());
-                    }
-
-                    uint64_t texID = GPUtex ? (uint64_t)GPUtex->ID : 0u;
-
-                    ImGui::ImageButton((ImTextureID)texID, { 50,50 });
-
-                    if (ImGui::BeginDragDropTarget()) 
-                    {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-                        {
-                            const char* c = (const char*)payload->Data;
-                            std::string extension = String::ExtractValue(c, '.');
-
-                            if (extension == "jpg" || extension == "png")
-                            {   
-                                mat->SetTexture(texType, c);
-                            }
-                        }
-                        ImGui::EndDragDropTarget();
+                        if (newMaterial)
+                            renderer->m_model->SetMaterial(newMaterial);
                     }
                 }
-                ImGui::EndTable();
+                ImGui::EndDragDropTarget();
             }
+
             ImGui::TreePop();
         }
     }

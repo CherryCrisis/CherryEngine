@@ -13,6 +13,7 @@
 #include "model_base.hpp"
 #include "csassembly.hpp"
 #include "command.hpp"
+#include "model_loader.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -182,12 +183,12 @@ void AssetBrowser::RenderNodes()
                 return;
             }
 
-            //-- Research input --//
             std::string fullFilename(assetNode->m_filename + assetNode->m_extension);
+            //-- Research input --//
             if (strlen(m_researchInput) > 0)
             {
-                fullFilename = String::ToLower(fullFilename);
-                if (fullFilename.find(String::ToLower(m_researchInput)) == std::string::npos)
+                std::string fullFilenameLower = String::ToLower(fullFilename);
+                if (fullFilenameLower.find(String::ToLower(m_researchInput)) == std::string::npos)
                     continue;
             }
 
@@ -424,6 +425,29 @@ void AssetBrowser::BrowserActionCreate()
                     myfile.close();
                 }
             }
+            else if (!m_popupAssetType.compare("material"))
+            {
+                std::filesystem::path newPath = m_currentDirectoryNode->m_path;
+                newPath /= newName;
+
+                bool exist = std::filesystem::exists(newPath.string() + ".mat");
+                int id = 0;
+
+                while (exist)
+                {
+                    std::string path(std::format("{}{}", newPath.string(), id));
+
+                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                        newPath = path;
+
+                    ++id;
+                }
+
+                newPath += ".mat";
+
+                std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResource<Material>(newPath.string().c_str(), true);
+                CCImporter::SaveMaterial(material.get());
+            }
 
             QuerryBrowser();
             ImGui::CloseCurrentPopup();
@@ -612,6 +636,13 @@ void AssetBrowser::ContextCallback()
             if (ImGui::MenuItem("Scene"))
             {
                 m_popupAssetType = "scene";
+                m_browserAction = EBrowserAction::CREATING;
+
+            }
+
+            if (ImGui::MenuItem("Material"))
+            {
+                m_popupAssetType = "material";
                 m_browserAction = EBrowserAction::CREATING;
 
             }

@@ -8,21 +8,7 @@
 class Texture;
 enum class ETextureType : unsigned int;
 class Material;
-class AssetSettings;
-
-class AssetSettingsDisplayer : public Panel
-{
-private:
-	std::unique_ptr<AssetSettings> m_assetSettings = nullptr;
-
-public :
-	AssetSettingsDisplayer() = default;
-
-	void SetAssetSettings(AssetSettings* assetSettings) { m_assetSettings.reset(assetSettings); }
-	
-	void Render() override;
-	void ContextCallback() override {};
-};
+class AssetSettingsDisplayer;
 
 class AssetSettings
 {
@@ -36,7 +22,29 @@ public :
 
 	//if return false delete assets settings
 	virtual void Render() = 0;
+
+
+	AssetSettingsDisplayer* m_assetSettingsDisplayer;
 };
+
+class AssetSettingsDisplayer : public Panel
+{
+private:
+	std::unique_ptr<AssetSettings> m_assetSettings = nullptr;
+
+public :
+	AssetSettingsDisplayer() = default;
+
+	void SetAssetSettings(AssetSettings* assetSettings) 
+	{ 
+		m_assetSettings.reset(assetSettings); 
+		m_assetSettings->m_assetSettingsDisplayer = this;
+	}
+	
+	void Render() override;
+	void ContextCallback() override {};
+};
+
 
 class TextureSettings : public AssetSettings
 {
@@ -55,14 +63,17 @@ public:
 class MaterialSettings : public AssetSettings
 {
 private:
-	std::map<const ETextureType, std::shared_ptr<Texture>> m_textures;
+	std::map<ETextureType, std::shared_ptr<Texture>> m_textures;
 	std::shared_ptr<Material> m_material;
 
+	int m_texturePreviewSize = 50;
+	int m_textureTypeFoccused = 0;
 
 	void GenerateTextureList();
 public:
 	MaterialSettings(std::shared_ptr<Material> material);
 	void Render() override;
+	void ContextCallback();
 
 };
 

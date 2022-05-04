@@ -46,33 +46,6 @@ void LogDisplayer::GenerateGPUTexture(std::shared_ptr<Texture> texture)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, texture->GetData());
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    /*glBindTexture(GL_TEXTURE_2D, gpuTexture->m_ID);
-
-    int mipmapsCount = texture->GetMipmapCount();
-    int width = texture->GetWidth();
-    int height = texture->GetHeight();
-    int offset = 0;
-
-    unsigned char* data = (unsigned char*)texture->GetData();
-
-    for (int i = 0; i < mipmapsCount && (width || height); ++i)
-    {
-        if (!width)
-            width = 1;
-
-        if (!height)
-            height = 1;
-
-        int size = ((width + 3) / 4) * ((height + 3) / 4) * 8;
-        glCompressedTexImage2D(GL_TEXTURE_2D, i, (GLenum)texture->GetInternalFormat(),
-            width, height, 0, size, data + offset);
-
-
-        offset += size;
-        width >>= 1;
-        height >>= 1;
-    }*/
-
     texture->m_gpuTexture = std::move(gpuTexture);
 }
 
