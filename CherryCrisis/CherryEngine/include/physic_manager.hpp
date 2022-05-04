@@ -71,7 +71,7 @@ namespace PhysicSystem
 		// Call scenes updates
 		void Simulate(float deltaTime);
 
-		static RaycastHit RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+		static physx::PxRaycastBuffer RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 		void AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode);
 
 		void MoveObjectFromScnToScn(PhysicScene* from, PhysicScene* to, PhysicActor* actor);

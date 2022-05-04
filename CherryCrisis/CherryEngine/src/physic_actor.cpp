@@ -40,6 +40,15 @@ namespace PhysicSystem
 			// TODO: Change with world tranform
 			t->SetPosition(pos);
 			t->SetRotation(rot);
+
+			RaycastHit out = Raycast(pos, { 0, -1, 0 }, 2.1f);
+			
+			if (out.actor)
+			{
+				PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(out.actor->userData);
+				Debug::GetInstance()->AddLog(ELogType::INFO, std::to_string(out.distance).c_str());
+				Debug::GetInstance()->AddLog(ELogType::INFO, actor1->m_owner->GetName().c_str());
+			}
 		}
 	}
 
@@ -238,13 +247,19 @@ namespace PhysicSystem
 
 	RaycastHit PhysicActor::Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
 	{
-		RaycastHit firstHit = PhysicManager::RaycastInScene(*m_owner->m_cell->m_physicCell, origin, dir, maxRange);
+		physx::PxRaycastBuffer hit = PhysicManager::RaycastInScene(*m_owner->m_cell->m_physicCell, origin, dir, maxRange);
+	
+		unsigned int hitNb = (int)hit.getNbTouches();
 
-		if (firstHit.actor == static_cast<physx::PxRigidActor*>(m_pxActor))
+		if (hit.getTouch(hitNb - 1).actor == static_cast<physx::PxRigidActor*>(m_pxActor))
 		{
-			CCMaths::Vector3 newOrigin = { firstHit.position.x, firstHit.position.y, firstHit.position.z };
-			RaycastHit secondHit = PhysicManager::RaycastInScene(*m_owner->m_cell->m_physicCell, newOrigin, dir, maxRange - firstHit.distance);
+			if (hitNb > 1)
+				return hit.getTouch(hitNb - 2);
+			else
+				return hit.getTouch(hitNb);
 		}
+
+		return hit.block;
 	}
 
 	bool PhysicActor::HasRigidbody()

@@ -14,6 +14,8 @@
 
 PhysicSystem::PhysicManager* Singleton<PhysicSystem::PhysicManager>::currentInstance = nullptr;
 
+using namespace physx;
+
 namespace PhysicSystem
 {
 	PhysicManager::PhysicManager()
@@ -45,8 +47,8 @@ namespace PhysicSystem
 	{
 		static Debug* debug = Debug::GetInstance();
 
-		static physx::PxDefaultAllocator		allocCallback;
-		static physx::PxDefaultErrorCallback	errorCallback;
+		static PxDefaultAllocator		allocCallback;
+		static PxDefaultErrorCallback	errorCallback;
 
 		if (!m_foundation)
 			m_foundation = PxCreateFoundation(PX_PHYSICS_VERSION, allocCallback, errorCallback);
@@ -60,11 +62,11 @@ namespace PhysicSystem
 		if (!m_pvd)
 		{
 			m_pvd = PxCreatePvd(*m_foundation);
-			physx::PxPvdTransport* transport = physx::PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
-			m_pvd->connect(*transport, physx::PxPvdInstrumentationFlag::eALL);
+			PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
+			m_pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 		}
 
-		physx::PxTolerancesScale toleranceScale;
+		PxTolerancesScale toleranceScale;
 		toleranceScale.length = 100;        // typical length of an object
 		toleranceScale.speed = 981;         // typical speed of an object, gravity*1s is a reasonable choice
 
@@ -88,7 +90,7 @@ namespace PhysicSystem
 			PX_RELEASE(m_foundation);
 	}
 
-	physx::PxMaterial* PhysicManager::CreateMaterial(float sf, float df, float cr)
+	PxMaterial* PhysicManager::CreateMaterial(float sf, float df, float cr)
 	{
 		return m_physics->createMaterial(sf, df, cr);
 	}
@@ -272,13 +274,14 @@ namespace PhysicSystem
 		DestroyPhysX();
 	}
 
-	RaycastHit PhysicManager::RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
+	PxRaycastBuffer PhysicManager::RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
 	{
-		physx::PxRaycastBuffer hit;
+		PxRaycastHit hit[256];
+		PxRaycastBuffer hitBuffer(hit, 256);
 
-		bool status = scene.Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hit);
+		bool status = scene.Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hitBuffer);
 
-		return hit.getTouch(0);
+		return hitBuffer;
 	}
 
 	void PhysicManager::AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode)
@@ -303,10 +306,10 @@ namespace PhysicSystem
 			scene->Update(deltaTime);
 	}
 
-	physx::PxMaterial* PhysicManager::GetMaterial(const uint32_t& index)
+	PxMaterial* PhysicManager::GetMaterial(const uint32_t& index)
 	{
-		std::vector<physx::PxMaterial*> materials(m_physics->getNbMaterials());
-		if (index < m_physics->getMaterials((physx::PxMaterial**)&materials.front(), (physx::PxU32)materials.size()))
+		std::vector<PxMaterial*> materials(m_physics->getNbMaterials());
+		if (index < m_physics->getMaterials((PxMaterial**)&materials.front(), (PxU32)materials.size()))
 			return materials[index];
 		else
 			return 0;
