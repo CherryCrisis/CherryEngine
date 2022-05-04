@@ -36,6 +36,7 @@ void Texture::Delete()
 
 void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureFormat textureFormat)
 {
+    texture->m_isFlipped = flipTexture;
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 

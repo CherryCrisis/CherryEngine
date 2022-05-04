@@ -150,20 +150,21 @@ int PBRRenderPass::Subscribe(ModelRenderer* toGenerate)
 		m_modelRenderers.insert(toGenerate);
 	}
 
+	toGenerate->m_onMaterialSet.Bind(&PBRRenderPass::Generate, this);
+
 	// Generate GPU textures
 	{
 		if (Material* material = model->m_material.get())
-			Subscribe(material);
+			Generate(material);
 	}
 
 	return 1;
 }
 
-template <>
-int PBRRenderPass::Subscribe(Material* toGenerate)
+void PBRRenderPass::Generate(Material* toGenerate)
 {
 	if (!toGenerate)
-		return -1;
+		return;
 
 	// Albedo texture
 	if (Texture* albedoTexture = toGenerate->m_textures[ETextureType::ALBEDO].get())
@@ -184,9 +185,6 @@ int PBRRenderPass::Subscribe(Material* toGenerate)
 
 	if (Texture* aoMap = toGenerate->m_textures[ETextureType::AO].get())
 		Subscribe(aoMap);
-
-
-	return 1;
 }
 
 template <>

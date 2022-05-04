@@ -33,6 +33,8 @@ private:
     int             m_blockSize = 0;
     ETextureFormat  m_internalFormat = ETextureFormat::RGBA;
 
+    bool            m_isFlipped = true;
+
     void*   m_data = nullptr;
 
 public:
@@ -62,4 +64,6 @@ public:
 
     //put a texture if the texture should not be imported
     void Reload(bool flipTexture = true, std::shared_ptr<Texture> texture = nullptr);
+
+    bool IsFlipped() const { return m_isFlipped; }
 };

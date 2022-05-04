@@ -37,9 +37,6 @@
     <Filter Include="Fichiers externes\Assimp">
       <UniqueIdentifier>{86cf7f2c-3c86-4dd3-bb93-e9aa81105b5d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Rendering">
-      <UniqueIdentifier>{634c2c81-51b5-4f0b-b4e2-1625dbd80036}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Rendering">
       <UniqueIdentifier>{4c3ee403-c5ce-4c26-bf4f-00e0404f094a}</UniqueIdentifier>
     </Filter>
@@ -88,12 +85,6 @@
     <Filter Include="Fichiers sources\Serialization">
       <UniqueIdentifier>{afdd0ab2-1029-4166-9f31-55e41b1d6d2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Rendering\Renderpass">
-      <UniqueIdentifier>{afffcb04-38da-4720-bb8b-eb88c35fad49}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Rendering\Generator">
-      <UniqueIdentifier>{f4e2d591-1196-4774-b969-80ac6443b808}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Rendering\Renderpass">
       <UniqueIdentifier>{05193d54-7521-4c8e-b1bc-211e2b57fd4b}</UniqueIdentifier>
     </Filter>
@@ -113,10 +104,19 @@
       <UniqueIdentifier>{60ec3e5f-64a8-463c-984d-a0b0ae0d8e2a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
-      <UniqueIdentifier>{6784c658-a388-408c-889c-bebf3d6edeee}</UniqueIdentifier>
+      <UniqueIdentifier>{dee2d53b-44b3-4ff9-bca8-b54466731a9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering">
+      <UniqueIdentifier>{634c2c81-51b5-4f0b-b4e2-1625dbd80036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering\Renderpass">
+      <UniqueIdentifier>{afffcb04-38da-4720-bb8b-eb88c35fad49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Rendering\Generator">
+      <UniqueIdentifier>{f4e2d591-1196-4774-b969-80ac6443b808}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
-      <UniqueIdentifier>{dee2d53b-44b3-4ff9-bca8-b54466731a9e}</UniqueIdentifier>
+      <UniqueIdentifier>{6784c658-a388-408c-889c-bebf3d6edeee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

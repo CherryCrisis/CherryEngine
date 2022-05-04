@@ -37,6 +37,7 @@ TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
         return;
 
     m_currentId = IdOfTextureFormat.at(m_texture->GetInternalFormat());
+    m_isFlipped = m_texture->IsFlipped();
 }
 
 bool TextureSettings::Update()
@@ -71,6 +72,9 @@ bool TextureSettings::Update()
             }
             ImGui::EndCombo();
         }
+
+        if (ImGui::Checkbox("Flip", &m_isFlipped))
+            m_settingsChanged = true;
         
         if (ImGui::Button("Close"))
         {
@@ -86,7 +90,7 @@ bool TextureSettings::Update()
             if (ImGui::Button("Save"))
             {
                 m_texture->SetInternalFormat(textureFormatByID.at(m_currentId));
-                Resource<Texture>::ReloadResource(m_texture, true);
+                Resource<Texture>::ReloadResource(m_texture, m_isFlipped);
                 ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
                 return false;
