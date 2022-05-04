@@ -19,9 +19,6 @@
 #include "panels/build_displayer.hpp"
 
 #include "maths.hpp"
-
-// not sure about this
-static const std::filesystem::path AssetPath = "Assets";
  
 struct GLFWwindow;
 class Entity;
@@ -43,6 +40,8 @@ struct EntitySelector
     //std::unordered_map<type, Behaviour*> GetSimilarComponents();
 
     void ApplyRange();
+
+    Entity* First() { return IsEmpty() ? nullptr : m_entities[0]; }
 
     Entity* m_startRange = nullptr;
     Entity* m_endRange = nullptr;
@@ -78,13 +77,10 @@ private:
     bool m_isDemoOpened     = false;
     bool m_isFeaturerOpened = false;
 
-    // TODO: To Replace with Resource Manager Texture Handling
-    uint64_t PlayIcon = 0;
-    uint64_t PauseIcon = 0;
-    uint64_t ReplayIcon = 0;
-    uint64_t StopIcon = 0;
+    std::shared_ptr<Texture> m_menuBarTextures[4];
+    void* m_gpuTextureIDs[4];
 
-    InputManager::InputContext* m_editorContext;
+    void GenerateGPUTexture(std::shared_ptr<Texture> texture);
 public:
 
     EntitySelector m_entitySelector;
@@ -97,20 +93,15 @@ public:
     void LinkEngine(Engine* engine);
 
     void FocusCallback(GLFWwindow* window, int focused);
-
-
     void FocusEntity(Entity* entity);
 
-    static bool LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height);
-
     InputManager* inputs;
-
-    //Selected Entities in hierarchy
-    std::vector<Entity*> m_selectedEntities;
+    InputManager::InputContext* m_editorContext;
 
     std::string m_projectPath = "";
 };
 
+// Wrapper for generic notifications
 namespace EditorNotifications 
 {
     void SceneSaving(bool result);

@@ -148,17 +148,16 @@ void SceneDisplayer::Render()
             glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
             Pickinger::SetBuffer(&m_framebuffer, &m_camera);
             CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
-            Entity* e = Pickinger::GetEntity(mousePos.x - (ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMin().x), mousePos.y - (ImGui::GetWindowPos().y + ImGui::GetWindowContentRegionMin().y));
+            Entity* pickedEntity = Pickinger::GetEntity(mousePos.x - (ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMin().x), mousePos.y - (ImGui::GetWindowPos().y + ImGui::GetWindowContentRegionMin().y));
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-            if (e) 
+            if (pickedEntity)
             {
-                Entity* root = e->GetBehaviour<Transform>()->GetRootParent()->GetHostPtr();
-                if (std::find(m_manager->m_selectedEntities.begin(), m_manager->m_selectedEntities.end(), root) != m_manager->m_selectedEntities.end() ||
-                    (e->GetBehaviour<Transform>()->IsChildOf(root->GetBehaviour<Transform>()) && m_manager->m_selectedEntities.size() > 0 && m_manager->m_selectedEntities[0]->GetBehaviour<Transform>()->IsChildOf(root->GetBehaviour<Transform>())))
+                Entity* root = pickedEntity->GetBehaviour<Transform>()->GetRootParent()->GetHostPtr();
+                if (m_manager->m_entitySelector.Contains(root))
                 {
                     selector.Clear();
-                    selector.Add(e);
+                    selector.Add(pickedEntity);
                 }
                 else 
                 {
@@ -185,18 +184,18 @@ void SceneDisplayer::Render()
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE")) 
             {
-                const char* c = (const char*)payload->Data;
-                std::string extension = String::ExtractValue(c, '.');
+                const char* data = (const char*)payload->Data;
+                std::string extension = String::ExtractValue(data, '.');
 
                 if (extension == "cherry") 
                 {
-                    m_manager->m_selectedEntities.clear();
-                    EditorNotifications::SceneLoading(SceneManager::LoadScene(c));
+                    m_manager->m_entitySelector.Clear();
+                    EditorNotifications::SceneLoading(SceneManager::LoadScene(data));
                 }
                 else if (extension == "obj" || extension == "fbx" || extension == "gltf")
                 {
                     auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-                    ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(c, true, cb);
+                    ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(data, true, cb);
                     EditorManager::SendNotification("Adding object ...", ENotifType::Info);
                 }
             }
@@ -211,9 +210,9 @@ void SceneDisplayer::Render()
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
         }
-        if (!selector.IsEmpty() && selector.m_entities[0]->GetBehaviour<Transform>())
+        if (!selector.IsEmpty() && selector.First()->GetBehaviour<Transform>())
         {
-            Transform* t = selector.m_entities[0]->GetBehaviour<Transform>();
+            Transform* t = selector.First()->GetBehaviour<Transform>();
             CCMaths::Matrix4 mat = t->GetWorldMatrix();
 
             if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, mat.data))

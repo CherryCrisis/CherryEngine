@@ -24,22 +24,18 @@ public:
 	//Call entities Update
 	void Update();
 
-	//To Move
 	static void Load(std::shared_ptr<Scene> scene);
-
-	std::string GetUniqueEntityName(const std::string& entityName);
 
 	void PopulateEmpty();
 
-	//To Rework
+	
 	void AddEntity(Entity* toAdd);
-	//To Rework
 	void RemoveEntity(Entity* toRemove);
-	//To Rework
 	void RemoveEntity(const std::string& name);
-	//To Rework
+
+	//Find Entity by its UUID
 	Entity* FindEntity(uint32_t id);
-	//To Remove
+	//!!INTERNAL!! - Find Entity by its modelID (picking)
 	Entity* FindModelEntity(uint32_t id);
 
 	void GenerateEntities(std::shared_ptr<ModelBase> resource);
@@ -50,8 +46,8 @@ public:
 	bool Save();
 	bool SaveAs(const char* filepath);
 
+	//Clear the entity vector
 	void Empty();
 
 	void Delete() override;
-
 };

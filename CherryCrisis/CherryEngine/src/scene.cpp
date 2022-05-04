@@ -105,17 +105,22 @@ bool Scene::SaveAs(const char* filepath)
 void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities)
 {
 	Entity* entity = new Entity();
-	ModelRenderer* modelRdr = entity->AddBehaviour<ModelRenderer>();
 	Transform* transform = entity->GetOrAddBehaviour<Transform>();
 
-	modelRdr->m_transform = transform;
-	modelRdr->SetModel(node->m_model);
+	ModelRenderer* modelRdr;
+
+	if (node->m_model)
+	{
+		modelRdr = entity->AddBehaviour<ModelRenderer>();
+		modelRdr->m_transform = transform;
+		modelRdr->SetModel(node->m_model);
+		modelRdr->BindToSignals();
+	}
 
 	transform->SetPosition(node->m_baseTRS[0]);
 	transform->SetRotation(node->m_baseTRS[1]);
 	transform->SetScale(node->m_baseTRS[2]);
 
-	modelRdr->BindToSignals();
 	transform->BindToSignals();
 
 	if (parentEntity)
@@ -174,9 +179,9 @@ Entity* Scene::FindModelEntity(uint32_t id)
 
 void Scene::Empty() 
 {
-	for (Entity* entity : m_entities)
+	while(m_entities.size() > 0)
 	{
-		entity->Destroy();
+		m_entities[0]->Destroy();
 		m_entities.erase(m_entities.begin());
 	}
 }

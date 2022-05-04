@@ -156,7 +156,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
             m_draggedEntity = (Entity*)payload->Data;
 
             m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform);
-            m_manager->m_selectedEntities.clear();
+            m_manager->m_entitySelector.Clear();
             m_isEntityDragged = false;
             m_draggedEntity = nullptr;
             if (opened) ImGui::TreePop();
@@ -186,7 +186,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
             else
             {
                 m_draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr);
-                m_manager->m_selectedEntities.clear();
+                m_manager->m_entitySelector.Clear();
                 m_draggedEntity = nullptr;
                 if (opened) ImGui::TreePop();
                 return true;
@@ -282,19 +282,18 @@ void HierarchyDisplayer::ContextCallback()
 
             ImGui::EndMenu();
         }
-        if (m_manager->m_selectedEntities.size() > 0)
+        if (!m_manager->m_entitySelector.IsEmpty())
         {
             ImGui::Separator();
-
 
             if (ImGui::MenuItem("Rename")) { m_renaming = true; }
             if (ImGui::MenuItem("Delete"))
             {
-                for (auto& entity : m_manager->m_selectedEntities)
+                for (auto& entity : m_manager->m_entitySelector.m_entities)
                 {
                     SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
                     //To Change
-                    m_manager->m_selectedEntities.clear();
+                    m_manager->m_entitySelector.Clear();
                 }
             }
 

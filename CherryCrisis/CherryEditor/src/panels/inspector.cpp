@@ -22,6 +22,7 @@
 #include "core/imcherry.hpp"
 #include "utils.hpp"
 #include "basic_renderpass.hpp"
+#include "light_component.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -320,21 +321,54 @@ void Inspector::Render()
 
 
             // TODO: Replace with list of available components
-            if (ImGui::MenuItem("Transform"))           { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
-            if (ImGui::MenuItem("Camera"))              { }
-            if (ImGui::MenuItem("Rigidbody"))           { auto rigidbody = m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); rigidbody->BindToSignals(); }
-            if (ImGui::MenuItem("Box Collider"))        { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); collider->BindToSignals(); }
-            if (ImGui::MenuItem("Sphere Collider"))     { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); collider->BindToSignals(); }
-            if (ImGui::MenuItem("Capsule Collider"))    { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<CapsuleCollider>(); collider->BindToSignals(); }
+            if (ImGui::MenuItem("Transform")) 
+            { 
+                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
+                    entity->AddBehaviour<Transform>(); 
+            }
+            if (ImGui::MenuItem("Camera"))      
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<CameraComponent>();
+            }
+            if (ImGui::MenuItem("Light"))
+            {
+                //for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                //    entity->AddBehaviour<LightComponent>();
+            }
+            if (ImGui::MenuItem("Rigidbody"))     
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<Rigidbody>();
+            }
+            if (ImGui::MenuItem("Box Collider"))      
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<BoxCollider>();
+            }
+            if (ImGui::MenuItem("Sphere Collider"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<SphereCollider>();
+            }
+            if (ImGui::MenuItem("Capsule Collider")) 
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour <CapsuleCollider>();
+            }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))
                 {
-                    ScriptedBehaviour* behaviour = m_manager->m_selectedEntities[0]->AddBehaviour<ScriptedBehaviour>();
+                    for (Entity* entity : m_manager->m_entitySelector.m_entities) 
+                    {
+                        ScriptedBehaviour* behaviour = entity->AddBehaviour<ScriptedBehaviour>();
                         behaviour->SetScriptClass(name);
                         behaviour->BindToSignals();
+                    }
                 }
-            }   
+            }  
+
 
             //---------------------------------------------------
 
