@@ -9,7 +9,6 @@
 
 #include "physic_actor.hpp"
 #include "physic_scene.hpp"
-#include "physic_utils.hpp"
 
 #define PX_RELEASE(x)	if(x)	{ x->release(); x = nullptr; }
 #define CCPhysicManager PhysicSystem::PhysicManager
@@ -72,9 +71,8 @@ namespace PhysicSystem
 		// Call scenes updates
 		void Simulate(float deltaTime);
 
-		Raycast RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
-
-		
+		static RaycastHit RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+		void AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode);
 
 		void MoveObjectFromScnToScn(PhysicScene* from, PhysicScene* to, PhysicActor* actor);
 

@@ -345,7 +345,7 @@ bool InputManager::GetKeyDown(const char* inputName)
 	}
 	else
 	{
-		ActionButtons& current = m_fetchContext.top()->m_buttons[inputName];
+		ActionSingle& current = m_fetchContext.top()->m_buttons[inputName];
 		return current.CheckDown();
 	}
 }
@@ -363,7 +363,7 @@ bool InputManager::GetKey(const char* inputName)
 	}
 	else
 	{
-		ActionButtons& current = m_fetchContext.top()->m_buttons[inputName];
+		ActionSingle& current = m_fetchContext.top()->m_buttons[inputName];
 		return current.CheckHeld();
 	}
 }
@@ -381,14 +381,14 @@ bool InputManager::GetKeyUp(const char* inputName)
 	}
 	else
 	{
-		ActionButtons& current = m_fetchContext.top()->m_buttons[inputName];
+		ActionSingle& current = m_fetchContext.top()->m_buttons[inputName];
 		return current.CheckUp();
 	}
 }
 #pragma endregion
 
-#pragma region ActionButtons
-InputManager::ActionButtons* InputManager::AddActionButtons(const std::string& name, int& success)
+#pragma region ActionSingle
+InputManager::ActionSingle* InputManager::AddActionButtons(const std::string& name, int& success)
 {
 	if (!m_fetchContext.top())
 	{
@@ -398,7 +398,7 @@ InputManager::ActionButtons* InputManager::AddActionButtons(const std::string& n
 
 	if (!m_fetchContext.top()->m_buttons.contains(name))
 	{
-		m_fetchContext.top()->m_buttons[name] = ActionButtons();
+		m_fetchContext.top()->m_buttons[name] = ActionSingle();
 		success = 1;
 	}
 	else
@@ -439,7 +439,7 @@ int InputManager::AddInputToAction(const std::string& name, Keycode key)
 	return 1;
 }
 
-int InputManager::AddInputToAction(ActionButtons* preset, Keycode key)
+int InputManager::AddInputToAction(ActionSingle* preset, Keycode key)
 {
 	if (!m_fetchContext.top())
 		return -1;
@@ -448,12 +448,12 @@ int InputManager::AddInputToAction(ActionButtons* preset, Keycode key)
 	return 1;
 }
 
-int InputManager::ChangeInputInAction(ActionButtons* action, Keycode oldKey, Keycode newKey)
+int InputManager::ChangeInputInAction(ActionSingle* action, Keycode oldKey, Keycode newKey)
 {
 	return action->ChangeInput(oldKey, newKey);
 }
 
-void InputManager::ActionButtons::SetPriorKey(EPriorKey key)
+void InputManager::ActionSingle::SetPriorKey(EPriorKey key)
 {
 	if ((int)key == -1)
 		m_priorKey = nullptr;
@@ -467,16 +467,16 @@ void InputManager::ActionButtons::SetPriorKey(EPriorKey key)
 }
 
 
-void InputManager::ActionButtons::AddInput(Keycode newInput)
+void InputManager::ActionSingle::AddInput(Keycode newInput)
 {
 	Input* input = InputManager::GetInstance()->GetInputRef(newInput);
 
 	m_inputs[newInput] = input;
 
-	input->m_isUpdated.Bind(&ActionButtons::Update, this);
+	input->m_isUpdated.Bind(&ActionSingle::Update, this);
 }
 
-int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
+int InputManager::ActionSingle::ChangeInput(Keycode oldKey, Keycode newKey)
 {
 	if (m_inputs.empty() || !m_inputs.contains(oldKey))
 		return -1;
@@ -486,7 +486,7 @@ int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
 
 	Input* input = InputManager::GetInstance()->GetInputRef(oldKey);
 
-	input->m_isUpdated.Unbind(&ActionButtons::Update, this);
+	input->m_isUpdated.Unbind(&ActionSingle::Update, this);
 	
 	m_inputs.erase(oldKey);
 	AddInput(newKey);
@@ -494,19 +494,19 @@ int InputManager::ActionButtons::ChangeInput(Keycode oldKey, Keycode newKey)
 	return 1;
 }
 
-void InputManager::ActionButtons::Destroy()
+void InputManager::ActionSingle::Destroy()
 {
 	InputManager* IM = InputManager::GetInstance();
 
 	for (auto& input : m_inputs)
 	{
-		IM->GetInputRef(input.first)->m_isUpdated.Unbind(&ActionButtons::Update, this);
+		IM->GetInputRef(input.first)->m_isUpdated.Unbind(&ActionSingle::Update, this);
 	}
 	m_inputs.clear();
 }
 
 
-void InputManager::ActionButtons::Update(Input* input)
+void InputManager::ActionSingle::Update(Input* input)
 {
 	if (!GetPriorKey())
 		return;
@@ -523,7 +523,7 @@ void InputManager::ActionButtons::Update(Input* input)
 		m_released.Invoke();
 }
 
-bool InputManager::ActionButtons::GetPriorKey()
+bool InputManager::ActionSingle::GetPriorKey()
 {
 	if (!m_priorKey || m_priorKey->Held())
 		return true;
@@ -531,7 +531,7 @@ bool InputManager::ActionButtons::GetPriorKey()
 	return false;
 }
 
-bool InputManager::ActionButtons::CheckDown()
+bool InputManager::ActionSingle::CheckDown()
 {
 	if (!GetPriorKey())
 		return false;
@@ -545,7 +545,7 @@ bool InputManager::ActionButtons::CheckDown()
 	return false;
 }
 
-bool InputManager::ActionButtons::CheckHeld()
+bool InputManager::ActionSingle::CheckHeld()
 {
 	if (!GetPriorKey())
 		return false;
@@ -559,7 +559,7 @@ bool InputManager::ActionButtons::CheckHeld()
 	return false;
 }
 
-bool InputManager::ActionButtons::CheckUp()
+bool InputManager::ActionSingle::CheckUp()
 {
 	if (!GetPriorKey())
 		return false;

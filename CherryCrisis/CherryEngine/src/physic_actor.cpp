@@ -10,6 +10,7 @@
 #include "transform.hpp"
 #include "cell.hpp"
 
+#include "debug.hpp"
 
 namespace PhysicSystem
 {
@@ -101,7 +102,6 @@ namespace PhysicSystem
 		else if (m_rigidbody)
 		{
 			m_isDynamic = true;
-			m_useGravity = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
 			SetPxActor();
@@ -223,6 +223,27 @@ namespace PhysicSystem
 		while (!m_colliders.empty())
 		{
 			m_colliders.back()->Unregister();
+		}
+	}
+
+	void PhysicActor::AddForce(const CCMaths::Vector3& force, EForceMode mode)
+	{
+		if (m_pxActor && m_isDynamic)
+		{
+			physx::PxVec3 pxForce = { force.x, force.y, force.z };
+			physx::PxRigidDynamic* object = static_cast<physx::PxRigidDynamic*>(m_pxActor);
+			object->addForce(pxForce, mode, true);
+		}
+	}
+
+	RaycastHit PhysicActor::Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
+	{
+		RaycastHit firstHit = PhysicManager::RaycastInScene(*m_owner->m_cell->m_physicCell, origin, dir, maxRange);
+
+		if (firstHit.actor == static_cast<physx::PxRigidActor*>(m_pxActor))
+		{
+			CCMaths::Vector3 newOrigin = { firstHit.position.x, firstHit.position.y, firstHit.position.z };
+			RaycastHit secondHit = PhysicManager::RaycastInScene(*m_owner->m_cell->m_physicCell, newOrigin, dir, maxRange - firstHit.distance);
 		}
 	}
 

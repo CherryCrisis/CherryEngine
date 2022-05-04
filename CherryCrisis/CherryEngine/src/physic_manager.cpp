@@ -198,8 +198,6 @@ namespace PhysicSystem
 			return;
 
 		cellScene->m_cell = nullptr;
-
-		//IsSceneEmpty(*cellScene);
 	}
 
 	PhysicScene& PhysicManager::FindOrCreateScene(Cell* cell)
@@ -274,13 +272,18 @@ namespace PhysicSystem
 		DestroyPhysX();
 	}
 
-	Raycast PhysicManager::RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
+	RaycastHit PhysicManager::RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
 	{
-		Raycast hit;
+		physx::PxRaycastBuffer hit;
 
 		bool status = scene.Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hit);
 
-		return hit;
+		return hit.getTouch(0);
+	}
+
+	void PhysicManager::AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode)
+	{
+		actor->AddForce(force, mode);
 	}
 
 	void PhysicManager::MoveObjectFromScnToScn(PhysicScene* from, PhysicScene* to, PhysicActor* actor)
