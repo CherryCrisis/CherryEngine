@@ -7,6 +7,8 @@
 #include "rendering_renderpass_interface.hpp"
 
 #include "ebo_tbn_generator.hpp"
+#include "texture_generator.hpp"
+#include "portal_generator.hpp"
 
 #include "framebuffer.hpp"
 #include "texture.hpp"
@@ -22,7 +24,6 @@ private:
 	struct GPUBasicPortal : public GPUPortal
 	{
 		Framebuffer framebuffer;
-
 	};
 
 	std::unordered_set<Portal*>	m_portals;
@@ -31,19 +32,8 @@ private:
 
 protected:
 	ElementMeshGenerator m_meshGenerator;
-
-	struct GPUTextureBasic : public GPUTexture
-	{
-		GLuint ID = 0u;
-
-		void Generate(Texture* texture);
-		void Regenerate(Texture* texture);
-		void Destroy();
-
-		GPUTextureBasic(Texture* texture);
-		virtual ~GPUTextureBasic();
-		void OnReload(std::shared_ptr<Texture> texture);
-	};
+	PortalGenerator m_portalGenerator;
+	TextureGenerator m_textureGenerator;
 
 public:
 	PortalRenderPass(const char* name);

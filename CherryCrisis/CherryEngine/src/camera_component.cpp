@@ -62,8 +62,8 @@ void CameraComponent::Initialize()
 
 void CameraComponent::ChangePosition(const CCMaths::Vector3& position)
 {
-	m_camera.lastPosition = m_camera.position;
-	m_camera.position = position;
+	m_camera.lastPosition = m_camera.m_position;
+	m_camera.m_position = position;
 
 	UpdateCameraModel();
 }
@@ -77,5 +77,5 @@ void CameraComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 
 void CameraComponent::UpdateCameraModel()
 {
-	m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
+	m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.m_position);
 }

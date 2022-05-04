@@ -81,9 +81,12 @@ void Transform::SetParent(Transform* transform)
 
 	m_parent = transform;
 
-	ReapplyPosition();
-	ReapplyRotation();
-	ReapplyScale();
+	if (m_parent)
+	{
+		ReapplyPosition();
+		ReapplyRotation();
+		ReapplyScale();
+	}
 
 	SetDirty();
 }

@@ -26,6 +26,5 @@ public:
 
 	void ChangePosition(const CCMaths::Vector3& position);
 	void ChangeRotation(const CCMaths::Vector3& rotation);
-
-	void UpdateCameraModel();
+	void ChangeScale(const CCMaths::Vector3& scale);
 };

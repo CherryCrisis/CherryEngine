@@ -130,8 +130,6 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glCullFace(GL_BACK);
 
 	glUseProgram(m_program->m_shaderProgram);
-	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);

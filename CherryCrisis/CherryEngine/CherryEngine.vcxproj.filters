@@ -1239,6 +1239,9 @@
     <ClInclude Include="include\mixed_rendering_pipeline.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="include\portal_generator.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1621,6 +1624,9 @@
       <Filter>Fichiers sources\Rendering\Pipeline</Filter>
     </ClCompile>
     <ClCompile Include="src\texture_generator.cpp">
+      <Filter>Fichiers sources\Rendering\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\portal_generator.cpp">
       <Filter>Fichiers sources\Rendering\Generator</Filter>
     </ClCompile>
   </ItemGroup>

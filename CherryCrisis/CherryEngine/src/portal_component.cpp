@@ -52,28 +52,34 @@ void PortalComponent::Initialize()
 
 	m_transform->m_onPositionChange.Bind(&PortalComponent::ChangePosition, this);
 	m_transform->m_onRotationChange.Bind(&PortalComponent::ChangeRotation, this);
+	m_transform->m_onScaleChange.Bind(&PortalComponent::ChangeScale, this);
 
 	GetHost().m_OnAwake.Unbind(&PortalComponent::Initialize, this);
 
 	ChangePosition(m_transform->GetPosition());
 	ChangeRotation(m_transform->GetRotation());
+	ChangeScale(m_transform->GetScale());
 }
 
 void PortalComponent::ChangePosition(const CCMaths::Vector3& position)
 {
-	m_portal.m_position = position;
+	CCMaths::Vector3 pos = (CCMaths::Vector3)m_transform->position;
+	CCMaths::Vector3 rot = (CCMaths::Vector3)m_transform->rotation;
 
-	UpdateCameraModel();
+	m_portal.m_viewMatrix = Matrix4::RotateXYZ(-rot) * Matrix4::Translate(-pos);
+	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 }
 
 void PortalComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 {
-	m_portal.m_rotation = rotation;
+	CCMaths::Vector3 pos = (CCMaths::Vector3)m_transform->position;
+	CCMaths::Vector3 rot = (CCMaths::Vector3)m_transform->rotation;
 
-	UpdateCameraModel();
+	m_portal.m_viewMatrix = Matrix4::RotateXYZ(-rot) * Matrix4::Translate(-pos);
+	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 }
 
-void PortalComponent::UpdateCameraModel()
+void PortalComponent::ChangeScale(const CCMaths::Vector3& scale)
 {
-	m_portal.m_viewMatrix = Matrix4::RotateZXY(-m_portal.m_rotation) * Matrix4::Translate(-m_portal.m_position);
+	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 }
