@@ -24,6 +24,7 @@ private:
 
 public:
 	CapsuleCollider();
+	CapsuleCollider(CCUUID& id);
 	~CapsuleCollider();
 
 	void BindToSignals() override;
@@ -36,10 +37,10 @@ public:
 
 	void SetPxData() override;
 
-	void SetScale(const float& scale) { m_editableScale = scale; SetPxData(); }
+	void SetScale(const float& scale) { m_editableScale = scale; ResetPxShape(); }
 	float GetScale() { return m_editableScale; }
 
-	void SetRadius(const float& radisu) { m_editableRadius = radisu; SetPxData(); }
+	void SetRadius(const float& radisu) { m_editableRadius = radisu; ResetPxShape(); }
 	float GetRadius() { return m_editableRadius; }
 
 	floatProperty editableScale{ this, &CapsuleCollider::SetScale, &CapsuleCollider::GetScale };

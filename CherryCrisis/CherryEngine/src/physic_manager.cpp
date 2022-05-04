@@ -18,6 +18,31 @@ namespace PhysicSystem
 {
 	PhysicManager::PhysicManager()
 	{
+	}
+
+	PhysicManager::~PhysicManager()
+	{
+		if (m_physics)
+			Stop();
+
+		for (auto& actor : m_physicActors)
+		{
+			actor->Empty();
+		}
+
+		m_physicActors.clear();
+
+		for (auto& scene : m_scenes)
+		{
+			delete scene;
+			scene = nullptr;
+		}
+
+		m_scenes.clear();
+	}
+
+	void PhysicManager::CreatePhysX()
+	{
 		static Debug* debug = Debug::GetInstance();
 
 		static physx::PxDefaultAllocator		allocCallback;
@@ -52,26 +77,8 @@ namespace PhysicSystem
 		CreateMaterial();
 	}
 
-	PhysicManager::~PhysicManager()
+	void PhysicManager::DestroyPhysX()
 	{
-		for (auto& actor : m_physicActors)
-		{
-			actor->Empty();
-		}
-
-		m_physicActors.clear();
-
-		for (auto& scene : m_scenes)
-		{
-			physx::PxScene* pxScene = scene->Get();
-			PX_RELEASE(pxScene);
-
-			delete scene;
-			scene = nullptr;
-		}
-
-		m_scenes.clear();
-
 		PX_RELEASE(m_physics);
 
 		if (m_pvd)
@@ -245,11 +252,13 @@ namespace PhysicSystem
 	{
 		m_isPlaying = true;
 
-		for (auto& actor : m_physicActors)
-			actor->CreatePxActor();
+		CreatePhysX();
 
 		for (auto& scene : m_scenes)
 			scene->CreatePxScene();
+
+		for (auto& actor : m_physicActors)
+			actor->CreatePxActor();
 	}
 
 	void PhysicManager::Stop()
@@ -261,6 +270,8 @@ namespace PhysicSystem
 
 		for (auto& scene : m_scenes)
 			scene->DestroyPxScene();
+
+		DestroyPhysX();
 	}
 
 	Raycast PhysicManager::RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
