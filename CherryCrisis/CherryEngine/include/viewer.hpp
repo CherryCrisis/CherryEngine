@@ -3,11 +3,8 @@
 #include <memory>
 
 #include "rendering_pipeline_interface.hpp"
-#include "render_manager.hpp"
 
 #include "maths.hpp"
-
-#include "property.hpp"
 
 class Cell;
 
@@ -22,6 +19,7 @@ public:
 
 	std::unique_ptr<ARenderingPipeline> m_pipeline;
 
-	Viewer() { RenderManager::GetInstance()->m_viewers.insert(this); }
-	virtual ~Viewer() { RenderManager::GetInstance()->m_viewers.erase(this);  }
+	void Draw(Framebuffer& fb) { m_pipeline->Execute(fb, this); }
+
+	virtual ~Viewer() = default;
 };

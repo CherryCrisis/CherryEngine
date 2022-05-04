@@ -2,12 +2,14 @@
 
 #include "behaviour.hpp"
 
+#include "cherry_macros.hpp"
+
 #include "camera.hpp"
 #include "maths.hpp"
 
 class Transform;
 
-class CameraComponent : public Behaviour
+class CCENGINE_API CameraComponent : public Behaviour
 {
 protected:
 	void PopulateMetadatas() override;

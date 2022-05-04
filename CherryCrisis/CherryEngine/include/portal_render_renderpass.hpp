@@ -8,18 +8,30 @@
 
 #include "ebo_tbn_generator.hpp"
 
+#include "framebuffer.hpp"
 #include "texture.hpp"
+#include "portal.hpp"
 #include "light.hpp"
 #include "mesh.hpp"
 
-struct Portal;
 class Viewer;
 
 class PortalRenderPass : public ARenderingRenderPass
 {
+private:
+	struct GPUBasicPortal : public GPUPortal
+	{
+		Framebuffer framebuffer;
+
+	};
+
 	std::unordered_set<Portal*>	m_portals;
 
+	std::shared_ptr<Mesh> m_quadMesh;
+
 protected:
+	ElementMeshGenerator m_meshGenerator;
+
 	struct GPUTextureBasic : public GPUTexture
 	{
 		GLuint ID = 0u;

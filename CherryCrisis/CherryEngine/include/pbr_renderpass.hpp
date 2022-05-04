@@ -7,6 +7,7 @@
 #include "rendering_renderpass_interface.hpp"
 
 #include "ebo_tbn_generator.hpp"
+#include "texture_generator.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -17,8 +18,11 @@ class Material;
 class Viewer;
 class Skydome;
 
-class PBRRenderPass : public ARenderingRenderPass, ElementTBNGenerator
+class PBRRenderPass : public ARenderingRenderPass
 {
+	ElementTBNGenerator m_meshGenerator;
+	TextureGenerator m_textureGenerator;
+
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
 
@@ -27,19 +31,6 @@ class PBRRenderPass : public ARenderingRenderPass, ElementTBNGenerator
 	Skydome* m_skydome = nullptr;
 
 protected:
-	struct GPUTextureBasic : public GPUTexture
-	{
-		GLuint ID = 0u;
-
-		void Generate(Texture* texture);
-		void Regenerate(Texture* texture);
-		void Destroy();
-
-		GPUTextureBasic(Texture* texture);
-		virtual ~GPUTextureBasic();
-		void OnReload(std::shared_ptr<Texture> texture);
-	};
-
 	void BindTexture(Material* material, ETextureType textureType, int id);
 
 public:

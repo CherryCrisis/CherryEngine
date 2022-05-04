@@ -45,7 +45,7 @@ int SkyboxRenderPass::Subscribe(Skybox* toGenerate)
 		}
 		cubemap->m_gpuCubemap = std::move(gpuCubemap);
 
-		if (!ElementMeshGenerator::Generate(toGenerate->m_mesh.get()))
+		if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
 			return -1;
 	}
 
@@ -88,7 +88,7 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	Mesh* mesh = m_skybox->m_mesh.get();
 
-	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
+	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 	glBindVertexArray(gpuMesh->VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 	glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);

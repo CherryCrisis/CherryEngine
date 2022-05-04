@@ -7,8 +7,10 @@
 
 class Mesh;
 
-class BloomRenderPass : public APostProcessRenderPass, public ElementMeshGenerator
+class BloomRenderPass : public APostProcessRenderPass
 {
+    ElementMeshGenerator m_meshGenerator;
+
     Framebuffer m_pingpongFramebuffers[2];
     std::shared_ptr<Mesh> m_quadMesh;
 

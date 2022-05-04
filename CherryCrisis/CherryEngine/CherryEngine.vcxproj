@@ -402,10 +402,14 @@
     <None Include="..\x64\Debug\Assets\bloomShader.vert" />
     <None Include="..\x64\Debug\Assets\hdrShader.frag" />
     <None Include="..\x64\Debug\Assets\hdrShader.vert" />
+    <None Include="..\x64\Debug\Assets\portalShader.frag" />
+    <None Include="..\x64\Debug\Assets\portalShader.vert" />
     <None Include="..\x64\Debug\Assets\shadowShader.frag" />
     <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
     <None Include="..\x64\Debug\Assets\skyboxShader.vert" />
+    <None Include="Scripting.cd" />
+    <None Include="Rendering.cd" />
     <None Include="externals\include\assimp\color4.inl" />
     <None Include="externals\include\assimp\material.inl" />
     <None Include="externals\include\assimp\matrix3x3.inl" />
@@ -421,7 +425,6 @@
     <None Include="include\maths\vector2.inl" />
     <None Include="include\maths\vector3.inl" />
     <None Include="include\maths\vector4.inl" />
-    <None Include="include\renderer_manager.inl" />
     <None Include="include\resources_container.inl" />
     <None Include="include\resource_manager.inl" />
     <CustomBuild Include="interface\ccengine.i">
@@ -570,6 +573,7 @@
     <ClCompile Include="src\spheremap.cpp" />
     <ClCompile Include="src\sphere_collider.cpp" />
     <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\texture_generator.cpp" />
     <ClCompile Include="src\time_manager.cpp" />
     <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />

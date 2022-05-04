@@ -1286,9 +1286,6 @@
     <None Include="externals\include\assimp\vector3.inl">
       <Filter>Fichiers externes\Assimp</Filter>
     </None>
-    <None Include="include\renderer_manager.inl">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </None>
     <None Include="interface\entity.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
@@ -1378,6 +1375,14 @@
     </None>
     <None Include="include\entity.inl">
       <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </None>
+    <None Include="Scripting.cd" />
+    <None Include="Rendering.cd" />
+    <None Include="..\x64\Debug\Assets\portalShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\portalShader.vert">
+      <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1614,6 +1619,9 @@
     </ClCompile>
     <ClCompile Include="src\mixed_rendering_pipeline.cpp">
       <Filter>Fichiers sources\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture_generator.cpp">
+      <Filter>Fichiers sources\Rendering\Generator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

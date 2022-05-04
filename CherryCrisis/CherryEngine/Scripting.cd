@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="mono::ManagedScriptContext" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAABQJBAgAoAAIEAAEAZGAAAAChECAAAAJEA=</HashCode>
+      <FileName>include\csassembly.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedScriptSystem" Collapsed="true">
+    <Position X="5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABUwAAEgAQQACgYAAAggCABAgAgAQAAAAAAAAAKIQgA=</HashCode>
+      <FileName>include\csscripting_system.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedBase&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgEAAAEAAAAgAAAAAAEAAAAACABA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedHandle&lt;T&gt;" Collapsed="true">
+    <Position X="5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAEAACAAAAAAAAAAgAAAAgAAAAgAIAgBAAAAAA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedAssembly" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="mono::ManagedAssembly::HandleT" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>include\monowrapper.hpp</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>gAEAAACAACQAIAAAgIAAAAAIAARAAAASCAAAAABgAEA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedClass" Collapsed="true">
+    <Position X="2.75" Y="1.5" Width="1.5" />
+    <Members>
+      <Field Name="arrayClass" Hidden="true" />
+      <Field Name="booleanClass" Hidden="true" />
+      <Field Name="byteClass" Hidden="true" />
+      <Field Name="charClass" Hidden="true" />
+      <Field Name="doubleClass" Hidden="true" />
+      <Field Name="enumClass" Hidden="true" />
+      <Field Name="exceptionClass" Hidden="true" />
+      <Field Name="ImplementsInterface" Hidden="true" />
+      <Field Name="int16Class" Hidden="true" />
+      <Field Name="int32Class" Hidden="true" />
+      <Field Name="int64Class" Hidden="true" />
+      <Field Name="intptrClass" Hidden="true" />
+      <Field Name="m_alignment" Hidden="true" />
+      <Field Name="m_assembly" Hidden="true" />
+      <Field Name="m_attributes" Hidden="true" />
+      <Field Name="m_attrInfo" Hidden="true" />
+      <Field Name="m_class" Hidden="true" />
+      <Field Name="m_className" Hidden="true" />
+      <Field Name="m_delegateClass" Hidden="true" />
+      <Field Name="m_enumClass" Hidden="true" />
+      <Field Name="m_fields" Hidden="true" />
+      <Field Name="m_handledInstances" Hidden="true" />
+      <Field Name="m_instances" Hidden="true" />
+      <Field Name="m_managedInstances" Hidden="true" />
+      <Field Name="m_methods" Hidden="true" />
+      <Field Name="m_namespaceName" Hidden="true" />
+      <Field Name="m_nullableClass" Hidden="true" />
+      <Field Name="m_numConstructors" Hidden="true" />
+      <Field Name="m_populated" Hidden="true" />
+      <Field Name="m_properties" Hidden="true" />
+      <Field Name="m_size" Hidden="true" />
+      <Field Name="m_valueClass" Hidden="true" />
+      <Field Name="sbyteClass" Hidden="true" />
+      <Field Name="singleClass" Hidden="true" />
+      <Field Name="stringClass" Hidden="true" />
+      <Field Name="threadClass" Hidden="true" />
+      <Field Name="uint16Class" Hidden="true" />
+      <Field Name="uint32Class" Hidden="true" />
+      <Field Name="uint64Class" Hidden="true" />
+      <Field Name="uintptrClass" Hidden="true" />
+      <Field Name="voidClass" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>YDIFjAEoQUyEECTCxfOcBJ4wGshAIQY2GzgAIwJiymk=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedMethod" Collapsed="true">
+    <Position X="2.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EDAAAAQBgEAoBCAAgAIkAAQQAABAAMQCCAAAQCAKCAA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedType" Collapsed="true">
+    <Position X="2.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EDAcIABoAQikACEAgUKIDYYAqGgAAAQQKFgAEUIChno=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedObject" Collapsed="true">
+    <Position X="2.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAABAAhAgOQJAAEAAAIAAAAEAAEAAAAAGEAAAIAAAAA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::AManagedThunk" Collapsed="true">
+    <Position X="2.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedThunk&lt;RetT, ...Args&gt;" Collapsed="true">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAICAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedField" Collapsed="true">
+    <Position X="2.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAIAAAAEAAAAAIAAIAAAQEIAAAAAAAAQAAAAEAAAA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mono::ManagedProperty" Collapsed="true">
+    <Position X="2.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAgAAAAAAEAAAAAAAAIAAAAAAAAAAIUQAAAAIAAEACA=</HashCode>
+      <FileName>include\monowrapper.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CsAssembly">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAEAAAAAAAAABAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>include\csassembly.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CsScriptingSystem">
+    <Position X="5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAQAAAAAAAgAAAAAAABACACCAAIA=</HashCode>
+      <FileName>include\csscripting_system.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

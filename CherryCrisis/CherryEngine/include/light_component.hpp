@@ -3,10 +3,11 @@
 #include "behaviour.hpp"
 
 #include "light.hpp"
+#include "cherry_macros.hpp"
 
 class Transform;
 
-class LightComponent : public Behaviour, public ARenderer
+class CCENGINE_API LightComponent : public Behaviour, public ARenderer
 {
 protected:
 	void PopulateMetadatas() override;

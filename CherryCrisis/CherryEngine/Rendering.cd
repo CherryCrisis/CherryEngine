@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="APostProcessRenderPass">
+    <Position X="2.5" Y="2.5" Width="1.5" />
+    <InheritanceLine Type="ARenderPass" FixedFromPoint="true">
+      <Path>
+        <Point X="4.5" Y="1.438" />
+        <Point X="3.25" Y="1.438" />
+        <Point X="3.25" Y="2.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAACAAAAAAAAAAAAAAAAAAIAABAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\postprocess_renderpass_interface.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ARenderer">
+    <Position X="8.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAIAAAAAAAAAAAAAAAAAgAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>include\renderer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ARenderingPipeline">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAgAAAAAAAAAAwAAQAAAAAAAAAgAAAQAAAAAAAEAAA=</HashCode>
+      <FileName>include\rendering_pipeline_interface.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ARenderingRenderPass">
+    <Position X="7.5" Y="0.5" Width="1.75" />
+    <InheritanceLine Type="ARenderPass" FixedFromPoint="true">
+      <Path>
+        <Point X="6" Y="1.438" />
+        <Point X="7.5" Y="1.438" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAACGAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\rendering_renderpass_interface.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ARenderPass">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAAgAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>include\renderpass_interface.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BasicPostProcessRenderPass" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAEAAAFAQ=</HashCode>
+      <FileName>include\basic_postprocess_renderpass.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BasicRenderPass" Collapsed="true">
+    <Position X="7.75" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="ARenderingRenderPass" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.438" Y="2.761" />
+        <Point X="8.438" Y="3.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAACAAACAAAIYAAAAEAAAAA=</HashCode>
+      <FileName>include\basic_renderpass.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BasicRPipeline" Collapsed="true">
+    <Position X="10" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAYQAYAEAAAAAEAAAAAAAAAAgAAAAIAA=</HashCode>
+      <FileName>include\basic_rendering_pipeline.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BloomRenderPass" Collapsed="true">
+    <Position X="4.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAEAAAAACAQAAAAAAAAAAAAAAAAAAAAAAAEABAA=</HashCode>
+      <FileName>include\bloom_renderpass.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HDRRenderPass" Collapsed="true">
+    <Position X="2.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAQAAAAAAAAAAAAAAAAAQBAQ=</HashCode>
+      <FileName>include\hdr_renderpass.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShaderProgram">
+    <Position X="10.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAgQAAAAAAAAAAAAAAAABAAAEAAAAACAABAABAAAA=</HashCode>
+      <FileName>include\shader_program.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Viewer">
+    <Position X="6.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAQAAAQSAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\viewer.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="GPUCubemap" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\cubemap.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GPULight" Collapsed="true">
+    <Position X="12" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\light.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GPUMesh" Collapsed="true">
+    <Position X="12" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\mesh.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GPUPortal" Collapsed="true">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\portal.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GPUTexture" Collapsed="true">
+    <Position X="12" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>include\texture.hpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

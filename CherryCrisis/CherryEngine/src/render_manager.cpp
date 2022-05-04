@@ -4,12 +4,9 @@
 
 #include <glad/gl.h>
 
-#include "resource_manager.hpp"
-
 #include "framebuffer.hpp"
 
 #include "viewer.hpp"
-#include "camera.hpp"
 
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
@@ -69,12 +66,4 @@ RenderManager::RenderManager()
 	glDebugMessageCallback(debugCallback, NULL);
 
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
-}
-
-void RenderManager::DrawScene(Framebuffer& framebuffer, Viewer* viewer)
-{
-	RenderManager* RM = GetInstance();
-
-    if (auto pipeline = viewer->m_pipeline.get())
-        pipeline->Execute(framebuffer, viewer);
 }

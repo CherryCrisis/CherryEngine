@@ -320,10 +320,10 @@ void InspectComponents(Entity* entity, int id)
 
 
                     ImGui::TableNextColumn();
-                    BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
+                    TextureGenerator::GPUTextureBasic* GPUtex = nullptr;
                     if (texRef.get() && texRef->m_gpuTexture)
                     {
-                        GPUtex = static_cast<BasicRenderPass::GPUTextureBasic*>
+                        GPUtex = static_cast<TextureGenerator::GPUTextureBasic*>
                         (texRef->m_gpuTexture.get());
                     }
 
@@ -381,24 +381,29 @@ void Inspector::Render()
             static char search[32] = "";
             ImGui::InputText("##", search, IM_ARRAYSIZE(search));
 
-
+            Behaviour* addBehaviour = nullptr;
             // TODO: Replace with list of available components
-            if (ImGui::MenuItem("Transform"))           { m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
-            if (ImGui::MenuItem("Camera"))              { }
-            if (ImGui::MenuItem("Rigidbody"))           { auto rigidbody = m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); rigidbody->BindToSignals(); }
-            if (ImGui::MenuItem("Box Collider"))        { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); collider->BindToSignals(); }
-            if (ImGui::MenuItem("Sphere Collider"))     { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); collider->BindToSignals(); }
-            if (ImGui::MenuItem("Capsule Collider"))    { auto collider = m_manager->m_selectedEntities[0]->AddBehaviour<CapsuleCollider>(); collider->BindToSignals(); }
-            if (ImGui::MenuItem("PortalComponent"))		{ auto portal = m_manager->m_selectedEntities[0]->AddBehaviour<PortalComponent>(); portal->BindToSignals(); }
+            if (ImGui::MenuItem("Transform"))           { addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<Transform>(); }
+            if (ImGui::MenuItem("Camera"))              { addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<CameraComponent>(); }
+            if (ImGui::MenuItem("Rigidbody"))           { addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<Rigidbody>(); }
+            if (ImGui::MenuItem("Box Collider"))        { addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<BoxCollider>(); }
+            if (ImGui::MenuItem("Sphere Collider"))     { addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<SphereCollider>(); }
+            if (ImGui::MenuItem("Capsule Collider"))    { addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<CapsuleCollider>(); }
+            if (ImGui::MenuItem("Light Component"))     { addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<LightComponent>(); }
+            if (ImGui::MenuItem("Portal Component"))	{ addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<PortalComponent>(); }
+
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))
                 {
-                    ScriptedBehaviour* behaviour = m_manager->m_selectedEntities[0]->AddBehaviour<ScriptedBehaviour>();
-                        behaviour->SetScriptClass(name);
-                        behaviour->BindToSignals();
+                    ScriptedBehaviour* script = m_manager->m_selectedEntities[0]->AddBehaviour<ScriptedBehaviour>();
+                    script->SetScriptClass(name);
+                    addBehaviour = script;
                 }
             }   
+
+            if (addBehaviour)
+                addBehaviour->GetHost().Initialize();
 
             //---------------------------------------------------
 
