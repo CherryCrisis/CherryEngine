@@ -157,6 +157,7 @@ Matrix4 Transform::GetLocalMatrix()
 
 void Transform::SetPosition(const Vector3& position)
 {
+	m_onTransformEdited.Invoke(this);
 	m_position = position;
 	SetDirty();
 	m_onPositionChange.Invoke(position);
@@ -164,13 +165,16 @@ void Transform::SetPosition(const Vector3& position)
 
 void Transform::SetRotation(const Vector3& rotation)
 {
+	m_onTransformEdited.Invoke(this);
 	m_rotation = rotation;
 	SetDirty();
 	m_onRotationChange.Invoke(rotation);
+
 }
 
 void Transform::SetScale(const Vector3& scale)
 {
+	m_onTransformEdited.Invoke(this);
 	m_scale = scale;
 	SetDirty();
 	m_onScaleChange.Invoke(scale);

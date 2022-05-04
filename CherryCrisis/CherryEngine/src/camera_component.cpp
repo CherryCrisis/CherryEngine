@@ -12,20 +12,29 @@
 
 #include "mixed_rendering_pipeline.hpp"
 
+unsigned int	 CameraComponent::m_count	    = 0;
+CameraComponent* CameraComponent::m_mainCamera	= nullptr;
+
 CameraComponent::CameraComponent()
 {
+	if (m_count == 0) SetAsMain();
+	m_count++;
 	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
 }
 
 CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
 {
+	if (m_count == 0) SetAsMain();
+	m_count++;
 	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
 }
 
 CameraComponent::~CameraComponent()
 {
+	if (m_mainCamera == this) m_mainCamera = nullptr;
+	m_count--;
 	GetHost().m_cell->RemoveViewer(&m_camera);
 }
 
@@ -78,4 +87,14 @@ void CameraComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 void CameraComponent::UpdateCameraModel()
 {
 	m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
+}
+
+CameraComponent* CameraComponent::GetMainCamera()
+{
+	return m_mainCamera;
+}
+
+void CameraComponent::SetAsMain() 
+{
+	m_mainCamera = this;
 }

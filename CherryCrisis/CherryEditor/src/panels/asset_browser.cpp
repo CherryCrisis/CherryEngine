@@ -58,7 +58,6 @@ void AssetBrowser::RenderAssetsSettingsPopUp()
 
 void AssetBrowser::RenderMenuBar()
 {
-
     if (ImGui::BeginMenuBar())
     {
         ImGui::InputText("Search", m_researchInput, IM_ARRAYSIZE(m_researchInput));

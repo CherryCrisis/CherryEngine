@@ -140,6 +140,8 @@ void SceneDisplayer::Render()
             }
         }
 
+        EntitySelector& selector = m_manager->m_entitySelector;
+
         if (InputManager::GetInstance()->GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
             && !ImGuizmo::IsOver())
         {
@@ -148,33 +150,26 @@ void SceneDisplayer::Render()
             CCMaths::Vector2 mousePos  = InputManager::GetInstance()->GetMousePos();
             ImVec2 bufferPos = ImGui::GetWindowContentRegionMin();
             CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y)};
-            Entity* e = Pickinger::GetEntity(mousebufferPos);
+            Entity* pickedEntity = Pickinger::GetEntity(mousebufferPos);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-            //TODO: Add multi select CTRL 
-
-            if (e) 
+            if (pickedEntity)
             {
-                Entity* root = e->GetBehaviour<Transform>()->GetRootParent()->GetHostPtr();
-                if (std::find(m_manager->m_selectedEntities.begin(), m_manager->m_selectedEntities.end(), root) != m_manager->m_selectedEntities.end() ||
-                    (e->GetBehaviour<Transform>()->IsChildOf(root->GetBehaviour<Transform>()) && m_manager->m_selectedEntities.size() > 0 && m_manager->m_selectedEntities[0]->GetBehaviour<Transform>()->IsChildOf(root->GetBehaviour<Transform>())))
+                Entity* root = pickedEntity->GetBehaviour<Transform>()->GetRootParent()->GetHostPtr();
+                if (m_manager->m_entitySelector.Contains(root))
                 {
-                    m_manager->m_selectedEntities.clear();
-                    m_manager->m_selectedEntities.push_back(e);
+                    selector.Clear();
+                    selector.Add(pickedEntity);
                 }
                 else 
                 {
-                    m_manager->m_selectedEntities.clear();
-                    m_manager->m_selectedEntities.push_back(root);
+                    selector.Clear();
+                    selector.Add(root);
                 }
             }
             else 
-            {
-                m_manager->m_selectedEntities.clear();
-            }
-
+                selector.Clear();
         }
-
 
         m_isActive = !ImGui::IsWindowCollapsed();
 
@@ -185,26 +180,24 @@ void SceneDisplayer::Render()
             UpdateFramebuffer(wsize.x, wsize.y, m_camera);
 
         uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
-
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
  
-        //Receive Drag&Drop
         if (ImGui::BeginDragDropTarget()) 
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE")) 
             {
-                const char* c = (const char*)payload->Data;
-                std::string extension = String::ExtractValue(c, '.');
+                const char* data = (const char*)payload->Data;
+                std::string extension = String::ExtractValue(data, '.');
 
                 if (extension == "cherry") 
                 {
-                    m_manager->m_selectedEntities.clear();
-                    EditorNotifications::SceneLoading(SceneManager::LoadScene(c));
+                    m_manager->m_entitySelector.Clear();
+                    EditorNotifications::SceneLoading(SceneManager::LoadScene(data));
                 }
                 else if (extension == "obj" || extension == "fbx" || extension == "gltf")
                 {
                     auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-                    ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(c, true, cb);
+                    ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(data, true, cb);
                     EditorManager::SendNotification("Adding object ...", ENotifType::Info);
                 }
             }
@@ -214,14 +207,15 @@ void SceneDisplayer::Render()
         CCMaths::Matrix4 projection = m_camera.m_projectionMatrix;
         CCMaths::Matrix4 view = m_camera.m_viewMatrix;
 
-        ImGuizmo::SetOrthographic(false);
-        ImGuizmo::SetDrawlist();
-        ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
-        if (m_manager->m_selectedEntities.size() > 0 && m_manager->m_selectedEntities[0]->GetBehaviour<Transform>() != nullptr) 
         {
-            Transform* t = m_manager->m_selectedEntities[0]->GetBehaviour<Transform>();
+            ImGuizmo::SetOrthographic(false);
+            ImGuizmo::SetDrawlist();
+            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+        }
+        if (!selector.IsEmpty() && selector.First()->GetBehaviour<Transform>())
+        {
+            Transform* t = selector.First()->GetBehaviour<Transform>();
             CCMaths::Matrix4 mat = t->GetWorldMatrix();
-
 
             if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, mat.data))
             {

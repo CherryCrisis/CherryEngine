@@ -26,61 +26,21 @@
 #include "builder.hpp"
 #include "command.hpp"
 
-//To Replace with Resource Manager Texture Handling
-bool EditorManager::LoadTextureFromFile(const char* filename, uint64_t* out_texture, int* out_width, int* out_height)
-{
-    // Load from file
-    stbi_set_flip_vertically_on_load(true);
-    int image_width = 0;
-    int image_height = 0;
-    unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
-    if (image_data == NULL)
-        return false;
-
-    // Create a OpenGL texture identifier
-    GLuint image_texture;
-    glGenTextures(1, &image_texture);
-    glBindTexture(GL_TEXTURE_2D, image_texture);
-
-    // Setup filtering parameters for display
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // This is required on WebGL for non power-of-two textures
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); // Same
-
-    // Upload pixels into texture
-#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-#endif
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
-    stbi_image_free(image_data);
-    
-    *out_texture = image_texture;
-    *out_width = image_width;
-    *out_height = image_height;
-
-    return true;
-}
-
 EditorManager::EditorManager(const std::string& projectPath) 
 {
     inputs = InputManager::GetInstance();
+    ResourceManager* RM = ResourceManager::GetInstance();
 
-    
-    { // To Replace with Resource Manager Texture Handler
-        int null = 0;
+    m_menuBarTextures[0] = RM->AddResource<Texture>("Internal/Icons/play_icon.png", true, false, ETextureFormat::RGBA);
+    m_menuBarTextures[1] = RM->AddResource<Texture>("Internal/Icons/pause_icon.png", true, false, ETextureFormat::RGBA);
+    m_menuBarTextures[2] = RM->AddResource<Texture>("Internal/Icons/replay_icon.png", true, false, ETextureFormat::RGBA);
+    m_menuBarTextures[3] = RM->AddResource<Texture>("Internal/Icons/stop_icon.png", true, false, ETextureFormat::RGBA);
 
-        if (!LoadTextureFromFile("Internal/Icons/play_icon.png", &PlayIcon, &null, &null))
-            std::cout << "failed to load Play icon" << std::endl;
-
-        if (!LoadTextureFromFile("Internal/Icons/pause_icon.png", &PauseIcon, &null, &null))
-            std::cout << "failed to load Pause icon" << std::endl;
-
-        if (!LoadTextureFromFile("Internal/Icons/replay_icon.png", &ReplayIcon, &null, &null))
-            std::cout << "failed to load Replay icon" << std::endl;
-
-        if (!LoadTextureFromFile("Internal/Icons/stop_icon.png", &StopIcon, &null, &null))
-            std::cout << "failed to load Stop icon" << std::endl;
+    for (int i = 0; i < 4; ++i)
+    {
+        GenerateGPUTexture(m_menuBarTextures[i]);
+        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_menuBarTextures[i]->m_gpuTexture.get());
+        m_gpuTextureIDs[i] = reinterpret_cast<void*>((uintptr_t)gpuTextureLog->m_ID);
     }
 
     m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
@@ -89,6 +49,28 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
 
     Serializer::UnserializeEditor("editor.meta");
+}
+
+void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
+{
+    std::unique_ptr<GPUTextureLog> gpuTexture = std::make_unique<GPUTextureLog>();
+
+    glGenTextures(1, &gpuTexture->m_ID);
+    glBindTexture(GL_TEXTURE_2D, gpuTexture->m_ID);
+
+    // Setup filtering parameters for display
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    if (!texture->GetData() || texture->GetWidth() <= 0 || texture->GetHeight() <= 0)
+        return;
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, texture->GetData());
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    texture->m_gpuTexture = std::move(gpuTexture);
 }
 
 void EditorManager::LinkEngine(Engine* engine) 
@@ -102,8 +84,7 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
 {
     HandleDocking();
 
-    if (m_selectedEntities.size() > 0)
-        ImGuizmo::Enable(true);
+    if (!m_entitySelector.IsEmpty()) ImGuizmo::Enable(true);
 
     HandleMenuBar();
     m_browser.Render();
@@ -224,12 +205,12 @@ void EditorManager::HandleMenuBar()
         ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg]);
         ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f * 3.f));
 
-        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)StopIcon : (ImTextureID)PlayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)m_gpuTextureIDs[3] : (ImTextureID)m_gpuTextureIDs[0], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
             if (m_engine->isPlaying)
             {
                 m_engine->Stop();
-                m_selectedEntities.clear();
+                m_entitySelector.Clear();
                 m_gameDisplayer.Unfocus();
             }
             else
@@ -241,12 +222,12 @@ void EditorManager::HandleMenuBar()
 
         } ImGui::SameLine();
         
-        if (ImGui::ImageButton((ImTextureID)PauseIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        if (ImGui::ImageButton((ImTextureID)m_gpuTextureIDs[1], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         } ImGui::SameLine();
         
-        if (ImGui::ImageButton((ImTextureID)ReplayIcon, ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        if (ImGui::ImageButton((ImTextureID)m_gpuTextureIDs[2], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
 
         }
@@ -367,8 +348,8 @@ void EditorManager::FocusCallback(GLFWwindow* window, int focused)
 
 void EditorManager::FocusEntity(Entity* entity)
 {
-    m_selectedEntities.clear();
-    m_selectedEntities.push_back(entity);
+    m_entitySelector.Clear();
+    m_entitySelector.Add(entity);
 }
 
 namespace EditorNotifications
@@ -411,5 +392,77 @@ namespace EditorNotifications
             EditorManager::SendNotification("Building game..", ENotifType::Info);
         else
             EditorManager::SendNotification("Error while building game, see console", ENotifType::Error);
+    }
+}
+
+bool EntitySelector::Add(Entity* entity) 
+{
+    if (std::count(m_entities.begin(), m_entities.end(), entity))
+        return false;
+
+    m_entities.push_back(entity);
+    return true;
+}
+
+bool EntitySelector::Remove(Entity* entity) 
+{
+    for (auto it = m_entities.begin(); it != m_entities.end(); it++)
+    {
+        if (*it == entity)
+        {
+            m_entities.erase(it);
+            break;
+        }
+    }
+
+    return Contains(entity);
+}
+
+bool EntitySelector::Clear() 
+{
+    m_entities.clear();
+    return m_entities.size() <= 0;
+}
+
+bool EntitySelector::Contains(Entity* entity) 
+{
+    return std::count(m_entities.begin(), m_entities.end(), entity);
+}
+
+void EntitySelector::SetStartRange(Entity* entity) 
+{
+    m_startRange = entity;
+}
+
+void EntitySelector::SetEndRange() 
+{
+    m_endRange = m_startRange;
+}
+
+void EntitySelector::ApplyRange() 
+{
+    if (!m_endRange)
+        return;
+
+    std::vector<Entity*>& entities = SceneManager::GetInstance()->m_currentScene->m_entities;
+
+    auto startIt = std::find(entities.begin(), entities.end(), m_startRange);
+    auto endIt   = std::find(entities.begin(), entities.end(), m_endRange);
+    
+     if (startIt - entities.begin() > endIt - entities.begin())
+        for (auto it = endIt; it != startIt+1; it++)
+            Add(*it);
+    else
+        for (auto it = startIt; it != endIt+1; it++)
+            Add(*it);
+    
+    m_endRange = nullptr;
+}
+
+void EntitySelector::GetSimilarComponents() 
+{
+    for (Entity* entity : m_entities)
+    {
+        
     }
 }

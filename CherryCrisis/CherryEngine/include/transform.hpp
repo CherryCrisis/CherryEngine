@@ -87,4 +87,6 @@ public:
 	Matrix4 GetLocalMatrix();
 
 	bool IsChildOf(Transform* parent, bool recursive=true);
+
+	Event<Transform*> m_onTransformEdited;
 };
