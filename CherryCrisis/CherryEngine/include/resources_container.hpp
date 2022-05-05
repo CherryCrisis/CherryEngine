@@ -29,7 +29,7 @@ public:
 	virtual ~AResourcesContainer() = default;
 	
 	template<class ResourceT>
-	void Add(std::shared_ptr<ResourceT>& resource);
+	std::shared_ptr<ResourceT>* Add(std::shared_ptr<ResourceT>& resource);
 
 	template<class ResourceT>
 	std::shared_ptr<ResourceT>* GetResource(const std::filesystem::path& filepath);
@@ -58,7 +58,7 @@ public:
 	ResourcesContainer()
 		: AResourcesContainer(typeid(ResourceT)) {}
 
-	void Add(std::shared_ptr<ResourceT>& resource);
+	std::shared_ptr<ResourceT>* Add(std::shared_ptr<ResourceT>& resource);
 	std::shared_ptr<ResourceT>* GetResource(const std::filesystem::path& filename);
 
 	void Purge() override;

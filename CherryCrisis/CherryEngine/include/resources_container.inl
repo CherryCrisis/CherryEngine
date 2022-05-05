@@ -10,7 +10,7 @@ ResourcesContainer<ResourceT>* AResourcesContainer::UnwrapResourcesContainer()
 }
 
 template<class ResourceT>
-void AResourcesContainer::Add(std::shared_ptr<ResourceT>& resource)
+std::shared_ptr<ResourceT>* AResourcesContainer::Add(std::shared_ptr<ResourceT>& resource)
 {
 	ResourcesContainer<ResourceT>* resourceContainer = UnwrapResourcesContainer<ResourceT>();
 	assert(resourceContainer != nullptr);
@@ -18,8 +18,7 @@ void AResourcesContainer::Add(std::shared_ptr<ResourceT>& resource)
 	auto func = CCFunction::BindFunctionUnsafe(&AResourcesContainer::Erase, this, (*resource->GetFilesystemPath()));
 	resource->m_OnDeleted.Bind(&CCFunction::AFunction::Invoke, func.release());
 
-	resourceContainer->Add(resource);
-	
+	return resourceContainer->Add(resource);
 }
 
 template<class ResourceT>
@@ -35,10 +34,12 @@ void AResourcesContainer::Reload(const char* filename, Args... args)
 }
 
 template<class ResourceT>
-void ResourcesContainer<ResourceT>::Add(std::shared_ptr<ResourceT>& resource)
+std::shared_ptr<ResourceT>* ResourcesContainer<ResourceT>::Add(std::shared_ptr<ResourceT>& resource)
 {
 	size_t hash = std::hash<std::string>{}(resource->GetFilepath());
-	m_resources.insert({ hash, resource });
+	auto pair = m_resources.insert({ hash, resource });
+
+	return &pair.first->second;
 }
 
 template<class ResourceT>
