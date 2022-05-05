@@ -466,8 +466,8 @@ void Inspector::Render()
             }
             if (ImGui::MenuItem("Light"))
             {
-                //for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                //    entity->AddBehaviour<LightComponent>();
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<LightComponent>();
             }
             if (ImGui::MenuItem("Rigidbody"))     
             {
@@ -489,7 +489,11 @@ void Inspector::Render()
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
                     entity->AddBehaviour <CapsuleCollider>();
             }
-            if (ImGui::MenuItem("Portal Component"))	{ addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<PortalComponent>(); }
+            if (ImGui::MenuItem("Portal Component"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour <PortalComponent>();
+            }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))

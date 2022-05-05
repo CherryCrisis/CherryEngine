@@ -41,7 +41,7 @@ int SkyboxRenderPass::Subscribe(Skybox* toGenerate)
 			if (!cubemap->GetData()[faceID])
 				return -1;
 
-			glTextureSubImage3D(gpuCubemap->ID, 0, 0, 0, faceID, cubemap->GetWidth(), cubemap->GetHeight(), 1, GL_BGR, GL_UNSIGNED_BYTE, cubemap->GetData()[faceID]);
+			glTextureSubImage3D(gpuCubemap->ID, 0, 0, 0, faceID, cubemap->GetWidth(), cubemap->GetHeight(), 1, GL_BGRA, GL_UNSIGNED_BYTE, cubemap->GetData()[faceID]);
 		}
 		cubemap->m_gpuCubemap = std::move(gpuCubemap);
 

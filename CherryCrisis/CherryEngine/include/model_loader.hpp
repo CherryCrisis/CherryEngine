@@ -50,11 +50,11 @@ namespace CCImporter
 
     struct MaterialHeader
     {
-        Vector3         m_ambient;
-        Vector3         m_diffuse;
-        Vector3         m_specular;
-        Vector3         m_emissive;
-        float           m_shininess;
+        Vector3         m_ambient = Vector3::Zero;
+        Vector3         m_diffuse = Vector3::Zero;
+        Vector3         m_specular = Vector3::Zero;
+        Vector3         m_emissive = Vector3::Zero;
+        float           m_shininess = 0.f;
 
         //-- PBR --//
         bool m_hasNormal = true;

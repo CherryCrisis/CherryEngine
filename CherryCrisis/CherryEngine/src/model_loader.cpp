@@ -438,7 +438,7 @@ namespace CCImporter
             settingsSave["clearCoatRoughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatRoughnessFactor);
             settingsSave["texturesCount"] = std::any_cast<unsigned int>(materialArgs.m_materialHeader.m_texturesCount);
 
-            for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+            for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
             {
                 std::string textureId = std::format("texture_{}", i).c_str();
                 std::string textureTypeId = std::format("textureTypes_{}", i);
@@ -474,15 +474,15 @@ namespace CCImporter
         {
             std::vector<unsigned int> texturesPathSize;
 
-            for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+            for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
             {
-                texturesPathSize.push_back(materialArgs.m_texturesPath[i].size());
+                texturesPathSize.push_back(static_cast<unsigned int>(materialArgs.m_texturesPath[i].size()));
             }
 
             fwrite(&texturesPathSize[0], texturesPathSize.size() * sizeof(unsigned int), 1, file);
             fwrite(&materialArgs.m_texturesType[0], materialArgs.m_texturesType.size() * sizeof(unsigned int), 1, file);
 
-            for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+            for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
             {
                 fwrite(&materialArgs.m_texturesPath[i][0], texturesPathSize[i], 1, file);
             }
@@ -544,7 +544,7 @@ namespace CCImporter
         model.m_materialPath += "\\";
         model.m_materialPath += name.C_Str();
         model.m_materialPath += CCImporter::materialExtension;
-        model.modelHeader.m_materialPathSize = model.m_materialPath.size();
+        model.modelHeader.m_materialPathSize = static_cast<unsigned int>(model.m_materialPath.size());
 
         if (std::filesystem::exists(model.m_materialPath))
             return;
@@ -620,7 +620,7 @@ namespace CCImporter
         materialArgs.m_materialHeader.m_clearCoatRoughnessFactor = settingsLoaded["clearCoatRoughnessFactor"].as<float>();
         materialArgs.m_materialHeader.m_texturesCount = settingsLoaded["texturesCount"].as<unsigned int>();
 
-        for (int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
+        for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
         {
             std::string textureId = std::format("texture_{}", i).c_str();
             std::string textureTypeId = std::format("textureTypes_{}", i);

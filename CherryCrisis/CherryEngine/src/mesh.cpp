@@ -94,9 +94,9 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
         vertex.position.y = ySign *-yHalfRes;
         vertex.position.z = zSign * zHalfRes;
 
-        vertex.normal = CCMaths::Vector3(xSign, ySign, zSign);
-        vertex.tangent = CCMaths::Vector3(xSign, ySign, zSign);
-        vertex.bitangent = CCMaths::Vector3(xSign, ySign, zSign);
+        vertex.normal = CCMaths::Vector3((float)xSign, (float)ySign, (float)zSign);
+        vertex.tangent = CCMaths::Vector3((float)xSign, (float)ySign, (float)zSign);
+        vertex.bitangent = CCMaths::Vector3((float)xSign, (float)ySign, (float)zSign);
 
         vertices.push_back(vertex);
     }

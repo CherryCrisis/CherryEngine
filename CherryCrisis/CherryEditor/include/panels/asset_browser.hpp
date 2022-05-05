@@ -71,7 +71,7 @@ namespace CCScripting
 		std::string				m_filename; // filename without extension
 		std::string				m_extension; // extension
 
-		bool					m_isHovered;
+		bool					m_isHovered = false;
 		AssetBrowser*			m_assetBrowser = nullptr;
 
 		void UploadPreviewTexture();

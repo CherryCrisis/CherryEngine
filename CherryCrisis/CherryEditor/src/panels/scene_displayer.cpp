@@ -60,7 +60,7 @@ SceneDisplayer::SceneDisplayer()
 
     IM->PopContext();
 
-    m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
+    m_camera.m_pipeline = std::make_unique<MixedPipeline>();
     CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
 }
 

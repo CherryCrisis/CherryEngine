@@ -260,7 +260,7 @@ void AssetBrowser::RenderNodes()
                 {
                     if (GPUTexturePreview* gpuTexturePreview = static_cast<GPUTexturePreview*>(assetNode->m_previewTexture->m_gpuTextureEditor.get()))
                     {
-                        ImGui::Image((void*)gpuTexturePreview->m_ID, { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
+                        ImGui::Image((void*)static_cast<intptr_t>(gpuTexturePreview->m_ID), { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
                     }
                 }
 
@@ -500,7 +500,7 @@ void AssetBrowser::BrowserActionRename()
 
             newPath += extension;
 
-            rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str());
+            int outIgnored = rename(m_focusedNode->m_path.string().c_str(), newPath.string().c_str());
             m_focusedNode->Rename(String::ExtractValueStr(newPath.string(), "Assets\\").c_str());
 
             QuerryBrowser();

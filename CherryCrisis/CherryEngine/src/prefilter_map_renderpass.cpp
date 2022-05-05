@@ -113,8 +113,8 @@ void PrefilterMapRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 
 	for (unsigned int mip = 0; mip < m_maxMipLevels; ++mip)
 	{
-		unsigned int mipWidth = m_mipMapResolution * std::pow(0.5, mip);
-		unsigned int mipHeight = m_mipMapResolution * std::pow(0.5, mip);
+		unsigned int mipWidth = static_cast<unsigned int>(m_mipMapResolution * std::powf(0.5, (float)mip));
+		unsigned int mipHeight = static_cast<unsigned int>(m_mipMapResolution * std::powf(0.5, (float)mip));
 
 		glBindRenderbuffer(GL_RENDERBUFFER, gpuSpheremap->RBO);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);

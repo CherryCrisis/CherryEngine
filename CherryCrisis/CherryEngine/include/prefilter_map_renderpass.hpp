@@ -16,8 +16,8 @@ class PrefilterMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 private:
 	Skydome* m_skydome = nullptr;
 
-	const int	m_maxMipLevels = 5;
-	const int	m_mipMapResolution = 128;
+	const unsigned int	m_maxMipLevels = 5;
+	const unsigned int	m_mipMapResolution = 128;
 
 
 public:
