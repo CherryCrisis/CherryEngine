@@ -42,6 +42,6 @@ void BuildDisplayer::Render()
                 m_isOpened = false;
         }
 
-        ImGui::End();
     }
+    ImGui::End();
 }

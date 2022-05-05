@@ -13,10 +13,12 @@
 #include "model_base.hpp"
 #include "csassembly.hpp"
 #include "command.hpp"
+#include "model_loader.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
-AssetBrowser::AssetBrowser()
+AssetBrowser::AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer)
+    : m_assetSettingsDisplayer(assetSettingsDisplayer)
 {
     m_assetsDirectory = std::filesystem::current_path();
     m_assetsDirectory /= "Assets\\";
@@ -40,20 +42,8 @@ void AssetBrowser::Render()
 
         BrowserAction();
 
-        RenderAssetsSettingsPopUp();
-
     }
     ImGui::End();
-}
-
-void AssetBrowser::RenderAssetsSettingsPopUp()
-{
-    if (!m_currentAssetsSettings)
-        return;
-
-    if (!m_currentAssetsSettings->Update())
-        m_currentAssetsSettings.reset();
-
 }
 
 void AssetBrowser::RenderMenuBar()
@@ -193,12 +183,12 @@ void AssetBrowser::RenderNodes()
                 return;
             }
 
-            //-- Research input --//
             std::string fullFilename(assetNode->m_filename + assetNode->m_extension);
+            //-- Research input --//
             if (strlen(m_researchInput) > 0)
             {
-                fullFilename = String::ToLower(fullFilename);
-                if (fullFilename.find(String::ToLower(m_researchInput)) == std::string::npos)
+                std::string fullFilenameLower = String::ToLower(fullFilename);
+                if (fullFilenameLower.find(String::ToLower(m_researchInput)) == std::string::npos)
                     continue;
             }
 
@@ -258,9 +248,9 @@ void AssetBrowser::RenderNodes()
 
                 //-- Draw preview image --//
                 {
-                    if (GPUTexturePreview* gpuTexturePreview = static_cast<GPUTexturePreview*>(assetNode->m_previewTexture->m_gpuTextureEditor.get()))
+                    if (auto gpuTexturePreview = static_cast<TextureGenerator::GPUTextureBasic*>(assetNode->m_previewTexture->m_gpuTexture.get()))
                     {
-                        ImGui::Image((void*)static_cast<intptr_t>(gpuTexturePreview->m_ID), { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
+                        ImGui::Image((void*)static_cast<intptr_t>(gpuTexturePreview->ID), { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
                     }
                 }
 
@@ -435,6 +425,29 @@ void AssetBrowser::BrowserActionCreate()
                     myfile.close();
                 }
             }
+            else if (!m_popupAssetType.compare("material"))
+            {
+                std::filesystem::path newPath = m_currentDirectoryNode->m_path;
+                newPath /= newName;
+
+                bool exist = std::filesystem::exists(newPath.string() + ".mat");
+                int id = 0;
+
+                while (exist)
+                {
+                    std::string path(std::format("{}{}", newPath.string(), id));
+
+                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                        newPath = path;
+
+                    ++id;
+                }
+
+                newPath += ".mat";
+
+                std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResource<Material>(newPath.string().c_str(), true);
+                CCImporter::SaveMaterial(material.get());
+            }
 
             QuerryBrowser();
             ImGui::CloseCurrentPopup();
@@ -516,8 +529,8 @@ void AssetBrowser::BrowserActionRename()
             ImGui::CloseCurrentPopup();
         }
 
-        ImGui::EndPopup();
     }
+    ImGui::EndPopup();
 }
 
 void AssetBrowser::BrowserActionDelete()
@@ -627,6 +640,13 @@ void AssetBrowser::ContextCallback()
 
             }
 
+            if (ImGui::MenuItem("Material"))
+            {
+                m_popupAssetType = "material";
+                m_browserAction = EBrowserAction::CREATING;
+
+            }
+
             //TODO : Material
 
             ImGui::EndMenu();
@@ -676,7 +696,7 @@ void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode& as
 
     std::string filename = path.filename().string();
     assetNode.m_relativePath = String::ExtractKeyStr(assetNode.m_relativePath.string(), filename.c_str());
-    assetNode.m_filename = String::ExtractKey(filename, '.');
+    assetNode.m_filename = String::ExtractLastKey(filename, '.');
     assetNode.m_extension = path.extension().string();
 
     assetNode.m_assetBrowser = this;
@@ -715,9 +735,9 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
 
         //-- Texture --//
-        for (int i = 0; i < m_textureExtensions.size(); ++i)
         {
-            if (!m_textureExtensions[i].compare(extension))
+            auto it = textureExtensions.find(extension);
+            if (it != textureExtensions.end())
             {
                 TextureNode textureNode;
                 SetAssetNode(m_path, textureNode);
@@ -733,9 +753,9 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         }
 
         //-- Model --//
-        for (int i = 0; i < m_modelExtensions.size(); ++i)
         {
-            if (!m_modelExtensions[i].compare(extension))
+            auto it = modelExtensions.find(extension);
+            if (it != modelExtensions.end())
             {
                 ModelNode modelNode;
                 SetAssetNode(m_path, modelNode);
@@ -756,9 +776,9 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         }
 
         //-- Shader --//
-        for (int i = 0; i < m_shaderExtensions.size(); ++i)
         {
-            if (!m_shaderExtensions[i].compare(extension))
+            auto it = shaderExtensions.find(extension);
+            if (it != shaderExtensions.end())
             {
                 ShaderNode shaderNode;
                 SetAssetNode(m_path, shaderNode);
@@ -775,7 +795,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         }
 
         //-- Script --//
-        if (!m_scriptExtensions.compare(extension))
+        if (!scriptExtensions.compare(extension))
         {
             ScriptNode scriptNode;
             SetAssetNode(m_path, scriptNode);
@@ -788,7 +808,8 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             return pair.first->second.get();
         }
 
-        if (!m_sceneExtensions.compare(extension))
+        //-- Scene --//
+        if (!sceneExtensions.compare(extension))
         {
             EmptyNode emptyNode;
             SetAssetNode(m_path, emptyNode);
@@ -799,10 +820,29 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             return pair.first->second.get();
         }
 
-        //-- Sound --//
-        /*for (int i = 0; i < m_soundExtensions.size(); ++i)
+        //-- Material --//
         {
-            if (!m_soundExtensions[i].compare(extension))
+            if (!matExtensions.compare(extension))
+            {
+                MaterialNode materialNode;
+                SetAssetNode(m_path, materialNode);
+
+                std::string filepath(materialNode.m_relativePath.string() + materialNode.m_filename + materialNode.m_extension);
+                std::shared_ptr<Material> material = resourceManager->AddResource<Material>(filepath.c_str(), true);
+                materialNode.m_resource = material;
+
+                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+
+                auto pair = m_assetNodes.insert({ materialNode.m_path.string(), std::make_unique<MaterialNode>(materialNode) });
+                return pair.first->second.get();
+            }
+        }
+
+        //-- Sound --//
+        /*
+        {
+            auto it = textureExtensions.find(extension);
+            if (it != textureExtensions.end())
             {
                 SoundNode soundNode;
                 SetAssetNode(m_path, soundNode);
@@ -847,101 +887,9 @@ void AssetBrowser::QuerryBrowser()
 
     for (const auto& assetNode : m_assetNodes)
     {
-        assetNode.second->UploadPreviewTexture();
+        m_textureGenerator.Generate(assetNode.second->m_previewTexture.get());
         m_allAssetNode.insert(assetNode.second.get());
     }
 
     ResourceManager::GetInstance()->Purge();
-}
-
-
-void AssetBrowser::AssetNode::UploadPreviewTexture()
-{
-    if (!m_previewTexture)
-        return;
-
-    m_previewTexture->m_gpuTexture = nullptr;
-
-    if (!m_previewTexture->GetData() || m_previewTexture->GetWidth() <= 0 || m_previewTexture->GetHeight() <= 0)
-        return;
-
-    m_previewTexture->m_gpuTextureEditor = std::make_unique<GPUTexturePreview>(m_previewTexture.get());
-}
-
-void AssetBrowser::GPUTexturePreview::Generate(Texture* texture)
-{
-    glCreateTextures(GL_TEXTURE_2D, 1, &m_ID);
-
-    glTextureParameteri(m_ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(m_ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTextureParameteri(m_ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTextureParameteri(m_ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    ETextureFormat textureFormat = texture->GetInternalFormat();
-
-    if (textureFormat == ETextureFormat::RGB || textureFormat == ETextureFormat::RGBA)
-    {
-        unsigned int internalFormat = GL_RGBA8;
-        if (textureFormat == ETextureFormat::RGB)
-            internalFormat = GL_RGB8;
-
-        glTextureStorage2D(m_ID, 1, internalFormat, texture->GetWidth(), texture->GetHeight());
-        glTextureSubImage2D(m_ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (unsigned int)textureFormat, GL_UNSIGNED_BYTE, texture->GetData());
-
-        glGenerateTextureMipmap(m_ID);
-    }
-    else
-    {
-        glBindTexture(GL_TEXTURE_2D, m_ID);
-
-        int mipmapsCount = texture->GetMipmapCount();
-        int width = texture->GetWidth();
-        int height = texture->GetHeight();
-        int offset = 0;
-        unsigned char* data = (unsigned char*)texture->GetData();
-
-        for (int mipmapId = 0; mipmapId < mipmapsCount && (width || height); ++mipmapId)
-        {
-            CCMaths::Min(width, 1);
-            CCMaths::Min(height, 1);
-
-            int size = ((width + 3) / 4) * ((height + 3) / 4) * texture->GetBlockSize();
-            glCompressedTexImage2D(GL_TEXTURE_2D, mipmapId, (unsigned int)textureFormat,
-                width, height, 0, size, data + offset);
-
-
-            offset += size;
-            width >>= 1;
-            height >>= 1;
-        }
-    }
-
-    texture->ClearData();
-}
-
-void AssetBrowser::GPUTexturePreview::Regenerate(Texture* texture)
-{
-    Destroy();
-    Generate(texture);
-}
-
-void AssetBrowser::GPUTexturePreview::Destroy()
-{
-    glDeleteTextures(1, &m_ID);
-}
-
-AssetBrowser::GPUTexturePreview::GPUTexturePreview(Texture* texture)
-{
-    texture->m_OnReloaded.Bind(&GPUTexturePreview::OnReload, this);
-    Generate(texture);
-}
-
-AssetBrowser::GPUTexturePreview::~GPUTexturePreview()
-{
-    Destroy();
-}
-
-void AssetBrowser::GPUTexturePreview::OnReload(std::shared_ptr<Texture> texture)
-{
-    Regenerate(texture.get());
 }

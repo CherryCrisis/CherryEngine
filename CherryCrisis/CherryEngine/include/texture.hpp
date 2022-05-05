@@ -32,8 +32,7 @@ private:
     int             m_mipmapLevels = 0;
     int             m_blockSize = 0;
     ETextureFormat  m_internalFormat = ETextureFormat::RGBA;
-
-    bool            m_isFlipped = true;
+    bool            m_flipped = false;
 
     void*   m_data = nullptr;
 
@@ -41,7 +40,6 @@ private:
 
 public:
     std::unique_ptr<GPUTexture> m_gpuTexture = nullptr;
-    std::unique_ptr<GPUTexture> m_gpuTextureEditor = nullptr;
 
     Texture(const char* texturePath);
     virtual ~Texture();
@@ -53,6 +51,8 @@ public:
     int GetBlockSize() { return m_blockSize; }
     ETextureFormat GetInternalFormat() { return m_internalFormat; }
     void SetInternalFormat(ETextureFormat textureFormat) { m_internalFormat = textureFormat; }
+
+    bool GetIsFlipped() const { return m_flipped; }
 
     void* GetData() { return m_data; }
     void ClearData();
@@ -67,8 +67,5 @@ public:
     
     void Delete() override;
 
-    //put a texture if the texture should not be imported
-    void Reload(bool flipTexture = true, std::shared_ptr<Texture> texture = nullptr);
-
-    bool IsFlipped() const { return m_isFlipped; }
+    void Reload(bool flipTexture = true);
 };

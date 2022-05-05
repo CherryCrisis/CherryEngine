@@ -61,8 +61,8 @@ void ProjectSettingsDisplayer::Render()
 
         m_categories[m_selectedCategory]->DisplayCategory();
 
-        ImGui::End();
     }
+    ImGui::End();
 }
 
 

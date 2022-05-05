@@ -15,10 +15,20 @@
 #include "texture.hpp"
 #include "sound.hpp"
 #include "shader.hpp"
-#include "assets_settings.hpp"
+#include "material.hpp"
+#include "asset_settings.hpp"
+
 
 class AResource;
 class ModelBase;
+
+const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr" };
+const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf" };
+const std::set<std::string> shaderExtensions = { ".frag", ".vert" };
+const std::set<std::string> soundExtensions = { ".wav" };
+const std::string scriptExtensions = ".cs";
+const std::string sceneExtensions = ".cherry";
+const std::string matExtensions = ".mat";
 
 class AssetBrowser : public Panel
 {
@@ -109,6 +119,7 @@ namespace CCScripting
 		void Action() override {};
 	};
 
+
 	template <class ResourceT>
 	struct ResourceAssetNode : public AssetNode
 	{
@@ -138,11 +149,19 @@ namespace CCScripting
 		virtual void Action() override = 0;
 	};
 
+	struct MaterialNode : public ResourceAssetNode<Material>
+	{
+		void Action() override
+		{
+			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(m_resource));
+		};
+	};
+
 	struct TextureNode : public ResourceAssetNode<Texture>
 	{
 		void Action() override 
 		{
-			m_assetBrowser->SetCurrentAssetsSettingsPopUp(new TextureSettings(m_resource));
+			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(new TextureSettings(m_resource));
 		};
 	};
 
@@ -169,19 +188,11 @@ namespace CCScripting
 		CREATING,
 	};
 
-	const std::vector<std::string> m_textureExtensions = {".jpg", ".png", ".hdr"};
-	const std::vector<std::string> m_modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf"};
-	const std::vector<std::string> m_shaderExtensions = { ".frag", ".vert" };
-	const std::vector<std::string> m_soundExtensions = { ".wav" };
-	const std::string m_scriptExtensions = ".cs";
-	const std::string m_sceneExtensions = ".cherry";
 
 	std::filesystem::path m_assetsDirectory;
 
 	DirectoryNode* m_assetsDirectoryNode = nullptr;
 	DirectoryNode* m_currentDirectoryNode = nullptr;
-
-	std::unique_ptr<AssetsSettings> m_currentAssetsSettings = nullptr;
 
 	std::map<std::string, std::unique_ptr<AssetNode>> m_assetNodes;
 	std::set<AssetNode*> m_allAssetNode; //To research in all directories
@@ -194,6 +205,8 @@ namespace CCScripting
 	AssetNode* m_focusedNode = nullptr;
 	EBrowserAction m_browserAction = EBrowserAction::NONE;
 	std::string m_popupAssetType;
+
+	TextureGenerator m_textureGenerator;
 
 	void SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode);
 	AssetNode* RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory); //return m_assetsDirectoryNode 
@@ -208,22 +221,22 @@ namespace CCScripting
 	void BrowserActionDelete();
 	void BrowserAction();
 
-	void RenderAssetsSettingsPopUp();
 	bool DragAndDropTarget(AssetNode* assetNode);
 
 public :
-	AssetBrowser();
+
+	AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer);
 
 	void SetCurrentDirectory(DirectoryNode* directoryNode) 
 	{ 
 		m_currentDirectoryNode = directoryNode; 
 		strcpy_s(m_researchInput, "");
 	}
-	void SetCurrentAssetsSettingsPopUp(AssetsSettings* assetSettings) { m_currentAssetsSettings.reset(assetSettings); }
 
 	void Render() override;
 	void ContextCallback() override;
 	
 	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
 
+	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
 };

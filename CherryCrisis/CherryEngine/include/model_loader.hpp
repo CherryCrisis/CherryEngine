@@ -7,6 +7,7 @@
 #include "model.hpp"
 #include "model_base.hpp"
 #include "mesh.hpp"
+#include "cherry_macros.hpp"
 
 enum class ETextureFormat;
 
@@ -46,6 +47,7 @@ namespace CCImporter
         ETextureFormat internalFormat;
         int mipmapsLevel;
         int blockSize;
+        bool flipped;
     };
 
     struct MaterialHeader
@@ -113,14 +115,15 @@ namespace CCImporter
 
     static const char* assetsDirectory("Assets/");
     static const char* cacheExtension(".ccfile");
-    static const char* materialExtension(".ccmat");
+    static const char* cacheMaterialExtension(".ccmat");
+    static const char* materialExtension(".mat");
     static const char* cacheDirectory("Cache/");
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
     void ImportTexture(const std::filesystem::path& filepath,
         unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat);
 
-    void SaveMaterial(Material* material);
+    void CCENGINE_API SaveMaterial(Material* material);
     bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs);
 }
 

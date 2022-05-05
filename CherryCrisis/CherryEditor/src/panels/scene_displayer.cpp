@@ -212,6 +212,7 @@ void SceneDisplayer::Render()
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
         }
+        
         if (!selector.IsEmpty() && selector.First()->GetBehaviour<Transform>())
         {
             Transform* t = selector.First()->GetBehaviour<Transform>();

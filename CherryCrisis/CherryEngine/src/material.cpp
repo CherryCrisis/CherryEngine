@@ -56,6 +56,7 @@ bool Material::LoadFromCache(std::shared_ptr<Material> material, CCImporter::Mat
 {
 	std::string fullFilepath(CCImporter::cacheDirectory);
 	fullFilepath += material->GetFilesystemPath()->filename().string();
+	fullFilepath += CCImporter::cacheMaterialExtension;
 
 	FILE* file = nullptr;
 
@@ -91,8 +92,14 @@ bool Material::LoadFromCache(std::shared_ptr<Material> material, CCImporter::Mat
 	return true;
 }
 
-void Material::Reload()
+void Material::Reload(bool saveOnly)
 {
+	if (saveOnly)
+	{
+		CCImporter::SaveMaterial(this);
+		return;
+	}
+
 	m_textures.clear();
 
 	ResourceManager* resourceManager = ResourceManager::GetInstance();

@@ -37,7 +37,7 @@ void HierarchyDisplayer::Render()
         ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
         ImGui::Separator();
 
-        for (Entity* entity: SceneManager::GetInstance()->m_currentScene->m_entities)
+        for (Entity* entity : SceneManager::GetInstance()->m_currentScene->m_entities)
         {
             if (entity)
             {
@@ -47,17 +47,40 @@ void HierarchyDisplayer::Render()
 
                 std::string name = entity->GetName();
                 if (RenderEntity(entity))
-                    break;              
+                    break;
             }
         }
-    }
 
-    ContextCallback();
+        if (ImGui::IsWindowHovered())
+        {
+            if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
+            {
+                ImGui::OpenPopup("context");
+            }
 
-    if (ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
-    {
-        ImGui::OpenPopup("context");
+            if (!m_manager->m_entitySelector.IsEmpty())
+            {
+                if (InputManager::GetInstance()->GetKeyDown(Keycode::F2))
+                    m_renaming = true;
+
+                if (InputManager::GetInstance()->GetKeyDown(Keycode::DEL))
+                {
+                    for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                        SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
+
+                    m_manager->m_entitySelector.Clear();
+
+                    ImGui::End();
+                    return;
+
+                }
+            }
+        }
+        
+        ContextCallback();
     }
+    ImGui::End();
+
 
     if (m_renaming)
         ImGui::OpenPopup("Rename");
@@ -91,18 +114,6 @@ void HierarchyDisplayer::Render()
         ImGui::EndPopup();
     }
 
-    if (ImGui::IsKeyDown(ImGuiKey_F2) && !m_manager->m_entitySelector.IsEmpty()  && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
-        m_renaming = true;
-
-    ImGui::End();
-
-    if (ImGui::IsKeyDown(ImGuiKey_Delete) && !m_manager->m_entitySelector.IsEmpty())
-    {
-        for (Entity* entity : m_manager->m_entitySelector.m_entities)
-            SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-            
-        m_manager->m_entitySelector.Clear();
-    }
 }
 
 bool HierarchyDisplayer::RenderEntity(Entity* entity)
@@ -165,6 +176,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
         ImGui::EndDragDropTarget();
     }
+
     else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive)
     {
         ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;

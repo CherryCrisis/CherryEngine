@@ -99,7 +99,7 @@
     <ClCompile Include="externals\src\ImGuizmo.cpp">
       <Filter>Fichiers externes</Filter>
     </ClCompile>
-    <ClCompile Include="src\panels\assets_settings.cpp">
+    <ClCompile Include="src\panels\asset_settings.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
     <ClCompile Include="src\core\imcherry.cpp">
@@ -167,7 +167,7 @@
     <ClInclude Include="externals\include\portable-file-dialogs.hpp">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
-    <ClInclude Include="include\panels\assets_settings.hpp">
+    <ClInclude Include="include\panels\asset_settings.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
     <ClInclude Include="include\panels\cell_system_displayer.hpp">
