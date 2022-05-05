@@ -3,21 +3,22 @@
 template<class T>
 std::shared_ptr<T>& ResourceManager::CreateResource(const char* filepath)
 {
-	std::shared_ptr<T> resourcePtr = std::make_shared<T>(filepath);
+	std::shared_ptr<T> resource = std::make_shared<T>(filepath);
 
 	auto resourceContainerIt = m_resources.find(typeid(T));
+
+	std::shared_ptr<T>* resourcePtr;
 	if (resourceContainerIt == m_resources.end())
 	{
 		auto pair = m_resources.emplace(typeid(T), new ResourcesContainer<T>());
-		pair.first->second->Add(resourcePtr);
+		resourcePtr = pair.first->second->Add(resource);
 	}
 	else
 	{
-		resourceContainerIt->second->Add(resourcePtr);
+		resourcePtr = resourceContainerIt->second->Add(resource);
 	}
 
-
-	return resourcePtr;
+	return *resourcePtr;
 }
 
 template<class T>

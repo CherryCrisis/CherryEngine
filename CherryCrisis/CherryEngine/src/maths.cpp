@@ -32,4 +32,6 @@ namespace CCMaths
 		0.f, 0.f, 1.f, 0.f,
 		0.f, 0.f, 0.f, 1.f,
 	};
+
+	const Quaternion Quaternion::Identity = { 1.f, 0.f, 0.f, 0.f };
 }
