@@ -14,6 +14,7 @@ class InputContext;
 
 struct GLFWwindow {};
 
+//! enum of Keycodes that can be use as prior keys for Action of type button
 enum class EPriorKey
 {
 	NONE = -1,
@@ -29,7 +30,7 @@ enum class EPriorKey
 class CCENGINE_API InputManager : public Singleton<InputManager>
 {
 public:
-	class Input
+	class CCENGINE_API Input
 	{
 	private:
 		bool	m_isDown = false;
@@ -39,14 +40,32 @@ public:
 	public:
 		Event<Input*> m_isUpdated;
 
+		//! \hiderefs
 		void Set(bool down, bool held, bool up);
 
-		bool Down() { return m_isDown; }	// Return true if input is pressed
-		bool Held() { return m_isHeld; }	// Return true if input is held
-		bool Up() { return m_isUp; }		// Return true if input is released
+		//! Return true if input is pressed
+		/*!
+		*	Return true if input is pressed
+		*	\note Prefere using InputManager::GetKeyDown(Keycode)
+		*/
+		bool Down() { return m_isDown; }
+
+		//! Return true if input is held
+		/*!
+		*	Return true if input is held
+		*	\note Prefere using InputManager::GetKey(Keycode)
+		*/
+		bool Held() { return m_isHeld; }
+
+		//! Return true if input is released
+		/*!
+		*	Return true if input is released
+		*	\note Prefere using InputManager::GetKeyUp(Keycode)
+		*/
+		bool Up() { return m_isUp; }
 	};
 
-	class Axis
+	class CCENGINE_API Axis
 	{
 	private:
 		Keycode m_positiveKey = {};
@@ -62,9 +81,14 @@ public:
 		Axis(Keycode pos, Keycode neg)
 			: m_positiveKey(pos), m_negativeKey(neg) {}
 		
+		//! \hiderefs
 		void BindUpdate();
+
+		//! \hiderefs
 		void Destroy();
-		float Value();	// Updates and returns value
+
+		//! \hiderefs
+		float Value();
 
 		void SetPositiveKey(Keycode key);
 		void SetNegativeKey(Keycode key);
@@ -73,7 +97,7 @@ public:
 		Keycode GetNegativeKey() { return m_negativeKey; }
 	};
 
-	class ActionButtons
+	class CCENGINE_API ActionSingle
 	{
 	private:
 		Input* m_priorKey = nullptr;
@@ -93,14 +117,32 @@ public:
 		void Destroy();
 
 		bool GetPriorKey();
-		bool CheckDown();					// Return true if Action (any input off m_inputs) is pressed
-		bool CheckHeld();					// Return true if Action (any input off m_inputs) is held
-		bool CheckUp();						// Return true if Action (any input off m_inputs) is released
+
+		//! Return true if any \b key of the Action is pressed
+		/*!
+		*	Return true if any \b key of the Action is pressed
+		*	\note Prefere using InputManager::GetKeyDown(const char*)
+		*/
+		bool CheckDown();
+
+		//! Return true if any \b key of the Action is held
+		/*!
+		*	Return true if any \b key of the Action is held
+		*	\note Prefere using InputManager::GetKey(const char*)
+		*/
+		bool CheckHeld();
+		
+		//! Return true if any \b key of the Action is released
+		/*!
+		*	Return true if any \b key of the Action is released
+		*	\note Prefere using InputManager::GetKeyUp(const char*)
+		*/
+		bool CheckUp();
 
 		const std::unordered_map<Keycode, Input*>& Inputs() { return m_inputs; }
 	};
 
-	class ActionAxes
+	class CCENGINE_API ActionAxes
 	{
 	private:
 		std::vector<Axis*> m_axes;
@@ -112,24 +154,33 @@ public:
 	public:		
 		Event<const float&> m_event;
 
+		//! \hiderefs
 		~ActionAxes();
 
-		void AddAxis(Axis* newInput);	// Add Axis to Action
+		//! Add new axis to action
+		/*!
+		*	Add new axis \b newInput in Action
+		*	\note Avoid using this method. Use InputManager::AddAxisToAction() instead
+		*/
+		void AddAxis(Axis* newInput);
+		
+		//! \hiderefs
 		void Destroy();
 
-		float ComputeValue();			// Updates and returns total value
+		//! \hiderefs
+		float ComputeValue();
 
 		const std::vector<Axis*>& Axes() { return m_axes; }
 	};
 
-	struct InputContext
+	struct CCENGINE_API InputContext
 	{
 		//list of keys (intern glfw callback update key statut)
 		std::unordered_map<Keycode, Input> m_keys;
 		std::vector<Keycode> m_framePressedKeys;
 
 		std::unordered_map<std::string, ActionAxes> m_axes;
-		std::unordered_map<std::string, ActionButtons> m_buttons;
+		std::unordered_map<std::string, ActionSingle> m_buttons;
 
 		CCMaths::Vector2 m_mouseWheel{};
 		CCMaths::Vector2 m_mouseDelta{};
@@ -461,28 +512,77 @@ public:
 	// Input
 	Input* GetInputRef(Keycode key);
 
+	//! Return true if the \b key is pressed
+	/*!
+	*	Return true if the \b key is pressed
+	*/
 	bool GetKeyDown(Keycode key);
+
+	//! Return true if any \b key of the Action is pressed
+	/*!
+	*	Return true if any \b key of the Action named \b inputName is pressed
+	*/
 	bool GetKeyDown(const char* inputName);
 
+
+	//! Return true if the \b key is held
+	/*!
+	*	Return true if the \b key is held
+	*/
 	bool GetKey(Keycode key);
+
+	//! Return true if any \b key of the Action is held
+	/*!
+	*	Return true if any \b key of the Action named \b inputName is held
+	*/
 	bool GetKey(const char* inputName);
 
+
+	//! Return true if the \b key is released
+	/*!
+	*	Return true if the \b key is released
+	*/
 	bool GetKeyUp(Keycode key);
+	
+	//! Return true if any \b key of the Action is released
+	/*!
+	*	Return true if any \b key of the Action named \b inputName is released
+	*/
 	bool GetKeyUp(const char* inputName);
 
 	void SetCursorHidden();
 	void SetCursorDisplayed();
 
 	// ActionButtons
-	ActionButtons* AddActionButtons(const std::string& name, int& success);
+	//! Add a new Action of type single input
+	/*!
+	*	Add a new Action of type button in the currently active \b fetchContext
+	*	\note Avoid using this method. Add the Action through the Project Settings instead
+	*/
+	ActionSingle* AddActionButtons(const std::string& name, int& success);
 	int RenameActionButtons(const std::string& oldName, const std::string& newName);
 
+	//! Set the prior key of the Action
+	/*!
+	*	Set the prior key of the Action \b name as \b priorKey 
+	*/
 	void SetActionPriorKey(const std::string& name, EPriorKey priorKey);
 
-	int AddInputToAction(const std::string& name, Keycode key);
-	int AddInputToAction(ActionButtons* preset, Keycode key);
 
-	int ChangeInputInAction(ActionButtons* action, Keycode oldKey, Keycode newKey);
+	//! Add new input to action
+	/*!
+	*	Add the \b key in the Action \b name
+	*/
+	int AddInputToAction(const std::string& name, Keycode key);
+	
+	//! Add new input to action
+	/*!
+	*	Add the \b key in the Action \b preset
+	*/
+	int AddInputToAction(ActionSingle* preset, Keycode key);
+
+	//! \hiderefs
+	int ChangeInputInAction(ActionSingle* action, Keycode oldKey, Keycode newKey);
 	
 	// Axis
 	void SetKey(Axis* axis, Keycode key, bool isNeg);
@@ -493,10 +593,26 @@ public:
 	float GetAxis(const char* axisName);
 
 	// ActionAxes
+	//! Add a new Action of type axe (double input)
+	/*!
+	*	Add a new Action of type axis in the currently active \b fetchContext
+	*	\note Avoid using this method. Add the Action through the Project Settings instead
+	*/
 	ActionAxes* AddActionAxes(const std::string& name, int& success);
+
+	//! \hiderefs
 	int RenameActionAxes(const std::string& oldName, const std::string& newName);
 
+	//! Add new axis to action
+	/*!
+	*	Create a pointer on the the axis \b newInput and add it in the Action \b name
+	*/
 	int AddAxisToAction(const std::string& name, Axis axis);
+
+	//! Add new axis to action
+	/*!
+	*	Create a pointer on the the axis \b newInput and add it in the Action \b preset
+	*/
 	int AddAxisToAction(ActionAxes* preset, Axis axis);
 
 	// Get

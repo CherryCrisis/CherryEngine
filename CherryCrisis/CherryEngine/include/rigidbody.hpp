@@ -31,6 +31,11 @@ public:
 	~Rigidbody();
 
 	void	BindToSignals() override;
+
+	//! Unregister the rigidbody from the Physic Manager
+	/*!
+	*	Unregister the rigidbody from the Physic Manager
+	*/
 	void	Unregister();
 
 	void	SetEnabled(const bool& isEnabled);

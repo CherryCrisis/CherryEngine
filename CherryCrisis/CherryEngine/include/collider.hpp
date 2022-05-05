@@ -28,12 +28,43 @@ public:
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
 
 	virtual void BindToSignals() override {}
+
+	//! Unregister collider from the Physic Manager
+	/*!
+	*	Unregister collider from the Physic Manager
+	*/
 	virtual void Unregister() {}
-	virtual void SetEntityScale(const CCMaths::Vector3&) {}
+
+	//! Set collider scale
+	/*!
+	*	\param scale: scale of the entity transform
+	* 
+	*	Apply the scale of the entity as base scale of the collider
+	*/
+	virtual void SetEntityScale(const CCMaths::Vector3& scale) {}
+
+	//! Create a pxShape
+	/*!
+	*	Create a pxShape for the collider in the pxActor of the entity
+	*/
 	virtual void SetPxShape() {}
+
+	//! Delete the pxShape
+	/*!
+	*	Delete the pxShape for the collider in the pxActor of the entity
+	*/
 	virtual void ClearPxShape() {}
+
+	//! Delete and re-create the pxShape
+	/*!
+	*	Reset the pxShape by calling ClearPxShape() then SetPxShape()
+	*/
 	virtual void ResetPxShape() {}
 
+	//! Setup the pxShape from PhysX
+	/*!
+	*   Setup the pxShape from PhysX
+	*/
 	virtual void SetPxData() {}
 
 	void	SetEnabled(const bool& isEnabled);

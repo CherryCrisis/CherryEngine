@@ -5,6 +5,8 @@
 #include "behaviour.hpp"
 #include "bool3.hpp"
 
+#include "physic_utils.hpp"
+
 class Rigidbody;
 class Collider;
 
@@ -67,6 +69,9 @@ namespace PhysicSystem
 		void RemoveRigidbody(Rigidbody* rigidbody);
 		void RemoveCollider(Collider* collider);
 		void Empty();
+
+		void AddForce(const CCMaths::Vector3& force, EForceMode mode);
+		RaycastHit Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 
 		physx::PxRigidActor* Get() { return m_pxActor; }
 

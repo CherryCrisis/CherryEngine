@@ -10,6 +10,7 @@
 #include "transform.hpp"
 #include "cell.hpp"
 
+#include "debug.hpp"
 
 namespace PhysicSystem
 {
@@ -39,6 +40,15 @@ namespace PhysicSystem
 			// TODO: Change with world tranform
 			t->SetPosition(pos);
 			t->SetRotation(rot);
+
+			RaycastHit out = Raycast(pos, { 0, -1, 0 }, 2.1f);
+			
+			if (out.actor)
+			{
+				PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(out.actor->userData);
+				Debug::GetInstance()->AddLog(ELogType::INFO, std::to_string(out.distance).c_str());
+				Debug::GetInstance()->AddLog(ELogType::INFO, actor1->m_owner->GetName().c_str());
+			}
 		}
 	}
 
@@ -101,7 +111,6 @@ namespace PhysicSystem
 		else if (m_rigidbody)
 		{
 			m_isDynamic = true;
-			m_useGravity = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
 			SetPxActor();
@@ -224,6 +233,33 @@ namespace PhysicSystem
 		{
 			m_colliders.back()->Unregister();
 		}
+	}
+
+	void PhysicActor::AddForce(const CCMaths::Vector3& force, EForceMode mode)
+	{
+		if (m_pxActor && m_isDynamic)
+		{
+			physx::PxVec3 pxForce = { force.x, force.y, force.z };
+			physx::PxRigidDynamic* object = static_cast<physx::PxRigidDynamic*>(m_pxActor);
+			object->addForce(pxForce, mode, true);
+		}
+	}
+
+	RaycastHit PhysicActor::Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
+	{
+		physx::PxRaycastBuffer hit = PhysicManager::RaycastInScene(*m_owner->m_cell->m_physicCell, origin, dir, maxRange);
+	
+		unsigned int hitNb = (int)hit.getNbTouches();
+
+		if (hit.getTouch(hitNb - 1).actor == static_cast<physx::PxRigidActor*>(m_pxActor))
+		{
+			if (hitNb > 1)
+				return hit.getTouch(hitNb - 2);
+			else
+				return hit.getTouch(hitNb);
+		}
+
+		return hit.block;
 	}
 
 	bool PhysicActor::HasRigidbody()
