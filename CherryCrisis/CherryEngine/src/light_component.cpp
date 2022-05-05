@@ -26,6 +26,13 @@ LightComponent::LightComponent(CCUUID& id) : Behaviour(id)
 LightComponent::~LightComponent()
 {
 	GetHost().m_cell->RemoveRenderer(this);
+
+	if (m_transform)
+	{
+		m_transform->m_onPositionChange.Unbind(&LightComponent::ChangePosition, this);
+		m_transform->m_onRotationChange.Unbind(&LightComponent::ChangeRotation, this);
+		m_transform->m_OnDestroy.Unbind(&LightComponent::InvalidateTransform, this);
+	}
 }
 
 void LightComponent::BindToSignals()
@@ -45,6 +52,7 @@ void LightComponent::Initialize()
 	{
 		m_transform->m_onPositionChange.Bind(&LightComponent::ChangePosition, this);
 		m_transform->m_onRotationChange.Bind(&LightComponent::ChangeRotation, this);
+		m_transform->m_OnDestroy.Bind(&LightComponent::InvalidateTransform, this);
 	}
 
 	ChangePosition(m_transform->GetPosition());
@@ -101,4 +109,9 @@ void LightComponent::OnCellAdded(Cell* newCell)
 void LightComponent::OnCellRemoved(Cell* newCell)
 {
 	newCell->RemoveRenderer(this);
+}
+
+void LightComponent::InvalidateTransform()
+{
+	m_transform = nullptr;
 }

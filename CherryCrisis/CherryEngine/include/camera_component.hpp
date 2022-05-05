@@ -39,4 +39,5 @@ public:
 	static CameraComponent* GetMainCamera();
 
 	void SetAsMain();
+	void InvalidateTransform();
 };

@@ -36,6 +36,13 @@ CameraComponent::~CameraComponent()
 	if (m_mainCamera == this) m_mainCamera = nullptr;
 	m_count--;
 	GetHost().m_cell->RemoveViewer(&m_camera);
+
+	if (m_transform)
+	{
+		m_transform->m_onPositionChange.Unbind(&CameraComponent::ChangePosition, this);
+		m_transform->m_onRotationChange.Unbind(&CameraComponent::ChangeRotation, this);
+		m_transform->m_OnDestroy.Unbind(&CameraComponent::InvalidateTransform, this);
+	}
 }
 
 void CameraComponent::PopulateMetadatas()
@@ -60,8 +67,12 @@ void CameraComponent::Initialize()
 {
 	m_transform = GetHost().GetOrAddBehaviour<Transform>();
 
-	m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
-	m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
+	if (m_transform)
+	{
+		m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
+		m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
+		m_transform->m_OnDestroy.Bind(&CameraComponent::InvalidateTransform, this);
+	}
 
 	GetHost().m_OnAwake.Unbind(&CameraComponent::Initialize, this);
 
@@ -98,3 +109,9 @@ void CameraComponent::SetAsMain()
 {
 	m_mainCamera = this;
 }
+
+void CameraComponent::InvalidateTransform()
+{
+	m_transform = nullptr;
+}
+

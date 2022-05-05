@@ -24,9 +24,11 @@ protected:
 		m_metadatas.SetProperty("m_owner", &owner);
 	}
 public:
+	Event<> m_OnDestroy;
+
 	Behaviour() = default;
 	Behaviour(CCUUID& id) : Object(id) {}
-	virtual ~Behaviour() = default;
+	virtual ~Behaviour() { m_OnDestroy.Invoke(); }
 
 	virtual void LateUpdate() {}
 	virtual void FixedUpdate() {}

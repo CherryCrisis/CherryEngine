@@ -274,16 +274,6 @@ namespace PhysicSystem
 		DestroyPhysX();
 	}
 
-	PxRaycastBuffer PhysicManager::RaycastInScene(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
-	{
-		PxRaycastHit hit[256];
-		PxRaycastBuffer hitBuffer(hit, 256);
-
-		bool status = scene.Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hitBuffer);
-
-		return hitBuffer;
-	}
-
 	void PhysicManager::AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode)
 	{
 		actor->AddForce(force, mode);

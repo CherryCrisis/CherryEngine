@@ -27,20 +27,23 @@ namespace PhysicSystem
 			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.y, pxT.q.x, pxT.q.z });
 
 			// TODO: Change with world tranform
-			Vector3 pos = t->GetPosition();
+			Vector3 pos = t ? t->GetPosition() : Vector3::Zero;
 			pos.x = pxT.p.x != m_oldPos.x ? pxT.p.x : pos.x;
 			pos.y = pxT.p.y != m_oldPos.y ? pxT.p.y : pos.y;
 			pos.z = pxT.p.z != m_oldPos.z ? pxT.p.z : pos.z;
 
-			Vector3 rot = t->GetRotation();
+			Vector3 rot = t ? t->GetRotation() : Vector3::Zero;
 			rot.x = pxRot.x != m_oldRot.x ? pxRot.x : rot.x;
 			rot.y = pxRot.y != m_oldRot.y ? pxRot.y : rot.y;
 			rot.z = pxRot.z != m_oldRot.z ? pxRot.z : rot.z;
 
-			// TODO: Change with world tranform
-			t->SetPosition(pos);
-			t->SetRotation(rot);
+			if (t)
+			{
+				t->SetPosition(pos);
+				t->SetRotation(rot);
+			}
 
+			// TODO: remove this
 			RaycastHit out = Raycast(pos, { 0, -1, 0 }, 2.1f);
 			
 			if (out.actor)
@@ -91,12 +94,24 @@ namespace PhysicSystem
 	void PhysicActor::CreatePxActor()
 	{
 		Transform* t = m_owner->GetBehaviour<Transform>();
-		t->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
-		t->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
-		t->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
+		
+		Vector3 pos;
+		Quaternion rot;
 
-		Vector3 pos = t->GetPosition();
-		Quaternion rot = Quaternion::FromEuler(t->GetRotation());
+		if (t)
+		{
+			t->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
+			t->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
+			t->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
+
+			pos = t->GetPosition();
+			rot = Quaternion::FromEuler(t->GetRotation());
+		}
+		else
+		{
+			pos = Vector3::Zero;
+			rot = Quaternion::Identity;
+		}
 
 		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.y, rot.x, rot.z, rot.w));
 
@@ -145,9 +160,12 @@ namespace PhysicSystem
 			m_owner->m_cell->m_physicCell->RemovePxActor(this);
 
 			Transform* t = m_owner->GetBehaviour<Transform>();
-			t->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
-			t->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
-			t->m_onScaleChange.Unbind(&PhysicActor::SetActorScale, this);
+			if (t)
+			{
+				t->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
+				t->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
+				t->m_onScaleChange.Unbind(&PhysicActor::SetActorScale, this);
+			}
 			PX_RELEASE(m_pxActor);
 		}
 	}
@@ -247,19 +265,27 @@ namespace PhysicSystem
 
 	RaycastHit PhysicActor::Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
 	{
-		physx::PxRaycastBuffer hit = PhysicManager::RaycastInScene(*m_owner->m_cell->m_physicCell, origin, dir, maxRange);
-	
-		unsigned int hitNb = (int)hit.getNbTouches();
+		static physx::PxRaycastHit hit[256];
+		static physx::PxRaycastBuffer hitBuffer(hit, 256);
 
-		if (hit.getTouch(hitNb - 1).actor == static_cast<physx::PxRigidActor*>(m_pxActor))
+		bool status = m_owner->m_cell->m_physicCell->Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hitBuffer);
+
+		if (!status)
 		{
-			if (hitNb > 1)
-				return hit.getTouch(hitNb - 2);
-			else
-				return hit.getTouch(hitNb);
+			return hitBuffer.getTouch(0);
 		}
 
-		return hit.block;
+		unsigned int hitNb = (unsigned int)hitBuffer.getNbTouches();
+
+		if (hitBuffer.getTouch(hitNb - 1).actor == static_cast<physx::PxRigidActor*>(m_pxActor))
+		{
+			if (hitNb > 1)
+				return hitBuffer.getTouch(hitNb - 2);
+			else
+				return hitBuffer.getTouch(hitNb);
+		}
+
+		return hitBuffer.getTouch(hitNb - 1);
 	}
 
 	bool PhysicActor::HasRigidbody()
