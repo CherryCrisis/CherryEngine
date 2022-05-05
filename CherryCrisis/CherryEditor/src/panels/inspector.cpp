@@ -24,6 +24,8 @@
 #include "utils.hpp"
 #include "basic_renderpass.hpp"
 #include "light_component.hpp"
+#include "audio_listener.hpp"
+#include "audio_emitter.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -446,13 +448,23 @@ void Inspector::Render()
             }
             if (ImGui::MenuItem("Light"))
             {
-                //for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                //    entity->AddBehaviour<LightComponent>();
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<LightComponent>();
             }
             if (ImGui::MenuItem("Rigidbody"))     
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
                     entity->AddBehaviour<Rigidbody>();
+            }
+            if (ImGui::MenuItem("Audio Listener"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<AudioListener>();
+            }
+            if (ImGui::MenuItem("Audio Emitter"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<AudioEmitter>();
             }
             if (ImGui::MenuItem("Box Collider"))      
             {

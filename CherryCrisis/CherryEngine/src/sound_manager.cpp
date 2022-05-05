@@ -4,7 +4,6 @@
 
 #include "al.h"
 #include "alc.h"
-#include "alut.h"
 
 template <>
 SoundManager* Singleton<SoundManager>::currentInstance = nullptr;
@@ -22,10 +21,12 @@ void SoundManager::PlaySoundAt(const CCMaths::Vector3& position, const float vol
 
 SoundManager::SoundManager() 
 {
-	// Initialize OpenAL
-	if (!alutInit(nullptr, nullptr))
-	{
-		ALenum error = alutGetError();
-		fprintf(stderr, "%s\n", alutGetErrorString(error));
-	}
+    // TODO: Send error messages
+    ALCdevice* device = alcOpenDevice(NULL);
+    if (!device) return;
+
+    ALCcontext* context = alcCreateContext(device, NULL);
+    if (!context) return;
+
+    if (!alcMakeContextCurrent(context)) return;
 }

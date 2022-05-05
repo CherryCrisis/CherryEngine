@@ -2,20 +2,117 @@
 
 #include <sound.hpp>
 #include "resource_manager.hpp"
-#include "alut.h"
+#include "al.h"
+
+static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigned int* size, int* bps, short** output)
+{
+    typedef struct WavRIFFHeader
+    {
+        char chunkId[4];
+        unsigned int chunkSize;
+        char format[4];
+    } WavRIFFHeader;
+
+    typedef struct WavFmtChunk
+    {
+        char chunkId[4];
+        unsigned int chunkSize;
+        short audioFormat; // PCM = 1
+        short numChannels;
+        int sampleRate;
+        int byteRate;
+        short blockAlign;
+        short bitsPerSample;
+    } WavFmtChunk;
+
+    typedef struct WavDataChunk
+    {
+        char chunkId[4];
+        unsigned int chunkSize;
+        //char data[];
+    } WavDataChunk;
+
+    FILE* wav = fopen(filename, "rb");
+    if (wav == NULL)
+        return -1;
+
+    WavRIFFHeader header;
+    fread(&header, sizeof(WavRIFFHeader), 1, wav);
+    if (strncmp(header.chunkId, "RIFF", 4) != 0 || strncmp(header.format, "WAVE", 4) != 0)
+    {
+        fclose(wav);
+        fprintf(stderr, "WAVE: Unsupported wav file\n");
+        return -1;
+    }
+
+    WavFmtChunk format;
+    fread(&format, sizeof(WavFmtChunk), 1, wav);
+    if (format.audioFormat != 1 || format.bitsPerSample != 16)
+    {
+        fclose(wav);
+        fprintf(stderr, "WAVE: Formats other than 16 bits PCM are not supported\n");
+        return -1;
+    }
+
+    WavDataChunk data;
+    fread(&data, sizeof(WavDataChunk), 1, wav);
+
+    short* buffer = (short*)calloc(1, data.chunkSize);
+    fread(buffer, sizeof(unsigned char), data.chunkSize, wav);
+    fclose(wav);
+
+    *bps = format.bitsPerSample;
+    *size = data.chunkSize;
+    *channels = format.numChannels;
+    *sampleRate = format.sampleRate;
+    *output = buffer;
+
+    return data.chunkSize / format.numChannels / (format.bitsPerSample / 8);
+}
 
 void Sound::Load(std::shared_ptr<Sound> sound)
 {
-	//Load Sound
-	sound->m_buffer = alutCreateBufferFromFile(sound->GetFilepath().c_str());
-	if (sound->m_buffer == AL_NONE)
-	{
-		unsigned int error = alutGetError();
-		fprintf(stderr, "Error loading file: '%s'\n",
-			alutGetErrorString(error));
-		alutExit();
-		exit(EXIT_FAILURE);
-	}
-	alGenSources(1, &(sound->m_source));
-	alSourcei(sound->m_source, AL_BUFFER, sound->m_buffer);
+    alGenBuffers(1, &sound->m_buffer);
+
+    short* buffer;
+    int channels;
+    int sampleRate;
+    int bps;
+    int frameCount = -1;
+    unsigned int size = 0u;
+    unsigned int format;
+
+    frameCount = wavLoad(sound->m_filepath.string().c_str(), &channels, &sampleRate, &size, &bps, &buffer);
+
+    if (frameCount == -1)
+    {
+        // TODO: Replace by log
+        std::cout << "Error while loading sound" << std::endl;
+        return;
+    }
+
+    short* monoBuffer = nullptr;
+    format = bps == 8 ? AL_FORMAT_MONO8 : AL_FORMAT_MONO16;
+
+    if (channels > 1)
+    {
+        monoBuffer = (short*)malloc(frameCount * sizeof(short));
+        for (int i = 0; i < frameCount; i++)
+            monoBuffer[i] = .5f * buffer[i * 2] + .5f * buffer[i * 2 + 1];
+    }
+
+    alBufferData(sound->m_buffer, format, channels == 1 ? buffer : monoBuffer, channels == 1 ? size : size * .5f, sampleRate);
+    free(buffer);
+
+    alGenSources(1, &(sound->m_source));
+    alSourcei(sound->m_source, AL_BUFFER, sound->m_buffer);
 }
+
+void Sound::SetLooping(bool loop) { alSourcei(m_source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE); }
+void Sound::SetPosition(float x, float y, float z) { alSource3f(m_source, AL_POSITION, x, y, z); }
+void Sound::SetPosition(const CCMaths::Vector3& pos) { SetPosition(pos.x, pos.y, pos.z); }
+void Sound::SetPitch(float pitch) { alSourcef(m_source, AL_PITCH, pitch); }
+
+void Sound::Play() { alSourcePlay(m_source); };
+void Sound::Pause() { alSourcePause(m_source); };
+void Sound::Stop() { alSourceStop(m_source); };

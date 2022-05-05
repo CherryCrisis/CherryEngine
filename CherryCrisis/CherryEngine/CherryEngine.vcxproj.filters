@@ -1239,6 +1239,18 @@
     <ClInclude Include="include\mixed_rendering_pipeline.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="include\audio_listener.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\audio_emitter.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\al.h">
+      <Filter>Fichiers externes</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\alc.h">
+      <Filter>Fichiers externes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1614,6 +1626,12 @@
     </ClCompile>
     <ClCompile Include="src\mixed_rendering_pipeline.cpp">
       <Filter>Fichiers sources\Rendering\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio_listener.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\audio_emitter.cpp">
+      <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
