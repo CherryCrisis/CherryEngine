@@ -10,7 +10,7 @@
 
 IrradianceMapRenderPass::IrradianceMapRenderPass(const char* name)
 // TODO: Set real path
-	: ARenderingRenderPass(name, "Assets/pbrShaders/environmentMapShader.vert", "Assets/pbrShaders/irradianceMapShader.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/PBR/environmentMapShader.vert", "Assets/Shaders/PBR/irradianceMapShader.frag")
 {
 }
 

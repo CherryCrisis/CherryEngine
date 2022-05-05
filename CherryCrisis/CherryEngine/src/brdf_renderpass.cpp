@@ -10,7 +10,7 @@
 
 BRDFRenderPass::BRDFRenderPass(const char* name)
 // TODO: Set real path
-	: ARenderingRenderPass(name, "Assets/pbrShaders/brdfShader.vert", "Assets/pbrShaders/brdfShader.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/PBR/brdfShader.vert", "Assets/Shaders/PBR/brdfShader.frag")
 {
 }
 

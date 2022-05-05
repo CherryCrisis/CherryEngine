@@ -57,7 +57,7 @@ void Skydome::Load()
 	m_mesh->m_OnDeleted.Bind(&Skydome::RemoveMesh, this);
 
 	// TODO: Remove texturePath
-	m_spheremap = ResourceManager::GetInstance()->AddResource<Spheremap>("skySphere", true, "Assets/skydome/Arches_3k.hdr");
+	m_spheremap = ResourceManager::GetInstance()->AddResource<Spheremap>("skySphere", true, "Assets/Skydome/Arches_3k.hdr");
 	m_spheremap->m_OnDeleted.Bind(&Skydome::RemoveCubemap, this);
 
 	// Move to function

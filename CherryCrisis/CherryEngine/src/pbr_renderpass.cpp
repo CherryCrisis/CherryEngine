@@ -19,7 +19,7 @@
 #include "viewer.hpp"
 
 PBRRenderPass::PBRRenderPass(const char* name)
-	: ARenderingRenderPass(name, "Assets/pbrShaders/pbrShader.vert", "Assets/pbrShaders/pbrShader.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/PBR/pbrShader.vert", "Assets/Shaders/PBR/pbrShader.frag")
 {
 	if (m_program)
 	{

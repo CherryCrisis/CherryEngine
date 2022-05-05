@@ -6,7 +6,7 @@
 #include "resource_manager.hpp"
 
 HDRRenderPass::HDRRenderPass(const char* name)
-	: APostProcessRenderPass(name, "Assets/hdrShader.vert", "Assets/hdrShader.frag")
+	: APostProcessRenderPass(name, "Assets/Shaders/LIT/hdrShader.vert", "Assets/Shaders/LIT/hdrShader.frag")
 {
 	if (m_program)
 	{

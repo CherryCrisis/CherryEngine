@@ -6,7 +6,7 @@
 #include "resource_manager.hpp"
 
 BloomRenderPass::BloomRenderPass(const char* name)
-	: APostProcessRenderPass(name, "Assets/bloomShader.vert", "Assets/bloomShader.frag")
+	: APostProcessRenderPass(name, "Assets/Shaders/bloomShader.vert", "Assets/Shaders/bloomShader.frag")
 {
 	if (m_program)
 	{

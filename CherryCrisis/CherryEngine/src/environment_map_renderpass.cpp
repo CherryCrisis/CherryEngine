@@ -9,7 +9,7 @@
 
 EnvironmentMapRenderPass::EnvironmentMapRenderPass(const char* name)
 // TODO: Set real path
-	: ARenderingRenderPass(name, "Assets/pbrShaders/environmentMapShader.vert", "Assets/pbrShaders/environmentMapShader.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/PBR/environmentMapShader.vert", "Assets/Shaders/PBR/environmentMapShader.frag")
 {
 }
 

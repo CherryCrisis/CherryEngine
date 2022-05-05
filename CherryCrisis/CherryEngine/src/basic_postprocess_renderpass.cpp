@@ -6,7 +6,7 @@
 #include "resource_manager.hpp"
 
 BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
-	: APostProcessRenderPass(name, "Assets/basicPostProcess.vert", "Assets/basicPostProcess.frag")
+	: APostProcessRenderPass(name, "Assets/Shaders/basicPostProcess.vert", "Assets/Shaders/basicPostProcess.frag")
 {
 	if (m_program)
 		m_callExecute = CCCallback::BindCallback(&BasicPostProcessRenderPass::Execute, this);

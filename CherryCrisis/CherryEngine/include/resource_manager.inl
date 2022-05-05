@@ -87,11 +87,21 @@ void ResourceManager::AddResourceWithCallback(std::shared_ptr<T> resource,
 		if (!callback)
 			return;
 
+		resource->m_OnLoaded.Bind(callback);
+
 		std::unique_ptr<CCFunction::AFunction> function = CCFunction::BindFunction(&CCCallback::AWrapCallback::Invoke,
 			wrappedCallback, resource);
-
+		
 		m_threadpool->CreateTask(function, EChannelTask::MAINTHREAD);
-		resource->m_OnLoaded.Bind(callback);
+		//auto resourceContainerIt = m_resources.find(typeid(T));
+		//if (resourceContainerIt != m_resources.end())
+		//{
+		//	std::shared_ptr<T>* findedResource = resourceContainerIt->second->GetResource<T>(*resource->GetFilesystemPath());
+		//	if (findedResource)
+		//	{
+		//	}
+		//}
+
 	}
 	break;
 

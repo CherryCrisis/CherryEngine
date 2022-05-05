@@ -79,9 +79,6 @@
     <Filter Include="Fichiers d%27en-tête\Picking">
       <UniqueIdentifier>{1acd25f1-bb3b-4e34-b70e-3386bddb4095}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Picking">
-      <UniqueIdentifier>{0ad23ffb-a465-4f8a-8046-1421fc6db677}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Serialization">
       <UniqueIdentifier>{afdd0ab2-1029-4166-9f31-55e41b1d6d2d}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,9 @@
     </Filter>
     <Filter Include="Fichiers d%27en-tête\Rendering\Pipeline">
       <UniqueIdentifier>{6784c658-a388-408c-889c-bebf3d6edeee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Picking">
+      <UniqueIdentifier>{0ad23ffb-a465-4f8a-8046-1421fc6db677}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

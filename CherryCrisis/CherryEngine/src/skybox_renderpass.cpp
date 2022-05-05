@@ -8,7 +8,7 @@
 
 SkyboxRenderPass::SkyboxRenderPass(const char* name)
 // TODO: Set real path
-	: ARenderingRenderPass(name, "Assets/skyboxShader.vert", "Assets/skyboxShader.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/LIT/skyboxShader.vert", "Assets/Shaders/LIT/skyboxShader.frag")
 {
 }
 

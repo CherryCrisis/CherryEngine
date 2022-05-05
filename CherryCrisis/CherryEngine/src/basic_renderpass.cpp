@@ -14,7 +14,7 @@
 
 
 BasicRenderPass::BasicRenderPass(const char* name)
-	: ARenderingRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/LIT/basicShader.vert", "Assets/Shaders/LIT/basicShader.frag")
 {
 	if (m_program)
 	{

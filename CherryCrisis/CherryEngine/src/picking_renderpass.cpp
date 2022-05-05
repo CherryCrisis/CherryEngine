@@ -10,7 +10,7 @@
 #include "viewer.hpp"
 
 PickingRenderPass::PickingRenderPass(const char* name)
-	: ARenderingRenderPass(name, "Assets/picking.vert", "Assets/picking.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/picking.vert", "Assets/Shaders/picking.frag")
 {
 	if (m_program)
 		m_callExecute = CCCallback::BindCallback(&PickingRenderPass::Execute, this);

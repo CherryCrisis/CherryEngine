@@ -14,7 +14,7 @@
 #include "viewer.hpp"
 
 PortalRenderPass::PortalRenderPass(const char* name)
-	: ARenderingRenderPass(name, "Assets/portalShader.vert", "Assets/portalShader.frag")
+	: ARenderingRenderPass(name, "Assets/Shaders/portalShader.vert", "Assets/Shaders/portalShader.frag")
 {
 	if (m_program)
 		m_callExecute = CCCallback::BindCallback(&PortalRenderPass::Execute, this);
