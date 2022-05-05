@@ -1,10 +1,14 @@
 x64
+bin
 
 !CherryCrisis/x64
 CherryCrisis/x64/*/*
 !Assets
 !Internal
 !imgui.ini
+!Properties
+!CherryScripting.csproj
+!CherryScripting.sln
 
 *.user
 .vs
@@ -16,5 +20,4 @@ CherryCrisis/x64/*/*
 
 doc/html
 
-CherryCrisis/CherryScripting/bin
-CherryCrisis/CherryScripting/obj
+CherryCrisis/CherryScriptInterface/obj

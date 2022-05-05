@@ -22,6 +22,9 @@ private:
 	std::unique_ptr<mono::ManagedScriptSystem> m_scriptSystem;
 	std::vector<std::shared_ptr<class CsAssembly>> m_assemblies;
 
+	std::shared_ptr<class CsAssembly> m_interfaceAssembly;
+	std::shared_ptr<class CsAssembly> m_scriptAssembly;
+
 public:
 	std::vector<std::string> classesName;
 

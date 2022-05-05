@@ -32,18 +32,22 @@ void CsScriptingSystem::Init()
 	};
 
 	mono_add_internal_call("CCEngine.ScriptedBehaviour::GetStaticInstance", GetStaticInstance);
-	auto csassembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
-	mono::ManagedAssembly* assembly = csassembly->m_context->FindAssembly("CherryScripting.copy.dll");
-	mono::ManagedClass* behaviourClass = csassembly->m_context->FindClass("CCEngine", "Behaviour");
-	csassembly->m_context->FindClass("CCScripting", "DebugTest");
-	csassembly->m_context->FindClass("CCScripting", "BackpackBehaviour");
-	csassembly->m_context->FindClass("CCScripting", "CameraController");
-	csassembly->m_context->FindClass("CCScripting", "Meow");
-	csassembly->m_context->FindClass("CCScripting", "TG");
+
+	m_scriptAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
+	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", true, "InterfaceDomain");
+
+	mono::ManagedAssembly* scriptAssembly = m_scriptAssembly->m_context->FindAssembly("CherryScripting.copy.dll");
+	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
+
+	m_scriptAssembly->m_context->FindClass("CCScripting", "DebugTest");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "BackpackBehaviour");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "CameraController");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "Meow");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "TG");
 
 	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
 
-	auto& classes = assembly->GetClasses();
+	auto& classes = scriptAssembly->GetClasses();
 	for (auto& [className, classRef] : classes)
 	{
 		if (className == "Behaviour")
@@ -54,7 +58,6 @@ void CsScriptingSystem::Init()
 		if (mono_type_get_type(typeParentMDR) == behaviourTypeID)
 			classesName.push_back(className);
 	}
-
 }
 
 mono::ManagedScriptContext* CsScriptingSystem::CreateContext(char* domainName, const char* contextPath)
@@ -74,6 +77,5 @@ void CsScriptingSystem::InitializeAssembly(std::shared_ptr<CsAssembly> assembly,
 
 void CsScriptingSystem::ReloadContextes()
 {
-	for (auto& assembly : m_assemblies)
-		Resource<CsAssembly>::ReloadResource(assembly);
+	Resource<CsAssembly>::ReloadResource(m_scriptAssembly);
 }
