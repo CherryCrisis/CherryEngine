@@ -1,12 +1,14 @@
 #pragma once
 
 #include <unordered_set>
+#include <map>
 
 #include <glad/gl.h>
 
 #include "rendering_renderpass_interface.hpp"
 
 #include "ebo_tbn_generator.hpp"
+#include "texture_generator.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -18,24 +20,17 @@ class ModelRenderer;
 class Material;
 class Viewer;
 
-class CCENGINE_API BasicRenderPass : public ARenderingRenderPass, ElementTBNGenerator
+class CCENGINE_API BasicRenderPass : public ARenderingRenderPass
 {
+	ElementTBNGenerator m_meshGenerator;
+	TextureGenerator m_textureGenerator;
+
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
-	
-public:
-	struct CCENGINE_API GPUTextureBasic : public GPUTexture
-	{
-		GLuint ID = 0u;
 
-		void Generate(Texture* texture);
-		void Regenerate(Texture* texture);
-		void Destroy();
+	std::map<ETextureType, std::shared_ptr<Texture>> m_defaultTextures;
 
-		GPUTextureBasic(Texture* texture);
-		virtual ~GPUTextureBasic();
-		void OnReload(std::shared_ptr<Texture> texture);
-	};
+	void BindTexture(Material* material, ETextureType textureType, int id);
 
 public:
 	BasicRenderPass(const char* name);
@@ -59,9 +54,6 @@ public:
 	int Subscribe(ModelRenderer* toGenerate);
 
 	void Generate(Material* toGenerate);
-
-	template <>
-	int Subscribe(Texture* toGenerate);
 
 	template <>
 	void Unsubscribe(ModelRenderer* toGenerate);

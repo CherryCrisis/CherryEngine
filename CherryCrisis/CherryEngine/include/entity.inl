@@ -8,7 +8,9 @@ CompT* Entity::AddBehaviour()
 
 	CompT* rawPtr = new CompT();
 	rawPtr->m_owner = this;
+
 	m_behaviours.insert({ typeid(CompT), rawPtr });
+	rawPtr->BindToSignals();
 
 	return rawPtr;
 }

@@ -74,7 +74,7 @@ void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 		glUniform4f(glGetUniformLocation(m_program->m_shaderProgram, "uColorID"), colorID.r, colorID.g, colorID.b, 1.f);
 
 		Mesh* mesh = model->m_mesh.get();
-		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
+		auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 
 		if (!gpuMesh)
 			continue;

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <unordered_set>
@@ -15,13 +14,13 @@
 class ModelRenderer;
 class Viewer;
 
-class PickingRenderPass : public ARenderingRenderPass, ElementMeshGenerator
+class PickingRenderPass : public ARenderingRenderPass
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 
-
 public:
-	
+	ElementMeshGenerator m_meshGenerator;
+
 	struct GPUTextureBasic : GPUTexture
 	{
 		GLuint ID = 0u;

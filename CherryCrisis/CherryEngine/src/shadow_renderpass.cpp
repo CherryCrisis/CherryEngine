@@ -157,11 +157,6 @@ void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		}
 	}
 
-	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
-
-	glCullFace(GL_BACK);
-
 	glUseProgram(0);
 
 	glBindVertexArray(0);

@@ -196,6 +196,13 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 					node[propName] = val;
 					continue;
 				}
+				if (type == typeid(const char*))
+				{
+					const char* val;
+					propRef->Get(&val);
+					node[propName] = std::string(val);
+					continue;
+				}
 				if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
 				{
 					Object* ptr;
@@ -321,6 +328,12 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						bool str = value.as<bool>();
 						prop->Set(&str);
 					}
+					else if (propType == typeid(const char*))
+					{
+						std::string str = value.as<std::string>();
+						const char* val = str.c_str();
+						prop->Set(&val);
+					}
 				}
 
 				if (behaviourPtr->m_metadatas.m_fields.contains(key))
@@ -346,16 +359,6 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 					{
 						std::string* valPtr = std::any_cast<std::string*>(field.m_value);
 						*valPtr = value.as<std::string>();
-
-						ModelRenderer* renderer = (ModelRenderer*)behaviourPtr;
-						if (renderer)
-						{
-							std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(value.as<std::string>().c_str());
-							if (model->GetResourceState() == EResourceState::LOADED)
-								renderer->SetModel(model);
-							else
-								model->m_OnLoaded.Bind(&ModelRenderer::SetModel, renderer);
-						}
 					}
 				}
 			}

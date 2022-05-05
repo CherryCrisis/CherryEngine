@@ -37,6 +37,8 @@ private:
 
     void*   m_data = nullptr;
 
+    bool m_stackAllocated = false;
+
 public:
     std::unique_ptr<GPUTexture> m_gpuTexture = nullptr;
     std::unique_ptr<GPUTexture> m_gpuTextureEditor = nullptr;
@@ -54,6 +56,9 @@ public:
 
     void* GetData() { return m_data; }
     void ClearData();
+
+    static void Load(std::shared_ptr<Texture> texture, void* data, int width = 1, int height = 1,
+        ETextureFormat textureFormat = ETextureFormat::RGBA);
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true, 
         ETextureFormat textureFormat = ETextureFormat::RGBA);

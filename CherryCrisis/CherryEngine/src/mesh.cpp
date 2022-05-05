@@ -93,6 +93,11 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
         vertex.position.x = xSign * xHalfRes;
         vertex.position.y = ySign *-yHalfRes;
         vertex.position.z = zSign * zHalfRes;
+
+        vertex.normal = CCMaths::Vector3(xSign, ySign, zSign);
+        vertex.tangent = CCMaths::Vector3(xSign, ySign, zSign);
+        vertex.bitangent = CCMaths::Vector3(xSign, ySign, zSign);
+
         vertices.push_back(vertex);
     }
 
@@ -147,6 +152,11 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 
         vertex.position.x = xSign * xHalfRes;
         vertex.position.y = ySign * yHalfRes;
+
+        vertex.normal = CCMaths::Vector3::Forward;
+        vertex.tangent = CCMaths::Vector3::Right;
+        vertex.tangent = CCMaths::Vector3::Up;
+
         vertices.push_back(vertex);
     }
 

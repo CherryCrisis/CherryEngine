@@ -230,6 +230,26 @@ void InspectComponents(Entity* entity, int id)
 
                     continue;
                 }
+
+                if (propType == typeid(char*))
+                {
+                    char* val;
+                    propRef->Get(&val);
+                    if (ImGui::InputText(propName.c_str(), val, strlen(val) + 2))
+                        propRef->Set(&val);
+
+                    continue;
+                }
+
+                if (propType == typeid(const char*))
+                {
+                    const char* val = nullptr;
+                    propRef->Get(&val);
+
+                    ImGui::Text("%s %s", propName.c_str(), val ? val : "X");
+
+                    continue;
+                }
             }
             ImGui::TreePop();
         }
@@ -301,10 +321,10 @@ void InspectComponents(Entity* entity, int id)
 
 
                     ImGui::TableNextColumn();
-                    BasicRenderPass::GPUTextureBasic* GPUtex = nullptr;
+                    TextureGenerator::GPUTextureBasic* GPUtex = nullptr;
                     if (texRef.get() && texRef->m_gpuTexture)
                     {
-                        GPUtex = static_cast<BasicRenderPass::GPUTextureBasic*>
+                        GPUtex = static_cast<TextureGenerator::GPUTextureBasic*>
                         (texRef->m_gpuTexture.get());
                     }
 
@@ -432,7 +452,7 @@ void Inspector::Render()
             static char search[32] = "";
             ImGui::InputText("##", search, IM_ARRAYSIZE(search));
 
-
+            Behaviour* addBehaviour = nullptr;
             // TODO: Replace with list of available components
             if (ImGui::MenuItem("Transform")) 
             { 
@@ -469,6 +489,7 @@ void Inspector::Render()
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
                     entity->AddBehaviour <CapsuleCollider>();
             }
+            if (ImGui::MenuItem("Portal Component"))	{ addBehaviour = m_manager->m_selectedEntities[0]->AddBehaviour<PortalComponent>(); }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
                 if (ImGui::MenuItem(name.c_str()))

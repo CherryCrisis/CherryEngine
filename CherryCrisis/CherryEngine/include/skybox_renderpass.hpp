@@ -11,9 +11,11 @@
 class Skybox;
 class Viewer;
 
-class SkyboxRenderPass : public ARenderingRenderPass, ElementMeshGenerator
+class SkyboxRenderPass : public ARenderingRenderPass
 {
 private:
+	ElementMeshGenerator m_meshGenerator;
+
 	Skybox* m_skybox = nullptr;
 
 	struct GPUSkyboxCubemap : GPUCubemap

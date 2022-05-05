@@ -11,10 +11,9 @@
 #include <condition_variable>
 
 #include "render_manager.hpp"
-#include "model_loader.hpp"
-
 #include "debug.hpp"
 
+#include "model_loader.hpp"
 
 Texture::Texture(const char* texturePath)
     : Resource(texturePath)
@@ -32,6 +31,15 @@ void Texture::Delete()
 {
     ClearData();
     m_gpuTexture.reset();
+}
+
+void Texture::Load(std::shared_ptr<Texture> texture, void* data, int width, int height, ETextureFormat textureFormat)
+{
+    texture->m_data = std::move(data);
+    texture->m_height = height;
+    texture->m_width = width;
+    texture->m_internalFormat = textureFormat;
+    texture->m_stackAllocated = true;
 }
 
 void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureFormat textureFormat)
@@ -58,9 +66,8 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
     texture->m_mipmapLevels = textureHeader.mipmapsLevel;
     texture->m_internalFormat = textureHeader.internalFormat;
     texture->m_blockSize = textureHeader.blockSize;
+    texture->m_stackAllocated = false;
 }
-
-#include "nvtt/nvtt.h"
 
 bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader)
 {
@@ -93,7 +100,7 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** da
 
 void Texture::ClearData()
 {
-    if (m_data)
+    if (m_data && !m_stackAllocated)
         delete m_data;
 
     m_data = nullptr;

@@ -2,6 +2,8 @@
 
 #include "behaviour.hpp"
 
+#include "cherry_macros.hpp"
+
 #include "camera.hpp"
 #include "maths.hpp"
 

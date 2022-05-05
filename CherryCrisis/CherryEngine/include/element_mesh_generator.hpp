@@ -2,8 +2,6 @@
 
 #include <glad/gl.h>
 
-#include "renderpass_interface.hpp"
-
 #include "mesh.hpp"
 
 class CCENGINE_API ElementMeshGenerator

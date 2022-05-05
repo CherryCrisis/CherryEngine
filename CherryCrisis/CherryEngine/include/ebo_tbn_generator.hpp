@@ -2,8 +2,6 @@
 
 #include <glad/gl.h>
 
-#include "renderpass_interface.hpp"
-
 #include "element_mesh_generator.hpp"
 
 class Mesh;

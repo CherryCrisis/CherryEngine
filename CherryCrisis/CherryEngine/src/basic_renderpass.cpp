@@ -12,85 +12,6 @@
 #include "shadow_renderpass.hpp"
 #include "viewer.hpp"
 
-void BasicRenderPass::GPUTextureBasic::Generate(Texture* texture)
-{
-	glCreateTextures(GL_TEXTURE_2D, 1, &ID);
-
-	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	ETextureFormat textureFormat = texture->GetInternalFormat();
-
-	if (textureFormat == ETextureFormat::RGB || textureFormat == ETextureFormat::RGBA)
-	{
-		unsigned int internalFormat = GL_RGBA8;
-		if (textureFormat == ETextureFormat::RGB)
-			internalFormat = GL_RGB8;
-
-		glTextureStorage2D(ID, 1, internalFormat, texture->GetWidth(), texture->GetHeight());
-		glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (unsigned int)textureFormat, GL_UNSIGNED_BYTE, texture->GetData());
-
-		glGenerateTextureMipmap(ID);
-	}
-	else
-	{
-		glBindTexture(GL_TEXTURE_2D, ID);
-
-		int mipmapsCount = texture->GetMipmapCount();
-		int width = texture->GetWidth();
-		int height = texture->GetHeight();
-		int offset = 0;
-		unsigned char* data = (unsigned char*)texture->GetData();
-
-		for (int mipmapId = 0; mipmapId < mipmapsCount && (width || height); ++mipmapId)
-		{
-			CCMaths::Min(width, 1);
-			CCMaths::Min(height, 1);
-
-			int size = ((width + 3) / 4) * ((height + 3) / 4) * texture->GetBlockSize();
-			glCompressedTexImage2D(GL_TEXTURE_2D, mipmapId, (unsigned int)textureFormat,
-				width, height, 0, size, data + offset);
-
-
-			offset += size;
-			width >>= 1;
-			height >>= 1;
-		}
-	}
-
-	texture->ClearData();
-}
-
-void BasicRenderPass::GPUTextureBasic::Regenerate(Texture* texture)
-{
-	Destroy();
-	Generate(texture);
-}
-
-void BasicRenderPass::GPUTextureBasic::Destroy()
-{
-	glDeleteTextures(1, &ID);
-}
-
-BasicRenderPass::GPUTextureBasic::GPUTextureBasic(Texture* texture)
-{
-	texture->m_OnReloaded.Bind(&GPUTextureBasic::OnReload, this);
-
-	Generate(texture);
-}
-
-BasicRenderPass::GPUTextureBasic::~GPUTextureBasic()
-{
-	Destroy();
-}
-
-void BasicRenderPass::GPUTextureBasic::OnReload(std::shared_ptr<Texture> texture)
-{
-	Regenerate(texture.get());
-}
-
 
 BasicRenderPass::BasicRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/basicShader.vert", "Assets/basicShader.frag")
@@ -105,7 +26,29 @@ BasicRenderPass::BasicRenderPass(const char* name)
 		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
 
 		glUseProgram(0);
+
+		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
+		m_defaultTextures[ETextureType::ALBEDO] = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
+
+		unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
+		m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
+
+		for (auto& [texType, texRef] : m_defaultTextures)
+			m_textureGenerator.Generate(texRef.get());
 	}
+}
+
+void BasicRenderPass::BindTexture(Material* material, ETextureType textureType, int id)
+{
+	// Get correct texture from type
+	Texture* texture = material->m_textures[textureType].get();
+
+	// TODO: Add multiple default textures
+	// If is does not exist and its gpuTex too, get the default texture
+	auto& gpuTexPtr = texture && texture->m_gpuTexture ? texture->m_gpuTexture : m_defaultTextures[textureType]->m_gpuTexture;
+
+	auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(gpuTexPtr.get());
+	glBindTextureUnit(id, gpuTexture->ID);
 }
 
 template <>
@@ -129,7 +72,7 @@ int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 
 	// Generate GPU mesh
 	{
-		if (!ElementMeshGenerator::Generate(model->m_mesh.get()))
+		if (!m_meshGenerator.Generate(model->m_mesh.get()))
 			return -1;
 
 		m_modelRenderers.insert(toGenerate);
@@ -153,28 +96,11 @@ void BasicRenderPass::Generate(Material* toGenerate)
 
 	// Albedo texture
 	if (Texture* albedoTexture = toGenerate->m_textures[ETextureType::ALBEDO].get())
-		Subscribe(albedoTexture);
+		m_textureGenerator.Generate(albedoTexture);
 
 	// Normal texture
 	if (Texture* normalMap = toGenerate->m_textures[ETextureType::NORMAL_MAP].get())
-		Subscribe(normalMap);
-}
-
-template <>
-int BasicRenderPass::Subscribe(Texture* toGenerate)
-{
-	if (!toGenerate)
-		return -1;
-
-	if (toGenerate->m_gpuTexture)
-		return 0;
-
-	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
-		return -1;
-
-	toGenerate->m_gpuTexture = std::make_unique<GPUTextureBasic>(toGenerate);
-
-	return 1;
+		m_textureGenerator.Generate(normalMap);
 }
 
 template <>
@@ -194,6 +120,9 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	if (!viewer)
 		return;
 
+	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
@@ -201,8 +130,6 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glCullFace(GL_BACK);
 
 	glUseProgram(m_program->m_shaderProgram);
-	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
@@ -213,7 +140,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	std::unordered_set<Light*>::iterator lightIt = m_lights.begin();
 
 	// TODO: Set shader define as upper bound
-	for (size_t lightID = 0u; lightID < m_lights.size(); lightID++)
+	for (size_t lightID = 0u; lightID < 8; lightID++)
 	{
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 
@@ -269,7 +196,6 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-
 		Model* model = modelRdr->m_model.get();
 
 		if (!model)
@@ -277,28 +203,14 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 		if (Material* material = model->m_material.get())
 		{
-
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.ambientCol"), 1, material->m_ambient.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.diffuseCol"), 1, material->m_diffuse.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specularCol"), 1, material->m_specular.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.emissiveCol"), 1, material->m_emissive.data);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.shininess"), material->m_shininess);
 
-			if (Texture* albedoTexture = material->m_textures[ETextureType::ALBEDO].get())
-			{
-				if (auto gpuAlbedoTexture = static_cast<GPUTextureBasic*>(albedoTexture->m_gpuTexture.get()))
-				{
-					glBindTextureUnit(0, gpuAlbedoTexture->ID);
-				}
-			}
-
-			if (Texture* normalMap = material->m_textures[ETextureType::NORMAL_MAP].get())
-			{
-				if (auto gpuNormalMap = static_cast<GPUTextureBasic*>(normalMap->m_gpuTexture.get()))
-				{
-					glBindTextureUnit(1, gpuNormalMap->ID);
-				}
-			}
+			BindTexture(material, ETextureType::ALBEDO, 0);
+			BindTexture(material, ETextureType::NORMAL_MAP, 1);
 		}
 
 		Mesh* mesh = model->m_mesh.get();
@@ -306,7 +218,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!mesh)
 			continue;
 
-		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
+		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 
 		if (!gpuMesh)
 			continue;

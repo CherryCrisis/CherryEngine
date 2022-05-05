@@ -8,10 +8,13 @@
 
 class ARenderingPipeline;
 
+struct GPUPortal { };
+
 struct Portal : public Viewer, public ARenderer
 {
-	CCMaths::Vector3 m_position = CCMaths::Vector3::Zero;
-	CCMaths::Vector3 m_rotation = CCMaths::Vector3::Zero;
+	std::unique_ptr<GPUPortal> m_gpuPortal;
+
+	CCMaths::Matrix4 m_modelMatrix = CCMaths::Matrix4::Identity;
 
 	Portal* m_linkedPortal = nullptr;
 

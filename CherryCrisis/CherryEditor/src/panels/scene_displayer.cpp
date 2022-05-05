@@ -60,7 +60,7 @@ SceneDisplayer::SceneDisplayer()
 
     IM->PopContext();
 
-    m_camera.m_pipeline = std::make_unique<MixedPipeline>();
+    m_camera.m_pipeline = std::make_unique<BasicRPipeline>();
     CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
 }
 
@@ -95,9 +95,9 @@ void SceneDisplayer::UpdateCamera()
     m_camera.rotation.pitch += dt * deltaMouse.y;
     m_camera.rotation.yaw += dt * deltaMouse.x;
     
-    m_camera.position += (forwardMove + rightwardMove + upwardMove) * speed;
+    m_camera.m_position += (forwardMove + rightwardMove + upwardMove) * speed;
 
-    m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.position);
+    m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.m_position);
 }
 
 void SceneDisplayer::Render() 
