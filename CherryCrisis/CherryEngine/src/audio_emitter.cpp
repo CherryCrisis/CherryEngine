@@ -31,6 +31,7 @@ void AudioEmitter::SetPitch(float value)
 {
 	if (!m_sound) return;
 	m_sound->SetPitch(value);
+
 }
 
 //Load the sound if not existing, and adds it as the selected sound
@@ -81,7 +82,6 @@ void AudioEmitter::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&AudioEmitter::Initialize, this);
 	GetHost().m_OnStart.Bind(&AudioEmitter::Start, this);
-
 }
 
 void AudioEmitter::ChangePosition(const CCMaths::Vector3& position)
@@ -108,4 +108,6 @@ void AudioEmitter::Start()
 {
 	if (m_isAutoplaying)
 		Play();
+
+	GetHost().m_OnStart.Unbind(&AudioEmitter::Start, this);
 }

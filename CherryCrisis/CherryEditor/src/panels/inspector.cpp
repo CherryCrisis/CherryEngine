@@ -171,8 +171,6 @@ void InspectComponents(Entity* entity, int id)
                             if (extension == "wav") 
                             {
                                 emitter->AddSound(data);
-                                emitter->SetLooping(true);
-                                emitter->Play();
                             }
 
                         }
@@ -486,8 +484,11 @@ void Inspector::Render()
             }
             if (ImGui::MenuItem("Audio Emitter"))
             {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<AudioEmitter>();
+                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
+                {
+                    AudioEmitter* emitter = entity->AddBehaviour<AudioEmitter>();
+                    emitter->BindToSignals();
+                }
             }
             if (ImGui::MenuItem("Box Collider"))      
             {
