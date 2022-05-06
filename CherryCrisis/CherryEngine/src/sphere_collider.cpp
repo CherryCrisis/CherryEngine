@@ -63,6 +63,8 @@ void SphereCollider::SetPxShape()
 {
 	float scale = m_baseEntityScale * m_editableScale * m_entityScale;
 	m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(scale));
+	m_pxShape->userData = this;
+
 	SetPxData();
 }
 

@@ -409,6 +409,7 @@
     <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
     <None Include="..\x64\Debug\Assets\skyboxShader.vert" />
+    <None Include="interface\physic_manager.i" />
     <None Include="Scripting.cd" />
     <None Include="Rendering.cd" />
     <None Include="externals\include\assimp\color4.inl" />

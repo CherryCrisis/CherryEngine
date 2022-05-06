@@ -5,8 +5,6 @@
 #include "behaviour.hpp"
 #include "bool3.hpp"
 
-#include "physic_utils.hpp"
-
 class Rigidbody;
 class Collider;
 

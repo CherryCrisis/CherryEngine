@@ -70,6 +70,7 @@ void CapsuleCollider::SetPxShape()
 	physx::PxTransform transform = m_pxShape->getLocalPose();
 	physx::PxTransform relativeRot = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
 	m_pxShape->setLocalPose(transform * relativeRot);
+	m_pxShape->userData = this;
 
 	SetPxData();
 }

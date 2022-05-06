@@ -67,6 +67,7 @@ void BoxCollider::SetPxShape()
 
 	physx::PxVec3 scalePx = { scale.x, scale.y, scale.z };
 	m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(scalePx));
+	m_pxShape->userData = this;
 	SetPxData();
 }
 

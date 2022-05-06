@@ -48,9 +48,8 @@ namespace PhysicSystem
 			
 			if (out.actor)
 			{
-				PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(out.actor->userData);
 				Debug::GetInstance()->AddLog(ELogType::INFO, std::to_string(out.distance).c_str());
-				Debug::GetInstance()->AddLog(ELogType::INFO, actor1->m_owner->GetName().c_str());
+				Debug::GetInstance()->AddLog(ELogType::INFO, out.actor->m_owner->GetName().c_str());
 			}
 		}
 	}
@@ -259,33 +258,27 @@ namespace PhysicSystem
 		{
 			physx::PxVec3 pxForce = { force.x, force.y, force.z };
 			physx::PxRigidDynamic* object = static_cast<physx::PxRigidDynamic*>(m_pxActor);
-			object->addForce(pxForce, mode, true);
+			object->addForce(pxForce, static_cast<physx::PxForceMode::Enum>(mode), true);
 		}
 	}
 
 	RaycastHit PhysicActor::Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
 	{
-		static physx::PxRaycastHit hit[256];
-		static physx::PxRaycastBuffer hitBuffer(hit, 256);
+		physx::PxRaycastBuffer hit = PhysicManager::RaycastBuff(*m_owner->m_cell->m_physicCell, origin, dir, maxRange);
 
-		bool status = m_owner->m_cell->m_physicCell->Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hitBuffer);
+		unsigned int hitNb = (unsigned int)hit.getNbTouches();
 
-		if (!status)
+		if (hitNb == 0)
 		{
-			return hitBuffer.getTouch(0);
+			return RaycastHit();
 		}
 
-		unsigned int hitNb = (unsigned int)hitBuffer.getNbTouches();
-
-		if (hitBuffer.getTouch(hitNb - 1).actor == static_cast<physx::PxRigidActor*>(m_pxActor))
+		for (int i = hitNb - 1; i > 0; i++)
 		{
-			if (hitNb > 1)
-				return hitBuffer.getTouch(hitNb - 2);
-			else
-				return hitBuffer.getTouch(hitNb);
+			if (hit.getTouch(i).actor != static_cast<physx::PxRigidActor*>(m_pxActor))
+				return PhysicManager::RaycastFromPxRaycast(hit.getTouch(i));
 		}
-
-		return hitBuffer.getTouch(hitNb - 1);
+		return RaycastHit();
 	}
 
 	bool PhysicActor::HasRigidbody()
