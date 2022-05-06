@@ -15,7 +15,7 @@
 #include "box_collider.hpp"
 #include "sphere_collider.hpp"
 #include "capsule_collider.hpp"
-#include "model.hpp"
+#include "model_base.hpp"
 
 #include "scene_manager.hpp"
 #include "object.hpp"

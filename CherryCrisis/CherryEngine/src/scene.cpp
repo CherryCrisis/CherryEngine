@@ -109,11 +109,12 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 
 	ModelRenderer* modelRdr;
 
-	if (node->m_model)
+	if (node->m_mesh)
 	{
 		modelRdr = entity->AddBehaviour<ModelRenderer>();
 		modelRdr->m_transform = transform;
-		modelRdr->SetModel(node->m_model);
+		modelRdr->SetMesh(node->m_mesh);
+		modelRdr->SetMaterial(node->m_material);
 		modelRdr->BindToSignals();
 	}
 
@@ -141,7 +142,7 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
 
 	ModelNode* rootNode = modelBase->GetRootNode();
 
-	if (modelBase->GetModelCount() && rootNode)
+	if (modelBase->GetMeshCount() && rootNode)
 		GenerateEntitiesRecursive(rootNode, nullptr, entities);
 
 	for (Entity* entity : entities)

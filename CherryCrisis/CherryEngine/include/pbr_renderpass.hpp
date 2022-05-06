@@ -11,8 +11,8 @@
 
 #include "texture.hpp"
 #include "light.hpp"
-#include "mesh.hpp"
 
+enum class ETextureType : unsigned int;
 class ModelRenderer;
 class Material;
 class Viewer;
@@ -55,9 +55,6 @@ public:
 	int Subscribe(ModelRenderer* toGenerate);
 
 	void Generate(Material* toGenerate);
-
-	template <>
-	int Subscribe(Texture* toGenerate);
 
 	template <>
 	int Subscribe(Skydome* toGenerate);

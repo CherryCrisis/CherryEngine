@@ -22,6 +22,9 @@ int PickingRenderPass::Subscribe(ModelRenderer* toGenerate)
 	if (!toGenerate)
 		return -1;
 
+	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
+		return -1;
+
 	m_modelRenderers.insert(toGenerate);
 
 	return 1;
@@ -65,15 +68,14 @@ void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-		Model* model = modelRdr->m_model.get();
+		Mesh* mesh = modelRdr->m_mesh.get();
 
-		if (!model || !model->m_mesh.get())
+		if (!mesh)
 			continue;
 
 		CCMaths::Vector3 colorID = RGB(modelRdr->m_id);
 		glUniform4f(glGetUniformLocation(m_program->m_shaderProgram, "uColorID"), colorID.r, colorID.g, colorID.b, 1.f);
 
-		Mesh* mesh = model->m_mesh.get();
 		auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 
 		if (!gpuMesh)

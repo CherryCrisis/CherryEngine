@@ -88,7 +88,10 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 template <>
 int ShadowRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
-	if (!toGenerate->m_model)
+	if (!toGenerate->m_mesh)
+		return -1;
+
+	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
 		return -1;
 
 	m_models.insert(toGenerate);
@@ -136,12 +139,7 @@ void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			CCMaths::Matrix4 lightSpaceModel = light->m_lightSpace * modelRdr->m_transform->GetWorldMatrix();
 			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uLightSpaceModel"), 1, GL_FALSE, lightSpaceModel.data);
 
-			Model* model = modelRdr->m_model.get();
-
-			if (!model)
-				continue;
-
-			Mesh* mesh = model->m_mesh.get();
+			Mesh* mesh = modelRdr->m_mesh.get();
 
 			if (!mesh)
 				continue;

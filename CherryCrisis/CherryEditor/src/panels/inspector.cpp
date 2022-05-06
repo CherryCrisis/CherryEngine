@@ -25,6 +25,7 @@
 #include "panels/asset_settings.hpp"
 #include "basic_renderpass.hpp"
 #include "light_component.hpp"
+#include "material.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -260,9 +261,9 @@ void Inspector::InspectComponents(Entity* entity, int id)
     }
     
     //Inspect Material
-    if (renderer && renderer->m_model && renderer->m_model->m_material)
+    if (renderer && renderer->m_mesh && renderer->m_material)
     {
-        std::shared_ptr<Material> mat = renderer->m_model->m_material;
+        std::shared_ptr<Material> mat = renderer->m_material;
         if (ImGui::TreeNode("Material"))
         {
             if (ImGui::Button(mat->GetFilesystemPath()->filename().string().c_str()))
@@ -283,7 +284,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
                         std::shared_ptr<Material> newMaterial = ResourceManager::GetInstance()->GetResource<Material>(materialPath);
 
                         if (newMaterial)
-                            renderer->m_model->SetMaterial(newMaterial);
+                            renderer->SetMaterial(newMaterial);
                     }
                 }
                 ImGui::EndDragDropTarget();

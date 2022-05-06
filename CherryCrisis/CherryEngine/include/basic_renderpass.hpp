@@ -12,10 +12,10 @@
 
 #include "texture.hpp"
 #include "light.hpp"
-#include "mesh.hpp"
 
 #include <cherry_macros.hpp>
 
+enum class ETextureType : unsigned int;
 class ModelRenderer;
 class Material;
 class Viewer;

@@ -14,6 +14,8 @@
 #include "irradiance_map_renderpass.hpp"
 #include "prefilter_map_renderpass.hpp"
 #include "brdf_renderpass.hpp"
+#include "material.hpp"
+#include "texture.hpp"
 
 #include "shadow_renderpass.hpp"
 #include "viewer.hpp"
@@ -39,7 +41,7 @@ PBRRenderPass::PBRRenderPass(const char* name)
 		glUseProgram(0);
 
 		m_defaultTexture = ResourceManager::GetInstance()->AddResource<Texture>("Internal/PBR/defaultTexture.png", true);
-		Subscribe(m_defaultTexture.get());
+		m_textureGenerator.Generate(m_defaultTexture.get());
 	}
 }
 
@@ -57,25 +59,17 @@ int PBRRenderPass::Subscribe(Light* toGenerate)
 template <>
 int PBRRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
-	Model* model = toGenerate->m_model.get();
-
-	if (!model)
-		return -1;
-
 	// Generate GPU mesh
 	{
-		if (!m_meshGenerator.Generate(model->m_mesh.get()))
+		if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
 			return -1;
 
 		m_modelRenderers.insert(toGenerate);
 	}
 
-	toGenerate->m_onMaterialSet.Bind(&PBRRenderPass::Generate, this);
-
 	// Generate GPU textures
 	{
-		if (Material* material = model->m_material.get())
-			Generate(material);
+		Generate(toGenerate->m_material.get());
 	}
 
 	return 1;
@@ -88,40 +82,23 @@ void PBRRenderPass::Generate(Material* toGenerate)
 
 	// Albedo texture
 	if (Texture* albedoTexture = toGenerate->m_textures[ETextureType::ALBEDO].get())
-		Subscribe(albedoTexture);
+		m_textureGenerator.Generate(albedoTexture);
 
 	// Normal texture
 	if (Texture* normalMap = toGenerate->m_textures[ETextureType::NORMAL_MAP].get())
-		Subscribe(normalMap);
+		m_textureGenerator.Generate(normalMap);
 
 	if (Texture* specularMap = toGenerate->m_textures[ETextureType::SPECULAR].get())
-		Subscribe(specularMap);
+		m_textureGenerator.Generate(specularMap);
 
 	if (Texture* metallicMap = toGenerate->m_textures[ETextureType::METALLIC].get())
-		Subscribe(metallicMap);
+		m_textureGenerator.Generate(metallicMap);
 
 	if (Texture* roughnessMap = toGenerate->m_textures[ETextureType::ROUGHNESS].get())
-		Subscribe(roughnessMap);
+		m_textureGenerator.Generate(roughnessMap);
 
 	if (Texture* aoMap = toGenerate->m_textures[ETextureType::AO].get())
-		Subscribe(aoMap);
-}
-
-template <>
-int PBRRenderPass::Subscribe(Texture* toGenerate)
-{
-	if (!toGenerate)
-		return -1;
-
-	if (toGenerate->m_gpuTexture)
-		return 0;
-
-	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
-		return -1;
-
-	toGenerate->m_gpuTexture = std::make_unique<TextureGenerator::GPUTextureBasic>(toGenerate);
-
-	return 1;
+		m_textureGenerator.Generate(aoMap);
 }
 
 template <>
@@ -158,27 +135,16 @@ void PBRRenderPass::Unsubscribe(Light* toGenerate)
 
 void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, int id)
 {
-	if (Texture* texture = material->m_textures[textureType].get())
-	{
-		if (auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(texture->m_gpuTexture.get()))
-		{
-			glBindTextureUnit(id, gpuTexture->ID);
-		}
-		else
-		{
-			if (auto gpuDefaultTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_defaultTexture->m_gpuTexture.get()))
-			{
-				glBindTextureUnit(id, gpuDefaultTexture->ID);
-			}
-		}
-	}
-	else
-	{
-		if (auto gpuDefaultTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_defaultTexture->m_gpuTexture.get()))
-		{
-			glBindTextureUnit(id, gpuDefaultTexture->ID);
-		}
-	}
+	// Get correct texture from type
+	Texture* texture = material->m_textures[textureType].get();
+	 
+	// TODO: Add multiple default textures
+	// If is does not exist and its gpuTex too, get the default texture
+	auto& gpuTexPtr = (texture && texture->m_gpuTexture) ? texture->m_gpuTexture : m_defaultTexture->m_gpuTexture;
+
+
+	auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(gpuTexPtr.get());
+	glBindTextureUnit(id, gpuTexture->ID);
 }
 
 void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
@@ -248,15 +214,10 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!modelRdr->m_isVisible)
 			continue;
 
-		Model* model = modelRdr->m_model.get();
-
-		if (!model)
-			continue;
-
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-		if (Material* material = model->m_material.get())
+		if (Material* material = modelRdr->m_material.get())
 		{
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), material->m_hasNormal);
@@ -294,7 +255,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			}
 		}
 
-		Mesh* mesh = model->m_mesh.get();
+		Mesh* mesh = modelRdr->m_mesh.get();
 
 		if (!mesh)
 			continue;

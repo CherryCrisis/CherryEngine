@@ -11,7 +11,8 @@
 
 #include "cherry_macros.hpp"
 
-class Model;
+class Mesh;
+class Material;
 class Entity;
 class Scene;
 
@@ -24,25 +25,26 @@ namespace CCImporter
 
 struct ModelNode
 {
-	ModelNode*				m_parentNode;
-	std::vector<ModelNode*> m_childrenNode;
-	std::shared_ptr<Model>	m_model;
-	Vector3					m_baseTRS[3];
+	ModelNode*					m_parentNode;
+	std::vector<ModelNode*>		m_childrenNode;
+	std::shared_ptr<Mesh>		m_mesh;
+	std::shared_ptr<Material>	m_material;
+	Vector3						m_baseTRS[3];
 };
 
 class CCENGINE_API ModelBase : public Resource<ModelBase>
 {
 private:
-	ModelNode* m_rootNode;
-	std::vector<std::shared_ptr<Model>>	m_models;
+	ModelNode*		m_rootNode = nullptr;
+	unsigned int	m_meshCount = 0;
 
 	void DeleteModelNode(ModelNode* modelNode);
 
 public:
-	ModelBase(const char* filename) : Resource(filename), m_rootNode(nullptr) {}
+	ModelBase(const char* filename) : Resource(filename) {}
 	~ModelBase() = default;
 
-	size_t GetModelCount() { return m_models.size(); }
+	size_t GetMeshCount() { return m_meshCount; }
 	ModelNode* GetRootNode() { return m_rootNode; }
 
 	static void Load(std::shared_ptr<ModelBase> modelBase);

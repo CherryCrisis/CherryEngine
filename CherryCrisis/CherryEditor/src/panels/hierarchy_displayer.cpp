@@ -237,7 +237,7 @@ void HierarchyDisplayer::ContextCallback()
             if (ImGui::BeginMenu("Shapes"))
             {
                 Entity* newEntity = nullptr;
-                std::shared_ptr<Model> newModel = nullptr;
+               /* std::shared_ptr<Model> newModel = nullptr;
                 if (ImGui::MenuItem("Cube"))
                 {
                     newEntity = new Entity("Cube");
@@ -283,7 +283,7 @@ void HierarchyDisplayer::ContextCallback()
 
                     SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
                     m_manager->FocusEntity(newEntity);
-                }
+                }*/
 
                 ImGui::EndMenu();
             }

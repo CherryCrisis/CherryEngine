@@ -7,11 +7,11 @@
 #include "camera.hpp"
 #include "model_renderer.hpp"
 #include "transform.hpp"
-#include "model.hpp"
+#include "material.hpp"
+#include "mesh.hpp"
 
 #include "shadow_renderpass.hpp"
 #include "viewer.hpp"
-
 
 BasicRenderPass::BasicRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/LIT/basicShader.vert", "Assets/Shaders/LIT/basicShader.frag")
@@ -65,25 +65,17 @@ int BasicRenderPass::Subscribe(Light* toGenerate)
 template <>
 int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
-	Model* model = toGenerate->m_model.get();
-
-	if (!model)
-		return -1;
-
 	// Generate GPU mesh
 	{
-		if (!m_meshGenerator.Generate(model->m_mesh.get()))
+		if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
 			return -1;
 
 		m_modelRenderers.insert(toGenerate);
 	}
 
-	toGenerate->m_onMaterialSet.Bind(&BasicRenderPass::Generate, this);
-
 	// Generate GPU textures
 	{
-		if (Material* material = model->m_material.get())
-			Generate(material);
+		Generate(toGenerate->m_material.get());
 	}
 
 	return 1;
@@ -196,12 +188,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
-		Model* model = modelRdr->m_model.get();
-
-		if (!model)
-			continue;
-
-		if (Material* material = model->m_material.get())
+		if (Material* material = modelRdr->m_material.get())
 		{
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.ambientCol"), 1, material->m_ambient.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.diffuseCol"), 1, material->m_diffuse.data);
@@ -213,7 +200,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			BindTexture(material, ETextureType::NORMAL_MAP, 1);
 		}
 
-		Mesh* mesh = model->m_mesh.get();
+		Mesh* mesh = modelRdr->m_mesh.get();
 
 		if (!mesh)
 			continue;
