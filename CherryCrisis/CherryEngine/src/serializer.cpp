@@ -16,6 +16,8 @@
 #include "sphere_collider.hpp"
 #include "capsule_collider.hpp"
 #include "model.hpp"
+#include "audio_emitter.hpp"
+#include "audio_listener.hpp"
 
 #include "scene_manager.hpp"
 #include "object.hpp"
@@ -233,7 +235,8 @@ Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 	else if (type == "BoxCollider")       b = new BoxCollider(id);
 	else if (type == "SphereCollider")    b = new SphereCollider(id);
 	else if (type == "CapsuleCollider")   b = new CapsuleCollider(id);
-
+	else if (type == "AudioListener")     b = new AudioListener(id);
+	else if (type == "AudioEmitter")      b = new AudioEmitter(id);
 	return b;
 }
 
@@ -348,6 +351,8 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						*valPtr = value.as<std::string>();
 
 						ModelRenderer* renderer = (ModelRenderer*)behaviourPtr;
+						AudioEmitter* emitter = (AudioEmitter*)behaviourPtr;
+
 						if (renderer)
 						{
 							std::shared_ptr<Model> model = ResourceManager::GetInstance()->AddResourceRef<Model>(value.as<std::string>().c_str());
@@ -356,6 +361,8 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 							else
 								model->m_OnLoaded.Bind(&ModelRenderer::SetModel, renderer);
 						}
+						if (emitter)
+							emitter->AddSound(value.as<std::string>().c_str());
 					}
 				}
 			}

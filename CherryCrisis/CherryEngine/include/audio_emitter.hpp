@@ -12,6 +12,8 @@ class CCENGINE_API AudioEmitter : public Behaviour
 {
 private:
 	std::shared_ptr<Sound> m_sound;
+	std::string m_soundPath = "null";
+	bool m_isAutoplaying = true;
 public:
 	AudioEmitter();
 	AudioEmitter(CCUUID& id);
@@ -26,11 +28,14 @@ public:
 	
 	//Load the sound if not existing, and adds it as the selected sound
 	void AddSound(const char* filepath);
+	void AddSound(std::shared_ptr<Sound> sound);
 
 	Transform* m_transform = nullptr;
 
 	void Initialize();
-	void BindToSignals() override;
+	void Start();
+	void BindToSignals()	 override;
+	void PopulateMetadatas() override;
 
 	void ChangePosition(const CCMaths::Vector3& position);
 	void ChangeRotation(const CCMaths::Vector3& position);

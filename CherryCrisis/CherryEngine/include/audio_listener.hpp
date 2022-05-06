@@ -13,7 +13,7 @@ public:
 	AudioListener();
 	AudioListener(CCUUID& id);
 	~AudioListener();
-	
+
 	Transform* m_transform = nullptr; 
 
 	void Initialize();

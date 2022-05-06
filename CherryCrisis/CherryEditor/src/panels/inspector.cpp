@@ -45,6 +45,7 @@ void InspectComponents(Entity* entity, int id)
     std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 
     ModelRenderer* renderer = nullptr;
+    AudioEmitter* emitter = nullptr;
     for (Behaviour* behaviour : behaviours)
     {
         ImGui::PushID(static_cast<int>(behaviour->GetUUID()));
@@ -74,6 +75,8 @@ void InspectComponents(Entity* entity, int id)
             opened = ImGui::TreeNode(bname.c_str());
         if (bname == "ModelRenderer")
             renderer = (ModelRenderer*)behaviour;
+        if (bname == "AudioEmitter")
+            emitter = (AudioEmitter*)behaviour;
         // check if right clicked
         if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
         {
@@ -156,6 +159,26 @@ void InspectComponents(Entity* entity, int id)
                 {
                     std::string val = *std::any_cast<std::string*>(fieldRef.m_value);
                     ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
+
+                    // if sound then accept drag and drop
+                    if (emitter && ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                        {
+                            const char* data = (const char*)payload->Data;
+                            std::string extension = String::ExtractValue(data, '.');
+
+                            if (extension == "wav") 
+                            {
+                                emitter->AddSound(data);
+                                emitter->SetLooping(true);
+                                emitter->Play();
+                            }
+
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+
                     continue;
                 }
             }

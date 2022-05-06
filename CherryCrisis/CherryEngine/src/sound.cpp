@@ -3,6 +3,7 @@
 #include <sound.hpp>
 #include "resource_manager.hpp"
 #include "al.h"
+#include "sound_manager.hpp"
 
 static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigned int* size, int* bps, short** output)
 {
@@ -72,6 +73,7 @@ static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigne
 
 void Sound::Load(std::shared_ptr<Sound> sound)
 {
+    SoundManager::GetInstance()->PlaySound2D(0);
     alGenBuffers(1, &sound->m_buffer);
 
     short* buffer;
@@ -103,6 +105,7 @@ void Sound::Load(std::shared_ptr<Sound> sound)
 
     alBufferData(sound->m_buffer, format, channels == 1 ? buffer : monoBuffer, channels == 1 ? size : size * .5f, sampleRate);
     free(buffer);
+    free(monoBuffer);
 
     alGenSources(1, &(sound->m_source));
     alSourcei(sound->m_source, AL_BUFFER, sound->m_buffer);
