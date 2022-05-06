@@ -6,6 +6,7 @@
 
 #include "scene.hpp"
 #include "transform.hpp"
+#include "portal_component.hpp"
 #include "core/editor_manager.hpp"
 
 #include<algorithm>
@@ -224,19 +225,22 @@ void HierarchyDisplayer::ContextCallback()
         ImGui::Separator();
         if (ImGui::BeginMenu("New"))
         {
+            Entity* newEntity = nullptr;
 
             if (ImGui::MenuItem("Empty"))
-            {
-                Entity* empty = new Entity("Empty");
-                SceneManager::GetInstance()->m_currentScene->AddEntity(empty);
-            }
+                newEntity = new Entity("Empty");
+
             if (ImGui::MenuItem("ModelRenderer")) {}
+            if (ImGui::MenuItem("Portal"))
+            {
+                newEntity = new Entity("Portal");
+                newEntity->AddBehaviour<PortalComponent>();
+            }
             if (ImGui::MenuItem("Camera")) {}
             if (ImGui::MenuItem("Particle System")) {}
             if (ImGui::MenuItem("Audio Source")) {}
             if (ImGui::BeginMenu("Shapes"))
             {
-                Entity* newEntity = nullptr;
                 std::shared_ptr<Model> newModel = nullptr;
                 if (ImGui::MenuItem("Cube"))
                 {
@@ -278,15 +282,19 @@ void HierarchyDisplayer::ContextCallback()
                     ModelRenderer* rdr = newEntity->AddBehaviour<ModelRenderer>();
                     rdr->m_transform = tr;
                     rdr->SetModel(newModel);
-
-                    newEntity->Initialize();
-
-                    SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
-                    m_manager->FocusEntity(newEntity);
                 }
 
                 ImGui::EndMenu();
             }
+
+            if (newEntity)
+            {
+                newEntity->Initialize();
+
+                SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
+                m_manager->FocusEntity(newEntity);
+            }
+
             ImGui::Separator();
 
             ImGui::EndMenu();
