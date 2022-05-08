@@ -169,10 +169,7 @@ void InspectComponents(Entity* entity, int id)
                             std::string extension = String::ExtractValue(data, '.');
 
                             if (extension == "wav") 
-                            {
                                 emitter->AddSound(data);
-                            }
-
                         }
                         ImGui::EndDragDropTarget();
                     }
@@ -479,8 +476,12 @@ void Inspector::Render()
             }
             if (ImGui::MenuItem("Audio Listener"))
             {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<AudioListener>();
+                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
+                {
+                    AudioListener* listener =  entity->AddBehaviour<AudioListener>();
+                    listener->BindToSignals();
+                    listener->Initialize();
+                }
             }
             if (ImGui::MenuItem("Audio Emitter"))
             {
@@ -488,6 +489,7 @@ void Inspector::Render()
                 {
                     AudioEmitter* emitter = entity->AddBehaviour<AudioEmitter>();
                     emitter->BindToSignals();
+                    emitter->Initialize();
                 }
             }
             if (ImGui::MenuItem("Box Collider"))      

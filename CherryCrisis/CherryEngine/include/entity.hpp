@@ -55,6 +55,7 @@ public:
 	Event<> m_OnAwake;
 	Event<> m_OnStart;
 	Event<> m_OnTick;
+	Event<> m_OnDestroyed;
 	Event<Cell*> m_OnCellAdded;
 	Event<Cell*> m_OnCellRemoved;
 

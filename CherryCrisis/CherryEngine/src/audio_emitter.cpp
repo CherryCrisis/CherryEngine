@@ -22,16 +22,28 @@ void AudioEmitter::Stop()
 	m_sound->Stop();
 }
 
-void AudioEmitter::SetLooping(bool loop) 
+void AudioEmitter::SetLooping(const bool& loop) 
 {
 	if (!m_sound) return;
-	m_sound->SetLooping(loop);
+	m_isLooping = loop;
+	m_sound->SetLooping(m_isLooping);
 }
-void AudioEmitter::SetPitch(float value) 
+void AudioEmitter::SetPitch(const float& value) 
 {
 	if (!m_sound) return;
-	m_sound->SetPitch(value);
+	m_pitch = value;
+	m_sound->SetPitch(m_pitch);
+}
 
+void AudioEmitter::SetSpatialized(const bool& value)
+{
+	if (!m_sound) return;
+	m_isSpatial = value;
+	if (m_isSpatial && m_transform) 
+	{
+		ChangePosition(m_transform->GetPosition());
+		ChangeRotation(m_transform->GetRotation());
+	}
 }
 
 //Load the sound if not existing, and adds it as the selected sound
@@ -82,11 +94,13 @@ void AudioEmitter::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&AudioEmitter::Initialize, this);
 	GetHost().m_OnStart.Bind(&AudioEmitter::Start, this);
+	GetHost().m_OnDestroyed.Bind(&AudioEmitter::Stop, this);
+	
 }
 
 void AudioEmitter::ChangePosition(const CCMaths::Vector3& position)
 {
-	if (!m_sound)return;
+	if (!m_sound || !m_isSpatial) return;
 	m_sound->SetPosition(position);
 }
 
@@ -100,8 +114,12 @@ void AudioEmitter::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetField<std::string>("Sound", m_soundPath);
+	// change all of this to properties
+	m_metadatas.SetProperty("Sound", &SoundPath);
 	m_metadatas.SetField<bool>("AutoPlay", m_isAutoplaying);
+	m_metadatas.SetProperty("Looping", &Looping);
+	m_metadatas.SetProperty("Spatialized", &Spatialized);
+	m_metadatas.SetProperty("Pitch", &Pitch);
 }
 
 void AudioEmitter::Start() 

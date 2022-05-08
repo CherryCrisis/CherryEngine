@@ -80,6 +80,7 @@ void Entity::OnTriggerExit(Entity* other)
 
 void Entity::Destroy()
 {
+	m_OnDestroyed.Invoke();
 	delete this;
 }
 
