@@ -35,7 +35,7 @@ void PortalComponent::PopulateMetadatas()
 	Behaviour::PopulateMetadatas();
 
 	// Add property
-	m_metadatas.SetField<Portal*>("linked portal", m_portal.m_linkedPortal);
+	m_metadatas.SetProperty("linkedPortalProp", &m_LinkedPortalProp);
 }
 
 void PortalComponent::BindToSignals()

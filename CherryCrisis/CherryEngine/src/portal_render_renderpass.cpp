@@ -59,6 +59,8 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		}
 	}
 
+	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);

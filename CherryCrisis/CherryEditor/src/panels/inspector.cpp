@@ -158,6 +158,15 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
                     continue;
                 }
+
+                if (type == typeid(Object*))
+                {
+                    Object* val = *std::any_cast<Object**>(fieldRef.m_value);
+
+                    ImGui::Text("%s", typeid(*val).name());
+
+                    continue;
+                }
             }
 
             std::unordered_map <std::string, CCProperty::IClearProperty*>& properties = behaviour->GetProperties();
@@ -249,6 +258,16 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     propRef->Get(&val);
 
                     ImGui::Text("%s %s", propName.c_str(), val ? val : "X");
+
+                    continue;
+                }
+
+                if (propType == typeid(Object*))
+                {
+                    Object* val = nullptr;
+                    propRef->Get(&val);
+
+                    ImGui::Text("%s %p", propName.c_str(), val);
 
                     continue;
                 }
