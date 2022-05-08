@@ -40,7 +40,7 @@ public:
 	void SetScale(const float& scale) { m_editableScale = scale; ResetPxShape(); }
 	float GetScale() { return m_editableScale; }
 
-	void SetRadius(const float& radisu) { m_editableRadius = radisu; ResetPxShape(); }
+	void SetRadius(const float& radius) { m_editableRadius = radius; ResetPxShape(); }
 	float GetRadius() { return m_editableRadius; }
 
 	floatProperty editableScale{ this, &CapsuleCollider::SetScale, &CapsuleCollider::GetScale };

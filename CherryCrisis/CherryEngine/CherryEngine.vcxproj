@@ -218,6 +218,7 @@
     <ClInclude Include="include\capsule_collider.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\cell_system.hpp" />
+    <ClInclude Include="include\character_controller.hpp" />
     <ClInclude Include="include\command.hpp" />
     <ClInclude Include="include\ebo_tbn_generator.hpp" />
     <ClInclude Include="include\environment_map_renderpass.hpp" />
@@ -409,7 +410,13 @@
     <None Include="..\x64\Debug\Assets\shadowShader.vert" />
     <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
     <None Include="..\x64\Debug\Assets\skyboxShader.vert" />
+    <None Include="interface\box_collider.i" />
+    <None Include="interface\capsule_collider.i" />
+    <None Include="interface\collider.i" />
+    <None Include="interface\physic_actor.i" />
     <None Include="interface\physic_manager.i" />
+    <None Include="interface\physic_scene.i" />
+    <None Include="interface\sphere_collider.i" />
     <None Include="Scripting.cd" />
     <None Include="Rendering.cd" />
     <None Include="externals\include\assimp\color4.inl" />

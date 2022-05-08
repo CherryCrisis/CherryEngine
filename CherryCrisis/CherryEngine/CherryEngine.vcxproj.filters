@@ -1242,6 +1242,9 @@
     <ClInclude Include="include\portal_generator.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\character_controller.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1388,6 +1391,24 @@
       <Filter>Fichiers de ressources</Filter>
     </None>
     <None Include="interface\physic_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\box_collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\capsule_collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\sphere_collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\physic_actor.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\physic_scene.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>

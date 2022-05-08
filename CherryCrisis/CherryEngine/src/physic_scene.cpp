@@ -139,6 +139,14 @@ namespace PhysicSystem
 		return -1;
 	}
 
+	PhysicActor* PhysicScene::GetActor(int index)
+	{
+		if (index < 0 || index >= m_actors.size())
+			return nullptr;
+
+		else return m_actors[index];
+	}
+
 	void PhysicScene::onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs)
 	{
 		for (physx::PxU32 i = 0; i < nbPairs; i++)
