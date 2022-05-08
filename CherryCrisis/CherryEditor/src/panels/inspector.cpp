@@ -267,7 +267,18 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     Object* val = nullptr;
                     propRef->Get(&val);
 
-                    ImGui::Text("%s %p", propName.c_str(), val);
+                    ImGui::Text("%s", propName.c_str());
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+                        {
+                            Entity* m_draggedEntity = (Entity*)payload->Data;
+                            propRef->Set(&m_draggedEntity);
+                        }
+
+                        ImGui::EndDragDropTarget();
+                    }
 
                     continue;
                 }

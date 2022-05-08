@@ -129,9 +129,17 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
     bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
 
-    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered())
+    if (entityTransform && ImGui::BeginDragDropSource())
     {
-        if (InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) 
+        ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
+        ImGui::Text(entity->GetName().c_str());
+        ImGui::EndDragDropSource();
+        m_isEntityDragged = true;
+    }
+
+    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered() && !m_isEntityDragged)
+    {
+        if (InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL))
         {
             if (!selector->Contains(entity))
                 selector->Add(entity);
@@ -144,21 +152,13 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
             selector->SetStartRange(entity);
             selector->ApplyRange();
         }
-        else 
+        else
         {
             selector->Clear();
             selector->Add(entity);
         }
 
         selector->SetStartRange(entity);
-    }
-
-    if (entityTransform && ImGui::BeginDragDropSource())
-    {
-        ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
-        ImGui::Text(entity->GetName().c_str());
-        ImGui::EndDragDropSource();
-        m_isEntityDragged = true;
     }
 
     if (entityTransform && ImGui::BeginDragDropTarget())
@@ -178,7 +178,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         ImGui::EndDragDropTarget();
     }
 
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive)
+    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive && ImGui::IsWindowHovered())
     {
         ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;
         if (payload->IsDataType("HIERARCHY_DROP"))
@@ -200,6 +200,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
             {
                 m_draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr, true, true, true);
                 m_manager->m_entitySelector.Clear();
+                m_manager->m_entitySelector.Add(m_draggedEntity);
                 m_draggedEntity = nullptr;
                 if (opened) ImGui::TreePop();
                 return true;

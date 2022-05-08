@@ -55,7 +55,9 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (GPUBasicPortal* gpuPortal = static_cast<GPUBasicPortal*>(portal->m_gpuPortal.get()))
 		{
 			portal->m_projectionMatrix = viewer->m_projectionMatrix;
-			portal->Draw(gpuPortal->framebuffer, viewer->m_currentIteration - 1);
+
+			if (portal->m_linkedPortal)
+				portal->m_linkedPortal->Draw(gpuPortal->framebuffer, viewer->m_currentIteration - 1);
 		}
 	}
 

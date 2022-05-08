@@ -44,6 +44,8 @@ void PortalComponent::BindToSignals()
 
 	GetHost().m_cell->AddViewer(&m_portal);
 	GetHost().m_cell->AddRenderer(&m_portal);
+	GetHost().m_OnCellAdded.Bind(&PortalComponent::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&PortalComponent::OnCellRemoved, this);
 }
 
 void PortalComponent::Initialize()
@@ -82,4 +84,42 @@ void PortalComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 void PortalComponent::ChangeScale(const CCMaths::Vector3& scale)
 {
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
+}
+
+
+void PortalComponent::SetLinkedPortal(Object* linkedObject)
+{
+	auto linkedEntity = dynamic_cast<Entity*>(linkedObject);
+
+	if (!linkedEntity)
+		return;
+
+	PortalComponent* linkedPortalComp = linkedEntity->GetBehaviour<PortalComponent>();
+
+	m_linkedPortal = linkedPortalComp;
+
+	if (linkedPortalComp)
+	{
+		linkedPortalComp->m_linkedPortal = this;
+		Portal* tempPortal = &m_portal;
+		m_portal.m_linkedPortal = &linkedPortalComp->m_portal;
+		linkedPortalComp->m_portal.m_linkedPortal = tempPortal;
+	}
+}
+
+Object* PortalComponent::GetLinkedPortal()
+{
+	return m_linkedPortal ? m_linkedPortal->GetHostPtr() : nullptr;
+}
+
+void PortalComponent::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(&m_portal);
+	newCell->AddViewer(&m_portal);
+}
+
+void PortalComponent::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(&m_portal);
+	newCell->RemoveViewer(&m_portal);
 }
