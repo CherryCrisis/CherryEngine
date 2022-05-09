@@ -25,6 +25,8 @@
 #include "panels/asset_settings.hpp"
 #include "basic_renderpass.hpp"
 #include "light_component.hpp"
+#include "audio_listener.hpp"
+#include "audio_emitter.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -45,6 +47,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
     std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 
     ModelRenderer* renderer = nullptr;
+    AudioEmitter* emitter = nullptr;
     for (Behaviour* behaviour : behaviours)
     {
         ImGui::PushID(static_cast<int>(behaviour->GetUUID()));
@@ -74,6 +77,8 @@ void Inspector::InspectComponents(Entity* entity, int id)
             opened = ImGui::TreeNode(bname.c_str());
         if (bname == "ModelRenderer")
             renderer = (ModelRenderer*)behaviour;
+        if (bname == "AudioEmitter")
+            emitter = (AudioEmitter*)behaviour;
         // check if right clicked
         if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
         {
@@ -156,6 +161,21 @@ void Inspector::InspectComponents(Entity* entity, int id)
                 {
                     std::string val = *std::any_cast<std::string*>(fieldRef.m_value);
                     ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
+
+                    // if sound then accept drag and drop
+                    if (emitter && ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                        {
+                            const char* data = (const char*)payload->Data;
+                            std::string extension = String::ExtractValue(data, '.');
+
+                            if (extension == "wav") 
+                                emitter->AddSound(data);
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+
                     continue;
                 }
             }
@@ -413,6 +433,24 @@ void Inspector::Render()
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
                     entity->AddBehaviour<Rigidbody>();
+            }
+            if (ImGui::MenuItem("Audio Listener"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
+                {
+                    AudioListener* listener =  entity->AddBehaviour<AudioListener>();
+                    listener->BindToSignals();
+                    listener->Initialize();
+                }
+            }
+            if (ImGui::MenuItem("Audio Emitter"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
+                {
+                    AudioEmitter* emitter = entity->AddBehaviour<AudioEmitter>();
+                    emitter->BindToSignals();
+                    emitter->Initialize();
+                }
             }
             if (ImGui::MenuItem("Box Collider"))      
             {

@@ -28,10 +28,6 @@ namespace CCScripting
 
 			time += deltaTime;
 
-			transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
-
-			//transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
-
 			Vector2 deltaMouse = InputManager.GetInstance().GetMouseDelta();
 			float sensitityX = Time.GetInstance().GetDeltaTime() * deltaMouse.x;
 			float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;
