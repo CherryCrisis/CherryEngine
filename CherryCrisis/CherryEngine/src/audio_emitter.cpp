@@ -35,6 +35,19 @@ void AudioEmitter::SetPitch(const float& value)
 	m_sound->SetPitch(m_pitch);
 }
 
+void AudioEmitter::SetRollOff(const float& value)
+{
+	if (!m_sound) return;
+	m_rollOff = value;
+	m_sound->SetRollOff(m_rollOff);
+}
+
+void AudioEmitter::SetReferenceDistance(const float& value)
+{
+	if (!m_sound) return;
+	m_referenceDistance = value;
+	m_sound->SetReferenceDistance(m_referenceDistance);
+}
 void AudioEmitter::SetSpatialized(const bool& value)
 {
 	if (!m_sound) return;
@@ -120,6 +133,8 @@ void AudioEmitter::PopulateMetadatas()
 	m_metadatas.SetProperty("Looping", &Looping);
 	m_metadatas.SetProperty("Spatialized", &Spatialized);
 	m_metadatas.SetProperty("Pitch", &Pitch);
+	m_metadatas.SetProperty("RollOff", &RollOff);
+	m_metadatas.SetProperty("ReferenceDistance", &ReferenceDistance);
 }
 
 void AudioEmitter::Start() 

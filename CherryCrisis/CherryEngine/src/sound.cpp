@@ -114,6 +114,8 @@ void Sound::SetLooping(bool loop) { alSourcei(m_source, AL_LOOPING, loop ? AL_TR
 void Sound::SetPosition(float x, float y, float z) { alSource3f(m_source, AL_POSITION, x, y, z); }
 void Sound::SetPosition(const CCMaths::Vector3& pos) { SetPosition(pos.x, pos.y, pos.z); }
 void Sound::SetPitch(float pitch) { alSourcef(m_source, AL_PITCH, pitch); }
+void Sound::SetRollOff(float rolloff) { alSourcef(m_source, AL_ROLLOFF_FACTOR, rolloff); }
+void Sound::SetReferenceDistance(float dst) { alSourcef(m_source, AL_REFERENCE_DISTANCE, dst); }
 
 void Sound::Play() { alSourcePlay(m_source); };
 void Sound::Pause() { alSourcePause(m_source); };
