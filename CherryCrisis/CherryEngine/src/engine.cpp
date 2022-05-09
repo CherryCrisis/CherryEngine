@@ -22,6 +22,7 @@ Engine::Engine()
 {
 	CsScriptingSystem::GetInstance()->Init();
 	RenderManager::GetInstance();
+	SoundManager::Init();
 }
 
 Engine::~Engine()

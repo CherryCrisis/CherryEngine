@@ -21,12 +21,29 @@ void SoundManager::PlaySoundAt(const CCMaths::Vector3& position, const float vol
 
 SoundManager::SoundManager() 
 {
+
+}
+
+SoundManager::~SoundManager()
+{
+    m_device = alcGetContextsDevice(m_context);
+    alcMakeContextCurrent(NULL);
+    alcDestroyContext(m_context);
+    alcCloseDevice(m_device);
+}
+
+
+bool SoundManager::Init() 
+{
     // TODO: Send error messages
-    ALCdevice* device = alcOpenDevice(NULL);
-    if (!device) return;
+    SoundManager* instance = SoundManager::GetInstance();
+    instance->m_device = alcOpenDevice(NULL);
+    if (!instance->m_device) return false;
 
-    ALCcontext* context = alcCreateContext(device, NULL);
-    if (!context) return;
+    instance->m_context = alcCreateContext(instance->m_device, NULL);
+    if (!instance->m_context) return false;
 
-    if (!alcMakeContextCurrent(context)) return;
+    if (!alcMakeContextCurrent(instance->m_context)) return false;
+
+    return true;
 }

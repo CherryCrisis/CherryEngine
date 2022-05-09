@@ -73,7 +73,6 @@ static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigne
 
 void Sound::Load(std::shared_ptr<Sound> sound)
 {
-    SoundManager::GetInstance()->PlaySound2D(0);
     alGenBuffers(1, &sound->m_buffer);
 
     short* buffer;
@@ -119,3 +118,9 @@ void Sound::SetPitch(float pitch) { alSourcef(m_source, AL_PITCH, pitch); }
 void Sound::Play() { alSourcePlay(m_source); };
 void Sound::Pause() { alSourcePause(m_source); };
 void Sound::Stop() { alSourceStop(m_source); };
+
+void Sound::Delete() 
+{
+    alDeleteSources(1, &m_source);
+    alDeleteBuffers(1, &m_buffer);
+}
