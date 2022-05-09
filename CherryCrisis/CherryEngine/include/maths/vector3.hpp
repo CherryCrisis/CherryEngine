@@ -329,6 +329,10 @@ namespace CCMaths
 		*/
 		inline static float Dot(const Vector3& lhs, const Vector3& rhs);
 
+		inline Vector3& Multiply(const Vector3& rhs);
+
+		inline static Vector3 Multiply(const Vector3& lhs, const Vector3& rhs);
+
 		//! The cross product between two Vector3s
 		/*!
 		*	\attention Use as a member method of a specific object
@@ -393,6 +397,10 @@ namespace CCMaths
 		*/
 		inline float Length() const;
 
+		inline void ClampLength(float minLength, float maxLength);
+		
+		inline static Vector3 ClampLength(const Vector3& toClamp, float minLength, float maxLength);
+
 		//! Normalize the Vector3
 		/*!
 		*	\attention Use as a member method of a specific object
@@ -431,7 +439,7 @@ namespace CCMaths
 		*	\sa Normalized(const Vector3&)
 		*	\sa Normalized() const
 		*/
-		inline Vector3& Normalize(Vector3& outVector);
+		inline static Vector3& Normalize(Vector3& outVector);
 
 		//! Normalize the Vector3
 		/*!

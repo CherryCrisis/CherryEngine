@@ -18,6 +18,7 @@ namespace CCMaths
 	struct Vector3;
 }
 
+class CharacterController;
 class Rigidbody;
 class Collider;
 class Cell;
@@ -67,9 +68,11 @@ namespace PhysicSystem
 
 		void Register(Rigidbody* rigidbody);
 		void Register(Collider* collider);
+		void Register(CharacterController* controller);
 
 		void Unregister(Rigidbody* rigidbody);
 		void Unregister(Collider* collider);
+		void Unregister(CharacterController* controller);
 
 		PhysicActor& FindOrCreateActor(Entity& owningEntity);
 		PhysicActor* FindActor(Entity& owningEntity);

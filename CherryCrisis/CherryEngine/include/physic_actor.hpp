@@ -5,8 +5,15 @@
 #include "behaviour.hpp"
 #include "bool3.hpp"
 
+class CharacterController;
 class Rigidbody;
 class Collider;
+
+namespace PhysicSystem
+{
+	struct RaycastHit;
+	enum class EForceMode;
+}
 
 namespace physx
 {
@@ -24,6 +31,7 @@ namespace PhysicSystem
 
 
 		Rigidbody* m_rigidbody = nullptr;
+		CharacterController* m_controller = nullptr;
 		std::vector<Collider*> m_colliders;
 
 		bool	m_isDynamic		= false;
@@ -63,12 +71,15 @@ namespace PhysicSystem
 
 		void AddRigidbody(Rigidbody* rigidbody, bool isPlaying = false);
 		void AddCollider(Collider* collider, bool isPlaying = false);
+		void AddController(CharacterController* controller, bool isPlaying = false);
 
 		void RemoveRigidbody(Rigidbody* rigidbody);
 		void RemoveCollider(Collider* collider);
+		void RemoveController(CharacterController* controller);
 		void Empty();
 
 		void AddForce(const CCMaths::Vector3& force, EForceMode mode);
+		void AddTorque(const CCMaths::Vector3& force, EForceMode mode);
 		RaycastHit Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 
 		physx::PxRigidActor* Get() { return m_pxActor; }

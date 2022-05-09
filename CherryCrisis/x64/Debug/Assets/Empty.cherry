@@ -1,8 +1,174 @@
+resources:
+  - Assets\Models\Backpack\backpack.obj
 entities:
   4245071128:
     name: Light
   1141188403:
     name: Camera
+  2615939013:
+    name: Cube
+  781938732:
+    name: Entity
+  1095712309:
+    name: Entity
+  1750006010:
+    name: Entity
+  1618227384:
+    name: Entity
+  2761600540:
+    name: Entity
+  2846965166:
+    name: Entity
+  2550665127:
+    name: Entity
+  2410014917:
+    name: Entity
+  2718688877:
+    name: Entity
+  1862196078:
+    name: Entity
+  3156124626:
+    name: Entity
+  3539404724:
+    name: Entity
+  334520387:
+    name: Entity
+  2670628797:
+    name: Entity
+  1929042238:
+    name: Entity
+  2736289624:
+    name: Entity
+  2368997048:
+    name: Entity
+  3653888482:
+    name: Entity
+  2286451231:
+    name: Entity
+  2398841947:
+    name: Entity
+  4090682396:
+    name: Entity
+  1118223906:
+    name: Entity
+  1427046496:
+    name: Entity
+  1363579522:
+    name: Entity
+  29366829:
+    name: Entity
+  1949662565:
+    name: Entity
+  482354966:
+    name: Entity
+  3257761102:
+    name: Entity
+  1597861977:
+    name: Entity
+  683026426:
+    name: Entity
+  2539978233:
+    name: Entity
+  711228835:
+    name: Entity
+  146029466:
+    name: Entity
+  611443729:
+    name: Entity
+  4027112398:
+    name: Entity
+  2590739224:
+    name: Entity
+  136190391:
+    name: Entity
+  1994414947:
+    name: Entity
+  2083443113:
+    name: Entity
+  4022003086:
+    name: Entity
+  3357366040:
+    name: Entity
+  1207325239:
+    name: Entity
+  271068341:
+    name: Entity
+  3981996014:
+    name: Entity
+  3229827286:
+    name: Entity
+  3450923509:
+    name: Entity
+  1094097910:
+    name: Entity
+  1224301882:
+    name: Entity
+  1875260518:
+    name: Entity
+  4238701727:
+    name: Entity
+  3357623992:
+    name: Entity
+  237662940:
+    name: Entity
+  2252526308:
+    name: Entity
+  4221883615:
+    name: Entity
+  3820381537:
+    name: Entity
+  1409988963:
+    name: Entity
+  4051580143:
+    name: Entity
+  321944482:
+    name: Entity
+  1277258629:
+    name: Entity
+  1052453508:
+    name: Entity
+  4166342051:
+    name: Entity
+  1570724667:
+    name: Entity
+  3873024001:
+    name: Entity
+  3096411022:
+    name: Entity
+  1764708913:
+    name: Entity
+  3536784213:
+    name: Entity
+  1581561188:
+    name: Entity
+  1099950966:
+    name: Entity
+  1602525589:
+    name: Entity
+  1838963533:
+    name: Entity
+  3516978754:
+    name: Entity
+  349092667:
+    name: Entity
+  1603915723:
+    name: Entity
+  2437764702:
+    name: Entity
+  87984466:
+    name: Entity
+  1059355103:
+    name: Entity
+  680424239:
+    name: Entity
+  874885772:
+    name: Entity
+  2504673761:
+    name: Entity
+  3925587336:
+    name: Entity
+  2834772399:
+    name: Entity
 components:
   1630027800:
     type: LightComponent
@@ -12,6 +178,13 @@ components:
     attenuation: 1.000000/0.000000/0.000000
     isPoint: true
     m_owner: 4245071128
+  901434679:
+    type: Transform
+    m_owner: 4245071128
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
   517230441:
     type: Transform
     m_owner: 1141188403
@@ -21,9 +194,996 @@ components:
     parent: ~
   977345729:
     type: CameraComponent
-    aspect: 1.50622404
+    aspect: 1.33333337
     fovY: 1.04719758
     near: 0.00999999978
-    far: 200
-    transform: ~
+    far: 1500
+    transform: 517230441
     m_owner: 1141188403
+  472201977:
+    type: Transform
+    m_owner: 2615939013
+    position: 0.000000/-5.000000/-20.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 10.000000/1.000000/10.000000
+    parent: ~
+  1742065366:
+    type: ModelRenderer
+    transform: 472201977
+    m_owner: 2615939013
+    file: CC_NormalizedCube
+  2071174028:
+    type: BoxCollider
+    m_owner: 2615939013
+    Contact Offset: 0.0199999996
+    Enabled: true
+    Scale: 1.000000/1.000000/1.000000
+    Is Trigger: false
+  874093488:
+    type: Transform
+    m_owner: 781938732
+    position: 0.000000/10.000000/-20.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  1543074734:
+    type: CharacterController
+    m_owner: 781938732
+    Move Speed: 10
+    Spring Dampling: 20
+    String Strength: 150
+  1559114160:
+    type: Transform
+    m_owner: 1095712309
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 874093488
+  933147420:
+    type: Transform
+    m_owner: 1750006010
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3731397245:
+    type: ModelRenderer
+    transform: 933147420
+    m_owner: 1750006010
+    file: Assets\Backpack\backpack.obj/1
+  4010256683:
+    type: Transform
+    m_owner: 1618227384
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2307034904:
+    type: ModelRenderer
+    transform: 4010256683
+    m_owner: 1618227384
+    file: Assets\Backpack\backpack.obj/2
+  1454931914:
+    type: Transform
+    m_owner: 2761600540
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3991492621:
+    type: ModelRenderer
+    transform: 1454931914
+    m_owner: 2761600540
+    file: Assets\Backpack\backpack.obj/3
+  563430405:
+    type: Transform
+    m_owner: 2846965166
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2924570071:
+    type: ModelRenderer
+    transform: 563430405
+    m_owner: 2846965166
+    file: Assets\Backpack\backpack.obj/4
+  31130596:
+    type: Transform
+    m_owner: 2550665127
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1343970063:
+    type: ModelRenderer
+    transform: 31130596
+    m_owner: 2550665127
+    file: Assets\Backpack\backpack.obj/5
+  1560982502:
+    type: Transform
+    m_owner: 2410014917
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4150167294:
+    type: ModelRenderer
+    transform: 1560982502
+    m_owner: 2410014917
+    file: Assets\Backpack\backpack.obj/6
+  3562536554:
+    type: Transform
+    m_owner: 2718688877
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2058245324:
+    type: ModelRenderer
+    transform: 3562536554
+    m_owner: 2718688877
+    file: Assets\Backpack\backpack.obj/7
+  1950206484:
+    type: Transform
+    m_owner: 1862196078
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2839975188:
+    type: ModelRenderer
+    transform: 1950206484
+    m_owner: 1862196078
+    file: Assets\Backpack\backpack.obj/8
+  4175543053:
+    type: Transform
+    m_owner: 3156124626
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2352348660:
+    type: ModelRenderer
+    transform: 4175543053
+    m_owner: 3156124626
+    file: Assets\Backpack\backpack.obj/9
+  2713437669:
+    type: Transform
+    m_owner: 3539404724
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3249105454:
+    type: ModelRenderer
+    transform: 2713437669
+    m_owner: 3539404724
+    file: Assets\Backpack\backpack.obj/10
+  4115678060:
+    type: Transform
+    m_owner: 334520387
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3164035465:
+    type: ModelRenderer
+    transform: 4115678060
+    m_owner: 334520387
+    file: Assets\Backpack\backpack.obj/11
+  1848522173:
+    type: Transform
+    m_owner: 2670628797
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1834370991:
+    type: ModelRenderer
+    transform: 1848522173
+    m_owner: 2670628797
+    file: Assets\Backpack\backpack.obj/12
+  853434994:
+    type: Transform
+    m_owner: 1929042238
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3322274447:
+    type: ModelRenderer
+    transform: 853434994
+    m_owner: 1929042238
+    file: Assets\Backpack\backpack.obj/13
+  1651340960:
+    type: Transform
+    m_owner: 2736289624
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1636866273:
+    type: ModelRenderer
+    transform: 1651340960
+    m_owner: 2736289624
+    file: Assets\Backpack\backpack.obj/14
+  1492882461:
+    type: ModelRenderer
+    transform: 1627618138
+    m_owner: 2368997048
+    file: Assets\Backpack\backpack.obj/15
+  1627618138:
+    type: Transform
+    m_owner: 2368997048
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1323908484:
+    type: Transform
+    m_owner: 3653888482
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3594972612:
+    type: ModelRenderer
+    transform: 1323908484
+    m_owner: 3653888482
+    file: Assets\Backpack\backpack.obj/16
+  2385780140:
+    type: ModelRenderer
+    transform: 2151674692
+    m_owner: 2286451231
+    file: Assets\Backpack\backpack.obj/17
+  2151674692:
+    type: Transform
+    m_owner: 2286451231
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1595599996:
+    type: Transform
+    m_owner: 2398841947
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  724084183:
+    type: ModelRenderer
+    transform: 1595599996
+    m_owner: 2398841947
+    file: Assets\Backpack\backpack.obj/18
+  1710093351:
+    type: Transform
+    m_owner: 4090682396
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1283312770:
+    type: ModelRenderer
+    transform: 1710093351
+    m_owner: 4090682396
+    file: Assets\Backpack\backpack.obj/19
+  939303637:
+    type: Transform
+    m_owner: 1118223906
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3552387933:
+    type: ModelRenderer
+    transform: 939303637
+    m_owner: 1118223906
+    file: Assets\Backpack\backpack.obj/20
+  4213596066:
+    type: Transform
+    m_owner: 1427046496
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2097820951:
+    type: ModelRenderer
+    transform: 4213596066
+    m_owner: 1427046496
+    file: Assets\Backpack\backpack.obj/21
+  998180817:
+    type: Transform
+    m_owner: 1363579522
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2130227329:
+    type: ModelRenderer
+    transform: 998180817
+    m_owner: 1363579522
+    file: Assets\Backpack\backpack.obj/22
+  1494226693:
+    type: ModelRenderer
+    transform: 2802349473
+    m_owner: 29366829
+    file: Assets\Backpack\backpack.obj/23
+  2802349473:
+    type: Transform
+    m_owner: 29366829
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2265993130:
+    type: Transform
+    m_owner: 1949662565
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3398821435:
+    type: ModelRenderer
+    transform: 2265993130
+    m_owner: 1949662565
+    file: Assets\Backpack\backpack.obj/24
+  3554471248:
+    type: Transform
+    m_owner: 482354966
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1385578704:
+    type: ModelRenderer
+    transform: 3554471248
+    m_owner: 482354966
+    file: Assets\Backpack\backpack.obj/25
+  1687631503:
+    type: ModelRenderer
+    transform: 1059928626
+    m_owner: 3257761102
+    file: Assets\Backpack\backpack.obj/26
+  1059928626:
+    type: Transform
+    m_owner: 3257761102
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4198896901:
+    type: Transform
+    m_owner: 1597861977
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2387192588:
+    type: ModelRenderer
+    transform: 4198896901
+    m_owner: 1597861977
+    file: Assets\Backpack\backpack.obj/27
+  2760152332:
+    type: Transform
+    m_owner: 683026426
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4181470252:
+    type: ModelRenderer
+    transform: 2760152332
+    m_owner: 683026426
+    file: Assets\Backpack\backpack.obj/28
+  276845581:
+    type: Transform
+    m_owner: 2539978233
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2687704557:
+    type: ModelRenderer
+    transform: 276845581
+    m_owner: 2539978233
+    file: Assets\Backpack\backpack.obj/29
+  87253168:
+    type: Transform
+    m_owner: 711228835
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  640579899:
+    type: ModelRenderer
+    transform: 87253168
+    m_owner: 711228835
+    file: Assets\Backpack\backpack.obj/30
+  2183481315:
+    type: Transform
+    m_owner: 146029466
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1935784305:
+    type: ModelRenderer
+    transform: 2183481315
+    m_owner: 146029466
+    file: Assets\Backpack\backpack.obj/31
+  1618697027:
+    type: Transform
+    m_owner: 611443729
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1713783066:
+    type: ModelRenderer
+    transform: 1618697027
+    m_owner: 611443729
+    file: Assets\Backpack\backpack.obj/32
+  591979263:
+    type: Transform
+    m_owner: 4027112398
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  613333467:
+    type: ModelRenderer
+    transform: 591979263
+    m_owner: 4027112398
+    file: Assets\Backpack\backpack.obj/33
+  3639750094:
+    type: Transform
+    m_owner: 2590739224
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1350363862:
+    type: ModelRenderer
+    transform: 3639750094
+    m_owner: 2590739224
+    file: Assets\Backpack\backpack.obj/34
+  230209712:
+    type: ModelRenderer
+    transform: 4262763066
+    m_owner: 136190391
+    file: Assets\Backpack\backpack.obj/35
+  4262763066:
+    type: Transform
+    m_owner: 136190391
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2839497291:
+    type: Transform
+    m_owner: 1994414947
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  368747635:
+    type: ModelRenderer
+    transform: 2839497291
+    m_owner: 1994414947
+    file: Assets\Backpack\backpack.obj/36
+  2808226481:
+    type: Transform
+    m_owner: 2083443113
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1219243507:
+    type: ModelRenderer
+    transform: 2808226481
+    m_owner: 2083443113
+    file: Assets\Backpack\backpack.obj/37
+  3228107001:
+    type: ModelRenderer
+    transform: 856117521
+    m_owner: 4022003086
+    file: Assets\Backpack\backpack.obj/38
+  856117521:
+    type: Transform
+    m_owner: 4022003086
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  416165553:
+    type: Transform
+    m_owner: 3357366040
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  791613104:
+    type: ModelRenderer
+    transform: 416165553
+    m_owner: 3357366040
+    file: Assets\Backpack\backpack.obj/39
+  1687191146:
+    type: Transform
+    m_owner: 1207325239
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4071636992:
+    type: ModelRenderer
+    transform: 1687191146
+    m_owner: 1207325239
+    file: Assets\Backpack\backpack.obj/40
+  2396086823:
+    type: ModelRenderer
+    transform: 25589720
+    m_owner: 271068341
+    file: Assets\Backpack\backpack.obj/41
+  25589720:
+    type: Transform
+    m_owner: 271068341
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  393189738:
+    type: Transform
+    m_owner: 3981996014
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3478823521:
+    type: ModelRenderer
+    transform: 393189738
+    m_owner: 3981996014
+    file: Assets\Backpack\backpack.obj/42
+  690032977:
+    type: Transform
+    m_owner: 3229827286
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  170314492:
+    type: ModelRenderer
+    transform: 690032977
+    m_owner: 3229827286
+    file: Assets\Backpack\backpack.obj/43
+  3158022809:
+    type: Transform
+    m_owner: 3450923509
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1998879882:
+    type: ModelRenderer
+    transform: 3158022809
+    m_owner: 3450923509
+    file: Assets\Backpack\backpack.obj/44
+  2427441009:
+    type: Transform
+    m_owner: 1094097910
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2571769284:
+    type: ModelRenderer
+    transform: 2427441009
+    m_owner: 1094097910
+    file: Assets\Backpack\backpack.obj/45
+  1956467545:
+    type: ModelRenderer
+    transform: 245441295
+    m_owner: 1224301882
+    file: Assets\Backpack\backpack.obj/46
+  245441295:
+    type: Transform
+    m_owner: 1224301882
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1227668329:
+    type: Transform
+    m_owner: 1875260518
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  558676342:
+    type: ModelRenderer
+    transform: 1227668329
+    m_owner: 1875260518
+    file: Assets\Backpack\backpack.obj/47
+  3531453314:
+    type: Transform
+    m_owner: 4238701727
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  545965021:
+    type: ModelRenderer
+    transform: 3531453314
+    m_owner: 4238701727
+    file: Assets\Backpack\backpack.obj/48
+  2897824832:
+    type: Transform
+    m_owner: 3357623992
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1424032983:
+    type: ModelRenderer
+    transform: 2897824832
+    m_owner: 3357623992
+    file: Assets\Backpack\backpack.obj/49
+  1791549048:
+    type: ModelRenderer
+    transform: 1584556112
+    m_owner: 237662940
+    file: Assets\Backpack\backpack.obj/50
+  1584556112:
+    type: Transform
+    m_owner: 237662940
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4248413861:
+    type: Transform
+    m_owner: 2252526308
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1833364934:
+    type: ModelRenderer
+    transform: 4248413861
+    m_owner: 2252526308
+    file: Assets\Backpack\backpack.obj/51
+  2057353122:
+    type: Transform
+    m_owner: 4221883615
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  120465820:
+    type: ModelRenderer
+    transform: 2057353122
+    m_owner: 4221883615
+    file: Assets\Backpack\backpack.obj/52
+  533121471:
+    type: ModelRenderer
+    transform: 1556781398
+    m_owner: 3820381537
+    file: Assets\Backpack\backpack.obj/53
+  1556781398:
+    type: Transform
+    m_owner: 3820381537
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4113436160:
+    type: Transform
+    m_owner: 1409988963
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4033573802:
+    type: ModelRenderer
+    transform: 4113436160
+    m_owner: 1409988963
+    file: Assets\Backpack\backpack.obj/54
+  4273657906:
+    type: Transform
+    m_owner: 4051580143
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2086933523:
+    type: ModelRenderer
+    transform: 4273657906
+    m_owner: 4051580143
+    file: Assets\Backpack\backpack.obj/55
+  823150590:
+    type: Transform
+    m_owner: 321944482
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3082652745:
+    type: ModelRenderer
+    transform: 823150590
+    m_owner: 321944482
+    file: Assets\Backpack\backpack.obj/56
+  3819795266:
+    type: Transform
+    m_owner: 1277258629
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4142372169:
+    type: ModelRenderer
+    transform: 3819795266
+    m_owner: 1277258629
+    file: Assets\Backpack\backpack.obj/57
+  1947056661:
+    type: ModelRenderer
+    transform: 3202563771
+    m_owner: 1052453508
+    file: Assets\Backpack\backpack.obj/58
+  3202563771:
+    type: Transform
+    m_owner: 1052453508
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  319252973:
+    type: ModelRenderer
+    transform: 3274365271
+    m_owner: 4166342051
+    file: Assets\Backpack\backpack.obj/59
+  3274365271:
+    type: Transform
+    m_owner: 4166342051
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4192140169:
+    type: Transform
+    m_owner: 1570724667
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3153087305:
+    type: ModelRenderer
+    transform: 4192140169
+    m_owner: 1570724667
+    file: Assets\Backpack\backpack.obj/60
+  1109648768:
+    type: ModelRenderer
+    transform: 2400806616
+    m_owner: 3873024001
+    file: Assets\Backpack\backpack.obj/61
+  2400806616:
+    type: Transform
+    m_owner: 3873024001
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3226621496:
+    type: Transform
+    m_owner: 3096411022
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2969878941:
+    type: ModelRenderer
+    transform: 3226621496
+    m_owner: 3096411022
+    file: Assets\Backpack\backpack.obj/62
+  1673048150:
+    type: Transform
+    m_owner: 1764708913
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3073850988:
+    type: ModelRenderer
+    transform: 1673048150
+    m_owner: 1764708913
+    file: Assets\Backpack\backpack.obj/63
+  116710546:
+    type: Transform
+    m_owner: 3536784213
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1445536047:
+    type: ModelRenderer
+    transform: 116710546
+    m_owner: 3536784213
+    file: Assets\Backpack\backpack.obj/64
+  1052702212:
+    type: Transform
+    m_owner: 1581561188
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1930071762:
+    type: ModelRenderer
+    transform: 1052702212
+    m_owner: 1581561188
+    file: Assets\Backpack\backpack.obj/65
+  156362504:
+    type: Transform
+    m_owner: 1099950966
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2760340735:
+    type: ModelRenderer
+    transform: 156362504
+    m_owner: 1099950966
+    file: Assets\Backpack\backpack.obj/66
+  274184674:
+    type: Transform
+    m_owner: 1602525589
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2021112466:
+    type: ModelRenderer
+    transform: 274184674
+    m_owner: 1602525589
+    file: Assets\Backpack\backpack.obj/67
+  2359166777:
+    type: Transform
+    m_owner: 1838963533
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2080981962:
+    type: ModelRenderer
+    transform: 2359166777
+    m_owner: 1838963533
+    file: Assets\Backpack\backpack.obj/68
+  1299863532:
+    type: Transform
+    m_owner: 3516978754
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2029523430:
+    type: ModelRenderer
+    transform: 1299863532
+    m_owner: 3516978754
+    file: Assets\Backpack\backpack.obj/69
+  4023760817:
+    type: ModelRenderer
+    transform: 3188338320
+    m_owner: 349092667
+    file: Assets\Backpack\backpack.obj/70
+  3188338320:
+    type: Transform
+    m_owner: 349092667
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1516939910:
+    type: Transform
+    m_owner: 1603915723
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  1693762735:
+    type: ModelRenderer
+    transform: 1516939910
+    m_owner: 1603915723
+    file: Assets\Backpack\backpack.obj/71
+  3500363523:
+    type: Transform
+    m_owner: 2437764702
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  957306821:
+    type: ModelRenderer
+    transform: 3500363523
+    m_owner: 2437764702
+    file: Assets\Backpack\backpack.obj/72
+  1362873401:
+    type: Transform
+    m_owner: 87984466
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3890772774:
+    type: ModelRenderer
+    transform: 1362873401
+    m_owner: 87984466
+    file: Assets\Backpack\backpack.obj/73
+  2717153534:
+    type: ModelRenderer
+    transform: 2533554406
+    m_owner: 1059355103
+    file: Assets\Backpack\backpack.obj/74
+  2533554406:
+    type: Transform
+    m_owner: 1059355103
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3792752186:
+    type: ModelRenderer
+    transform: 2506393970
+    m_owner: 680424239
+    file: Assets\Backpack\backpack.obj/75
+  2506393970:
+    type: Transform
+    m_owner: 680424239
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2857238943:
+    type: Transform
+    m_owner: 874885772
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  2737757600:
+    type: ModelRenderer
+    transform: 2857238943
+    m_owner: 874885772
+    file: Assets\Backpack\backpack.obj/76
+  1386594072:
+    type: Transform
+    m_owner: 2504673761
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  4120394225:
+    type: ModelRenderer
+    transform: 1386594072
+    m_owner: 2504673761
+    file: Assets\Backpack\backpack.obj/77
+  722464280:
+    type: Transform
+    m_owner: 3925587336
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3980897527:
+    type: ModelRenderer
+    transform: 722464280
+    m_owner: 3925587336
+    file: Assets\Backpack\backpack.obj/78
+  2231753980:
+    type: Transform
+    m_owner: 2834772399
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1559114160
+  3824216409:
+    type: ModelRenderer
+    transform: 2231753980
+    m_owner: 2834772399
+    file: Assets\Backpack\backpack.obj/79

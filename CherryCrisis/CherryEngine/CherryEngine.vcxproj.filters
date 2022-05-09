@@ -46,9 +46,6 @@
     <Filter Include="Fichiers sources\Interface">
       <UniqueIdentifier>{324b38eb-add6-41cc-b2ac-a4bbf89c7b4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\CSGenerated">
-      <UniqueIdentifier>{7345006b-0b31-4718-8917-eafda2e01f1a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Interface\Maths">
       <UniqueIdentifier>{eee4fb74-d9e3-477a-b235-761c3b3df1c9}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,9 @@
     </Filter>
     <Filter Include="Fichiers sources\Picking">
       <UniqueIdentifier>{0ad23ffb-a465-4f8a-8046-1421fc6db677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\CSGenerated">
+      <UniqueIdentifier>{7345006b-0b31-4718-8917-eafda2e01f1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

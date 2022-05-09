@@ -5,6 +5,7 @@
 #include <vector>
 #include <PxPhysicsAPI.h>
 
+#include "character_controller.hpp"
 #include "collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
@@ -111,6 +112,14 @@ namespace PhysicSystem
 		actor.AddCollider(collider, m_isPlaying);
 	}
 
+	void PhysicManager::Register(CharacterController* controller)
+	{
+		PhysicActor& actor = FindOrCreateActor(controller->GetHost());
+
+		controller->m_physicActor = &actor;
+		actor.AddController(controller, m_isPlaying);
+	}
+
 	void PhysicManager::Unregister(Rigidbody* rigidbody)
 	{
 		PhysicActor* actor = rigidbody->m_physicActor;
@@ -129,6 +138,17 @@ namespace PhysicSystem
 			return;
 
 		actor->RemoveCollider(collider);
+
+		IsActorEmpty(*actor);
+	}
+
+	void PhysicManager::Unregister(CharacterController* controller)
+	{
+		PhysicActor* actor = controller->m_physicActor;
+		if (!actor)
+			return;
+
+		actor->RemoveController(controller);
 
 		IsActorEmpty(*actor);
 	}
@@ -293,8 +313,8 @@ namespace PhysicSystem
 
 	PxRaycastBuffer PhysicManager::RaycastBuff(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
 	{
-		static PxRaycastHit hit[256];
-		static PxRaycastBuffer hitBuffer(hit, 256);
+		static PxRaycastHit hit[16];
+		static PxRaycastBuffer hitBuffer(hit, 16);
 
 		bool status = scene.Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hitBuffer);
 
@@ -305,10 +325,13 @@ namespace PhysicSystem
 	{
 		RaycastHit hit;
 
-		hit.actor = reinterpret_cast<PhysicActor*>(pxHit.actor->userData);
-		hit.distance = pxHit.distance;
-		hit.normal = { pxHit.normal.x, pxHit.normal.y, pxHit.normal.z };
-		hit.position = { pxHit.position.x, pxHit.position.y, pxHit.position.z };
+		if (pxHit.actor)
+		{
+			hit.actor = reinterpret_cast<PhysicActor*>(pxHit.actor->userData);
+			hit.distance = pxHit.distance;
+			hit.normal = { pxHit.normal.x, pxHit.normal.y, pxHit.normal.z };
+			hit.position = { pxHit.position.x, pxHit.position.y, pxHit.position.z };
+		}
 
 		return hit;
 	}
