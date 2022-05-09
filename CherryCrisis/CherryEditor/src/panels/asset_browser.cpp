@@ -21,7 +21,7 @@ AssetBrowser::AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer)
     : m_assetSettingsDisplayer(assetSettingsDisplayer)
 {
     m_assetsDirectory = std::filesystem::current_path();
-    m_assetsDirectory /= "Assets\\";
+    m_assetsDirectory /= "Assets";
 
 	QuerryBrowser();
 }
@@ -115,7 +115,7 @@ bool AssetBrowser::DragAndDropTarget(AssetNode* assetNode)
             {
                 const char* draggedPath = static_cast<const char*>(payload->Data);
 
-                std::string fullPath = m_assetsDirectoryNode->m_path.parent_path().parent_path().string() + "\\" + draggedPath;
+                std::string fullPath = m_assetsDirectoryNode->m_path.parent_path().string() + "\\" + draggedPath;
                 auto it = m_assetNodes.find(fullPath);
 
                 if (it != m_assetNodes.end() && it->second.get() != assetNode && it->second.get()->m_path.parent_path().compare(directoryNode->m_path))
@@ -141,8 +141,10 @@ bool AssetBrowser::DragAndDropTarget(AssetNode* assetNode)
                         remove(draggedAssetPath.c_str());
                     }
 
-                    std::string fullFilename(draggedAssetNode->m_filename + draggedAssetNode->m_extension);
-                    draggedAssetNode->Rename((directoryNode->m_relativePath.string() + fullFilename).c_str());
+                    std::string fullFilename(directoryNode->m_path.string() + "\\" + draggedAssetNode->m_filename + draggedAssetNode->m_extension);
+                    fullFilename.erase(fullFilename.begin(), fullFilename.begin() + fullFilename.rfind("Assets"));
+
+                    draggedAssetNode->Rename(fullFilename.c_str());
 
                     QuerryBrowser();
 
@@ -692,6 +694,7 @@ void AssetBrowser::ContextCallback()
 void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode)
 {
     assetNode.m_path = path;
+
     assetNode.m_relativePath = String::ExtractValueStr(path.string(), "Assets\\");
 
     std::string filename = path.filename().string();
@@ -709,7 +712,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
     if (std::filesystem::is_directory(m_path))
     {
         DirectoryNode directoryNode;
-        SetAssetNode(m_path, directoryNode);
+        SetAssetNode(m_path.string(), directoryNode);
 
         directoryNode.m_parentDirectory = parentDirectory;
 

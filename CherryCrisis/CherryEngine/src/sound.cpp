@@ -33,7 +33,9 @@ static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigne
         //char data[];
     } WavDataChunk;
 
-    FILE* wav = fopen(filename, "rb");
+    FILE* wav;
+    fopen_s(&wav, filename, "rb");
+
     if (wav == NULL)
         return -1;
 

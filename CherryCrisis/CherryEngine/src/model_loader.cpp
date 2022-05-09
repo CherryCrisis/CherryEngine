@@ -22,7 +22,7 @@
 
 #include "mesh.hpp"
 #include "model_base.hpp"
-#include "model.hpp"
+#include "material.hpp"
 #include "texture.hpp"
 #include "utils.hpp"
 
@@ -436,6 +436,7 @@ namespace CCImporter
             settingsSave["ao"] = std::any_cast<float>(materialArgs.m_materialHeader.m_ao);
             settingsSave["clearCoatFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatFactor);
             settingsSave["clearCoatRoughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatRoughnessFactor);
+            settingsSave["pipeline"] = std::any_cast<unsigned int>(materialArgs.m_materialHeader.m_pipeline);
             settingsSave["texturesCount"] = std::any_cast<unsigned int>(materialArgs.m_materialHeader.m_texturesCount);
 
             for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
@@ -521,6 +522,7 @@ namespace CCImporter
             .m_clearCoatFactor = material->m_clearCoatFactor,
             .m_clearCoatRoughnessFactor = material->m_clearCoatRoughnessFactor,
             .m_texturesCount = textureCount,
+            .m_pipeline = static_cast<unsigned int>(material->m_pipelineType),
         };
 
         SaveMaterial(*material->GetFilesystemPath(), materialArgs);

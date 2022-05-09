@@ -5,6 +5,7 @@
 #include <unordered_set>
 
 #include "framebuffer.hpp"
+#include "element_mesh_generator.hpp"
 
 #include "light.hpp"
 
@@ -15,6 +16,8 @@ class ShadowRenderPass : public ARenderingRenderPass
 {
 	std::unordered_set<Light*> m_lights;
 	std::unordered_set<ModelRenderer*> m_models;
+
+	ElementMeshGenerator m_meshGenerator;
 
 public:
 	struct GPUShadowLight : GPULight

@@ -9,6 +9,7 @@
 #include "transform.hpp"
 #include "model_loader.hpp"
 #include "mesh.hpp"
+#include "material.hpp"
 #include "scene.hpp"
 
 void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
@@ -28,7 +29,6 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
-
         ModelNode* modelNode = new ModelNode();
         std::swap(modelNode->m_baseTRS, modelUtils.modelHeader.m_trs);
 
@@ -42,10 +42,8 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
             if (modelUtils.modelHeader.m_hasMaterial)
                 material = resourceManager->AddResource<Material>(modelUtils.m_materialPath.c_str(), true);
 
-            std::shared_ptr<Model> model = resourceManager->AddResource<Model>(modelUtils.m_modelName.c_str(), true, mesh, material, modelBase);
-
-            modelNode->m_model = model;
-            modelBase->m_models.push_back(model);
+            modelNode->m_mesh = mesh; 
+            modelNode->m_material = material;
         }
 
         modelNodes.push_back(modelNode);
@@ -71,6 +69,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         }
     }
 
+    modelBase->m_meshCount = static_cast<unsigned int>(modelNodes.size());
     modelBase->m_rootNode = rootNode;
 }
 
@@ -132,10 +131,6 @@ bool ModelBase::LoadFromCache(std::shared_ptr<ModelBase> modelBase, std::vector<
 
 void ModelBase::Delete()
 {
-    for (std::shared_ptr<Model>& model : m_models)
-        model->DeleteResource();
-
-    m_models.clear();
     DeleteModelNode(m_rootNode);
 }
 
@@ -152,7 +147,6 @@ void ModelBase::DeleteModelNode(ModelNode* modelNode)
 
 void ModelBase::Reload()
 {
-    m_models.clear();
     DeleteModelNode(m_rootNode);
 
     std::vector<CCImporter::ImportModelUtils> modelsUtils;
@@ -166,7 +160,7 @@ void ModelBase::Reload()
 
     std::vector<ModelNode*> modelNodes;
 
-    std::vector<std::shared_ptr<Material>> materialsReloaded; // materials already reloaded
+    std::set<std::shared_ptr<Material>> materialsReloaded; // materials already reloaded
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
         ModelNode* modelNode = new ModelNode();
@@ -190,44 +184,19 @@ void ModelBase::Reload()
 
             if (material)
             {
-                bool reloaded = false;
-                for (const auto materialReloaded : materialsReloaded)
-                {
-                    if (materialReloaded == material)
-                    {
-                        reloaded = true;
-                        break;
-                    }
-                }
-
-                if (!reloaded)
+                if (materialsReloaded.find(material) == materialsReloaded.end())
                 {
                     Resource<Material>::ReloadResource(material);
-                    materialsReloaded.push_back(material);
+                    materialsReloaded.insert(material);
                 }
             }
             else
             {
                 material = resourceManager->AddResource<Material>(modelUtils.m_materialPath.c_str(), true);
             }
-                
-            
 
-            std::shared_ptr<Model> model = resourceManager->GetResource<Model>(modelUtils.m_modelName.c_str());
-
-            if (model)
-            {
-                Resource<Model>::ReloadResource(model, mesh, material);
-            }
-            else
-            {
-                model = resourceManager->AddResource<Model>(modelUtils.m_modelName.c_str(), true, mesh, material);
-            }
-
-
-
-            modelNode->m_model = model;
-            m_models.push_back(model);
+            modelNode->m_mesh = mesh;
+            modelNode->m_material = material;
         }
 
         modelNodes.push_back(modelNode);
@@ -253,5 +222,6 @@ void ModelBase::Reload()
         }
     }
 
+    m_meshCount = modelNodes.size();
     m_rootNode = rootNode;
 }
