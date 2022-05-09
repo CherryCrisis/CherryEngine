@@ -26,6 +26,8 @@ PortalComponent::PortalComponent(CCUUID& id) : Behaviour(id)
 
 PortalComponent::~PortalComponent()
 {
+	InvalidateLinkedPortal();
+
 	GetHost().m_cell->RemoveViewer(&m_portal);
 	GetHost().m_cell->RemoveRenderer(&m_portal);
 }
@@ -86,24 +88,39 @@ void PortalComponent::ChangeScale(const CCMaths::Vector3& scale)
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 }
 
+void PortalComponent::InvalidateLinkedPortal()
+{
+	if (!m_linkedPortal)
+		return;
+
+	m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, m_linkedPortal);
+	m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
+
+	m_portal.m_linkedPortal = m_linkedPortal->m_portal.m_linkedPortal = nullptr;
+	m_linkedPortal = m_linkedPortal->m_linkedPortal = nullptr;
+};
 
 void PortalComponent::SetLinkedPortal(Object* linkedObject)
 {
+	InvalidateLinkedPortal();
+
 	auto linkedEntity = dynamic_cast<Entity*>(linkedObject);
 
 	if (!linkedEntity)
 		return;
 
-	PortalComponent* linkedPortalComp = linkedEntity->GetBehaviour<PortalComponent>();
-
-	m_linkedPortal = linkedPortalComp;
-
-	if (linkedPortalComp)
+	if (PortalComponent* linkedPortalComp = linkedEntity->GetBehaviour<PortalComponent>())
 	{
+		m_linkedPortal = linkedPortalComp;
+
+		m_linkedPortal->m_OnDestroy.Bind(&PortalComponent::InvalidateLinkedPortal, this);
+
 		linkedPortalComp->m_linkedPortal = this;
 		Portal* tempPortal = &m_portal;
 		m_portal.m_linkedPortal = &linkedPortalComp->m_portal;
 		linkedPortalComp->m_portal.m_linkedPortal = tempPortal;
+
+		m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
 	}
 }
 

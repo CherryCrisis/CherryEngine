@@ -34,6 +34,8 @@ public:
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 
+	void InvalidateLinkedPortal();
+
 	void SetLinkedPortal(Object* linkedObject);
 	Object* GetLinkedPortal();
 
