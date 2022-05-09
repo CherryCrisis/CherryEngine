@@ -116,7 +116,7 @@ void AudioEmitter::PopulateMetadatas()
 
 	// change all of this to properties
 	m_metadatas.SetProperty("Sound", &SoundPath);
-	m_metadatas.SetField<bool>("AutoPlay", m_isAutoplaying);
+	m_metadatas.SetField("AutoPlay", m_isAutoplaying);
 	m_metadatas.SetProperty("Looping", &Looping);
 	m_metadatas.SetProperty("Spatialized", &Spatialized);
 	m_metadatas.SetProperty("Pitch", &Pitch);

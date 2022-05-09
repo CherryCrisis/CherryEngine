@@ -6,6 +6,7 @@
 
 #include "scene.hpp"
 #include "transform.hpp"
+#include "portal_component.hpp"
 #include "core/editor_manager.hpp"
 
 #include<algorithm>
@@ -128,9 +129,17 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
     bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
 
-    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered())
+    if (entityTransform && ImGui::BeginDragDropSource())
     {
-        if (InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL)) 
+        ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
+        ImGui::Text(entity->GetName().c_str());
+        ImGui::EndDragDropSource();
+        m_isEntityDragged = true;
+    }
+
+    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered() && !m_isEntityDragged)
+    {
+        if (InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL))
         {
             if (!selector->Contains(entity))
                 selector->Add(entity);
@@ -143,21 +152,13 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
             selector->SetStartRange(entity);
             selector->ApplyRange();
         }
-        else 
+        else
         {
             selector->Clear();
             selector->Add(entity);
         }
 
         selector->SetStartRange(entity);
-    }
-
-    if (entityTransform && ImGui::BeginDragDropSource())
-    {
-        ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
-        ImGui::Text(entity->GetName().c_str());
-        ImGui::EndDragDropSource();
-        m_isEntityDragged = true;
     }
 
     if (entityTransform && ImGui::BeginDragDropTarget())
@@ -177,7 +178,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         ImGui::EndDragDropTarget();
     }
 
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive)
+    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && ImGui::GetCurrentContext()->DragDropActive && ImGui::IsWindowHovered())
     {
         ImGuiPayload* payload = &ImGui::GetCurrentContext()->DragDropPayload;
         if (payload->IsDataType("HIERARCHY_DROP"))
@@ -199,6 +200,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
             {
                 m_draggedEntity->GetBehaviour<Transform>()->SetParent(nullptr, true, true, true);
                 m_manager->m_entitySelector.Clear();
+                m_manager->m_entitySelector.Add(m_draggedEntity);
                 m_draggedEntity = nullptr;
                 if (opened) ImGui::TreePop();
                 return true;
@@ -224,13 +226,17 @@ void HierarchyDisplayer::ContextCallback()
         ImGui::Separator();
         if (ImGui::BeginMenu("New"))
         {
+            Entity* newEntity = nullptr;
 
             if (ImGui::MenuItem("Empty"))
-            {
-                Entity* empty = new Entity("Empty");
-                SceneManager::GetInstance()->m_currentScene->AddEntity(empty);
-            }
+                newEntity = new Entity("Empty");
+
             if (ImGui::MenuItem("ModelRenderer")) {}
+            if (ImGui::MenuItem("Portal"))
+            {
+                newEntity = new Entity("Portal");
+                newEntity->AddBehaviour<PortalComponent>();
+            }
             if (ImGui::MenuItem("Camera")) {}
             if (ImGui::MenuItem("Particle System")) {}
             if (ImGui::MenuItem("Audio Source")) {}
@@ -287,6 +293,15 @@ void HierarchyDisplayer::ContextCallback()
 
                 ImGui::EndMenu();
             }
+
+            if (newEntity)
+            {
+                newEntity->Initialize();
+
+                SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
+                m_manager->FocusEntity(newEntity);
+            }
+
             ImGui::Separator();
 
             ImGui::EndMenu();

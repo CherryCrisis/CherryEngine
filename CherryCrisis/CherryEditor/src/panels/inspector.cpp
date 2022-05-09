@@ -179,6 +179,15 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
                     continue;
                 }
+
+                if (type == typeid(Object*))
+                {
+                    Object* val = *std::any_cast<Object**>(fieldRef.m_value);
+
+                    ImGui::Text("%s", typeid(*val).name());
+
+                    continue;
+                }
             }
 
             std::unordered_map <std::string, CCProperty::IClearProperty*>& properties = behaviour->GetProperties();
@@ -270,6 +279,27 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     propRef->Get(&val);
 
                     ImGui::Text("%s %s", propName.c_str(), val ? val : "X");
+
+                    continue;
+                }
+
+                if (propType == typeid(Object*))
+                {
+                    Object* val = nullptr;
+                    propRef->Get(&val);
+
+                    ImGui::Text("%s", propName.c_str());
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+                        {
+                            Entity* m_draggedEntity = (Entity*)payload->Data;
+                            propRef->Set(&m_draggedEntity);
+                        }
+
+                        ImGui::EndDragDropTarget();
+                    }
 
                     continue;
                 }
@@ -413,27 +443,28 @@ void Inspector::Render()
             static char search[32] = "";
             ImGui::InputText("##", search, IM_ARRAYSIZE(search));
 
-            Behaviour* addBehaviour = nullptr;
+            std::vector<Behaviour*> addBehaviours;
+
             // TODO: Replace with list of available components
             if (ImGui::MenuItem("Transform")) 
             { 
                 for (Entity* entity : m_manager->m_entitySelector.m_entities) 
-                    entity->AddBehaviour<Transform>(); 
+                    addBehaviours.push_back(entity->AddBehaviour<Transform>());
             }
             if (ImGui::MenuItem("Camera"))      
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<CameraComponent>();
+                    addBehaviours.push_back(entity->AddBehaviour<CameraComponent>());
             }
             if (ImGui::MenuItem("Light"))
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<LightComponent>();
+                    addBehaviours.push_back(entity->AddBehaviour<LightComponent>());
             }
             if (ImGui::MenuItem("Rigidbody"))     
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<Rigidbody>();
+                    addBehaviours.push_back(entity->AddBehaviour<Rigidbody>());
             }
             if (ImGui::MenuItem("Audio Listener"))
             {
@@ -456,22 +487,22 @@ void Inspector::Render()
             if (ImGui::MenuItem("Box Collider"))      
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<BoxCollider>();
+                    addBehaviours.push_back(entity->AddBehaviour<BoxCollider>());
             }
             if (ImGui::MenuItem("Sphere Collider"))
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<SphereCollider>();
+                    addBehaviours.push_back(entity->AddBehaviour<SphereCollider>());
             }
             if (ImGui::MenuItem("Capsule Collider")) 
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour <CapsuleCollider>();
+                    addBehaviours.push_back(entity->AddBehaviour<CapsuleCollider>());
             }
             if (ImGui::MenuItem("Portal Component"))
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour <PortalComponent>();
+                    addBehaviours.push_back(entity->AddBehaviour<PortalComponent>());
             }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {
@@ -481,12 +512,20 @@ void Inspector::Render()
                     {
                         ScriptedBehaviour* behaviour = entity->AddBehaviour<ScriptedBehaviour>();
                         behaviour->SetScriptClass(name);
-                        behaviour->BindToSignals();
                     }
                 }
             }  
-            //---------------------------------------------------
 
+            if (addBehaviours.size() > 0)
+            {
+                for (Behaviour* behaviour : addBehaviours)
+                    behaviour->BindToSignals();
+
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->m_OnAwake.Invoke();
+            }
+
+            //---------------------------------------------------
             ImGui::SetItemDefaultFocus();
             if (ImGui::Button("Cancel", ImVec2(ImGui::GetContentRegionAvail().x, 0))) { ImGui::CloseCurrentPopup(); }
             ImGui::EndPopup();

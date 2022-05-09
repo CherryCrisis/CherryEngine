@@ -424,28 +424,28 @@ namespace CCImporter
             YAML::Node yamlSave;
 
             YAML::Node settingsSave = yamlSave["settings"];
-            settingsSave["ambient"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_ambient);
-            settingsSave["diffuse"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_diffuse);
-            settingsSave["specular"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_specular);
-            settingsSave["emissive"] = std::any_cast<CCMaths::Vector3>(materialArgs.m_materialHeader.m_emissive);
-            settingsSave["shininess"] = std::any_cast<float>(materialArgs.m_materialHeader.m_shininess);
-            settingsSave["hasNormal"] = std::any_cast<bool>(materialArgs.m_materialHeader.m_hasNormal);
-            settingsSave["specularFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_specularFactor);
-            settingsSave["metallicFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_metallicFactor);
-            settingsSave["roughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_roughnessFactor);
-            settingsSave["ao"] = std::any_cast<float>(materialArgs.m_materialHeader.m_ao);
-            settingsSave["clearCoatFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatFactor);
-            settingsSave["clearCoatRoughnessFactor"] = std::any_cast<float>(materialArgs.m_materialHeader.m_clearCoatRoughnessFactor);
-            settingsSave["pipeline"] = std::any_cast<unsigned int>(materialArgs.m_materialHeader.m_pipeline);
-            settingsSave["texturesCount"] = std::any_cast<unsigned int>(materialArgs.m_materialHeader.m_texturesCount);
+            settingsSave["ambient"] = materialArgs.m_materialHeader.m_ambient;
+            settingsSave["diffuse"] = materialArgs.m_materialHeader.m_diffuse;
+            settingsSave["specular"] = materialArgs.m_materialHeader.m_specular;
+            settingsSave["emissive"] = materialArgs.m_materialHeader.m_emissive;
+            settingsSave["shininess"] = materialArgs.m_materialHeader.m_shininess;
+            settingsSave["hasNormal"] = materialArgs.m_materialHeader.m_hasNormal;
+            settingsSave["specularFactor"] = materialArgs.m_materialHeader.m_specularFactor;
+            settingsSave["metallicFactor"] = materialArgs.m_materialHeader.m_metallicFactor;
+            settingsSave["roughnessFactor"] = materialArgs.m_materialHeader.m_roughnessFactor;
+            settingsSave["ao"] = materialArgs.m_materialHeader.m_ao;
+            settingsSave["clearCoatFactor"] = materialArgs.m_materialHeader.m_clearCoatFactor;
+            settingsSave["clearCoatRoughnessFactor"] = materialArgs.m_materialHeader.m_clearCoatRoughnessFactor;
+            settingsSave["pipeline"] = materialArgs.m_materialHeader.m_pipeline;
+            settingsSave["texturesCount"] = materialArgs.m_materialHeader.m_texturesCount;
 
             for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
             {
                 std::string textureId = std::format("texture_{}", i).c_str();
                 std::string textureTypeId = std::format("textureTypes_{}", i);
 
-                settingsSave[textureId.c_str()] = std::any_cast<std::string>(materialArgs.m_texturesPath[i]);
-                settingsSave[textureTypeId.c_str()] = std::any_cast<unsigned int>(materialArgs.m_texturesType[i]);
+                settingsSave[textureId.c_str()] = materialArgs.m_texturesPath[i];
+                settingsSave[textureTypeId.c_str()] = materialArgs.m_texturesType[i];
             }
 
             std::ofstream out(path.string().c_str());
@@ -626,6 +626,7 @@ namespace CCImporter
         materialArgs.m_materialHeader.m_ao = settingsLoaded["ao"].as<float>();
         materialArgs.m_materialHeader.m_clearCoatFactor = settingsLoaded["clearCoatFactor"].as<float>();
         materialArgs.m_materialHeader.m_clearCoatRoughnessFactor = settingsLoaded["clearCoatRoughnessFactor"].as<float>();
+        materialArgs.m_materialHeader.m_pipeline = settingsLoaded["pipeline"].as<unsigned int>();
         materialArgs.m_materialHeader.m_texturesCount = settingsLoaded["texturesCount"].as<unsigned int>();
 
         for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)

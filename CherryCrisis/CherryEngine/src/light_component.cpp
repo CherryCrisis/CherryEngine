@@ -65,11 +65,11 @@ void LightComponent::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetField<CCMaths::Vector3>("ambient", m_light.m_ambient);
-	m_metadatas.SetField<CCMaths::Vector3>("diffuse", m_light.m_diffuse);
-	m_metadatas.SetField<CCMaths::Vector3>("specular", m_light.m_specular);
-	m_metadatas.SetField<CCMaths::Vector3>("attenuation", m_light.m_attenuation);
-	m_metadatas.SetField<bool>("isPoint", m_light.m_isPoint);
+	m_metadatas.SetField("ambient", m_light.m_ambient);
+	m_metadatas.SetField("diffuse", m_light.m_diffuse);
+	m_metadatas.SetField("specular", m_light.m_specular);
+	m_metadatas.SetField("attenuation", m_light.m_attenuation);
+	m_metadatas.SetField("isPoint", m_light.m_isPoint);
 }
 
 void LightComponent::ChangePosition(const CCMaths::Vector3& position)
