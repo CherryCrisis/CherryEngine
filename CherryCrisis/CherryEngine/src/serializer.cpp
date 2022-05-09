@@ -15,6 +15,8 @@
 #include "box_collider.hpp"
 #include "sphere_collider.hpp"
 #include "capsule_collider.hpp"
+#include "audio_emitter.hpp"
+#include "audio_listener.hpp"
 #include "model.hpp"
 
 #include "scene_manager.hpp"
@@ -240,6 +242,8 @@ Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 	else if (type == "BoxCollider")       b = new BoxCollider(id);
 	else if (type == "SphereCollider")    b = new SphereCollider(id);
 	else if (type == "CapsuleCollider")   b = new CapsuleCollider(id);
+	else if (type == "AudioEmitter")   b = new AudioEmitter(id);
+	else if (type == "AudioListener")   b = new AudioListener(id);
 
 	return b;
 }

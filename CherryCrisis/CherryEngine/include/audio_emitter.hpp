@@ -15,7 +15,7 @@ private:
 	using floatProperty = CCProperty::ConstRefProperty<AudioEmitter, float>;
 
 	std::shared_ptr<Sound> m_sound;
-	const char* m_soundPath = "null";
+	std::string m_soundPath = "null";
 
 	bool  m_isAutoplaying = true;
 	bool  m_isLooping     = false;
@@ -37,7 +37,7 @@ public:
 	void SetSpatialized(const bool& value);
 
 	//Load the sound if not existing, and adds it as the selected sound
-	void AddSound(const char* filepath);
+	void AddSound(const std::string& filepath);
 	void AddSound(std::shared_ptr<Sound> sound);
 
 	Transform* m_transform = nullptr;
@@ -52,11 +52,11 @@ public:
 	bool	    GetLooping()	 { return m_isLooping; }
 	bool	    GetSpatialized() { return m_isSpatial; }
 	float	    GetPitch()       { return m_pitch;     }
-	const char* GetSoundPath()   { return m_soundPath; }
+	std::string GetSoundPath()   { return m_soundPath; }
 
 	boolProperty	Looping{ this, &AudioEmitter::SetLooping,   &AudioEmitter::GetLooping };
 	boolProperty	Spatialized{ this, &AudioEmitter::SetSpatialized,   &AudioEmitter::GetSpatialized };
 	floatProperty	Pitch{ this, &AudioEmitter::SetPitch,   &AudioEmitter::GetPitch };
 
-	CCProperty::CopyProperty<AudioEmitter, const char*> SoundPath{ this, &AudioEmitter::AddSound, &AudioEmitter::GetSoundPath };
+	CCProperty::ConstRefProperty<AudioEmitter, std::string> SoundPath{ this, &AudioEmitter::AddSound, &AudioEmitter::GetSoundPath };
 };

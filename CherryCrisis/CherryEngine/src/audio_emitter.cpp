@@ -47,16 +47,16 @@ void AudioEmitter::SetSpatialized(const bool& value)
 }
 
 //Load the sound if not existing, and adds it as the selected sound
-void AudioEmitter::AddSound(const char* filepath)
+void AudioEmitter::AddSound(const std::string& filepath)
 {
-	m_sound = ResourceManager::GetInstance()->AddResource<Sound>(filepath, true);
-	m_soundPath = m_sound->m_filepath.string().c_str();
+	m_sound = ResourceManager::GetInstance()->AddResource<Sound>(filepath.c_str(), true);
+	m_soundPath = m_sound->m_filepath.string();
 }
 
 void AudioEmitter::AddSound(std::shared_ptr<Sound> sound)
 {
 	m_sound = sound;
-	m_soundPath = m_sound->m_filepath.string().c_str();
+	m_soundPath = m_sound->m_filepath.string();
 }
 
 AudioEmitter::AudioEmitter()
