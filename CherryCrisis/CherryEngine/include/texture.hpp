@@ -61,7 +61,7 @@ public:
         ETextureFormat textureFormat = ETextureFormat::RGBA);
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true, 
-        ETextureFormat textureFormat = ETextureFormat::RGBA);
+        ETextureFormat textureFormat = ETextureFormat::DXT1);
 
     static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     

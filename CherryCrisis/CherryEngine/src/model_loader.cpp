@@ -67,6 +67,9 @@ namespace CCImporter
         model.m_meshName += std::string("/");
         model.m_meshName += std::string(assimpMesh->mName.C_Str());
 
+        if (meshIndex > 0)
+            model.m_meshName += '_' + meshIndex;
+
         model.modelHeader.m_meshHeader.m_meshNameSize = model.m_meshName.size();
 
         std::vector<Vertex> vertices;
@@ -407,7 +410,8 @@ namespace CCImporter
                 std::filesystem::path textureFilepath(filepath.parent_path());
                 textureFilepath += "\\";
                 textureFilepath += textureFilename.C_Str();
-
+                textureFilepath = textureFilepath.lexically_normal();
+                
                 if (!VerifIfTextureCacheExist(textureFilepath.filename().string().c_str()))
                     ImportTextureData(textureFilepath);
 

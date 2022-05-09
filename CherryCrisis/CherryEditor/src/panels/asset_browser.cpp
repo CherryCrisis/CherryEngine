@@ -744,12 +744,13 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             {
                 TextureNode textureNode;
                 SetAssetNode(m_path, textureNode);
-
+            
                 std::string filepath(textureNode.m_relativePath.string() + textureNode.m_filename + textureNode.m_extension);
                 textureNode.m_resource = resourceManager->AddResource<Texture>(filepath.c_str(), true);
-
+            
                 textureNode.m_previewTexture = std::dynamic_pointer_cast<Texture>(textureNode.m_resource);
-
+                m_textureGenerator.Generate(textureNode.m_previewTexture.get());
+            
                 auto pair = m_assetNodes.insert({ textureNode.m_path.string(), std::make_unique<TextureNode>(textureNode) });
                 return pair.first->second.get();
             }
