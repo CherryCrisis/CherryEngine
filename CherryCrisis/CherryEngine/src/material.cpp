@@ -37,6 +37,7 @@ void Material::Load(std::shared_ptr<Material> material)
 	material->m_ao = materialArgs.m_materialHeader.m_ao;
 	material->m_clearCoatFactor = materialArgs.m_materialHeader.m_clearCoatFactor;
 	material->m_clearCoatRoughnessFactor = materialArgs.m_materialHeader.m_clearCoatRoughnessFactor;
+	material->m_pipelineType = static_cast<EPipelineType>(materialArgs.m_materialHeader.m_pipeline);
 
     if (materialArgs.m_materialHeader.m_texturesCount)
     {
@@ -123,6 +124,7 @@ void Material::Reload(bool saveOnly)
 	m_ao = materialArgs.m_materialHeader.m_ao;
 	m_clearCoatFactor = materialArgs.m_materialHeader.m_clearCoatFactor;
 	m_clearCoatRoughnessFactor = materialArgs.m_materialHeader.m_clearCoatRoughnessFactor;
+	m_pipelineType = static_cast<EPipelineType>(materialArgs.m_materialHeader.m_pipeline);
 
 	for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
 	{

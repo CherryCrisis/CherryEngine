@@ -1,5 +1,7 @@
 #include "pch.hpp"
 
+#include <string>
+
 #include "model_renderer.hpp"
 
 #include "render_manager.hpp"
@@ -56,37 +58,43 @@ void ModelRenderer::PopulateMetadatas()
 	m_metadatas.SetProperty("matFile", &m_MaterialPath);
 }
 
-void ModelRenderer::LoadModelFromPath(const char* modelPath)
+void ModelRenderer::LoadModelFromPath(std::string modelPath)
 {
-	if (!modelPath)
+	if (modelPath.empty())
+		return;
+	ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(modelPath.c_str(), true, nullptr);
+}
+
+std::string ModelRenderer::GetModelPath()
+{
+	std::string path(m_mesh->GetFilepath());
+	return m_mesh ? path.c_str() : nullptr;
+}
+
+void ModelRenderer::SetMeshFromPath(std::string meshPath)
+{
+	if (meshPath.empty())
 		return;
 
-	ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(modelPath, true, nullptr);
+	SetMesh(ResourceManager::GetInstance()->AddResourceRef<Mesh>(meshPath.c_str()));
 }
 
-const char* ModelRenderer::GetModelPath()
+std::string ModelRenderer::GetMeshPath()
 {
-	return m_mesh ? m_mesh->GetFilepath().c_str() : nullptr;
+	return m_mesh ? m_mesh->GetFilepath() : nullptr;
 }
 
-void ModelRenderer::SetMeshFromPath(const char* meshPath)
+void ModelRenderer::SetMaterialFromPath(std::string materialPath)
 {
-	SetMesh(ResourceManager::GetInstance()->AddResourceRef<Mesh>(meshPath));
+	if (materialPath.empty())
+		return;
+
+	SetMaterial(ResourceManager::GetInstance()->AddResourceRef<Material>(materialPath.c_str()));
 }
 
-const char* ModelRenderer::GetMeshPath()
+std::string ModelRenderer::GetMaterialPath()
 {
-	return m_mesh ? m_mesh->GetFilepath().c_str() : nullptr;
-}
-
-void ModelRenderer::SetMaterialFromPath(const char* materialPath)
-{
-	SetMaterial(ResourceManager::GetInstance()->AddResourceRef<Material>(materialPath));
-}
-
-const char* ModelRenderer::GetMaterialPath()
-{
-	return m_material ? m_material->GetFilepath().c_str() : nullptr;
+	return m_material ? m_material->GetFilepath() : nullptr;
 }
 
 void ModelRenderer::OnMeshLoaded(std::shared_ptr<Mesh> mesh)

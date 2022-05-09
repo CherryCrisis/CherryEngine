@@ -40,18 +40,18 @@ public:
 	void Initialize();
 	void BindToSignals() override;
 
-	void LoadModelFromPath(const char* modelPath);
-	const char* GetModelPath();
+	void LoadModelFromPath(std::string modelPath);
+	std::string GetModelPath();
 
-	void SetMeshFromPath(const char* meshPath);
-	const char* GetMeshPath();
+	void SetMeshFromPath(std::string meshPath);
+	std::string GetMeshPath();
 
 	void OnMeshLoaded(std::shared_ptr<Mesh> newMesh);
 	void SetMesh(std::shared_ptr<Mesh> newMesh);
 	void RemoveMesh();
 
-	void SetMaterialFromPath(const char* meshPath);
-	const char* GetMaterialPath();
+	void SetMaterialFromPath(std::string meshPath);
+	std::string GetMaterialPath();
 
 	void OnMaterialLoaded(std::shared_ptr<Material> newMat);
 	void OnMaterialReloaded(std::shared_ptr<Material> newMat);
@@ -66,7 +66,7 @@ public:
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 	
-	CCProperty::CopyProperty<ModelRenderer, const char*> m_ModelPath{ this, &ModelRenderer::LoadModelFromPath, &ModelRenderer::GetModelPath };
-	CCProperty::CopyProperty<ModelRenderer, const char*> m_MeshPath{ this, &ModelRenderer::SetMeshFromPath, &ModelRenderer::GetMeshPath };
-	CCProperty::CopyProperty<ModelRenderer, const char*> m_MaterialPath { this, &ModelRenderer::SetMaterialFromPath, &ModelRenderer::GetMaterialPath };
+	CCProperty::CopyProperty<ModelRenderer, std::string> m_ModelPath{ this, &ModelRenderer::LoadModelFromPath, &ModelRenderer::GetModelPath };
+	CCProperty::CopyProperty<ModelRenderer, std::string> m_MeshPath{ this, &ModelRenderer::SetMeshFromPath, &ModelRenderer::GetMeshPath };
+	CCProperty::CopyProperty<ModelRenderer, std::string> m_MaterialPath { this, &ModelRenderer::SetMaterialFromPath, &ModelRenderer::GetMaterialPath };
 };
