@@ -21,7 +21,7 @@ namespace std
 %define COMP_TEMPLATE_WRAP(COMP_T)
 COMP_PREFIX_WRAP(Get, COMP_T, GetBehaviour)
 COMP_PREFIX_WRAP(Add, COMP_T, AddBehaviour)
-COMP_PREFIX_WRAP(GetAllOf, COMP_T, GetBehaviours)
+COMP_PREFIX_WRAP(GetAllOf, COMP_T, GetBehavioursOfType)
 %enddef
 
 %define COMP_PREFIX_WRAP(prefix, COMP_T, funcSignature)
@@ -53,7 +53,7 @@ public:
 	CompT* GetBehaviour();
 
 	template <class CompT>
-	std::vector<CompT*> GetBehaviours();
+	std::vector<CompT*> GetBehavioursOfType();
 
 	template <class CompT>
 	bool HasBehaviour();

@@ -1,5 +1,7 @@
 #pragma once	
 
+#include "utils.hpp"
+
 template <class CompT>
 CompT* Entity::AddBehaviour()
 {
@@ -9,7 +11,7 @@ CompT* Entity::AddBehaviour()
 	CompT* rawPtr = new CompT();
 	rawPtr->m_owner = this;
 
-	m_behaviours.insert({ typeid(CompT), rawPtr });
+	m_behaviours.insert({ String::ExtractTypeName<CompT>(), rawPtr });
 	rawPtr->BindToSignals();
 
 	return rawPtr;
@@ -21,12 +23,12 @@ CompT* Entity::GetBehaviour()
 	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
 	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
 
-	auto compIt = m_behaviours.find(typeid(CompT));
+	auto compIt = m_behaviours.find(String::ExtractTypeName<CompT>());
 
 	if (compIt != m_behaviours.end())
 		return static_cast<CompT*>(compIt->second);
 
-	auto itPair = m_behaviours.equal_range(typeid(Behaviour));
+	auto itPair = m_behaviours.equal_range("Behaviour");
 
 	for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
 	{
@@ -40,14 +42,14 @@ CompT* Entity::GetBehaviour()
 }
 
 template <class CompT>
-std::vector<CompT*> Entity::GetBehaviours()
+std::vector<CompT*> Entity::GetBehavioursOfType()
 {
 	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
 	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
 
 	std::vector<CompT*> behaviours;
 
-	auto itPair = m_behaviours.equal_range(typeid(CompT));
+	auto itPair = m_behaviours.equal_range(String::ExtractTypeName<CompT>());
 
 	for (auto compIt = itPair.first; compIt != itPair.second; compIt++)
 		behaviours.push_back(static_cast<CompT*>(compIt->second));
@@ -91,6 +93,5 @@ CompT* Entity::GetOrAddBehaviour()
 template <class CompT>
 void Entity::SubscribeComponent(CompT* behaviour)
 {
-	behaviour->m_owner = this;
-	m_behaviours.insert({ typeid(CompT), behaviour });
+	SubscribeComponent(behaviour, String::ExtractTypeName<CompT>());
 }

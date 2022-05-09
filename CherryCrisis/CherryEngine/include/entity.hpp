@@ -18,7 +18,7 @@ class CCENGINE_API Entity : public Object
 {
 protected:
 	std::string m_name = "Entity";
-	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
+	std::unordered_multimap<std::string, Behaviour*> m_behaviours;
 
 public:
 	Cell* m_cell = nullptr;
@@ -37,11 +37,14 @@ public:
 
 	std::vector<Behaviour*> GetAllBehaviours();
 
+	std::vector<Behaviour*> GetBehavioursOfType(const std::string& componentTypeName);
+
 	template <class CompT>
-	std::vector<CompT*> GetBehaviours();
+	std::vector<CompT*> GetBehavioursOfType();
 
 	template <class CompT>
 	void SubscribeComponent(CompT* behaviour);
+	void SubscribeComponent(Behaviour* behaviour, const std::string& componentTypeName);
 
 	template <class CompT>
 	bool HasBehaviour();
