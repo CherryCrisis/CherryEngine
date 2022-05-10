@@ -1261,6 +1261,12 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
+  2562397425:
+    type: ScriptedBehaviour
+    scriptName: CameraController
+    time: 0
+    m_owner: 1141188403
+    deltaTime: 0.00999999978
   977345729:
     type: CameraComponent
     aspect: 1.33333337
@@ -3743,6 +3749,12 @@ components:
     m_owner: 4067370883
     meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/ceiling_2ndfloor`
     matFile: Assets\Models\Sponza\metal_door.mat
+  3424476662:
+    type: ModelRenderer
+    transform: 4290607610
+    m_owner: 403725263
+    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/ceiling_2ndfloora
+    matFile: Assets\Models\Sponza\arch_stone_wall_01.mat
   4290607610:
     type: Transform
     m_owner: 403725263
@@ -3750,12 +3762,6 @@ components:
     rotation: 0.000000/-0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2377335363
-  3424476662:
-    type: ModelRenderer
-    transform: 4290607610
-    m_owner: 403725263
-    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/ceiling_2ndfloora
-    matFile: Assets\Models\Sponza\arch_stone_wall_01.mat
   1348108119:
     type: Transform
     m_owner: 4153733565
@@ -3808,6 +3814,12 @@ components:
     m_owner: 2245188576
     meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/arch_wall_2ndfloora
     matFile: Assets\Models\Sponza\metal_door.mat
+  3727750916:
+    type: ModelRenderer
+    transform: 1620941681
+    m_owner: 894292860
+    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndflloor_01`
+    matFile: Assets\Models\Sponza\light_bulb.mat
   1620941681:
     type: Transform
     m_owner: 894292860
@@ -3815,12 +3827,6 @@ components:
     rotation: 0.000000/-0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2377335363
-  3727750916:
-    type: ModelRenderer
-    transform: 1620941681
-    m_owner: 894292860
-    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndflloor_01`
-    matFile: Assets\Models\Sponza\light_bulb.mat
   1164007161:
     type: ModelRenderer
     transform: 1743072437
@@ -3860,12 +3866,6 @@ components:
     m_owner: 636837938
     meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_02a
     matFile: Assets\Models\Sponza\lamp_glass_01.mat
-  2184304436:
-    type: ModelRenderer
-    transform: 3917824726
-    m_owner: 2974513325
-    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_03`
-    matFile: Assets\Models\Sponza\light_bulb.mat
   3917824726:
     type: Transform
     m_owner: 2974513325
@@ -3873,6 +3873,18 @@ components:
     rotation: 0.000000/-0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2377335363
+  2184304436:
+    type: ModelRenderer
+    transform: 3917824726
+    m_owner: 2974513325
+    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_03`
+    matFile: Assets\Models\Sponza\light_bulb.mat
+  1687665931:
+    type: ModelRenderer
+    transform: 2495827602
+    m_owner: 2207203721
+    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_03a
+    matFile: Assets\Models\Sponza\lamp_glass_01.mat
   2495827602:
     type: Transform
     m_owner: 2207203721
@@ -3880,12 +3892,6 @@ components:
     rotation: 0.000000/-0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2377335363
-  1687665931:
-    type: ModelRenderer
-    transform: 2495827602
-    m_owner: 2207203721
-    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_03a
-    matFile: Assets\Models\Sponza\lamp_glass_01.mat
   3698941493:
     type: Transform
     m_owner: 902552787
@@ -3912,6 +3918,12 @@ components:
     m_owner: 3004398090
     meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_04a
     matFile: Assets\Models\Sponza\lamp_glass_01.mat
+  1412513383:
+    type: ModelRenderer
+    transform: 1558313620
+    m_owner: 2905167964
+    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_05`
+    matFile: Assets\Models\Sponza\light_bulb.mat
   1558313620:
     type: Transform
     m_owner: 2905167964
@@ -3919,12 +3931,6 @@ components:
     rotation: 0.000000/-0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2377335363
-  1412513383:
-    type: ModelRenderer
-    transform: 1558313620
-    m_owner: 2905167964
-    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/lamps_2ndfloor_05`
-    matFile: Assets\Models\Sponza\light_bulb.mat
   2055968955:
     type: ModelRenderer
     transform: 335476157
@@ -5061,12 +5067,6 @@ components:
     m_owner: 1929348308
     meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/ornament_door_2ndfloor_02`
     matFile: Assets\Models\Sponza\brickwall_02.mat
-  1174087379:
-    type: ModelRenderer
-    transform: 244982706
-    m_owner: 1509425986
-    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/ornament_door_2ndfloor_02a
-    matFile: Assets\Models\Sponza\door_stoneframe_02.mat
   244982706:
     type: Transform
     m_owner: 1509425986
@@ -5074,6 +5074,12 @@ components:
     rotation: 0.000000/-0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 3115614651
+  1174087379:
+    type: ModelRenderer
+    transform: 244982706
+    m_owner: 1509425986
+    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/ornament_door_2ndfloor_02a
+    matFile: Assets\Models\Sponza\door_stoneframe_02.mat
   1343355644:
     type: Transform
     m_owner: 3114559471
@@ -6452,6 +6458,12 @@ components:
     m_owner: 2538193823
     meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/roof_floor_03_07`
     matFile: Assets\Models\Sponza\stones_01_tile.mat
+  2406649561:
+    type: ModelRenderer
+    transform: 1873392997
+    m_owner: 1410515427
+    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/roof_floor_03_08`
+    matFile: Assets\Models\Sponza\stones_01_tile.mat
   1873392997:
     type: Transform
     m_owner: 1410515427
@@ -6459,12 +6471,6 @@ components:
     rotation: 0.000000/-0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1172448687
-  2406649561:
-    type: ModelRenderer
-    transform: 1873392997
-    m_owner: 1410515427
-    meshFile: Assets\Models\Sponza\NewSponza_Main_FBX_YUp.fbx/roof_floor_03_08`
-    matFile: Assets\Models\Sponza\stones_01_tile.mat
   116275502:
     type: Transform
     m_owner: 3072813812

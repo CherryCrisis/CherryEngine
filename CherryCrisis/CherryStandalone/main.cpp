@@ -54,44 +54,49 @@ int main()
         printf("glfwInit failed\n");
         return -1;
     }
+
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Cherry Crisis", nullptr, nullptr);
     if (window == nullptr)
     {
         printf("glfwCreateWindow failed\n");
         return -1;
     }
+
     glfwMakeContextCurrent(window);
     if (gladLoaderLoadGL() == 0)
     {
         printf("gladLoaderLoadGL failed\n");
         return -1;
     }
+
     if (GLAD_GL_KHR_debug)
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
     Engine engine{};
     Context context;
     context.inputs = InputManager::GetInstance();
+    //Callbacks
+    {
+        glfwSetWindowUserPointer(window, &context);
+        glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
+            {
+                static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->KeyCallback(w, k, s, a, m);
+            });
+        glfwSetScrollCallback(window, [](GLFWwindow* w, double x, double y)
+            {
+                static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
+            });
+        glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y)
+            {
+                static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MousePosCallback(w, x, y);
+            });
+        glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int k, int a, int m)
+            {
+                static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
+            });
 
-    glfwSetWindowUserPointer(window, &context);
-    glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
-        {
-            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->KeyCallback(w, k, s, a, m);
-        });
-    glfwSetScrollCallback(window, [](GLFWwindow* w, double x, double y)
-        {
-            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
-        });
-    glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y)
-        {
-            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MousePosCallback(w, x, y);
-        });
-    glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int k, int a, int m)
-        {
-            static_cast<Context*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
-        });
-
-    glfwSetWindowSizeCallback(window, window_size_callback);
+        glfwSetWindowSizeCallback(window, window_size_callback);
+    }
 
     InputManager::GetInstance()->HideCursor = HideCursor;
     InputManager::GetInstance()->ShowCursor = ShowCursor;
@@ -102,6 +107,7 @@ int main()
 
     Framebuffer framebuffer;
 
+    engine.LaunchStandalone();
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();
@@ -111,25 +117,17 @@ int main()
         glfwGetWindowSize(window, &framebuffer.colorTex.width, &framebuffer.colorTex.height);
 
 
-
-        if (Entity* cameraEntity = SceneManager::GetInstance()->m_currentScene->m_entities["Camera"])
+        if (CameraComponent* cameraComp = CameraComponent::GetMainCamera())
         {
-            // TODO: Move this
-            if (CameraComponent* cameraComp = cameraEntity->GetBehaviour<CameraComponent>())
-            {
-                Camera* cam = &cameraComp->m_camera;
+            Camera* cam = &cameraComp->m_camera;
 
-                float aspect = (float)framebuffer.colorTex.width / (float)framebuffer.colorTex.height;
-                cam->m_projectionMatrix = Matrix4::Perspective(cam->fovY, aspect, cam->near, cam->far);
+            float aspect = (float)framebuffer.colorTex.width / (float)framebuffer.colorTex.height;
+            cam->m_projectionMatrix = Matrix4::Perspective(cam->fovY, aspect, cam->near, cam->far);
 
-                RenderManager::DrawScene(framebuffer, cam);
-
-            }
+            cam->Draw(framebuffer, 5);
         }
 
-
         engine.TickEngine();
-        engine.LaunchStandalone();
         if (engine.isPlaying)
             engine.Tick();
 
