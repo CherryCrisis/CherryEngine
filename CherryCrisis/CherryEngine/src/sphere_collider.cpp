@@ -62,7 +62,10 @@ void SphereCollider::SetEntityScale(const CCMaths::Vector3& scale)
 void SphereCollider::SetPxShape()
 {
 	float scale = m_baseEntityScale * m_editableScale * m_entityScale;
+
 	m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(scale));
+	SetPxLocalPos();
+
 	m_pxShape->userData = this;
 
 	SetPxData();

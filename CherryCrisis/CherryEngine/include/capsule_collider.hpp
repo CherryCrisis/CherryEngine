@@ -12,8 +12,6 @@ class CCENGINE_API CapsuleCollider : public Collider
 private:
 	using floatProperty = CCProperty::ConstRefProperty<CapsuleCollider, float>;
 
-	physx::PxShape* m_pxShape = nullptr;
-
 	float m_baseEntityScale =1.f;
 	float m_entityScale = 1.f;
 	float m_entityRadius = 1.f;

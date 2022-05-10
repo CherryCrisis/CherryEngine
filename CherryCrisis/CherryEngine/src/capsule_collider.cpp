@@ -67,9 +67,12 @@ void CapsuleCollider::SetPxShape()
 	float totalRadius = m_editableRadius * m_entityRadius;
 
 	m_pxShape = m_physicActor->CreateShape(physx::PxCapsuleGeometry(totalRadius, scale));
+
 	physx::PxTransform transform = m_pxShape->getLocalPose();
 	physx::PxTransform relativeRot = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
 	m_pxShape->setLocalPose(transform * relativeRot);
+	SetPxLocalPos();
+
 	m_pxShape->userData = this;
 
 	SetPxData();
