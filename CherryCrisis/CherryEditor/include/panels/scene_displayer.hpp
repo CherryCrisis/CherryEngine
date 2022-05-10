@@ -22,6 +22,7 @@ public:
 	
 	void UpdateCamera();
 	void Render() override;
+	void RenderMenuBar();
 
 	void Focus() override;
 	void Unfocus() override;

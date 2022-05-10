@@ -107,8 +107,10 @@ void SceneDisplayer::Render()
 
     m_isActive = true;
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f,0.f });
-    if (ImGui::Begin("Scene", &m_isOpened))
+    if (ImGui::Begin("Scene", &m_isOpened, ImGuiWindowFlags_MenuBar))
     {
+        RenderMenuBar();
+
         InputManager* IM = InputManager::GetInstance();
 
         IM->PushContext("Editor Context");
@@ -256,4 +258,37 @@ void SceneDisplayer::Unfocus()
     m_isFocused = false;
     m_inputs->SetCursorDisplayed();
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
+}
+
+void SceneDisplayer::RenderMenuBar() 
+{
+    if (ImGui::BeginMenuBar())
+    {
+        bool m_isWorld = m_mode == ImGuizmo::MODE::WORLD;
+        bool m_isLocal = m_mode == ImGuizmo::MODE::LOCAL;
+        bool m_isTranslate = m_operation == ImGuizmo::TRANSLATE;
+        bool m_isRotate    = m_operation == ImGuizmo::ROTATE;
+        bool m_isScale     = m_operation == ImGuizmo::SCALE;
+
+        if (ImGui::Selectable("Translate", &m_isTranslate, 0, ImGui::CalcTextSize("Clear on play")))
+            m_operation = ImGuizmo::TRANSLATE;
+
+        ImGui::Spacing();
+        if (ImGui::Selectable("Rotate", &m_isRotate, 0, ImGui::CalcTextSize("AutoScroll")))
+            m_operation = ImGuizmo::ROTATE;
+
+        ImGui::Spacing();
+        if (ImGui::Selectable("Scale", &m_isScale, 0, ImGui::CalcTextSize("Collapse")))
+            m_operation = ImGuizmo::SCALE;
+
+        ImGui::Spacing();
+        if (ImGui::Selectable("Global", &m_isWorld, 0, ImGui::CalcTextSize("Collapse")))
+            m_mode = ImGuizmo::MODE::WORLD;
+
+        ImGui::Spacing();
+        if (ImGui::Selectable("Local", &m_isLocal, 0, ImGui::CalcTextSize("Collapse")))
+            m_mode = ImGuizmo::MODE::LOCAL;
+    }
+
+    ImGui::EndMenuBar();
 }
