@@ -50,6 +50,7 @@ void SphereCollider::PopulateMetadatas()
 
 	m_metadatas.SetProperty("Enabled", &isEnabled);
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
+	m_metadatas.SetProperty("Local Position", &localPosition);
 	m_metadatas.SetProperty("Scale", &editableScale);
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }

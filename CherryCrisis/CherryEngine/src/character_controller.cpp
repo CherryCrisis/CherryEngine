@@ -14,6 +14,9 @@
 CharacterController::CharacterController(CCUUID& id) : Behaviour(id)
 {
 	PopulateMetadatas();
+
+	m_inputManager = InputManager::GetInstance();
+	m_timeManager = TimeManager::GetInstance();
 }
 
 CharacterController::~CharacterController()
@@ -120,25 +123,24 @@ void CharacterController::Update()
 		m_isGrounded = false;
 	}
 
-	InputManager* IM = InputManager::GetInstance();
 
-	IM->PushContext("User Context");
+	m_inputManager->PushContext("User Context");
 
-	float forward = IM->GetAxis(Keycode::W, Keycode::S);
-	float side = IM->GetAxis(Keycode::D, Keycode::A);
+	float forward = m_inputManager->GetAxis(Keycode::W, Keycode::S);
+	float side = m_inputManager->GetAxis(Keycode::D, Keycode::A);
 
-	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * IM->GetMouseDelta().x / 60.f /* detlaTime */;
+	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_inputManager->GetMouseDelta().x * m_timeManager->GetDeltaTime();
 
-	if (IM->GetKey(Keycode::SPACE) && m_isGrounded)
+	if (m_inputManager->GetKey(Keycode::SPACE) && m_isGrounded)
 		m_physicActor->AddForce({0, 10.f, 0}, PhysicSystem::EForceMode::eIMPULSE);
 
-	IM->PopContext();
+	m_inputManager->PopContext();
 
 	CCMaths::Vector3 move = -m_transform->GetWorldMatrix().back.Normalized() * forward + m_transform->GetWorldMatrix().right.Normalized() * side;
 
 	CCMaths::Vector3 goalVelocity = move * m_moveSpeed;
 
-	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) * 60.f /* detlaTime */, -150.f, 150.f);
+	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) / m_timeManager->GetDeltaTime(), -150.f, 150.f);
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * actor->getMass(), { 1, 0, 1 });
 
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);

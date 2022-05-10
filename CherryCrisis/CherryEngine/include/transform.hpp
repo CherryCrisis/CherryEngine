@@ -11,19 +11,34 @@ using namespace CCMaths;
 
 class CCENGINE_API Transform : public Behaviour
 {
+	enum class EDirtyFlag
+	{
+		WORLD_MATRIX = 1 << 0,
+		WORLD_POSITION = 1 << 1,
+		WORLD_ROTATION = 1 << 2,
+		WORLD_SCALE = 1 << 3,
+	};
+
 private:
 	Vector3 m_position = Vector3(0.f, 0.f, 0.f);
 	Vector3 m_rotation = Vector3(0.f, 0.f, 0.f);
 	Vector3 m_scale	   = Vector3(1.f, 1.f, 1.f);
+
+	Vector3 m_worldPosition = Vector3(0.f, 0.f, 0.f);
+	Vector3 m_worldRotation = Vector3(0.f, 0.f, 0.f);
+	Vector3 m_worldScale = Vector3(1.f, 1.f, 1.f);
 
 	Transform* m_parent = nullptr;
 	std::vector<Transform*> m_children;
 
 	Matrix4 m_worldMatrix = Matrix4::Identity;
 
-	bool m_isDirty = true;
+	unsigned char m_isDirty = (int)EDirtyFlag::WORLD_MATRIX |
+							  (int)EDirtyFlag::WORLD_POSITION |
+						      (int)EDirtyFlag::WORLD_ROTATION |
+							  (int)EDirtyFlag::WORLD_SCALE;
 
-	void SetDirty();
+	void SetDirty(int dirtyFlag);
 
 	void PopulateMetadatas() override;
 
@@ -43,27 +58,23 @@ public:
 	void ClearChildParenting();
 	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
-	void UpdateMatrix();
-
 	bool IsDirty() { return m_isDirty; }
 
 	void SetPosition(const Vector3& position);
 	Vector3 GetPosition() { return m_position; }
+	Vector3 GetGlobalPosition();
 
 	void SetRotation(const Vector3& rotation);
 	Vector3 GetRotation() { return m_rotation; }
+	Vector3 GetGlobalRotation();
 
 	void SetScale(const Vector3& scale);
 	Vector3 GetScale() { return m_scale; }
+	Vector3 GetGlobalScale();
 
 	void ReapplyPosition();
-	Vector3 GetGlobalPosition();
-
 	void ReapplyRotation();
-	Vector3 GetGlobalRotation();
-
 	void ReapplyScale();
-	Vector3 GetGlobalScale();
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };

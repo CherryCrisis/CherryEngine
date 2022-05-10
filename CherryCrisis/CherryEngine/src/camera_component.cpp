@@ -83,14 +83,14 @@ void CameraComponent::Initialize()
 void CameraComponent::ChangePosition(const CCMaths::Vector3& position)
 {
 	m_camera.lastPosition = m_camera.m_position;
-	m_camera.m_position = position;
+	m_camera.m_position = m_transform->GetGlobalPosition();
 
 	UpdateCameraModel();
 }
 
 void CameraComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 {
-	m_camera.rotation = rotation;
+	m_camera.rotation = m_transform->GetGlobalRotation();
 
 	UpdateCameraModel();
 }
