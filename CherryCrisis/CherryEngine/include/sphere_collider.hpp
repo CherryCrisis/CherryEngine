@@ -12,8 +12,6 @@ class CCENGINE_API SphereCollider : public Collider
 private:
 	using floatProperty = CCProperty::ConstRefProperty<SphereCollider, float>;
 
-	physx::PxShape* m_pxShape = nullptr;
-
 	float m_baseEntityScale = 1.f;
 	float m_entityScale = 1.f;
 	float m_editableScale = 1.f;

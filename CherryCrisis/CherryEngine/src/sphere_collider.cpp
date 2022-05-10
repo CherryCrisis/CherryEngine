@@ -29,7 +29,7 @@ void SphereCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	Transform* t = m_physicActor->m_owner->GetBehaviour<Transform>();
+	Transform* t = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
 	SetEntityScale(t->GetScale());
 }
 
@@ -62,7 +62,12 @@ void SphereCollider::SetEntityScale(const CCMaths::Vector3& scale)
 void SphereCollider::SetPxShape()
 {
 	float scale = m_baseEntityScale * m_editableScale * m_entityScale;
+
 	m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(scale));
+	SetPxLocalPos();
+
+	m_pxShape->userData = this;
+
 	SetPxData();
 }
 

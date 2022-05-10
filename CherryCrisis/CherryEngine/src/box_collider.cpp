@@ -29,7 +29,7 @@ void BoxCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	Transform* t = m_physicActor->m_owner->GetBehaviour<Transform>();
+	Transform* t = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
 	SetEntityScale(t->GetScale());
 }
 
@@ -67,6 +67,10 @@ void BoxCollider::SetPxShape()
 
 	physx::PxVec3 scalePx = { scale.x, scale.y, scale.z };
 	m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(scalePx));
+
+	SetPxLocalPos();
+
+	m_pxShape->userData = this;
 	SetPxData();
 }
 

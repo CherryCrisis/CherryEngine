@@ -5,7 +5,8 @@
 #include <PxPhysicsAPI.h>
 
 #include "physic_manager.hpp"
-#include "collider.hpp"
+#include "character_controller.hpp"
+#include "capsule_collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
 #include "cell.hpp"
@@ -43,15 +44,8 @@ namespace PhysicSystem
 				t->SetRotation(rot);
 			}
 
-			// TODO: remove this
-			RaycastHit out = Raycast(pos, { 0, -1, 0 }, 2.1f);
-			
-			if (out.actor)
-			{
-				PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(out.actor->userData);
-				Debug::GetInstance()->AddLog(ELogType::INFO, std::to_string(out.distance).c_str());
-				Debug::GetInstance()->AddLog(ELogType::INFO, actor1->m_owner->GetName().c_str());
-			}
+			if (m_controller)
+				m_controller->Update();
 		}
 	}
 
@@ -211,8 +205,19 @@ namespace PhysicSystem
 		}
 	}
 
+	void PhysicActor::AddController(CharacterController* controller, bool isPlaying)
+	{
+		if (!m_controller)
+		{
+			m_controller = controller;
+		}
+	}
+
 	void PhysicActor::RemoveRigidbody(Rigidbody* rigidbody)
 	{
+		if (m_controller && m_pxActor)
+			return;
+
 		if (m_rigidbody == rigidbody)
 		{
 			m_rigidbody = nullptr;
@@ -227,6 +232,9 @@ namespace PhysicSystem
 
 	void PhysicActor::RemoveCollider(Collider* collider)
 	{
+		if (m_controller && m_pxActor)
+			return;
+
 		for (size_t i = 0; i < m_colliders.size(); ++i)
 		{
 			if (collider == m_colliders[i])
@@ -237,6 +245,21 @@ namespace PhysicSystem
 				m_colliders[i] = m_colliders.back();
 				m_colliders.pop_back();
 			}
+		}
+	}
+
+	void PhysicActor::RemoveController(CharacterController* controller)
+	{
+		if (m_pxActor)
+		{
+			// TODO: Fix crash
+			// Debug::GetInstance()->AddLog(ELogType::WARNING, "Can't remove character controller while playing");
+			// return;
+		}
+		
+		if (m_controller == controller)
+		{
+			m_controller = nullptr;
 		}
 	}
 
@@ -259,33 +282,37 @@ namespace PhysicSystem
 		{
 			physx::PxVec3 pxForce = { force.x, force.y, force.z };
 			physx::PxRigidDynamic* object = static_cast<physx::PxRigidDynamic*>(m_pxActor);
-			object->addForce(pxForce, mode, true);
+			object->addForce(pxForce, static_cast<physx::PxForceMode::Enum>(mode), true);
+		}
+	}
+
+	void PhysicActor::AddTorque(const CCMaths::Vector3& force, EForceMode mode)
+	{
+		if (m_pxActor && m_isDynamic)
+		{
+			physx::PxVec3 pxForce = { force.x, force.y, force.z };
+			physx::PxRigidDynamic* object = static_cast<physx::PxRigidDynamic*>(m_pxActor);
+			object->addTorque(pxForce, static_cast<physx::PxForceMode::Enum>(mode), true);
 		}
 	}
 
 	RaycastHit PhysicActor::Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
 	{
-		static physx::PxRaycastHit hit[256];
-		static physx::PxRaycastBuffer hitBuffer(hit, 256);
+		physx::PxRaycastBuffer hit = PhysicManager::RaycastBuff(*m_owner->m_cell->m_physicCell, origin, dir, maxRange);
 
-		bool status = m_owner->m_cell->m_physicCell->Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hitBuffer);
+		unsigned int hitNb = (unsigned int)hit.getNbAnyHits();
 
-		if (!status)
+		if (hitNb == 0)
 		{
-			return hitBuffer.getTouch(0);
+			return RaycastHit();
 		}
 
-		unsigned int hitNb = (unsigned int)hitBuffer.getNbTouches();
-
-		if (hitBuffer.getTouch(hitNb - 1).actor == static_cast<physx::PxRigidActor*>(m_pxActor))
+		for (int i = hitNb - 1; i >= 0; i--)
 		{
-			if (hitNb > 1)
-				return hitBuffer.getTouch(hitNb - 2);
-			else
-				return hitBuffer.getTouch(hitNb);
+			if (hit.getAnyHit(i).actor != m_pxActor)
+				return PhysicManager::RaycastFromPxRaycast(hit.getAnyHit(i));
 		}
-
-		return hitBuffer.getTouch(hitNb - 1);
+		return RaycastHit();
 	}
 
 	bool PhysicActor::HasRigidbody()

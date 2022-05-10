@@ -18,15 +18,36 @@ namespace CCMaths
 	struct Vector3;
 }
 
+class CharacterController;
 class Rigidbody;
 class Collider;
 class Cell;
 
 namespace PhysicSystem
 {
+	struct RaycastHit
+	{
+		CCMaths::Vector3	position	= CCMaths::Vector3::Zero;
+		CCMaths::Vector3	normal		= CCMaths::Vector3::Zero;
+		float				distance	= 0.0f;
+
+		PhysicActor* actor = nullptr;
+	};
+
+	enum class EForceMode
+	{
+		eFORCE,
+		eIMPULSE,
+		eVELOCITY_CHANGE,
+		eACCELERATION
+	};
+
 	class CCENGINE_API PhysicManager : public Singleton<PhysicManager>
 	{
 	private:
+		// TODO: Get physicManager Instance, replace functions by static
+		PhysicManager* m_instance = nullptr;
+
 		physx::PxFoundation* m_foundation = nullptr;
 		physx::PxPvd* m_pvd = nullptr;
 		physx::PxPhysics* m_physics = nullptr;
@@ -47,9 +68,11 @@ namespace PhysicSystem
 
 		void Register(Rigidbody* rigidbody);
 		void Register(Collider* collider);
+		void Register(CharacterController* controller);
 
 		void Unregister(Rigidbody* rigidbody);
 		void Unregister(Collider* collider);
+		void Unregister(CharacterController* controller);
 
 		PhysicActor& FindOrCreateActor(Entity& owningEntity);
 		PhysicActor* FindActor(Entity& owningEntity);
@@ -71,7 +94,12 @@ namespace PhysicSystem
 		// Call scenes updates
 		void Simulate(float deltaTime);
 
-		void AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode);
+		static RaycastHit Raycast(Cell& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+		static RaycastHit Raycast(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+		static RaycastHit RaycastFromPxRaycast(const physx::PxRaycastHit& pxHit);
+		static physx::PxRaycastBuffer RaycastBuff(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+		static void AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode);
+		static void AddForce(Entity* entity, const CCMaths::Vector3& force, EForceMode mode);
 
 		void MoveObjectFromScnToScn(PhysicScene* from, PhysicScene* to, PhysicActor* actor);
 

@@ -46,9 +46,6 @@
     <Filter Include="Fichiers sources\Interface">
       <UniqueIdentifier>{324b38eb-add6-41cc-b2ac-a4bbf89c7b4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\CSGenerated">
-      <UniqueIdentifier>{7345006b-0b31-4718-8917-eafda2e01f1a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Interface\Maths">
       <UniqueIdentifier>{eee4fb74-d9e3-477a-b235-761c3b3df1c9}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,9 @@
     </Filter>
     <Filter Include="Fichiers sources\Picking">
       <UniqueIdentifier>{0ad23ffb-a465-4f8a-8046-1421fc6db677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\CSGenerated">
+      <UniqueIdentifier>{7345006b-0b31-4718-8917-eafda2e01f1a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1254,6 +1254,9 @@
     <ClInclude Include="include\portal_generator.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
     </ClInclude>
+    <ClInclude Include="include\character_controller.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1398,6 +1401,27 @@
     </None>
     <None Include="..\x64\Debug\Assets\portalShader.vert">
       <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="interface\physic_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\box_collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\capsule_collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\sphere_collider.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\physic_actor.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\physic_scene.i">
+      <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

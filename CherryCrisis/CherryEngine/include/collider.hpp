@@ -16,11 +16,16 @@ class CCENGINE_API Collider : public Behaviour
 protected:
 	using boolProperty = CCProperty::ConstRefProperty<Collider, bool>;
 	using floatProperty = CCProperty::ConstRefProperty<Collider, float>;
-	
+	using Vector3Property = CCProperty::ConstRefProperty<Collider, CCMaths::Vector3>;
+
+	physx::PxShape* m_pxShape = nullptr;
+
 	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;
 	bool	m_isTrigger = false;
 	float	m_contactOffset = 0.02f;
+
+	CCMaths::Vector3 m_localPosition = CCMaths::Vector3::Zero;
 
 	virtual void PopulateMetadatas() override {}
 
@@ -67,6 +72,8 @@ public:
 	*/
 	virtual void SetPxData() {}
 
+	void	SetPxLocalPos();
+
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled() { return m_isEnabled; }
 	void	SetTrigger(const bool& isTrigger);
@@ -74,9 +81,13 @@ public:
 	void	SetContact(const float& contactOffset);
 	float	GetContact() { return m_contactOffset; }
 
+	void				SetLocalPos(const CCMaths::Vector3& localPos);
+	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
+
 	boolProperty isEnabled{ this, &Collider::SetEnabled, &Collider::GetEnabled };
 	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };
 	floatProperty contactOffset{ this, &Collider::SetContact, &Collider::GetContact };
+	Vector3Property localPosition{ this, &Collider::SetLocalPos, &Collider::GetLocalPos };
 
 	Collider() = default;
 	Collider(CCUUID& id) : Behaviour(id) {}

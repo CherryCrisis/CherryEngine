@@ -19,6 +19,7 @@
 #include "box_collider.hpp"
 #include "sphere_collider.hpp"
 #include "capsule_collider.hpp"
+#include "character_controller.hpp"
 #include "bool3.hpp"
 #include "core/imcherry.hpp"
 #include "utils.hpp"
@@ -497,7 +498,12 @@ void Inspector::Render()
             if (ImGui::MenuItem("Capsule Collider")) 
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<CapsuleCollider>());
+                    entity->AddBehaviour<CapsuleCollider>();
+            }
+            if (ImGui::MenuItem("Character Controller"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    entity->AddBehaviour<CharacterController>();
             }
             if (ImGui::MenuItem("Portal Component"))
             {

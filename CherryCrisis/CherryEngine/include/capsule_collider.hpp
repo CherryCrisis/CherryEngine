@@ -12,8 +12,6 @@ class CCENGINE_API CapsuleCollider : public Collider
 private:
 	using floatProperty = CCProperty::ConstRefProperty<CapsuleCollider, float>;
 
-	physx::PxShape* m_pxShape = nullptr;
-
 	float m_baseEntityScale =1.f;
 	float m_entityScale = 1.f;
 	float m_entityRadius = 1.f;
@@ -40,7 +38,7 @@ public:
 	void SetScale(const float& scale) { m_editableScale = scale; ResetPxShape(); }
 	float GetScale() { return m_editableScale; }
 
-	void SetRadius(const float& radisu) { m_editableRadius = radisu; ResetPxShape(); }
+	void SetRadius(const float& radius) { m_editableRadius = radius; ResetPxShape(); }
 	float GetRadius() { return m_editableRadius; }
 
 	floatProperty editableScale{ this, &CapsuleCollider::SetScale, &CapsuleCollider::GetScale };

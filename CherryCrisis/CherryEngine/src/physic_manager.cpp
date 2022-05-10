@@ -5,6 +5,7 @@
 #include <vector>
 #include <PxPhysicsAPI.h>
 
+#include "character_controller.hpp"
 #include "collider.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
@@ -111,6 +112,14 @@ namespace PhysicSystem
 		actor.AddCollider(collider, m_isPlaying);
 	}
 
+	void PhysicManager::Register(CharacterController* controller)
+	{
+		PhysicActor& actor = FindOrCreateActor(controller->GetHost());
+
+		controller->m_physicActor = &actor;
+		actor.AddController(controller, m_isPlaying);
+	}
+
 	void PhysicManager::Unregister(Rigidbody* rigidbody)
 	{
 		PhysicActor* actor = rigidbody->m_physicActor;
@@ -129,6 +138,17 @@ namespace PhysicSystem
 			return;
 
 		actor->RemoveCollider(collider);
+
+		IsActorEmpty(*actor);
+	}
+
+	void PhysicManager::Unregister(CharacterController* controller)
+	{
+		PhysicActor* actor = controller->m_physicActor;
+		if (!actor)
+			return;
+
+		actor->RemoveController(controller);
 
 		IsActorEmpty(*actor);
 	}
@@ -274,8 +294,61 @@ namespace PhysicSystem
 		DestroyPhysX();
 	}
 
+	RaycastHit PhysicManager::Raycast(Cell& cell, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
+	{
+		return PhysicManager::Raycast(*cell.m_physicCell, origin, dir, maxRange);
+	}
+
+	RaycastHit PhysicManager::Raycast(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
+	{
+		physx::PxRaycastBuffer hit = PhysicManager::RaycastBuff(scene, origin, dir, maxRange);
+
+		unsigned int hitNb = (unsigned int)hit.getNbTouches();
+
+		if (hitNb == 0)
+			return RaycastHit();
+
+		return PhysicManager::RaycastFromPxRaycast(hit.getTouch(hitNb - 1));
+	}
+
+	PxRaycastBuffer PhysicManager::RaycastBuff(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
+	{
+		static PxRaycastHit hit[16];
+		static PxRaycastBuffer hitBuffer(hit, 16);
+
+		bool status = scene.Get()->raycast({ origin.x, origin.y, origin.z }, { dir.x, dir.y, dir.z }, maxRange, hitBuffer);
+
+		return hitBuffer;
+	}
+	
+	RaycastHit PhysicManager::RaycastFromPxRaycast(const physx::PxRaycastHit& pxHit)
+	{
+		RaycastHit hit;
+
+		if (pxHit.actor)
+		{
+			hit.actor = reinterpret_cast<PhysicActor*>(pxHit.actor->userData);
+			hit.distance = pxHit.distance;
+			hit.normal = { pxHit.normal.x, pxHit.normal.y, pxHit.normal.z };
+			hit.position = { pxHit.position.x, pxHit.position.y, pxHit.position.z };
+		}
+
+		return hit;
+	}
+
 	void PhysicManager::AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode)
 	{
+		actor->AddForce(force, mode);
+	}
+
+	void PhysicManager::AddForce(Entity* entity, const CCMaths::Vector3& force, EForceMode mode)
+	{
+		PhysicManager* px = PhysicManager::GetInstance();
+
+		PhysicActor* actor = px->FindActor(*entity);
+		if (!actor)
+			return;
+
 		actor->AddForce(force, mode);
 	}
 

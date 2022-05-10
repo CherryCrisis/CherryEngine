@@ -50,6 +50,8 @@ namespace PhysicSystem
 		void	RemovePxActor(PhysicActor* actor);
 		int		PossessActor(PhysicActor* actor);
 
+		PhysicActor* GetActor(int index);
+
 		// Implements PxSimulationEventCallback		
 		virtual void onContact(const physx::PxContactPairHeader& pairHeader, const physx::PxContactPair* pairs, physx::PxU32 nbPairs);
 		virtual void onTrigger(physx::PxTriggerPair* pairs, physx::PxU32 count);
