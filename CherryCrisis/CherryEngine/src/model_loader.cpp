@@ -143,16 +143,36 @@ namespace CCImporter
         void endImage() override {};
     };
 
-    void CacheTextureData(const std::string& filepath, const unsigned char* cacheData, TextureHeader& textureHeader)
+    void CacheTextureData(const std::filesystem::path& texturePath, const unsigned char* cacheData, TextureHeader& textureHeader)
     {
+        //-- Meta file --//
+        std::string fullFilepathMeta(texturePath.string() + ".cctexture"); //TODO: .cctexture in model_loader.hpp
+
+        YAML::Node yamlSave;
+
+        YAML::Node settingsSave = yamlSave["settings"];
+        settingsSave["format"] = static_cast<unsigned int>(textureHeader.internalFormat);
+        settingsSave["flipped"] = textureHeader.flipped;
+
+        std::ofstream out(fullFilepathMeta.c_str());
+        bool opened = out.is_open();
+        out << yamlSave;
+        out.close();
+
+
+        //-- Cache file --//
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += texturePath.filename().string();
+        fullFilepath += CCImporter::cacheExtension;
+
         FILE* file = nullptr;
 
         if (!std::filesystem::exists(CCImporter::cacheDirectory))
             std::filesystem::create_directory(CCImporter::cacheDirectory);
 
-        if (fopen_s(&file, filepath.c_str(), "wb")) //w+b = write in binary mode
+        if (fopen_s(&file, fullFilepath.c_str(), "wb")) //w+b = write in binary mode
         {
-            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", filepath).c_str());
+            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("{} {}", "Failed to cache texture", fullFilepath).c_str());
             return;
         }
 
@@ -216,10 +236,14 @@ namespace CCImporter
         }
     }
     
-    void CompressTexture(nvtt::Context& context, nvtt::Surface& image, std::string& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
+    void CompressTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
     {
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += texturePath.filename().string();
+        fullFilepath += CCImporter::cacheExtension;
+
         nvtt::OutputOptions outputOptions;
-        outputOptions.setFileName(texturePath.c_str());
+        outputOptions.setFileName(fullFilepath.c_str());
         nvtt::CompressionOptions compressionOptions;
         SetTextureFormat(compressionOptions, textureHeader);
 
@@ -303,8 +327,8 @@ namespace CCImporter
 
         unsigned char* textureData;
 
-        CompressTexture(context, image, fullFilepath, textureHeader, &textureData);
-        CacheTextureData(fullFilepath, textureData, textureHeader);
+        CompressTexture(context, image, filepath, textureHeader, &textureData);
+        CacheTextureData(filepath, textureData, textureHeader);
 
         delete textureData;
         stbi_image_free(stbiData);
@@ -343,8 +367,22 @@ namespace CCImporter
         materialArgs.m_texturesPath.push_back(filepath.string());
     }
 
-    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat)
+    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, bool importSettings)
     {
+        if (importSettings)
+        {
+            if (std::filesystem::exists(filepath.string() + ".cctexture"))
+            {
+                YAML::Node loader = YAML::LoadFile(filepath.string() + ".cctexture");
+
+                YAML::Node settingsLoaded = loader["settings"];
+
+                textureFormat = static_cast<ETextureFormat>(settingsLoaded["format"].as<unsigned int>());
+                flipTexture = settingsLoaded["flipped"].as<bool>();
+            }
+        }
+
+
         if (!textureData)
             return;
 
@@ -361,13 +399,9 @@ namespace CCImporter
         textureHeader.height = image.height();
         textureHeader.flipped = flipTexture;
 
-        std::string fullFilepath(CCImporter::cacheDirectory);
-        fullFilepath += filepath.filename().string();
-        fullFilepath += CCImporter::cacheExtension;
+        CompressTexture(context, image, filepath, textureHeader, textureData);
 
-        CompressTexture(context, image, fullFilepath, textureHeader, textureData);
-
-        CacheTextureData(fullFilepath, *textureData, textureHeader);
+        CacheTextureData(filepath, *textureData, textureHeader);
     }
     #pragma endregion
 
@@ -557,6 +591,9 @@ namespace CCImporter
         model.m_materialPath += name.C_Str();
         model.m_materialPath += CCImporter::materialExtension;
         model.modelHeader.m_materialPathSize = static_cast<unsigned int>(model.m_materialPath.size());
+
+        if (std::filesystem::exists(model.m_materialPath))
+            return;
 
         MaterialArgs materialArgs {};
 

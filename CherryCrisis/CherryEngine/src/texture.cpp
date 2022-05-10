@@ -76,7 +76,6 @@ bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** da
     fullTexturePath += CCImporter::cacheExtension;
 
     FILE* file = nullptr;
-
     
     Debug* debug = Debug::GetInstance();
     if (fopen_s(&file, fullTexturePath.c_str(), "rb")) //rb = read in binary mode
@@ -111,7 +110,7 @@ void Texture::Reload(bool flipTexture)
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
-    CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat);
+    CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat, false);
 
     if (!data)
     {
