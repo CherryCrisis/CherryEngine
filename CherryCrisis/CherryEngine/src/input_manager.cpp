@@ -388,7 +388,7 @@ bool InputManager::GetKeyUp(const char* inputName)
 #pragma endregion
 
 #pragma region ActionSingle
-InputManager::ActionSingle* InputManager::AddActionButtons(const std::string& name, int& success)
+InputManager::ActionSingle* InputManager::AddActionSingle(const std::string& name, int& success)
 {
 	if (!m_fetchContext.top())
 	{
@@ -398,13 +398,27 @@ InputManager::ActionSingle* InputManager::AddActionButtons(const std::string& na
 
 	if (!m_fetchContext.top()->m_buttons.contains(name))
 	{
-		m_fetchContext.top()->m_buttons[name] = ActionSingle();
+		m_fetchContext.top()->m_buttons[name];
 		success = 1;
 	}
 	else
 		success = 0;
 
 	return &m_fetchContext.top()->m_buttons[name];
+}
+
+int InputManager::RemoveActionSingle(const std::string& name)
+{
+	if (!m_fetchContext.top())
+		return -1;
+
+	if (m_fetchContext.top()->m_buttons.contains(name))
+	{
+		m_fetchContext.top()->m_buttons.erase(name);
+		return 1;
+	}
+	else
+		return -1;
 }
 
 int InputManager::RenameActionButtons(const std::string& oldName, const std::string& newName)
@@ -448,6 +462,24 @@ int InputManager::AddInputToAction(ActionSingle* preset, Keycode key)
 	return 1;
 }
 
+int InputManager::RemoveInputFromAction(const std::string& name, Keycode key)
+{
+	if (!m_fetchContext.top() || !m_fetchContext.top()->m_buttons.contains(name))
+		return -1;
+
+	m_fetchContext.top()->m_buttons[name].RemoveInput(key);
+	return 1;
+}
+
+int InputManager::RemoveInputFromAction(ActionSingle* preset, Keycode key)
+{
+	if (!m_fetchContext.top())
+		return -1;
+
+	preset->RemoveInput(key);
+	return 1;
+}
+
 int InputManager::ChangeInputInAction(ActionSingle* action, Keycode oldKey, Keycode newKey)
 {
 	return action->ChangeInput(oldKey, newKey);
@@ -476,6 +508,15 @@ void InputManager::ActionSingle::AddInput(Keycode newInput)
 	input->m_isUpdated.Bind(&ActionSingle::Update, this);
 }
 
+void InputManager::ActionSingle::RemoveInput(Keycode oldKey)
+{
+	Input* input = InputManager::GetInstance()->GetInputRef(oldKey);
+
+	input->m_isUpdated.Unbind(&ActionSingle::Update, this);
+
+	m_inputs.erase(oldKey);
+}
+
 int InputManager::ActionSingle::ChangeInput(Keycode oldKey, Keycode newKey)
 {
 	if (m_inputs.empty() || !m_inputs.contains(oldKey))
@@ -484,11 +525,7 @@ int InputManager::ActionSingle::ChangeInput(Keycode oldKey, Keycode newKey)
 	if (m_inputs.contains(newKey))
 		return 0;
 
-	Input* input = InputManager::GetInstance()->GetInputRef(oldKey);
-
-	input->m_isUpdated.Unbind(&ActionSingle::Update, this);
-	
-	m_inputs.erase(oldKey);
+	RemoveInput(oldKey);
 	AddInput(newKey);
 
 	return 1;
@@ -682,13 +719,28 @@ InputManager::ActionAxes* InputManager::AddActionAxes(const std::string& name, i
 
 	if (!m_fetchContext.top()->m_axes.contains(name))
 	{
-		m_fetchContext.top()->m_axes[name] = ActionAxes();
+		m_fetchContext.top()->m_axes[name];
 		success = 1;
 	}
 	else
 		success = 0;
 
 	return &m_fetchContext.top()->m_axes[name];
+}
+
+int InputManager::RemoveActionAxes(const std::string& name)
+{
+	if (!m_fetchContext.top())
+		return -1;
+
+	if (m_fetchContext.top()->m_axes.contains(name))
+	{
+		m_fetchContext.top()->m_axes[name].Destroy();
+		m_fetchContext.top()->m_axes.erase(name);
+		return 1;
+	}
+	else
+		return -1;
 }
 
 int InputManager::RenameActionAxes(const std::string& oldName, const std::string& newName)
@@ -727,6 +779,24 @@ int InputManager::AddAxisToAction(ActionAxes* preset, Axis axis)
 	return 1;
 }
 
+int InputManager::RemoveAxisFromAction(const std::string& name, Axis* axis)
+{
+	if (!m_fetchContext.top() || !m_fetchContext.top()->m_axes.contains(name))
+		return -1;
+
+	m_fetchContext.top()->m_axes[name].RemoveAxis(axis);
+	return 1;
+}
+
+int InputManager::RemoveAxisFromAction(ActionAxes* preset, Axis* axis)
+{
+	if (!m_fetchContext.top())
+		return -1;
+
+	preset->RemoveAxis(axis);
+	return 1;
+}
+
 InputManager::ActionAxes::~ActionAxes()
 {
 	for (auto& axis : m_axes)
@@ -742,6 +812,23 @@ void InputManager::ActionAxes::AddAxis(Axis* newAxis)
 	newAxis->m_isUpdated.Bind(&ActionAxes::Update, this);
 
 	m_axes.push_back(newAxis);
+}
+
+void InputManager::ActionAxes::RemoveAxis(Axis* newAxis)
+{
+	newAxis->Destroy();
+
+	newAxis->m_isUpdated.Unbind(&ActionAxes::Update, this);
+
+	for (auto& axis : m_axes)
+	{
+		if (newAxis == axis)
+		{
+			axis = m_axes.back();
+			m_axes.pop_back();
+			delete newAxis;
+		}
+	}
 }
 
 void InputManager::ActionAxes::Destroy()

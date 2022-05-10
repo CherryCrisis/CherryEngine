@@ -113,7 +113,8 @@ public:
 		void SetPriorKey(EPriorKey key);
 
 		void AddInput(Keycode newInput);	// Add a new key to the action
-		int ChangeInput(Keycode oldKey, Keycode newKey);
+		void RemoveInput(Keycode oldKey);	// Add a new key to the action
+		int	 ChangeInput(Keycode oldKey, Keycode newKey);
 		void Destroy();
 
 		bool GetPriorKey();
@@ -162,8 +163,10 @@ public:
 		*	Add new axis \b newInput in Action
 		*	\note Avoid using this method. Use InputManager::AddAxisToAction() instead
 		*/
-		void AddAxis(Axis* newInput);
+		void AddAxis(Axis* newAxis);
 		
+		void RemoveAxis(Axis* newAxis);
+
 		//! \hiderefs
 		void Destroy();
 
@@ -559,7 +562,9 @@ public:
 	*	Add a new Action of type button in the currently active \b fetchContext
 	*	\note Avoid using this method. Add the Action through the Project Settings instead
 	*/
-	ActionSingle* AddActionButtons(const std::string& name, int& success);
+	ActionSingle*	AddActionSingle(const std::string& name, int& success);
+	int				RemoveActionSingle(const std::string& name);
+
 	int RenameActionButtons(const std::string& oldName, const std::string& newName);
 
 	//! Set the prior key of the Action
@@ -581,6 +586,18 @@ public:
 	*/
 	int AddInputToAction(ActionSingle* preset, Keycode key);
 
+	//! Remove new input from action
+	/*!
+	*	Remove the \b key in the Action \b name
+	*/
+	int RemoveInputFromAction(const std::string& name, Keycode key);
+
+	//! Remove new input from action
+	/*!
+	*	Remove the \b key in the Action \b preset
+	*/
+	int RemoveInputFromAction(ActionSingle* preset, Keycode key);
+
 	//! \hiderefs
 	int ChangeInputInAction(ActionSingle* action, Keycode oldKey, Keycode newKey);
 	
@@ -599,6 +616,7 @@ public:
 	*	\note Avoid using this method. Add the Action through the Project Settings instead
 	*/
 	ActionAxes* AddActionAxes(const std::string& name, int& success);
+	int			RemoveActionAxes(const std::string& name);
 
 	//! \hiderefs
 	int RenameActionAxes(const std::string& oldName, const std::string& newName);
@@ -614,6 +632,18 @@ public:
 	*	Create a pointer on the the axis \b newInput and add it in the Action \b preset
 	*/
 	int AddAxisToAction(ActionAxes* preset, Axis axis);
+
+	//! Remove new axis to action
+	/*!
+	*	Create a pointer on the the axis \b newInput and add it in the Action \b name
+	*/
+	int RemoveAxisFromAction(const std::string& name, Axis* axis);
+
+	//! Remove new axis to action
+	/*!
+	*	Create a pointer on the the axis \b newInput and add it in the Action \b preset
+	*/
+	int RemoveAxisFromAction(ActionAxes* preset, Axis* axis);
 
 	// Get
 	CCMaths::Vector2 GetMouseWheel();

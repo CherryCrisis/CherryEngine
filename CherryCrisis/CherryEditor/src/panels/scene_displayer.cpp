@@ -38,24 +38,24 @@ SceneDisplayer::SceneDisplayer()
     IM->AddActionAxes("RightLeft", i);
     IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
 
-    IM->AddActionButtons("Save", i);
+    IM->AddActionSingle("Save", i);
     IM->AddInputToAction("Save", Keycode::S);
     IM->SetActionPriorKey("Save", EPriorKey::LEFT_CONTROL);
 
-    IM->AddActionButtons("Translate", i);
-    IM->AddActionButtons("Rotate", i);
-    IM->AddActionButtons("Scale", i);
+    IM->AddActionSingle("Translate", i);
+    IM->AddActionSingle("Rotate", i);
+    IM->AddActionSingle("Scale", i);
 
     IM->AddInputToAction("Translate", Keycode::W);
     IM->AddInputToAction("Rotate", Keycode::E);
     IM->AddInputToAction("Scale", Keycode::R);
 
-    IM->AddActionButtons("World", i);
-    IM->AddActionButtons("Local", i);
+    IM->AddActionSingle("World", i);
+    IM->AddActionSingle("Local", i);
     IM->AddInputToAction("World", Keycode::T);
     IM->AddInputToAction("Local", Keycode::Y);
 
-    IM->AddActionButtons("Pick", i);
+    IM->AddActionSingle("Pick", i);
     IM->AddInputToAction("Pick", Keycode::LEFT_CLICK);
 
     IM->PopContext();

@@ -24,7 +24,7 @@ CellSystemDisplayer::CellSystemDisplayer()
     IM->AddActionAxes("RightLeft", i);
     IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
 
-    IM->AddActionButtons("Pick", i);
+    IM->AddActionSingle("Pick", i);
     IM->AddInputToAction("Pick", Keycode::LEFT_CLICK);
 
     IM->PopContext();

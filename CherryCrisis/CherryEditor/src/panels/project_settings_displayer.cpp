@@ -147,7 +147,7 @@ void ProjectSettingsDisplayer::Input::CreateButtons(InputManager* IM, const char
 {
     int success = 0;
     IM->PushContext(userContext);
-    IM->AddActionButtons(std::string(name), success);
+    IM->AddActionSingle(std::string(name), success);
     IM->PopContext();
 
     if (success == 1)
@@ -201,8 +201,28 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
     ImGui::Text("Buttons"); ImGui::Separator();
     for (auto& button : userContext->m_buttons)
     {
-        std::string treeLabel = button.first + "##button" + std::to_string(i);
-        if (ImGui::TreeNode(treeLabel.c_str()))
+        std::string treeLabel = "##button" + std::to_string(i);
+
+        if (ImGui::Button((std::string("-") + treeLabel).c_str()))
+        {
+            IM->PushContext(userContext);
+            int success = IM->RemoveActionSingle(button.first);
+            IM->PopContext();
+
+            if (success == 1)
+            {
+                std::string notif = "New input added to Action.";
+                EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
+                break;
+            }
+            else if (success == -1)
+            {
+                std::string notif = "Couldn't add input to Action.";
+                EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
+            }
+        } ImGui::SameLine();
+
+        if (ImGui::TreeNode((button.first + treeLabel).c_str()))
         {
             // Loop in keys in current action
             for (auto& input : button.second.Inputs())
@@ -247,7 +267,7 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
 
                 // Start listening for key
                 std::string listeningLabel = "Listening" + label;
-                if (ImGui::Button((std::string("-") + label).c_str()))
+                if (ImGui::Button((std::string("...") + label).c_str()))
                 {
                     IM->SetListening();
 
@@ -271,6 +291,26 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                         ImGui::CloseCurrentPopup();
                     }
                     ImGui::EndPopup();
+                } ImGui::SameLine();
+
+                // Remove key from Action
+                if (ImGui::Button((std::string("-") + label).c_str()))
+                {
+                    IM->PushContext(userContext);
+                    int success = IM->RemoveInputFromAction(&button.second, input.first);
+                    IM->PopContext();
+
+                    if (success == 1)
+                    {
+                        std::string notif = "New input added to Action.";
+                        EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
+                        breakLoop = true;
+                    }
+                    else if (success == -1)
+                    {
+                        std::string notif = "Couldn't add input to Action.";
+                        EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
+                    }
                 }
 
                 ImGui::Separator();
@@ -315,8 +355,28 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
     ImGui::Text("Axes"); ImGui::Separator();
     for (auto& axis : userContext->m_axes)
     {
-        std::string treeLabel = axis.first + "##axis" + std::to_string(i);
-        if (ImGui::TreeNode(treeLabel.c_str()))
+        std::string treeLabel = "##axis" + std::to_string(i);
+
+        if (ImGui::Button((std::string("-") + treeLabel).c_str()))
+        {
+            IM->PushContext(userContext);
+            int success = IM->RemoveActionAxes(axis.first);
+            IM->PopContext();
+
+            if (success == 1)
+            {
+                std::string notif = "New input added to Action.";
+                EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
+                break;
+            }
+            else if (success == -1)
+            {
+                std::string notif = "Couldn't add input to Action.";
+                EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
+            }
+        } ImGui::SameLine();
+
+        if (ImGui::TreeNode((axis.first + treeLabel).c_str()))
         {
             // Loop over axis in current action
             for (auto& axes : axis.second.Axes())
@@ -380,7 +440,7 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
 
                     // Start listening for key
                     std::string listeningLabel = "Listening" + label;
-                    if (ImGui::Button((std::string("-") + label).c_str()))
+                    if (ImGui::Button((std::string("...") + label).c_str()))
                     {
                         IM->SetListening();
 
@@ -405,6 +465,25 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                     }
 
                     ImGui::Separator();
+                }
+
+                // Add new key to Action
+                if (ImGui::Button((std::string("-") + label).c_str()))
+                {
+                    IM->PushContext(userContext);
+                    int success = IM->RemoveAxisFromAction(&axis.second, axes);
+                    IM->PopContext();
+
+                    if (success == 1)
+                    {
+                        std::string notif = "New input added to Action.";
+                        EditorManager::SendNotification(notif.c_str(), ENotifType::Success, 1.0f);
+                    }
+                    else if (success == -1)
+                    {
+                        std::string notif = "Couldn't add input to Action.";
+                        EditorManager::SendNotification(notif.c_str(), ENotifType::Error, 1.0f);
+                    }
                 }
 
                 j++;
