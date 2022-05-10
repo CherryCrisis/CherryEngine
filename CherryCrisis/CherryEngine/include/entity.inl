@@ -2,12 +2,9 @@
 
 #include "utils.hpp"
 
-template <class CompT>
+template <BehaviourT CompT>
 CompT* Entity::AddBehaviour()
 {
-	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
-	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
-
 	CompT* rawPtr = new CompT();
 	rawPtr->m_owner = this;
 
@@ -17,12 +14,9 @@ CompT* Entity::AddBehaviour()
 	return rawPtr;
 }
 
-template <class CompT>
+template <BehaviourT CompT>
 CompT* Entity::GetBehaviour()
 {
-	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
-	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
-
 	auto compIt = m_behaviours.find(String::ExtractTypeName<CompT>());
 
 	if (compIt != m_behaviours.end())
@@ -41,12 +35,9 @@ CompT* Entity::GetBehaviour()
 	return nullptr;
 }
 
-template <class CompT>
+template <BehaviourT CompT>
 std::vector<CompT*> Entity::GetBehavioursOfType()
 {
-	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
-	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
-
 	std::vector<CompT*> behaviours;
 
 	auto itPair = m_behaviours.equal_range(String::ExtractTypeName<CompT>());
@@ -57,32 +48,23 @@ std::vector<CompT*> Entity::GetBehavioursOfType()
 	return behaviours;
 }
 
-template <class CompT>
+template <BehaviourT CompT>
 bool Entity::HasBehaviour()
 {
-	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
-	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
-
 	return GetBehaviour<CompT>() != nullptr;
 }
 
-template <class CompT>
+template <BehaviourT CompT>
 bool Entity::TryGetBehaviour(CompT*& componentToReturn)
 {
-	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
-	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
-	
 	componentToReturn = GetBehaviour<CompT>();
 
 	return componentToReturn != nullptr;
 }
 
-template <class CompT>
+template <BehaviourT CompT>
 CompT* Entity::GetOrAddBehaviour()
 {
-	static_assert(!std::is_same_v<Behaviour, CompT>, "CompT cannot be a pure Behaviour");
-	static_assert(std::is_base_of_v<Behaviour, CompT>, "CompT is not inherited of Behaviour");
-
 	CompT* componentToReturn = nullptr;
 	if (TryGetBehaviour(componentToReturn))
 		return componentToReturn;
@@ -90,7 +72,7 @@ CompT* Entity::GetOrAddBehaviour()
 	return AddBehaviour<CompT>();
 }
 
-template <class CompT>
+template <BehaviourT CompT>
 void Entity::SubscribeComponent(CompT* behaviour)
 {
 	SubscribeComponent(behaviour, String::ExtractTypeName<CompT>());

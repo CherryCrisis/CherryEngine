@@ -10,8 +10,13 @@
 #include "uuid.hpp"
 #include "event.hpp"
 #include "object.hpp"
+#include "behaviour.hpp"
 
 class Behaviour;
+
+template<class CompT>
+concept BehaviourT = std::is_base_of_v<Behaviour, CompT>;
+
 class Cell;
 
 class CCENGINE_API Entity : public Object
@@ -27,10 +32,10 @@ public:
 	Entity(const std::string& name, CCUUID m_uuid = {});
 	virtual ~Entity();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* AddBehaviour();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* GetBehaviour();
 
 	bool RemoveBehaviour(Behaviour* behaviour);
@@ -39,20 +44,20 @@ public:
 
 	std::vector<Behaviour*> GetBehavioursOfType(const std::string& componentTypeName);
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	std::vector<CompT*> GetBehavioursOfType();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	void SubscribeComponent(CompT* behaviour);
 	void SubscribeComponent(Behaviour* behaviour, const std::string& componentTypeName);
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	bool HasBehaviour();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	bool TryGetBehaviour(CompT*& componentToReturn);
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* GetOrAddBehaviour();
 
 	Event<> m_OnAwake;

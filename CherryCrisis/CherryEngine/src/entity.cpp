@@ -2,11 +2,13 @@
 
 #include "entity.hpp"
 
-#include "behaviour.hpp"
-#include "transform.hpp"
+#include <typeinfo>
+
 #include "cell_system.hpp"
 
-#include <typeinfo>
+#include "behaviour.hpp"
+#include "transform.hpp"
+
 Entity::Entity()
 {
 	CellSystem::GetInstance()->AddEntityToDefault(this);
@@ -17,7 +19,6 @@ Entity::Entity(const std::string& name, CCUUID id)
 {
 	CellSystem::GetInstance()->AddEntityToDefault(this);
 }
-
 
 Entity::~Entity()
 {

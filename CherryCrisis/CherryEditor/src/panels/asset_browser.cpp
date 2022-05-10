@@ -1,5 +1,7 @@
 #include "panels/asset_browser.hpp"
 
+#include <fstream>
+
 #include <imgui.h>
 #include <imgui_internal.h>
 

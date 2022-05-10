@@ -21,6 +21,7 @@ namespace CCMaths
 class Rigidbody;
 class Collider;
 class Cell;
+class Entity;
 
 namespace PhysicSystem
 {

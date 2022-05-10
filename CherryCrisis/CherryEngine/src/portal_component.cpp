@@ -3,6 +3,7 @@
 #include "portal_component.hpp"
 
 #include "cell.hpp"
+#include "entity.hpp"
 
 #include "transform.hpp"
 

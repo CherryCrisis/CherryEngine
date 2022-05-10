@@ -1,19 +1,21 @@
-
 #include "panels/hierarchy_displayer.hpp"
 
+#include <algorithm>
 #include <imgui.h>
 #include <imgui_internal.h>
+
+#include "resource_manager.hpp"
+#include "scene_manager.hpp"
+
+#include "core/editor_manager.hpp"
 
 #include "scene.hpp"
 #include "transform.hpp"
 #include "portal_component.hpp"
-#include "core/editor_manager.hpp"
 
-#include<algorithm>
-#include <resource_manager.hpp>
 #include "callback.hpp"
-#include "scene_manager.hpp"
 #include "model.hpp"
+#include "entity.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 

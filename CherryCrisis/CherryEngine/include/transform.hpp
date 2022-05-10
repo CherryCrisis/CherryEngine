@@ -9,12 +9,14 @@
 
 using namespace CCMaths;
 
+class Cell;
+
 class CCENGINE_API Transform : public Behaviour
 {
 private:
-	Vector3 m_position = Vector3(0.f, 0.f, 0.f);
-	Vector3 m_rotation = Vector3(0.f, 0.f, 0.f);
-	Vector3 m_scale	   = Vector3(1.f, 1.f, 1.f);
+	Vector3 m_position = CCMaths::Vector3::Zero;
+	Vector3 m_rotation = CCMaths::Vector3::Zero;
+	Vector3 m_scale	   = CCMaths::Vector3::One;
 
 	Transform* m_parent = nullptr;
 	std::vector<Transform*> m_children;

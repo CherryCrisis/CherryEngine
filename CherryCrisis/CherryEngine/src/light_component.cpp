@@ -12,6 +12,7 @@
 #include "transform.hpp"
 
 #include "cell.hpp"
+#include "entity.hpp"
 
 LightComponent::LightComponent()
 {

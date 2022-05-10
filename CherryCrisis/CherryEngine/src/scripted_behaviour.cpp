@@ -12,6 +12,8 @@
 
 #include "csreflection_ex.hpp"
 
+#include "entity.hpp"
+
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path

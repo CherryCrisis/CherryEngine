@@ -5,7 +5,9 @@
 #include <PxPhysicsAPI.h>
 
 #include "physic_manager.hpp"
+
 #include "transform.hpp"
+#include "entity.hpp"
 
 SphereCollider::SphereCollider()
 {

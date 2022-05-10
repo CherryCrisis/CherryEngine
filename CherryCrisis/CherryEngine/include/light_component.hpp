@@ -6,6 +6,7 @@
 #include "cherry_macros.hpp"
 
 class Transform;
+class Cell;
 
 class CCENGINE_API LightComponent : public Behaviour, public ARenderer
 {

@@ -6,6 +6,7 @@
 #include "resource_manager.hpp"
 #include "utils.hpp"
 
+#include "entity.hpp"
 #include "transform.hpp"
 #include "light_component.hpp"
 #include "model_renderer.hpp"
