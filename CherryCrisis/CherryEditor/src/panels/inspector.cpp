@@ -163,21 +163,6 @@ void Inspector::InspectComponents(Entity* entity, int id)
                 {
                     std::string val = *std::any_cast<std::string*>(fieldRef.m_value);
                     ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
-
-                    // if sound then accept drag and drop
-                    if (emitter && ImGui::BeginDragDropTarget())
-                    {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-                        {
-                            const char* data = (const char*)payload->Data;
-                            std::string extension = String::ExtractValue(data, '.');
-
-                            if (extension == "wav") 
-                                emitter->AddSound(data);
-                        }
-                        ImGui::EndDragDropTarget();
-                    }
-
                     continue;
                 }
 
@@ -261,6 +246,20 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     if (ImGui::InputText(propName.c_str(), &val[0], val.size() + 2))
                         propRef->Set(&val);
 
+                    // if sound then accept drag and drop
+                    if (emitter && ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                        {
+                            const char* data = (const char*)payload->Data;
+                            std::string strData = data;
+                            std::string extension = String::ExtractValue(data, '.');
+
+                            if (extension == "wav")
+                                propRef->Set(&strData);
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
                     continue;
                 }
 
@@ -280,7 +279,6 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     propRef->Get(&val);
 
                     ImGui::Text("%s %s", propName.c_str(), val ? val : "X");
-
                     continue;
                 }
 

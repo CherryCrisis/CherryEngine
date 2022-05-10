@@ -41,7 +41,16 @@ bool Entity::RemoveBehaviour(Behaviour* behaviour)
 
 	if (compIt == m_behaviours.end())
 	{
-		compIt = m_behaviours.find(typeid(Behaviour));
+		auto itPair = m_behaviours.equal_range(typeid(Behaviour));
+
+		for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
+		{
+			if (findIt->second == behaviour)
+			{
+				compIt = findIt;
+				break;
+			}
+		}
 
 		if (compIt == m_behaviours.end())
 			return false;

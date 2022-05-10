@@ -35,6 +35,19 @@ void AudioEmitter::SetPitch(const float& value)
 	m_sound->SetPitch(m_pitch);
 }
 
+void AudioEmitter::SetRollOff(const float& value)
+{
+	if (!m_sound) return;
+	m_rollOff = value;
+	m_sound->SetRollOff(m_rollOff);
+}
+
+void AudioEmitter::SetReferenceDistance(const float& value)
+{
+	if (!m_sound) return;
+	m_referenceDistance = value;
+	m_sound->SetReferenceDistance(m_referenceDistance);
+}
 void AudioEmitter::SetSpatialized(const bool& value)
 {
 	if (!m_sound) return;
@@ -47,16 +60,16 @@ void AudioEmitter::SetSpatialized(const bool& value)
 }
 
 //Load the sound if not existing, and adds it as the selected sound
-void AudioEmitter::AddSound(const char* filepath)
+void AudioEmitter::AddSound(const std::string& filepath)
 {
-	m_sound = ResourceManager::GetInstance()->AddResource<Sound>(filepath, true);
-	m_soundPath = m_sound->m_filepath.string().c_str();
+	m_sound = ResourceManager::GetInstance()->AddResource<Sound>(filepath.c_str(), true);
+	m_soundPath = m_sound->m_filepath.string();
 }
 
 void AudioEmitter::AddSound(std::shared_ptr<Sound> sound)
 {
 	m_sound = sound;
-	m_soundPath = m_sound->m_filepath.string().c_str();
+	m_soundPath = m_sound->m_filepath.string();
 }
 
 AudioEmitter::AudioEmitter()
@@ -120,6 +133,8 @@ void AudioEmitter::PopulateMetadatas()
 	m_metadatas.SetProperty("Looping", &Looping);
 	m_metadatas.SetProperty("Spatialized", &Spatialized);
 	m_metadatas.SetProperty("Pitch", &Pitch);
+	m_metadatas.SetProperty("RollOff", &RollOff);
+	m_metadatas.SetProperty("ReferenceDistance", &ReferenceDistance);
 }
 
 void AudioEmitter::Start() 
