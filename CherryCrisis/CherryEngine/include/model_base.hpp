@@ -25,6 +25,7 @@ namespace CCImporter
 
 struct ModelNode
 {
+	std::string					m_nodeName;
 	ModelNode*					m_parentNode;
 	std::vector<ModelNode*>		m_childrenNode;
 	std::shared_ptr<Mesh>		m_mesh;

@@ -15,7 +15,7 @@
 #include "scripted_behaviour.hpp"
 
 #include "model_base.hpp"
-#include "model.hpp"
+#include "mesh.hpp"
 
 #include "serializer.hpp"
 
@@ -105,6 +105,11 @@ bool Scene::SaveAs(const char* filepath)
 void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities)
 {
 	Entity* entity = new Entity();
+
+
+	if (!node->m_nodeName.empty())
+		entity->SetName(node->m_nodeName);
+
 	Transform* transform = entity->GetOrAddBehaviour<Transform>();
 
 	ModelRenderer* modelRdr;
@@ -116,6 +121,7 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 		modelRdr->SetMesh(node->m_mesh);
 		modelRdr->SetMaterial(node->m_material);
 		modelRdr->BindToSignals();
+
 	}
 
 	transform->SetPosition(node->m_baseTRS[0]);

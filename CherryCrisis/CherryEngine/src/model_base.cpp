@@ -32,6 +32,8 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         ModelNode* modelNode = new ModelNode();
         std::swap(modelNode->m_baseTRS, modelUtils.modelHeader.m_trs);
 
+        modelNode->m_nodeName = modelUtils.m_modelName;
+
         if (modelUtils.modelHeader.m_meshHeader.m_hasMesh)
         {
             std::shared_ptr<Mesh> mesh = resourceManager->AddResource<Mesh>(modelUtils.m_meshName.c_str(), 

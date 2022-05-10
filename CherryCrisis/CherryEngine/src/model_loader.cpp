@@ -692,9 +692,7 @@ namespace CCImporter
     {
             ImportModelUtils model{};
 
-            model.m_modelName = filepath.string();
-            model.m_modelName += std::string("/");
-            model.m_modelName += std::to_string(index);
+            model.m_modelName = node->mName.C_Str();
 
             model.modelHeader.m_modelNameSize = model.m_modelName.size();
             model.modelHeader.m_index = index;
