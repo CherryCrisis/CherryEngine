@@ -3,7 +3,6 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include "render_manager.hpp" //TODO: Erase when renderer manager instance is initialized in ENGINE
 #include "core/editor_manager.hpp"
 #include "resource_manager.hpp"
 #include "input_manager.hpp"
@@ -731,104 +730,81 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
         DirectoryNode* directoryNodePtr = static_cast<DirectoryNode*>(assetNode);
 
-        /*-- Directory --*/
+        std::vector<AssetNode*> directoryNodes;
+        std::vector<AssetNode*> sceneNodes;
+        std::vector<AssetNode*> modelNodes;
+        std::vector<AssetNode*> textureNodes;
+        std::vector<AssetNode*> shaderNodes;
+        std::vector<AssetNode*> scriptNodes;
+        std::vector<AssetNode*> materialNodes;
+        std::vector<AssetNode*> soundNodes;
+        std::vector<AssetNode*> otherNodes;
+
         for (const auto& entry : entries)
         {
             if (std::filesystem::is_directory(entry.path()))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                directoryNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
-        }
 
-        /*-- Scene --*/
-        for (const auto& entry : entries)
-        {
             std::string extension = entry.path().extension().string();
 
             if (!sceneExtensions.compare(extension))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                sceneNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
-        }
-
-        /*-- Model --*/
-        for (const auto& entry : entries)
-        {
-            std::string extension = entry.path().extension().string();
 
             if (modelExtensions.end() != modelExtensions.find(extension))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                modelNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
-        }
-
-        /*-- Texture --*/
-        for (const auto& entry : entries)
-        {
-            std::string extension = entry.path().extension().string();
 
             if (textureExtensions.end() != textureExtensions.find(extension))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                textureNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
-        }
-
-        /*-- Shader --*/
-        for (const auto& entry : entries)
-        {
-            std::string extension = entry.path().extension().string();
 
             if (shaderExtensions.end() != shaderExtensions.find(extension))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                shaderNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
-        }
-
-        /*-- Script --*/
-        for (const auto& entry : entries)
-        {
-            std::string extension = entry.path().extension().string();
 
             if (!scriptExtensions.compare(extension))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                scriptNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
-        }
-
-        /*-- Material --*/
-        for (const auto& entry : entries)
-        {
-            std::string extension = entry.path().extension().string();
 
             if (!matExtensions.compare(extension))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                materialNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
-        }
 
-        /*-- Sound --*/
-        for (const auto& entry : entries)
-        {
-            std::string extension = entry.path().extension().string();
-
-            if (shaderExtensions.end() != shaderExtensions.find(extension))
+            if (soundExtensions.end() != soundExtensions.find(extension))
             {
-                directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
-                entries.erase(entry);
+                soundNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
             }
+
+            otherNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
         }
 
-        /*-- Other --*/
-        for (const auto& entry : entries)
-            directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), directoryNodes.begin(), directoryNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), sceneNodes.begin(), sceneNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), modelNodes.begin(), modelNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), shaderNodes.begin(), shaderNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), scriptNodes.begin(), scriptNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), materialNodes.begin(), materialNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), soundNodes.begin(), soundNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), otherNodes.begin(), otherNodes.end());
 
+       
         #pragma endregion
 
         return assetNode;
@@ -976,8 +952,6 @@ void AssetBrowser::QuerryBrowser()
 	m_assetsDirectoryNode = nullptr;
 	m_assetNodes.clear();
     m_allAssetNode.clear();
-
-    RenderManager::GetInstance(); //TODO: Erase when renderer manager instance is initialized in ENGINE
 
     if (std::filesystem::exists(m_assetsDirectory))
     {

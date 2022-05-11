@@ -20,8 +20,19 @@ void* Engine::window_handle = nullptr;
 
 Engine::Engine() 
 {
+	ThreadPool::CreateInstance();
+	InputManager::CreateInstance();
+	PhysicSystem::PhysicManager::CreateInstance();
+	SoundManager::CreateInstance();
+	TimeManager::CreateInstance();
+	ResourceManager::CreateInstance();
+	SceneManager::CreateInstance();
+	CellSystem::CreateInstance();
+	CsScriptingSystem::CreateInstance();
+	RenderManager::CreateInstance();
+	Debug::CreateInstance();
+
 	CsScriptingSystem::GetInstance()->Init();
-	RenderManager::GetInstance();
 	SoundManager::Init();
 }
 
@@ -36,12 +47,13 @@ Engine::~Engine()
 	CellSystem::Kill();
 	CsScriptingSystem::Kill();
 	RenderManager::Kill();
-	Debug::Kill(); 
+	Debug::Kill();
+	ThreadPool::Kill();
 }
 
 void Engine::TickEngine()
 {
-	ThreadPool::GetInstance()->Update(EChannelTask::MAINTHREAD); //TODO: stock threadpool in engine class
+	ThreadPool::GetInstance()->Update(EChannelTask::MAINTHREAD);
 }
 
 void Engine::Tick() 

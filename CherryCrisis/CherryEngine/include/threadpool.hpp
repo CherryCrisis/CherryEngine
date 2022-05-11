@@ -12,6 +12,7 @@
 #include "function.hpp"
 #include "callback.hpp"
 #include "event.hpp"
+#include "singleton.hpp"
 
 enum class EChannelTask
 {
@@ -30,9 +31,11 @@ public:
 	virtual ~Task() = default;
 };
 
-class CCENGINE_API ThreadPool
+class CCENGINE_API ThreadPool : public Singleton<ThreadPool>
 {
 private:
+	friend class Singleton<ThreadPool>;
+
 	std::queue<std::unique_ptr<Task>>	m_multiThreadsTasks;
 	std::vector<std::thread>			m_threads;
 	std::condition_variable				m_condition;
@@ -42,16 +45,12 @@ private:
 	std::mutex							m_mainThreadQueueLock;
 	std::queue<std::unique_ptr<Task>>	m_mainThreadTasks;
 
-	static ThreadPool* m_instance;
-
 	std::thread::id m_mainThreadID;
 
 public:
 
 	ThreadPool();
 	virtual ~ThreadPool();
-
-	static ThreadPool* GetInstance();
 
 	void RethrowExceptions(std::exception_ptr exeption);
 	void CreateTask(std::unique_ptr<CCFunction::AFunction>& function, EChannelTask channelTask);

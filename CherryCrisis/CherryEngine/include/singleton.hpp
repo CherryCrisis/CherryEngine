@@ -17,7 +17,9 @@ protected:
 	static T* currentInstance;
 
 public:
-	static T* GetInstance()
+	static T* GetInstance() { return currentInstance; }
+
+	static T* CreateInstance()
 	{
 		if (!instantiateFlag.test_and_set())
 		{
