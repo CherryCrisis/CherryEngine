@@ -108,8 +108,8 @@ int main()
     Framebuffer framebuffer;
 
     engine.LaunchStandalone();
-    
-    InputManager::GetInstance()->AddContext("User Context");
+
+    Serializer::UnserializeInputs();
     InputManager::GetInstance()->SetPollContext("User Context");
     InputManager::GetInstance()->PushContext("User Context");
     

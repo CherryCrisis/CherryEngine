@@ -403,20 +403,20 @@ void AssetBrowser::BrowserActionCreate()
                 std::filesystem::path newPath = m_currentDirectoryNode->m_path;
                 newPath /= newName;
 
-                bool exist = std::filesystem::exists(newPath.string() + ".cherry");
+                bool exist = std::filesystem::exists(newPath.string() + ".ccscene");
                 int id = 0;
 
                 while (exist)
                 {
                     std::string path(std::format("{}{}", newPath.string(), id));
 
-                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                    if (!(exist = std::filesystem::exists(path + ".ccscene")))
                         newPath = path;
 
                     ++id;
                 }
 
-                newPath += ".cherry";
+                newPath += ".ccscene";
 
                 std::ofstream myfile;
 
@@ -439,7 +439,7 @@ void AssetBrowser::BrowserActionCreate()
                 {
                     std::string path(std::format("{}{}", newPath.string(), id));
 
-                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                    if (!(exist = std::filesystem::exists(path + ".ccscene")))
                         newPath = path;
 
                     ++id;

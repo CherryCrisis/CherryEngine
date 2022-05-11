@@ -5,6 +5,7 @@
 
 #include "core/editor_manager.hpp"
 #include "resource_manager.hpp"
+#include "serializer.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -79,12 +80,15 @@ void ProjectSettingsDisplayer::General::Fill()
 
 ProjectSettingsDisplayer::Input::Input(std::string name) : PanelCategory(name)
 {
-    userContext = InputManager::GetInstance()->AddContext("User Context");
+    userContext = InputManager::GetInstance()->GetOrAddContext("User Context");
 }
 
 void ProjectSettingsDisplayer::Input::Fill()
 {
     InputManager* IM = InputManager::GetInstance();
+
+    if (ImGui::Button("Save"))
+        Serializer::SerializeInputs();
 
     static int type = -1;
     if (ImGui::Button("Add Button Mapped Action"))
@@ -199,7 +203,7 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
 
     // Loop on Buttons actions in Input Manager
     ImGui::Text("Buttons"); ImGui::Separator();
-    for (auto& button : userContext->m_buttons)
+    for (auto& button : userContext->m_single)
     {
         std::string treeLabel = "##button" + std::to_string(i);
 
@@ -397,7 +401,8 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
 
                         currentKey = &m_axisPosIndex[j];
 
-                        ImGui::Text("Positive key:"); ImGui::SameLine();
+                        ImGui::Text("Positive:");
+                        ImGui::SameLine();
                         label = "##pos" + std::to_string(j);
                     }
                     else if (k == 1)
@@ -409,7 +414,8 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
 
                         currentKey = &m_axisNegIndex[j];
 
-                        ImGui::Text("Negative key:"); ImGui::SameLine();
+                        ImGui::Text("Negative:");
+                        ImGui::SameLine();
                         label = "##neg" + std::to_string(j);
                     }
 
@@ -417,6 +423,7 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                     {
                         combo_preview_value = IM->GetKeyname(*currentKey);
 
+                        ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.5f - 150.f);
                         // Key selection combo
                         if (ImGui::BeginCombo(label.c_str(), combo_preview_value))
                         {
@@ -462,9 +469,7 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                             ImGui::CloseCurrentPopup();
                         }
                         ImGui::EndPopup();
-                    }
-
-                    ImGui::Separator();
+                    } ImGui::SameLine();
                 }
 
                 // Add new key to Action

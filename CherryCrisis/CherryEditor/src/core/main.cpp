@@ -116,6 +116,8 @@ int main(int argc, char** argv)
     InputManager::GetInstance()->ShowCursor = ShowCursor;
     Engine::window_handle = window;
 
+    Serializer::UnserializeInputs();
+
     editor.LinkEngine(&engine);
     engine.window_handle = window;
 

@@ -117,6 +117,8 @@ public:
 		int	 ChangeInput(Keycode oldKey, Keycode newKey);
 		void Destroy();
 
+		std::string GetAsString(Keycode key);
+
 		bool GetPriorKey();
 
 		//! Return true if any \b key of the Action is pressed
@@ -173,6 +175,8 @@ public:
 		//! \hiderefs
 		float ComputeValue();
 
+		std::string GetAsString(Axis* axis);
+
 		const std::vector<Axis*>& Axes() { return m_axes; }
 	};
 
@@ -183,7 +187,7 @@ public:
 		std::vector<Keycode> m_framePressedKeys;
 
 		std::unordered_map<std::string, ActionAxes> m_axes;
-		std::unordered_map<std::string, ActionSingle> m_buttons;
+		std::unordered_map<std::string, ActionSingle> m_single;
 
 		CCMaths::Vector2 m_mouseWheel{};
 		CCMaths::Vector2 m_mouseDelta{};
@@ -486,7 +490,8 @@ public:
 	void ErrorAxes(const char* Name);
 
 	// Context
-	InputContext* AddContext(const std::string& name);
+	InputContext* GetOrAddContext(const std::string& name);
+	InputContext* GetContext(const std::string& name);
 
 	void SetPollContext(const std::string& name);
 	void SetPollContext(InputContext* context);
@@ -620,6 +625,9 @@ public:
 
 	//! \hiderefs
 	int RenameActionAxes(const std::string& oldName, const std::string& newName);
+
+	//! \hiderefs
+	Axis GetFromString(const std::string& in);
 
 	//! Add new axis to action
 	/*!

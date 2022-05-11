@@ -10,7 +10,7 @@ InputManager* Singleton<InputManager>::currentInstance = nullptr;
 
 InputManager::InputManager()
 {
-	m_defaultContext = AddContext("Editor Context");
+	m_defaultContext = GetOrAddContext("Editor Context");
 	SetPollContext(m_defaultContext);
 	PushContext(m_defaultContext);
 }
@@ -21,13 +21,13 @@ InputManager::~InputManager()
 	{
 		PushContext(&context.second);
 
-		for (auto& action : context.second.m_buttons)
+		for (auto& action : context.second.m_single)
 			action.second.Destroy();
 
 		for (auto& action : context.second.m_axes)
 			action.second.Destroy();
 
-		context.second.m_buttons.clear();
+		context.second.m_single.clear();
 		context.second.m_axes.clear();
 
 		PopContext();
@@ -100,9 +100,13 @@ Keycode	InputManager::GetKeycode(int index)
 
 Keycode	InputManager::GetKeycode(const char* name)
 {
+	std::string currentName;
+	std::string strName = name;
+
 	for (int i = 0; i < 122; ++i)
 	{
-		if (keynames[i] == name)
+		currentName = keynames[i];
+		if (currentName == strName)
 			return keycodes[i];
 	}
 
@@ -146,10 +150,15 @@ void InputManager::ErrorAxes(const char* name)
 #pragma endregion
 
 #pragma region Context
-InputManager::InputContext* InputManager::AddContext(const std::string& name)
+InputManager::InputContext* InputManager::GetOrAddContext(const std::string& name)
+{
+	return &m_contexts[name];
+}
+
+InputManager::InputContext* InputManager::GetContext(const std::string& name)
 {
 	if (!m_contexts.contains(name))
-		m_contexts[name] = InputContext();
+		return nullptr;
 
 	return &m_contexts[name];
 }
@@ -338,14 +347,14 @@ bool InputManager::GetKeyDown(const char* inputName)
 	if (!m_fetchContext.top())
 		return false;
 
-	if (m_fetchContext.top()->m_buttons.empty() || !m_fetchContext.top()->m_buttons.contains(inputName))
+	if (m_fetchContext.top()->m_single.empty() || !m_fetchContext.top()->m_single.contains(inputName))
 	{
 		ErrorButtons(inputName);
 		return 0.f;
 	}
 	else
 	{
-		ActionSingle& current = m_fetchContext.top()->m_buttons[inputName];
+		ActionSingle& current = m_fetchContext.top()->m_single[inputName];
 		return current.CheckDown();
 	}
 }
@@ -355,7 +364,7 @@ bool InputManager::GetKey(const char* inputName)
 	if (!m_fetchContext.top())
 		return false;
 
-	if (m_fetchContext.top()->m_buttons.empty() || !m_fetchContext.top()->m_buttons.contains(inputName))
+	if (m_fetchContext.top()->m_single.empty() || !m_fetchContext.top()->m_single.contains(inputName))
 	{
 		ErrorButtons(inputName);
 
@@ -363,7 +372,7 @@ bool InputManager::GetKey(const char* inputName)
 	}
 	else
 	{
-		ActionSingle& current = m_fetchContext.top()->m_buttons[inputName];
+		ActionSingle& current = m_fetchContext.top()->m_single[inputName];
 		return current.CheckHeld();
 	}
 }
@@ -373,7 +382,7 @@ bool InputManager::GetKeyUp(const char* inputName)
 	if (!m_fetchContext.top())
 		return false;
 
-	if (m_fetchContext.top()->m_buttons.empty() || !m_fetchContext.top()->m_buttons.contains(inputName))
+	if (m_fetchContext.top()->m_single.empty() || !m_fetchContext.top()->m_single.contains(inputName))
 	{
 		ErrorButtons(inputName);
 
@@ -381,7 +390,7 @@ bool InputManager::GetKeyUp(const char* inputName)
 	}
 	else
 	{
-		ActionSingle& current = m_fetchContext.top()->m_buttons[inputName];
+		ActionSingle& current = m_fetchContext.top()->m_single[inputName];
 		return current.CheckUp();
 	}
 }
@@ -396,15 +405,14 @@ InputManager::ActionSingle* InputManager::AddActionSingle(const std::string& nam
 		return nullptr;
 	}
 
-	if (!m_fetchContext.top()->m_buttons.contains(name))
+	if (!m_fetchContext.top()->m_single.contains(name))
 	{
-		m_fetchContext.top()->m_buttons[name];
 		success = 1;
 	}
 	else
 		success = 0;
 
-	return &m_fetchContext.top()->m_buttons[name];
+	return &m_fetchContext.top()->m_single[name];
 }
 
 int InputManager::RemoveActionSingle(const std::string& name)
@@ -412,9 +420,9 @@ int InputManager::RemoveActionSingle(const std::string& name)
 	if (!m_fetchContext.top())
 		return -1;
 
-	if (m_fetchContext.top()->m_buttons.contains(name))
+	if (m_fetchContext.top()->m_single.contains(name))
 	{
-		m_fetchContext.top()->m_buttons.erase(name);
+		m_fetchContext.top()->m_single.erase(name);
 		return 1;
 	}
 	else
@@ -426,30 +434,30 @@ int InputManager::RenameActionButtons(const std::string& oldName, const std::str
 	if (!m_fetchContext.top())
 		return -1;
 
-	if (m_fetchContext.top()->m_buttons.contains(newName))
+	if (m_fetchContext.top()->m_single.contains(newName))
 		return 0;
 
-	auto button = m_fetchContext.top()->m_buttons.extract(oldName);
+	auto button = m_fetchContext.top()->m_single.extract(oldName);
 	button.key() = newName;
-	m_fetchContext.top()->m_buttons.insert(move(button));
+	m_fetchContext.top()->m_single.insert(move(button));
 
 	return 1;
 }
 
 void InputManager::SetActionPriorKey(const std::string& name, EPriorKey priorKey)
 {
-	if (!m_fetchContext.top() || !m_fetchContext.top()->m_buttons.contains(name))
+	if (!m_fetchContext.top() || !m_fetchContext.top()->m_single.contains(name))
 		return;
 
-	m_fetchContext.top()->m_buttons[name].SetPriorKey(priorKey);
+	m_fetchContext.top()->m_single[name].SetPriorKey(priorKey);
 }
 
 int InputManager::AddInputToAction(const std::string& name, Keycode key)
 {
-	if (!m_fetchContext.top() || !m_fetchContext.top()->m_buttons.contains(name))
+	if (!m_fetchContext.top() || !m_fetchContext.top()->m_single.contains(name))
 		return -1;
 
-	m_fetchContext.top()->m_buttons[name].AddInput(key);
+	m_fetchContext.top()->m_single[name].AddInput(key);
 	return 1;
 }
 
@@ -464,10 +472,10 @@ int InputManager::AddInputToAction(ActionSingle* preset, Keycode key)
 
 int InputManager::RemoveInputFromAction(const std::string& name, Keycode key)
 {
-	if (!m_fetchContext.top() || !m_fetchContext.top()->m_buttons.contains(name))
+	if (!m_fetchContext.top() || !m_fetchContext.top()->m_single.contains(name))
 		return -1;
 
-	m_fetchContext.top()->m_buttons[name].RemoveInput(key);
+	m_fetchContext.top()->m_single[name].RemoveInput(key);
 	return 1;
 }
 
@@ -542,13 +550,21 @@ void InputManager::ActionSingle::Destroy()
 	m_inputs.clear();
 }
 
+std::string InputManager::ActionSingle::GetAsString(Keycode key)
+{
+	InputManager* IM = InputManager::GetInstance();
+
+	if (m_inputs.contains(key))
+		return IM->GetKeyname(key);
+
+	return IM->GetKeyname(Keycode::UNKNOWN);
+}
+
 
 void InputManager::ActionSingle::Update(Input* input)
 {
 	if (!GetPriorKey())
 		return;
-	
-	// TODO: if not active context return
 
 	if (input->Down())
 		m_pressed.Invoke();
@@ -719,7 +735,6 @@ InputManager::ActionAxes* InputManager::AddActionAxes(const std::string& name, i
 
 	if (!m_fetchContext.top()->m_axes.contains(name))
 	{
-		m_fetchContext.top()->m_axes[name];
 		success = 1;
 	}
 	else
@@ -860,3 +875,34 @@ float InputManager::ActionAxes::ComputeValue()
 	return m_value;
 }
 #pragma endregion
+
+std::string InputManager::ActionAxes::GetAsString(Axis* axis)
+{
+	InputManager* IM = InputManager::GetInstance();
+	
+	for (auto& currAxis : m_axes)
+	{
+		if (axis == currAxis)
+		{
+			std::string out = IM->GetKeyname(axis->GetPositiveKey());
+			out += "/";
+			out += IM->GetKeyname(axis->GetNegativeKey());
+			return out;
+		}
+	}
+
+	std::string out = IM->GetKeyname(Keycode::UNKNOWN);
+	out += "/";
+	out += IM->GetKeyname(Keycode::UNKNOWN);
+	return out;
+}
+
+InputManager::Axis InputManager::GetFromString(const std::string& in)
+{
+	InputManager* IM = InputManager::GetInstance();
+
+	Keycode	pos = IM->GetKeycode(in.substr(0, in.find("/")).c_str());
+	Keycode neg = IM->GetKeycode(in.substr(in.find("/") + 1, in.size() - 1).c_str());
+
+	return {pos, neg};
+}
