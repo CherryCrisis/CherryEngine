@@ -1257,6 +1257,9 @@
     <ClInclude Include="include\character_controller.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\sky_renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1670,6 +1673,9 @@
     </ClCompile>
     <ClCompile Include="src\portal_generator.cpp">
       <Filter>Fichiers sources\Rendering\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sky_renderer.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

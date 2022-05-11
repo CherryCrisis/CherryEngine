@@ -53,7 +53,7 @@ int PrefilterMapRenderPass::Subscribe(Skydome* toGenerate)
 
 		spheremap->m_gpuPrefilterMap = std::move(gpuPrefilterMap);
 
-		if (!ElementMeshGenerator::Generate(toGenerate->m_mesh.get()))
+		if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
 			return -1;
 	}
 
@@ -98,7 +98,7 @@ void PrefilterMapRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, captureProjectionMatrix.data);
 
 	Spheremap* skyTexture = m_skydome->m_spheremap.get();
-	Mesh* mesh = m_skydome->m_mesh.get();
+	Mesh* mesh = m_skydome->m_cube.get();
 
 	auto gpuSpheremap = static_cast<EnvironmentMapRenderPass::GPUSkydomeSpheremap*>(skyTexture->m_gpuSpheremap.get());
 	auto gpuCubemap = static_cast<SkydomeRenderPass::GPUSkydomeCubemap*>(skyTexture->m_gpuCubemapV2.get());

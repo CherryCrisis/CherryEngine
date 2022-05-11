@@ -25,6 +25,8 @@
 #include "material.hpp"
 #include "texture.hpp"
 #include "utils.hpp"
+#include "cubemap.hpp"
+#include "spheremap.hpp"
 
 namespace YAML
 {
@@ -454,10 +456,8 @@ namespace CCImporter
         }
     }
 
-    void SaveMaterial(const std::filesystem::path& path, const MaterialArgs& materialArgs, bool saveInAssetDirectory = true)
+    void SaveMaterial(const std::filesystem::path& path, const MaterialArgs& materialArgs)
     {
-        if (saveInAssetDirectory)
-        {
             //-- Save in assets directory --//
             YAML::Node yamlSave;
 
@@ -490,45 +490,6 @@ namespace CCImporter
             bool opened = out.is_open();
             out << yamlSave;
             out.close();
-        }
-
-        //-- Save cache --//
-        std::string fullFilepath(CCImporter::cacheDirectory);
-        fullFilepath += path.filename().string();
-        fullFilepath += CCImporter::cacheMaterialExtension;
-
-        if (!std::filesystem::exists(CCImporter::cacheDirectory))
-            std::filesystem::create_directory(CCImporter::cacheDirectory);
-
-        FILE* file = nullptr;
-
-        if (fopen_s(&file, fullFilepath.c_str(), "wb"))
-        {
-            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", fullFilepath.c_str()).c_str());
-            return;
-        }
-
-        fwrite(&materialArgs.m_materialHeader, sizeof(MaterialHeader), 1, file);
-
-        if (materialArgs.m_materialHeader.m_texturesCount)
-        {
-            std::vector<unsigned int> texturesPathSize;
-
-            for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
-            {
-                texturesPathSize.push_back(static_cast<unsigned int>(materialArgs.m_texturesPath[i].size()));
-            }
-
-            fwrite(&texturesPathSize[0], texturesPathSize.size() * sizeof(unsigned int), 1, file);
-            fwrite(&materialArgs.m_texturesType[0], materialArgs.m_texturesType.size() * sizeof(unsigned int), 1, file);
-
-            for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
-            {
-                fwrite(&materialArgs.m_texturesPath[i][0], texturesPathSize[i], 1, file);
-            }
-        }
-
-        fclose(file);
     }
 
     void SaveMaterial(Material* material)
@@ -679,7 +640,6 @@ namespace CCImporter
             materialArgs.m_texturesType.push_back(settingsLoaded[textureTypeId.c_str()].as<unsigned int>());
         }
 
-        SaveMaterial(path, materialArgs, false);
         return true;
     }
 
@@ -818,4 +778,73 @@ namespace CCImporter
 
     #pragma endregion
 
+    #pragma region Cubemap
+    void SaveCubemap(Cubemap * cubemap)
+    {
+        std::string path(cubemap->GetFilesystemPath()->string());
+        //-- Save in assets directory --//
+        YAML::Node yamlSave;
+
+        YAML::Node settingsSave = yamlSave["settings"];
+
+        for (unsigned int i = 0; i < cubemap->m_textures.size(); ++i)
+        {
+            std::string textureId = std::format("texture_{}", i).c_str();
+            settingsSave[textureId.c_str()] = cubemap->m_textures[i] ? cubemap->m_textures[i]->GetFilepath().c_str() : "";
+        }
+
+        std::ofstream out(path.c_str());
+        bool opened = out.is_open();
+        out << yamlSave;
+        out.close();
+    }
+
+    bool ImportCubemap(const std::filesystem::path& path, std::array<std::string, 6>& texturesPaths)
+    {
+        if (!std::filesystem::exists(path))
+            return false;
+
+        YAML::Node loader = YAML::LoadFile(path.string().c_str());
+
+        YAML::Node settingsLoaded = loader["settings"];
+
+        for (unsigned int i = 0; i < 6; ++i)
+        {
+            std::string textureId = std::format("texture_{}", i).c_str();
+            texturesPaths[i] = settingsLoaded[textureId.c_str()].as<std::string>();
+        }
+        return true;
+    }
+    #pragma  endregion
+
+    #pragma region Spheremap
+    void CCENGINE_API SaveSpheremap(Spheremap* spheremap)
+    {
+        std::string path(spheremap->GetFilesystemPath()->string());
+
+        //-- Save in assets directory --//
+        YAML::Node yamlSave;
+
+        YAML::Node settingsSave = yamlSave["settings"];
+        settingsSave["texture"] = spheremap->m_texture ? spheremap->m_texture->GetFilepath().c_str() : "";
+
+        std::ofstream out(path.c_str());
+        bool opened = out.is_open();
+        out << yamlSave;
+        out.close();
+    }
+
+    bool ImportSpheremap(const std::filesystem::path& path, std::string& texturePath)
+    {
+        if (!std::filesystem::exists(path))
+            return false;
+
+        YAML::Node loader = YAML::LoadFile(path.string().c_str());
+
+        YAML::Node settingsLoaded = loader["settings"];
+        texturePath = settingsLoaded["texture"].as<std::string>();
+
+        return true;
+    }
+    #pragma endregion
 }

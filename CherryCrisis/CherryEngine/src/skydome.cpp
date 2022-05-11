@@ -19,46 +19,49 @@
 #include "cell.hpp"
 
 Skydome::Skydome(Cell* cell)
-	: m_cell(cell)
+	: SkyRenderer(cell)
 {
 
 }
 
 Skydome::~Skydome()
 {
-	if (m_mesh)
-		m_spheremap->m_OnDeleted.Unbind(&Skydome::RemoveMesh, this);
+	RemoveMap();
+	RemoveQuad();
 }
 
-void Skydome::RemoveMesh()
+void Skydome::RemoveQuad()
 {
-	m_mesh = nullptr;
-	m_quad = nullptr;
+	if (m_quad)
+	{
+		m_quad->m_OnDeleted.Unbind(&Skydome::RemoveQuad, this);
+		m_quad = nullptr;
 
-	// Move to function
-	m_cell->RemoveRenderer(this);
+		// Move to function
+		m_cell->RemoveRenderer(this);
+	}
 }
 
-void Skydome::RemoveCubemap()
-{
-	m_mesh = nullptr;
-	m_quad = nullptr;
 
-	// Move to function
-	m_cell->RemoveRenderer(this);
+void Skydome::RemoveMap()
+{
+	if (m_spheremap)
+	{
+		m_spheremap->m_OnDeleted.Unbind(&Skydome::RemoveMap, this);
+		m_spheremap = nullptr;
+
+		// Move to function
+		m_cell->RemoveRenderer(this);
+	}
 }
 
 void Skydome::Load()
 {
 	m_quad = ResourceManager::GetInstance()->AddResource<Mesh>("CC_normalizedQuad", true, EMeshShape::QUAD, 1.f, 1.f);
-	m_quad->m_OnDeleted.Bind(&Skydome::RemoveMesh, this);
+	m_quad->m_OnDeleted.Bind(&Skydome::RemoveQuad, this);
 
-	m_mesh = ResourceManager::GetInstance()->AddResource<Mesh>("CC_normalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
-	m_mesh->m_OnDeleted.Bind(&Skydome::RemoveMesh, this);
-
-	// TODO: Remove texturePath
-	m_spheremap = ResourceManager::GetInstance()->AddResource<Spheremap>("skySphere", true, "Assets/Skydome/Arches_3k.hdr");
-	m_spheremap->m_OnDeleted.Bind(&Skydome::RemoveCubemap, this);
+	m_cube = ResourceManager::GetInstance()->AddResource<Mesh>("CC_normalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
+	m_cube->m_OnDeleted.Bind(&SkyRenderer::RemoveCube, static_cast<SkyRenderer*>(this));
 
 	// Move to function
 	m_cell->AddRenderer(this);
@@ -66,7 +69,7 @@ void Skydome::Load()
 
 void Skydome::ClearData()
 {
-	m_mesh->ClearData();
+	m_cube->ClearData();
 	//m_quad->ClearData();
 	m_spheremap->ClearData();
 }

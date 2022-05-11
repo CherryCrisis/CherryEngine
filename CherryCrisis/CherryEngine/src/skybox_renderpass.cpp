@@ -45,7 +45,7 @@ int SkyboxRenderPass::Subscribe(Skybox* toGenerate)
 		}
 		cubemap->m_gpuCubemap = std::move(gpuCubemap);
 
-		if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
+		if (!m_meshGenerator.Generate(toGenerate->m_cube.get()))
 			return -1;
 	}
 
@@ -86,7 +86,7 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
-	Mesh* mesh = m_skybox->m_mesh.get();
+	Mesh* mesh = m_skybox->m_cube.get();
 
 	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 	glBindVertexArray(gpuMesh->VAO);

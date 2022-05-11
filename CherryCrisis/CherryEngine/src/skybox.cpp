@@ -5,57 +5,40 @@
 #include "resource_manager.hpp"
 
 #include "cubemap.hpp"
-#include "mesh.hpp"
 
 #include "skybox_renderpass.hpp"
-#include "render_manager.hpp"
-#include "threadpool.hpp"
 
 #include "rendering_pipeline_interface.hpp"
 #include "viewer.hpp"
 #include "cell.hpp"
 
 Skybox::Skybox(Cell* cell)
-	: m_cell(cell)
+	: SkyRenderer(cell)
 {
 
 }
 
 Skybox::~Skybox()
 {
-	if (m_mesh)
-		m_cubemap->m_OnDeleted.Unbind(&Skybox::RemoveMesh, this);
-
-	if (m_mesh)
-		m_cubemap->m_OnDeleted.Unbind(&Skybox::RemoveMesh, this);
+	RemoveMap();
 }
 
-void Skybox::RemoveMesh()
+void Skybox::RemoveMap()
 {
-	m_mesh = nullptr;
+	if (m_cubemap)
+	{
+		m_cubemap->m_OnDeleted.Unbind(&Skybox::RemoveMap, this);
+		m_cubemap = nullptr;
 
-	// Move to function
-	m_cell->RemoveRenderer(this);
-}
-
-void Skybox::RemoveCubemap()
-{
-	m_mesh = nullptr;
-
-	// Move to function
-	m_cell->RemoveRenderer(this);
+		// Move to function
+		m_cell->RemoveRenderer(this);
+	}
 }
 
 void Skybox::Load()
 {
-	m_mesh = ResourceManager::GetInstance()->AddResource<Mesh>("CC_normalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
-	m_mesh->m_OnDeleted.Bind(&Skybox::RemoveMesh, this);
-
-	// TODO: Remove this
-	const char* textures[6] = { "Assets/Skybox/right.jpg", "Assets/Skybox/left.jpg", "Assets/Skybox/top.jpg", "Assets/Skybox/bottom.jpg", "Assets/Skybox/front.jpg", "Assets/Skybox/back.jpg" };
-
-	m_cubemap = ResourceManager::GetInstance()->AddResource<Cubemap>("skyCubemap", true, textures);
-	m_cubemap->m_OnDeleted.Bind(&Skybox::RemoveCubemap, this);
+	m_cube = ResourceManager::GetInstance()->AddResource<Mesh>("CC_normalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
+	m_cube->m_OnDeleted.Bind(&SkyRenderer::RemoveCube, static_cast<SkyRenderer*>(this));
 
 	// Move to function
 	m_cell->AddRenderer(this);
@@ -63,7 +46,7 @@ void Skybox::Load()
 
 void Skybox::ClearData()
 {
-	m_mesh->ClearData();
+	m_cube->ClearData();
 	m_cubemap->ClearData();
 }
 

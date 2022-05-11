@@ -58,7 +58,7 @@ int EnvironmentMapRenderPass::Subscribe(Skydome* toGenerate)
 
 		spheremap->m_gpuSpheremap = std::move(gpuSpheremap);
 
-		if (!ElementMeshGenerator::Generate(toGenerate->m_mesh.get()))
+		if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
 			return -1;
 	}
 
@@ -115,7 +115,7 @@ void EnvironmentMapRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 		glViewport(0, 0, width, height); // don't forget to configure the viewport to the capture dimensions.
 		glBindFramebuffer(GL_FRAMEBUFFER, gpuSpheremap->FBO);
 
-		Mesh* mesh = m_skydome->m_mesh.get();
+		Mesh* mesh = m_skydome->m_cube.get();
 		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
 		
 		for (unsigned int i = 0; i < 6; ++i)

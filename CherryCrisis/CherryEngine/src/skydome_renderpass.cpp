@@ -53,7 +53,7 @@ int SkydomeRenderPass::Subscribe(Skydome* toGenerate)
 		
 		spheremap->m_gpuCubemapV2 = std::move(gpuCubemap);
 
-		if (!ElementMeshGenerator::Generate(toGenerate->m_mesh.get()))
+		if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
 			return -1;
 	}
 
@@ -94,7 +94,7 @@ void SkydomeRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, viewer->m_projectionMatrix.data);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, viewer->m_viewMatrix.data);
 
-	Mesh* mesh = m_skydome->m_mesh.get();
+	Mesh* mesh = m_skydome->m_cube.get();
 
 	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
 	glBindVertexArray(gpuMesh->VAO);

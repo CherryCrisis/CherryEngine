@@ -10,6 +10,8 @@
 #include "cherry_macros.hpp"
 
 enum class ETextureFormat;
+class Spheremap;
+class Cubemap;
 
 namespace CCImporter
 {
@@ -115,10 +117,12 @@ namespace CCImporter
     };
 
     static const char* assetsDirectory("Assets/");
+    static const char* cacheDirectory("Cache/");
     static const char* cacheExtension(".ccfile");
     static const char* cacheMaterialExtension(".ccmat");
     static const char* materialExtension(".mat");
-    static const char* cacheDirectory("Cache/");
+    static const char* spheremapExtension(".ccspheremap");
+    static const char* cubemapExtension(".cccubemap");
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
     void ImportTexture(const std::filesystem::path& filepath,
@@ -126,5 +130,11 @@ namespace CCImporter
 
     void CCENGINE_API SaveMaterial(Material* material);
     bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs);
+
+    void CCENGINE_API SaveCubemap(Cubemap* cubemap);
+    bool ImportCubemap(const std::filesystem::path& path, std::array<std::string, 6>& texturesPaths);
+
+    void CCENGINE_API SaveSpheremap(Spheremap* spheremap);
+    bool ImportSpheremap(const std::filesystem::path& path, std::string& texturePath);
 }
 

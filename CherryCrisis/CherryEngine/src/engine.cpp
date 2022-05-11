@@ -15,6 +15,7 @@
 #include "time_manager.hpp"
 #include "cell_system.hpp"
 #include "debug.hpp"
+#include "pickinger.hpp"
 
 void* Engine::window_handle = nullptr;
 
@@ -31,6 +32,7 @@ Engine::Engine()
 	CsScriptingSystem::CreateInstance();
 	RenderManager::CreateInstance();
 	Debug::CreateInstance();
+	Pickinger::CreateInstance();
 
 	CsScriptingSystem::GetInstance()->Init();
 	SoundManager::Init();

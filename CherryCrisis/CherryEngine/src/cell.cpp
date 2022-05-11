@@ -30,10 +30,8 @@ Cell::~Cell()
 
 void Cell::Initialize()
 {
-	//m_skybox = new Skybox(this);
-	//m_skybox->Load();
-	m_skydome = new Skydome(this);
-	m_skydome->Load();
+	m_skyRenderer = new Skydome(this);
+	m_skyRenderer->Load();
 }
 
 void Cell::AddEntity(Entity* newEntity)

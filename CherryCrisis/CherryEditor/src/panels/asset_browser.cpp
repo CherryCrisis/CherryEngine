@@ -402,20 +402,20 @@ void AssetBrowser::BrowserActionCreate()
                 std::filesystem::path newPath = m_currentDirectoryNode->m_path;
                 newPath /= newName;
 
-                bool exist = std::filesystem::exists(newPath.string() + ".cherry");
+                bool exist = std::filesystem::exists(newPath.string() + sceneExtensions);
                 int id = 0;
 
                 while (exist)
                 {
                     std::string path(std::format("{}{}", newPath.string(), id));
 
-                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                    if (!(exist = std::filesystem::exists(path + sceneExtensions)))
                         newPath = path;
 
                     ++id;
                 }
 
-                newPath += ".cherry";
+                newPath += sceneExtensions;
 
                 std::ofstream myfile;
 
@@ -431,24 +431,69 @@ void AssetBrowser::BrowserActionCreate()
                 std::filesystem::path newPath = m_currentDirectoryNode->m_path;
                 newPath /= newName;
 
-                bool exist = std::filesystem::exists(newPath.string() + ".mat");
+                bool exist = std::filesystem::exists(newPath.string() + matExtensions);
                 int id = 0;
 
                 while (exist)
                 {
                     std::string path(std::format("{}{}", newPath.string(), id));
 
-                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                    if (!(exist = std::filesystem::exists(path + matExtensions)))
                         newPath = path;
 
                     ++id;
                 }
 
-                newPath += ".mat";
+                newPath += matExtensions;
 
                 std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResource<Material>(newPath.string().c_str(), true);
                 CCImporter::SaveMaterial(material.get());
             }
+            else if (!m_popupAssetType.compare("spheremap"))
+            {
+                std::filesystem::path newPath = m_currentDirectoryNode->m_path;
+                newPath /= newName;
+
+                bool exist = std::filesystem::exists(newPath.string() + spheremapExtension);
+                int id = 0;
+
+                while (exist)
+                {
+                    std::string path(std::format("{}{}", newPath.string(), id));
+
+                    if (!(exist = std::filesystem::exists(path + spheremapExtension)))
+                        newPath = path;
+
+                    ++id;
+                }
+
+                newPath += spheremapExtension;
+
+                std::shared_ptr<Spheremap> material = ResourceManager::GetInstance()->AddResource<Spheremap>(newPath.string().c_str(), true);
+            }
+            else if (!m_popupAssetType.compare("cubemap"))
+            {
+                std::filesystem::path newPath = m_currentDirectoryNode->m_path;
+                newPath /= newName;
+
+                bool exist = std::filesystem::exists(newPath.string() + spheremapExtension);
+                int id = 0;
+
+                while (exist)
+                {
+                    std::string path(std::format("{}{}", newPath.string(), id));
+
+                    if (!(exist = std::filesystem::exists(path + spheremapExtension)))
+                        newPath = path;
+
+                    ++id;
+                }
+
+                newPath += spheremapExtension;
+
+                std::shared_ptr<Cubemap> material = ResourceManager::GetInstance()->AddResource<Cubemap>(newPath.string().c_str(), true);
+            }
+
 
             QuerryBrowser();
             ImGui::CloseCurrentPopup();
@@ -648,7 +693,19 @@ void AssetBrowser::ContextCallback()
 
             }
 
-            //TODO : Material
+            if (ImGui::MenuItem("Cubemap"))
+            {
+                m_popupAssetType = "cubemap";
+                m_browserAction = EBrowserAction::CREATING;
+
+            }
+
+            if (ImGui::MenuItem("Spheremap"))
+            {
+                m_popupAssetType = "spheremap";
+                m_browserAction = EBrowserAction::CREATING;
+
+            }
 
             ImGui::EndMenu();
         }
@@ -798,6 +855,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), directoryNodes.begin(), directoryNodes.end());
         directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), sceneNodes.begin(), sceneNodes.end());
         directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), modelNodes.begin(), modelNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), textureNodes.begin(), textureNodes.end());
         directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), shaderNodes.begin(), shaderNodes.end());
         directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), scriptNodes.begin(), scriptNodes.end());
         directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), materialNodes.begin(), materialNodes.end());
@@ -927,6 +985,40 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 soundNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true);
 
                 auto pair = m_assetNodes.insert({ soundNode.m_path.string(), std::make_unique<SoundNode>(soundNode) });
+                return pair.first->second.get();
+            }
+        }
+
+        //-- Cubemap --//
+        {
+            if (cubemapExtension.compare(extension) == 0)
+            {
+                CubemapNode cubemap;
+                SetAssetNode(m_path, cubemap);
+
+                std::string filepath(cubemap.m_relativePath.string() + cubemap.m_filename + cubemap.m_extension);
+                cubemap.m_resource = resourceManager->AddResource<Cubemap>(filepath.c_str(), true);
+
+                cubemap.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+
+                auto pair = m_assetNodes.insert({ cubemap.m_path.string(), std::make_unique<CubemapNode>(cubemap) });
+                return pair.first->second.get();
+            }
+        }
+
+        //-- Spheremap --//
+        {
+            if (spheremapExtension.compare(extension) == 0)
+            {
+                SpheremapNode spheremap;
+                SetAssetNode(m_path, spheremap);
+
+                std::string filepath(spheremap.m_relativePath.string() + spheremap.m_filename + spheremap.m_extension);
+                spheremap.m_resource = resourceManager->AddResource<Spheremap>(filepath.c_str(), true);
+
+                spheremap.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+
+                auto pair = m_assetNodes.insert({ spheremap.m_path.string(), std::make_unique<SpheremapNode>(spheremap) });
                 return pair.first->second.get();
             }
         }

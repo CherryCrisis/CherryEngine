@@ -15,15 +15,11 @@ void Material::Delete()
 void Material::Load(std::shared_ptr<Material> material)
 {
 	CCImporter::MaterialArgs materialArgs;
-
-	if (!LoadFromCache(material, materialArgs))
+	if (!CCImporter::ImportMaterial(*material->GetFilesystemPath(), materialArgs))
 	{
-		if (!CCImporter::ImportMaterial(*material->GetFilesystemPath(), materialArgs))
-		{
-			//If doesn't exist create empty material
-			CCImporter::SaveMaterial(material.get());
-			return;
-		}
+		//If doesn't exist create empty material
+		CCImporter::SaveMaterial(material.get());
+		return;
 	}
 
 	material->m_ambient = materialArgs.m_materialHeader.m_ambient;
@@ -51,46 +47,6 @@ void Material::Load(std::shared_ptr<Material> material)
             material->m_textures.emplace(ETextureType(materialArgs.m_texturesType[i]), texture);
         }
     }
-}
-
-bool Material::LoadFromCache(std::shared_ptr<Material> material, CCImporter::MaterialArgs& materialArgs)
-{
-	std::string fullFilepath(CCImporter::cacheDirectory);
-	fullFilepath += material->GetFilesystemPath()->filename().string();
-	fullFilepath += CCImporter::cacheMaterialExtension;
-
-	FILE* file = nullptr;
-
-	if (fopen_s(&file, fullFilepath.c_str(), "rb"))
-		return false;
-
-	fread(&materialArgs.m_materialHeader, sizeof(CCImporter::MaterialHeader), 1, file);
-
-	unsigned int textureCount = materialArgs.m_materialHeader.m_texturesCount;
-	if (textureCount)
-	{
-		std::vector<unsigned int> texturesPathSize;
-
-		texturesPathSize.resize(textureCount);
-		materialArgs.m_texturesType.resize(textureCount);
-
-		fread(&texturesPathSize[0], textureCount * sizeof(unsigned int), 1, file);
-		fread(&materialArgs.m_texturesType[0], textureCount * sizeof(unsigned int), 1, file);
-
-		for (unsigned int i = 0; i < textureCount; ++i)
-		{
-			std::string texturePath;
-			texturePath.resize(texturesPathSize[i]);
-
-			fread(&texturePath[0], texturesPathSize[i], 1, file);
-
-			materialArgs.m_texturesPath.push_back(texturePath);
-		}
-	}
-
-	fclose(file);
-
-	return true;
 }
 
 void Material::Reload(bool saveOnly)

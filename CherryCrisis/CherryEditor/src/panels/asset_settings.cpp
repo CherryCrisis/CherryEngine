@@ -7,6 +7,8 @@
 
 #include "texture.hpp"
 #include "material.hpp"
+#include "spheremap.hpp"
+#include "cubemap.hpp"
 #include "utils.hpp"
 #include "Panels/asset_browser.hpp"
 
@@ -310,6 +312,248 @@ void MaterialSettings::ContextCallback()
                 {
                     m_assetSettingsDisplayer->SetAssetSettings(new TextureSettings(textureIt->second));
                 }
+            }
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+#pragma endregion
+
+#pragma region Spheremap
+
+SpheremapSettings::SpheremapSettings(std::shared_ptr<Spheremap> spheremap)
+    : m_spheremap(spheremap)
+{
+}
+
+void SpheremapSettings::Render()
+{
+    ImGui::Separator();
+    ImGui::Text(std::format("Spheremap name : {}", m_spheremap->GetFilesystemPath()->filename().string()).c_str());
+    ImGui::Separator();
+
+    if (ImGui::BeginTable("texturesTable", 2))
+    {
+        ImGui::TableNextColumn();
+        ImGui::Text("texture");
+        ImGui::TableNextColumn();
+
+        uint64_t texID = 0u;
+        if (m_spheremap->m_texture)
+        {
+            if (auto gpuTextureBasic = static_cast<TextureGenerator::GPUTextureBasic*>(m_spheremap->m_texture->m_gpuTexture.get()))
+                texID = gpuTextureBasic->ID;
+        }
+
+        //-- Highlight --//
+        {
+            ImGuiContext& g = *GImGui;
+            const ImGuiStyle& style = g.Style;
+            ImGuiWindow* window = ImGui::GetCurrentWindow();
+            const ImGuiID id = window->GetID("texturesTable");
+            float cellWidth = ImGui::GetContentRegionAvail().x;
+            ImVec2 pos = window->DC.CursorPos;
+            ImVec2 size = ImGui::CalcItemSize({ 50, 50 }, 0, 0);
+
+            ImVec2 posSize(pos.x + size.x, pos.y + size.y);
+            ImRect bb(pos, posSize);
+            ImVec2 posMin(bb.Min.x, bb.Min.y);
+            ImVec2 posMax(bb.Max.x, bb.Max.y);
+
+            bool held;
+            bool pressed = ImGui::ButtonBehavior(bb, id, &isHovered, &held, 0);
+
+            // Render
+            const ImU32 col = ImGui::GetColorU32((held && isHovered) ? ImGuiCol_ButtonActive :
+                isHovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+
+            ImVec4 imageColor = isHovered == true ? ImVec4{ 1, 1, 1, 1 } : ImVec4{ 0.5f, 0.5f, 0.5f, 1 };
+            ImGui::Image((ImTextureID)texID, { 50,50 }, { 0,0 }, { 1,1 }, { 1, 1, 1, 1 }, imageColor);
+        }
+
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+            {
+                const char* texturePath = (const char*)payload->Data;
+                std::string extension = String::ExtractValue(texturePath, '.');
+
+                auto it = textureExtensions.find("." + extension);
+                if (it != textureExtensions.end())
+                {
+                    if (std::shared_ptr<Texture> texture = ResourceManager::GetInstance()->GetResource<Texture>(texturePath))
+                    {
+                        m_spheremap->m_texture = texture;
+                        m_settingsChanged = true;
+                    }
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+        ImGui::EndTable();
+    }
+
+    if (m_settingsChanged)
+    {
+        //true for save only
+        Resource<Spheremap>::ReloadResource(m_spheremap, true);
+        m_settingsChanged = false;
+    }
+
+    ContextCallback();
+}
+
+void SpheremapSettings::ContextCallback()
+{
+    static bool focusedNodeisHovered = false;
+    if (ImGui::IsWindowHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
+    {
+        if (isHovered)
+            ImGui::OpenPopup("context");
+    }
+
+    if (ImGui::BeginPopupContextItem("context"))
+    {
+        ImGui::Text("Actions ...");
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Clear"))
+        {
+            m_spheremap->m_texture = nullptr;
+            m_settingsChanged = true;
+        }
+
+        if (ImGui::MenuItem("Texture Settings"))
+        {
+            if (m_spheremap->m_texture)
+            {
+                m_assetSettingsDisplayer->SetAssetSettings(new TextureSettings(m_spheremap->m_texture));
+            }
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+#pragma endregion
+
+#pragma region Cubemap
+CubemapSettings::CubemapSettings(std::shared_ptr<Cubemap> cubemap)
+    : m_cubemap(cubemap)
+{
+}
+
+void CubemapSettings::Render()
+{
+    ImGui::Separator();
+    ImGui::Text(std::format("Cubemap name : {}", m_cubemap->GetFilesystemPath()->filename().string()).c_str());
+    ImGui::Separator();
+
+    if (ImGui::BeginTable("texturesTable", 2))
+    {
+        for (int i = 0; i < m_cubemap->m_textures.size(); ++i)
+        {
+            ImGui::TableNextColumn();
+            ImGui::Text(std::format("texture_{}", i).c_str());
+            ImGui::TableNextColumn();
+
+            uint64_t texID = 0u;
+            if (m_cubemap->m_textures[i])
+            {
+                if (auto gpuTextureBasic = static_cast<TextureGenerator::GPUTextureBasic*>(m_cubemap->m_textures[i]->m_gpuTexture.get()))
+                    texID = gpuTextureBasic->ID;
+            }
+
+            //-- Highlight --//
+            {
+                ImGuiContext& g = *GImGui;
+                const ImGuiStyle& style = g.Style;
+                ImGuiWindow* window = ImGui::GetCurrentWindow();
+                const ImGuiID id = window->GetID("texturesTable");
+                float cellWidth = ImGui::GetContentRegionAvail().x;
+                ImVec2 pos = window->DC.CursorPos;
+                ImVec2 size = ImGui::CalcItemSize({ 50, 50 }, 0, 0);
+
+                ImVec2 posSize(pos.x + size.x, pos.y + size.y);
+                ImRect bb(pos, posSize);
+                ImVec2 posMin(bb.Min.x, bb.Min.y);
+                ImVec2 posMax(bb.Max.x, bb.Max.y);
+
+                bool held, hovered;
+                bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held, 0);
+
+                if (hovered)
+                    m_textureIdFoccused = static_cast<int>(i);
+
+                // Render
+                const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive :
+                    hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+
+                ImVec4 imageColor = hovered == true ? ImVec4{ 1, 1, 1, 1 } : ImVec4{ 0.5f, 0.5f, 0.5f, 1 };
+                ImGui::Image((ImTextureID)texID, { 50,50 }, { 0,0 }, { 1,1 }, { 1, 1, 1, 1 }, imageColor);
+            }
+
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                {
+                    const char* texturePath = (const char*)payload->Data;
+                    std::string extension = String::ExtractValue(texturePath, '.');
+
+                    if (textureExtensions.end() != textureExtensions.find("." + extension))
+                    {
+                        if (std::shared_ptr<Texture> texture = ResourceManager::GetInstance()->GetResource<Texture>(texturePath))
+                        {
+                            m_cubemap->m_textures[m_textureIdFoccused] = texture;
+                            m_settingsChanged = true;
+                        }
+                    }
+                }
+                ImGui::EndDragDropTarget();
+            }
+        }
+        ImGui::EndTable();
+    }
+
+    if (m_settingsChanged)
+    {
+        //true for save only
+        Resource<Cubemap>::ReloadResource(m_cubemap, true);
+        m_settingsChanged = false;
+    }
+
+    ContextCallback();
+}
+
+void CubemapSettings::ContextCallback()
+{
+    static bool focusedNodeisHovered = false;
+    if (ImGui::IsWindowHovered() && ImGui::GetMouseClickedCount(ImGuiMouseButton_Right) == 1)
+    {
+        ImGui::OpenPopup("context");
+    }
+
+    if (ImGui::BeginPopupContextItem("context"))
+    {
+        ImGui::Text("Actions ...");
+        ImGui::Separator();
+
+        if (ImGui::MenuItem("Clear"))
+        {
+            m_cubemap->m_textures[m_textureIdFoccused] = nullptr;
+            m_settingsChanged = true;
+        }
+
+        if (ImGui::MenuItem("Texture Settings"))
+        {
+            auto texture =  m_cubemap->m_textures[m_textureIdFoccused];
+            if (texture)
+            {
+                m_assetSettingsDisplayer->SetAssetSettings(new TextureSettings(texture));
             }
         }
 

@@ -13,10 +13,20 @@ Spheremap::~Spheremap()
 }
 
 
-void Spheremap::Load(std::shared_ptr<Spheremap> spheremap, const char* texturePath)
+void Spheremap::Load(std::shared_ptr<Spheremap> spheremap)
 {
-    ResourceManager* resourceManager = ResourceManager::GetInstance();
-    spheremap->m_texture = ResourceManager::GetInstance()->AddResource<Texture>(texturePath, true, true, ETextureFormat::RGB);
+    std::string texturePath;
+    if (!CCImporter::ImportSpheremap(*spheremap->GetFilesystemPath(), texturePath))
+    {
+        CCImporter::SaveSpheremap(spheremap.get());
+        return;
+    }
+
+    if (!texturePath.empty())
+    {
+        ResourceManager* resourceManager = ResourceManager::GetInstance();
+        spheremap->m_texture = resourceManager->AddResource<Texture>(texturePath.c_str(), true, true, ETextureFormat::RGB);
+    }
 }
 
 int Spheremap::GetWidth()
@@ -41,9 +51,39 @@ const void* Spheremap::GetData()
 
 void Spheremap::ClearData()
 {
-    m_texture->ClearData();
+    if (m_texture)
+        m_texture->ClearData();
 }
 void Spheremap::Delete()
 {
     ClearData();
+}
+
+void Spheremap::Reload(bool saveOnly)
+{
+    if (saveOnly)
+    {
+        CCImporter::SaveSpheremap(this);
+        return;
+    }
+
+    std::string texturePath;
+    if (!CCImporter::ImportSpheremap(*GetFilesystemPath(), texturePath))
+    {
+        CCImporter::SaveSpheremap(this);
+        return;
+    }
+
+    if (!texturePath.empty())
+    {
+        ResourceManager* resourceManager = ResourceManager::GetInstance();
+        std::shared_ptr<Texture> texture = resourceManager->GetResource<Texture>(texturePath.c_str());
+        
+        if (!texture)
+        {
+            texture = resourceManager->AddResource<Texture>(texturePath.c_str(), true, true, ETextureFormat::RGB);
+        }
+
+        m_texture = texture;
+    }
 }

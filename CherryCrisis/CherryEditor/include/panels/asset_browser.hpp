@@ -17,6 +17,8 @@
 #include "shader.hpp"
 #include "material.hpp"
 #include "asset_settings.hpp"
+#include "spheremap.hpp"
+#include "cubemap.hpp"
 
 
 class AResource;
@@ -29,6 +31,8 @@ const std::set<std::string> soundExtensions = { ".wav" };
 const std::string scriptExtensions = ".cs";
 const std::string sceneExtensions = ".cherry";
 const std::string matExtensions = ".mat";
+const std::string cubemapExtension = ".cccubemap";
+const std::string spheremapExtension = ".ccspheremap";
 
 class AssetBrowser : public Panel
 {
@@ -158,6 +162,22 @@ namespace CCScripting
 	struct ShaderNode : public ResourceAssetNode<Shader>
 	{
 		void Action() override {};
+	};
+
+	struct SpheremapNode : public ResourceAssetNode<Spheremap>
+	{
+		void Action() override
+		{
+			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(new SpheremapSettings(m_resource));
+		}
+	};
+
+	struct CubemapNode : public ResourceAssetNode<Cubemap>
+	{
+		void Action() override
+		{
+			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(new CubemapSettings(m_resource));
+		};
 	};
 
 	enum class EBrowserAction
