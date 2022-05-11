@@ -723,6 +723,8 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         auto pair = m_assetNodes.insert({ directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode)});
         AssetNode* assetNode = pair.first->second.get();
 
+        #pragma region Sort AssetNode
+
         std::set<std::filesystem::directory_entry> entries;
         for (const std::filesystem::directory_entry& entry : directory_iterator)
             entries.emplace(entry);
@@ -733,7 +735,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         for (const auto& entry : entries)
         {
             if (std::filesystem::is_directory(entry.path()))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
 
         /*-- Scene --*/
@@ -742,7 +747,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             std::string extension = entry.path().extension().string();
 
             if (!sceneExtensions.compare(extension))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
 
         /*-- Model --*/
@@ -751,7 +759,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             std::string extension = entry.path().extension().string();
 
             if (modelExtensions.end() != modelExtensions.find(extension))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
 
         /*-- Texture --*/
@@ -760,7 +771,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             std::string extension = entry.path().extension().string();
 
             if (textureExtensions.end() != textureExtensions.find(extension))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
 
         /*-- Shader --*/
@@ -769,7 +783,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             std::string extension = entry.path().extension().string();
 
             if (shaderExtensions.end() != shaderExtensions.find(extension))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
 
         /*-- Script --*/
@@ -778,7 +795,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             std::string extension = entry.path().extension().string();
 
             if (!scriptExtensions.compare(extension))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
 
         /*-- Material --*/
@@ -787,7 +807,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             std::string extension = entry.path().extension().string();
 
             if (!matExtensions.compare(extension))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
 
         /*-- Sound --*/
@@ -796,8 +819,17 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             std::string extension = entry.path().extension().string();
 
             if (shaderExtensions.end() != shaderExtensions.find(extension))
+            {
                 directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                entries.erase(entry);
+            }
         }
+
+        /*-- Other --*/
+        for (const auto& entry : entries)
+            directoryNodePtr->m_assetNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+
+        #pragma endregion
 
         return assetNode;
     }
