@@ -36,6 +36,8 @@ namespace CCMaths
         return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
     }
 
+    inline float Round(const double& value) { return (float)floor(value + 0.5); }
+    
     template <typename T>
     int Sign(const T& value) { return (T(0) < value) - (value < T(0)); }
 
@@ -50,4 +52,5 @@ namespace CCMaths
 
     template<typename T, typename S>
     T Lerp(const T& lhs, const T& rhs, const S& factor) { return (1.f - factor) * lhs + factor * rhs; }
+
 }

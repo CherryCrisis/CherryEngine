@@ -191,7 +191,7 @@ void SceneDisplayer::Render()
                 const char* data = (const char*)payload->Data;
                 std::string extension = String::ExtractValue(data, '.');
 
-                if (extension == "cherry") 
+                if (extension == "ccscene") 
                 {
                     m_manager->m_entitySelector.Clear();
                     EditorNotifications::SceneLoading(SceneManager::LoadScene(data));
@@ -218,11 +218,14 @@ void SceneDisplayer::Render()
         if (!selector.IsEmpty() && selector.First()->GetBehaviour<Transform>())
         {
             Transform* t = selector.First()->GetBehaviour<Transform>();
-            CCMaths::Matrix4 mat = t->GetWorldMatrix();
+            
+            if (!m_isManipulated)
+                m_guizmoTransform = t->GetWorldMatrix();
 
-            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, mat.data))
+            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, m_guizmoTransform.data))
             {
                 Transform* parent = t->GetParent();
+                CCMaths::Matrix4 mat = m_guizmoTransform;
 
                 if (parent)
                     mat = CCMaths::Matrix4::Inverse(parent->GetWorldMatrix()) * mat;
@@ -230,10 +233,27 @@ void SceneDisplayer::Render()
                 CCMaths::Vector3 p, r, s; // position, rotation and scale
                 CCMaths::Matrix4::Decompose(mat, p, r, s);
 
-                t->SetPosition(p); 
+                if (m_isSnapping)
+                {
+                    p.x = CCMaths::Round(p.x / m_posSnap) * m_posSnap;
+                    p.y = CCMaths::Round(p.y / m_posSnap) * m_posSnap;
+                    p.z = CCMaths::Round(p.z / m_posSnap) * m_posSnap;
+
+                    r.x = CCMaths::Round(r.x / m_rotSnap) * m_rotSnap;
+                    r.y = CCMaths::Round(r.y / m_rotSnap) * m_rotSnap;
+                    r.z = CCMaths::Round(r.z / m_rotSnap) * m_rotSnap;
+                }
+
+                t->SetPosition(p);
                 t->SetRotation(r);
                 t->SetScale(s);
-            }            
+            }
+
+            InputManager* IM = InputManager::GetInstance();
+            if (ImGuizmo::IsUsing() && IM->GetKey(Keycode::LEFT_CLICK))
+                m_isManipulated = true;
+            else if (m_isManipulated)
+                m_isManipulated = false;
         }
 
         ImGui::EndChild();
@@ -288,6 +308,20 @@ void SceneDisplayer::RenderMenuBar()
         ImGui::Spacing();
         if (ImGui::Selectable("Local", &m_isLocal, 0, ImGui::CalcTextSize("Collapse")))
             m_mode = ImGuizmo::MODE::LOCAL;
+
+        ImGui::Spacing();
+        ImGui::Selectable("Snap", &m_isSnapping, 0, ImGui::CalcTextSize("Snap"));
+
+        ImGui::Spacing();
+        ImGui::SetNextItemWidth(50.f);
+        ImGui::DragFloat("Position", &m_posSnap, 0.01f, 0.01f, 5.f, "%.2f");
+
+        ImGui::Spacing();
+        ImGui::SetNextItemWidth(50.f);
+        float rot = m_rotSnap * CCMaths::RAD2DEG;
+        if (ImGui::DragFloat("Rotation", &rot, 0.1f, 0.1f, 90.f, "%.1f"))
+            m_rotSnap = rot * CCMaths::DEG2RAD;
+
     }
 
     ImGui::EndMenuBar();

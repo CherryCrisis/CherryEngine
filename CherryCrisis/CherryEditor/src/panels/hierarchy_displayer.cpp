@@ -316,9 +316,9 @@ void HierarchyDisplayer::ContextCallback()
                 for (auto& entity : m_manager->m_entitySelector.m_entities)
                 {
                     SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-                    //To Change
-                    m_manager->m_entitySelector.Clear();
                 }
+                //To Change
+                m_manager->m_entitySelector.Clear();
             }
 
             if (ImGui::MenuItem("Copy")) {}
