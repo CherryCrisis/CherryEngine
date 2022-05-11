@@ -246,6 +246,8 @@ namespace mono
 		bool IsPtr()	const { return m_isPtr; }
 
 		bool Equals(const ManagedType* other) const;
+		bool Equals(const MonoType* other) const;
+		bool Equals(const std::string& otherName) const;
 		bool operator==(const ManagedType* other) const { return Equals(other); }
 
 		const std::string& Name();
@@ -543,6 +545,8 @@ namespace mono
 		std::vector<UniqueRef<class ManagedProperty>> m_instances;
 		std::vector<UniqueRef<class ManagedObject>> m_handledInstances;
 		std::vector<UniqueRef<class ManagedObject>> m_managedInstances;
+		UniqueRef<class ManagedType> m_type;
+
 		MonoCustomAttrInfo* m_attrInfo;
 		std::string m_namespaceName;
 		std::string m_className;
@@ -631,6 +635,7 @@ namespace mono
 		ManagedObject* CreateUnmanagedInstance(void* cPtr, bool ownMemory);
 
 		inline MonoType* RawType() const { return mono_class_get_type(m_class); }
+		inline ManagedType* GetType() const { return m_type.get(); }
 		inline MonoClass* RawClass() const { return m_class;	}
 
 		bool ImplementsInterface(ManagedClass& interface);

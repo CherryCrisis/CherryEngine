@@ -98,13 +98,6 @@ void Inspector::InspectComponents(Entity* entity, int id)
             {
                 const std::type_index type = fieldRef.m_value.type();
 
-                if (type == typeid(CCMaths::Vector3))
-                {
-                    CCMaths::Vector3 val = std::any_cast<CCMaths::Vector3>(fieldRef.m_value);
-                    ImCherry::ColoredDragFloat3(fieldRef.m_name.c_str(), val.data, {1.f,1.f,1.f,1.f}, 0.5f);
-                    continue;
-                }
-
                 if (type == typeid(CCMaths::Vector3*))
                 {
                     CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
@@ -112,28 +105,15 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
-                if (type == typeid(CCMaths::Vector3**))
+                if (type == typeid(Bool3*))
                 {
-                    CCMaths::Vector3** val = std::any_cast<CCMaths::Vector3**>(fieldRef.m_value);
-                    CCMaths::Vector3* v = *val;
-                    ImCherry::ColoredDragFloat3(fieldRef.m_name.c_str(), v->data, color1, color2, color3 , 0.5f);
+                    Bool3* val = std::any_cast<Bool3*>(fieldRef.m_value);
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val->x); ImGui::SameLine();
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val->y); ImGui::SameLine();
+                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val->z);
                     continue;
                 }
 
-                if (type == typeid(Bool3))
-                {
-                    Bool3 val = std::any_cast<Bool3>(fieldRef.m_value);
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val.x); ImGui::SameLine();
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val.y); ImGui::SameLine();
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val.z);
-                    continue;
-                }
-                if (type == typeid(bool))
-                {
-                    bool val = std::any_cast<bool>(fieldRef.m_value);
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val);
-                    continue;
-                }
                 if (type == typeid(bool*))
                 {
                     bool* val = std::any_cast<bool*>(fieldRef.m_value);
@@ -152,17 +132,11 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     ImGui::DragFloat(fieldRef.m_name.c_str(), val, 0.5f, 0.0f, 0.0f, *val >= 1.0e+5 ? "%e" : "%.3f");
                     continue;
                 }
-                if (type == typeid(float))
-                {
-                    float val = std::any_cast<float>(fieldRef.m_value);
-                    ImGui::DragFloat(fieldRef.m_name.c_str(), &val, 0.5f, 0.0f, 0.0f, val >= 1.0e+5 ? "%e" : "%.3f");
-                    continue;
-                }
 
                 if (type == typeid(std::string*))
                 {
-                    std::string val = *std::any_cast<std::string*>(fieldRef.m_value);
-                    ImGui::InputText(fieldRef.m_name.c_str(), &val[0], val.size() + 1);
+                    std::string* val = std::any_cast<std::string*>(fieldRef.m_value);
+                    ImGui::InputText(fieldRef.m_name.c_str(), &(*val)[0], val->size() + 1);
                     continue;
                 }
 

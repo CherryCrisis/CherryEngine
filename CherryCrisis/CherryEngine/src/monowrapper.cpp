@@ -191,15 +191,22 @@ namespace mono
 	//================================================================//
 
 	ManagedType::ManagedType(MonoType* type)
-		: m_type(type)
+		
 	{
 		m_isVoid = mono_type_is_void(type);
 		m_isStruct = mono_type_is_struct(type);
 		m_isRef = mono_type_is_reference(type);
 		m_isPtr = mono_type_is_pointer(type);
-		m_typeindex = mono_type_get_type(type);
 
-		char* name = mono_type_get_name(type);
+		m_type = type;
+
+
+		//if (m_isPtr && !m_isRef)
+		//	m_type = mono_type_get_ptr_type(type);
+
+		m_typeindex = mono_type_get_type(m_type);
+
+		char* name = mono_type_get_name(m_type);
 		m_name = name;
 		mono_free(name);
 	}
@@ -231,6 +238,16 @@ namespace mono
 	bool ManagedType::Equals(const ManagedType* other) const
 	{
 		return m_typeindex == other->m_typeindex;
+	}
+
+	bool ManagedType::Equals(const MonoType* other) const
+	{
+		return m_typeindex == mono_type_get_type((MonoType*)other);
+	}
+
+	bool ManagedType::Equals(const std::string& otherName) const
+	{
+		return m_name == otherName;
 	}
 
 	const std::string& ManagedType::Name()
@@ -504,6 +521,9 @@ namespace mono
 		m_namespaceName = mono_class_get_namespace(cls);
 		m_attrInfo = mono_custom_attrs_from_class(cls);
 
+		MonoType* type = mono_class_get_type(m_class);
+		m_type = std::make_unique<ManagedType>(type);
+
 		if (!m_attrInfo || !mono_custom_attrs_has_attr(m_attrInfo, cls))
 			return;
 
@@ -639,6 +659,9 @@ namespace mono
 	void ManagedClass::Reload()
 	{
 		m_class = mono_class_from_name(m_assembly->m_image, m_namespaceName.c_str(), m_className.c_str());
+
+		MonoType* type = mono_class_get_type(m_class);
+		m_type = std::make_unique<ManagedType>(type);
 
 		if (!m_class)
 		{

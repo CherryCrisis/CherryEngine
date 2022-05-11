@@ -15,26 +15,30 @@
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
-	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
+	m_scriptingAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
+	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", false, "InterfaceDomain", false);
+
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
-	if (m_assembly)
+	if (m_scriptingAssembly)
 	{
-		m_assembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
-		m_assembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
+		m_scriptingAssembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
+		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
 	}
 }
 
 ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 {
 	// TODO: Change path
-	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
+	m_scriptingAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
+	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", false, "InterfaceDomain", false);
+
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
-	if (m_assembly)
+	if (m_scriptingAssembly)
 	{
-		m_assembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
-		m_assembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
+		m_scriptingAssembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
+		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
 	}
 }
 
@@ -43,10 +47,10 @@ ScriptedBehaviour::~ScriptedBehaviour()
 	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
 
-	if (m_assembly) 
+	if (m_scriptingAssembly)
 	{
-		m_assembly->m_OnReloaded.Unbind(&ScriptedBehaviour::Reload, this);
-		m_assembly->m_OnDeleted.Unbind(&ScriptedBehaviour::InvalidateAssembly, this);
+		m_scriptingAssembly->m_OnReloaded.Unbind(&ScriptedBehaviour::Reload, this);
+		m_scriptingAssembly->m_OnDeleted.Unbind(&ScriptedBehaviour::InvalidateAssembly, this);
 	}
 
 	if (managedInstance)
@@ -75,10 +79,10 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 {
 	m_scriptName = scriptName;
 
-	if (!m_assembly || !m_assembly->m_context)
+	if (!m_scriptingAssembly || !m_scriptingAssembly->m_context)
 		return;
 
-	managedClass = m_assembly->m_context->FindClass("CCScripting", scriptName.c_str());
+	managedClass = m_scriptingAssembly->m_context->FindClass("CCScripting", scriptName.c_str());
 
 	if (managedUpdate = managedClass->FindMethod("Update"))
 		csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
@@ -95,9 +99,17 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
+	Behaviour::PopulateMetadatas();
+
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
-	Behaviour::PopulateMetadatas();
+
+	auto handleRefClass = m_scriptingAssembly->m_context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
+	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
+	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
+
+	auto managedVector = m_interfaceAssembly->m_context->FindClass("CCEngine", "Vector3");
+	auto managedTransform = m_interfaceAssembly->m_context->FindClass("CCEngine", "Transform");
 
 	const auto& fields = managedClass->Fields();
 
@@ -123,10 +135,28 @@ void ScriptedBehaviour::PopulateMetadatas()
 			continue;
 		}
 
-		if (fieldType->Equals(mono::ManagedType::GetBoolean()))
+		if (fieldType->Equals("CCEngine.Vector3"))
 		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<bool>(managedInstance, fieldRef.get()));
-			continue;
+			auto managedGetCPtr = managedVector->FindMethod("getCPtr");
+
+			auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
+			MonoObject* managedVec = nullptr;
+			managedInstance->GetField(fieldName.c_str(), &managedVec);
+
+			MonoException* excep = nullptr;
+			MonoObject* ptrHandle = getCPtr->Invoke(managedVec, &excep);
+
+			void* unboxedHandle = mono_object_unbox(ptrHandle);
+
+			MonoObject* excepObj;
+			MonoObject* res = mono_runtime_invoke(getHandleMethod, unboxedHandle, nullptr, &excepObj);
+
+			if (!res || excep)
+				return;
+
+			CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
+
+			m_metadatas.SetFieldFromPtr(fieldName.c_str(), vecPtr);
 		}
 	}
 
@@ -144,13 +174,6 @@ void ScriptedBehaviour::PopulateMetadatas()
 			continue;
 		}
 
-		if (getType && getType->Equals(mono::ManagedType::GetBoolean()) ||
-			setType && setType->Equals(mono::ManagedType::GetBoolean()))
-		{
-			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<bool>(managedInstance, propRef.get()));
-			continue;
-		}
-
 		if (getType && getType->Equals(mono::ManagedType::GetString()) ||
 			setType && setType->Equals(mono::ManagedType::GetString()))
 		{
@@ -165,29 +188,6 @@ void ScriptedBehaviour::PopulateMetadatas()
 			continue;
 		}
 	}
-
-	/*auto handleRefClass = assembly->context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
-	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
-	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
-
-	auto managedVector = assembly->context->FindClass("CCEngine", "Vector3");
-	auto managedGetCPtr = managedVector->FindMethod("getCPtr");
-	auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
-	MonoObject* managedVec = nullptr;
-	behaviourInst->GetField("pos", &managedVec);
-
-	MonoException* excep = nullptr;
-	MonoObject* ptrHandle = getCPtr->Invoke(managedVec, &excep);
-
-	void* unboxedHandle = mono_object_unbox(ptrHandle);
-
-	MonoObject* exception = nullptr;
-	MonoObject* res = mono_runtime_invoke(getHandleMethod, unboxedHandle, nullptr, &exception);
-
-	if (!res || exception)
-		return;
-
-	CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);*/
 }
 
 void ScriptedBehaviour::Start()

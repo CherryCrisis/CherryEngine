@@ -38,10 +38,22 @@ struct CCENGINE_API Metadata
 		m_fields[fieldName] = Field(fieldName, value, fieldType);
 	}
 
+	template <typename CastT, typename RefT>
+	void SetFieldFromPtr(const char* fieldName, RefT* ref)
+	{
+		SetField(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(ref)), typeid(CastT));
+	}
+
+	template <typename RefT>
+	void SetFieldFromPtr(const char* fieldName, RefT* ref)
+	{
+		SetField(fieldName, std::any(ref), typeid(RefT));
+	}
+
 	template <typename RefT>
 	void SetField(const char* fieldName, RefT& ref)
 	{
-		SetField(fieldName, std::any(&ref), typeid(RefT));
+		SetFieldFromPtr(fieldName, &ref);
 	}
 
 	template <typename CastT, typename RefT>
