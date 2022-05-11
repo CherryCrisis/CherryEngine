@@ -773,8 +773,6 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 auto pair = m_assetNodes.insert({ modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) });
                 AssetNode* assetNode = pair.first->second.get();
 
-                modelBase->m_OnReloaded.Bind(&AssetBrowser::ResourceAssetNode<ModelBase>::ReloadPreviewTexture, static_cast<ResourceAssetNode<ModelBase>*>(assetNode));
-
                 return assetNode;
             }
         }

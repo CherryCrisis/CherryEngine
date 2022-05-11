@@ -191,12 +191,12 @@ void SceneDisplayer::Render()
                 const char* data = (const char*)payload->Data;
                 std::string extension = String::ExtractValue(data, '.');
 
-                if (extension == "cherry") 
+                if (sceneExtensions.compare('.' + extension) == 0)
                 {
                     m_manager->m_entitySelector.Clear();
                     EditorNotifications::SceneLoading(SceneManager::LoadScene(data));
                 }
-                else if (extension == "obj" || extension == "fbx" || extension == "gltf")
+                else if (modelExtensions.end() != modelExtensions.find("." + extension))
                 {
                     auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
                     ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(data, true, cb);

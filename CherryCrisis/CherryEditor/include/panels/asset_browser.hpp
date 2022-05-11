@@ -23,7 +23,7 @@ class AResource;
 class ModelBase;
 
 const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr" };
-const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf" };
+const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glb", ".gltf" };
 const std::set<std::string> shaderExtensions = { ".frag", ".vert" };
 const std::set<std::string> soundExtensions = { ".wav" };
 const std::string scriptExtensions = ".cs";
@@ -59,19 +59,6 @@ namespace CCScripting
     }
 })CS";
 
-	struct GPUTexturePreview : public GPUTexture
-	{
-		GLuint m_ID = 0u;
-
-		void Generate(Texture* texture);
-		void Regenerate(Texture* texture);
-		void Destroy();
-
-		GPUTexturePreview(Texture* texture);
-		virtual ~GPUTexturePreview();
-		void OnReload(std::shared_ptr<Texture> texture);
-	};
-
 	struct AssetNode
 	{
 		std::shared_ptr<Texture> m_previewTexture;
@@ -83,8 +70,6 @@ namespace CCScripting
 
 		bool					m_isHovered = false;
 		AssetBrowser*			m_assetBrowser = nullptr;
-
-		void UploadPreviewTexture();
 
 		virtual void Rename(const char* newFilepath) = 0;
 		virtual void Reload() = 0;
@@ -124,11 +109,6 @@ namespace CCScripting
 	struct ResourceAssetNode : public AssetNode
 	{
 		std::shared_ptr<ResourceT> m_resource;
-
-		void ReloadPreviewTexture(std::shared_ptr<ResourceT> resource)
-		{
-			//UploadPreviewTexture();
-		}
 
 		void Reload() override
 		{

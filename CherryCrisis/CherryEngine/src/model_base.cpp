@@ -27,12 +27,17 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
 
     std::vector<ModelNode*> modelNodes;
 
+    int rootNodeCount = 0;
+
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
         ModelNode* modelNode = new ModelNode();
         std::swap(modelNode->m_baseTRS, modelUtils.modelHeader.m_trs);
 
         modelNode->m_nodeName = modelUtils.m_modelName;
+
+        if (modelUtils.modelHeader.m_parentIndex == -1)
+            ++rootNodeCount;
 
         if (modelUtils.modelHeader.m_meshHeader.m_hasMesh)
         {
@@ -51,8 +56,18 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         modelNodes.push_back(modelNode);
     }
 
-    ModelNode* rootNode = new ModelNode();
-    rootNode->m_baseTRS[2] = Vector3::One;
+    ModelNode* rootNode = nullptr;
+
+    if (rootNodeCount > 1)
+    {
+        rootNode = new ModelNode();
+        rootNode->m_baseTRS[2] = Vector3::One;
+    }
+    else
+    {
+        rootNode = modelNodes[0];
+    }
+
 
     for (CCImporter::ImportModelUtils& modelUtils : modelsUtils)
     {
@@ -64,7 +79,7 @@ void ModelBase::Load(std::shared_ptr<ModelBase> modelBase)
         {
             modelNode->m_parentNode = modelNodes[modelUtils.modelHeader.m_parentIndex];
         }
-        else
+        else if (rootNodeCount > 1)
         {
             modelNode->m_parentNode = rootNode;
             rootNode->m_childrenNode.push_back(modelNode);
