@@ -79,7 +79,7 @@ namespace CCScripting
 
 	struct DirectoryNode : public AssetNode
 	{
-		std::set<AssetNode*> m_assetNodes {};
+		std::vector<AssetNode*> m_assetNodes {};
 		DirectoryNode*		m_parentDirectory = nullptr;
 
 		void Rename(const char* newFilepath) override {};
@@ -175,7 +175,7 @@ namespace CCScripting
 	DirectoryNode* m_currentDirectoryNode = nullptr;
 
 	std::map<std::string, std::unique_ptr<AssetNode>> m_assetNodes;
-	std::set<AssetNode*> m_allAssetNode; //To research in all directories
+	std::vector<AssetNode*> m_allAssetNode; //To research in all directories
 
 	const float m_padding = 55.f;
 	const float m_upPadding = 5.f;
@@ -217,6 +217,7 @@ public :
 	void ContextCallback() override;
 	
 	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
+	std::string GetCurrentDirectoryPath() { return m_currentDirectoryNode ? m_currentDirectoryNode->m_path.string() : ""; }
 
 	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
 };
