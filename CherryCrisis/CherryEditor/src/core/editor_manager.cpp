@@ -47,8 +47,11 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_cellSystemDisplayer.m_camera = &m_sceneDisplayer.m_camera;
 
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
+    m_browser.SetPath(m_projectPath);
 
     Serializer::UnserializeEditor("editor.meta");
+
+    m_browser.ReloadScripts();
 }
 
 void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
@@ -283,9 +286,6 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
         if (ImGui::Button("Show Demo"))
             m_isDemoOpened = true;
-
-        if (ImGui::Button("Reload scripts"))
-            CsScriptingSystem::GetInstance()->ReloadContextes();
         
     }
     ImGui::End();

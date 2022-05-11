@@ -8,6 +8,7 @@
 #include "csassembly.hpp"
 
 #include "utils.hpp"
+#include "command.hpp"
 
 #include "resource_manager.hpp"
 
@@ -32,18 +33,22 @@ void CsScriptingSystem::Init()
 	};
 
 	mono_add_internal_call("CCEngine.ScriptedBehaviour::GetStaticInstance", GetStaticInstance);
-	auto csassembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
-	mono::ManagedAssembly* assembly = csassembly->m_context->FindAssembly("CherryScripting.copy.dll");
-	mono::ManagedClass* behaviourClass = csassembly->m_context->FindClass("CCEngine", "Behaviour");
-	csassembly->m_context->FindClass("CCScripting", "DebugTest");
-	csassembly->m_context->FindClass("CCScripting", "BackpackBehaviour");
-	csassembly->m_context->FindClass("CCScripting", "CameraController");
-	csassembly->m_context->FindClass("CCScripting", "Meow");
-	csassembly->m_context->FindClass("CCScripting", "TG");
+
+	m_scriptAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain", true);
+	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", true, "InterfaceDomain", false);
+
+	mono::ManagedAssembly* scriptAssembly = m_scriptAssembly->m_context->FindAssembly("CherryScripting.copy.dll");
+	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
+
+	m_scriptAssembly->m_context->FindClass("CCScripting", "DebugTest");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "BackpackBehaviour");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "CameraController");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "Meow");
+	m_scriptAssembly->m_context->FindClass("CCScripting", "TG");
 
 	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
 
-	auto& classes = assembly->GetClasses();
+	auto& classes = scriptAssembly->GetClasses();
 	for (auto& [className, classRef] : classes)
 	{
 		if (className == "Behaviour")
@@ -54,26 +59,38 @@ void CsScriptingSystem::Init()
 		if (mono_type_get_type(typeParentMDR) == behaviourTypeID)
 			classesName.push_back(className);
 	}
-
 }
 
-mono::ManagedScriptContext* CsScriptingSystem::CreateContext(char* domainName, const char* contextPath)
+mono::ManagedScriptContext* CsScriptingSystem::CreateContext(char* domainName, const char* contextPath, bool makeCopy)
 {
-	auto newPath = CopyTemporaryFile(contextPath);
+	std::string currPath = contextPath;
 
-	return m_scriptSystem->CreateContext(domainName, contextPath, newPath.generic_string().c_str());
+	if (makeCopy)
+	{
+		auto newPath = CopyTemporaryFile(contextPath);
+		currPath = newPath.generic_string();
+	}
+
+	return m_scriptSystem->CreateContext(domainName, contextPath, currPath.c_str());
 }
 
-void CsScriptingSystem::InitializeAssembly(std::shared_ptr<CsAssembly> assembly, const char* domainName)
+void CsScriptingSystem::InitializeAssembly(std::shared_ptr<CsAssembly> assembly, const char* domainName, bool makeCopy)
 {
 	char* name = (char*)&domainName[0];
-	assembly->m_context = CreateContext(name, assembly->GetFilepath().c_str());
+	assembly->m_context = CreateContext(name, assembly->GetFilepath().c_str(), makeCopy);
 
 	m_assemblies.push_back(assembly);
 }
 
 void CsScriptingSystem::ReloadContextes()
 {
-	for (auto& assembly : m_assemblies)
-		Resource<CsAssembly>::ReloadResource(assembly);
+	Resource<CsAssembly>::ReloadResource(m_scriptAssembly);
+}
+
+void CsScriptingSystem::InitializeHotReload(const char* compilerPath, const char* solutionPath) 
+{
+	"\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv\"";
+	std::string fullArg = solutionPath + std::string(" /Build");
+	callEx("open", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv", fullArg.c_str());
+	ReloadContextes();
 }

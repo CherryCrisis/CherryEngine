@@ -7,10 +7,10 @@
 #include "monowrapper.hpp"
 #include "utils.hpp"
 
-void CsAssembly::Load(std::shared_ptr<CsAssembly> csassembly, const char* domainName)
+void CsAssembly::Load(std::shared_ptr<CsAssembly> csassembly, const char* domainName, bool makeCopy)
 {
 	// TODO: try const_cast
-	CsScriptingSystem::GetInstance()->InitializeAssembly(csassembly, domainName);
+	CsScriptingSystem::GetInstance()->InitializeAssembly(csassembly, domainName, makeCopy);
 }
 
 void CsAssembly::Reload()

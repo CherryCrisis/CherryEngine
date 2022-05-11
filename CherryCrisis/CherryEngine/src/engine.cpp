@@ -21,6 +21,7 @@ void* Engine::window_handle = nullptr;
 Engine::Engine() 
 {
 	CsScriptingSystem::GetInstance()->Init();
+
 	RenderManager::GetInstance();
 	SoundManager::Init();
 }
@@ -69,4 +70,5 @@ void Engine::Stop()
 	isPlaying = false;
 	PhysicSystem::PhysicManager::GetInstance()->Stop();
 	SceneManager::ResetScene();
+	m_OnStop.Invoke();
 }

@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#include "event.hpp"
+
 class CCENGINE_API Engine
 {
 public:
@@ -22,4 +24,6 @@ public:
 
 	void Tick();
 	void TickEngine();
+
+	Event<> m_OnStop;
 };

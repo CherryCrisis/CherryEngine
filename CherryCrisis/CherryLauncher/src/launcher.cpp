@@ -61,11 +61,7 @@ void Launcher::CreateProject(const std::string& path, const std::string& name)
 
 	//Create project Folder
 	CreateFolder(path, name);
-	
-	CreateFolder(newPath, "Assets");
-	CreateFolder(newPath, "Cache");
-	CreateFolder(newPath, "Internal");
-	CopyFile("imgui.ini", newPath+"/imgui.ini");
+	CopyFolder("ProjectKit", newPath);
 
 	//Create cherryproject 
 	std::ofstream out(projectfilePath);

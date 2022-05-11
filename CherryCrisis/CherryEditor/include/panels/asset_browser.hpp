@@ -5,9 +5,11 @@
 #include <filesystem>
 #include <unordered_map>
 #include <set>
-#include <glad/gl.h>
 #include <typeinfo>
 #include <typeindex>
+#include <vector>
+
+#include <glad/gl.h>
 
 #include "resource_manager.hpp"
 
@@ -21,6 +23,7 @@
 
 class AResource;
 class ModelBase;
+class EditorManager;
 
 const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr" };
 const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf" };
@@ -117,6 +120,9 @@ namespace CCScripting
 		void Reload() override {};
 		void Delete() override {};
 		void Action() override {};
+
+		//last time edited info
+		//check if modified
 	};
 
 
@@ -223,9 +229,11 @@ namespace CCScripting
 
 	bool DragAndDropTarget(AssetNode* assetNode);
 
+	EditorManager* m_manager = nullptr;
 public :
 
-	AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer);
+	std::unordered_map<std::string, time_t> m_timeModified;
+	AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer, EditorManager* manager = nullptr);
 
 	void SetCurrentDirectory(DirectoryNode* directoryNode) 
 	{ 
@@ -238,5 +246,7 @@ public :
 	
 	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
 
+	void ReloadScripts();
+	void SetPath(const std::filesystem::path& path);
 	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
 };

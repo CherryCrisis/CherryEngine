@@ -94,7 +94,7 @@ public:
 	~ProjectSettingsDisplayer();
 
 	BuildSettings GetBuildSettings();
-	
+
 	void Render() override;
 
 	// All the things + will have to serialize of all this shit

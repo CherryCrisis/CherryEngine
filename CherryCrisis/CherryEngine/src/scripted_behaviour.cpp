@@ -15,7 +15,7 @@
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
-	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
+	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
 	if (m_assembly)
@@ -28,7 +28,7 @@ ScriptedBehaviour::ScriptedBehaviour()
 ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 {
 	// TODO: Change path
-	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain");
+	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
 	if (m_assembly)
@@ -95,9 +95,9 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
-	Behaviour::PopulateMetadatas();
-
 	m_metadatas.SetProperty("scriptName", &scriptPath);
+
+	Behaviour::PopulateMetadatas();
 
 	const auto& fields = managedClass->Fields();
 
@@ -122,6 +122,12 @@ void ScriptedBehaviour::PopulateMetadatas()
 			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<float>(managedInstance, fieldRef.get()));
 			continue;
 		}
+
+		if (fieldType->Equals(mono::ManagedType::GetBoolean()))
+		{
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<bool>(managedInstance, fieldRef.get()));
+			continue;
+		}
 	}
 
 	const auto& properties = managedClass->Properties();
@@ -135,6 +141,13 @@ void ScriptedBehaviour::PopulateMetadatas()
 			setType && setType->Equals(mono::ManagedType::GetInt32()))
 		{
 			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<int>(managedInstance, propRef.get()));
+			continue;
+		}
+
+		if (getType && getType->Equals(mono::ManagedType::GetBoolean()) ||
+			setType && setType->Equals(mono::ManagedType::GetBoolean()))
+		{
+			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<bool>(managedInstance, propRef.get()));
 			continue;
 		}
 

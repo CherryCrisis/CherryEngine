@@ -22,6 +22,7 @@
 #include <crtdbg.h>
 
 #include "utils.hpp"
+#include "command.hpp"
 
 void HideCursor(void* window) 
 {
@@ -84,7 +85,17 @@ int main(int argc, char** argv)
     if (argc > 1) 
         projectPath = argv[1];
 
+
+    if (projectPath.size() > 0)
+        std::filesystem::current_path(projectPath);
+
+    std::string solutionPath = projectPath + "/CherryScripting.sln /Build";
+    callEx("open", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv", solutionPath.c_str());
     Engine engine{};
+    std::cout << "engine created " << std::endl;
+
+
+
     EditorManager editor{projectPath};
 
     glfwSetWindowUserPointer(window, &editor);

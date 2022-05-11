@@ -54,7 +54,7 @@ private:
 
     //Panel's Classes
     AssetSettingsDisplayer   m_assetSettingsDisplayer{};
-    AssetBrowser             m_browser               {&m_assetSettingsDisplayer};
+    AssetBrowser             m_browser               {&m_assetSettingsDisplayer, this};
     LogDisplayer             m_logDisplayer          {};
     Inspector                m_inspector             {true, this, &m_assetSettingsDisplayer};
     GameDisplayer            m_gameDisplayer         {};
@@ -66,7 +66,6 @@ private:
     BuildDisplayer           m_buildDisplayer        {false};
     //--------------
 
-    Engine* m_engine = nullptr;
 
     void HandleDocking();
     void HandleFeaturerWindow(GLFWwindow* window);
@@ -85,6 +84,7 @@ private:
     void GenerateGPUTexture(std::shared_ptr<Texture> texture);
 public:
 
+    Engine* m_engine = nullptr;
     EntitySelector m_entitySelector;
 
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
@@ -101,6 +101,8 @@ public:
     InputManager::InputContext* m_editorContext;
 
     std::string m_projectPath = "";
+
+    std::string GetCompilerPath() { return m_preferencesDisplayer.GetCompilerPath(); }
 };
 
 // Wrapper for generic notifications

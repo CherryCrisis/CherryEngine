@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "render_manager.hpp" //TODO: Erase when renderer manager instance is initialized in ENGINE
 #include "core/editor_manager.hpp"
@@ -15,15 +17,15 @@
 #include "command.hpp"
 #include "model_loader.hpp"
 
+#include "csscripting_system.hpp"
+#include "engine.hpp"
+
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
-AssetBrowser::AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer)
-    : m_assetSettingsDisplayer(assetSettingsDisplayer)
+AssetBrowser::AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer, EditorManager* manager)
+    : m_assetSettingsDisplayer(assetSettingsDisplayer), m_manager(manager)
 {
-    m_assetsDirectory = std::filesystem::current_path();
-    m_assetsDirectory /= "Assets";
 
-	QuerryBrowser();
 }
 
 void AssetBrowser::Render()
@@ -809,6 +811,31 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true);
 
             auto pair = m_assetNodes.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
+
+            struct stat result;
+            if (stat(scriptNode.m_path.string().c_str(), &result) == 0)
+            {
+                auto mod_time = result.st_mtime;
+            
+                if (m_timeModified.contains(scriptNode.m_filename))
+                {
+                    if (m_timeModified[scriptNode.m_filename] != mod_time) 
+                    {
+                        m_timeModified[scriptNode.m_filename] = mod_time;
+                        // TODO: check if reload already started
+                        if (m_manager->m_engine) 
+                        {
+                            if (m_manager->m_engine->isPlaying)
+                                m_manager->m_engine->m_OnStop.Bind(&AssetBrowser::ReloadScripts, this);
+                            else
+                                ReloadScripts();
+                        }
+                    }
+                }
+                else
+                    m_timeModified.insert({ scriptNode.m_filename, mod_time });
+            }
+
             return pair.first->second.get();
         }
 
@@ -872,6 +899,12 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
     return pair.first->second.get();
 }
 
+void AssetBrowser::SetPath(const std::filesystem::path& path) 
+{
+    m_assetsDirectory = path/"Assets";
+    QuerryBrowser();
+}
+
 void AssetBrowser::QuerryBrowser()
 {
 	m_currentDirectoryNode = nullptr;
@@ -896,4 +929,11 @@ void AssetBrowser::QuerryBrowser()
     }
 
     ResourceManager::GetInstance()->Purge();
+}
+
+void AssetBrowser::ReloadScripts()
+{
+    std::string solutionPath = (m_assetsDirectory.parent_path() / "CherryScripting.sln").string();
+    CsScriptingSystem::GetInstance()->InitializeHotReload(m_manager->GetCompilerPath().c_str(), solutionPath.c_str());
+    m_manager->m_engine->m_OnStop.Unbind(&AssetBrowser::ReloadScripts, this);
 }

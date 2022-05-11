@@ -24,6 +24,8 @@ private:
 	public:
 		ThirdParty(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
+
+		char m_compilerPath[256] = "C:\\Program Files(x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv";
 	};
 
 public:
@@ -32,6 +34,7 @@ public:
 
 	void Render() override;
 
+	std::string   GetCompilerPath();
 
 	// All the things + will have to serialize of all this shit
 };

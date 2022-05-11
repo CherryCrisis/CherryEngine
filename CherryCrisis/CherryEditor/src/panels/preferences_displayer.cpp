@@ -58,9 +58,14 @@ void PreferencesDisplayer::Cutstomization::Fill()
 
 void PreferencesDisplayer::ThirdParty::Fill()
 {
-    static char scripting[32] = "Scripting App Path";
-    IMGUI_LEFT_LABEL(ImGui::InputText, "Scripting Software:", scripting, IM_ARRAYSIZE(scripting));
+    IMGUI_LEFT_LABEL(ImGui::InputText, "Scripting Software:", m_compilerPath, IM_ARRAYSIZE(m_compilerPath));
 
     static char shader[32] = "Shader App Path";
     IMGUI_LEFT_LABEL(ImGui::InputText, "Shader Editing Software:", shader, IM_ARRAYSIZE(shader));
+}
+
+std::string PreferencesDisplayer::GetCompilerPath() 
+{
+    PreferencesDisplayer::ThirdParty* thirdParty = (PreferencesDisplayer::ThirdParty*)m_categories[1];
+    return thirdParty->m_compilerPath;
 }

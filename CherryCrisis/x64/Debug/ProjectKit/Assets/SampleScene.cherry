@@ -1,0 +1,38 @@
+entities:
+  4245071128:
+    name: Light
+  1141188403:
+    name: Camera
+  2420331767:
+    name: Empty
+components:
+  743442707:
+    type: Transform
+    m_owner: 4245071128
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  1630027800:
+    type: LightComponent
+    ambient: 1.000000/1.000000/1.000000
+    diffuse: 1.000000/1.000000/1.000000
+    specular: 1.000000/1.000000/1.000000
+    attenuation: 1.000000/0.000000/0.000000
+    isPoint: true
+    m_owner: 4245071128
+  517230441:
+    type: Transform
+    m_owner: 1141188403
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  977345729:
+    type: CameraComponent
+    aspect: 1.33333337
+    fovY: 1.04719758
+    near: 0.00999999978
+    far: 1500
+    transform: 517230441
+    m_owner: 1141188403
