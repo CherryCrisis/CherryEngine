@@ -98,6 +98,7 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_preferencesDisplayer.Render();
     m_projSettingsDisplayer.Render();
     m_buildDisplayer.Render();
+    m_uiEditor.Render();
     HandleFeaturerWindow(window);
 
     HandleNotifications();
@@ -188,14 +189,16 @@ void EditorManager::HandleMenuBar()
         {
             if (ImGui::BeginMenu("Open"))
             {
-                if (ImGui::MenuItem("Browser")) { m_browser.Toggle(true); }
-                if (ImGui::MenuItem("Hierarchy")) { m_hierarchyDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Log"))       { m_logDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Inspector")) { m_inspector.Toggle(true); }
+                if (ImGui::MenuItem("Browser"))        { m_browser.Toggle(true); }
+                if (ImGui::MenuItem("Hierarchy"))      { m_hierarchyDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Log"))            { m_logDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Inspector"))      { m_inspector.Toggle(true); }
                 if (ImGui::MenuItem("Asset Settings")) { m_assetSettingsDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Game"))      { m_gameDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Scene"))     { m_sceneDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Featurer"))  { m_isFeaturerOpened = true; }
+                if (ImGui::MenuItem("Game"))           { m_gameDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Scene"))          { m_sceneDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Featurer"))       { m_isFeaturerOpened = true; }
+                if (ImGui::MenuItem("UI Editor"))      { m_uiEditor.Toggle(true);}
+
                 ImGui::EndMenu();
             }
 

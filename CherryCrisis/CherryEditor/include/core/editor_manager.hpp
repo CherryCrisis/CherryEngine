@@ -18,6 +18,7 @@
 #include "panels/project_settings_displayer.hpp"
 #include "panels/build_displayer.hpp"
 #include "panels/asset_settings.hpp"
+#include "panels/ui_editor.hpp"
 
 #include "maths.hpp"
  
@@ -63,7 +64,8 @@ private:
     HierarchyDisplayer       m_hierarchyDisplayer    {true, this};
     PreferencesDisplayer     m_preferencesDisplayer  {false};
     ProjectSettingsDisplayer m_projSettingsDisplayer {false};
-    BuildDisplayer           m_buildDisplayer        {false};
+    BuildDisplayer           m_buildDisplayer        { false };
+    UIEditor                 m_uiEditor              {};
     //--------------
 
     Engine* m_engine = nullptr;

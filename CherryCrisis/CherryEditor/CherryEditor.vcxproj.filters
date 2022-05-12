@@ -111,6 +111,9 @@
     <ClCompile Include="src\panels\asset_browser.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\panels\ui_editor.cpp">
+      <Filter>Fichiers sources\Panels</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -174,6 +177,9 @@
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
     <ClInclude Include="include\panels\asset_browser.hpp">
+      <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\panels\ui_editor.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
   </ItemGroup>

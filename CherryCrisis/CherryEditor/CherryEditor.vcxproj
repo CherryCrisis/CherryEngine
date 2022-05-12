@@ -46,6 +46,7 @@
     <ClCompile Include="src\panels\project_settings_displayer.cpp" />
     <ClCompile Include="src\panels\scene_displayer.cpp" />
     <ClCompile Include="src\panels\toolbar.cpp" />
+    <ClCompile Include="src\panels\ui_editor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\include\ImGuizmo.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="include\panels\project_settings_displayer.hpp" />
     <ClInclude Include="include\panels\scene_displayer.hpp" />
     <ClInclude Include="include\panels\toolbar.hpp" />
+    <ClInclude Include="include\panels\ui_editor.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -234,7 +236,8 @@
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Release;lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>start /d ..\ Release_Postbuild.bat</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
