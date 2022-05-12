@@ -53,20 +53,21 @@ void Engine::Tick()
 
 void Engine::Launch() 
 {
-	isPlaying = true;
+	m_isPlaying = true;
 	SceneManager::FlipScene();
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }
 
 void Engine::LaunchStandalone() 
 {
-	isPlaying = true;
+	m_isPlaying = true;
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }
 
 void Engine::Stop()
 {
-	isPlaying = false;
+	m_isPlaying = false;
+	m_isPaused = false;
 	PhysicSystem::PhysicManager::GetInstance()->Stop();
 	SceneManager::ResetScene();
 }

@@ -150,7 +150,7 @@ int main(int argc, char** argv)
 
         engine.TickEngine();
 
-        if (engine.isPlaying)
+        if (engine.m_isPlaying && !engine.m_isPaused)
         {
             InputManager::GetInstance()->PushContext("User Context");
             engine.Tick();
