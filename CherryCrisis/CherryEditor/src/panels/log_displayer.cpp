@@ -22,7 +22,7 @@ LogDisplayer::LogDisplayer()
     for (int i = 0; i < 3; ++i)
     {
         GenerateGPUTexture(m_logTextures[i]);
-        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_logTextures[i]->m_gpuTexture.get());
+        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_logTextures[i]->m_gpuTexture2D.get());
         m_gpuTextureIDs[i] = reinterpret_cast<void*>((uintptr_t)gpuTextureLog->m_ID);
     }
 }
@@ -46,7 +46,7 @@ void LogDisplayer::GenerateGPUTexture(std::shared_ptr<Texture> texture)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, texture->GetData());
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    texture->m_gpuTexture = std::move(gpuTexture);
+    texture->m_gpuTexture2D = std::move(gpuTexture);
 }
 
 void LogDisplayer::Render()

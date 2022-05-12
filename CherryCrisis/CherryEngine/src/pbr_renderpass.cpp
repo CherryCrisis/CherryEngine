@@ -140,7 +140,7 @@ void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, in
 	 
 	// TODO: Add multiple default textures
 	// If is does not exist and its gpuTex too, get the default texture
-	auto& gpuTexPtr = (texture && texture->m_gpuTexture) ? texture->m_gpuTexture : m_defaultTexture->m_gpuTexture;
+	auto& gpuTexPtr = (texture && texture->m_gpuTexture2D) ? texture->m_gpuTexture2D : m_defaultTexture->m_gpuTexture2D;
 
 
 	auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(gpuTexPtr.get());
@@ -236,21 +236,24 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			BindTexture(material, ETextureType::ROUGHNESS, 4);
 			BindTexture(material, ETextureType::AO, 5);
 
-			if (Spheremap* spheremap = m_skydome->m_spheremap.get())
+			if (m_skydome)
 			{
-				if (auto gpuIrradianceMap = static_cast<IrradianceMapRenderPass::GPUIrradianceMapSphereMap*>(spheremap->m_gpuIrradiancemap.get()))
+				if (Spheremap* spheremap = m_skydome->m_spheremap.get())
 				{
-					glBindTextureUnit(6, gpuIrradianceMap->ID);
-				}
+					if (auto gpuIrradianceMap = static_cast<IrradianceMapRenderPass::GPUIrradianceMapSphereMap*>(spheremap->m_gpuIrradiancemap.get()))
+					{
+						glBindTextureUnit(6, gpuIrradianceMap->ID);
+					}
 
-				if (auto gpuPrefilterMap = static_cast<PrefilterMapRenderPass::GPUPrefilterMapSphereMap*>(spheremap->m_gpuPrefilterMap.get()))
-				{
-					glBindTextureUnit(7, gpuPrefilterMap->ID);
-				}
+					if (auto gpuPrefilterMap = static_cast<PrefilterMapRenderPass::GPUPrefilterMapSphereMap*>(spheremap->m_gpuPrefilterMap.get()))
+					{
+						glBindTextureUnit(7, gpuPrefilterMap->ID);
+					}
 
-				if (auto gpuBRDF = static_cast<BRDFRenderPass::GPUBRDFSphereMap*>(spheremap->m_gpuBrdf.get()))
-				{
-					glBindTextureUnit(8, gpuBRDF->ID);
+					if (auto gpuBRDF = static_cast<BRDFRenderPass::GPUBRDFSphereMap*>(spheremap->m_gpuBrdf.get()))
+					{
+						glBindTextureUnit(8, gpuBRDF->ID);
+					}
 				}
 			}
 		}

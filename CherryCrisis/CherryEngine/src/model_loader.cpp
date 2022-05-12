@@ -154,6 +154,7 @@ namespace CCImporter
 
         YAML::Node settingsSave = yamlSave["settings"];
         settingsSave["format"] = static_cast<unsigned int>(textureHeader.internalFormat);
+        settingsSave["surface"] = static_cast<unsigned int>(textureHeader.surface);
         settingsSave["flipped"] = textureHeader.flipped;
 
         std::ofstream out(fullFilepathMeta.c_str());
@@ -340,7 +341,7 @@ namespace CCImporter
     {
         unsigned char* data;
         TextureHeader textureHeader;
-        ImportTexture(filepath, &data, textureHeader, true, ETextureFormat::RGBA);
+        ImportTexture(filepath, &data, textureHeader, true, ETextureFormat::RGBA, ETextureSurface::TEXTURE_2D);
         delete data;
     }
 
@@ -369,7 +370,7 @@ namespace CCImporter
         materialArgs.m_texturesPath.push_back(filepath.string());
     }
 
-    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, bool importSettings)
+    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, ETextureSurface textureSurface, bool importSettings)
     {
         if (importSettings)
         {
@@ -380,6 +381,7 @@ namespace CCImporter
                 YAML::Node settingsLoaded = loader["settings"];
 
                 textureFormat = static_cast<ETextureFormat>(settingsLoaded["format"].as<unsigned int>());
+                textureSurface = static_cast<ETextureSurface>(settingsLoaded["surface"].as<unsigned int>());
                 flipTexture = settingsLoaded["flipped"].as<bool>();
             }
         }
@@ -397,6 +399,7 @@ namespace CCImporter
             image.flipY();
 
         textureHeader.internalFormat = textureFormat;
+        textureHeader.surface = textureSurface;
         textureHeader.width = image.width();
         textureHeader.height = image.height();
         textureHeader.flipped = flipTexture;
@@ -779,7 +782,7 @@ namespace CCImporter
     #pragma endregion
 
     #pragma region Cubemap
-    void SaveCubemap(Cubemap * cubemap)
+    void SaveCubemap(Cubemap* cubemap)
     {
         std::string path(cubemap->GetFilesystemPath()->string());
         //-- Save in assets directory --//

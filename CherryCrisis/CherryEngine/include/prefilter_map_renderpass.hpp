@@ -6,24 +6,31 @@
 
 #include "element_mesh_generator.hpp"
 
-#include "spheremap.hpp"
+#include "texture.hpp"
 
-class Skydome;
+class SkyRenderer;
 class Viewer;
 
 class PrefilterMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
-	Skydome* m_skydome = nullptr;
-
-	const unsigned int	m_maxMipLevels = 5;
-	const unsigned int	m_mipMapResolution = 128;
-
+	SkyRenderer* m_skyRenderer = nullptr;
 
 public:
 	struct GPUPrefilterMapSphereMap : GPUPrefilterMap
 	{
+		const unsigned int	m_maxMipLevels = 5;
+		const unsigned int	m_mipMapResolution = 128;
+
 		GLuint		ID = 0u;
+
+		void Generate(Texture* texture);
+		void Regenerate(Texture* texture);
+		void Destroy();
+
+		GPUPrefilterMapSphereMap(Texture* texture);
+		virtual ~GPUPrefilterMapSphereMap();
+		void OnReload(std::shared_ptr<Texture> texture);
 	};
 
 	PrefilterMapRenderPass(const char* name);
@@ -41,11 +48,9 @@ public:
 	}
 
 	template <>
-	int Subscribe(Skydome* toGenerate);
+	int Subscribe(SkyRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Skydome* toGenerate);
-
-	void Execute(Framebuffer& fb, Viewer*& viewer);
+	void Unsubscribe(SkyRenderer* toGenerate);
 
 };

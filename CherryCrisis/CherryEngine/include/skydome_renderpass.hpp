@@ -6,20 +6,19 @@
 
 #include "element_mesh_generator.hpp"
 
-#include "spheremap.hpp"
+#include "texture.hpp"
 
-class Skydome;
+class SkyRenderer;
 class Viewer;
 
 class SkydomeRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
-	Skydome* m_skydome = nullptr;
-
+	SkyRenderer* m_skyRenderer = nullptr;
 
 public:
 
-	struct GPUSkydomeCubemap : GPUCubemapV2
+	struct GPUSkydomeCubemap : GPUTextureCubemap
 	{
 		GLuint ID = 0u;
 	};
@@ -39,10 +38,10 @@ public:
 	}
 
 	template <>
-	int Subscribe(Skydome* toGenerate);
+	int Subscribe(SkyRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Skydome* toGenerate);
+	void Unsubscribe(SkyRenderer* toGenerate);
 
 	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

@@ -39,7 +39,7 @@ EditorManager::EditorManager(const std::string& projectPath)
     for (int i = 0; i < 4; ++i)
     {
         GenerateGPUTexture(m_menuBarTextures[i]);
-        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_menuBarTextures[i]->m_gpuTexture.get());
+        GPUTextureLog* gpuTextureLog = static_cast<GPUTextureLog*>(m_menuBarTextures[i]->m_gpuTexture2D.get());
         m_gpuTextureIDs[i] = reinterpret_cast<void*>((uintptr_t)gpuTextureLog->m_ID);
     }
 
@@ -70,7 +70,7 @@ void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->GetWidth(), texture->GetHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, texture->GetData());
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    texture->m_gpuTexture = std::move(gpuTexture);
+    texture->m_gpuTexture2D = std::move(gpuTexture);
 }
 
 void EditorManager::LinkEngine(Engine* engine) 

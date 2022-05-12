@@ -22,7 +22,7 @@ ThreadPool::ThreadPool()
 ThreadPool::~ThreadPool()
 {
 	m_stopThreads = true;
-	m_condition.notify_one();
+	m_condition.notify_all();
 
 	while (m_threads.size() != 0)
 	{

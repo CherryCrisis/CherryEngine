@@ -3,11 +3,37 @@
 #include "resource.hpp"
 #include "model_loader.hpp"
 
-struct CCENGINE_API GPUTexture
+struct CCENGINE_API GPUTexture2D
 {
-    virtual ~GPUTexture() = default;
+    virtual ~GPUTexture2D() = default;
 };
 
+struct CCENGINE_API GPUTextureSpheremap
+{
+    virtual ~GPUTextureSpheremap() = default;
+};
+
+struct CCENGINE_API GPUTextureCubemap
+{
+    virtual ~GPUTextureCubemap() = default;
+};
+
+struct CCENGINE_API GPUIrradianceMap
+{
+    virtual ~GPUIrradianceMap() = default;
+};
+
+struct CCENGINE_API GPUPrefilterMap
+{
+    virtual ~GPUPrefilterMap() = default;
+};
+
+enum class ETextureSurface
+{
+    TEXTURE_2D,
+    TEXTURE_CUBEMAP,
+    TEXTURE_SPHEREMAP,
+};
 
 enum class ETextureFormat
 {
@@ -32,6 +58,7 @@ private:
     int             m_mipmapLevels = 0;
     int             m_blockSize = 0;
     ETextureFormat  m_internalFormat = ETextureFormat::RGBA;
+    ETextureSurface m_surface = ETextureSurface::TEXTURE_2D;
     bool            m_flipped = false;
 
     void*   m_data = nullptr;
@@ -39,8 +66,14 @@ private:
     bool m_stackAllocated = false;
 
 public:
-    std::unique_ptr<GPUTexture> m_gpuTexture = nullptr;
+    std::unique_ptr<GPUTexture2D> m_gpuTexture2D = nullptr;
+    std::unique_ptr<GPUTextureSpheremap> m_gpuTextureSpheremap = nullptr;
+    std::unique_ptr<GPUTextureCubemap> m_gpuTextureCubemap = nullptr;
 
+    //-- PBR --//
+    std::unique_ptr<GPUIrradianceMap>   m_gpuIrradiancemap = nullptr;
+    std::unique_ptr<GPUPrefilterMap>    m_gpuPrefilterMap = nullptr;
+    
     Texture(const char* texturePath);
     virtual ~Texture();
 
@@ -49,8 +82,13 @@ public:
     int GetSize()   { return m_size; }
     int GetMipmapCount() { return m_mipmapLevels; }
     int GetBlockSize() { return m_blockSize; }
+
     ETextureFormat GetInternalFormat() { return m_internalFormat; }
     void SetInternalFormat(ETextureFormat textureFormat) { m_internalFormat = textureFormat; }
+
+    ETextureSurface GetSurface() { return m_surface; }
+    void SetSurface(ETextureSurface surface) { m_surface = surface; }
+
 
     bool GetIsFlipped() const { return m_flipped; }
 

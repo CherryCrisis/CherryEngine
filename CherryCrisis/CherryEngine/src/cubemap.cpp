@@ -9,14 +9,14 @@
 void Cubemap::Load(std::shared_ptr<Cubemap> cubemap)
 {
     std::array<std::string, 6> texturePaths;
-    if (CCImporter::ImportCubemap(*cubemap->GetFilesystemPath(), texturePaths))
+    if (!CCImporter::ImportCubemap(*cubemap->GetFilesystemPath(), texturePaths))
     {
         //Save empty cubemap if doesn't exist
         CCImporter::SaveCubemap(cubemap.get());
     }
 
     int width, height;
-    bool ready; //Ready to use if all width/height of all textures are same
+    bool ready = false; //Ready to use if all width/height of all textures are same
 
     ResourceManager* resourceManager = ResourceManager::GetInstance();
     for (unsigned int i = 0; i < 6; i++)
@@ -77,7 +77,7 @@ void Cubemap::Reload(bool saveOnly)
     }
 
     int width, height;
-    bool ready; //Ready to use if all width/height of all textures are same
+    bool ready = 0; //Ready to use if all width/height of all textures are same
 
     ResourceManager* resourceManager = ResourceManager::GetInstance();
     for (unsigned int i = 0; i < 6; i++)

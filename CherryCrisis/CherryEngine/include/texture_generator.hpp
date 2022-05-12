@@ -7,7 +7,7 @@
 class CCENGINE_API TextureGenerator
 {
 public:
-	struct CCENGINE_API GPUTextureBasic : public GPUTexture
+	struct CCENGINE_API GPUTextureBasic : public GPUTexture2D
 	{
 		GLuint ID = 0u;
 

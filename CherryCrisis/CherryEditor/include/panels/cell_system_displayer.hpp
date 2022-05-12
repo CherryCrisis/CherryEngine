@@ -25,6 +25,7 @@ public:
 	
 	CellSystemDisplayer();
 	
+	void CellSettings();
 	void CreateCell();
 	void RenameCell();
 	bool Context();
@@ -33,4 +34,5 @@ public:
 	void Render() override;
 	void RenderCells();
 	void RenderEntities();
+
 };

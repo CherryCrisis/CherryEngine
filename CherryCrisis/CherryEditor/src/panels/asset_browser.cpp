@@ -249,7 +249,7 @@ void AssetBrowser::RenderNodes()
 
                 //-- Draw preview image --//
                 {
-                    if (auto gpuTexturePreview = static_cast<TextureGenerator::GPUTextureBasic*>(assetNode->m_previewTexture->m_gpuTexture.get()))
+                    if (auto gpuTexturePreview = static_cast<TextureGenerator::GPUTextureBasic*>(assetNode->m_previewTexture->m_gpuTexture2D.get()))
                     {
                         ImGui::Image((void*)static_cast<intptr_t>(gpuTexturePreview->ID), { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
                     }
@@ -476,22 +476,22 @@ void AssetBrowser::BrowserActionCreate()
                 std::filesystem::path newPath = m_currentDirectoryNode->m_path;
                 newPath /= newName;
 
-                bool exist = std::filesystem::exists(newPath.string() + spheremapExtension);
+                bool exist = std::filesystem::exists(newPath.string() + cubemapExtension);
                 int id = 0;
 
                 while (exist)
                 {
                     std::string path(std::format("{}{}", newPath.string(), id));
 
-                    if (!(exist = std::filesystem::exists(path + spheremapExtension)))
+                    if (!(exist = std::filesystem::exists(path + cubemapExtension)))
                         newPath = path;
 
                     ++id;
                 }
 
-                newPath += spheremapExtension;
+                newPath += cubemapExtension;
 
-                std::shared_ptr<Cubemap> material = ResourceManager::GetInstance()->AddResource<Cubemap>(newPath.string().c_str(), true);
+                ResourceManager::GetInstance()->AddResource<Cubemap>(newPath.string().c_str(), true);
             }
 
 
@@ -772,7 +772,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
         directoryNode.m_parentDirectory = parentDirectory;
 
-        directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true);
+        directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true, true, ETextureFormat::RGBA);
 
         auto directory_iterator = std::filesystem::directory_iterator(m_path);
 
@@ -901,7 +901,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<ModelBase> modelBase = resourceManager->AddResource<ModelBase>(filepath.c_str(), true);
                 modelNode.m_resource = modelBase;
 
-                modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true);
+                modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) });
                 AssetNode* assetNode = pair.first->second.get();
@@ -921,7 +921,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<Shader> shader = resourceManager->AddResource<Shader>(filepath.c_str(), true);
                 shaderNode.m_resource = shader;
 
-                shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true);
+                shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) });
                 return pair.first->second.get();
@@ -936,7 +936,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
             std::string filepath(scriptNode.m_relativePath.string() + scriptNode.m_filename + scriptNode.m_extension);
 
-            scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true);
+            scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true, true, ETextureFormat::RGBA);
 
             auto pair = m_assetNodes.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
             return pair.first->second.get();
@@ -948,7 +948,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             EmptyNode emptyNode;
             SetAssetNode(m_path, emptyNode);
 
-            emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true);
+            emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
 
             auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode) });
             return pair.first->second.get();
@@ -965,7 +965,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<Material> material = resourceManager->AddResource<Material>(filepath.c_str(), true);
                 materialNode.m_resource = material;
 
-                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ materialNode.m_path.string(), std::make_unique<MaterialNode>(materialNode) });
                 return pair.first->second.get();
@@ -982,7 +982,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::string filepath(soundNode.m_relativePath.string() + soundNode.m_filename + soundNode.m_extension);
                 soundNode.m_resource = resourceManager->AddResource<Sound>(filepath.c_str(), true);
 
-                soundNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true);
+                soundNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ soundNode.m_path.string(), std::make_unique<SoundNode>(soundNode) });
                 return pair.first->second.get();
@@ -999,7 +999,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::string filepath(cubemap.m_relativePath.string() + cubemap.m_filename + cubemap.m_extension);
                 cubemap.m_resource = resourceManager->AddResource<Cubemap>(filepath.c_str(), true);
 
-                cubemap.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+                cubemap.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ cubemap.m_path.string(), std::make_unique<CubemapNode>(cubemap) });
                 return pair.first->second.get();
@@ -1016,7 +1016,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::string filepath(spheremap.m_relativePath.string() + spheremap.m_filename + spheremap.m_extension);
                 spheremap.m_resource = resourceManager->AddResource<Spheremap>(filepath.c_str(), true);
 
-                spheremap.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+                spheremap.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ spheremap.m_path.string(), std::make_unique<SpheremapNode>(spheremap) });
                 return pair.first->second.get();
@@ -1028,7 +1028,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
     EmptyNode emptyNode;
     SetAssetNode(m_path, emptyNode);
 
-    emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+    emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
     auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode)});
     return pair.first->second.get();

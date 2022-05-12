@@ -7,6 +7,10 @@
 #include "core/editor_manager.hpp"
 #include "transform.hpp"
 #include "camera.hpp"
+#include "sky_renderer.hpp"
+#include "skydome.hpp"
+#include "skybox.hpp"
+#include "utils.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -47,7 +51,9 @@ void CellSystemDisplayer::Render()
         RenderCells();
 
         if (m_selectedCell)
+        {
             RenderEntities();
+        }
 
 
         ImGui::SameLine();
@@ -55,6 +61,39 @@ void CellSystemDisplayer::Render()
 
     ImGui::PopStyleVar(1);
     ImGui::End();
+    ImGui::ShowDemoWindow();
+}
+
+void CellSystemDisplayer::CellSettings()
+{
+    if (ImGui::TreeNode("Settings"))
+    {
+        std::string skyRendererPath;
+
+        if (Skydome* skydome = static_cast<Skydome*>(m_selectedCell->m_skyRenderer))
+            skyRendererPath = skydome->m_spheremap->GetFilepath();
+
+        ImGui::InputText("SkyRenderer", skyRendererPath.data(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+            {
+                const char* path = (const char*)payload->Data;
+                std::string extension = String::ExtractValue(path, '.');
+
+                if (spheremapExtension.compare("." + extension) == 0)
+                {
+                    if (std::shared_ptr<Spheremap> spheremap = ResourceManager::GetInstance()->GetResource<Spheremap>(path))
+                    {
+                        m_selectedCell->m_skyRenderer = new Skydome(m_selectedCell, spheremap);
+                    }
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+        ImGui::TreePop();
+    }
 }
 
 void CellSystemDisplayer::RenderCells()
@@ -157,6 +196,8 @@ void CellSystemDisplayer::RenderEntities()
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 
 	ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
+
+    CellSettings();
 
 	for (auto& entity : m_selectedCell->GetEntities())
 	{

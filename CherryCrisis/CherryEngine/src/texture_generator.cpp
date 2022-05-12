@@ -50,7 +50,10 @@ void TextureGenerator::GPUTextureBasic::Generate(Texture* texture)
 		}
 	}
 
-	texture->ClearData();
+	//Dont clear data if is not 2D Texture to display in asset browser 
+	//and after generate cubemap or spheremap with this data
+	if (texture->GetSurface() == ETextureSurface::TEXTURE_2D)
+		texture->ClearData();
 }
 
 void TextureGenerator::GPUTextureBasic::Regenerate(Texture* texture)
@@ -86,13 +89,13 @@ bool TextureGenerator::Generate(Texture* toGenerate)
 	if (!toGenerate)
 		return false;
 
-	if (toGenerate->m_gpuTexture)
+	if (toGenerate->m_gpuTexture2D)
 		return true;
 
 	if (!toGenerate->GetData() || toGenerate->GetWidth() <= 0 || toGenerate->GetHeight() <= 0)
 		return false;
 
-	toGenerate->m_gpuTexture = std::make_unique<GPUTextureBasic>(toGenerate);
+	toGenerate->m_gpuTexture2D = std::make_unique<GPUTextureBasic>(toGenerate);
 
 	return true;
 }

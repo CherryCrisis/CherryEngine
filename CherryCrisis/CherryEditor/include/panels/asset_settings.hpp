@@ -52,7 +52,8 @@ public :
 class TextureSettings : public AssetSettings
 {
 private:
-	int m_currentId = 0;
+	int m_currentTypeId = 0;
+	int m_currentSurfaceId = 0;
 	bool m_isFlipped = false;
 
 	std::shared_ptr<Texture> m_texture;

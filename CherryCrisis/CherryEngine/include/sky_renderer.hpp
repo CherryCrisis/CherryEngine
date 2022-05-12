@@ -13,18 +13,23 @@ protected:
 	class Cell* m_cell;
 
 public:
-	std::shared_ptr<Mesh> m_cube;
+	std::shared_ptr<Mesh>		m_cube;
+	std::shared_ptr<Mesh>		m_quad = nullptr;
+	std::shared_ptr<Texture>	m_texture = nullptr;
 
 	SkyRenderer(Cell* cell);
 	~SkyRenderer();
 
+	void OnReloadTexture(std::shared_ptr<Texture> texture);
+	void OnSetTexture(std::shared_ptr<Texture> texture);
+	void SetTexture(std::shared_ptr<Texture> texture);
+
 	void RemoveCube();
-	virtual void RemoveMap() = 0;
+	void RemoveQuad();
+	void RemoveTexture();
 
+	void ClearData();
 
-	virtual void Load() = 0;
-	virtual void ClearData() = 0;
-
-	virtual void SubscribeToPipeline(ARenderingPipeline* pipeline) override = 0;
-	virtual void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override = 0;
+	void SubscribeToPipeline(ARenderingPipeline* pipeline);
+	void UnsubscribeToPipeline(ARenderingPipeline* pipeline);
 };

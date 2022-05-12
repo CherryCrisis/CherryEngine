@@ -10,10 +10,8 @@
 #include "portal.hpp"
 #include "entity.hpp"
 #include "viewer.hpp"
-#include "skybox.hpp"
 #include "renderer.hpp"
-
-#include "skydome.hpp"
+#include "sky_renderer.hpp"
 
 Cell::Cell()
 {
@@ -30,8 +28,7 @@ Cell::~Cell()
 
 void Cell::Initialize()
 {
-	m_skyRenderer = new Skydome(this);
-	m_skyRenderer->Load();
+	m_skyRenderer = std::make_unique<SkyRenderer>(this);
 }
 
 void Cell::AddEntity(Entity* newEntity)
