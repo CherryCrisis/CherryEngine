@@ -38,7 +38,7 @@ private:
 public:
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
 
-	CharacterController() { PopulateMetadatas(); }
+	CharacterController();
 	CharacterController(CCUUID& id);
 	~CharacterController();
 

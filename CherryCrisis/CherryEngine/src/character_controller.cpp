@@ -11,6 +11,13 @@
 #include "transform.hpp"
 #include "capsule_collider.hpp"
 
+CharacterController::CharacterController()
+{
+	PopulateMetadatas();
+
+	m_timeManager = TimeManager::GetInstance();
+}
+
 CharacterController::CharacterController(CCUUID& id) : Behaviour(id)
 {
 	PopulateMetadatas();
