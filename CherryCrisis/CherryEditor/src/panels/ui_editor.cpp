@@ -226,6 +226,16 @@ void UIEditor::InspectSelectedItem()
             continue;
         }
 
+        if (propType == typeid(CCMaths::Vector2))
+        {
+            CCMaths::Vector2 val;
+            propRef->Get(&val);
+            if (ImGui::DragFloat2(propName.c_str(), val.data))
+                propRef->Set(&val);
+
+            continue;
+        }
+
         if (propType == typeid(int))
         {
             int val;

@@ -57,7 +57,10 @@ void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	{
 		CCMaths::Vector3 pos;
 		image->Position.Get(&pos);
-		CCMaths::Matrix4 modelMat = CCMaths::Matrix4::Translate(pos) * CCMaths::Matrix4::Scale(.1f);
+		pos.x /= framebuffer.colorTex.width;
+		pos.y /= framebuffer.colorTex.height;
+		
+		CCMaths::Matrix4 modelMat = CCMaths::Matrix4::Translate(pos) * CCMaths::Matrix4::Scale({ .01f * image->GetSize().x, .01f * image->GetSize().y, 1.f });
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(image->m_texture->m_gpuTexture.get());
