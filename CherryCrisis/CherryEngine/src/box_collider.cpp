@@ -4,12 +4,21 @@
 
 #include <PxPhysicsAPI.h>
 
+#include "resource_manager.hpp"
 #include "physic_manager.hpp"
+
+#include "shadow_renderpass.hpp"
+#include "basic_renderpass.hpp"
+#include "pbr_renderpass.hpp"
+#include "picking_renderpass.hpp"
 #include "transform.hpp"
+#include "mesh.hpp"
 
 BoxCollider::BoxCollider()
 {
 	PopulateMetadatas();
+
+	// m_boxCollider = ResourceManager::GetInstance()->AddResource<Mesh>("Internal/ColliderShapes/BoxCollider.fbx", true);
 }
 
 BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
@@ -118,4 +127,18 @@ void BoxCollider::SetPxData()
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}
+}
+
+void BoxCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	if (!m_boxCollider)
+		return;
+
+	// TODO: Make renderPass for colliders
+	//pipeline->SubscribeToPipeline<ColliderRenderPass>(this);
+}
+
+void BoxCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	//pipeline->UnsubscribeToPipeline<ColliderRenderPass>(this);
 }

@@ -10,9 +10,9 @@
 #include "shadow_renderpass.hpp"
 #include "basic_renderpass.hpp"
 #include "pbr_renderpass.hpp"
+#include "picking_renderpass.hpp"
 #include "entity.hpp"
 #include "model.hpp"
-#include "picking_renderpass.hpp"
 #include "texture.hpp"
 #include "material.hpp"
 

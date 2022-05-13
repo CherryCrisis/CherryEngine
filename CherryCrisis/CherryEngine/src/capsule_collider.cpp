@@ -4,12 +4,18 @@
 
 #include <PxPhysicsAPI.h>
 
+#include "resource_manager.hpp"
 #include "physic_manager.hpp"
+
 #include "transform.hpp"
+#include "mesh.hpp"
 
 CapsuleCollider::CapsuleCollider()
 {
 	PopulateMetadatas();
+
+	// m_capsTopCollider = ResourceManager::GetInstance()->AddResource<Mesh>("Internal/ColliderShapes/CapsTopCollider.fbx", true);
+	// m_capsBodyCollider = ResourceManager::GetInstance()->AddResource<Mesh>("Internal/ColliderShapes/CapsBodyCollider.fbx", true);
 }
 
 CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
@@ -122,4 +128,18 @@ void CapsuleCollider::SetPxData()
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}
+}
+
+void CapsuleCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	if (!m_capsTopCollider || !m_capsBodyCollider)
+		return;
+
+	// TODO: Make renderPass for colliders
+	//pipeline->SubscribeToPipeline<ColliderRenderPass>(this);
+}
+
+void CapsuleCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	//pipeline->UnsubscribeToPipeline<ColliderRenderPass>(this);
 }

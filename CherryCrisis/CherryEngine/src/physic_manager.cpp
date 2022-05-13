@@ -10,7 +10,6 @@
 #include "rigidbody.hpp"
 #include "transform.hpp"
 #include "cell_system.hpp"
-
 #include "debug.hpp"
 
 PhysicSystem::PhysicManager* Singleton<PhysicSystem::PhysicManager>::currentInstance = nullptr;

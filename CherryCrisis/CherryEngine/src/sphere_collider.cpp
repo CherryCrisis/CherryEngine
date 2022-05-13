@@ -4,12 +4,17 @@
 
 #include <PxPhysicsAPI.h>
 
+#include "resource_manager.hpp"
 #include "physic_manager.hpp"
+
 #include "transform.hpp"
+#include "mesh.hpp"
 
 SphereCollider::SphereCollider()
 {
 	PopulateMetadatas();
+
+	// m_sphereCollider = ResourceManager::GetInstance()->AddResource<Mesh>("Internal/ColliderShapes/SphereCollider.fbx", true);
 }
 
 SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
@@ -115,4 +120,18 @@ void SphereCollider::SetPxData()
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}
+}
+
+void SphereCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	if (!m_sphereCollider)
+		return;
+
+	// TODO: Make renderPass for colliders
+	//pipeline->SubscribeToPipeline<ColliderRenderPass>(this);
+}
+
+void SphereCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	//pipeline->UnsubscribeToPipeline<ColliderRenderPass>(this);
 }

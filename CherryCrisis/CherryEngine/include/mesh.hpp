@@ -28,6 +28,7 @@ enum class EMeshShape
 	QUAD,
 	CUBE,
 	SPHERE,
+	CYLINDER,
 };
 
 struct GPUMesh
@@ -48,10 +49,12 @@ public:
 
 	static void Load(std::shared_ptr<Mesh> mesh, const aiMesh* assimpMesh);
 
+	static void CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHeight, float longitude);
+	static void CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude, float longitude);
 	static void CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes, float zHalfRes);
 	static void CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes);
 
-	static void Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, float xHalfRes, float yHalfRes, float zHalfRes = 0);
+	static void Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, float xHalfRes, float yHalfRes = 0, float zHalfRes = 0);
 
 	static void Load(std::shared_ptr<Mesh> mesh, std::vector<Vertex>& vertices, std::vector<unsigned int>& indices);
 
