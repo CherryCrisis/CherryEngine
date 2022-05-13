@@ -727,6 +727,7 @@ namespace mono
 		/* Performs a class search in all loaded assemblies */
 		/* If you have the assembly name, please use the alternative version of this
 		 * function */
+		ManagedClass* FindClass(const char* fullname);
 		ManagedClass* FindClass(const char* ns, const char* cls);
 
 		ManagedClass* FindClass(ManagedAssembly* assembly, const char* ns, const char* cls);

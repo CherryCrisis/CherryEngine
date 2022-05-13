@@ -1182,6 +1182,17 @@ namespace mono
 		return false;
 	}
 
+	ManagedClass* ManagedScriptContext::FindClass(const char* fullname)
+	{
+		std::string fullNameStr = fullname;
+		size_t separatorID = fullNameStr.find_last_of('.');
+
+		std::string namespaceStr = fullNameStr.substr(0, separatorID);
+		std::string classStr = fullNameStr.substr(separatorID + 1, fullNameStr.size());
+
+		return FindClass(namespaceStr.c_str(), classStr.c_str());
+	}
+
 	/* Performs a class search in all loaded assemblies */
 	/* If you have the assembly name, please use the alternative version of this
 	 * function */

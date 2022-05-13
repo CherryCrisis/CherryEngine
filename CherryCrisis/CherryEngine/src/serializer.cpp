@@ -145,7 +145,11 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 
 				if (type == typeid(Object*)) 
 				{
-					Object* obj = *std::any_cast<Object**>(fieldRef.m_value);
+					Object** objPtr = std::any_cast<Object**>(fieldRef.m_value);
+
+					if (!objPtr) continue;
+						
+					Object* obj = *objPtr;
 					node[fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
 					continue;
 				}

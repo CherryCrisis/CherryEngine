@@ -50,8 +50,6 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_browser.SetPath(m_projectPath);
 
     Serializer::UnserializeEditor("editor.meta");
-
-    m_browser.ReloadScripts();
 }
 
 void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)

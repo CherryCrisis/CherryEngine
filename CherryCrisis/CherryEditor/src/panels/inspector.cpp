@@ -139,15 +139,6 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     ImGui::InputText(fieldRef.m_name.c_str(), &(*val)[0], val->size() + 1);
                     continue;
                 }
-
-                if (type == typeid(Object*))
-                {
-                    Object* val = *std::any_cast<Object**>(fieldRef.m_value);
-
-                    ImGui::Text("%s", typeid(*val).name());
-
-                    continue;
-                }
             }
 
             std::unordered_map <std::string, CCProperty::IClearProperty*>& properties = behaviour->GetProperties();
@@ -267,8 +258,8 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     {
                         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
                         {
-                            Entity* m_draggedEntity = (Entity*)payload->Data;
-                            propRef->Set(&m_draggedEntity);
+                            Object* m_draggedObject = (Object*)payload->Data;
+                            propRef->Set(&m_draggedObject);
                         }
 
                         ImGui::EndDragDropTarget();

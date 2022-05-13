@@ -11,12 +11,14 @@ namespace CCScripting
 		{
 		}
 
+		public void Awake()
+		{
+			transform = GetComponent<Transform>();
+		}
+
 		public void Start()
 		{
 
-			transform = GetComponent<Transform>();
-			Debug.GetInstance().Log(ELogType.INFO, pos);
-			transform.position = new Vector3(0f, 0f, -5f);
 		}
 
 		void SetRotation()
@@ -24,7 +26,6 @@ namespace CCScripting
 			if (!isMoving) 
 				return; 
 			 
-			if (BMARIN > 20) 
 				transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
 			
 				//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);

@@ -44,3 +44,46 @@ public:
 		m_csOwner(owner), m_reflectedField(field)
 	{ }
 };
+
+
+template <>
+struct ReflectedField<Object*> : public CCProperty::CopyProperty<ReflectedField<Object*>, Object*>
+{
+private:
+	mono::ManagedField* m_reflectedField = nullptr;
+	mono::ManagedObject* m_csOwner = nullptr;
+	mono::ManagedClass* m_baseClass = nullptr;
+
+	MonoMethod* m_handleMethod = nullptr;
+	mono::ManagedMethod* m_managedGetCPtr = nullptr;
+
+public:
+	void SetField(Object* value)
+	{
+		mono::ManagedObject* managedInstance = m_baseClass->CreateUnmanagedInstance(value, false);
+		m_csOwner->SetField(m_reflectedField, managedInstance->RawObject());
+	}
+
+	Object* GetField()
+	{
+		MonoObject* managedFieldInstance = nullptr, *excep = nullptr;
+		m_csOwner->GetField(m_reflectedField, &managedFieldInstance);
+
+		MonoObject* ptrHandle = m_managedGetCPtr->InvokeStatic((void**)&managedFieldInstance, &excep);
+
+		void* unboxedHandle = mono_object_unbox(ptrHandle);
+		MonoObject* res = mono_runtime_invoke(m_handleMethod, unboxedHandle, nullptr, &excep);
+
+		if (!res || excep)
+			return nullptr;
+
+		return *(Object**)mono_object_unbox(res);
+	}
+
+	ReflectedField(mono::ManagedObject* owner, mono::ManagedField* field, mono::ManagedClass* baseClass, MonoMethod* handleMethod)
+		: CCProperty::CopyProperty<ReflectedField, Object*>(this, &ReflectedField::SetField, &ReflectedField::GetField),
+		m_csOwner(owner), m_reflectedField(field), m_baseClass(baseClass), m_handleMethod(handleMethod)
+	{
+		m_managedGetCPtr = m_baseClass->FindMethod("getCPtr");
+	}
+};
