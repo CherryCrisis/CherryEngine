@@ -45,7 +45,8 @@ void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
-
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	glCullFace(GL_BACK);
 
 	glUseProgram(m_program->m_shaderProgram);
@@ -60,7 +61,9 @@ void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		pos.x /= framebuffer.colorTex.width;
 		pos.y /= framebuffer.colorTex.height;
 		
-		CCMaths::Matrix4 modelMat = CCMaths::Matrix4::Translate(pos) * CCMaths::Matrix4::Scale({ .01f * image->GetSize().x, .01f * image->GetSize().y, 1.f });
+		CCMaths::Vector2 scale = image->GetSize();
+		scale * static_cast<Camera*>(viewer)->aspect;
+		CCMaths::Matrix4 modelMat = CCMaths::Matrix4::Translate(pos) * CCMaths::Matrix4::Scale({ .01f * scale.x, .01f * scale.y, 1.f });
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(image->m_texture->m_gpuTexture.get());
@@ -83,4 +86,5 @@ void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glDisable(GL_BLEND);
 }

@@ -4,5 +4,5 @@
 
 class UIText : public UIItem 
 {
-
+	UIText();
 };
