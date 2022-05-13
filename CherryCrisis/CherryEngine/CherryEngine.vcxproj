@@ -393,6 +393,10 @@
     <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\time_manager.hpp" />
     <ClInclude Include="include\transform.hpp" />
+    <ClInclude Include="include\ui_context.hpp" />
+    <ClInclude Include="include\ui_image.hpp" />
+    <ClInclude Include="include\ui_item.hpp" />
+    <ClInclude Include="include\ui_renderpass.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="include\uuid.hpp" />
     <ClInclude Include="include\viewer.hpp" />
@@ -593,6 +597,10 @@
     <ClCompile Include="src\time_manager.cpp" />
     <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />
+    <ClCompile Include="src\ui_context.cpp" />
+    <ClCompile Include="src\ui_image.cpp" />
+    <ClCompile Include="src\ui_item.cpp" />
+    <ClCompile Include="src\ui_renderpass.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\uuid.cpp" />
   </ItemGroup>

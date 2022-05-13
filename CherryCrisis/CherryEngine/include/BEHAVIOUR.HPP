@@ -18,11 +18,12 @@ private:
 	Entity* m_owner = nullptr;
 protected:
 
-
-	virtual void PopulateMetadatas()
+	virtual void PopulateMetadatas() override
 	{
+		Object::PopulateMetadatas();
 		m_metadatas.SetProperty("m_owner", &owner);
 	}
+
 public:
 	Event<> m_OnDestroy;
 
@@ -35,9 +36,6 @@ public:
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
-
-	std::unordered_map<std::string, Field>& GetFields() { return m_metadatas.m_fields; }
-	std::unordered_map<std::string, CCProperty::IClearProperty*>& GetProperties() { return m_metadatas.m_properties; }
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }

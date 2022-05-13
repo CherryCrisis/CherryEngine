@@ -10,6 +10,7 @@
 #include "bloom_renderpass.hpp"
 #include "hdr_renderpass.hpp"
 #include "basic_postprocess_renderpass.hpp"
+#include "ui_renderpass.hpp"
 
 //-- PBR --//
 #include "environment_map_renderpass.hpp"
@@ -29,6 +30,7 @@ MixedPipeline::MixedPipeline()
 	m_bloomPass = LoadSubpipeline<BloomRenderPass>();
 	m_hdrPass = LoadSubpipeline<HDRRenderPass>();
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
+	m_uiPass = LoadSubpipeline<UIRenderPass>();
 
 	//-- PBR --//
 	m_environmentMapPass = LoadSubpipeline<EnvironmentMapRenderPass>();
@@ -62,5 +64,6 @@ void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 
 	m_skydomePass->CallOnExecute(framebuffer, viewer);
 
+	m_uiPass->CallOnExecute(framebuffer, viewer);
 	//m_postprocessPass->CallOnExecute(framebuffer);
 }

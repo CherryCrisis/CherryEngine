@@ -5,6 +5,7 @@
 
 #include "resource.hpp"
 #include "entity.hpp"
+#include "ui_context.hpp"
 
 class ModelBase;
 struct ModelNode;
@@ -17,7 +18,7 @@ public:
 	virtual ~Scene();
 	
 	std::vector<Entity*> m_entities;
-
+	UIContext m_UIContext;
 	//Call entities Initialize 
 	void Initialize();
 	
