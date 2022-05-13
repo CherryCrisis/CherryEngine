@@ -7,17 +7,18 @@
 #include <iostream>
 #include "scene_manager.hpp"
 #include "ui_context.hpp"
-#include "ui_item.hpp"
 #include "core/imcherry.hpp"
+
+#include "ui_item.hpp"
 
 UIEditor::UIEditor() 
 {
-    m_items.push_back("Button");
+    m_items.push_back("Image");
     m_items.push_back("Horizontal Layout");
     m_items.push_back("Vertical Layout");
     m_items.push_back("Text");
     m_items.push_back("Progress Bar");
-    m_items.push_back("Image");
+    m_items.push_back("Button");
     m_items.push_back("Toggle");
     m_items.push_back("Slider");
     m_items.push_back("Input Text");
@@ -90,8 +91,7 @@ void UIEditor::Render()
             {
                 if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UI_EDITOR_ITEM_TEMPLATE"))
                 {
-                    EItemUI* data = (EItemUI*) payload->Data;
-                    context.AddImage();
+                    context.AddItemByType(*((EItemUI*)payload->Data));
                 }
 
                 ImGui::EndDragDropTarget();
@@ -102,7 +102,7 @@ void UIEditor::Render()
             InspectSelectedItem();
             if (ImGui::Button("rm")) 
             {
-                context.RemoveItem();
+                context.RemoveItem(m_selectedItem);
                 m_selectedItem = nullptr;
             }
 
@@ -124,11 +124,6 @@ void UIEditor::SetDraggedItem(const std::string& item, EItemUI type)
         ImGui::Text(item.c_str());
         ImGui::EndDragDropSource();
     }
-}
-
-void UIEditor::AddItem(const std::string& item)
-{
-
 }
 
 void UIEditor::InspectSelectedItem()
@@ -268,6 +263,17 @@ void UIEditor::InspectSelectedItem()
             propRef->Get(&val);
             if (ImGui::InputText(propName.c_str(), &val[0], val.size() + 2))
                 propRef->Set(&val);
+
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                {
+                    const char* data = (const char*)payload->Data;
+                    std::string strData = data;
+                    propRef->Set(&strData);
+                }
+                ImGui::EndDragDropTarget();
+            }
 
             continue;
         }

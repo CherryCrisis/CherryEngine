@@ -4,16 +4,19 @@
 
 #include "maths/vector3.hpp"
 #include "object.hpp"
+#include "cherry_macros.hpp"
 
-class UIItem : public Object
+class CCENGINE_API UIItem : public Object
 {
-	std::string m_name = "";
+	std::string m_name = " ";
 	CCMaths::Vector3 m_position;
 	
-public:
-	UIItem() { PopulateMetadatas(); }
-
+protected:
 	virtual void PopulateMetadatas();
+public:
+	UIItem() { }
+
+	virtual void Delete();
 
 	std::string GetName() { return m_name; }
 	void		SetName(std::string name) { m_name = name; }

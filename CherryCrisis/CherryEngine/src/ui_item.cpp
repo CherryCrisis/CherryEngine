@@ -7,3 +7,5 @@ void UIItem::PopulateMetadatas()
 	m_metadatas.SetProperty("Name", &Name);
 	m_metadatas.SetProperty("Position", &Position);
 }
+
+void UIItem::Delete() {};

@@ -39,8 +39,6 @@ void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	if (!viewer)
 		return;
 
-	//Camera camera;
-
 	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 

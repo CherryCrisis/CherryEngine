@@ -13,7 +13,6 @@ class UIEditor : public FrameDisplayer
 {
 private:
 	void SetDraggedItem(const std::string& item, EItemUI type);
-	void AddItem(const std::string& item);
 	
 	void InspectSelectedItem();
 

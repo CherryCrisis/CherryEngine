@@ -1275,6 +1275,30 @@
     <ClInclude Include="include\ui_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
+    <ClInclude Include="include\ui_text.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_button.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_input_text.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_progressbar.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_slider.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_toggle.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_horizontal_layout.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_vertical_layout.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">

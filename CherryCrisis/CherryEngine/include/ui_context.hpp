@@ -8,7 +8,14 @@
 enum class EItemUI
 {
 	IMAGE,
-	BUTTON
+	HORIZONTAL_LAYOUT,
+	VERTICAL_LAYOUT,
+	TEXT,
+	PROGRESS_BAR,
+	BUTTON,
+	TOGGLE,
+	SLIDER,
+	INPUT_TEXT
 };
 
 //Container that represents the UI.
@@ -17,7 +24,11 @@ class CCENGINE_API UIContext
 {
 public:
 	void AddImage();
-	void RemoveItem();
+
+	template<class ItemT>
+	ItemT* AddItem();
+	void AddItemByType(const EItemUI& type);
+	void RemoveItem(UIItem* item);
 	
 	std::vector<UIItem*> m_items;
 
