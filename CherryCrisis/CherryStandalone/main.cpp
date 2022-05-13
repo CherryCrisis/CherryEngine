@@ -107,12 +107,12 @@ int main()
 
     Framebuffer framebuffer;
 
-    engine.LaunchStandalone();
+    engine.Launch(false);
 
     Serializer::UnserializeInputs();
     InputManager::GetInstance()->SetPollContext("User Context");
     InputManager::GetInstance()->PushContext("User Context");
-    
+
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();

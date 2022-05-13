@@ -242,11 +242,10 @@ void EditorManager::HandleMenuBar()
             // Stop game
             m_engine->Stop();
             m_entitySelector.Clear();
-            m_gameDisplayer.Unfocus();
 
             // Launch game
             m_logDisplayer.TryClearOnPlay();
-            m_engine->Launch();
+            m_engine->Launch(false);
             m_gameDisplayer.Focus();
         }
         ImGui::PopStyleColor(1);

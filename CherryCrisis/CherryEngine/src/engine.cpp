@@ -51,16 +51,13 @@ void Engine::Tick()
 	PhysicSystem::PhysicManager::GetInstance()->Simulate(1/60.f);
 }
 
-void Engine::Launch() 
+void Engine::Launch(bool flipScene) 
 {
 	m_isPlaying = true;
-	SceneManager::FlipScene();
-	PhysicSystem::PhysicManager::GetInstance()->Launch();
-}
-
-void Engine::LaunchStandalone() 
-{
-	m_isPlaying = true;
+	
+	if (flipScene)
+		SceneManager::FlipScene();
+	
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }
 

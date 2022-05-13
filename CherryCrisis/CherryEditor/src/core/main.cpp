@@ -132,6 +132,8 @@ int main(int argc, char** argv)
     ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
     //-----------------------------------
 
+    bool isSceneFocused = false;
+
     while (glfwWindowShouldClose(window) == false)
     {
         InputManager::GetInstance()->UpdateKeys();
@@ -145,6 +147,9 @@ int main(int argc, char** argv)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
+
+        if (!isSceneFocused)
+            ImGui::SetWindowFocus("Scene");
 
         editor.DisplayEditorUI(window);
 
