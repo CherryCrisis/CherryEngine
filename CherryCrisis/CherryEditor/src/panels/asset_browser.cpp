@@ -57,11 +57,9 @@ void AssetBrowser::RenderMenuBar()
 
 void AssetBrowser::ResizeCell()
 {
-    InputManager* inputManager = InputManager::GetInstance();
-
-    if (inputManager->GetKey(Keycode::LEFT_CONTROL) && inputManager->GetMouseWheel().y != 0)
+    if (InputManager::GetKey(Keycode::LEFT_CONTROL) && InputManager::GetMouseWheel().y != 0)
     {
-        m_thumbnailSize += InputManager::GetInstance()->GetMouseWheel().y * 2;
+        m_thumbnailSize += InputManager::GetMouseWheel().y * 2;
     }
 }
 

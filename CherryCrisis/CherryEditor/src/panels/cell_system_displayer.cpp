@@ -14,20 +14,19 @@ CellSystemDisplayer::CellSystemDisplayer()
 {
     m_cellSystem = CellSystem::GetInstance();
 
-    InputManager* IM = InputManager::GetInstance();
-    IM->PushContext("Editor Context");
+    InputManager::PushContext("Editor Context");
 
     int i = 0;
-    IM->AddActionAxes("FrontBack", i);
-    IM->AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
+    InputManager::AddActionAxes("FrontBack", i);
+    InputManager::AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
 
-    IM->AddActionAxes("RightLeft", i);
-    IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
+    InputManager::AddActionAxes("RightLeft", i);
+    InputManager::AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
 
-    IM->AddActionSingle("Pick", i);
-    IM->AddInputToAction("Pick", Keycode::LEFT_CLICK);
+    InputManager::AddActionSingle("Pick", i);
+    InputManager::AddInputToAction("Pick", Keycode::LEFT_CLICK);
 
-    IM->PopContext();
+    InputManager::PopContext();
 }
 
 void CellSystemDisplayer::UpdateCamera()
@@ -99,7 +98,7 @@ void CellSystemDisplayer::RenderCells()
 
             if (ImGui::IsItemHovered())
             {
-                if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
+                if (InputManager::GetKeyDown(Keycode::LEFT_CLICK))
                 {
                     Cell* lastCell = m_displayedCell ? m_displayedCell : m_selectedCell;
                     m_selectedCell = &cell.second;
@@ -118,7 +117,7 @@ void CellSystemDisplayer::RenderCells()
                     itemSelected = true;
                 }
 
-                if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
+                if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK))
                 {
                     ImGui::OpenPopup("options");
                     m_rightClickedCell = &cell.second;
@@ -142,7 +141,7 @@ void CellSystemDisplayer::RenderCells()
         i++;
     }
 
-    if (!itemSelected && ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
+    if (!itemSelected && ImGui::IsWindowHovered() && InputManager::GetKeyDown(Keycode::LEFT_CLICK))
     {
         m_selectedCell = nullptr;
     }
@@ -152,26 +151,26 @@ void CellSystemDisplayer::RenderCells()
 
 void CellSystemDisplayer::RenderEntities()
 {
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 
-	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 
-	ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
+    ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
 
-	for (auto& entity : m_selectedCell->GetEntities())
-	{
-		Transform* entityTransform = entity->GetBehaviour<Transform>();
-		if (entityTransform)
-			if (entityTransform->GetParent())
-				continue;
+    for (auto& entity : m_selectedCell->GetEntities())
+    {
+        Transform* entityTransform = entity->GetBehaviour<Transform>();
+        if (entityTransform)
+            if (entityTransform->GetParent())
+                continue;
 
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_SpanAvailWidth;
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_SpanAvailWidth;
 
-		if (m_selectedEntity == entity) { flags |= ImGuiTreeNodeFlags_Selected; }
+        if (m_selectedEntity == entity) { flags |= ImGuiTreeNodeFlags_Selected; }
 
-		bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
+        bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
 
-		if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered())
+        if (InputManager::GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered())
 		{
 			m_selectedEntity = entity;
 		}

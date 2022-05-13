@@ -482,84 +482,84 @@ private:
 
 public:
 	
-	InputManager();
 	~InputManager();
 
+	void Init();
 	//Errors
 	void ErrorButtons(const char* Name);
 	void ErrorAxes(const char* Name);
 
 	// Context
-	InputContext* GetOrAddContext(const std::string& name);
-	InputContext* GetContext(const std::string& name);
+	static InputContext* GetOrAddContext(const std::string& name);
+	static InputContext* GetContext(const std::string& name);
 
-	void SetPollContext(const std::string& name);
-	void SetPollContext(InputContext* context);
+	static void SetPollContext(const std::string& name);
+	static void SetPollContext(InputContext* context);
 
-	void PushContext(const std::string& name);
-	void PushContext(InputContext* context);
+	static void PushContext(const std::string& name);
+	static void PushContext(InputContext* context);
 
-	void PopContext();
+	static void PopContext();
 
-	void SetDefaultContext();
+	static void SetDefaultContext();
 
 	void (*HideCursor)(void* window);
 	void (*ShowCursor)(void* window);
 
 	// Callbacks
-	void SetListening();
-	void ResetListenedKey();
+	static void SetListening();
+	static void ResetListenedKey();
 
-	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-	void MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset);
-	void MousePosCallback(GLFWwindow* window, double xpos, double ypos);
-	void MouseClickCallback(GLFWwindow* window, int button, int action, int mods);
+	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void MouseWheelCallback(GLFWwindow* window, double xoffset, double yoffset);
+	static void MousePosCallback(GLFWwindow* window, double xpos, double ypos);
+	static void MouseClickCallback(GLFWwindow* window, int button, int action, int mods);
 	
-	void UpdateKeys();
+	static void UpdateKeys();
 
 	// Input
-	Input* GetInputRef(Keycode key);
+	static Input* GetInputRef(Keycode key);
 
 	//! Return true if the \b key is pressed
 	/*!
 	*	Return true if the \b key is pressed
 	*/
-	bool GetKeyDown(Keycode key);
+	static bool GetKeyDown(Keycode key);
 
 	//! Return true if any \b key of the Action is pressed
 	/*!
 	*	Return true if any \b key of the Action named \b inputName is pressed
 	*/
-	bool GetKeyDown(const char* inputName);
+	static bool GetKeyDown(const char* inputName);
 
 
 	//! Return true if the \b key is held
 	/*!
 	*	Return true if the \b key is held
 	*/
-	bool GetKey(Keycode key);
+	static bool GetKey(Keycode key);
 
 	//! Return true if any \b key of the Action is held
 	/*!
 	*	Return true if any \b key of the Action named \b inputName is held
 	*/
-	bool GetKey(const char* inputName);
+	static bool GetKey(const char* inputName);
 
 
 	//! Return true if the \b key is released
 	/*!
 	*	Return true if the \b key is released
 	*/
-	bool GetKeyUp(Keycode key);
+	static bool GetKeyUp(Keycode key);
 	
 	//! Return true if any \b key of the Action is released
 	/*!
 	*	Return true if any \b key of the Action named \b inputName is released
 	*/
-	bool GetKeyUp(const char* inputName);
+	static bool GetKeyUp(const char* inputName);
 
-	void SetCursorHidden();
-	void SetCursorDisplayed();
+	static void SetCursorHidden();
+	static void SetCursorDisplayed();
 
 	// ActionButtons
 	//! Add a new Action of type single input
@@ -567,52 +567,52 @@ public:
 	*	Add a new Action of type button in the currently active \b fetchContext
 	*	\note Avoid using this method. Add the Action through the Project Settings instead
 	*/
-	ActionSingle*	AddActionSingle(const std::string& name, int& success);
-	int				RemoveActionSingle(const std::string& name);
+	static ActionSingle*	AddActionSingle(const std::string& name, int& success);
+	static int				RemoveActionSingle(const std::string& name);
 
-	int RenameActionButtons(const std::string& oldName, const std::string& newName);
+	static int RenameActionButtons(const std::string& oldName, const std::string& newName);
 
 	//! Set the prior key of the Action
 	/*!
 	*	Set the prior key of the Action \b name as \b priorKey 
 	*/
-	void SetActionPriorKey(const std::string& name, EPriorKey priorKey);
+	static void SetActionPriorKey(const std::string& name, EPriorKey priorKey);
 
 
 	//! Add new input to action
 	/*!
 	*	Add the \b key in the Action \b name
 	*/
-	int AddInputToAction(const std::string& name, Keycode key);
+	static int AddInputToAction(const std::string& name, Keycode key);
 	
 	//! Add new input to action
 	/*!
 	*	Add the \b key in the Action \b preset
 	*/
-	int AddInputToAction(ActionSingle* preset, Keycode key);
+	static int AddInputToAction(ActionSingle* preset, Keycode key);
 
 	//! Remove new input from action
 	/*!
 	*	Remove the \b key in the Action \b name
 	*/
-	int RemoveInputFromAction(const std::string& name, Keycode key);
+	static int RemoveInputFromAction(const std::string& name, Keycode key);
 
 	//! Remove new input from action
 	/*!
 	*	Remove the \b key in the Action \b preset
 	*/
-	int RemoveInputFromAction(ActionSingle* preset, Keycode key);
+	static int RemoveInputFromAction(ActionSingle* preset, Keycode key);
 
 	//! \hiderefs
-	int ChangeInputInAction(ActionSingle* action, Keycode oldKey, Keycode newKey);
+	static int ChangeInputInAction(ActionSingle* action, Keycode oldKey, Keycode newKey);
 	
 	// Axis
-	void SetKey(Axis* axis, Keycode key, bool isNeg);
-	void SetPositiveKey(Axis* axis, Keycode key);
-	void SetNegativeKey(Axis* axis, Keycode key);
+	static void SetKey(Axis* axis, Keycode key, bool isNeg);
+	static void SetPositiveKey(Axis* axis, Keycode key);
+	static void SetNegativeKey(Axis* axis, Keycode key);
 
-	float GetAxis(Keycode posKey, Keycode negKey);
-	float GetAxis(const char* axisName);
+	static float GetAxis(Keycode posKey, Keycode negKey);
+	static float GetAxis(const char* axisName);
 
 	// ActionAxes
 	//! Add a new Action of type axe (double input)
@@ -620,53 +620,53 @@ public:
 	*	Add a new Action of type axis in the currently active \b fetchContext
 	*	\note Avoid using this method. Add the Action through the Project Settings instead
 	*/
-	ActionAxes* AddActionAxes(const std::string& name, int& success);
-	int			RemoveActionAxes(const std::string& name);
+	static ActionAxes* AddActionAxes(const std::string& name, int& success);
+	static int			RemoveActionAxes(const std::string& name);
 
 	//! \hiderefs
-	int RenameActionAxes(const std::string& oldName, const std::string& newName);
+	static int RenameActionAxes(const std::string& oldName, const std::string& newName);
 
 	//! \hiderefs
-	Axis GetFromString(const std::string& in);
+	static Axis GetFromString(const std::string& in);
 
 	//! Add new axis to action
 	/*!
 	*	Create a pointer on the the axis \b newInput and add it in the Action \b name
 	*/
-	int AddAxisToAction(const std::string& name, Axis axis);
+	static int AddAxisToAction(const std::string& name, Axis axis);
 
 	//! Add new axis to action
 	/*!
 	*	Create a pointer on the the axis \b newInput and add it in the Action \b preset
 	*/
-	int AddAxisToAction(ActionAxes* preset, Axis axis);
+	static int AddAxisToAction(ActionAxes* preset, Axis axis);
 
 	//! Remove new axis to action
 	/*!
 	*	Create a pointer on the the axis \b newInput and add it in the Action \b name
 	*/
-	int RemoveAxisFromAction(const std::string& name, Axis* axis);
+	static int RemoveAxisFromAction(const std::string& name, Axis* axis);
 
 	//! Remove new axis to action
 	/*!
 	*	Create a pointer on the the axis \b newInput and add it in the Action \b preset
 	*/
-	int RemoveAxisFromAction(ActionAxes* preset, Axis* axis);
+	static int RemoveAxisFromAction(ActionAxes* preset, Axis* axis);
 
 	// Get
-	CCMaths::Vector2 GetMouseWheel();
-	CCMaths::Vector2 GetMousePos();
-	CCMaths::Vector2 GetMouseDelta();
+	static CCMaths::Vector2 GetMouseWheel();
+	static CCMaths::Vector2 GetMousePos();
+	static CCMaths::Vector2 GetMouseDelta();
 
-	const int GetListenedKey() { return m_listenedKey; }
+	static const int GetListenedKey() { return currentInstance->m_listenedKey; }
 
-	int			KeynamesSize() { return 122; }
+	static int			KeynamesSize() { return 122; }
 
-	const char* GetKeyname(int index);
-	const char* GetKeyname(Keycode code);
-	int			GetKeynameIndex(const char* name);
+	static const char* GetKeyname(int index);
+	static const char* GetKeyname(Keycode code);
+	static int		   GetKeynameIndex(const char* name);
 
-	Keycode		GetKeycode(int index);
-	Keycode		GetKeycode(const char* name);
-	int			GetKeycodeIndex(Keycode code);
+	static Keycode		GetKeycode(int index);
+	static Keycode		GetKeycode(const char* name);
+	static int			GetKeycodeIndex(Keycode code);
 };

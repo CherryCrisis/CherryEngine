@@ -17,14 +17,14 @@ class InputManager
 public:
 	static InputManager* GetInstance();
 
-	bool GetKey(Keycode key);
-	bool GetKeyDown(Keycode key);
-	bool GetKeyUp(Keycode key);
-	bool GetKey(const char* keyName);
-	bool GetKeyDown(const char* keyName);
-	bool GetKeyUp(const char* keyName);
-	float GetAxis(const char* axisName);
-	CCMaths::Vector2 GetMouseWheel();
-	CCMaths::Vector2 GetMousePos();
-	CCMaths::Vector2 GetMouseDelta();
+	static bool GetKey(Keycode key);
+	static bool GetKeyDown(Keycode key);
+	static bool GetKeyUp(Keycode key);
+	static bool GetKey(const char* keyName);
+	static bool GetKeyDown(const char* keyName);
+	static bool GetKeyUp(const char* keyName);
+	static float GetAxis(const char* axisName);
+	static CCMaths::Vector2 GetMouseWheel();
+	static CCMaths::Vector2 GetMousePos();
+	static CCMaths::Vector2 GetMouseDelta();
 };

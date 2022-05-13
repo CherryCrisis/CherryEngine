@@ -54,17 +54,17 @@ void HierarchyDisplayer::Render()
 
         if (ImGui::IsWindowHovered())
         {
-            if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
+            if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK))
             {
                 ImGui::OpenPopup("context");
             }
 
             if (!m_manager->m_entitySelector.IsEmpty())
             {
-                if (InputManager::GetInstance()->GetKeyDown(Keycode::F2))
+                if (InputManager::GetKeyDown(Keycode::F2))
                     m_renaming = true;
 
-                if (InputManager::GetInstance()->GetKeyDown(Keycode::DEL))
+                if (InputManager::GetKeyDown(Keycode::DEL))
                 {
                     for (Entity* entity : m_manager->m_entitySelector.m_entities)
                         SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
@@ -77,7 +77,7 @@ void HierarchyDisplayer::Render()
                 }
             }
         }
-        
+
         ContextCallback();
     }
     ImGui::End();
@@ -123,9 +123,9 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
     Transform* entityTransform = entity->GetBehaviour<Transform>();
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-    
+
     if (selector->Contains(entity))                                     flags |= ImGuiTreeNodeFlags_Selected;
-    if (!entityTransform || entityTransform->GetChildren().size() <= 0) flags |= ImGuiTreeNodeFlags_Leaf; 
+    if (!entityTransform || entityTransform->GetChildren().size() <= 0) flags |= ImGuiTreeNodeFlags_Leaf;
 
     bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
 
@@ -137,16 +137,16 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         m_isEntityDragged = true;
     }
 
-    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered() && !m_isEntityDragged)
+    if (InputManager::GetKeyDown(Keycode::LEFT_CLICK) && ImGui::IsItemHovered() && !m_isEntityDragged)
     {
-        if (InputManager::GetInstance()->GetKey(Keycode::LEFT_CONTROL))
+        if (InputManager::GetKey(Keycode::LEFT_CONTROL))
         {
             if (!selector->Contains(entity))
                 selector->Add(entity);
             else
                 selector->Remove(entity);
         }
-        else if (InputManager::GetInstance()->GetKey(Keycode::LEFT_SHIFT))
+        else if (InputManager::GetKey(Keycode::LEFT_SHIFT))
         {
             selector->SetEndRange();
             selector->SetStartRange(entity);

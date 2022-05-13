@@ -28,7 +28,6 @@
 
 EditorManager::EditorManager(const std::string& projectPath) 
 {
-    inputs = InputManager::GetInstance();
     ResourceManager* RM = ResourceManager::GetInstance();
 
     m_menuBarTextures[0] = RM->AddResource<Texture>("Internal/Icons/play_icon.png", true, false, ETextureFormat::RGBA);
@@ -317,24 +316,22 @@ void EditorManager::HandleNotifications()
 
 void EditorManager::UpdateFocusGame()
 {
-    InputManager* IM = InputManager::GetInstance();
-
     if (!m_gameDisplayer.m_isFocused)
     {
-        IM->PushContext("Editor Context");
-        if (m_gameDisplayer.m_isHovered && m_engine->m_isPlaying && IM->GetKeyDown(Keycode::LEFT_CLICK))
+        InputManager::PushContext("Editor Context");
+        if (m_gameDisplayer.m_isHovered && m_engine->m_isPlaying && InputManager::GetKeyDown(Keycode::LEFT_CLICK))
             m_gameDisplayer.Focus();
-        IM->PopContext();
+        InputManager::PopContext();
     }
     else if (m_gameDisplayer.m_isFocused && m_engine->m_isPlaying)
     {
-        IM->PushContext("User Context");
+        InputManager::PushContext("User Context");
 
-        if (IM->GetKeyDown(Keycode::ESCAPE))
+        if (InputManager::GetKeyDown(Keycode::ESCAPE))
         {
             m_gameDisplayer.Unfocus();
         }
-        IM->PopContext();
+        InputManager::PopContext();
     }
 }
 

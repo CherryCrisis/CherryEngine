@@ -487,8 +487,7 @@ bool Serializer::SerializeInputs()
 {
 	YAML::Node save;
 
-	InputManager* IM = InputManager::GetInstance();
-	InputManager::InputContext* userContext = IM->GetContext("User Context");
+	InputManager::InputContext* userContext = InputManager::GetContext("User Context");
 	if (!userContext)
 		return false;
 
@@ -542,10 +541,9 @@ bool Serializer::UnserializeInputs()
 	if (!std::filesystem::exists(filepath))
 		return false;
 
-	InputManager* IM = InputManager::GetInstance();
-	InputManager::InputContext* userContext = IM->GetContext("User Context");
-	IM->SetPollContext(userContext);
-	IM->PushContext(userContext);
+	InputManager::InputContext* userContext = InputManager::GetContext("User Context");
+	InputManager::SetPollContext(userContext);
+	InputManager::PushContext(userContext);
 
 	YAML::Node loader = YAML::LoadFile(filepath);
 
@@ -554,11 +552,11 @@ bool Serializer::UnserializeInputs()
 	{
 		for (YAML::const_iterator it = loader["ActionSingle"].begin(); it != loader["ActionSingle"].end(); ++it)
 		{
-			auto* action = IM->AddActionSingle(it->first.as<std::string>(), success);
+			auto* action = InputManager::AddActionSingle(it->first.as<std::string>(), success);
 			for (auto key : it->second)
 			{
 				std::string str = key.as<std::string>();
-				IM->AddInputToAction(action, IM->GetKeycode(str.c_str()));
+				InputManager::AddInputToAction(action, InputManager::GetKeycode(str.c_str()));
 			}
 		}
 	}
@@ -567,18 +565,18 @@ bool Serializer::UnserializeInputs()
 	{
 		for (YAML::const_iterator it = loader["ActionAxes"].begin(); it != loader["ActionAxes"].end(); ++it)
 		{
-			auto* action = IM->AddActionAxes(it->first.as<std::string>(), success);
+			auto* action = InputManager::AddActionAxes(it->first.as<std::string>(), success);
 			for (auto key : it->second)
 			{
 				std::string str = key.as<std::string>();
-				auto axis = IM->GetFromString(str);
-				IM->AddAxisToAction(action, axis);
+				auto axis = InputManager::GetFromString(str);
+				InputManager::AddAxisToAction(action, axis);
 			}
 		}
 	}
 
-	IM->PopContext();
-	IM->SetPollContext(nullptr);
+	InputManager::PopContext();
+	InputManager::SetPollContext(nullptr);
 
 	return true;
 }

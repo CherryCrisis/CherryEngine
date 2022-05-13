@@ -25,40 +25,39 @@
 
 SceneDisplayer::SceneDisplayer() 
 {
-    InputManager* IM = InputManager::GetInstance();
-    IM->PushContext("Editor Context");
+    InputManager::PushContext("Editor Context");
 
     int i = 0;
-    IM->AddActionAxes("UpDown", i);
-    IM->AddAxisToAction("UpDown", { Keycode::SPACE, Keycode::LEFT_CONTROL });
+    InputManager::AddActionAxes("UpDown", i);
+    InputManager::AddAxisToAction("UpDown", { Keycode::SPACE, Keycode::LEFT_CONTROL });
 
-    IM->AddActionAxes("FrontBack", i);
-    IM->AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
+    InputManager::AddActionAxes("FrontBack", i);
+    InputManager::AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
 
-    IM->AddActionAxes("RightLeft", i);
-    IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
+    InputManager::AddActionAxes("RightLeft", i);
+    InputManager::AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
 
-    IM->AddActionSingle("Save", i);
-    IM->AddInputToAction("Save", Keycode::S);
-    IM->SetActionPriorKey("Save", EPriorKey::LEFT_CONTROL);
+    InputManager::AddActionSingle("Save", i);
+    InputManager::AddInputToAction("Save", Keycode::S);
+    InputManager::SetActionPriorKey("Save", EPriorKey::LEFT_CONTROL);
 
-    IM->AddActionSingle("Translate", i);
-    IM->AddActionSingle("Rotate", i);
-    IM->AddActionSingle("Scale", i);
+    InputManager::AddActionSingle("Translate", i);
+    InputManager::AddActionSingle("Rotate", i);
+    InputManager::AddActionSingle("Scale", i);
 
-    IM->AddInputToAction("Translate", Keycode::W);
-    IM->AddInputToAction("Rotate", Keycode::E);
-    IM->AddInputToAction("Scale", Keycode::R);
+    InputManager::AddInputToAction("Translate", Keycode::W);
+    InputManager::AddInputToAction("Rotate", Keycode::E);
+    InputManager::AddInputToAction("Scale", Keycode::R);
 
-    IM->AddActionSingle("World", i);
-    IM->AddActionSingle("Local", i);
-    IM->AddInputToAction("World", Keycode::T);
-    IM->AddInputToAction("Local", Keycode::Y);
+    InputManager::AddActionSingle("World", i);
+    InputManager::AddActionSingle("Local", i);
+    InputManager::AddInputToAction("World", Keycode::T);
+    InputManager::AddInputToAction("Local", Keycode::Y);
 
-    IM->AddActionSingle("Pick", i);
-    IM->AddInputToAction("Pick", Keycode::LEFT_CLICK);
+    InputManager::AddActionSingle("Pick", i);
+    InputManager::AddInputToAction("Pick", Keycode::LEFT_CLICK);
 
-    IM->PopContext();
+    InputManager::PopContext();
 
     m_camera.m_pipeline = std::make_unique<MixedPipeline>();
     CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
@@ -71,8 +70,7 @@ SceneDisplayer::~SceneDisplayer()
 
 void SceneDisplayer::UpdateCamera()
 {
-    InputManager* IM = InputManager::GetInstance();
-    CCMaths::Vector2 deltaMouse = IM->GetMouseDelta();
+    CCMaths::Vector2 deltaMouse = InputManager::GetMouseDelta();
 
     CCMaths::Matrix4 view = Matrix4::RotateYXZ(m_camera.rotation);
 
@@ -81,16 +79,16 @@ void SceneDisplayer::UpdateCamera()
     Vector3 forward = -view.back;
 
     float dt = TimeManager::GetInstance()->GetDeltaTime();
-    
-    m_cameraSpeed += dt * IM->GetMouseWheel().y * 10.f;
+
+    m_cameraSpeed += dt * InputManager::GetMouseWheel().y * 10.f;
     m_cameraSpeed = CCMaths::Clamp(m_cameraSpeed, 0.5f, 100.f);
 
     float speed = dt * m_cameraSpeed;
 
     // Compute each movement vector
-    Vector3 forwardMove = forward * IM->GetAxis("FrontBack");
-    Vector3 rightwardMove = right * IM->GetAxis("RightLeft");
-    Vector3 upwardMove = up * IM->GetAxis("UpDown");
+    Vector3 forwardMove = forward * InputManager::GetAxis("FrontBack");
+    Vector3 rightwardMove = right * InputManager::GetAxis("RightLeft");
+    Vector3 upwardMove = up * InputManager::GetAxis("UpDown");
 
     m_camera.rotation.pitch += dt * deltaMouse.y;
     m_camera.rotation.yaw += dt * deltaMouse.x;
@@ -111,47 +109,45 @@ void SceneDisplayer::Render()
     {
         RenderMenuBar();
 
-        InputManager* IM = InputManager::GetInstance();
-
-        IM->PushContext("Editor Context");
+        InputManager::PushContext("Editor Context");
 
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)) 
         {
-            if (IM->GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
+            if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
         }
 
         if (m_isFocused)
         {
-            if (IM->GetKey(Keycode::RIGHT_CLICK)) { UpdateCamera(); }
-            if (IM->GetKeyUp(Keycode::RIGHT_CLICK)) { Unfocus(); }
+            if (InputManager::GetKey(Keycode::RIGHT_CLICK)) { UpdateCamera(); }
+            if (InputManager::GetKeyUp(Keycode::RIGHT_CLICK)) { Unfocus(); }
         }
 
-        if (!IM->GetKey(Keycode::RIGHT_CLICK))
+        if (!InputManager::GetKey(Keycode::RIGHT_CLICK))
         {
-            if (IM->GetKeyDown("Save"))
+            if (InputManager::GetKeyDown("Save"))
                 EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
 
             if (ImGui::IsWindowFocused(ImGuiHoveredFlags_ChildWindows))
             {
-                if (IM->GetKeyDown("Translate"))   m_operation = ImGuizmo::OPERATION::TRANSLATE;
-                if (IM->GetKeyDown("Rotate"))      m_operation = ImGuizmo::OPERATION::ROTATE;
-                if (IM->GetKeyDown("Scale"))       m_operation = ImGuizmo::OPERATION::SCALE;
+                if (InputManager::GetKeyDown("Translate"))   m_operation = ImGuizmo::OPERATION::TRANSLATE;
+                if (InputManager::GetKeyDown("Rotate"))      m_operation = ImGuizmo::OPERATION::ROTATE;
+                if (InputManager::GetKeyDown("Scale"))       m_operation = ImGuizmo::OPERATION::SCALE;
 
-                if (IM->GetKeyDown("World"))       m_mode = ImGuizmo::MODE::WORLD;
-                if (IM->GetKeyDown("Local"))       m_mode = ImGuizmo::MODE::LOCAL;
+                if (InputManager::GetKeyDown("World"))       m_mode = ImGuizmo::MODE::WORLD;
+                if (InputManager::GetKeyDown("Local"))       m_mode = ImGuizmo::MODE::LOCAL;
             }
         }
 
         EntitySelector& selector = m_manager->m_entitySelector;
 
-        if (InputManager::GetInstance()->GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
+        if (InputManager::GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
             && !ImGuizmo::IsOver())
         {
             glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
             Pickinger::SetBuffer(&m_framebuffer, &m_camera);
-            CCMaths::Vector2 mousePos  = InputManager::GetInstance()->GetMousePos();
+            CCMaths::Vector2 mousePos = InputManager::GetMousePos();
             ImVec2 bufferPos = ImGui::GetWindowContentRegionMin();
-            CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y)};
+            CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y) };
             Entity* pickedEntity = Pickinger::GetEntity(mousebufferPos);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -163,13 +159,13 @@ void SceneDisplayer::Render()
                     selector.Clear();
                     selector.Add(pickedEntity);
                 }
-                else 
+                else
                 {
                     selector.Clear();
                     selector.Add(root);
                 }
             }
-            else 
+            else
                 selector.Clear();
         }
 
@@ -177,21 +173,21 @@ void SceneDisplayer::Render()
 
         ImGui::BeginChild("SceneFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
-        
+
         if (m_isActive)
             UpdateFramebuffer(wsize.x, wsize.y, m_camera);
 
         uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
- 
-        if (ImGui::BeginDragDropTarget()) 
+
+        if (ImGui::BeginDragDropTarget())
         {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE")) 
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
             {
                 const char* data = (const char*)payload->Data;
                 std::string extension = String::ExtractValue(data, '.');
 
-                if (extension == "ccscene") 
+                if (extension == "ccscene")
                 {
                     m_manager->m_entitySelector.Clear();
                     EditorNotifications::SceneLoading(SceneManager::LoadScene(data));
@@ -214,11 +210,11 @@ void SceneDisplayer::Render()
             ImGuizmo::SetDrawlist();
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
         }
-        
+
         if (!selector.IsEmpty() && selector.First()->GetBehaviour<Transform>())
         {
             Transform* t = selector.First()->GetBehaviour<Transform>();
-            
+
             if (!m_isManipulated)
                 m_guizmoTransform = t->GetWorldMatrix();
 
@@ -249,8 +245,7 @@ void SceneDisplayer::Render()
                 t->SetScale(s);
             }
 
-            InputManager* IM = InputManager::GetInstance();
-            if (ImGuizmo::IsUsing() && IM->GetKey(Keycode::LEFT_CLICK))
+            if (ImGuizmo::IsUsing() && InputManager::GetKey(Keycode::LEFT_CLICK))
                 m_isManipulated = true;
             else if (m_isManipulated)
                 m_isManipulated = false;
@@ -258,7 +253,7 @@ void SceneDisplayer::Render()
 
         ImGui::EndChild();
 
-        IM->PopContext();
+        InputManager::PopContext();
     }
 
     ImGui::PopStyleVar(1);
@@ -268,7 +263,7 @@ void SceneDisplayer::Render()
 void SceneDisplayer::Focus()
 {
     m_isFocused = true;
-    m_inputs->SetCursorHidden();
+    InputManager::SetCursorHidden();
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
     ImGui::SetWindowFocus("Scene");
 }
@@ -276,7 +271,7 @@ void SceneDisplayer::Focus()
 void SceneDisplayer::Unfocus()
 {
     m_isFocused = false;
-    m_inputs->SetCursorDisplayed();
+    InputManager::SetCursorDisplayed();
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 

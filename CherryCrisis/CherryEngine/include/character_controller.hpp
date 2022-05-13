@@ -23,7 +23,6 @@ private:
 	class Transform*		m_transform = nullptr;
 
 	class TimeManager*	m_timeManager	= nullptr;
-	class InputManager* m_inputManager	= nullptr;
 
 	bool	m_isRegistered = false;
 	bool	m_isGrounded = false;

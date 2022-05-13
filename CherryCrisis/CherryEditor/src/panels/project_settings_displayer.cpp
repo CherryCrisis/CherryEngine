@@ -80,13 +80,11 @@ void ProjectSettingsDisplayer::General::Fill()
 
 ProjectSettingsDisplayer::Input::Input(std::string name) : PanelCategory(name)
 {
-    userContext = InputManager::GetInstance()->GetOrAddContext("User Context");
+    userContext = InputManager::GetOrAddContext("User Context");
 }
 
 void ProjectSettingsDisplayer::Input::Fill()
 {
-    InputManager* IM = InputManager::GetInstance();
-
     if (ImGui::Button("Save"))
         Serializer::SerializeInputs();
 
@@ -103,14 +101,14 @@ void ProjectSettingsDisplayer::Input::Fill()
         type = 1;
     }
 
-    CreateAction(IM, type);
+    CreateAction(type);
 
-    SetButtons(IM);
+    SetButtons();
     ImGui::Spacing(); ImGui::Separator();
-    SetAxes(IM);
+    SetAxes();
 }
 
-void ProjectSettingsDisplayer::Input::CreateAction(InputManager* IM, int& type)
+void ProjectSettingsDisplayer::Input::CreateAction(int& type)
 {
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
@@ -132,9 +130,9 @@ void ProjectSettingsDisplayer::Input::CreateAction(InputManager* IM, int& type)
             ImGui::CloseCurrentPopup();
 
             if (type == 0)
-                CreateButtons(IM, name);
+                CreateButtons(name);
             else if (type == 1)
-                CreateAxes(IM, name);
+                CreateAxes(name);
 
             type = -1;
 
@@ -147,12 +145,12 @@ void ProjectSettingsDisplayer::Input::CreateAction(InputManager* IM, int& type)
     }
 }
 
-void ProjectSettingsDisplayer::Input::CreateButtons(InputManager* IM, const char* name)
+void ProjectSettingsDisplayer::Input::CreateButtons(const char* name)
 {
     int success = 0;
-    IM->PushContext(userContext);
-    IM->AddActionSingle(std::string(name), success);
-    IM->PopContext();
+    InputManager::PushContext(userContext);
+    InputManager::AddActionSingle(std::string(name), success);
+    InputManager::PopContext();
 
     if (success == 1)
     {
@@ -171,12 +169,12 @@ void ProjectSettingsDisplayer::Input::CreateButtons(InputManager* IM, const char
     }
 }
 
-void ProjectSettingsDisplayer::Input::CreateAxes(InputManager* IM, const char* name)
+void ProjectSettingsDisplayer::Input::CreateAxes(const char* name)
 {
     int success = 0;
-    IM->PushContext(userContext);
-    IM->AddActionAxes(std::string(name), success);
-    IM->PopContext();
+    InputManager::PushContext(userContext);
+    InputManager::AddActionAxes(std::string(name), success);
+    InputManager::PopContext();
 
     if (success == 1)
     {
@@ -195,7 +193,7 @@ void ProjectSettingsDisplayer::Input::CreateAxes(InputManager* IM, const char* n
     }
 }
 
-void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
+void ProjectSettingsDisplayer::Input::SetButtons()
 {
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
@@ -209,9 +207,9 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
 
         if (ImGui::Button((std::string("-") + treeLabel).c_str()))
         {
-            IM->PushContext(userContext);
-            int success = IM->RemoveActionSingle(button.first);
-            IM->PopContext();
+            InputManager::PushContext(userContext);
+            int success = InputManager::RemoveActionSingle(button.first);
+            InputManager::PopContext();
 
             if (success == 1)
             {
@@ -234,11 +232,11 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 bool breakLoop = false;
 
                 if (m_inputsIndex.size() <= j)
-                    m_inputsIndex.push_back(IM->GetKeycodeIndex(input.first));
+                    m_inputsIndex.push_back(InputManager::GetKeycodeIndex(input.first));
                 else
-                    m_inputsIndex[j] = IM->GetKeycodeIndex(input.first);
+                    m_inputsIndex[j] = InputManager::GetKeycodeIndex(input.first);
 
-                const char* combo_preview_value = IM->GetKeyname(m_inputsIndex[j]);
+                const char* combo_preview_value = InputManager::GetKeyname(m_inputsIndex[j]);
 
                 ImGui::Text("Key:"); ImGui::SameLine();
                 std::string label = "##k" + std::to_string(j);
@@ -246,18 +244,18 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 // Key selection combo
                 if (ImGui::BeginCombo(label.c_str(), combo_preview_value))
                 {
-                    for (int n = 0; n < IM->KeynamesSize(); n++)
+                    for (int n = 0; n < InputManager::KeynamesSize(); n++)
                     {
                         const bool is_selected = (m_inputsIndex[j] == n);
-                        if (ImGui::Selectable(IM->GetKeyname(n), is_selected))
+                        if (ImGui::Selectable(InputManager::GetKeyname(n), is_selected))
                         {
                             m_inputsIndex[j] = n;
-                            int success = IM->ChangeInputInAction(&button.second, input.first, IM->GetKeycode(m_inputsIndex[j]));
+                            int success = InputManager::ChangeInputInAction(&button.second, input.first, InputManager::GetKeycode(m_inputsIndex[j]));
                             breakLoop = true;
 
                             if (success == 0)
                             {
-                                std::string notif = "Key " + std::string(IM->GetKeyname(m_inputsIndex[j])) + " is already link to Action " + button.first;
+                                std::string notif = "Key " + std::string(InputManager::GetKeyname(m_inputsIndex[j])) + " is already link to Action " + button.first;
                                 EditorManager::SendNotification(notif.c_str(), ENotifType::Warning, 1.0f);
                             }
                         }
@@ -273,7 +271,7 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 std::string listeningLabel = "Listening" + label;
                 if (ImGui::Button((std::string("...") + label).c_str()))
                 {
-                    IM->SetListening();
+                    InputManager::SetListening();
 
                     ImGui::OpenPopup(listeningLabel.c_str());
                 }
@@ -284,13 +282,13 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 {
                     ImGui::Separator();
 
-                    int key = IM->GetListenedKey();
+                    int key = InputManager::GetListenedKey();
                     if (key != -1)
                     {
-                        IM->ChangeInputInAction(&button.second, input.first, IM->GetKeycode(key));
+                        InputManager::ChangeInputInAction(&button.second, input.first, InputManager::GetKeycode(key));
                         breakLoop = true;
 
-                        IM->ResetListenedKey();
+                        InputManager::ResetListenedKey();
 
                         ImGui::CloseCurrentPopup();
                     }
@@ -300,9 +298,9 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
                 // Remove key from Action
                 if (ImGui::Button((std::string("-") + label).c_str()))
                 {
-                    IM->PushContext(userContext);
-                    int success = IM->RemoveInputFromAction(&button.second, input.first);
-                    IM->PopContext();
+                    InputManager::PushContext(userContext);
+                    int success = InputManager::RemoveInputFromAction(&button.second, input.first);
+                    InputManager::PopContext();
 
                     if (success == 1)
                     {
@@ -328,9 +326,9 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
             // Add new key to Action
             if (ImGui::Button("+"))
             {
-                IM->PushContext(userContext);
-                int success = IM->AddInputToAction(&button.second, Keycode::UNKNOWN);
-                IM->PopContext();
+                InputManager::PushContext(userContext);
+                int success = InputManager::AddInputToAction(&button.second, Keycode::UNKNOWN);
+                InputManager::PopContext();
 
                 if (success == 1)
                 {
@@ -349,7 +347,7 @@ void ProjectSettingsDisplayer::Input::SetButtons(InputManager* IM)
     }
 }
 
-void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
+void ProjectSettingsDisplayer::Input::SetAxes()
 {
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
 
@@ -363,9 +361,9 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
 
         if (ImGui::Button((std::string("-") + treeLabel).c_str()))
         {
-            IM->PushContext(userContext);
-            int success = IM->RemoveActionAxes(axis.first);
-            IM->PopContext();
+            InputManager::PushContext(userContext);
+            int success = InputManager::RemoveActionAxes(axis.first);
+            InputManager::PopContext();
 
             if (success == 1)
             {
@@ -395,9 +393,9 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                     if (k == 0)
                     {
                         if (m_axisPosIndex.size() <= j)
-                            m_axisPosIndex.push_back(IM->GetKeycodeIndex(axes->GetPositiveKey()));
+                            m_axisPosIndex.push_back(InputManager::GetKeycodeIndex(axes->GetPositiveKey()));
                         else
-                            m_axisPosIndex[j] = IM->GetKeycodeIndex(axes->GetPositiveKey());
+                            m_axisPosIndex[j] = InputManager::GetKeycodeIndex(axes->GetPositiveKey());
 
                         currentKey = &m_axisPosIndex[j];
 
@@ -408,9 +406,9 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                     else if (k == 1)
                     {
                         if (m_axisNegIndex.size() <= j)
-                            m_axisNegIndex.push_back(IM->GetKeycodeIndex(axes->GetNegativeKey()));
+                            m_axisNegIndex.push_back(InputManager::GetKeycodeIndex(axes->GetNegativeKey()));
                         else
-                            m_axisNegIndex[j] = IM->GetKeycodeIndex(axes->GetNegativeKey());
+                            m_axisNegIndex[j] = InputManager::GetKeycodeIndex(axes->GetNegativeKey());
 
                         currentKey = &m_axisNegIndex[j];
 
@@ -421,21 +419,21 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
 
                     if (currentKey)
                     {
-                        combo_preview_value = IM->GetKeyname(*currentKey);
+                        combo_preview_value = InputManager::GetKeyname(*currentKey);
 
                         ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.5f - 150.f);
                         // Key selection combo
                         if (ImGui::BeginCombo(label.c_str(), combo_preview_value))
                         {
-                            for (int n = 0; n < IM->KeynamesSize(); n++)
+                            for (int n = 0; n < InputManager::KeynamesSize(); n++)
                             {
                                 const bool is_selected = (*currentKey == n);
 
-                                if (ImGui::Selectable(IM->GetKeyname(n), is_selected))
+                                if (ImGui::Selectable(InputManager::GetKeyname(n), is_selected))
                                 {
                                     *currentKey = n;
-                                    
-                                    IM->SetKey(axes, IM->GetKeycode(*currentKey), (bool)k);
+
+                                    InputManager::SetKey(axes, InputManager::GetKeycode(*currentKey), (bool)k);
                                 }
 
                                 if (is_selected)
@@ -449,7 +447,7 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                     std::string listeningLabel = "Listening" + label;
                     if (ImGui::Button((std::string("...") + label).c_str()))
                     {
-                        IM->SetListening();
+                        InputManager::SetListening();
 
                         ImGui::OpenPopup(listeningLabel.c_str());
                     }
@@ -460,11 +458,11 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                     {
                         ImGui::Separator();
 
-                        int key = IM->GetListenedKey();
+                        int key = InputManager::GetListenedKey();
                         if (key != -1)
                         {
-                            IM->SetKey(axes, IM->GetKeycode(key), (bool)k);
-                            IM->ResetListenedKey();
+                            InputManager::SetKey(axes, InputManager::GetKeycode(key), (bool)k);
+                            InputManager::ResetListenedKey();
 
                             ImGui::CloseCurrentPopup();
                         }
@@ -475,9 +473,9 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
                 // Add new key to Action
                 if (ImGui::Button((std::string("-") + label).c_str()))
                 {
-                    IM->PushContext(userContext);
-                    int success = IM->RemoveAxisFromAction(&axis.second, axes);
-                    IM->PopContext();
+                    InputManager::PushContext(userContext);
+                    int success = InputManager::RemoveAxisFromAction(&axis.second, axes);
+                    InputManager::PopContext();
 
                     if (success == 1)
                     {
@@ -497,9 +495,9 @@ void ProjectSettingsDisplayer::Input::SetAxes(InputManager* IM)
             // Add new axis to Action
             if (ImGui::Button("+"))
             {
-                IM->PushContext(userContext);
-                int success = IM->AddAxisToAction(&axis.second, { Keycode::UNKNOWN, Keycode::UNKNOWN });
-                IM->PopContext();
+                InputManager::PushContext(userContext);
+                int success = InputManager::AddAxisToAction(&axis.second, { Keycode::UNKNOWN, Keycode::UNKNOWN });
+                InputManager::PopContext();
 
                 if (success == 1)
                 {

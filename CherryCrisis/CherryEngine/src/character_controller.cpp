@@ -15,7 +15,6 @@ CharacterController::CharacterController(CCUUID& id) : Behaviour(id)
 {
 	PopulateMetadatas();
 
-	m_inputManager = InputManager::GetInstance();
 	m_timeManager = TimeManager::GetInstance();
 }
 
@@ -124,17 +123,17 @@ void CharacterController::Update()
 	}
 
 
-	m_inputManager->PushContext("User Context");
+	InputManager::PushContext("User Context");
 
-	float forward = m_inputManager->GetAxis(Keycode::W, Keycode::S);
-	float side = m_inputManager->GetAxis(Keycode::D, Keycode::A);
+	float forward = InputManager::GetAxis(Keycode::W, Keycode::S);
+	float side = InputManager::GetAxis(Keycode::D, Keycode::A);
 
-	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_inputManager->GetMouseDelta().x * m_timeManager->GetDeltaTime();
+	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * InputManager::GetMouseDelta().x * m_timeManager->GetDeltaTime();
 
-	if (m_inputManager->GetKey(Keycode::SPACE) && m_isGrounded)
+	if (InputManager::GetKey(Keycode::SPACE) && m_isGrounded)
 		m_physicActor->AddForce({0, 10.f, 0}, PhysicSystem::EForceMode::eIMPULSE);
 
-	m_inputManager->PopContext();
+	InputManager::PopContext();
 
 	CCMaths::Vector3 move = -m_transform->GetWorldMatrix().back.Normalized() * forward + m_transform->GetWorldMatrix().right.Normalized() * side;
 

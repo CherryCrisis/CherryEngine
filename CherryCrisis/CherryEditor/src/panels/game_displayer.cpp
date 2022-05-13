@@ -44,8 +44,8 @@ void GameDisplayer::Render()
 
 void GameDisplayer::Focus()
 {
-    m_inputs->SetPollContext("User Context");
-    m_inputs->SetCursorHidden();
+    InputManager::SetPollContext("User Context");
+    InputManager::SetCursorHidden();
     m_isFocused = true;
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
     ImGui::SetWindowFocus("Game");
@@ -53,8 +53,8 @@ void GameDisplayer::Focus()
 
 void GameDisplayer::Unfocus()
 {
-    m_inputs->SetPollContext(nullptr);
-    m_inputs->SetCursorDisplayed();
+    InputManager::SetPollContext(nullptr);
+    InputManager::SetCursorDisplayed();
     m_isFocused = false;
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
