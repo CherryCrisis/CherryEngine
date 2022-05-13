@@ -9,8 +9,6 @@
 class Texture;
 enum class ETextureType : unsigned int;
 class Material;
-class Spheremap;
-class Cubemap;
 class AssetSettingsDisplayer;
 
 class AssetSettings
@@ -78,38 +76,6 @@ private:
 	void GenerateTextureList();
 public:
 	MaterialSettings(std::shared_ptr<Material> material);
-	void Render() override;
-	void ContextCallback();
-
-};
-
-class SpheremapSettings : public AssetSettings
-{
-private:
-	std::shared_ptr<Spheremap> m_spheremap;
-	int m_texturePreviewSize = 50;
-	bool isHovered = false;
-
-	TextureGenerator m_textureGenerator;
-public:
-	SpheremapSettings(std::shared_ptr<Spheremap> spheremap);
-	void Render() override;
-	void ContextCallback();
-
-};
-
-class CubemapSettings : public AssetSettings
-{
-private:
-	std::shared_ptr<Cubemap> m_cubemap;
-
-	int m_texturePreviewSize = 50;
-	int m_textureIdFoccused = 0;
-
-	TextureGenerator m_textureGenerator;
-
-public:
-	CubemapSettings(std::shared_ptr<Cubemap> material);
 	void Render() override;
 	void ContextCallback();
 

@@ -1200,9 +1200,6 @@
     <ClInclude Include="include\skydome_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
-    <ClInclude Include="include\spheremap.hpp">
-      <Filter>Fichiers d%27en-tête\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="include\environment_map_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
@@ -1628,9 +1625,6 @@
     </ClCompile>
     <ClCompile Include="src\pbr_rendering_pipeline.cpp">
       <Filter>Fichiers sources\Rendering\Pipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="src\spheremap.cpp">
-      <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\skydome_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>

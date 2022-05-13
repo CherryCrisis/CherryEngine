@@ -386,7 +386,6 @@
     <ClInclude Include="include\sky_renderer.hpp" />
     <ClInclude Include="include\sound.hpp" />
     <ClInclude Include="include\sound_manager.hpp" />
-    <ClInclude Include="include\spheremap.hpp" />
     <ClInclude Include="include\sphere_collider.hpp" />
     <ClInclude Include="include\texture.hpp" />
     <ClInclude Include="include\texture_generator.hpp" />
@@ -585,7 +584,6 @@
     <ClCompile Include="src\sky_renderer.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\sound_manager.cpp" />
-    <ClCompile Include="src\spheremap.cpp" />
     <ClCompile Include="src\sphere_collider.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\texture_generator.cpp" />

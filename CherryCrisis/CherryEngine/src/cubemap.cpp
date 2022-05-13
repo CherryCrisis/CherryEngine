@@ -9,11 +9,11 @@
 void Cubemap::Load(std::shared_ptr<Cubemap> cubemap)
 {
     std::array<std::string, 6> texturePaths;
-    if (!CCImporter::ImportCubemap(*cubemap->GetFilesystemPath(), texturePaths))
-    {
-        //Save empty cubemap if doesn't exist
-        CCImporter::SaveCubemap(cubemap.get());
-    }
+    //if (!CCImporter::ImportCubemap(*cubemap->GetFilesystemPath(), texturePaths))
+    //{
+    //    //Save empty cubemap if doesn't exist
+    //    CCImporter::SaveCubemap(cubemap.get());
+    //}
 
     int width, height;
     bool ready = false; //Ready to use if all width/height of all textures are same
@@ -62,19 +62,19 @@ void Cubemap::ClearData()
 
 void Cubemap::Reload(bool saveOnly)
 {
-    if (saveOnly)
-    {
-        CCImporter::SaveCubemap(this);
-        return;
-    }
+    //if (saveOnly)
+    //{
+    //    CCImporter::SaveCubemap(this);
+    //    return;
+    //}
 
 
     std::array<std::string, 6> texturePaths;
-    if (CCImporter::ImportCubemap(*GetFilesystemPath(), texturePaths))
-    {
-        //Save empty cubemap if doesn't exist
-        CCImporter::SaveCubemap(this);
-    }
+    //if (CCImporter::ImportCubemap(*GetFilesystemPath(), texturePaths))
+    //{
+    //    //Save empty cubemap if doesn't exist
+    //    CCImporter::SaveCubemap(this);
+    //}
 
     int width, height;
     bool ready = 0; //Ready to use if all width/height of all textures are same

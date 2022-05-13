@@ -26,7 +26,6 @@
 #include "texture.hpp"
 #include "utils.hpp"
 #include "cubemap.hpp"
-#include "spheremap.hpp"
 
 namespace YAML
 {
@@ -781,73 +780,4 @@ namespace CCImporter
 
     #pragma endregion
 
-    #pragma region Cubemap
-    void SaveCubemap(Cubemap* cubemap)
-    {
-        std::string path(cubemap->GetFilesystemPath()->string());
-        //-- Save in assets directory --//
-        YAML::Node yamlSave;
-
-        YAML::Node settingsSave = yamlSave["settings"];
-
-        for (unsigned int i = 0; i < cubemap->m_textures.size(); ++i)
-        {
-            std::string textureId = std::format("texture_{}", i).c_str();
-            settingsSave[textureId.c_str()] = cubemap->m_textures[i] ? cubemap->m_textures[i]->GetFilepath().c_str() : "";
-        }
-
-        std::ofstream out(path.c_str());
-        bool opened = out.is_open();
-        out << yamlSave;
-        out.close();
-    }
-
-    bool ImportCubemap(const std::filesystem::path& path, std::array<std::string, 6>& texturesPaths)
-    {
-        if (!std::filesystem::exists(path))
-            return false;
-
-        YAML::Node loader = YAML::LoadFile(path.string().c_str());
-
-        YAML::Node settingsLoaded = loader["settings"];
-
-        for (unsigned int i = 0; i < 6; ++i)
-        {
-            std::string textureId = std::format("texture_{}", i).c_str();
-            texturesPaths[i] = settingsLoaded[textureId.c_str()].as<std::string>();
-        }
-        return true;
-    }
-    #pragma  endregion
-
-    #pragma region Spheremap
-    void CCENGINE_API SaveSpheremap(Spheremap* spheremap)
-    {
-        std::string path(spheremap->GetFilesystemPath()->string());
-
-        //-- Save in assets directory --//
-        YAML::Node yamlSave;
-
-        YAML::Node settingsSave = yamlSave["settings"];
-        settingsSave["texture"] = spheremap->m_texture ? spheremap->m_texture->GetFilepath().c_str() : "";
-
-        std::ofstream out(path.c_str());
-        bool opened = out.is_open();
-        out << yamlSave;
-        out.close();
-    }
-
-    bool ImportSpheremap(const std::filesystem::path& path, std::string& texturePath)
-    {
-        if (!std::filesystem::exists(path))
-            return false;
-
-        YAML::Node loader = YAML::LoadFile(path.string().c_str());
-
-        YAML::Node settingsLoaded = loader["settings"];
-        texturePath = settingsLoaded["texture"].as<std::string>();
-
-        return true;
-    }
-    #pragma endregion
 }

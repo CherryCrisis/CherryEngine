@@ -2,7 +2,8 @@
 
 #include "prefilter_map_renderpass.hpp"
 
-#include "skydome.hpp"
+#include "texture.hpp"
+#include "sky_renderer.hpp"
 #include "skydome_renderpass.hpp"
 #include "environment_map_renderpass.hpp"
 #include "viewer.hpp"
@@ -15,67 +16,58 @@ PrefilterMapRenderPass::PrefilterMapRenderPass(const char* name)
 }
 
 template <>
-int PrefilterMapRenderPass::Subscribe(Skydome* toGenerate)
+int PrefilterMapRenderPass::Subscribe(SkyRenderer* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
-
-	Spheremap* spheremap = toGenerate->m_spheremap.get();
-
-	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0 || !spheremap->m_gpuSpheremap)
+	if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
 		return -1;
 
-	if (!spheremap->m_gpuPrefilterMap)
-	{
-		std::unique_ptr<GPUPrefilterMapSphereMap> gpuPrefilterMap = std::make_unique<GPUPrefilterMapSphereMap>();
+	m_skyRenderer = toGenerate;
 
-		//--- Generate environment map --//
-		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &gpuPrefilterMap->ID);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, gpuPrefilterMap->ID);
-
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // to combatting visible dots artifact in the reflectance
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		for (unsigned int i = 0; i < 6; ++i)
-		{
-			// note that we store each face with 16 bit floating point values
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F,
-				m_mipMapResolution, m_mipMapResolution, 0, GL_RGB, GL_FLOAT, nullptr);
-		}
-
-		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-
-		glUseProgram(m_program->m_shaderProgram);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "environmentMap"), 0);
-
-		spheremap->m_gpuPrefilterMap = std::move(gpuPrefilterMap);
-
-		if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
-			return -1;
-	}
-
-	m_skydome = toGenerate;
-
-	if (m_skydome && m_program)
-		m_callExecute = CCCallback::BindCallback(&PrefilterMapRenderPass::Execute, this);
+	SetupPrefilterMap();
 
 	return 1;
 }
 
 template <>
-void PrefilterMapRenderPass::Unsubscribe(Skydome* toGenerate)
+void PrefilterMapRenderPass::Unsubscribe(SkyRenderer* toGenerate)
 {
-	if (m_skydome == toGenerate)
+	if (m_skyRenderer == toGenerate)
 	{
-		m_skydome = nullptr;
+		m_skyRenderer = nullptr;
 		m_callExecute = nullptr;
 	}
 }
 
-void PrefilterMapRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
+void PrefilterMapRenderPass::SetupPrefilterMap()
+{
+	if (!m_skyRenderer)
+		return;
+
+	Texture* spheremap = m_skyRenderer->m_texture.get();
+
+	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0)
+		return;
+
+	if (!spheremap->m_gpuPrefilterMap)
+	{
+		if (!spheremap->GetData())
+			return;
+
+		std::unique_ptr<GPUPrefilterMapSphereMap> gpuPrefilterMap = std::make_unique<GPUPrefilterMapSphereMap>();
+		gpuPrefilterMap->m_OnGpuReloaded = CCCallback::BindCallback(&PrefilterMapRenderPass::GeneratePrefilterMap, this);
+
+		glUseProgram(m_program->m_shaderProgram);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "environmentMap"), 0);
+
+		spheremap->m_gpuPrefilterMap = std::move(gpuPrefilterMap);
+	}
+
+	GeneratePrefilterMap();
+}
+
+void PrefilterMapRenderPass::GeneratePrefilterMap()
 {
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
@@ -97,30 +89,29 @@ void PrefilterMapRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 	glUseProgram(m_program->m_shaderProgram);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, captureProjectionMatrix.data);
 
-	Spheremap* skyTexture = m_skydome->m_spheremap.get();
-	Mesh* mesh = m_skydome->m_cube.get();
+	Texture* spheremap = m_skyRenderer->m_texture.get();
+	Mesh* mesh = m_skyRenderer->m_cube.get();
 
-	auto gpuSpheremap = static_cast<EnvironmentMapRenderPass::GPUSkydomeSpheremap*>(skyTexture->m_gpuSpheremap.get());
-	auto gpuCubemap = static_cast<SkydomeRenderPass::GPUSkydomeCubemap*>(skyTexture->m_gpuCubemapV2.get());
-	auto gpuPrefilterMap = static_cast<GPUPrefilterMapSphereMap*>(skyTexture->m_gpuPrefilterMap.get());
+	auto gpuSpheremap = static_cast<EnvironmentMapRenderPass::GPUEnvironmentMap*>(spheremap->m_gpuTextureSpheremap.get());
+	auto gpuCubemap = static_cast<SkydomeRenderPass::GPUSkydomeCubemap*>(spheremap->m_gpuTextureCubemap.get());
+	auto gpuPrefilterMap = static_cast<GPUPrefilterMapSphereMap*>(spheremap->m_gpuPrefilterMap.get());
 	auto gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
-	//auto gpuIrradianceMap = static_cast<IrradianceMapRenderPass::GPUIrradianceMapSphereMap*>(skyTexture->m_gpuIrradiancemap.get());
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, gpuSpheremap->FBO);
 
-	for (unsigned int mip = 0; mip < m_maxMipLevels; ++mip)
+	for (unsigned int mip = 0; mip < gpuPrefilterMap->m_maxMipLevels; ++mip)
 	{
-		unsigned int mipWidth = static_cast<unsigned int>(m_mipMapResolution * std::powf(0.5, (float)mip));
-		unsigned int mipHeight = static_cast<unsigned int>(m_mipMapResolution * std::powf(0.5, (float)mip));
+		unsigned int mipWidth = static_cast<unsigned int>(gpuPrefilterMap->m_mipMapResolution * std::powf(0.5, (float)mip));
+		unsigned int mipHeight = static_cast<unsigned int>(gpuPrefilterMap->m_mipMapResolution * std::powf(0.5, (float)mip));
 
 		glBindRenderbuffer(GL_RENDERBUFFER, gpuSpheremap->RBO);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
 		glViewport(0, 0, mipWidth, mipHeight);
 
-		float roughness = (float)mip / (float)(m_maxMipLevels - 1);
+		float roughness = (float)mip / (float)(gpuPrefilterMap->m_maxMipLevels - 1);
 		glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "roughness"), roughness);
 
 		for (unsigned int i = 0; i < 6; ++i)
@@ -141,8 +132,60 @@ void PrefilterMapRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
-	glViewport(0, 0, fb.colorTex.width, fb.colorTex.height);
+void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Generate(Texture* texture)
+{
+	//--- Generate environment map --//
+	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &ID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
 
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // to combatting visible dots artifact in the reflectance
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	for (unsigned int i = 0; i < 6; ++i)
+	{
+		// note that we store each face with 16 bit floating point values
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F,
+			m_mipMapResolution, m_mipMapResolution, 0, GL_RGB, GL_FLOAT, nullptr);
+	}
+
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+	texture->ClearData();
+
+	if (m_OnGpuReloaded)
+		m_OnGpuReloaded->Invoke();
+}
+
+void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Regenerate(Texture* texture)
+{
+	Destroy();
+	Generate(texture);
+}
+
+void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Destroy()
+{
+	m_OnReloaded->Unbind(&GPUPrefilterMapSphereMap::OnReload, this);
+	glDeleteTextures(1, &ID);
+}
+
+PrefilterMapRenderPass::GPUPrefilterMapSphereMap::GPUPrefilterMapSphereMap(Texture* texture)
+{
+	m_OnReloaded = &texture->m_OnReloaded;
+	m_OnReloaded->Bind(&GPUPrefilterMapSphereMap::OnReload, this);
+	Generate(texture);
+}
+
+PrefilterMapRenderPass::GPUPrefilterMapSphereMap::~GPUPrefilterMapSphereMap()
+{
+	Destroy();
+}
+
+void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::OnReload(std::shared_ptr<Texture> texture)
+{
+	Regenerate(texture.get());
 }

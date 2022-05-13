@@ -4,6 +4,8 @@
 
 #include <unordered_set>
 
+#include "sky_renderer.hpp"
+
 class Entity;
 class Debug;
 struct Portal;
@@ -33,7 +35,7 @@ private:
 	std::vector<Portal*> m_portals;
 
 public:
-	std::unique_ptr<class SkyRenderer> m_skyRenderer = nullptr;
+	std::unique_ptr<SkyRenderer> m_skyRenderer = nullptr;
 	PhysicSystem::PhysicScene* m_physicCell = nullptr;
 
 	Cell();

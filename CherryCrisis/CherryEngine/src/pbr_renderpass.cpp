@@ -10,7 +10,7 @@
 #include "model_renderer.hpp"
 #include "transform.hpp"
 #include "model.hpp"
-#include "skydome.hpp"
+#include "sky_renderer.hpp"
 #include "irradiance_map_renderpass.hpp"
 #include "prefilter_map_renderpass.hpp"
 #include "brdf_renderpass.hpp"
@@ -39,9 +39,6 @@ PBRRenderPass::PBRRenderPass(const char* name)
 		m_callExecute = CCCallback::BindCallback(&PBRRenderPass::Execute, this);
 
 		glUseProgram(0);
-
-		m_defaultTexture = ResourceManager::GetInstance()->AddResource<Texture>("Internal/PBR/defaultTexture.png", true);
-		m_textureGenerator.Generate(m_defaultTexture.get());
 	}
 }
 
@@ -102,22 +99,22 @@ void PBRRenderPass::Generate(Material* toGenerate)
 }
 
 template <>
-int PBRRenderPass::Subscribe(Skydome* toGenerate)
+int PBRRenderPass::Subscribe(SkyRenderer* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
 
-	m_skydome = toGenerate;
+	m_skyRenderer = toGenerate;
 
 	return 1;
 }
 
 template <>
-void PBRRenderPass::Unsubscribe(Skydome* toGenerate)
+void PBRRenderPass::Unsubscribe(SkyRenderer* toGenerate)
 {
-	if (m_skydome == toGenerate)
+	if (m_skyRenderer == toGenerate)
 	{
-		m_skydome = nullptr;
+		m_skyRenderer = nullptr;
 	}
 }
 
@@ -236,9 +233,9 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			BindTexture(material, ETextureType::ROUGHNESS, 4);
 			BindTexture(material, ETextureType::AO, 5);
 
-			if (m_skydome)
+			if (m_skyRenderer)
 			{
-				if (Spheremap* spheremap = m_skydome->m_spheremap.get())
+				if (Texture* spheremap = m_skyRenderer->m_texture.get())
 				{
 					if (auto gpuIrradianceMap = static_cast<IrradianceMapRenderPass::GPUIrradianceMapSphereMap*>(spheremap->m_gpuIrradiancemap.get()))
 					{
@@ -250,7 +247,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 						glBindTextureUnit(7, gpuPrefilterMap->ID);
 					}
 
-					if (auto gpuBRDF = static_cast<BRDFRenderPass::GPUBRDFSphereMap*>(spheremap->m_gpuBrdf.get()))
+					if (auto gpuBRDF = static_cast<BRDFRenderPass::GPUBRDFSphereMap*>(m_skyRenderer->m_gpuBRDF.get()))
 					{
 						glBindTextureUnit(8, gpuBRDF->ID);
 					}

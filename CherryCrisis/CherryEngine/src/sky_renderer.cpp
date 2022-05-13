@@ -36,13 +36,6 @@ SkyRenderer::~SkyRenderer()
 	RemoveQuad();
 }
 
-void SkyRenderer::OnReloadTexture(std::shared_ptr<Texture> texture)
-{
-	texture->m_OnReloaded.Unbind(&SkyRenderer::OnReloadTexture, this);
-	RemoveTexture();
-	SetTexture(texture);
-}
-
 void SkyRenderer::OnSetTexture(std::shared_ptr<Texture> texture)
 {
 	texture->m_OnLoaded.Unbind(&SkyRenderer::OnSetTexture, this);
@@ -70,7 +63,6 @@ void SkyRenderer::SetTexture(std::shared_ptr<Texture> texture)
 
 	RemoveTexture();
 
-	texture->m_OnReloaded.Bind(&SkyRenderer::OnReloadTexture, this);
 	m_texture = texture;
 
 	m_cell->AddRenderer(this);
@@ -106,7 +98,12 @@ void SkyRenderer::RemoveTexture()
 	if (m_texture)
 	{
 		m_texture->m_OnDeleted.Unbind(&SkyRenderer::RemoveTexture, this);
-		m_texture->m_OnReloaded.Unbind(&SkyRenderer::OnReloadTexture, this);
+		
+		m_texture->m_gpuTextureSpheremap = nullptr;
+		m_texture->m_gpuIrradiancemap = nullptr;
+		m_texture->m_gpuPrefilterMap = nullptr;
+		m_texture->m_gpuTextureCubemap = nullptr;
+
 		m_texture = nullptr;
 
 		// Move to function

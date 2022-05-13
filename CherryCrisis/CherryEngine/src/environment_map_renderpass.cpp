@@ -19,28 +19,12 @@ int EnvironmentMapRenderPass::Subscribe(SkyRenderer* toGenerate)
 	if (!toGenerate)
 		return -1;
 
-	Texture* spheremap = toGenerate->m_texture.get();
-
-	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0 || !spheremap->GetData())
+	if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
 		return -1;
 
-	if (!spheremap->m_gpuTextureSpheremap)
-	{
-		std::unique_ptr<GPUEnvironmentMap> gpuEnvMap = std::make_unique<GPUEnvironmentMap>(spheremap);
-
-		glUseProgram(m_program->m_shaderProgram);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "equirectangularMap"), 0);
-
-		spheremap->m_gpuTextureSpheremap = std::move(gpuEnvMap);
-
-		if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
-			return -1;
-	}
-
 	m_skyRenderer = toGenerate;
-	toGenerate->ClearData();
 
-	GenerateEnvironmentMap();
+	SetupEnvironmentMap();
 
 	return 1;
 }
@@ -53,6 +37,33 @@ void EnvironmentMapRenderPass::Unsubscribe(SkyRenderer* toGenerate)
 		m_skyRenderer = nullptr;
 		m_callExecute = nullptr;
 	}
+}
+
+void EnvironmentMapRenderPass::SetupEnvironmentMap()
+{
+	if (!m_skyRenderer)
+		return;
+
+	Texture* spheremap = m_skyRenderer->m_texture.get();
+
+	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0)
+		return;
+
+	if (!spheremap->m_gpuTextureSpheremap)
+	{
+		if (!spheremap->GetData())
+			return;
+
+		std::unique_ptr<GPUEnvironmentMap> gpuEnvMap = std::make_unique<GPUEnvironmentMap>(spheremap);
+		gpuEnvMap->m_OnGpuReloaded = CCCallback::BindCallback(&EnvironmentMapRenderPass::GenerateEnvironmentMap, this);
+
+		glUseProgram(m_program->m_shaderProgram);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "equirectangularMap"), 0);
+
+		spheremap->m_gpuTextureSpheremap = std::move(gpuEnvMap);
+	}
+
+	GenerateEnvironmentMap();
 }
 
 void EnvironmentMapRenderPass::GenerateEnvironmentMap()
@@ -138,6 +149,9 @@ void EnvironmentMapRenderPass::GPUEnvironmentMap::Generate(Texture* texture)
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
 	texture->ClearData();
+
+	if (m_OnGpuReloaded)
+		m_OnGpuReloaded->Invoke();
 }
 
 void EnvironmentMapRenderPass::GPUEnvironmentMap::Regenerate(Texture* texture)
@@ -153,13 +167,15 @@ void EnvironmentMapRenderPass::GPUEnvironmentMap::Destroy()
 
 EnvironmentMapRenderPass::GPUEnvironmentMap::GPUEnvironmentMap(Texture* texture)
 {
-	texture->m_OnReloaded.Bind(&GPUEnvironmentMap::OnReload, this);
+	m_OnTextureReloaded = &texture->m_OnReloaded;
+	m_OnTextureReloaded->Bind(&GPUEnvironmentMap::OnReload, this);
 
 	Generate(texture);
 }
 
 EnvironmentMapRenderPass::GPUEnvironmentMap::~GPUEnvironmentMap()
 {
+	m_OnTextureReloaded->Unbind(&GPUEnvironmentMap::OnReload, this);
 	Destroy();
 }
 

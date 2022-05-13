@@ -6,24 +6,36 @@
 
 #include "element_mesh_generator.hpp"
 
-#include "spheremap.hpp"
+#include "texture.hpp"
 
-class Skydome;
+class SkyRenderer;
 class Viewer;
 
 class IrradianceMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
 
-	Skydome*	 m_skydome	= nullptr;
-	const int	m_mapSize	= 32;
+	SkyRenderer* m_skyRenderer	= nullptr;
 
+	void SetupIrradianceMap();
+	void GenerateIrradianceMap();
 
 public:
 	struct GPUIrradianceMapSphereMap : GPUIrradianceMap
 	{
+		Event<std::shared_ptr<Texture>>* m_OnTextureReloaded = nullptr;
+		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
+
 		GLuint		ID = 0u;
-		bool		hasIrradianceMap = false;
+		const int	mapSize = 32;
+
+		void Generate(Texture* texture);
+		void Regenerate(Texture* texture);
+		void Destroy();
+
+		GPUIrradianceMapSphereMap(Texture* texture);
+		virtual ~GPUIrradianceMapSphereMap();
+		void OnReload(std::shared_ptr<Texture> texture);
 	};
 
 	IrradianceMapRenderPass(const char* name);
@@ -41,11 +53,9 @@ public:
 	}
 
 	template <>
-	int Subscribe(Skydome* toGenerate);
+	int Subscribe(SkyRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Skydome* toGenerate);
-
-	void Execute(Framebuffer& fb, Viewer*& viewer);
+	void Unsubscribe(SkyRenderer* toGenerate);
 
 };

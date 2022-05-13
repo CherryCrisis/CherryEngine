@@ -16,6 +16,7 @@ class SkydomeRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 private:
 	SkyRenderer* m_skyRenderer = nullptr;
 
+	void SetupSkydome();
 public:
 
 	struct GPUSkydomeCubemap : GPUTextureCubemap

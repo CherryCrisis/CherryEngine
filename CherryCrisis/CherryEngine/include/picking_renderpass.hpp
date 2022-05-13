@@ -21,7 +21,7 @@ class PickingRenderPass : public ARenderingRenderPass
 public:
 	ElementMeshGenerator m_meshGenerator;
 
-	struct GPUTextureBasic : GPUTexture
+	struct GPUTextureBasic : GPUTexture2D
 	{
 		GLuint ID = 0u;
 	};

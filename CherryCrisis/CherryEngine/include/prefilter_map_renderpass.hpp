@@ -16,9 +16,14 @@ class PrefilterMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 private:
 	SkyRenderer* m_skyRenderer = nullptr;
 
+	void SetupPrefilterMap();
+	void GeneratePrefilterMap();
 public:
 	struct GPUPrefilterMapSphereMap : GPUPrefilterMap
 	{
+		Event<std::shared_ptr<Texture>>* m_OnReloaded = nullptr;
+		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
+
 		const unsigned int	m_maxMipLevels = 5;
 		const unsigned int	m_mipMapResolution = 128;
 

@@ -8,6 +8,7 @@
 
 #include "ebo_tbn_generator.hpp"
 #include "texture_generator.hpp"
+#include "element_mesh_generator.hpp"
 
 #include "texture.hpp"
 #include "light.hpp"
@@ -16,9 +17,9 @@ enum class ETextureType : unsigned int;
 class ModelRenderer;
 class Material;
 class Viewer;
-class Skydome;
+class SkyRenderer;
 
-class PBRRenderPass : public ARenderingRenderPass
+class PBRRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 	ElementTBNGenerator m_meshGenerator;
 	TextureGenerator m_textureGenerator;
@@ -28,7 +29,7 @@ class PBRRenderPass : public ARenderingRenderPass
 
 	std::shared_ptr<Texture> m_defaultTexture;
 
-	Skydome* m_skydome = nullptr;
+	SkyRenderer* m_skyRenderer = nullptr;
 
 protected:
 	void BindTexture(Material* material, ETextureType textureType, int id);
@@ -57,10 +58,10 @@ public:
 	void Generate(Material* toGenerate);
 
 	template <>
-	int Subscribe(Skydome* toGenerate);
+	int Subscribe(SkyRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Skydome* toGenerate);
+	void Unsubscribe(SkyRenderer* toGenerate);
 
 	template <>
 	void Unsubscribe(ModelRenderer* toGenerate);

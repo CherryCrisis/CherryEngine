@@ -18,47 +18,9 @@ int SkydomeRenderPass::Subscribe(SkyRenderer* toGenerate)
 	if (!toGenerate)
 		return -1;
 
-	Texture* spheremap = toGenerate->m_texture.get();
-
-	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0)
-		return -1;
-
-	if (!spheremap->m_gpuTextureCubemap)
-	{
-		std::unique_ptr<GPUSkydomeCubemap> gpuCubemap = std::make_unique<GPUSkydomeCubemap>();
-
-		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &gpuCubemap->ID);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
-
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
-		for (unsigned int i = 0; i < 6; ++i)
-		{
-			// note that we store each face with 16 bit floating point values
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F,
-				1024, 1024, 0, GL_RGB, GL_FLOAT, nullptr);
-		}
-
-		glUseProgram(m_program->m_shaderProgram);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "environmentMap"), 0);
-
-		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-
-
-		//TODO: Integer Compressed spheremap
-		
-		spheremap->m_gpuTextureCubemap = std::move(gpuCubemap);
-
-		if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
-			return -1;
-	}
-
 	m_skyRenderer = toGenerate;
-	toGenerate->ClearData();
+
+	SetupSkydome();
 
 	if (m_skyRenderer && m_program)
 		m_callExecute = CCCallback::BindCallback(&SkydomeRenderPass::Execute, this);
@@ -73,6 +35,45 @@ void SkydomeRenderPass::Unsubscribe(SkyRenderer* toGenerate)
 	{
 		m_skyRenderer = nullptr;
 		m_callExecute = nullptr;
+	}
+}
+
+void SkydomeRenderPass::SetupSkydome()
+{
+	if (!m_skyRenderer)
+		return;
+
+	Texture* spheremap = m_skyRenderer->m_texture.get();
+
+	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0)
+		return;
+
+	if (!spheremap->m_gpuTextureCubemap)
+	{
+		std::unique_ptr<GPUSkydomeCubemap> gpuCubemap = std::make_unique<GPUSkydomeCubemap>();
+
+		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &gpuCubemap->ID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
+
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		for (unsigned int i = 0; i < 6; ++i)
+		{
+			// note that we store each face with 16 bit floating point values
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F,
+				1024, 1024, 0, GL_RGB, GL_FLOAT, nullptr);
+		}
+
+		glUseProgram(m_program->m_shaderProgram);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "environmentMap"), 0);
+
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+		spheremap->m_gpuTextureCubemap = std::move(gpuCubemap);
 	}
 }
 

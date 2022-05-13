@@ -16,11 +16,15 @@ class EnvironmentMapRenderPass : public ARenderingRenderPass, ElementMeshGenerat
 private:
 	SkyRenderer* m_skyRenderer = nullptr;
 
+	void SetupEnvironmentMap();
 	void GenerateEnvironmentMap();
 
 public:
 	struct GPUEnvironmentMap: GPUTextureSpheremap
 	{
+		Event<std::shared_ptr<Texture>>* m_OnTextureReloaded = nullptr;
+		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
+
 		const int envMapSize = 1024;
 
 		GLuint ID = 0u;

@@ -28,7 +28,7 @@ struct CCENGINE_API GPUPrefilterMap
     virtual ~GPUPrefilterMap() = default;
 };
 
-enum class ETextureSurface
+enum class CCENGINE_API ETextureSurface
 {
     TEXTURE_2D,
     TEXTURE_CUBEMAP,

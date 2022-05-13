@@ -8,8 +8,6 @@
 #include "transform.hpp"
 #include "camera.hpp"
 #include "sky_renderer.hpp"
-#include "skydome.hpp"
-#include "skybox.hpp"
 #include "utils.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
@@ -70,9 +68,6 @@ void CellSystemDisplayer::CellSettings()
     {
         std::string skyRendererPath;
 
-        if (Skydome* skydome = static_cast<Skydome*>(m_selectedCell->m_skyRenderer))
-            skyRendererPath = skydome->m_spheremap->GetFilepath();
-
         ImGui::InputText("SkyRenderer", skyRendererPath.data(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
 
         if (ImGui::BeginDragDropTarget())
@@ -82,11 +77,11 @@ void CellSystemDisplayer::CellSettings()
                 const char* path = (const char*)payload->Data;
                 std::string extension = String::ExtractValue(path, '.');
 
-                if (spheremapExtension.compare("." + extension) == 0)
+                if (textureExtensions.end() != textureExtensions.find("." + extension))
                 {
-                    if (std::shared_ptr<Spheremap> spheremap = ResourceManager::GetInstance()->GetResource<Spheremap>(path))
+                    if (std::shared_ptr<Texture> texture = ResourceManager::GetInstance()->GetResource<Texture>(path))
                     {
-                        m_selectedCell->m_skyRenderer = new Skydome(m_selectedCell, spheremap);
+                        m_selectedCell->m_skyRenderer->SetTexture(texture);
                     }
                 }
             }
