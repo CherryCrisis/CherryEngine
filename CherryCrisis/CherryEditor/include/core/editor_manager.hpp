@@ -92,6 +92,7 @@ public:
     EditorManager(const std::string& projectPath="");
     
     AssetBrowser* GetAssetBrowser() { return &m_browser; }
+    CellSystemDisplayer* GetCellSystemDisplayer() { return &m_cellSystemDisplayer; }
 
     void DisplayEditorUI(GLFWwindow* window);
 

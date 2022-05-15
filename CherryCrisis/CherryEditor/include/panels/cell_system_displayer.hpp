@@ -17,14 +17,19 @@ private:
 	Cell*		m_selectedCell = nullptr;
 	Cell*		m_rightClickedCell = nullptr;
 	Entity*		m_selectedEntity = nullptr;
-	bool m_renameCell = false;
+	bool		m_renameCell = false;
+
+	void SelectCell(Cell* cell);
 
 public:
 	EditorManager* m_manager = nullptr;
 	Camera* m_camera = nullptr;
 	
 	CellSystemDisplayer();
+
+	Cell* GetSelectedCell() { return m_selectedCell; }
 	
+
 	void CellSettings();
 	void CreateCell();
 	void RenameCell();

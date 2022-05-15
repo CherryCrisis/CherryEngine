@@ -27,6 +27,7 @@ void Material::Load(std::shared_ptr<Material> material)
 	material->m_specular = materialArgs.m_materialHeader.m_specular;
 	material->m_emissive = materialArgs.m_materialHeader.m_emissive;
 	material->m_shininess = materialArgs.m_materialHeader.m_shininess;
+	material->m_hasNormal = materialArgs.m_materialHeader.m_hasNormal;
 	material->m_specularFactor = materialArgs.m_materialHeader.m_specularFactor;
 	material->m_metallicFactor = materialArgs.m_materialHeader.m_metallicFactor;
 	material->m_roughnessFactor = materialArgs.m_materialHeader.m_roughnessFactor;

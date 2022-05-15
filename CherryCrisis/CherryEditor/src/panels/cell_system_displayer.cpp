@@ -16,6 +16,9 @@ CellSystemDisplayer::CellSystemDisplayer()
 {
     m_cellSystem = CellSystem::GetInstance();
 
+    if (m_cellSystem->m_cells.size() > 0)
+        SelectCell(& m_cellSystem->m_cells.begin()->second);
+
     InputManager* IM = InputManager::GetInstance();
     IM->PushContext("Editor Context");
 
@@ -50,7 +53,7 @@ void CellSystemDisplayer::Render()
 
         if (m_selectedCell)
         {
-            RenderEntities();
+            CellSettings();
         }
 
 
@@ -64,19 +67,30 @@ void CellSystemDisplayer::Render()
 
 void CellSystemDisplayer::CellSettings()
 {
-    if (ImGui::TreeNode("Settings"))
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+
+    ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
+
+    //-- SkyRenderer Settings --//
     {
         std::string skyRendererPath;
-    
+
+        if (m_selectedCell->m_skyRenderer->m_texture)
+            skyRendererPath = m_selectedCell->m_skyRenderer->m_texture->GetFilepath();
+        else
+            skyRendererPath = "Null";
+
         ImGui::InputText("SkyRenderer", skyRendererPath.data(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
-    
+
         if (ImGui::BeginDragDropTarget())
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
             {
                 const char* path = (const char*)payload->Data;
                 std::string extension = String::ExtractValue(path, '.');
-    
+
                 if (textureExtensions.end() != textureExtensions.find("." + extension))
                 {
                     if (std::shared_ptr<Texture> texture = ResourceManager::GetInstance()->GetResource<Texture>(path))
@@ -87,7 +101,26 @@ void CellSystemDisplayer::CellSettings()
             }
             ImGui::EndDragDropTarget();
         }
-        ImGui::TreePop();
+    }
+
+    ImGui::EndChild();
+    ImGui::PopStyleVar();
+}
+
+void CellSystemDisplayer::SelectCell(Cell* cell)
+{
+    Cell* lastCell = m_displayedCell ? m_displayedCell : m_selectedCell;
+    m_selectedCell = cell;
+
+    if (m_displayedCell != m_selectedCell)
+    {
+        if (m_selectedCell && lastCell)
+        {
+            m_displayedCell = m_selectedCell;
+
+            lastCell->RemoveViewer(m_camera);
+            m_displayedCell->AddViewer(m_camera);
+        }
     }
 }
 
@@ -135,20 +168,7 @@ void CellSystemDisplayer::RenderCells()
             {
                 if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
                 {
-                    Cell* lastCell = m_displayedCell ? m_displayedCell : m_selectedCell;
-                    m_selectedCell = &cell.second;
-
-                    if (m_displayedCell != m_selectedCell)
-                    {
-                        if (m_selectedCell && lastCell)
-                        {
-                            m_displayedCell = m_selectedCell;
-
-                            lastCell->RemoveViewer(m_camera);
-                            m_displayedCell->AddViewer(m_camera);
-                        }
-                    }
-
+                    SelectCell(&cell.second);
                     itemSelected = true;
                 }
 
@@ -161,10 +181,26 @@ void CellSystemDisplayer::RenderCells()
 
             if (ImGui::BeginDragDropTarget())
             {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CELL_DROP"))
+                //if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CELL_DROP"))
+                //{
+                //    m_cellSystem->MoveEntityFromCellToCell(m_selectedEntity->m_cell, &cell.second, m_selectedEntity);
+                //    m_selectedEntity = nullptr;
+                //}
+
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
                 {
-                    m_cellSystem->MoveEntityFromCellToCell(m_selectedEntity->m_cell, &cell.second, m_selectedEntity);
-                    m_selectedEntity = nullptr;
+                    Entity* draggedEntity = (Entity*)payload->Data;
+
+                    //m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform, true, true, true);
+                    //m_manager->m_entitySelector.Clear();
+                    //m_isEntityDragged = false;
+                    //m_draggedEntity = nullptr;
+                    //if (opened) ImGui::TreePop();
+                    //return true;
+                    if (draggedEntity)
+                    {
+                        m_cellSystem->MoveEntityFromCellToCell(draggedEntity->m_cell, &cell.second, draggedEntity);
+                    }
                 }
 
                 ImGui::EndDragDropTarget();
@@ -176,10 +212,10 @@ void CellSystemDisplayer::RenderCells()
         i++;
     }
 
-    if (!itemSelected && ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
-    {
-        m_selectedCell = nullptr;
-    }
+    //if (!itemSelected && ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
+    //{
+    //    m_selectedCell = nullptr;
+    //}
 
     ImGui::EndChild(); ImGui::SameLine();
 }
@@ -192,9 +228,8 @@ void CellSystemDisplayer::RenderEntities()
 
 	ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
 
-    CellSettings();
-
-	for (auto& entity : m_selectedCell->GetEntities())
+    auto entities = m_selectedCell->GetEntities();
+	for (auto& entity : entities)
 	{
 		Transform* entityTransform = entity->GetBehaviour<Transform>();
 		if (entityTransform)

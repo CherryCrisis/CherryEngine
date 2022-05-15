@@ -23,7 +23,7 @@
 class AResource;
 class ModelBase;
 
-const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr" };
+const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr"};
 const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glb", ".gltf" };
 const std::set<std::string> shaderExtensions = { ".frag", ".vert" };
 const std::set<std::string> soundExtensions = { ".wav" };

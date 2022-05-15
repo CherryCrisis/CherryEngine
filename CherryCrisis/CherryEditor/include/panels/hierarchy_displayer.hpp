@@ -7,11 +7,13 @@
 class Scene;
 class EditorManager;
 class Entity;
+class CellSystemDisplayer;
 
 class HierarchyDisplayer : public Panel
 {
 private:
 	EditorManager* m_manager = nullptr;
+	CellSystemDisplayer* m_cellSystemDisplayer = nullptr;
 
 	Entity* m_draggedEntity = nullptr;
 	bool	m_isEntityDragged = false;
@@ -24,6 +26,5 @@ public:
 
 	bool RenderEntity(Entity* entity);
 
-	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr) :
-		Panel(spawnOpened), m_manager(manager) {}
+	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr);
 };

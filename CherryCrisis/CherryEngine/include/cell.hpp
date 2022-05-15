@@ -53,8 +53,7 @@ public:
 	void	RemoveViewer(Viewer* viewer);
 	int		PossessEntity(Entity* entity);
 
-
-	const std::vector<Entity*> GetEntities() { return m_entities; }
+	const std::vector<Entity*>& GetEntities() { return m_entities; }
 
 	void	LinkPortal(Portal* toLink);
 	void	LinkPortals(Portal* portal1, Portal* portal2);

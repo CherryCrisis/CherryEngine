@@ -26,12 +26,12 @@ Engine::Engine()
 	PhysicSystem::PhysicManager::CreateInstance();
 	SoundManager::CreateInstance();
 	TimeManager::CreateInstance();
+	Debug::CreateInstance();
 	ResourceManager::CreateInstance();
 	SceneManager::CreateInstance();
 	CellSystem::CreateInstance();
 	CsScriptingSystem::CreateInstance();
 	RenderManager::CreateInstance();
-	Debug::CreateInstance();
 	Pickinger::CreateInstance();
 
 	CsScriptingSystem::GetInstance()->Init();

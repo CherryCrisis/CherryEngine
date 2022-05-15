@@ -66,7 +66,8 @@ bool CellSystem::RemoveCell(const std::string& name)
 
 	if (m_cells.contains(name))
 	{
-		for (auto& entity : m_cells[name].GetEntities())
+		auto entities = m_cells[name].GetEntities();
+		for (auto& entity : entities)
 			MoveEntityFromCellToCell(name, m_defaultCell, entity);
 
 		m_cells.erase(name);

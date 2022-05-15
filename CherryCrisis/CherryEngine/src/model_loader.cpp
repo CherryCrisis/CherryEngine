@@ -591,6 +591,7 @@ namespace CCImporter
             .m_specular = material->m_specular,
             .m_emissive = material->m_emissive,
             .m_shininess = material->m_shininess,
+            .m_hasNormal = material->m_hasNormal,
             .m_specularFactor = material->m_specularFactor,
             .m_metallicFactor = material->m_metallicFactor,
             .m_roughnessFactor = material->m_roughnessFactor,

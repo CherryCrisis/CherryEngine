@@ -3,17 +3,18 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <algorithm>
+
+#include "resource_manager.hpp"
+#include "scene_manager.hpp"
 
 #include "scene.hpp"
 #include "transform.hpp"
 #include "portal_component.hpp"
 #include "core/editor_manager.hpp"
-
-#include<algorithm>
-#include <resource_manager.hpp>
 #include "callback.hpp"
-#include "scene_manager.hpp"
 #include "model.hpp"
+#include "cell.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -28,6 +29,13 @@ bool Contains(std::vector<T>& vec, const T& elem)
     return result;
 }
 
+HierarchyDisplayer::HierarchyDisplayer(bool spawnOpened, EditorManager* manager) 
+    : Panel(spawnOpened), m_manager(manager) 
+{
+    if (m_manager)
+        m_cellSystemDisplayer = m_manager->GetCellSystemDisplayer();
+}
+
 void HierarchyDisplayer::Render()
 {
     if (!m_isOpened)
@@ -36,9 +44,20 @@ void HierarchyDisplayer::Render()
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
         ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
+
+        Cell* selectedCell = m_cellSystemDisplayer->GetSelectedCell();
+
+        if (!selectedCell)
+        {
+            ImGui::End();
+            return;
+        }
+
+        ImGui::Text(std::format("Cell : {}", selectedCell->GetName().c_str()).c_str());
         ImGui::Separator();
 
-        for (Entity* entity : SceneManager::GetInstance()->m_currentScene->m_entities)
+        auto entities = selectedCell->GetEntities();
+        for (auto& entity : entities)
         {
             if (entity)
             {
@@ -131,7 +150,8 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
     if (entityTransform && ImGui::BeginDragDropSource())
     {
-        ImGui::SetDragDropPayload("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
+        std::cout << entity << std::endl;
+        ImGui::SetDragDropPayloadNoCopy("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
         ImGui::Text(entity->GetName().c_str());
         ImGui::EndDragDropSource();
         m_isEntityDragged = true;
@@ -165,8 +185,8 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
         {
-            m_draggedEntity = (Entity*)payload->Data;
-
+            m_draggedEntity = static_cast<Entity*>(payload->Data);
+            std::cout << m_draggedEntity << std::endl;
             m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform, true, true, true);
             m_manager->m_entitySelector.Clear();
             m_isEntityDragged = false;
