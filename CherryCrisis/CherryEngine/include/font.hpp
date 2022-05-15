@@ -14,12 +14,6 @@ struct Character {
 
 class CCENGINE_API Font : public Resource<Font>
 {
-private:
-	unsigned int m_buffer = 0u;
-	unsigned int m_source = 0u;
-
-protected:
-
 public:
 	Font(const char* filepath) : Resource(filepath) {}
 

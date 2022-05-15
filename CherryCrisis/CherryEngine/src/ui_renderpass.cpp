@@ -51,19 +51,14 @@ void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	//CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
-	//glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
-
+	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, framebuffer.colorTex.width, 0.0f, framebuffer.colorTex.height, -1.f, 5.f);
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "projection"), 1, GL_FALSE, proj.data);
 	for (UIImage* image : m_uiImages)
 	{
 		CCMaths::Vector3 pos;
 		image->Position.Get(&pos);
-		pos.x /= framebuffer.colorTex.width;
-		pos.y /= framebuffer.colorTex.height;
-		
-		CCMaths::Vector2 scale = image->GetSize();
-		scale * static_cast<Camera*>(viewer)->aspect;
-		CCMaths::Matrix4 modelMat = CCMaths::Matrix4::Translate(pos) * CCMaths::Matrix4::Scale({ .01f * scale.x, .01f * scale.y, 1.f });
+
+		CCMaths::Matrix4 modelMat = CCMaths::Matrix4::Translate(pos) * CCMaths::Matrix4::Scale({image->GetSize(), 1.f});
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(image->m_texture->m_gpuTexture.get());

@@ -1275,9 +1275,6 @@
     <ClInclude Include="include\ui_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
-    <ClInclude Include="include\ui_text.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\ui_button.hpp">
       <Filter>Fichiers d%27en-tête\UI</Filter>
     </ClInclude>
@@ -1298,6 +1295,12 @@
     </ClInclude>
     <ClInclude Include="include\ui_vertical_layout.hpp">
       <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_text.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_text_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1724,6 +1727,15 @@
     </ClCompile>
     <ClCompile Include="src\ui_item.cpp">
       <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_text.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\font.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_text_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

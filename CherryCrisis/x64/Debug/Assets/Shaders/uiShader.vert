@@ -6,11 +6,11 @@ layout (location = 1) in vec2 aUV;
 out vec2 TexCoord;
 
 uniform mat4 uModel;
-//uniform mat4 uViewProjection;
+uniform mat4 projection;
 
 void main()
 {
 	TexCoord = aUV;
 	// TODO: Move the matrix product on the CPU
-	gl_Position = uModel * vec4(aPosition, 1.0);
+	gl_Position = projection * uModel * vec4(aPosition, 1.0);
 }
