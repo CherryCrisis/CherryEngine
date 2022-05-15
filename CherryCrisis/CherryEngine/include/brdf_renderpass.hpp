@@ -17,6 +17,7 @@ class BRDFRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 private:
 	SkyRenderer* m_skyRenderer = nullptr;
 
+	//BRDF Map is generated once
 	void GenerateBRDF();
 
 public:

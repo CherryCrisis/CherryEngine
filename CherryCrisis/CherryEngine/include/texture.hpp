@@ -61,7 +61,7 @@ private:
     ETextureSurface m_surface = ETextureSurface::TEXTURE_2D;
     bool            m_flipped = false;
 
-    void*   m_data = nullptr;
+    void*           m_data = nullptr;
 
     bool m_stackAllocated = false;
 

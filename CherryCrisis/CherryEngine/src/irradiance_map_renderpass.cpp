@@ -4,7 +4,6 @@
 
 #include "sky_renderer.hpp"
 #include "skydome_renderpass.hpp"
-#include "environment_map_renderpass.hpp"
 #include "viewer.hpp"
 #include "framebuffer.hpp"
 
@@ -52,11 +51,16 @@ void IrradianceMapRenderPass::SetupIrradianceMap()
 
 	if (!spheremap->m_gpuIrradiancemap)
 	{
-		std::unique_ptr<GPUIrradianceMapSphereMap> gpuIrradianceMap = std::make_unique<GPUIrradianceMapSphereMap>();
+		if (!spheremap->m_gpuTextureCubemap)
+			return;
 
+		std::unique_ptr<GPUIrradianceMapSphereMap> gpuIrradianceMap = std::make_unique<GPUIrradianceMapSphereMap>(spheremap);
+		gpuIrradianceMap->m_OnGpuReloaded = CCCallback::BindCallback(&IrradianceMapRenderPass::GenerateIrradianceMap, this);
+		
 		spheremap->m_gpuIrradiancemap = std::move(gpuIrradianceMap);
-
 	}
+
+	GenerateIrradianceMap();
 }
 
 void IrradianceMapRenderPass::GenerateIrradianceMap()
@@ -83,8 +87,7 @@ void IrradianceMapRenderPass::GenerateIrradianceMap()
 	Texture* spheremap = m_skyRenderer->m_texture.get();
 	Mesh* mesh = m_skyRenderer->m_cube.get();
 
-	auto gpuSpheremap = static_cast<EnvironmentMapRenderPass::GPUEnvironmentMap*>(spheremap->m_gpuTextureSpheremap.get());
-	auto gpuCubemap = static_cast<SkydomeRenderPass::GPUSkydomeCubemap*>(spheremap->m_gpuTextureCubemap.get());
+	auto gpuCubemap = static_cast<SkyRenderer::GPUSkybox*>(spheremap->m_gpuTextureCubemap.get());
 	auto gpuIrradianceMap = static_cast<GPUIrradianceMapSphereMap*>(spheremap->m_gpuIrradiancemap.get());
 	auto gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
 
@@ -92,7 +95,13 @@ void IrradianceMapRenderPass::GenerateIrradianceMap()
 	glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
 
 	glViewport(0, 0, gpuIrradianceMap->mapSize, gpuIrradianceMap->mapSize);
-	glBindFramebuffer(GL_FRAMEBUFFER, gpuSpheremap->FBO);
+
+
+	GLuint FBO;
+
+	glGenRenderbuffers(1, &FBO);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
 	for (unsigned int i = 0; i < 6; ++i)
 	{
@@ -112,6 +121,7 @@ void IrradianceMapRenderPass::GenerateIrradianceMap()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	glDeleteFramebuffers(1, &FBO);
 }
 
 void IrradianceMapRenderPass::GPUIrradianceMapSphereMap::Generate(Texture* texture)
@@ -142,7 +152,9 @@ void IrradianceMapRenderPass::GPUIrradianceMapSphereMap::Generate(Texture* textu
 void IrradianceMapRenderPass::GPUIrradianceMapSphereMap::Regenerate(Texture* texture)
 {
 	Destroy();
-	Generate(texture);
+
+	if (texture->GetSurface() == ETextureSurface::TEXTURE_SPHEREMAP)
+		Generate(texture);
 }
 
 void IrradianceMapRenderPass::GPUIrradianceMapSphereMap::Destroy()

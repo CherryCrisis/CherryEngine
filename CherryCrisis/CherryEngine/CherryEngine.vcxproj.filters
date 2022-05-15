@@ -1248,11 +1248,11 @@
     <ClInclude Include="include\character_controller.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\sky_renderer.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
-    </ClInclude>
     <ClInclude Include="include\texture_generator.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sky_renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

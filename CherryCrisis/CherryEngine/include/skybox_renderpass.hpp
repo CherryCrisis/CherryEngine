@@ -6,21 +6,30 @@
 
 #include "element_mesh_generator.hpp"
 
-#include "cubemap.hpp"
+#include "sky_renderer.hpp"
 
-class Skybox;
+class Texture;
 class Viewer;
 
-class SkyboxRenderPass : public ARenderingRenderPass
+class SkyboxRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
-	ElementMeshGenerator m_meshGenerator;
+	//ElementMeshGenerator m_meshGenerator;
 
-	Skybox* m_skybox = nullptr;
+	SkyRenderer* m_skyRenderer = nullptr;
 
-	struct GPUSkyboxCubemap : GPUCubemap
+	struct GPUSkyboxCubemap : public SkyRenderer::GPUSkybox
 	{
-		GLuint ID = 0u;
+		Event<std::shared_ptr<Texture>>* m_OnTextureReloaded = nullptr;
+		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
+
+		void Generate(Texture* texture);
+		void Regenerate(Texture* texture);
+		void Destroy();
+
+		GPUSkyboxCubemap(Texture* texture);
+		virtual ~GPUSkyboxCubemap();
+		void OnReload(std::shared_ptr<Texture> texture);
 	};
 
 public:
@@ -29,20 +38,21 @@ public:
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)
 	{
-		static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
+		//static_assert(false, "RendererT generation is not implemented in BasicSubPipeline");
+		return 1;
 	}
 
 	template <typename RendererT>
 	void Unsubscribe(RendererT* toGenerate)
 	{
-		static_assert(false, "RendererT deletion is not implemented in BasicSubPipeline");
+		//static_assert(false, "RendererT deletion is not implemented in BasicSubPipeline");
 	}
 
 	template <>
-	int Subscribe(Skybox* toGenerate);
+	int Subscribe(SkyRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Skybox* toGenerate);
+	void Unsubscribe(SkyRenderer* toGenerate);
 
 	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

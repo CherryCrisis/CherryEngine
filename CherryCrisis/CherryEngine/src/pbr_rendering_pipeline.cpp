@@ -21,15 +21,6 @@ PBRRPipeline::PBRRPipeline()
 
 void PBRRPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 {
-	if (!m_isGenerated)
-	{
-		//m_environmentMapPass->CallOnExecute(framebuffer, viewer);
-		//m_irradianceMapPass->CallOnExecute(framebuffer, viewer);
-		//m_prefilterPass->CallOnExecute(framebuffer, viewer);
-		m_brdfPass->CallOnExecute(framebuffer, viewer);
-		m_isGenerated = true;
-	}
-
 	m_pbrPass->CallOnExecute(framebuffer, viewer);
 	m_skydomePass->CallOnExecute(framebuffer, viewer);
 }

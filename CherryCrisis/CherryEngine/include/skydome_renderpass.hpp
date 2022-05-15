@@ -6,9 +6,8 @@
 
 #include "element_mesh_generator.hpp"
 
-#include "texture.hpp"
+#include "sky_renderer.hpp"
 
-class SkyRenderer;
 class Viewer;
 
 class SkydomeRenderPass : public ARenderingRenderPass, ElementMeshGenerator
@@ -19,9 +18,8 @@ private:
 	void SetupSkydome();
 public:
 
-	struct GPUSkydomeCubemap : GPUTextureCubemap
+	struct GPUSkydomeCubemap : public SkyRenderer::GPUSkybox
 	{
-		GLuint ID = 0u;
 	};
 
 	SkydomeRenderPass(const char* name);

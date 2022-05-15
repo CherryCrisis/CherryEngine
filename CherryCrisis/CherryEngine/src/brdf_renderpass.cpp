@@ -18,6 +18,11 @@ int BRDFRenderPass::Subscribe(SkyRenderer* toGenerate)
 	if (!toGenerate)
 		return -1;
 
+	if (!ElementMeshGenerator::Generate(toGenerate->m_quad.get()))
+		return -1;
+
+	m_skyRenderer = toGenerate;
+
 	if (!toGenerate->m_gpuBRDF)
 	{
 		std::unique_ptr<GPUBRDFSphereMap> gpuBrdf = std::make_unique<GPUBRDFSphereMap>();
@@ -34,15 +39,10 @@ int BRDFRenderPass::Subscribe(SkyRenderer* toGenerate)
 		// pre-allocate enough memory for the LUT texture.
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, gpuBrdf->resolution, gpuBrdf->resolution, 0, GL_RG, GL_FLOAT, 0);
 
-		if (!ElementMeshGenerator::Generate(toGenerate->m_quad.get()))
-			return -1;
-
 		toGenerate->m_gpuBRDF = std::move(gpuBrdf);
 
+		GenerateBRDF();
 	}
-
-	m_skyRenderer = toGenerate;
-
 	
 	return 1;
 }
@@ -64,17 +64,21 @@ void BRDFRenderPass::GenerateBRDF()
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	Texture* skyTexture = m_skyRenderer->m_texture.get();
 	Mesh* quad = m_skyRenderer->m_quad.get();
 
-	auto gpuSpheremap = static_cast<EnvironmentMapRenderPass::GPUEnvironmentMap*>(skyTexture->m_gpuTextureSpheremap.get());
 	auto gpuBrdf = static_cast<GPUBRDFSphereMap*>(m_skyRenderer->m_gpuBRDF.get());
 	auto gpuMesh = static_cast<GPUMeshBasic*>(quad->m_gpuMesh.get());
 
 	glViewport(0, 0, gpuBrdf->resolution, gpuBrdf->resolution); 
 
-	glBindFramebuffer(GL_FRAMEBUFFER, gpuSpheremap->FBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, gpuSpheremap->RBO);
+	GLuint FBO;
+	GLuint RBO;
+
+	glGenFramebuffers(1, &FBO);
+	glGenRenderbuffers(1, &RBO);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
 
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, gpuBrdf->resolution, gpuBrdf->resolution);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gpuBrdf->ID, 0);
@@ -89,5 +93,8 @@ void BRDFRenderPass::GenerateBRDF()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//glDeleteFramebuffers(1, &FBO);
+	//glDeleteRenderbuffers(1, &RBO);
 
 }

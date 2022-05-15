@@ -39,6 +39,20 @@ PBRRenderPass::PBRRenderPass(const char* name)
 		m_callExecute = CCCallback::BindCallback(&PBRRenderPass::Execute, this);
 
 		glUseProgram(0);
+
+		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
+		std::shared_ptr<Texture> whiteTexture = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
+		m_defaultTextures[ETextureType::ALBEDO] = whiteTexture;
+		m_defaultTextures[ETextureType::SPECULAR] = whiteTexture;
+		m_defaultTextures[ETextureType::METALLIC] = whiteTexture;
+		m_defaultTextures[ETextureType::ROUGHNESS] = whiteTexture;
+		m_defaultTextures[ETextureType::AO] = whiteTexture;
+
+		unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
+		m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
+
+		for (auto& [texType, texRef] : m_defaultTextures)
+			m_textureGenerator.Generate(texRef.get());
 	}
 }
 
@@ -134,11 +148,10 @@ void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, in
 {
 	// Get correct texture from type
 	Texture* texture = material->m_textures[textureType].get();
-	 
+
 	// TODO: Add multiple default textures
 	// If is does not exist and its gpuTex too, get the default texture
-	auto& gpuTexPtr = (texture && texture->m_gpuTexture2D) ? texture->m_gpuTexture2D : m_defaultTexture->m_gpuTexture2D;
-
+	auto& gpuTexPtr = texture && texture->m_gpuTexture2D ? texture->m_gpuTexture2D : m_defaultTextures[textureType]->m_gpuTexture2D;
 
 	auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(gpuTexPtr.get());
 	glBindTextureUnit(id, gpuTexture->ID);

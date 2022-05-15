@@ -52,7 +52,12 @@ void EnvironmentMapRenderPass::SetupEnvironmentMap()
 	if (!spheremap->m_gpuTextureSpheremap)
 	{
 		if (!spheremap->GetData())
-			return;
+		{
+			Resource<Texture>::ReloadResource(m_skyRenderer->m_texture);
+
+			if (!spheremap->GetData())
+				return;
+		}
 
 		std::unique_ptr<GPUEnvironmentMap> gpuEnvMap = std::make_unique<GPUEnvironmentMap>(spheremap);
 		gpuEnvMap->m_OnGpuReloaded = CCCallback::BindCallback(&EnvironmentMapRenderPass::GenerateEnvironmentMap, this);
@@ -92,7 +97,7 @@ void EnvironmentMapRenderPass::GenerateEnvironmentMap()
 
 		Texture* spheremap = m_skyRenderer->m_texture.get();
 		GPUEnvironmentMap* gpuSpheremap = static_cast<GPUEnvironmentMap*>(spheremap->m_gpuTextureSpheremap.get());
-		SkydomeRenderPass::GPUSkydomeCubemap* gpuCubemap = static_cast<SkydomeRenderPass::GPUSkydomeCubemap*>(spheremap->m_gpuTextureCubemap.get());
+		SkyRenderer::GPUSkybox* gpuCubemap = static_cast<SkyRenderer::GPUSkybox*>(spheremap->m_gpuTextureCubemap.get());
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, gpuSpheremap->ID);
@@ -157,12 +162,16 @@ void EnvironmentMapRenderPass::GPUEnvironmentMap::Generate(Texture* texture)
 void EnvironmentMapRenderPass::GPUEnvironmentMap::Regenerate(Texture* texture)
 {
 	Destroy();
-	Generate(texture);
+
+	if (texture->GetSurface() == ETextureSurface::TEXTURE_SPHEREMAP)
+		Generate(texture);
 }
 
 void EnvironmentMapRenderPass::GPUEnvironmentMap::Destroy()
 {
 	glDeleteTextures(1, &ID);
+	glDeleteFramebuffers(1, &FBO);
+	glDeleteRenderbuffers(1, &RBO);
 }
 
 EnvironmentMapRenderPass::GPUEnvironmentMap::GPUEnvironmentMap(Texture* texture)

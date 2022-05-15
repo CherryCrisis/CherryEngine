@@ -19,8 +19,6 @@ class CCENGINE_API PBRRPipeline : public ARenderingPipeline
 	BRDFRenderPass*				m_brdfPass				= nullptr;
 	PBRRenderPass*				m_pbrPass				= nullptr;
 
-	bool m_isGenerated = false;
-
 public:
 	PBRRPipeline();
 

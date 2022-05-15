@@ -27,7 +27,7 @@ class PBRRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
 	std::unordered_set<Light*> m_lights;
 
-	std::shared_ptr<Texture> m_defaultTexture;
+	std::map<ETextureType, std::shared_ptr<Texture>> m_defaultTextures;
 
 	SkyRenderer* m_skyRenderer = nullptr;
 

@@ -67,16 +67,16 @@ void CellSystemDisplayer::CellSettings()
     if (ImGui::TreeNode("Settings"))
     {
         std::string skyRendererPath;
-
+    
         ImGui::InputText("SkyRenderer", skyRendererPath.data(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
-
+    
         if (ImGui::BeginDragDropTarget())
         {
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
             {
                 const char* path = (const char*)payload->Data;
                 std::string extension = String::ExtractValue(path, '.');
-
+    
                 if (textureExtensions.end() != textureExtensions.find("." + extension))
                 {
                     if (std::shared_ptr<Texture> texture = ResourceManager::GetInstance()->GetResource<Texture>(path))

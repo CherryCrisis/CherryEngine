@@ -24,6 +24,8 @@ namespace CCCallback
 		ACallback(const std::type_index& typeIndex) : m_typeIndex(typeIndex) {}
 		virtual void Invoke(Args&&...) const = 0;
 
+		virtual bool IsEqual(ACallback<Args...>* callback) const = 0;
+
 	};
 
 	template<class T, class... Args>
@@ -42,6 +44,20 @@ namespace CCCallback
 		{
 			(m_member->*m_func)(args...);
 		}
+
+		bool IsEqual(ACallback<Args...>* callback) const override
+		{
+			if (CCCallback::MemberCallback<T, Args...>* memberCallback = dynamic_cast<CCCallback::MemberCallback<T, Args...>*>(callback))
+			{
+				if (memberCallback->m_func == m_func && memberCallback->m_member == m_member)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	};
 
 	template<class... Args>
@@ -58,6 +74,19 @@ namespace CCCallback
 		virtual void Invoke(Args&&... args) const override
 		{
 			(*m_func)(args...);
+		}
+
+		bool IsEqual(ACallback<Args...>* callback) const override
+		{
+			if (CCCallback::NonMemberCallback<Args...>* nonMemberCallback = dynamic_cast<CCCallback::NonMemberCallback<Args...>*>(callback))
+			{
+				if (nonMemberCallback->m_func == m_func)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	};
 

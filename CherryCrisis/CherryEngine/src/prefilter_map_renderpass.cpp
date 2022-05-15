@@ -5,7 +5,6 @@
 #include "texture.hpp"
 #include "sky_renderer.hpp"
 #include "skydome_renderpass.hpp"
-#include "environment_map_renderpass.hpp"
 #include "viewer.hpp"
 #include "framebuffer.hpp"
 
@@ -20,6 +19,7 @@ int PrefilterMapRenderPass::Subscribe(SkyRenderer* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
+
 	if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
 		return -1;
 
@@ -52,10 +52,10 @@ void PrefilterMapRenderPass::SetupPrefilterMap()
 
 	if (!spheremap->m_gpuPrefilterMap)
 	{
-		if (!spheremap->GetData())
+		if (!spheremap->m_gpuTextureCubemap)
 			return;
 
-		std::unique_ptr<GPUPrefilterMapSphereMap> gpuPrefilterMap = std::make_unique<GPUPrefilterMapSphereMap>();
+		std::unique_ptr<GPUPrefilterMapSphereMap> gpuPrefilterMap = std::make_unique<GPUPrefilterMapSphereMap>(spheremap);
 		gpuPrefilterMap->m_OnGpuReloaded = CCCallback::BindCallback(&PrefilterMapRenderPass::GeneratePrefilterMap, this);
 
 		glUseProgram(m_program->m_shaderProgram);
@@ -92,22 +92,27 @@ void PrefilterMapRenderPass::GeneratePrefilterMap()
 	Texture* spheremap = m_skyRenderer->m_texture.get();
 	Mesh* mesh = m_skyRenderer->m_cube.get();
 
-	auto gpuSpheremap = static_cast<EnvironmentMapRenderPass::GPUEnvironmentMap*>(spheremap->m_gpuTextureSpheremap.get());
-	auto gpuCubemap = static_cast<SkydomeRenderPass::GPUSkydomeCubemap*>(spheremap->m_gpuTextureCubemap.get());
+	auto gpuCubemap = static_cast<SkyRenderer::GPUSkybox*>(spheremap->m_gpuTextureCubemap.get());
 	auto gpuPrefilterMap = static_cast<GPUPrefilterMapSphereMap*>(spheremap->m_gpuPrefilterMap.get());
 	auto gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, gpuSpheremap->FBO);
+	GLuint FBO;
+	GLuint RBO;
+
+	glGenFramebuffers(1, &FBO);
+	glGenRenderbuffers(1, &RBO);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
 	for (unsigned int mip = 0; mip < gpuPrefilterMap->m_maxMipLevels; ++mip)
 	{
 		unsigned int mipWidth = static_cast<unsigned int>(gpuPrefilterMap->m_mipMapResolution * std::powf(0.5, (float)mip));
 		unsigned int mipHeight = static_cast<unsigned int>(gpuPrefilterMap->m_mipMapResolution * std::powf(0.5, (float)mip));
 
-		glBindRenderbuffer(GL_RENDERBUFFER, gpuSpheremap->RBO);
+		glBindRenderbuffer(GL_RENDERBUFFER, RBO);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
 		glViewport(0, 0, mipWidth, mipHeight);
 
@@ -132,6 +137,9 @@ void PrefilterMapRenderPass::GeneratePrefilterMap()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glDeleteFramebuffers(1, &FBO);
+	glDeleteRenderbuffers(1, &RBO);
 }
 
 void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Generate(Texture* texture)
@@ -164,7 +172,9 @@ void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Generate(Texture* texture
 void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Regenerate(Texture* texture)
 {
 	Destroy();
-	Generate(texture);
+
+	if (texture->GetSurface() == ETextureSurface::TEXTURE_SPHEREMAP)
+		Generate(texture);
 }
 
 void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Destroy()

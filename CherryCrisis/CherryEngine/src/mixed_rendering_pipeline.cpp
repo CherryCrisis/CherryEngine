@@ -41,14 +41,6 @@ MixedPipeline::MixedPipeline()
 
 void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 {
-	if (!m_isGenerated)
-	{
-		m_environmentMapPass->CallOnExecute(framebuffer, viewer);
-		m_irradianceMapPass->CallOnExecute(framebuffer, viewer);
-		m_prefilterPass->CallOnExecute(framebuffer, viewer);
-		m_brdfPass->CallOnExecute(framebuffer, viewer);
-		m_isGenerated = true;
-	}
 
 	m_portalPass->CallOnExecute(framebuffer, viewer);
 	m_shadowPass->CallOnExecute(framebuffer, viewer);
@@ -61,6 +53,7 @@ void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 	//	m_hdrPass->CallOnExecute(framebuffer);
 
 	m_skydomePass->CallOnExecute(framebuffer, viewer);
+	m_skyboxPass->CallOnExecute(framebuffer, viewer);
 
 	//m_postprocessPass->CallOnExecute(framebuffer);
 }

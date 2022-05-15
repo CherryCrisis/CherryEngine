@@ -28,7 +28,7 @@ Cell::~Cell()
 
 void Cell::Initialize()
 {
-	m_skyRenderer = std::make_unique<SkyRenderer>(this);
+	m_skyRenderer = new SkyRenderer(this);
 }
 
 void Cell::AddEntity(Entity* newEntity)

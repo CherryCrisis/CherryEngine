@@ -2,6 +2,10 @@
 
 #include "sky_renderer.hpp"
 
+#include <format>
+
+#include "debug.hpp"
+
 #include "mesh.hpp"
 #include "texture.hpp"
 
@@ -36,11 +40,28 @@ SkyRenderer::~SkyRenderer()
 	RemoveQuad();
 }
 
+void SkyRenderer::OnReloadTexture(std::shared_ptr<Texture> texture)
+{
+	assert(m_texture == texture);
+
+	ETextureSurface textureSurface = texture->GetSurface();
+
+	if (textureSurface == ETextureSurface::TEXTURE_2D)
+	{
+		Debug::GetInstance()->AddLog(ELogType::INFO, std::format("Texture : {} in SkyRenderer has been removed", texture->GetFilepath()).c_str());
+		RemoveTexture();
+	}
+	else if (textureSurface != m_currentTextureSurface)
+	{
+		SetTexture(texture);
+	}
+}
+
+
 void SkyRenderer::OnSetTexture(std::shared_ptr<Texture> texture)
 {
 	texture->m_OnLoaded.Unbind(&SkyRenderer::OnSetTexture, this);
 	SetTexture(texture);
-
 }
 
 void SkyRenderer::SetTexture(std::shared_ptr<Texture> texture)
@@ -53,7 +74,12 @@ void SkyRenderer::SetTexture(std::shared_ptr<Texture> texture)
 
 	ETextureSurface textureSurface = texture->GetSurface();
 	if (textureSurface == ETextureSurface::TEXTURE_2D)
+	{
+		if (m_texture == texture)
+			RemoveTexture();
+
 		return;
+	}
 
 	if (texture->GetResourceState() != EResourceState::LOADED)
 	{
@@ -64,6 +90,8 @@ void SkyRenderer::SetTexture(std::shared_ptr<Texture> texture)
 	RemoveTexture();
 
 	m_texture = texture;
+	m_currentTextureSurface = m_texture->GetSurface();
+	m_texture->m_OnReloaded.Bind(&SkyRenderer::OnReloadTexture, this);
 
 	m_cell->AddRenderer(this);
 }
@@ -98,10 +126,11 @@ void SkyRenderer::RemoveTexture()
 	if (m_texture)
 	{
 		m_texture->m_OnDeleted.Unbind(&SkyRenderer::RemoveTexture, this);
+		m_texture->m_OnReloaded.Unbind(&SkyRenderer::OnReloadTexture, this);
 		
-		m_texture->m_gpuTextureSpheremap = nullptr;
 		m_texture->m_gpuIrradiancemap = nullptr;
 		m_texture->m_gpuPrefilterMap = nullptr;
+		m_texture->m_gpuTextureSpheremap = nullptr;
 		m_texture->m_gpuTextureCubemap = nullptr;
 
 		m_texture = nullptr;
@@ -115,34 +144,34 @@ void SkyRenderer::ClearData()
 {
 	m_cube->ClearData();
 	m_quad->ClearData();
-	m_texture->ClearData();
 }
 
 void SkyRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	if (m_texture->GetSurface() == ETextureSurface::TEXTURE_SPHEREMAP)
 	{
-		pipeline->SubscribeToPipeline<EnvironmentMapRenderPass>(this);
-		pipeline->SubscribeToPipeline<IrradianceMapRenderPass>(this);
-		pipeline->SubscribeToPipeline<PrefilterMapRenderPass>(this);
-		pipeline->SubscribeToPipeline<BRDFRenderPass>(this);
 		pipeline->SubscribeToPipeline<SkydomeRenderPass>(this);
-		pipeline->SubscribeToPipeline<PBRRenderPass>(this);
+		pipeline->SubscribeToPipeline<EnvironmentMapRenderPass>(this);
 	}
-	else if (m_texture->GetSurface() == ETextureSurface::TEXTURE_CUBEMAP)
+	else //ETextureSurface::TEXTURE_CUBEMAP
 	{
 		pipeline->SubscribeToPipeline<SkyboxRenderPass>(this);
 	}
+
+	pipeline->SubscribeToPipeline<BRDFRenderPass>(this);
+	pipeline->SubscribeToPipeline<IrradianceMapRenderPass>(this);
+	pipeline->SubscribeToPipeline<PrefilterMapRenderPass>(this);
+	pipeline->SubscribeToPipeline<PBRRenderPass>(this);
 }
 
 void SkyRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->UnsubscribeToPipeline<SkyboxRenderPass>(this);
+	pipeline->UnsubscribeToPipeline<SkydomeRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<EnvironmentMapRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<IrradianceMapRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PrefilterMapRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<BRDFRenderPass>(this);
-	pipeline->UnsubscribeToPipeline<SkydomeRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(this);
 }
 

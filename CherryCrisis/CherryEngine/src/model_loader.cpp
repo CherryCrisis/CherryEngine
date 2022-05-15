@@ -238,6 +238,79 @@ namespace CCImporter
         }
     }
     
+    void CompressCubemapTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
+    {
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += texturePath.filename().string();
+        fullFilepath += CCImporter::cacheExtension;
+
+        nvtt::OutputOptions outputOptions;
+        outputOptions.setFileName(fullFilepath.c_str());
+        nvtt::CompressionOptions compressionOptions;
+        SetTextureFormat(compressionOptions, textureHeader);
+
+        textureHeader.mipmapsLevel = image.countMipmaps();
+
+        Vector2 faceSize;
+        faceSize.y = image.height() / 3;
+        faceSize.x = image.width() / 4;
+
+        unsigned char* faceData[6];
+        int faceDataSize = 0;
+
+        bool dataSettingsInitialized = false;
+        int it = 0;
+        for (int faceX = 0; faceX < 4; ++faceX)
+        {
+            for (int faceY = 0; faceY < 3; ++faceY)
+            {
+                if ((faceY == 0 && faceX == 0) || (faceY == 2 && faceX == 0) || (faceY == 0 && faceX == 2)
+                    || (faceY == 2 && faceX == 2) || (faceY == 0 && faceX == 3) || (faceY == 2 && faceX == 3))
+                    continue;
+
+                Vector2 pos;
+                pos.x = faceSize.x * faceX;
+                pos.y = faceSize.y * faceY;
+
+                int faceId;
+
+                if ((faceY == 1 && faceX == 2))
+                    faceId = 0; //Right
+                else if ((faceY == 1 && faceX == 0))
+                    faceId = 1; //Left
+                else if ((faceY == 0 && faceX == 1))
+                    faceId = 2; //Top
+                else if ((faceY == 2 && faceX == 1))
+                    faceId = 3; //Bottom
+                else if ((faceY == 1 && faceX == 1))
+                    faceId = 4; //Front
+                else if ((faceY == 1 && faceX == 3))
+                    faceId = 5; //Back
+
+                nvtt::Surface cubeImage = image.createSubImage(pos.x, pos.x + faceSize.x - 1, pos.y, pos.y + faceSize.y - 1, 0, 0);
+
+                OuputHandler outputHandler;
+                outputOptions.setOutputHandler(((nvtt::OutputHandler*)&outputHandler));
+
+                context.compress(cubeImage, 0, 0, compressionOptions, outputOptions);
+
+                if (!dataSettingsInitialized)
+                {
+                    faceDataSize = (int)outputHandler.m_data.size();
+                    textureHeader.size = faceDataSize * 6;
+                    *textureData = new unsigned char[textureHeader.size];
+                    dataSettingsInitialized = true;
+                }
+
+                std::move(outputHandler.m_data.begin(), outputHandler.m_data.end(), *textureData + faceDataSize * faceId);
+                it++;
+            }
+        }
+
+        textureHeader.height = faceSize.y * 6;
+        textureHeader.width = faceSize.x * 1;
+    }
+
     void CompressTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
     {
         std::string fullFilepath(CCImporter::cacheDirectory);
@@ -385,7 +458,6 @@ namespace CCImporter
             }
         }
 
-
         if (!textureData)
             return;
 
@@ -403,7 +475,10 @@ namespace CCImporter
         textureHeader.height = image.height();
         textureHeader.flipped = flipTexture;
 
-        CompressTexture(context, image, filepath, textureHeader, textureData);
+        if (textureSurface != ETextureSurface::TEXTURE_CUBEMAP)
+            CompressTexture(context, image, filepath, textureHeader, textureData);
+        else
+            CompressCubemapTexture(context, image, filepath, textureHeader, textureData);
 
         CacheTextureData(filepath, *textureData, textureHeader);
     }

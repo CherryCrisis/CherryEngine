@@ -29,7 +29,14 @@ private:
 
     void DeleteCallbacks(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
     {
-        m_callbacks.erase(callback);
+        for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
+        {
+            if ((*it)->IsEqual(callback.get()))
+            {
+                m_callbacks.erase(it);
+                return;
+            }
+        }
     }
 
 public:
@@ -54,6 +61,7 @@ public:
         auto callback = CCCallback::BindCallback(func);
         Bind(callback);
     }
+
     template<typename T>
     void Unbind(void (T::* func)(Args... type), T* member)
     {
