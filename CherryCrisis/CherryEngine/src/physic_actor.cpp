@@ -12,6 +12,7 @@
 #include "cell.hpp"
 
 #include "debug.hpp"
+#include "entity.hpp"
 
 namespace PhysicSystem
 {

@@ -8,13 +8,15 @@
 #include <algorithm>
 
 #include "time_manager.hpp"
+#include "resource_manager.hpp"
+#include "cell_system.hpp"
+#include "pickinger.hpp"
+
 #include "core/editor_manager.hpp"
+
 #include "transform.hpp"
 #include "maths.hpp"
-#include "resource_manager.hpp"
-
-#include "pickinger.hpp"
-#include "cell_system.hpp"
+#include "entity.hpp"
 
 #include "mixed_rendering_pipeline.hpp"
 

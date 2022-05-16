@@ -8,11 +8,9 @@
 #include "render_manager.hpp"
 
 // TODO: Remove this
+#include "entity.hpp"
 #include "transform.hpp"
-#include "light_component.hpp"
 #include "model_renderer.hpp"
-#include "camera_component.hpp"
-#include "scripted_behaviour.hpp"
 
 #include "model_base.hpp"
 #include "model.hpp"
@@ -41,21 +39,6 @@ void Scene::Update()
 {
  	for (Entity* entity : m_entities)
 		entity->Update();
-}
-
-void Scene::PopulateEmpty() 
-{
-	Entity* light = new Entity("Light");
-	light->AddBehaviour<LightComponent>(); 	AddEntity(light);
-
-	Entity* camera = new Entity("Camera");
-	camera->AddBehaviour<Transform>();
-	auto cameraComp = camera->AddBehaviour<CameraComponent>();
-	cameraComp->BindToSignals();
-
-	ScriptedBehaviour* bhave1 = camera->AddBehaviour<ScriptedBehaviour>();
-	bhave1->SetScriptClass("CameraController"); bhave1->BindToSignals();
-	AddEntity(camera);
 }
 
 void Scene::AddEntity(Entity* toAdd)

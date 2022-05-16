@@ -2,11 +2,13 @@
 
 #include "entity.hpp"
 
-#include "behaviour.hpp"
-#include "transform.hpp"
+#include <typeinfo>
+
 #include "cell_system.hpp"
 
-#include <typeinfo>
+#include "behaviour.hpp"
+#include "transform.hpp"
+
 Entity::Entity()
 {
 	CellSystem::GetInstance()->AddEntityToDefault(this);
@@ -17,7 +19,6 @@ Entity::Entity(const std::string& name, CCUUID id)
 {
 	CellSystem::GetInstance()->AddEntityToDefault(this);
 }
-
 
 Entity::~Entity()
 {
@@ -37,11 +38,11 @@ void Entity::Initialize()
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {
-	auto compIt = m_behaviours.find(typeid(*behaviour));
+	auto compIt = m_behaviours.find(String::ExtractTypeIndexName(typeid(*behaviour)));
 
 	if (compIt == m_behaviours.end())
 	{
-		auto itPair = m_behaviours.equal_range(typeid(Behaviour));
+		auto itPair = m_behaviours.equal_range("Behaviour");
 
 		for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
 		{
@@ -63,6 +64,7 @@ bool Entity::RemoveBehaviour(Behaviour* behaviour)
 
 void Entity::Update()
 {
+	m_OnAwake.Invoke();
 	m_OnStart.Invoke();
 	m_OnTick.Invoke();
 }
@@ -104,6 +106,24 @@ std::vector<Behaviour*> Entity::GetAllBehaviours()
 
 	for (auto& [type, behaviour] : m_behaviours)
 		behaviours.push_back(behaviour);
+
+	return behaviours;
+}
+
+void Entity::SubscribeComponent(Behaviour* behaviour, const std::string& componentTypeName)
+{
+	behaviour->m_owner = this;
+	m_behaviours.insert({ componentTypeName, behaviour });
+}
+
+std::vector<Behaviour*> Entity::GetBehavioursOfType(const std::string& componentTypeName)
+{
+	std::vector<Behaviour*> behaviours;
+
+	auto itPair = m_behaviours.equal_range(componentTypeName);
+
+	for (auto compIt = itPair.first; compIt != itPair.second; compIt++)
+		behaviours.push_back(compIt->second);
 
 	return behaviours;
 }

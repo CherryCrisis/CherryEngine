@@ -9,6 +9,8 @@
 #include "cherry_header.hpp"
 #include "core/editor_manager.hpp"
 
+#include "entity.hpp"
+
 #include "transform.hpp"
 #include "light_component.hpp"
 #include "camera_component.hpp"

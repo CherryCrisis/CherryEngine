@@ -10,15 +10,20 @@
 #include "uuid.hpp"
 #include "event.hpp"
 #include "object.hpp"
+#include "behaviour.hpp"
 
 class Behaviour;
+
+template<class CompT>
+concept BehaviourT = std::is_base_of_v<Behaviour, CompT>;
+
 class Cell;
 
 class CCENGINE_API Entity : public Object
 {
 protected:
 	std::string m_name = "Entity";
-	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
+	std::unordered_multimap<std::string, Behaviour*> m_behaviours;
 
 public:
 	Cell* m_cell = nullptr;
@@ -27,29 +32,32 @@ public:
 	Entity(const std::string& name, CCUUID m_uuid = {});
 	virtual ~Entity();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* AddBehaviour();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* GetBehaviour();
 
 	bool RemoveBehaviour(Behaviour* behaviour);
 
 	std::vector<Behaviour*> GetAllBehaviours();
 
-	template <class CompT>
-	std::vector<CompT*> GetBehaviours();
+	std::vector<Behaviour*> GetBehavioursOfType(const std::string& componentTypeName);
 
-	template <class CompT>
+	template <BehaviourT CompT>
+	std::vector<CompT*> GetBehavioursOfType();
+
+	template <BehaviourT CompT>
 	void SubscribeComponent(CompT* behaviour);
+	void SubscribeComponent(Behaviour* behaviour, const std::string& componentTypeName);
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	bool HasBehaviour();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	bool TryGetBehaviour(CompT*& componentToReturn);
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* GetOrAddBehaviour();
 
 	Event<> m_OnAwake;

@@ -4,6 +4,10 @@
 
 #include <algorithm>
 
+#include "entity.hpp"
+#include "event.hpp"
+#include "cell.hpp"
+
 Transform::Transform()
 {
 	PopulateMetadatas();

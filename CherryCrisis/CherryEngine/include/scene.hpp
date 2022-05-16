@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "resource.hpp"
-#include "entity.hpp"
 
 class ModelBase;
+class Entity;
 struct ModelNode;
 
 class CCENGINE_API Scene : public Resource<Scene>
@@ -25,9 +25,6 @@ public:
 	void Update();
 
 	static void Load(std::shared_ptr<Scene> scene);
-
-	void PopulateEmpty();
-
 	
 	void AddEntity(Entity* toAdd);
 	void RemoveEntity(Entity* toRemove);

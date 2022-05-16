@@ -1,10 +1,9 @@
 #include <pch.hpp>
 
-// TODO: Change this
 #include "behaviour.hpp"
+#include "entity.hpp"
 
 void Behaviour::SetHostPtr(Entity* newOwner)
 {
-	m_owner = newOwner; 
-	m_owner->SubscribeComponent(this);
+	newOwner->SubscribeComponent(this);
 }

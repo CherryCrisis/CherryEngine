@@ -13,6 +13,8 @@
 
 #include "debug.hpp"
 
+#include "entity.hpp"
+
 PhysicSystem::PhysicManager* Singleton<PhysicSystem::PhysicManager>::currentInstance = nullptr;
 
 using namespace physx;

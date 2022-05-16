@@ -11,6 +11,8 @@
 #include "transform.hpp"
 #include "capsule_collider.hpp"
 
+#include "entity.hpp"
+
 CharacterController::CharacterController(CCUUID& id) : Behaviour(id)
 {
 	PopulateMetadatas();

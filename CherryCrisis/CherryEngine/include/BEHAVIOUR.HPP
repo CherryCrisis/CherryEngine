@@ -3,7 +3,6 @@
 #include <cherry_macros.hpp>
 
 #include "object.hpp"
-#include "entity.hpp"
 
 #include "metadata.hpp"
 #include "scene.hpp"
@@ -11,19 +10,18 @@
 
 class CCENGINE_API Behaviour : public Object
 {
-	friend class Entity;
 	friend class Scene;
 	friend class Serializer;
 private:
-	Entity* m_owner = nullptr;
 protected:
-
-
 	virtual void PopulateMetadatas()
 	{
 		m_metadatas.SetProperty("m_owner", &owner);
 	}
+
 public:
+	class Entity* m_owner = nullptr;
+
 	Event<> m_OnDestroy;
 
 	Behaviour() = default;
