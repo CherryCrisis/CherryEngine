@@ -247,9 +247,9 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
-                if (propType == typeid(Object*))
+                if (propType == typeid(Entity*))
                 {
-                    Object* val = nullptr;
+                    Entity* val = nullptr;
                     propRef->Get(&val);
 
                     ImGui::Text("%s", propName.c_str());
@@ -258,7 +258,29 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     {
                         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
                         {
-                            Object* m_draggedObject = (Object*)payload->Data;
+                            Entity* m_draggedObject = (Entity*)payload->Data;
+                            propRef->Set(&m_draggedObject);
+                        }
+
+                        ImGui::EndDragDropTarget();
+                    }
+
+                    continue;
+                }
+
+                if (propType == typeid(Behaviour*))
+                {
+                    Behaviour* val = nullptr;
+                    propRef->Get(&val);
+
+                    ImGui::Text("%s", propName.c_str());
+
+                    if (ImGui::BeginDragDropTarget())
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+                        {
+                            Entity* m_draggedObject = (Entity*)payload->Data;
+
                             propRef->Set(&m_draggedObject);
                         }
 

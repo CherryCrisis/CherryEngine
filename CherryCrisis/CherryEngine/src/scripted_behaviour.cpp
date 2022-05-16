@@ -164,9 +164,15 @@ void ScriptedBehaviour::PopulateMetadatas()
 				continue;
 			}
 
+			if (fieldType->Equals("CCEngine.Entity"))
+			{
+				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Entity*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod));
+				continue;
+			}
+
 			if (fieldType->Equals("CCEngine.Transform"))
 			{
-				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<Object*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod));
+				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Behaviour*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod));
 				continue;
 			}
 
