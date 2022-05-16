@@ -10,6 +10,7 @@
 #include "bloom_renderpass.hpp"
 #include "hdr_renderpass.hpp"
 #include "basic_postprocess_renderpass.hpp"
+#include "collider_renderpass.hpp"
 
 //-- PBR --//
 #include "environment_map_renderpass.hpp"
@@ -22,6 +23,7 @@
 MixedPipeline::MixedPipeline()
 {
 	//-- LIT --//
+	m_colliderPass = LoadSubpipeline<ColliderRenderPass>();
 	m_portalPass = LoadSubpipeline<PortalRenderPass>();
 	m_shadowPass = LoadSubpipeline<ShadowRenderPass>();
 	m_basicPass = LoadSubpipeline<BasicRenderPass>();
@@ -59,6 +61,8 @@ void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 	//m_bloomPass->CallOnExecute(framebuffer);
 	//if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
 	//	m_hdrPass->CallOnExecute(framebuffer);
+	
+	m_colliderPass->CallOnExecute(framebuffer, viewer);
 
 	m_skydomePass->CallOnExecute(framebuffer, viewer);
 

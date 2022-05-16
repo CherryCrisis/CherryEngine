@@ -9,11 +9,13 @@
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
+#include "camera_component.hpp"
 
 #include "mixed_rendering_pipeline.hpp"
 
 unsigned int	 CameraComponent::m_count	    = 0;
-CameraComponent* CameraComponent::m_mainCamera	= nullptr;
+CameraComponent* CameraComponent::m_mainCamera      = nullptr;
+Camera*          CameraComponent::m_editorCamera	= nullptr;
 
 CameraComponent::CameraComponent()
 {

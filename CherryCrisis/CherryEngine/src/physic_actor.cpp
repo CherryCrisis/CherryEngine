@@ -15,6 +15,35 @@
 
 namespace PhysicSystem
 {
+	PhysicActor::~PhysicActor()
+	{
+		if (m_transform)
+		{
+			m_transform->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
+			m_transform->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
+			m_transform->m_onScaleChange.Unbind(&PhysicActor::SetActorScale, this);
+			m_transform->m_OnDestroy.Unbind(&PhysicActor::InvalidateTransform, this);
+		}
+	}
+
+	void PhysicActor::Init()
+	{
+		m_transform = m_owner->GetOrAddBehaviour<Transform>();
+
+		if (m_transform)
+		{
+			m_transform->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
+			m_transform->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
+			m_transform->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
+			m_transform->m_OnDestroy.Bind(&PhysicActor::InvalidateTransform, this);
+		}
+	}
+
+	void PhysicActor::InvalidateTransform()
+	{
+		m_transform = nullptr;
+	}
+
 	void PhysicActor::Update()
 	{
 		if (m_isDynamic)
@@ -87,25 +116,11 @@ namespace PhysicSystem
 
 	void PhysicActor::CreatePxActor()
 	{
-		Transform* t = m_owner->GetBehaviour<Transform>();
-		
-		Vector3 pos;
-		Quaternion rot;
+		if (!m_transform)
+			return;
 
-		if (t)
-		{
-			t->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
-			t->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
-			t->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
-
-			pos = t->GetPosition();
-			rot = Quaternion::FromEuler(t->GetRotation());
-		}
-		else
-		{
-			pos = Vector3::Zero;
-			rot = Quaternion::Identity;
-		}
+		Vector3 pos = m_transform->GetPosition();
+		Quaternion rot = Quaternion::FromEuler(m_transform->GetRotation());
 
 		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.y, rot.x, rot.z, rot.w));
 
@@ -153,13 +168,6 @@ namespace PhysicSystem
 		{
 			m_owner->m_cell->m_physicCell->RemovePxActor(this);
 
-			Transform* t = m_owner->GetBehaviour<Transform>();
-			if (t)
-			{
-				t->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
-				t->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
-				t->m_onScaleChange.Unbind(&PhysicActor::SetActorScale, this);
-			}
 			PX_RELEASE(m_pxActor);
 		}
 	}

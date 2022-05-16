@@ -256,6 +256,21 @@ namespace CCMaths
 		outPos.data[2] = mat.position.z;
 	}
 
+	inline void Matrix4::NormalizeScale()
+	{
+		this->right.Normalize();
+		this->up.Normalize();
+		this->back.Normalize();
+	}
+
+	inline Matrix4 Matrix4::NormalizedScale() const
+	{
+		Matrix4 out = *this;
+		out.NormalizeScale();
+
+		return out;
+	}
+
 	inline Matrix4 Matrix4::Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far)
 	{
 		// TODO: Optimizations

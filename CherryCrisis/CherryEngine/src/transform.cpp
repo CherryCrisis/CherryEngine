@@ -264,7 +264,7 @@ Vector3 Transform::GetGlobalPosition()
 Vector3 Transform::GetGlobalRotation()
 {
 	if (!m_isDirty)
-		return m_worldPosition;
+		return m_worldRotation;
 
 	CCMaths::Matrix4::Decompose(GetWorldMatrix(), m_worldPosition, m_worldRotation, m_worldScale);
 
@@ -276,7 +276,7 @@ Vector3 Transform::GetGlobalRotation()
 Vector3 Transform::GetGlobalScale()
 {
 	if (!m_isDirty)
-		return m_worldPosition;
+		return m_worldScale;
 
 	CCMaths::Matrix4::Decompose(GetWorldMatrix(), m_worldPosition, m_worldRotation, m_worldScale);
 

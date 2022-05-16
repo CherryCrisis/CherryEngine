@@ -6,6 +6,7 @@
 #include "skybox_renderpass.hpp"
 #include "basic_renderpass.hpp"
 #include "portal_render_renderpass.hpp"
+#include "collider_renderpass.hpp"
 
 #include "bloom_renderpass.hpp"
 #include "hdr_renderpass.hpp"
@@ -19,6 +20,7 @@ BasicRPipeline::BasicRPipeline()
 	m_skyboxPass = LoadSubpipeline<SkyboxRenderPass>();
 	m_bloomPass = LoadSubpipeline<BloomRenderPass>();
 	m_hdrPass = LoadSubpipeline<HDRRenderPass>();
+	m_colliderPass = LoadSubpipeline<ColliderRenderPass>();
 
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
 }
@@ -26,7 +28,7 @@ BasicRPipeline::BasicRPipeline()
 void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 {
 	m_portalPass->CallOnExecute(fb, viewer);
-
+	
 	m_shadowPass->CallOnExecute(fb, viewer);
 	m_basicPass->CallOnExecute(fb, viewer);
 
@@ -34,6 +36,8 @@ void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)
 
 	if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
 		m_hdrPass->CallOnExecute(fb);
+	
+	m_colliderPass->CallOnExecute(fb, viewer);
 
 	m_skyboxPass->CallOnExecute(fb, viewer);
 	//m_postprocessPass->CallOnExecute(fb);

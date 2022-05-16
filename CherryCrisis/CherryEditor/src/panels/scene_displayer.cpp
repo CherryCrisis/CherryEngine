@@ -19,6 +19,7 @@
 #include "mixed_rendering_pipeline.hpp"
 
 #include "utils.hpp"
+#include "camera_component.hpp"
 
 #undef near
 #undef far
@@ -60,6 +61,7 @@ SceneDisplayer::SceneDisplayer()
     InputManager::PopContext();
 
     m_camera.m_pipeline = std::make_unique<MixedPipeline>();
+    CameraComponent::m_editorCamera = &m_camera;
     CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
 }
 

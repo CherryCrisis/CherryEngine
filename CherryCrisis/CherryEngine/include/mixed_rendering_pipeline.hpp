@@ -13,6 +13,7 @@ class SkyboxRenderPass;
 class BloomRenderPass;
 class PortalRenderPass;
 class HDRRenderPass;
+class ColliderRenderPass;
 
 class BasicPostProcessRenderPass;
 
@@ -29,6 +30,7 @@ class PBRRenderPass;
 class CCENGINE_API MixedPipeline : public ARenderingPipeline
 {
 	//-- LIT --//
+	ColliderRenderPass* m_colliderPass = nullptr;
 	PortalRenderPass* m_portalPass = nullptr;
 	ShadowRenderPass* m_shadowPass = nullptr;
 	BasicRenderPass* m_basicPass = nullptr;

@@ -18,6 +18,8 @@ private:
 	float m_entityScale = 1.f;
 	float m_editableScale = 1.f;
 
+	float m_totalScale = 1.f;
+
 	std::shared_ptr<Mesh> m_sphereCollider = nullptr;
 
 	void PopulateMetadatas() override;
@@ -28,6 +30,7 @@ public:
 	~SphereCollider();
 
 	void BindToSignals() override;
+	void InvalidateTransform() override;
 	void Unregister() override;
 
 	void SetEntityScale(const CCMaths::Vector3& scale) override;
@@ -40,8 +43,11 @@ public:
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 
-	void SetScale(const float& scale) { m_editableScale = scale; ResetPxShape(); }
+	void SetScale(const float& scale);
 	float GetScale() { return m_editableScale; }
+
+	CCMaths::Matrix4 GetTranformMatrix() override;
+	Mesh* GetMesh() override;
 
 	floatProperty editableScale{ this, &SphereCollider::SetScale, &SphereCollider::GetScale };
 };

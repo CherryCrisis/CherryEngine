@@ -164,6 +164,8 @@ namespace PhysicSystem
 		PhysicActor& newActor = *m_physicActors.back();
 		newActor.m_owner = &owningEntity;
 
+		newActor.Init();
+
 		if (m_isPlaying)
 			newActor.CreatePxActor();
 

@@ -11,6 +11,13 @@ namespace PhysicSystem
 	class PhysicActor;
 }
 
+enum class EColliderType
+{
+	CUBE,
+	SPHERE,
+	CYLLINDER,
+};
+
 class CCENGINE_API Collider : public Behaviour
 {
 protected:
@@ -25,14 +32,18 @@ protected:
 	bool	m_isTrigger = false;
 	float	m_contactOffset = 0.02f;
 
+	class Transform* m_transform = nullptr;
+
 	CCMaths::Vector3 m_localPosition = CCMaths::Vector3::Zero;
 
 	virtual void PopulateMetadatas() override {}
 
 public:
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
+	float m_isVisible = true;
 
 	virtual void BindToSignals() override {}
+	virtual void InvalidateTransform() {}
 
 	//! Unregister collider from the Physic Manager
 	/*!
@@ -83,6 +94,9 @@ public:
 
 	void				SetLocalPos(const CCMaths::Vector3& localPos);
 	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
+
+	virtual CCMaths::Matrix4 GetTranformMatrix() = 0;
+	virtual class Mesh* GetMesh() = 0;
 
 	boolProperty isEnabled{ this, &Collider::SetEnabled, &Collider::GetEnabled };
 	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };

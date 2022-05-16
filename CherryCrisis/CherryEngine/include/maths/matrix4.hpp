@@ -446,6 +446,10 @@ namespace CCMaths
 		*/
 		inline static void Decompose(const Matrix4& matrix, Vector3& outPos, Vector3& outRot, Vector3& outScale);
 
+		inline void NormalizeScale();
+
+		inline Matrix4 NormalizedScale() const;
+
 		//! \hiderefs
 		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
 
