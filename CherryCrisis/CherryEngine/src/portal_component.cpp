@@ -10,17 +10,17 @@
 #include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
-#include "basic_rendering_pipeline.hpp"
+#include "mixed_rendering_pipeline.hpp"
 
 PortalComponent::PortalComponent()
 {
-	m_portal.m_pipeline = std::make_unique<BasicRPipeline>();
+	m_portal.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
 }
 
 PortalComponent::PortalComponent(CCUUID& id) : Behaviour(id)
 {
-	m_portal.m_pipeline = std::make_unique<BasicRPipeline>();
+	m_portal.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
 }
 

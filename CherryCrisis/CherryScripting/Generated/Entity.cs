@@ -34,13 +34,6 @@ public class Entity : Object {
     }
   }
 
-  public Entity() : this(CherryEnginePINVOKE.new_Entity__SWIG_0(), true) {
-  }
-
-  public Entity(string name) : this(CherryEnginePINVOKE.new_Entity__SWIG_1(name), true) {
-    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
-  }
-
   public void Destroy() {
     CherryEnginePINVOKE.Entity_Destroy(swigCPtr);
   }

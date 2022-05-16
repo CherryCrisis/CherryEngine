@@ -33,6 +33,7 @@ COMP_STD_WRAP(CameraComponent)
 COMP_STD_WRAP(Transform)
 COMP_STD_WRAP(ScriptedBehaviour)
 
+%nodefaultctor Entity;
 class Entity : public Object
 {
 	%csmethodmodifiers GetName() "private";
@@ -42,8 +43,6 @@ private:
 	std::vector<Behaviour*> m_behaviours;
 
 public:
-	Entity();
-	Entity(const std::string& name);
 	virtual ~Entity();
 
 	template <class CompT>

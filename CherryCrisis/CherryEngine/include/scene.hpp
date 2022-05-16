@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "resource.hpp"
 #include "entity.hpp"
@@ -24,9 +25,9 @@ public:
 	
 	std::vector<Entity*> m_entities;
 
-	std::unordered_map<std::string, Cell> m_cells;
+	std::map<std::string, Cell> m_cells;
 
-	Cell*	AddOrGetCell(const std::string& name);
+	Cell*	AddCell(const std::string& name, CCUUID uuid = {});
 	Cell*	GetCell(const std::string& name);
 	bool	RenameCell(const std::string& oldName, const std::string& newName);
 	bool	RemoveCell(const std::string& name);
@@ -56,8 +57,8 @@ public:
 	Entity* FindModelEntity(uint32_t id);
 
 	void GenerateEntities(std::shared_ptr<ModelBase> resource);
-	void GenerateEntitiesInCell(std::shared_ptr<ModelBase> resource, const std::string& cellName);
-	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities);
+	void GenerateEntitiesInCell(std::shared_ptr<ModelBase> resource, Cell* cell);
+	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities, Cell* cell);
 
 	std::string GetName() { return GetFilepath(); }
 

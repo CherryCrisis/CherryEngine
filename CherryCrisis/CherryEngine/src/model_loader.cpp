@@ -238,7 +238,7 @@ namespace CCImporter
         }
     }
     
-    void CompressCubemapTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
+    bool CompressCubemapTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
     {
         std::string fullFilepath(CCImporter::cacheDirectory);
         fullFilepath += texturePath.filename().string();
@@ -255,11 +255,15 @@ namespace CCImporter
         faceSize.y = image.height() / 3;
         faceSize.x = image.width() / 4;
 
-        unsigned char* faceData[6];
+        if (faceSize.y != faceSize.x)
+        {
+            Debug::GetInstance()->AddLog(ELogType::WARNING, std::format("Texture : {} is not a cubemap", texturePath.string()).c_str());
+            return false;
+        }
+
         int faceDataSize = 0;
 
         bool dataSettingsInitialized = false;
-        int it = 0;
         for (int faceX = 0; faceX < 4; ++faceX)
         {
             for (int faceY = 0; faceY < 3; ++faceY)
@@ -303,12 +307,13 @@ namespace CCImporter
                 }
 
                 std::move(outputHandler.m_data.begin(), outputHandler.m_data.end(), *textureData + faceDataSize * faceId);
-                it++;
             }
         }
 
         textureHeader.height = faceSize.y * 6;
         textureHeader.width = faceSize.x * 1;
+
+        return true;
     }
 
     void CompressTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
@@ -475,10 +480,18 @@ namespace CCImporter
         textureHeader.height = image.height();
         textureHeader.flipped = flipTexture;
 
-        if (textureSurface != ETextureSurface::TEXTURE_CUBEMAP)
-            CompressTexture(context, image, filepath, textureHeader, textureData);
+        if (textureSurface == ETextureSurface::TEXTURE_CUBEMAP)
+        {
+            if (!CompressCubemapTexture(context, image, filepath, textureHeader, textureData))
+            {
+                textureHeader.surface = ETextureSurface::TEXTURE_2D;
+                CompressTexture(context, image, filepath, textureHeader, textureData);
+            }
+        }
         else
-            CompressCubemapTexture(context, image, filepath, textureHeader, textureData);
+        {
+            CompressTexture(context, image, filepath, textureHeader, textureData);
+        }
 
         CacheTextureData(filepath, *textureData, textureHeader);
     }

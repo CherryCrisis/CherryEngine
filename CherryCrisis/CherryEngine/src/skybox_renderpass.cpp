@@ -99,11 +99,9 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 void SkyboxRenderPass::GPUSkyboxCubemap::Generate(Texture* texture)
 {
-	unsigned char* dataCubemap[6];
 	unsigned char* data = static_cast<unsigned char*>(texture->GetData());
 
 	int faceSize = texture->GetHeight() / 6;
-
 	int faceDataSize = texture->GetSize() / 6;
 
 	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &ID);

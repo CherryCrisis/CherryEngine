@@ -111,4 +111,5 @@ void SkydomeRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

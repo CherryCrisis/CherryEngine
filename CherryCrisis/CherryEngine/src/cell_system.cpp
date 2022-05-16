@@ -11,10 +11,10 @@ CellSystem::CellSystem()
 {
 	m_debug = Debug::GetInstance();
 
-	AddOrGetCell(m_defaultCell);
+	AddCell(m_defaultCell);
 }
 
-Cell* CellSystem::AddOrGetCell(const std::string& name)
+Cell* CellSystem::AddCell(const std::string& name)
 {
 	// TODO: cache variables
 	if (!m_cells.contains(name))

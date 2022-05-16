@@ -62,9 +62,10 @@ void PrefilterMapRenderPass::SetupPrefilterMap()
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "environmentMap"), 0);
 
 		spheremap->m_gpuPrefilterMap = std::move(gpuPrefilterMap);
+		
+		GeneratePrefilterMap();
 	}
 
-	GeneratePrefilterMap();
 }
 
 void PrefilterMapRenderPass::GeneratePrefilterMap()
@@ -179,7 +180,8 @@ void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Regenerate(Texture* textu
 
 void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::Destroy()
 {
-	m_OnReloaded->Unbind(&GPUPrefilterMapSphereMap::OnReload, this);
+	if (m_OnReloaded)
+		m_OnReloaded->Unbind(&GPUPrefilterMapSphereMap::OnReload, this);
 	glDeleteTextures(1, &ID);
 }
 

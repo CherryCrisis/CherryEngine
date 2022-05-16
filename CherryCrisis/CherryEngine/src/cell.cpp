@@ -13,7 +13,8 @@
 #include "renderer.hpp"
 #include "sky_renderer.hpp"
 
-Cell::Cell()
+Cell::Cell(CCUUID id)
+	: Object(id)
 {
 	m_debug = Debug::GetInstance();
 	m_pxManager = PhysicSystem::PhysicManager::GetInstance();
@@ -108,7 +109,7 @@ void Cell::RemoveRenderer(ARenderer* renderer)
 
 	m_renderers.erase(renderer);
 
-	for (Viewer* viewer : m_viewers)
+	for (auto& viewer : m_viewers)
 	{
 		if (auto pipeline = viewer->m_pipeline.get())
 			renderer->UnsubscribeToPipeline(pipeline);

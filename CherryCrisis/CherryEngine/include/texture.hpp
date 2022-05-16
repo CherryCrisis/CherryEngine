@@ -33,6 +33,8 @@ enum class CCENGINE_API ETextureSurface
     TEXTURE_2D,
     TEXTURE_CUBEMAP,
     TEXTURE_SPHEREMAP,
+
+    COUNT,
 };
 
 enum class ETextureFormat

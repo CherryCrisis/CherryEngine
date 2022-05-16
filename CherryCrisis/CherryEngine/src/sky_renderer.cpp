@@ -26,6 +26,8 @@
 SkyRenderer::SkyRenderer(Cell* cell)
 	: m_cell(cell)
 {
+	PopulateMetadatas();
+
 	m_quad = ResourceManager::GetInstance()->AddResource<Mesh>("CC_normalizedQuad", true, EMeshShape::QUAD, 1.f, 1.f);
 	m_quad->m_OnDeleted.Bind(&SkyRenderer::RemoveQuad, this);
 
@@ -39,6 +41,23 @@ SkyRenderer::~SkyRenderer()
 	RemoveTexture();
 	RemoveQuad();
 }
+
+void SkyRenderer::PopulateMetadatas()
+{
+	m_metadatas.SetProperty("texturePath", &m_texturePath);
+}
+
+void SkyRenderer::SetTextureFromPath(std::string texturePath)
+{
+	if (!texturePath.empty())
+		SetTexture(ResourceManager::GetInstance()->AddResourceRef<Texture>(texturePath.c_str()));
+}
+
+std::string SkyRenderer::GetTexturePath()
+{
+	return m_texture ? m_texture->GetFilepath() : "";
+}
+
 
 void SkyRenderer::OnReloadTexture(std::shared_ptr<Texture> texture)
 {
@@ -56,7 +75,6 @@ void SkyRenderer::OnReloadTexture(std::shared_ptr<Texture> texture)
 		SetTexture(texture);
 	}
 }
-
 
 void SkyRenderer::OnSetTexture(std::shared_ptr<Texture> texture)
 {

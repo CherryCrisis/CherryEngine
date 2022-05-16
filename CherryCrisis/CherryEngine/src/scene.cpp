@@ -41,7 +41,7 @@ Scene::~Scene()
 void Scene::Initialize()
 {
 	for (Entity* entity : m_entities)
-		entity->Initialize(this);
+		entity->Initialize();
 }
 
 void Scene::Update()
@@ -52,13 +52,17 @@ void Scene::Update()
 
 void Scene::PopulateEmpty() 
 {
-	AddOrGetCell(m_defaultCellName);
+	AddCell(m_defaultCellName);
 
-	Entity* light = new Entity("Light");
+	assert(m_cells.size() != 0);
+
+	Cell* cell = &m_cells.begin()->second;
+
+	Entity* light = new Entity("Light", cell);
 	light->AddBehaviour<LightComponent>(); 	
 	AddEntity(light);
 
-	Entity* camera = new Entity("Camera");
+	Entity* camera = new Entity("Camera", cell);
 	camera->AddBehaviour<Transform>();
 	auto cameraComp = camera->AddBehaviour<CameraComponent>();
 	cameraComp->BindToSignals();
@@ -113,13 +117,18 @@ bool Scene::SaveAs(const char* filepath)
 	return Serializer::SerializeScene(this, filepath);
 }
 
-void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities)
+void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities, Cell* cell)
 {
-	Entity* entity = new Entity();
-
+	std::string entityName;
 
 	if (!node->m_nodeName.empty())
-		entity->SetName(node->m_nodeName);
+		entityName = node->m_nodeName;
+	else
+		entityName = Entity::m_defaultName;
+
+	Entity* entity = new Entity(entityName, cell);
+
+
 
 	Transform* transform = entity->GetOrAddBehaviour<Transform>();
 
@@ -150,38 +159,44 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 	entities.push_back(entity);
 
 	for (ModelNode* childNode : node->m_childrenNode)
-		GenerateEntitiesRecursive(childNode, entity, entities);
+		GenerateEntitiesRecursive(childNode, entity, entities, cell);
 }
 
 void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
 {
+	if (m_cells.size() == 0)
+	{
+		Debug::GetInstance()->AddLog(ELogType::ERROR, "Can't generate entities of modelBase, scene has no cell");
+		return;
+	}
+
 	std::vector<Entity*> entities;
 
 	ModelNode* rootNode = modelBase->GetRootNode();
 
 	if (modelBase->GetMeshCount() && rootNode)
-		GenerateEntitiesRecursive(rootNode, nullptr, entities);
+		GenerateEntitiesRecursive(rootNode, nullptr, entities, &m_cells.begin()->second);
 
 	for (Entity* entity : entities)
 	{
 		AddEntity(entity);
-		entity->Initialize(this);
+		entity->Initialize();
 	}
 }
 
-void Scene::GenerateEntitiesInCell(std::shared_ptr<ModelBase> modelBase, const std::string& cellName)
+void Scene::GenerateEntitiesInCell(std::shared_ptr<ModelBase> modelBase, Cell* cell)
 {
 	std::vector<Entity*> entities;
 
 	ModelNode* rootNode = modelBase->GetRootNode();
 
 	if (modelBase->GetMeshCount() && rootNode)
-		GenerateEntitiesRecursive(rootNode, nullptr, entities);
+		GenerateEntitiesRecursive(rootNode, nullptr, entities, cell);
 
 	for (Entity* entity : entities)
 	{
 		AddEntity(entity);
-		entity->Initialize(this, cellName);
+		entity->Initialize();
 	}
 }
 
@@ -216,18 +231,20 @@ void Scene::Empty()
 	}
 }
 
-Cell* Scene::AddOrGetCell(const std::string& name)
+Cell* Scene::AddCell(const std::string& name, CCUUID uuid)
 {
+	Cell* cell = nullptr;
 	// TODO: cache variables
 	if (!m_cells.contains(name))
 	{
-		m_cells[name];
+		auto it = m_cells.insert({ name, { uuid } });
+		cell = &it.first->second;
 
-		m_cells[name].SetName(name);
-		m_cells[name].Initialize();
+		cell->SetName(name);
+		cell->Initialize();
 	}
 
-	return &m_cells[name];
+	return cell;
 }
 
 Cell* Scene::GetCell(const std::string& name)

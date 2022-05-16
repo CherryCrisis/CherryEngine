@@ -58,9 +58,10 @@ void IrradianceMapRenderPass::SetupIrradianceMap()
 		gpuIrradianceMap->m_OnGpuReloaded = CCCallback::BindCallback(&IrradianceMapRenderPass::GenerateIrradianceMap, this);
 		
 		spheremap->m_gpuIrradiancemap = std::move(gpuIrradianceMap);
+		
+		GenerateIrradianceMap();
 	}
 
-	GenerateIrradianceMap();
 }
 
 void IrradianceMapRenderPass::GenerateIrradianceMap()

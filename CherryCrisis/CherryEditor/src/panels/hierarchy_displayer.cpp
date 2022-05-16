@@ -150,7 +150,6 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
 
     if (entityTransform && ImGui::BeginDragDropSource())
     {
-        std::cout << entity << std::endl;
         ImGui::SetDragDropPayloadNoCopy("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
         ImGui::Text(entity->GetName().c_str());
         ImGui::EndDragDropSource();
@@ -186,7 +185,6 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
         {
             m_draggedEntity = static_cast<Entity*>(payload->Data);
-            std::cout << m_draggedEntity << std::endl;
             m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform, true, true, true);
             m_manager->m_entitySelector.Clear();
             m_isEntityDragged = false;
@@ -249,12 +247,20 @@ void HierarchyDisplayer::ContextCallback()
             Entity* newEntity = nullptr;
 
             if (ImGui::MenuItem("Empty"))
-                newEntity = new Entity("Empty");
+            {
+                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                {
+                    newEntity = new Entity("Empty", cell);
+                }
+            }
 
             if (ImGui::MenuItem("ModelRenderer")) {}
             if (ImGui::MenuItem("Portal"))
             {
-                newEntity = new Entity("Portal");
+                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                {
+                    newEntity = new Entity("Portal", cell);
+                }
                 newEntity->AddBehaviour<PortalComponent>();
             }
             if (ImGui::MenuItem("Camera")) {}
@@ -317,16 +323,6 @@ void HierarchyDisplayer::ContextCallback()
             if (newEntity)
             {
                 SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
-
-                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
-                {
-                    newEntity->Initialize(SceneManager::GetInstance()->m_currentScene.get(), cell->GetName());
-                }
-                else
-                {
-                    newEntity->Initialize(SceneManager::GetInstance()->m_currentScene.get());
-                }
-
                 m_manager->FocusEntity(newEntity);
             }
 

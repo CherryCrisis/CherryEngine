@@ -3,8 +3,7 @@
 #include "cherry_macros.hpp"
 
 #include <unordered_set>
-
-//#include "sky_renderer.hpp"
+#include "object.hpp"
 
 class Entity;
 class Debug;
@@ -21,7 +20,7 @@ namespace PhysicSystem
 	class PhysicScene;
 }
 
-class CCENGINE_API Cell
+class CCENGINE_API Cell : public Object
 {
 private:
 	std::string m_name;
@@ -38,7 +37,7 @@ public:
 	class SkyRenderer* m_skyRenderer = nullptr;
 	PhysicSystem::PhysicScene* m_physicCell = nullptr;
 
-	Cell();
+	Cell(CCUUID id = {});
 	~Cell();
 
 	void Initialize();

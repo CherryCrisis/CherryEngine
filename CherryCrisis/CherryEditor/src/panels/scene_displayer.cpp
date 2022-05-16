@@ -63,7 +63,7 @@ SceneDisplayer::SceneDisplayer()
     m_camera.m_pipeline = std::make_unique<MixedPipeline>();
     if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
     {
-        scene->AddOrGetCell("Default")->AddViewer(&m_camera);
+        scene->AddCell("Default")->AddViewer(&m_camera);
     }
 }
 
@@ -71,7 +71,10 @@ SceneDisplayer::~SceneDisplayer()
 {
     if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
     {
-        scene->AddOrGetCell("Default")->RemoveViewer(&m_camera);
+        if (Cell* cell = m_manager->GetCellSystemDisplayer()->GetSelectedCell())
+        {
+            cell->RemoveViewer(&m_camera);
+        }
     }
 }
 
@@ -207,7 +210,7 @@ void SceneDisplayer::Render()
                     std::shared_ptr<ModelBase> model = ResourceManager::GetInstance()->GetResource<ModelBase>(data);
 
                     if (Cell* cell = m_manager->GetCellSystemDisplayer()->GetSelectedCell())
-                        SceneManager::GetInstance()->m_currentScene->GenerateEntitiesInCell(model, cell->GetName());
+                        SceneManager::GetInstance()->m_currentScene->GenerateEntitiesInCell(model, cell);
 
                     EditorManager::SendNotification("Adding object ...", ENotifType::Info);
                 }

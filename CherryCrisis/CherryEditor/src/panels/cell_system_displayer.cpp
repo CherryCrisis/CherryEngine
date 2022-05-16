@@ -66,7 +66,6 @@ void CellSystemDisplayer::Render()
 
     ImGui::PopStyleVar(1);
     ImGui::End();
-    ImGui::ShowDemoWindow();
 }
 
 void CellSystemDisplayer::CellSettings()
@@ -78,6 +77,7 @@ void CellSystemDisplayer::CellSettings()
     ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
 
     //-- SkyRenderer Settings --//
+    if (m_selectedCell->m_skyRenderer)
     {
         std::string skyRendererPath;
 
@@ -297,7 +297,7 @@ void CellSystemDisplayer::CreateCell()
 
             if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
             {
-                scene->AddOrGetCell(name);
+                scene->AddCell(name);
             }
 
             memset(name, 0, IM_ARRAYSIZE(name));

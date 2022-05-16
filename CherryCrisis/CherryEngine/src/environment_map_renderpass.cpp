@@ -66,9 +66,10 @@ void EnvironmentMapRenderPass::SetupEnvironmentMap()
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "equirectangularMap"), 0);
 
 		spheremap->m_gpuTextureSpheremap = std::move(gpuEnvMap);
+		
+		GenerateEnvironmentMap();
 	}
 
-	GenerateEnvironmentMap();
 }
 
 void EnvironmentMapRenderPass::GenerateEnvironmentMap()
@@ -121,11 +122,14 @@ void EnvironmentMapRenderPass::GenerateEnvironmentMap()
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 			glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 		}
+
 		glBindVertexArray(0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
 		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	}
 }
 
@@ -152,6 +156,9 @@ void EnvironmentMapRenderPass::GPUEnvironmentMap::Generate(Texture* texture)
 
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, envMapSize, envMapSize);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RBO);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	texture->ClearData();
 

@@ -49,20 +49,6 @@ const std::map<const int, const ETextureFormat> textureFormatByID
     {7, ETextureFormat::DXT7},
 };
 
-const std::map<const ETextureSurface, const int> IdOfTextureSurface
-{
-    {ETextureSurface::TEXTURE_2D, 0},
-    {ETextureSurface::TEXTURE_CUBEMAP, 1},
-    {ETextureSurface::TEXTURE_SPHEREMAP, 2},
-};
-
-const std::map<const int, const ETextureSurface> textureSurfaceByID
-{
-    {0, ETextureSurface::TEXTURE_2D},
-    {1, ETextureSurface::TEXTURE_CUBEMAP},
-    {2, ETextureSurface::TEXTURE_SPHEREMAP},
-};
-
 TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
     : m_texture(texture)
 {
@@ -70,7 +56,7 @@ TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
         return;
 
     m_currentTypeId = IdOfTextureFormat.at(m_texture->GetInternalFormat());
-    m_currentSurfaceId = IdOfTextureSurface.at(m_texture->GetSurface());
+    m_currentSurfaceId = static_cast<int>(m_texture->GetSurface());
     m_isFlipped = m_texture->GetIsFlipped();
 }
 
@@ -85,7 +71,8 @@ void TextureSettings::Render()
 
         if (ImGui::BeginCombo(labelSurface, listSurface[m_currentSurfaceId]))
         {
-            for (int n = 0; n < IdOfTextureSurface.size(); n++)
+            int textureSurfaceCount = static_cast<int>(ETextureSurface::COUNT);
+            for (int n = 0; n < textureSurfaceCount; n++)
             {
                 const bool is_selected = (m_currentSurfaceId == n);
                 if (ImGui::Selectable(listSurface[n], is_selected))
@@ -128,9 +115,13 @@ void TextureSettings::Render()
             if (ImGui::Button("Apply"))
             {
                 m_texture->SetInternalFormat(textureFormatByID.at(m_currentTypeId));
-                m_texture->SetSurface(textureSurfaceByID.at(m_currentSurfaceId));
+                m_texture->SetSurface(static_cast<ETextureSurface>(m_currentSurfaceId));
+
                 Resource<Texture>::ReloadResource(m_texture, m_isFlipped);
                 m_settingsChanged = false;
+
+                //Reaply texture surface during reload because it can be changed if the texture doesn't support cubemap settings
+                m_currentSurfaceId = static_cast<int>(m_texture->GetSurface());
             }
         }
 }

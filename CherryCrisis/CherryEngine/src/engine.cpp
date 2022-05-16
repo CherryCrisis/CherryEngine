@@ -28,11 +28,10 @@ Engine::Engine()
 	TimeManager::CreateInstance();
 	Debug::CreateInstance();
 	ResourceManager::CreateInstance();
-	SceneManager::CreateInstance();
-	CellSystem::CreateInstance();
 	CsScriptingSystem::CreateInstance();
 	RenderManager::CreateInstance();
 	Pickinger::CreateInstance();
+	SceneManager::CreateInstance();
 
 	CsScriptingSystem::GetInstance()->Init();
 	SoundManager::Init();
