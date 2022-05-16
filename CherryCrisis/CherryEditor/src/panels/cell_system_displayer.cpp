@@ -9,15 +9,19 @@
 #include "camera.hpp"
 #include "sky_renderer.hpp"
 #include "utils.hpp"
+#include "scene_manager.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 CellSystemDisplayer::CellSystemDisplayer()
 {
-    m_cellSystem = CellSystem::GetInstance();
+    SceneManager* sceneManager = SceneManager::GetInstance();
 
-    if (m_cellSystem->m_cells.size() > 0)
-        SelectCell(& m_cellSystem->m_cells.begin()->second);
+    if (sceneManager->m_currentScene)
+    {
+        if (sceneManager->m_currentScene->m_cells.size() > 0)
+            SelectCell(&sceneManager->m_currentScene->m_cells.begin()->second);
+    }
 
     InputManager* IM = InputManager::GetInstance();
     IM->PushContext("Editor Context");
@@ -121,6 +125,11 @@ void CellSystemDisplayer::SelectCell(Cell* cell)
             lastCell->RemoveViewer(m_camera);
             m_displayedCell->AddViewer(m_camera);
         }
+        else if (m_selectedCell && !lastCell)
+        {
+            m_displayedCell = m_selectedCell;
+            m_displayedCell->AddViewer(m_camera);
+        }
     }
 }
 
@@ -146,70 +155,74 @@ void CellSystemDisplayer::RenderCells()
 
     bool itemSelected = false;
     int i = 0;
-    for (auto& cell : m_cellSystem->m_cells)
+    if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
     {
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf;
-        if (m_selectedCell == &cell.second) { flags |= ImGuiTreeNodeFlags_Selected; }
-
-        if (ImGui::TreeNodeEx((void*)(intptr_t)i, flags, cell.first.c_str()))
+        if (m_scene != scene)
         {
-            if (!Context())
+            m_selectedCell = nullptr;
+            m_displayedCell = nullptr;
+            m_scene = scene;
+        }
+
+        for (auto& cell : SceneManager::GetInstance()->m_currentScene->m_cells)
+        {
+            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf;
+            if (m_selectedCell == &cell.second) { flags |= ImGuiTreeNodeFlags_Selected; }
+
+            if (ImGui::TreeNodeEx((void*)(intptr_t)i, flags, cell.first.c_str()))
             {
-                if (m_selectedCell == m_rightClickedCell)
-                    m_selectedCell = nullptr;
-
-                m_rightClickedCell = nullptr;
-
-                ImGui::TreePop();
-                break;
-            }
-
-            if (ImGui::IsItemHovered())
-            {
-                if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
+                if (!Context())
                 {
-                    SelectCell(&cell.second);
-                    itemSelected = true;
+                    if (m_selectedCell == m_rightClickedCell)
+                        m_selectedCell = nullptr;
+
+                    m_rightClickedCell = nullptr;
+
+                    ImGui::TreePop();
+                    break;
                 }
 
-                if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
+                if (ImGui::IsItemHovered())
                 {
-                    ImGui::OpenPopup("options");
-                    m_rightClickedCell = &cell.second;
-                }
-            }
-
-            if (ImGui::BeginDragDropTarget())
-            {
-                //if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CELL_DROP"))
-                //{
-                //    m_cellSystem->MoveEntityFromCellToCell(m_selectedEntity->m_cell, &cell.second, m_selectedEntity);
-                //    m_selectedEntity = nullptr;
-                //}
-
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
-                {
-                    Entity* draggedEntity = (Entity*)payload->Data;
-
-                    //m_draggedEntity->GetBehaviour<Transform>()->SetParent(entityTransform, true, true, true);
-                    //m_manager->m_entitySelector.Clear();
-                    //m_isEntityDragged = false;
-                    //m_draggedEntity = nullptr;
-                    //if (opened) ImGui::TreePop();
-                    //return true;
-                    if (draggedEntity)
+                    if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
                     {
-                        m_cellSystem->MoveEntityFromCellToCell(draggedEntity->m_cell, &cell.second, draggedEntity);
+                        SelectCell(&cell.second);
+                        itemSelected = true;
+                    }
+
+                    if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))
+                    {
+                        ImGui::OpenPopup("options");
+                        m_rightClickedCell = &cell.second;
                     }
                 }
 
-                ImGui::EndDragDropTarget();
+                if (ImGui::BeginDragDropTarget())
+                {
+                    //if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CELL_DROP"))
+                    //{
+                    //    m_cellSystem->MoveEntityFromCellToCell(m_selectedEntity->m_cell, &cell.second, m_selectedEntity);
+                    //    m_selectedEntity = nullptr;
+                    //}
+
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+                    {
+                        Entity* draggedEntity = (Entity*)payload->Data;
+
+                        if (draggedEntity)
+                        {
+                            scene->MoveEntityFromCellToCell(draggedEntity->m_cell, &cell.second, draggedEntity);
+                        }
+                    }
+
+                    ImGui::EndDragDropTarget();
+                }
+
+                ImGui::TreePop();
             }
 
-            ImGui::TreePop();
+            i++;
         }
-
-        i++;
     }
 
     //if (!itemSelected && ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
@@ -282,7 +295,10 @@ void CellSystemDisplayer::CreateCell()
         {
             ImGui::CloseCurrentPopup();
 
-            m_cellSystem->AddOrGetCell(name);
+            if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+            {
+                scene->AddOrGetCell(name);
+            }
 
             memset(name, 0, IM_ARRAYSIZE(name));
         }
@@ -307,7 +323,10 @@ void CellSystemDisplayer::RenameCell()
 
         if (ImGui::Button("Rename", ImVec2(120, 0)))
         {
-            m_cellSystem->RenameCell(m_rightClickedCell->GetName(), name);
+            if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+            {
+                scene->RenameCell(m_rightClickedCell->GetName(), name);
+            }
 
             ImGui::CloseCurrentPopup();
 
@@ -330,11 +349,14 @@ bool CellSystemDisplayer::Context()
 
 		if (ImGui::MenuItem("Delete"))
 		{
-			if (m_cellSystem->RemoveCell(m_rightClickedCell->GetName()))
-			{
-				ImGui::EndPopup();
-				return false;
-			}
+            if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+            {
+                if (scene->RemoveCell(m_rightClickedCell->GetName()))
+                {
+                    ImGui::EndPopup();
+                    return false;
+                }
+            }
 		}
 
 		if (ImGui::MenuItem("Rename"))

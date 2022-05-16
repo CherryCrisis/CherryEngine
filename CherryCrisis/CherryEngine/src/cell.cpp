@@ -24,6 +24,12 @@ Cell::Cell()
 Cell::~Cell()
 {
 	m_pxManager->Unregister(this);
+
+	if (m_skyRenderer)
+	{
+		delete m_skyRenderer;
+		m_skyRenderer = nullptr;
+	}
 }
 
 void Cell::Initialize()

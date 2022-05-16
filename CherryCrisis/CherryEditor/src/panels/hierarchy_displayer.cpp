@@ -316,9 +316,17 @@ void HierarchyDisplayer::ContextCallback()
 
             if (newEntity)
             {
-                newEntity->Initialize();
-
                 SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
+
+                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                {
+                    newEntity->Initialize(SceneManager::GetInstance()->m_currentScene.get(), cell->GetName());
+                }
+                else
+                {
+                    newEntity->Initialize(SceneManager::GetInstance()->m_currentScene.get());
+                }
+
                 m_manager->FocusEntity(newEntity);
             }
 

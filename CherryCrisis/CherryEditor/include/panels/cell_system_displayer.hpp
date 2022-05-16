@@ -2,7 +2,7 @@
 
 #include "core/panel.hpp"
 
-#include "cell_system.hpp"
+#include "scene.hpp"
 #include "ImGuizmo.h"
 
 class EditorManager;
@@ -11,8 +11,7 @@ struct Camera;
 class CellSystemDisplayer : public Panel
 {
 private:
-
-	CellSystem* m_cellSystem = nullptr;
+	Scene*		m_scene = nullptr;
 	Cell*		m_displayedCell = nullptr;
 	Cell*		m_selectedCell = nullptr;
 	Cell*		m_rightClickedCell = nullptr;

@@ -61,12 +61,18 @@ SceneDisplayer::SceneDisplayer()
     IM->PopContext();
 
     m_camera.m_pipeline = std::make_unique<MixedPipeline>();
-    CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
+    if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+    {
+        scene->AddOrGetCell("Default")->AddViewer(&m_camera);
+    }
 }
 
 SceneDisplayer::~SceneDisplayer()
 {
-    CellSystem::GetInstance()->AddOrGetCell("Default")->RemoveViewer(&m_camera);
+    if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+    {
+        scene->AddOrGetCell("Default")->RemoveViewer(&m_camera);
+    }
 }
 
 void SceneDisplayer::UpdateCamera()
@@ -198,8 +204,11 @@ void SceneDisplayer::Render()
                 }
                 else if (modelExtensions.end() != modelExtensions.find("." + extension))
                 {
-                    auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-                    ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(data, true, cb);
+                    std::shared_ptr<ModelBase> model = ResourceManager::GetInstance()->GetResource<ModelBase>(data);
+
+                    if (Cell* cell = m_manager->GetCellSystemDisplayer()->GetSelectedCell())
+                        SceneManager::GetInstance()->m_currentScene->GenerateEntitiesInCell(model, cell->GetName());
+
                     EditorManager::SendNotification("Adding object ...", ENotifType::Info);
                 }
             }

@@ -84,6 +84,8 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				resources.push_back(path->string());
 	}
 
+	//for (Cell* cell : scene->)
+
 	//Entities Saving
 	YAML::Node entities = save["entities"];
 	for (const Entity* entity : scene->m_entities) 
@@ -256,6 +258,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	// First clean the scene container
 	scene->Empty();
 	
+	scene->AddOrGetCell("Default");
 	// first is the uuid and the behaviour pointer 
 	std::unordered_map<uint32_t, Object*> m_wrappedBehaviours;
 	// first is the behaviour uuid and the uuid to link in 

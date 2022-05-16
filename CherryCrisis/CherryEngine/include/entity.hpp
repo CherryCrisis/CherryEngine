@@ -11,6 +11,7 @@
 #include "event.hpp"
 #include "object.hpp"
 
+class Scene;
 class Behaviour;
 class Cell;
 
@@ -65,7 +66,9 @@ public:
 	Event<> m_OnTriggerEnter;
 	Event<> m_OnTriggerExit;
 
-	void Initialize();
+	void Initialize(Scene* scene);
+	void Initialize(Scene* scene, const std::string& cellName);
+
 	void Update();
 
 	void OnCollisionEnter(Entity* other);

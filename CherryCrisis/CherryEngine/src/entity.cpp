@@ -2,20 +2,21 @@
 
 #include "entity.hpp"
 
+#include "debug.hpp"
+
 #include "behaviour.hpp"
 #include "transform.hpp"
-#include "cell_system.hpp"
+#include "scene.hpp"
 
 #include <typeinfo>
 Entity::Entity()
 {
-	CellSystem::GetInstance()->AddEntityToDefault(this);
+
 }
 
 Entity::Entity(const std::string& name, CCUUID id)
 	: Object(id), m_name(name)
 {
-	CellSystem::GetInstance()->AddEntityToDefault(this);
 }
 
 
@@ -27,13 +28,27 @@ Entity::~Entity()
 	m_cell->RemoveEntity(this);
 }
 
-void Entity::Initialize() 
+void Entity::Initialize(Scene* scene) 
 {
+	if (scene)
+		scene->AddEntityToDefault(this);
+
 	for (auto& [type, behaviour] : m_behaviours)
 		behaviour->BindToSignals();
 	
 	m_OnAwake.Invoke();	
 }	
+
+void Entity::Initialize(Scene* scene, const std::string& cellName)
+{
+	if (scene)
+		scene->AddEntityToCell(this, cellName);
+
+	for (auto& [type, behaviour] : m_behaviours)
+		behaviour->BindToSignals();
+
+	m_OnAwake.Invoke();
+}
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {
