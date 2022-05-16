@@ -1,11 +1,15 @@
 #include <pch.hpp>
 
-#include <serializer.hpp>
+#include "serializer.hpp"
+
 #include <format>
+#include <yaml-cpp/yaml.h>
+
 
 #include "resource_manager.hpp"
-#include "utils.hpp"
+#include "scene_manager.hpp"
 
+#include "utils.hpp"
 #include "transform.hpp"
 #include "light_component.hpp"
 #include "model_renderer.hpp"
@@ -20,10 +24,8 @@
 #include "model.hpp"
 #include "character_controller.hpp"
 #include "model_base.hpp"
-
-#include "scene_manager.hpp"
+#include "sky_renderer.hpp"
 #include "object.hpp"
-#include "yaml-cpp/yaml.h"
 
 namespace YAML {
 	template<>
@@ -84,141 +86,219 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				resources.push_back(path->string());
 	}
 
-	//Entities Saving
-	YAML::Node entities = save["entities"];
-	for (const Entity* entity : scene->m_entities) 
-	{
-		entities[entity->GetUUID()]["name"] = entity->GetName();
-	}
+	YAML::Node cells = save["cells"];
 
-	const char* parseError = "#ERROR {}  is not handled !";//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
-	//Components Saving
-	YAML::Node components = save["components"];
-	for (Entity* entity : scene->m_entities)
+	for (auto& cellPair : scene->m_cells)
 	{
-		std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
-		for (const auto& behaviour : behaviours) 
-		{	
-			uint32_t UUID = behaviour->GetUUID();
-			YAML::Node node = components[UUID];
-			node["type"] = String::ExtractValue(typeid(*behaviour).name(), ' ');
-			// Field Saving
-			for (const auto& [fieldName, fieldRef] : behaviour->m_metadatas.m_fields)
+		Cell* cell = &cellPair.second;
+
+		YAML::Node cellNode = cells[cell->GetUUID()];
+		cellNode["name"] = cell->GetName();
+
+		YAML::Node cellSettings = cellNode["settings"];
+
+		//Properties saving
+		for (const auto& [propName, propRef] : cell->m_skyRenderer->m_metadatas.m_properties)
+		{
+			const std::type_index& type = propRef->GetGetType();
+
+			if (type == typeid(CCMaths::Vector3))
 			{
-				const std::type_index& type = fieldRef.m_type;
-
-				if (type == typeid(CCMaths::Vector3))
-				{
-					node[fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
-				 continue;
-				}
-				
-				if (type == typeid(Bool3)) 
-				{
-					node[fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(std::string)) 
-				{
-					node[fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(float)) 
-				{
-					node[fieldName] = *std::any_cast<float*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(int)) 
-				{
-					node[fieldName] = *std::any_cast<int*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(bool)) 
-				{
-					node[fieldName] = *std::any_cast<bool*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(Object*)) 
-				{
-					Object* obj = *std::any_cast<Object**>(fieldRef.m_value);
-					node[fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
-					continue;
-				}
-				//Unhandled Cases (useful to find them)
-					node[fieldName] = std::format(parseError, type.name());
+				CCMaths::Vector3 val;
+				propRef->Get(&val);
+				cellSettings[propName] = val;
+				continue;
 			}
-
-			//Properties saving
-			for (const auto& [propName, propRef] : behaviour->m_metadatas.m_properties)
+			if (type == typeid(Bool3))
 			{
-				const std::type_index& type = propRef->GetGetType();
-
-				if (type == typeid(CCMaths::Vector3))
-				{
-					CCMaths::Vector3 val;
-					propRef->Get(&val);
-					node[propName] = val;
-					continue;
-				}
-				if (type == typeid(Bool3))
-				{
-					Bool3 val;
-					propRef->Get(&val);
-					node[propName] = val;
-					continue;
-				}
-				if (type == typeid(std::string))
-				{
-					std::string val;
-					propRef->Get(&val);
-					node[propName] = val;
-					continue;
-				}
-				if (type == typeid(float))
-				{
-					float val;
-					propRef->Get(&val);
-					node[propName] = val;
-					continue;
-				}
-				if (type == typeid(int))
-				{
-					int val;
-					propRef->Get(&val);
-					node[propName] = val;
-					continue;
-				}
-				if (type == typeid(bool))
-				{
-					bool val;
-					propRef->Get(&val);
-					node[propName] = val;
-					continue;
-				}
-				if (type == typeid(const char*))
-				{
-					const char* val;
-					propRef->Get(&val);
-					node[propName] = std::string(val);
-					continue;
-				}
-				if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
-				{
-					Object* ptr;
-					propRef->Get(&ptr);
-					node[propName] = ptr ? YAML::Node(*ptr) : YAML::Node();
-					continue;
-				}
-				//Unhandled Cases (useful to find them)
-					node[propName] = std::format(parseError, type.name());
+				Bool3 val;
+				propRef->Get(&val);
+				cellSettings[propName] = val;
+				continue;
+			}
+			if (type == typeid(std::string))
+			{
+				std::string val;
+				propRef->Get(&val);
+				cellSettings[propName] = val;
+				continue;
+			}
+			if (type == typeid(float))
+			{
+				float val;
+				propRef->Get(&val);
+				cellSettings[propName] = val;
+				continue;
+			}
+			if (type == typeid(int))
+			{
+				int val;
+				propRef->Get(&val);
+				cellSettings[propName] = val;
+				continue;
+			}
+			if (type == typeid(bool))
+			{
+				bool val;
+				propRef->Get(&val);
+				cellSettings[propName] = val;
+				continue;
+			}
+			if (type == typeid(const char*))
+			{
+				const char* val;
+				propRef->Get(&val);
+				cellSettings[propName] = std::string(val);
+				continue;
+			}
+			if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
+			{
+				Object* ptr;
+				propRef->Get(&ptr);
+				cellSettings[propName] = ptr ? YAML::Node(*ptr) : YAML::Node();
+				continue;
 			}
 		}
+
+		//Entities Saving
+		YAML::Node entities = cellNode["entities"];
+
+		auto entitiesOfCell = cell->GetEntities();
+		for (const Entity* entity : entitiesOfCell)
+		{
+			YAML::Node entitiesUUID = entities[entity->GetUUID()];
+			entitiesUUID["name"] = entity->GetName();
+		}
 	}
+
+		const char* parseError = "#ERROR {}  is not handled !";//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
+		//Components Saving
+		YAML::Node components = save["components"];
+		for (Entity* entity : scene->m_entities)
+		{
+			std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
+			for (const auto& behaviour : behaviours)
+			{
+				uint32_t UUID = behaviour->GetUUID();
+				YAML::Node node = components[UUID];
+				node["type"] = String::ExtractValue(typeid(*behaviour).name(), ' ');
+				// Field Saving
+				for (const auto& [fieldName, fieldRef] : behaviour->m_metadatas.m_fields)
+				{
+					const std::type_index& type = fieldRef.m_type;
+
+					if (type == typeid(CCMaths::Vector3))
+					{
+						node[fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+						continue;
+					}
+
+					if (type == typeid(Bool3))
+					{
+						node[fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
+						continue;
+					}
+
+					if (type == typeid(std::string))
+					{
+						node[fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
+						continue;
+					}
+
+					if (type == typeid(float))
+					{
+						node[fieldName] = *std::any_cast<float*>(fieldRef.m_value);
+						continue;
+					}
+
+					if (type == typeid(int))
+					{
+						node[fieldName] = *std::any_cast<int*>(fieldRef.m_value);
+						continue;
+					}
+
+					if (type == typeid(bool))
+					{
+						node[fieldName] = *std::any_cast<bool*>(fieldRef.m_value);
+						continue;
+					}
+
+					if (type == typeid(Object*))
+					{
+						Object* obj = *std::any_cast<Object**>(fieldRef.m_value);
+						node[fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
+						continue;
+					}
+					//Unhandled Cases (useful to find them)
+					node[fieldName] = std::format(parseError, type.name());
+				}
+
+				//Properties saving
+				for (const auto& [propName, propRef] : behaviour->m_metadatas.m_properties)
+				{
+					const std::type_index& type = propRef->GetGetType();
+
+					if (type == typeid(CCMaths::Vector3))
+					{
+						CCMaths::Vector3 val;
+						propRef->Get(&val);
+						node[propName] = val;
+						continue;
+					}
+					if (type == typeid(Bool3))
+					{
+						Bool3 val;
+						propRef->Get(&val);
+						node[propName] = val;
+						continue;
+					}
+					if (type == typeid(std::string))
+					{
+						std::string val;
+						propRef->Get(&val);
+						node[propName] = val;
+						continue;
+					}
+					if (type == typeid(float))
+					{
+						float val;
+						propRef->Get(&val);
+						node[propName] = val;
+						continue;
+					}
+					if (type == typeid(int))
+					{
+						int val;
+						propRef->Get(&val);
+						node[propName] = val;
+						continue;
+					}
+					if (type == typeid(bool))
+					{
+						bool val;
+						propRef->Get(&val);
+						node[propName] = val;
+						continue;
+					}
+					if (type == typeid(const char*))
+					{
+						const char* val;
+						propRef->Get(&val);
+						node[propName] = std::string(val);
+						continue;
+					}
+					if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
+					{
+						Object* ptr;
+						propRef->Get(&ptr);
+						node[propName] = ptr ? YAML::Node(*ptr) : YAML::Node();
+						continue;
+					}
+					//Unhandled Cases (useful to find them)
+					node[propName] = std::format(parseError, type.name());
+				}
+			}
+		}
 
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	std::ofstream out(fileName);
@@ -255,7 +335,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 {
 	// First clean the scene container
 	scene->Empty();
-	
+
 	// first is the uuid and the behaviour pointer 
 	std::unordered_map<uint32_t, Object*> m_wrappedBehaviours;
 	// first is the behaviour uuid and the uuid to link in 
@@ -265,9 +345,9 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	YAML::Node loader = YAML::LoadFile(fileName);
 
 	// Iterates on Resources  entries
-	if (loader["resources"]) 
+	if (YAML::Node resources = loader["resources"])
 	{
-		for (auto resource : loader["resources"])
+		for (auto resource : resources)
 		{
 			std::string str = resource.as<std::string>();
 			const char* Cstr = str.c_str(); // need to casts it as a const char for MultiThread
@@ -275,14 +355,76 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 		}
 	}
 
-	// Iterates on Entities entries
-	if (loader["entities"])
+	if (YAML::Node cells = loader["cells"])
 	{
-		for (YAML::const_iterator it = loader["entities"].begin(); it != loader["entities"].end(); ++it)
+		for (YAML::const_iterator it = cells.begin(); it != cells.end(); ++it)
 		{
-			Entity* empty = new Entity(it->second["name"].as<std::string>(), it->first.as<uint32_t>());
-			scene->AddEntity(empty);
-			m_wrappedBehaviours[empty->GetUUID()] = empty;
+			uint32_t cellId = it->first.as<uint32_t>();
+			if (YAML::Node cellNode = it->second)
+			{
+				std::string cellName = cellNode["name"].as<std::string>();
+				Cell* cell = scene->AddCell(cellName, cellId);
+
+				if (YAML::Node cellSettings = cellNode["settings"])
+				{
+					for (YAML::const_iterator entry = cellSettings.begin(); entry != cellSettings.end(); ++entry)
+					{
+						std::string key = entry->first.as<std::string>();
+						YAML::Node value = entry->second;
+
+						if (value.as<std::string>() == "null")
+							continue;
+
+						if (cell->m_skyRenderer->m_metadatas.m_properties.contains(key))
+						{
+							CCProperty::IClearProperty* prop = cell->m_skyRenderer->m_metadatas.m_properties[key];
+
+							auto& propType = prop->GetGetType();
+
+							if (propType == typeid(Transform*) || propType == typeid(Entity*))
+							{
+								m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, value.as<uint32_t>() });
+							}
+							else if (propType == typeid(CCMaths::Vector3))
+							{
+								Vector3 vec = value.as<CCMaths::Vector3>();
+								prop->Set(&vec);
+							}
+							else if (propType == typeid(Bool3))
+							{
+								Bool3 vec = value.as<Bool3>();
+								prop->Set(&vec);
+							}
+							else if (propType == typeid(std::string))
+							{
+								std::string str = value.as<std::string>();
+								prop->Set(&str);
+							}
+							else if (propType == typeid(bool))
+							{
+								bool str = value.as<bool>();
+								prop->Set(&str);
+							}
+							else if (propType == typeid(const char*))
+							{
+								std::string str = value.as<std::string>();
+								const char* val = str.c_str();
+								prop->Set(&val);
+							}
+						}
+					}
+				}
+
+				if (YAML::Node entities = cellNode["entities"])
+				{
+					for (YAML::const_iterator it = entities.begin(); it != entities.end(); ++it)
+					{
+						Entity* empty = new Entity(it->second["name"].as<std::string>(), cell, it->first.as<uint32_t>());
+						scene->AddEntity(empty);
+						m_wrappedBehaviours[empty->GetUUID()] = empty;
+					}
+				}
+			}
 		}
 	}
 

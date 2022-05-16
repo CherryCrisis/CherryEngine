@@ -3,6 +3,7 @@
 #include "cherry_macros.hpp"
 
 #include <unordered_set>
+#include "object.hpp"
 
 class Entity;
 class Debug;
@@ -19,7 +20,7 @@ namespace PhysicSystem
 	class PhysicScene;
 }
 
-class CCENGINE_API Cell
+class CCENGINE_API Cell : public Object
 {
 private:
 	std::string m_name;
@@ -32,13 +33,11 @@ private:
 	std::unordered_set<class ARenderer*> m_renderers;
 	std::vector<Portal*> m_portals;
 
-	//class Skybox* m_skybox = nullptr;
-	class Skydome* m_skydome = nullptr;
-
 public:
+	class SkyRenderer* m_skyRenderer = nullptr;
 	PhysicSystem::PhysicScene* m_physicCell = nullptr;
 
-	Cell();
+	Cell(CCUUID id = {});
 	~Cell();
 
 	void Initialize();
@@ -53,8 +52,7 @@ public:
 	void	RemoveViewer(Viewer* viewer);
 	int		PossessEntity(Entity* entity);
 
-
-	const std::vector<Entity*> GetEntities() { return m_entities; }
+	const std::vector<Entity*>& GetEntities() { return m_entities; }
 
 	void	LinkPortal(Portal* toLink);
 	void	LinkPortals(Portal* portal1, Portal* portal2);

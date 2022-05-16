@@ -2,7 +2,7 @@
 
 #include "skydome_renderpass.hpp"
 
-#include "skydome.hpp"
+#include "sky_renderer.hpp"
 #include "viewer.hpp"
 #include "framebuffer.hpp"
 
@@ -13,17 +13,42 @@ SkydomeRenderPass::SkydomeRenderPass(const char* name)
 }
 
 template <>
-int SkydomeRenderPass::Subscribe(Skydome* toGenerate)
+int SkydomeRenderPass::Subscribe(SkyRenderer* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
 
-	Spheremap* spheremap = toGenerate->m_spheremap.get();
+	m_skyRenderer = toGenerate;
+
+	SetupSkydome();
+
+	if (m_skyRenderer && m_program)
+		m_callExecute = CCCallback::BindCallback(&SkydomeRenderPass::Execute, this);
+
+	return 1;
+}
+
+template <>
+void SkydomeRenderPass::Unsubscribe(SkyRenderer* toGenerate)
+{
+	if (m_skyRenderer == toGenerate)
+	{
+		m_skyRenderer = nullptr;
+		m_callExecute = nullptr;
+	}
+}
+
+void SkydomeRenderPass::SetupSkydome()
+{
+	if (!m_skyRenderer)
+		return;
+
+	Texture* spheremap = m_skyRenderer->m_texture.get();
 
 	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0)
-		return -1;
+		return;
 
-	if (!spheremap->m_gpuCubemapV2)
+	if (!spheremap->m_gpuTextureCubemap)
 	{
 		std::unique_ptr<GPUSkydomeCubemap> gpuCubemap = std::make_unique<GPUSkydomeCubemap>();
 
@@ -35,7 +60,7 @@ int SkydomeRenderPass::Subscribe(Skydome* toGenerate)
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		
+
 		for (unsigned int i = 0; i < 6; ++i)
 		{
 			// note that we store each face with 16 bit floating point values
@@ -48,31 +73,7 @@ int SkydomeRenderPass::Subscribe(Skydome* toGenerate)
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
-
-		//TODO: Integer Compressed spheremap
-		
-		spheremap->m_gpuCubemapV2 = std::move(gpuCubemap);
-
-		if (!ElementMeshGenerator::Generate(toGenerate->m_mesh.get()))
-			return -1;
-	}
-
-	m_skydome = toGenerate;
-	toGenerate->ClearData();
-
-	if (m_skydome && m_program)
-		m_callExecute = CCCallback::BindCallback(&SkydomeRenderPass::Execute, this);
-
-	return 1;
-}
-
-template <>
-void SkydomeRenderPass::Unsubscribe(Skydome* toGenerate)
-{
-	if (m_skydome == toGenerate)
-	{
-		m_skydome = nullptr;
-		m_callExecute = nullptr;
+		spheremap->m_gpuTextureCubemap = std::move(gpuCubemap);
 	}
 }
 
@@ -94,15 +95,15 @@ void SkydomeRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, viewer->m_projectionMatrix.data);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, viewer->m_viewMatrix.data);
 
-	Mesh* mesh = m_skydome->m_mesh.get();
+	Mesh* mesh = m_skyRenderer->m_cube.get();
 
 	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
 	glBindVertexArray(gpuMesh->VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 	glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 
-	Spheremap* skyTexture = m_skydome->m_spheremap.get();
-	GPUSkydomeCubemap* gpuCubemap = static_cast<GPUSkydomeCubemap*>(skyTexture->m_gpuCubemapV2.get());
+	Texture* spheremap = m_skyRenderer->m_texture.get();
+	GPUSkydomeCubemap* gpuCubemap = static_cast<GPUSkydomeCubemap*>(spheremap->m_gpuTextureCubemap.get());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
 
@@ -110,4 +111,5 @@ void SkydomeRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

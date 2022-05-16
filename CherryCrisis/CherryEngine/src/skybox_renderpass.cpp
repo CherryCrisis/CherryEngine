@@ -2,9 +2,9 @@
 
 #include "skybox_renderpass.hpp"
 
-#include "skybox.hpp"
 #include "viewer.hpp"
 #include "framebuffer.hpp"
+#include "texture.hpp"
 
 SkyboxRenderPass::SkyboxRenderPass(const char* name)
 // TODO: Set real path
@@ -13,57 +13,50 @@ SkyboxRenderPass::SkyboxRenderPass(const char* name)
 }
 
 template <>
-int SkyboxRenderPass::Subscribe(Skybox* toGenerate)
+int SkyboxRenderPass::Subscribe(SkyRenderer* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
 
-	Cubemap* cubemap = toGenerate->m_cubemap.get();
-
+	Texture* cubemap = toGenerate->m_texture.get();
+	
 	if (!cubemap || cubemap->GetWidth() <= 0 || cubemap->GetHeight() <= 0)
 		return -1;
+	
+	//if (!m_meshGenerator.Generate(toGenerate->m_cube.get()))
+	//	return -1;
 
-	if (!cubemap->m_gpuCubemap)
+	if (!ElementMeshGenerator::Generate(toGenerate->m_cube.get()))
+		return -1;
+
+	if (!cubemap->m_gpuTextureCubemap)
 	{
-		std::unique_ptr<GPUSkyboxCubemap> gpuCubemap = std::make_unique<GPUSkyboxCubemap>();
-
-		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &gpuCubemap->ID);
-		glTextureStorage2D(gpuCubemap->ID, 1, GL_RGBA8, cubemap->GetWidth(), cubemap->GetHeight());
-
-		glTextureParameteri(gpuCubemap->ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(gpuCubemap->ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(gpuCubemap->ID, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(gpuCubemap->ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTextureParameteri(gpuCubemap->ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		for (int faceID = 0; faceID < 6; faceID++)
+		if (!cubemap->GetData())
 		{
-			if (!cubemap->GetData()[faceID])
+			Resource<Texture>::ReloadResource(toGenerate->m_texture);
+
+			if (!cubemap->GetData())
 				return -1;
-
-			glTextureSubImage3D(gpuCubemap->ID, 0, 0, 0, faceID, cubemap->GetWidth(), cubemap->GetHeight(), 1, GL_BGRA, GL_UNSIGNED_BYTE, cubemap->GetData()[faceID]);
 		}
-		cubemap->m_gpuCubemap = std::move(gpuCubemap);
-
-		if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
-			return -1;
+		
+		std::unique_ptr<GPUSkyboxCubemap> gpuCubemap = std::make_unique<GPUSkyboxCubemap>(cubemap);
+		cubemap->m_gpuTextureCubemap = std::move(gpuCubemap);
 	}
+	
+	m_skyRenderer = toGenerate;
 
-	m_skybox = toGenerate;
-	toGenerate->ClearData();
-
-	if (m_skybox && m_program)
+	if (m_skyRenderer && m_program)
 		m_callExecute = CCCallback::BindCallback(&SkyboxRenderPass::Execute, this);
-
+	
 	return 1;
 }
 
 template <>
-void SkyboxRenderPass::Unsubscribe(Skybox* toGenerate)
+void SkyboxRenderPass::Unsubscribe(SkyRenderer* toGenerate)
 {
-	if (m_skybox == toGenerate)
+	if (m_skyRenderer == toGenerate)
 	{
-		m_skybox = nullptr;
+		m_skyRenderer = nullptr;
 		m_callExecute = nullptr;
 	}
 }
@@ -72,34 +65,91 @@ void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 {
 	if (!viewer)
 		return;
-
+	
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
-
+	
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_FRONT);
-
+	
 	glDepthFunc(GL_LEQUAL);
-
+	
 	glUseProgram(m_program->m_shaderProgram);
 	
 	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
-
-	Mesh* mesh = m_skybox->m_mesh.get();
-
+	
+	Mesh* mesh = m_skyRenderer->m_cube.get();
+	
 	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 	glBindVertexArray(gpuMesh->VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+	Texture* cubemap = m_skyRenderer->m_texture.get();
+	
+	if (auto gpuCubemap = static_cast<GPUSkyboxCubemap*>(cubemap->m_gpuTextureCubemap.get()))
+		glBindTextureUnit(0, gpuCubemap->ID);
+
 	glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
-
-	Cubemap* skyTexture = m_skybox->m_cubemap.get();
-
-	auto gpuCubemap = static_cast<GPUSkyboxCubemap*>(skyTexture->m_gpuCubemap.get());
-	glBindTextureUnit(0, gpuCubemap->ID);
-
+	
 	glUseProgram(0);
-
+	
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void SkyboxRenderPass::GPUSkyboxCubemap::Generate(Texture* texture)
+{
+	unsigned char* data = static_cast<unsigned char*>(texture->GetData());
+
+	int faceSize = texture->GetHeight() / 6;
+	int faceDataSize = texture->GetSize() / 6;
+
+	glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &ID);
+	glTextureStorage2D(ID, 1, GL_RGB8, faceSize, faceSize);
+
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	for (int faceID = 0; faceID < 6; faceID++)
+	{
+		glTextureSubImage3D(ID, 0, 0, 0, faceID, faceSize, faceSize, 1, GL_BGR, GL_UNSIGNED_BYTE, data + faceDataSize * faceID);
+	}
+
+	if (m_OnGpuReloaded)
+		m_OnGpuReloaded->Invoke();
+}
+
+void SkyboxRenderPass::GPUSkyboxCubemap::Regenerate(Texture* texture)
+{
+	Destroy();
+
+	if (texture->GetSurface() == ETextureSurface::TEXTURE_CUBEMAP)
+		Generate(texture);
+}
+
+void SkyboxRenderPass::GPUSkyboxCubemap::Destroy()
+{
+	glDeleteTextures(1, &ID);
+}
+
+SkyboxRenderPass::GPUSkyboxCubemap::GPUSkyboxCubemap(Texture* texture)
+{
+	m_OnTextureReloaded = &texture->m_OnReloaded;
+	m_OnTextureReloaded->Bind(&GPUSkyboxCubemap::OnReload, this);
+
+	Generate(texture);
+}
+
+SkyboxRenderPass::GPUSkyboxCubemap::~GPUSkyboxCubemap()
+{
+	m_OnTextureReloaded->Unbind(&GPUSkyboxCubemap::OnReload, this);
+	Destroy();
+}
+
+void SkyboxRenderPass::GPUSkyboxCubemap::OnReload(std::shared_ptr<Texture> texture)
+{
+	Regenerate(texture.get());
 }

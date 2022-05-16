@@ -15,14 +15,25 @@
 #include "time_manager.hpp"
 #include "cell_system.hpp"
 #include "debug.hpp"
+#include "pickinger.hpp"
 
 void* Engine::window_handle = nullptr;
 
 Engine::Engine() 
 {
-	CsScriptingSystem::GetInstance()->Init();
+	ThreadPool::CreateInstance();
+	InputManager::CreateInstance();
+	PhysicSystem::PhysicManager::CreateInstance();
+	SoundManager::CreateInstance();
+	TimeManager::CreateInstance();
+	Debug::CreateInstance();
+	ResourceManager::CreateInstance();
+	CsScriptingSystem::CreateInstance();
+	RenderManager::CreateInstance();
+	Pickinger::CreateInstance();
+	SceneManager::CreateInstance();
 
-	RenderManager::GetInstance();
+	CsScriptingSystem::GetInstance()->Init();
 	SoundManager::Init();
 }
 
@@ -37,12 +48,13 @@ Engine::~Engine()
 	CellSystem::Kill();
 	CsScriptingSystem::Kill();
 	RenderManager::Kill();
-	Debug::Kill(); 
+	Debug::Kill();
+	ThreadPool::Kill();
 }
 
 void Engine::TickEngine()
 {
-	ThreadPool::GetInstance()->Update(EChannelTask::MAINTHREAD); //TODO: stock threadpool in engine class
+	ThreadPool::GetInstance()->Update(EChannelTask::MAINTHREAD);
 }
 
 void Engine::Tick() 

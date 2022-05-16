@@ -435,9 +435,6 @@
     <ClInclude Include="include\cherry_macros.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\skybox.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\camera_component.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
@@ -1203,12 +1200,6 @@
     <ClInclude Include="include\skydome_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
-    <ClInclude Include="include\spheremap.hpp">
-      <Filter>Fichiers d%27en-tête\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="include\skydome.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\environment_map_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
@@ -1256,6 +1247,12 @@
     </ClInclude>
     <ClInclude Include="include\character_controller.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\texture_generator.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sky_renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1485,9 +1482,6 @@
     <ClCompile Include="src\maths.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\skybox.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\camera_component.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
@@ -1632,14 +1626,8 @@
     <ClCompile Include="src\pbr_rendering_pipeline.cpp">
       <Filter>Fichiers sources\Rendering\Pipeline</Filter>
     </ClCompile>
-    <ClCompile Include="src\spheremap.cpp">
-      <Filter>Fichiers sources\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="src\skydome_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\skydome.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\environment_map_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
@@ -1670,6 +1658,9 @@
     </ClCompile>
     <ClCompile Include="src\portal_generator.cpp">
       <Filter>Fichiers sources\Rendering\Generator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sky_renderer.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

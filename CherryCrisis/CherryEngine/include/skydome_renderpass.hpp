@@ -6,22 +6,20 @@
 
 #include "element_mesh_generator.hpp"
 
-#include "spheremap.hpp"
+#include "sky_renderer.hpp"
 
-class Skydome;
 class Viewer;
 
 class SkydomeRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
-	Skydome* m_skydome = nullptr;
+	SkyRenderer* m_skyRenderer = nullptr;
 
-
+	void SetupSkydome();
 public:
 
-	struct GPUSkydomeCubemap : GPUCubemapV2
+	struct GPUSkydomeCubemap : public SkyRenderer::GPUSkybox
 	{
-		GLuint ID = 0u;
 	};
 
 	SkydomeRenderPass(const char* name);
@@ -39,10 +37,10 @@ public:
 	}
 
 	template <>
-	int Subscribe(Skydome* toGenerate);
+	int Subscribe(SkyRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Skydome* toGenerate);
+	void Unsubscribe(SkyRenderer* toGenerate);
 
 	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

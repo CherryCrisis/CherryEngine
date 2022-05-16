@@ -10,12 +10,11 @@
 #include "portal.hpp"
 #include "entity.hpp"
 #include "viewer.hpp"
-#include "skybox.hpp"
 #include "renderer.hpp"
+#include "sky_renderer.hpp"
 
-#include "skydome.hpp"
-
-Cell::Cell()
+Cell::Cell(CCUUID id)
+	: Object(id)
 {
 	m_debug = Debug::GetInstance();
 	m_pxManager = PhysicSystem::PhysicManager::GetInstance();
@@ -26,14 +25,17 @@ Cell::Cell()
 Cell::~Cell()
 {
 	m_pxManager->Unregister(this);
+
+	if (m_skyRenderer)
+	{
+		delete m_skyRenderer;
+		m_skyRenderer = nullptr;
+	}
 }
 
 void Cell::Initialize()
 {
-	//m_skybox = new Skybox(this);
-	//m_skybox->Load();
-	m_skydome = new Skydome(this);
-	m_skydome->Load();
+	m_skyRenderer = new SkyRenderer(this);
 }
 
 void Cell::AddEntity(Entity* newEntity)
@@ -107,7 +109,7 @@ void Cell::RemoveRenderer(ARenderer* renderer)
 
 	m_renderers.erase(renderer);
 
-	for (Viewer* viewer : m_viewers)
+	for (auto& viewer : m_viewers)
 	{
 		if (auto pipeline = viewer->m_pipeline.get())
 			renderer->UnsubscribeToPipeline(pipeline);

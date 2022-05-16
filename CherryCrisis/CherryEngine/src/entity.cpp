@@ -2,20 +2,21 @@
 
 #include "entity.hpp"
 
+#include "debug.hpp"
+
 #include "behaviour.hpp"
 #include "transform.hpp"
-#include "cell_system.hpp"
+#include "scene.hpp"
+#include "cell.hpp"
 
 #include <typeinfo>
-Entity::Entity()
-{
-	CellSystem::GetInstance()->AddEntityToDefault(this);
-}
 
-Entity::Entity(const std::string& name, CCUUID id)
+std::string Entity::m_defaultName = "Entity";
+
+Entity::Entity(const std::string& name, Cell* cell, CCUUID id)
 	: Object(id), m_name(name)
 {
-	CellSystem::GetInstance()->AddEntityToDefault(this);
+	cell->AddEntity(this);
 }
 
 
@@ -33,7 +34,7 @@ void Entity::Initialize()
 		behaviour->BindToSignals();
 	
 	m_OnAwake.Invoke();	
-}	
+}
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {

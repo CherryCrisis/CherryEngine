@@ -1854,6 +1854,24 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_Dot__SWIG_0(void * jarg1, v
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Vector3_Multiply__SWIG_0(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = (CCMaths::Vector3 *) &(arg1)->Multiply((CCMaths::Vector3 const &)*arg2);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Vector3_Cross__SWIG_0(void * jarg1, void * jarg2) {
   void * jresult ;
   CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
@@ -1896,6 +1914,18 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Vector3_Length(void * jarg1) {
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_ClampLength__SWIG_0(void * jarg1, float jarg2, float jarg3) {
+  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  (arg1)->ClampLength(arg2,arg3);
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Vector3_Normalize__SWIG_0(void * jarg1) {
   void * jresult ;
   CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
@@ -1903,24 +1933,6 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Vector3_Normalize__SWIG_0(void * j
   
   arg1 = (CCMaths::Vector3 *)jarg1; 
   result = (CCMaths::Vector3 *) &(arg1)->Normalize();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Vector3_Normalize__SWIG_1(void * jarg1, void * jarg2) {
-  void * jresult ;
-  CCMaths::Vector3 *arg1 = (CCMaths::Vector3 *) 0 ;
-  CCMaths::Vector3 *arg2 = 0 ;
-  CCMaths::Vector3 *result = 0 ;
-  
-  arg1 = (CCMaths::Vector3 *)jarg1; 
-  arg2 = (CCMaths::Vector3 *)jarg2;
-  if (!arg2) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
-    return 0;
-  } 
-  result = (CCMaths::Vector3 *) &(arg1)->Normalize(*arg2);
   jresult = (void *)result; 
   return jresult;
 }
@@ -4087,33 +4099,6 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ScriptedBehaviourVector(void 
   
   arg1 = (std::vector< ScriptedBehaviour * > *)jarg1; 
   delete arg1;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Entity__SWIG_0() {
-  void * jresult ;
-  Entity *result = 0 ;
-  
-  result = (Entity *)new Entity();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Entity__SWIG_1(char * jarg1) {
-  void * jresult ;
-  std::string *arg1 = 0 ;
-  Entity *result = 0 ;
-  
-  if (!jarg1) {
-    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
-    return 0;
-  }
-  std::string arg1_str(jarg1);
-  arg1 = &arg1_str; 
-  result = (Entity *)new Entity((std::string const &)*arg1);
-  jresult = (void *)result; 
-  return jresult;
 }
 
 

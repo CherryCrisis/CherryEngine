@@ -4,22 +4,13 @@
 
 #include "debug.hpp"
 
-ThreadPool* ThreadPool::m_instance = nullptr;
-
-ThreadPool* ThreadPool::GetInstance()
-{
-	if (!m_instance)
-		m_instance = new ThreadPool();
-
-	return m_instance;
-}
+ThreadPool* Singleton<ThreadPool>::currentInstance = nullptr;
 
 ThreadPool::ThreadPool()
 {
 	m_mainThreadID = std::this_thread::get_id();
 
 	const int threadCount = (std::thread::hardware_concurrency() / 2) - 1;
-	std::cout << std::to_string(threadCount) << std::endl;
 
 	for (int i = 0; i < threadCount; ++i)
 	{
@@ -31,6 +22,8 @@ ThreadPool::ThreadPool()
 ThreadPool::~ThreadPool()
 {
 	m_stopThreads = true;
+	m_condition.notify_all();
+
 	while (m_threads.size() != 0)
 	{
 		m_threads[m_threads.size() - 1].join();

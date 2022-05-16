@@ -23,6 +23,11 @@ namespace String
 		return str.substr(str.find_first_of(key) + 1);
 	}
 
+	std::string ExtractLastValue(const std::string& str, const char key)
+	{
+		return str.substr(str.find_last_of(key) + 1);
+	}
+
 	std::string ExtractValueStr(const std::string& str, const char* key)
 	{
 		std::string string = str;

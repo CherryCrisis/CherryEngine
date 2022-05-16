@@ -19,14 +19,15 @@
 #include "shader.hpp"
 #include "material.hpp"
 #include "asset_settings.hpp"
+#include "cubemap.hpp"
 
 
 class AResource;
 class ModelBase;
 class EditorManager;
 
-const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr" };
-const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glsl", ".gltf" };
+const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr"};
+const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glb", ".gltf" };
 const std::set<std::string> shaderExtensions = { ".frag", ".vert" };
 const std::set<std::string> soundExtensions = { ".wav" };
 const std::string scriptExtensions = ".cs";
@@ -62,19 +63,6 @@ namespace CCScripting
     }
 })CS";
 
-	struct GPUTexturePreview : public GPUTexture
-	{
-		GLuint m_ID = 0u;
-
-		void Generate(Texture* texture);
-		void Regenerate(Texture* texture);
-		void Destroy();
-
-		GPUTexturePreview(Texture* texture);
-		virtual ~GPUTexturePreview();
-		void OnReload(std::shared_ptr<Texture> texture);
-	};
-
 	struct AssetNode
 	{
 		std::shared_ptr<Texture> m_previewTexture;
@@ -87,8 +75,6 @@ namespace CCScripting
 		bool					m_isHovered = false;
 		AssetBrowser*			m_assetBrowser = nullptr;
 
-		void UploadPreviewTexture();
-
 		virtual void Rename(const char* newFilepath) = 0;
 		virtual void Reload() = 0;
 		virtual void Delete() = 0;
@@ -97,7 +83,7 @@ namespace CCScripting
 
 	struct DirectoryNode : public AssetNode
 	{
-		std::set<AssetNode*> m_assetNodes {};
+		std::vector<AssetNode*> m_assetNodes {};
 		DirectoryNode*		m_parentDirectory = nullptr;
 
 		void Rename(const char* newFilepath) override {};
@@ -130,11 +116,6 @@ namespace CCScripting
 	struct ResourceAssetNode : public AssetNode
 	{
 		std::shared_ptr<ResourceT> m_resource;
-
-		void ReloadPreviewTexture(std::shared_ptr<ResourceT> resource)
-		{
-			//UploadPreviewTexture();
-		}
 
 		void Reload() override
 		{
@@ -201,7 +182,7 @@ namespace CCScripting
 	DirectoryNode* m_currentDirectoryNode = nullptr;
 
 	std::map<std::string, std::unique_ptr<AssetNode>> m_assetNodes;
-	std::set<AssetNode*> m_allAssetNode; //To research in all directories
+	std::vector<AssetNode*> m_allAssetNode; //To research in all directories
 
 	const float m_padding = 55.f;
 	const float m_upPadding = 5.f;
@@ -245,6 +226,7 @@ public :
 	void ContextCallback() override;
 	
 	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
+	std::string GetCurrentDirectoryPath() { return m_currentDirectoryNode ? m_currentDirectoryNode->m_path.string() : ""; }
 
 	void ReloadScripts();
 	void SetPath(const std::filesystem::path& path);

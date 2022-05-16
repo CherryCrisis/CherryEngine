@@ -25,6 +25,7 @@
 #include "material.hpp"
 #include "texture.hpp"
 #include "utils.hpp"
+#include "cubemap.hpp"
 
 namespace YAML
 {
@@ -152,6 +153,7 @@ namespace CCImporter
 
         YAML::Node settingsSave = yamlSave["settings"];
         settingsSave["format"] = static_cast<unsigned int>(textureHeader.internalFormat);
+        settingsSave["surface"] = static_cast<unsigned int>(textureHeader.surface);
         settingsSave["flipped"] = textureHeader.flipped;
 
         std::ofstream out(fullFilepathMeta.c_str());
@@ -236,6 +238,84 @@ namespace CCImporter
         }
     }
     
+    bool CompressCubemapTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
+    {
+        std::string fullFilepath(CCImporter::cacheDirectory);
+        fullFilepath += texturePath.filename().string();
+        fullFilepath += CCImporter::cacheExtension;
+
+        nvtt::OutputOptions outputOptions;
+        outputOptions.setFileName(fullFilepath.c_str());
+        nvtt::CompressionOptions compressionOptions;
+        SetTextureFormat(compressionOptions, textureHeader);
+
+        textureHeader.mipmapsLevel = image.countMipmaps();
+
+        Vector2 faceSize;
+        faceSize.y = image.height() / 3;
+        faceSize.x = image.width() / 4;
+
+        if (faceSize.y != faceSize.x)
+        {
+            Debug::GetInstance()->AddLog(ELogType::WARNING, std::format("Texture : {} is not a cubemap", texturePath.string()).c_str());
+            return false;
+        }
+
+        int faceDataSize = 0;
+
+        bool dataSettingsInitialized = false;
+        for (int faceX = 0; faceX < 4; ++faceX)
+        {
+            for (int faceY = 0; faceY < 3; ++faceY)
+            {
+                if ((faceY == 0 && faceX == 0) || (faceY == 2 && faceX == 0) || (faceY == 0 && faceX == 2)
+                    || (faceY == 2 && faceX == 2) || (faceY == 0 && faceX == 3) || (faceY == 2 && faceX == 3))
+                    continue;
+
+                Vector2 pos;
+                pos.x = faceSize.x * faceX;
+                pos.y = faceSize.y * faceY;
+
+                int faceId;
+
+                if ((faceY == 1 && faceX == 2))
+                    faceId = 0; //Right
+                else if ((faceY == 1 && faceX == 0))
+                    faceId = 1; //Left
+                else if ((faceY == 0 && faceX == 1))
+                    faceId = 2; //Top
+                else if ((faceY == 2 && faceX == 1))
+                    faceId = 3; //Bottom
+                else if ((faceY == 1 && faceX == 1))
+                    faceId = 4; //Front
+                else if ((faceY == 1 && faceX == 3))
+                    faceId = 5; //Back
+
+                nvtt::Surface cubeImage = image.createSubImage(pos.x, pos.x + faceSize.x - 1, pos.y, pos.y + faceSize.y - 1, 0, 0);
+
+                OuputHandler outputHandler;
+                outputOptions.setOutputHandler(((nvtt::OutputHandler*)&outputHandler));
+
+                context.compress(cubeImage, 0, 0, compressionOptions, outputOptions);
+
+                if (!dataSettingsInitialized)
+                {
+                    faceDataSize = (int)outputHandler.m_data.size();
+                    textureHeader.size = faceDataSize * 6;
+                    *textureData = new unsigned char[textureHeader.size];
+                    dataSettingsInitialized = true;
+                }
+
+                std::move(outputHandler.m_data.begin(), outputHandler.m_data.end(), *textureData + faceDataSize * faceId);
+            }
+        }
+
+        textureHeader.height = faceSize.y * 6;
+        textureHeader.width = faceSize.x * 1;
+
+        return true;
+    }
+
     void CompressTexture(nvtt::Context& context, nvtt::Surface& image, const std::filesystem::path& texturePath, TextureHeader& textureHeader, unsigned char** textureData)
     {
         std::string fullFilepath(CCImporter::cacheDirectory);
@@ -338,7 +418,7 @@ namespace CCImporter
     {
         unsigned char* data;
         TextureHeader textureHeader;
-        ImportTexture(filepath, &data, textureHeader, true, ETextureFormat::RGBA);
+        ImportTexture(filepath, &data, textureHeader, true, ETextureFormat::RGBA, ETextureSurface::TEXTURE_2D);
         delete data;
     }
 
@@ -367,7 +447,7 @@ namespace CCImporter
         materialArgs.m_texturesPath.push_back(filepath.string());
     }
 
-    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, bool importSettings)
+    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, ETextureSurface textureSurface, bool importSettings)
     {
         if (importSettings)
         {
@@ -378,10 +458,10 @@ namespace CCImporter
                 YAML::Node settingsLoaded = loader["settings"];
 
                 textureFormat = static_cast<ETextureFormat>(settingsLoaded["format"].as<unsigned int>());
+                textureSurface = static_cast<ETextureSurface>(settingsLoaded["surface"].as<unsigned int>());
                 flipTexture = settingsLoaded["flipped"].as<bool>();
             }
         }
-
 
         if (!textureData)
             return;
@@ -395,11 +475,23 @@ namespace CCImporter
             image.flipY();
 
         textureHeader.internalFormat = textureFormat;
+        textureHeader.surface = textureSurface;
         textureHeader.width = image.width();
         textureHeader.height = image.height();
         textureHeader.flipped = flipTexture;
 
-        CompressTexture(context, image, filepath, textureHeader, textureData);
+        if (textureSurface == ETextureSurface::TEXTURE_CUBEMAP)
+        {
+            if (!CompressCubemapTexture(context, image, filepath, textureHeader, textureData))
+            {
+                textureHeader.surface = ETextureSurface::TEXTURE_2D;
+                CompressTexture(context, image, filepath, textureHeader, textureData);
+            }
+        }
+        else
+        {
+            CompressTexture(context, image, filepath, textureHeader, textureData);
+        }
 
         CacheTextureData(filepath, *textureData, textureHeader);
     }
@@ -454,10 +546,8 @@ namespace CCImporter
         }
     }
 
-    void SaveMaterial(const std::filesystem::path& path, const MaterialArgs& materialArgs, bool saveInAssetDirectory = true)
+    void SaveMaterial(const std::filesystem::path& path, const MaterialArgs& materialArgs)
     {
-        if (saveInAssetDirectory)
-        {
             //-- Save in assets directory --//
             YAML::Node yamlSave;
 
@@ -490,45 +580,6 @@ namespace CCImporter
             bool opened = out.is_open();
             out << yamlSave;
             out.close();
-        }
-
-        //-- Save cache --//
-        std::string fullFilepath(CCImporter::cacheDirectory);
-        fullFilepath += path.filename().string();
-        fullFilepath += CCImporter::cacheMaterialExtension;
-
-        if (!std::filesystem::exists(CCImporter::cacheDirectory))
-            std::filesystem::create_directory(CCImporter::cacheDirectory);
-
-        FILE* file = nullptr;
-
-        if (fopen_s(&file, fullFilepath.c_str(), "wb"))
-        {
-            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Failed to open/create file : {}", fullFilepath.c_str()).c_str());
-            return;
-        }
-
-        fwrite(&materialArgs.m_materialHeader, sizeof(MaterialHeader), 1, file);
-
-        if (materialArgs.m_materialHeader.m_texturesCount)
-        {
-            std::vector<unsigned int> texturesPathSize;
-
-            for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
-            {
-                texturesPathSize.push_back(static_cast<unsigned int>(materialArgs.m_texturesPath[i].size()));
-            }
-
-            fwrite(&texturesPathSize[0], texturesPathSize.size() * sizeof(unsigned int), 1, file);
-            fwrite(&materialArgs.m_texturesType[0], materialArgs.m_texturesType.size() * sizeof(unsigned int), 1, file);
-
-            for (unsigned int i = 0; i < materialArgs.m_materialHeader.m_texturesCount; ++i)
-            {
-                fwrite(&materialArgs.m_texturesPath[i][0], texturesPathSize[i], 1, file);
-            }
-        }
-
-        fclose(file);
     }
 
     void SaveMaterial(Material* material)
@@ -553,6 +604,7 @@ namespace CCImporter
             .m_specular = material->m_specular,
             .m_emissive = material->m_emissive,
             .m_shininess = material->m_shininess,
+            .m_hasNormal = material->m_hasNormal,
             .m_specularFactor = material->m_specularFactor,
             .m_metallicFactor = material->m_metallicFactor,
             .m_roughnessFactor = material->m_roughnessFactor,
@@ -679,7 +731,6 @@ namespace CCImporter
             materialArgs.m_texturesType.push_back(settingsLoaded[textureTypeId.c_str()].as<unsigned int>());
         }
 
-        SaveMaterial(path, materialArgs, false);
         return true;
     }
 
@@ -692,9 +743,7 @@ namespace CCImporter
     {
             ImportModelUtils model{};
 
-            model.m_modelName = filepath.string();
-            model.m_modelName += std::string("/");
-            model.m_modelName += std::to_string(index);
+            model.m_modelName = node->mName.C_Str();
 
             model.modelHeader.m_modelNameSize = model.m_modelName.size();
             model.modelHeader.m_index = index;
@@ -734,8 +783,11 @@ namespace CCImporter
 
             if (node->mNumMeshes > 1 && node->mNumMeshes > (unsigned int)meshIndex + 1)
             {
-                models[modelParentIndex].modelHeader.m_childrenCount++;
-                models[modelParentIndex].m_childrenIndices.push_back(index);
+                if (modelParentIndex != -1)
+                {
+                    models[modelParentIndex].modelHeader.m_childrenCount++;
+                    models[modelParentIndex].m_childrenIndices.push_back(index);
+                }
                 ImportModelDataRecursive(node, modelParentIndex, index, meshIndex + 1, scene, models, filepath);
             }
     }

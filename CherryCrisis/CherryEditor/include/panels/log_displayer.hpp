@@ -8,7 +8,7 @@
 class Debug;
 class Log;
 
-struct GPUTextureLog : public GPUTexture
+struct GPUTextureLog : public GPUTexture2D
 {
 	unsigned int m_ID = 0;
 };

@@ -3,20 +3,20 @@
 #include <array>
 
 #include "resource.hpp"
+#include "cherry_macros.hpp"
 
 struct GPUCubemap { };
 class Texture;
 
-class Cubemap : public Resource<Cubemap>
+class CCENGINE_API Cubemap : public Resource<Cubemap>
 {
 private:
     int     m_width = 0;
     int     m_height = 0;
     std::array<void*, 6> m_data = { nullptr };
-    std::shared_ptr<Texture> m_textures[6];
-
 
 public:
+    std::array<std::shared_ptr<Texture>, 6> m_textures;
     std::unique_ptr<GPUCubemap> m_gpuCubemap = nullptr;
 
     Cubemap(const char* name)
@@ -28,9 +28,10 @@ public:
 
     const std::array<void*, 6>& GetData() { return m_data; }
 
-    static void Load(std::shared_ptr<Cubemap> cubemap, const char* textures[6]);
-    static void Load(std::shared_ptr<Cubemap> cubemap, const char* textureRight, const char* textureLeft, const char* textureTop, const char* textureBottom, const char* textureFront, const char* textureBack);
+    static void Load(std::shared_ptr<Cubemap> cubemap);
 
     void ClearData();
     void Delete() override {};
+
+    void Reload(bool saveOnly = false);
 };

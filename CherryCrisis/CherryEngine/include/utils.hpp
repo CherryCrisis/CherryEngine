@@ -13,6 +13,9 @@ namespace String
 {
 	//return the string chunk after the separator
 	std::string CCENGINE_API ExtractValue(const std::string& str, const char separator = ':');
+
+	//return the string chunk after the separator
+	std::string CCENGINE_API ExtractLastValue(const std::string& str, const char separator = ':');
 	
 	//return the string chunk before the separator
 	std::string CCENGINE_API ExtractKey(std::string& str, const char key = ':', bool erase = false);

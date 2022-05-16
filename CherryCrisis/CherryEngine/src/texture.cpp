@@ -30,7 +30,7 @@ Texture::~Texture()
 void Texture::Delete()
 {
     ClearData();
-    m_gpuTexture.reset();
+    m_gpuTexture2D.reset();
 }
 
 void Texture::Load(std::shared_ptr<Texture> texture, void* data, int width, int height, ETextureFormat textureFormat)
@@ -49,7 +49,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
 
     if (!LoadFromCache(texture, &data, textureHeader))
     {
-       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat);
+       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat, ETextureSurface::TEXTURE_2D);
     }
 
     if (!data)
@@ -64,6 +64,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
     texture->m_size = textureHeader.size;
     texture->m_mipmapLevels = textureHeader.mipmapsLevel;
     texture->m_internalFormat = textureHeader.internalFormat;
+    texture->m_surface = textureHeader.surface;
     texture->m_blockSize = textureHeader.blockSize;
     texture->m_flipped = textureHeader.flipped;
     texture->m_stackAllocated = false;
@@ -110,7 +111,7 @@ void Texture::Reload(bool flipTexture)
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
-    CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat, false);
+    CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat, m_surface, false);
 
     if (!data)
     {
@@ -124,6 +125,7 @@ void Texture::Reload(bool flipTexture)
     m_size = textureHeader.size;
     m_mipmapLevels = textureHeader.mipmapsLevel;
     m_internalFormat = textureHeader.internalFormat;
+    m_surface = textureHeader.surface;
     m_blockSize = textureHeader.blockSize;
     m_flipped = textureHeader.flipped;
 }

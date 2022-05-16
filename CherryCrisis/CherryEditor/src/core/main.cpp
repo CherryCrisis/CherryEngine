@@ -38,8 +38,20 @@ void ShowCursor(void* window)
 
 void drop_callback(GLFWwindow* window, int count, const char** paths)
 {
-    for (int i = 0; i < count; i++) 
-        EditorNotifications::ResourceImporting(CopyFile(paths[i], "Assets/"));
+    if (EditorManager* editor = static_cast<EditorManager*>(glfwGetWindowUserPointer(window)))
+    {
+        if (AssetBrowser* browser = editor->GetAssetBrowser())
+        {
+            std::string directoryPath = browser->GetCurrentDirectoryPath();
+
+            for (int i = 0; i < count; i++)
+            {
+                EditorNotifications::ResourceImporting(CopyFile(paths[i], directoryPath.c_str()));
+            }
+
+            browser->QuerryBrowser();
+        }
+    }
 }
 
 int main(int argc, char** argv)

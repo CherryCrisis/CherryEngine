@@ -63,7 +63,7 @@ void ModelRenderer::LoadModelFromPath(std::string modelPath)
 std::string ModelRenderer::GetModelPath()
 {
 	std::string path(m_mesh->GetFilepath());
-	return m_mesh ? path.c_str() : nullptr;
+	return m_mesh ? path.c_str() : "";
 }
 
 void ModelRenderer::SetMeshFromPath(std::string meshPath)
@@ -74,7 +74,7 @@ void ModelRenderer::SetMeshFromPath(std::string meshPath)
 
 std::string ModelRenderer::GetMeshPath()
 {
-	return m_mesh ? m_mesh->GetFilepath() : nullptr;
+	return m_mesh ? m_mesh->GetFilepath() : "";
 }
 
 void ModelRenderer::SetMaterialFromPath(std::string materialPath)
@@ -85,7 +85,7 @@ void ModelRenderer::SetMaterialFromPath(std::string materialPath)
 
 std::string ModelRenderer::GetMaterialPath()
 {
-	return m_material ? m_material->GetFilepath() : nullptr;
+	return m_material ? m_material->GetFilepath() : "";
 }
 
 void ModelRenderer::OnMeshLoaded(std::shared_ptr<Mesh> mesh)

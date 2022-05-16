@@ -61,12 +61,21 @@ SceneDisplayer::SceneDisplayer()
     IM->PopContext();
 
     m_camera.m_pipeline = std::make_unique<MixedPipeline>();
-    CellSystem::GetInstance()->AddOrGetCell("Default")->AddViewer(&m_camera);
+    if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+    {
+        scene->AddCell("Default")->AddViewer(&m_camera);
+    }
 }
 
 SceneDisplayer::~SceneDisplayer()
 {
-    CellSystem::GetInstance()->AddOrGetCell("Default")->RemoveViewer(&m_camera);
+    if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+    {
+        if (Cell* cell = m_manager->GetCellSystemDisplayer()->GetSelectedCell())
+        {
+            cell->RemoveViewer(&m_camera);
+        }
+    }
 }
 
 void SceneDisplayer::UpdateCamera()
@@ -191,15 +200,18 @@ void SceneDisplayer::Render()
                 const char* data = (const char*)payload->Data;
                 std::string extension = String::ExtractValue(data, '.');
 
-                if (extension == "cherry") 
+                if (sceneExtensions.compare('.' + extension) == 0)
                 {
                     m_manager->m_entitySelector.Clear();
                     EditorNotifications::SceneLoading(SceneManager::LoadScene(data));
                 }
-                else if (extension == "obj" || extension == "fbx" || extension == "gltf")
+                else if (modelExtensions.end() != modelExtensions.find("." + extension))
                 {
-                    auto cb = CCCallback::BindCallback(&Scene::GenerateEntities, SceneManager::GetInstance()->m_currentScene.get());
-                    ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(data, true, cb);
+                    std::shared_ptr<ModelBase> model = ResourceManager::GetInstance()->GetResource<ModelBase>(data);
+
+                    if (Cell* cell = m_manager->GetCellSystemDisplayer()->GetSelectedCell())
+                        SceneManager::GetInstance()->m_currentScene->GenerateEntitiesInCell(model, cell);
+
                     EditorManager::SendNotification("Adding object ...", ENotifType::Info);
                 }
             }

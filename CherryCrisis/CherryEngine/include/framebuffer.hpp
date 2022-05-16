@@ -15,4 +15,13 @@ struct CCENGINE_API Framebuffer
 	GLuint FBO = 0u, RBO = 0u;
 	TextureDisplayer colorTex;
 	TextureDisplayer brightnessTex;
+
+	~Framebuffer()
+	{
+		glDeleteBuffers(1, &FBO);
+		glDeleteFramebuffers(1, &FBO);
+		glDeleteRenderbuffers(1, &RBO);
+		glDeleteBuffers(1, &colorTex.texID);
+		glDeleteBuffers(1, &brightnessTex.texID);
+	}
 };

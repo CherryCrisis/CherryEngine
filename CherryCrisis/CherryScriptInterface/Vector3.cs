@@ -209,6 +209,12 @@ public class Vector3 : global::System.IDisposable {
     return ret;
   }
 
+  public Vector3 Multiply(Vector3 rhs) {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Vector3_Multiply__SWIG_0(swigCPtr, Vector3.getCPtr(rhs)), false);
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
   public Vector3 Cross(Vector3 rhs) {
     Vector3 ret = new Vector3(CherryEnginePINVOKE.Vector3_Cross__SWIG_0(swigCPtr, Vector3.getCPtr(rhs)), true);
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
@@ -225,14 +231,12 @@ public class Vector3 : global::System.IDisposable {
     return ret;
   }
 
-  public Vector3 Normalize() {
-    Vector3 ret = new Vector3(CherryEnginePINVOKE.Vector3_Normalize__SWIG_0(swigCPtr), false);
-    return ret;
+  public void ClampLength(float minLength, float maxLength) {
+    CherryEnginePINVOKE.Vector3_ClampLength__SWIG_0(swigCPtr, minLength, maxLength);
   }
 
-  public Vector3 Normalize(Vector3 outVector) {
-    Vector3 ret = new Vector3(CherryEnginePINVOKE.Vector3_Normalize__SWIG_1(swigCPtr, Vector3.getCPtr(outVector)), false);
-    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  public Vector3 Normalize() {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Vector3_Normalize__SWIG_0(swigCPtr), false);
     return ret;
   }
 

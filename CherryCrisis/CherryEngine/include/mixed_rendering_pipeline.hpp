@@ -44,7 +44,6 @@ class CCENGINE_API MixedPipeline : public ARenderingPipeline
 	PrefilterMapRenderPass* m_prefilterPass = nullptr;
 	BRDFRenderPass* m_brdfPass = nullptr;
 	PBRRenderPass* m_pbrPass = nullptr;
-	bool m_isGenerated = false;
 
 public:
 	MixedPipeline();

@@ -55,7 +55,8 @@ TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
     if (!m_texture)
         return;
 
-    m_currentId = IdOfTextureFormat.at(m_texture->GetInternalFormat());
+    m_currentTypeId = IdOfTextureFormat.at(m_texture->GetInternalFormat());
+    m_currentSurfaceId = static_cast<int>(m_texture->GetSurface());
     m_isFlipped = m_texture->GetIsFlipped();
 }
 
@@ -65,18 +66,39 @@ void TextureSettings::Render()
         ImGui::Text(std::format("Texture name : {}", m_texture->GetFilesystemPath()->filename().string()).c_str());
         ImGui::Separator();
 
-        const char* label = "Texture Format";
-        const char* list[] = { "RGB", "RGBA", "DXT1", "DXT1a", "DXT3", "DXT5", "DXT6", "DXT7" };
+        const char* labelSurface = "Texture Surface";
+        const char* listSurface[] = { "TEXTURE_2D", "TEXTURE_CUBEMAP", "TEXTURE_SPHEREMAP"};
 
-        if (ImGui::BeginCombo(label, list[m_currentId]))
+        if (ImGui::BeginCombo(labelSurface, listSurface[m_currentSurfaceId]))
+        {
+            int textureSurfaceCount = static_cast<int>(ETextureSurface::COUNT);
+            for (int n = 0; n < textureSurfaceCount; n++)
+            {
+                const bool is_selected = (m_currentSurfaceId == n);
+                if (ImGui::Selectable(listSurface[n], is_selected))
+                {
+                    m_currentSurfaceId = n;
+                    m_settingsChanged = true;
+                }
+
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+        const char* labelType = "Texture Format";
+        const char* listType[] = { "RGB", "RGBA", "DXT1", "DXT1a", "DXT3", "DXT5", "DXT6", "DXT7" };
+
+        if (ImGui::BeginCombo(labelType, listType[m_currentTypeId]))
         {
             for (int n = 0; n < IdOfTextureFormat.size(); n++)
             {
-                const bool is_selected = (m_currentId == n);
-                if (ImGui::Selectable(list[n], is_selected))
+                const bool is_selected = (m_currentTypeId == n);
+                if (ImGui::Selectable(listType[n], is_selected))
                 {
+                    m_currentTypeId = n;
                     m_settingsChanged = true;
-                    m_currentId = n;
                 }
 
                 if (is_selected)
@@ -92,9 +114,14 @@ void TextureSettings::Render()
         {
             if (ImGui::Button("Apply"))
             {
-                m_texture->SetInternalFormat(textureFormatByID.at(m_currentId));
+                m_texture->SetInternalFormat(textureFormatByID.at(m_currentTypeId));
+                m_texture->SetSurface(static_cast<ETextureSurface>(m_currentSurfaceId));
+
                 Resource<Texture>::ReloadResource(m_texture, m_isFlipped);
                 m_settingsChanged = false;
+
+                //Reaply texture surface during reload because it can be changed if the texture doesn't support cubemap settings
+                m_currentSurfaceId = static_cast<int>(m_texture->GetSurface());
             }
         }
 }
@@ -202,7 +229,7 @@ void MaterialSettings::Render()
             uint64_t texID = 0u;
             if (texRef)
             {
-                if (auto gpuTextureBasic = static_cast<TextureGenerator::GPUTextureBasic*>(texRef->m_gpuTexture.get()))
+                if (auto gpuTextureBasic = static_cast<TextureGenerator::GPUTextureBasic*>(texRef->m_gpuTexture2D.get()))
                     texID = gpuTextureBasic->ID;
             }
 

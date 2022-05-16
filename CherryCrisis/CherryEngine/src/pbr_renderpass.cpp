@@ -10,7 +10,7 @@
 #include "model_renderer.hpp"
 #include "transform.hpp"
 #include "model.hpp"
-#include "skydome.hpp"
+#include "sky_renderer.hpp"
 #include "irradiance_map_renderpass.hpp"
 #include "prefilter_map_renderpass.hpp"
 #include "brdf_renderpass.hpp"
@@ -40,8 +40,19 @@ PBRRenderPass::PBRRenderPass(const char* name)
 
 		glUseProgram(0);
 
-		m_defaultTexture = ResourceManager::GetInstance()->AddResource<Texture>("Internal/PBR/defaultTexture.png", true);
-		m_textureGenerator.Generate(m_defaultTexture.get());
+		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
+		std::shared_ptr<Texture> whiteTexture = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
+		m_defaultTextures[ETextureType::ALBEDO] = whiteTexture;
+		m_defaultTextures[ETextureType::SPECULAR] = whiteTexture;
+		m_defaultTextures[ETextureType::METALLIC] = whiteTexture;
+		m_defaultTextures[ETextureType::ROUGHNESS] = whiteTexture;
+		m_defaultTextures[ETextureType::AO] = whiteTexture;
+
+		unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
+		m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
+
+		for (auto& [texType, texRef] : m_defaultTextures)
+			m_textureGenerator.Generate(texRef.get());
 	}
 }
 
@@ -102,22 +113,22 @@ void PBRRenderPass::Generate(Material* toGenerate)
 }
 
 template <>
-int PBRRenderPass::Subscribe(Skydome* toGenerate)
+int PBRRenderPass::Subscribe(SkyRenderer* toGenerate)
 {
 	if (!toGenerate)
 		return -1;
 
-	m_skydome = toGenerate;
+	m_skyRenderer = toGenerate;
 
 	return 1;
 }
 
 template <>
-void PBRRenderPass::Unsubscribe(Skydome* toGenerate)
+void PBRRenderPass::Unsubscribe(SkyRenderer* toGenerate)
 {
-	if (m_skydome == toGenerate)
+	if (m_skyRenderer == toGenerate)
 	{
-		m_skydome = nullptr;
+		m_skyRenderer = nullptr;
 	}
 }
 
@@ -137,11 +148,10 @@ void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, in
 {
 	// Get correct texture from type
 	Texture* texture = material->m_textures[textureType].get();
-	 
+
 	// TODO: Add multiple default textures
 	// If is does not exist and its gpuTex too, get the default texture
-	auto& gpuTexPtr = (texture && texture->m_gpuTexture) ? texture->m_gpuTexture : m_defaultTexture->m_gpuTexture;
-
+	auto& gpuTexPtr = texture && texture->m_gpuTexture2D ? texture->m_gpuTexture2D : m_defaultTextures[textureType]->m_gpuTexture2D;
 
 	auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(gpuTexPtr.get());
 	glBindTextureUnit(id, gpuTexture->ID);
@@ -236,21 +246,24 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			BindTexture(material, ETextureType::ROUGHNESS, 4);
 			BindTexture(material, ETextureType::AO, 5);
 
-			if (Spheremap* spheremap = m_skydome->m_spheremap.get())
+			if (m_skyRenderer)
 			{
-				if (auto gpuIrradianceMap = static_cast<IrradianceMapRenderPass::GPUIrradianceMapSphereMap*>(spheremap->m_gpuIrradiancemap.get()))
+				if (Texture* spheremap = m_skyRenderer->m_texture.get())
 				{
-					glBindTextureUnit(6, gpuIrradianceMap->ID);
-				}
+					if (auto gpuIrradianceMap = static_cast<IrradianceMapRenderPass::GPUIrradianceMapSphereMap*>(spheremap->m_gpuIrradiancemap.get()))
+					{
+						glBindTextureUnit(6, gpuIrradianceMap->ID);
+					}
 
-				if (auto gpuPrefilterMap = static_cast<PrefilterMapRenderPass::GPUPrefilterMapSphereMap*>(spheremap->m_gpuPrefilterMap.get()))
-				{
-					glBindTextureUnit(7, gpuPrefilterMap->ID);
-				}
+					if (auto gpuPrefilterMap = static_cast<PrefilterMapRenderPass::GPUPrefilterMapSphereMap*>(spheremap->m_gpuPrefilterMap.get()))
+					{
+						glBindTextureUnit(7, gpuPrefilterMap->ID);
+					}
 
-				if (auto gpuBRDF = static_cast<BRDFRenderPass::GPUBRDFSphereMap*>(spheremap->m_gpuBrdf.get()))
-				{
-					glBindTextureUnit(8, gpuBRDF->ID);
+					if (auto gpuBRDF = static_cast<BRDFRenderPass::GPUBRDFSphereMap*>(m_skyRenderer->m_gpuBRDF.get()))
+					{
+						glBindTextureUnit(8, gpuBRDF->ID);
+					}
 				}
 			}
 		}

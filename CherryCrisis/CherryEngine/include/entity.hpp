@@ -11,20 +11,21 @@
 #include "event.hpp"
 #include "object.hpp"
 
+class Scene;
 class Behaviour;
 class Cell;
 
 class CCENGINE_API Entity : public Object
 {
 protected:
-	std::string m_name = "Entity";
+	std::string m_name = m_defaultName;
 	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
 
 public:
+	static std::string m_defaultName;
 	Cell* m_cell = nullptr;
 
-	Entity();
-	Entity(const std::string& name, CCUUID m_uuid = {});
+	Entity(const std::string& name, Cell* cell, CCUUID uuid = {});
 	virtual ~Entity();
 
 	template <class CompT>
@@ -66,6 +67,7 @@ public:
 	Event<> m_OnTriggerExit;
 
 	void Initialize();
+
 	void Update();
 
 	void OnCollisionEnter(Entity* other);

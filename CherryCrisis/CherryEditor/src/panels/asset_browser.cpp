@@ -5,7 +5,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "render_manager.hpp" //TODO: Erase when renderer manager instance is initialized in ENGINE
 #include "core/editor_manager.hpp"
 #include "resource_manager.hpp"
 #include "input_manager.hpp"
@@ -177,7 +176,7 @@ void AssetBrowser::RenderNodes()
         int columnID = columnCount;
         int assetID = 0;
 
-        std::set<AssetNode*>& assetNodes = strlen(m_researchInput) > 0 ? m_allAssetNode : m_currentDirectoryNode->m_assetNodes;
+        std::vector<AssetNode*>& assetNodes = strlen(m_researchInput) > 0 ? m_allAssetNode : m_currentDirectoryNode->m_assetNodes;
 
         for (const auto& assetNode : assetNodes)
         {
@@ -252,7 +251,7 @@ void AssetBrowser::RenderNodes()
 
                 //-- Draw preview image --//
                 {
-                    if (auto gpuTexturePreview = static_cast<TextureGenerator::GPUTextureBasic*>(assetNode->m_previewTexture->m_gpuTexture.get()))
+                    if (auto gpuTexturePreview = static_cast<TextureGenerator::GPUTextureBasic*>(assetNode->m_previewTexture->m_gpuTexture2D.get()))
                     {
                         ImGui::Image((void*)static_cast<intptr_t>(gpuTexturePreview->ID), { m_thumbnailSize, m_thumbnailSize }, { 0,1 }, { 1, 0 });
                     }
@@ -405,20 +404,20 @@ void AssetBrowser::BrowserActionCreate()
                 std::filesystem::path newPath = m_currentDirectoryNode->m_path;
                 newPath /= newName;
 
-                bool exist = std::filesystem::exists(newPath.string() + ".cherry");
+                bool exist = std::filesystem::exists(newPath.string() + sceneExtensions);
                 int id = 0;
 
                 while (exist)
                 {
                     std::string path(std::format("{}{}", newPath.string(), id));
 
-                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                    if (!(exist = std::filesystem::exists(path + sceneExtensions)))
                         newPath = path;
 
                     ++id;
                 }
 
-                newPath += ".cherry";
+                newPath += sceneExtensions;
 
                 std::ofstream myfile;
 
@@ -434,20 +433,20 @@ void AssetBrowser::BrowserActionCreate()
                 std::filesystem::path newPath = m_currentDirectoryNode->m_path;
                 newPath /= newName;
 
-                bool exist = std::filesystem::exists(newPath.string() + ".mat");
+                bool exist = std::filesystem::exists(newPath.string() + matExtensions);
                 int id = 0;
 
                 while (exist)
                 {
                     std::string path(std::format("{}{}", newPath.string(), id));
 
-                    if (!(exist = std::filesystem::exists(path + ".cherry")))
+                    if (!(exist = std::filesystem::exists(path + matExtensions)))
                         newPath = path;
 
                     ++id;
                 }
 
-                newPath += ".mat";
+                newPath += matExtensions;
 
                 std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResource<Material>(newPath.string().c_str(), true);
                 CCImporter::SaveMaterial(material.get());
@@ -651,7 +650,19 @@ void AssetBrowser::ContextCallback()
 
             }
 
-            //TODO : Material
+            if (ImGui::MenuItem("Cubemap"))
+            {
+                m_popupAssetType = "cubemap";
+                m_browserAction = EBrowserAction::CREATING;
+
+            }
+
+            if (ImGui::MenuItem("Spheremap"))
+            {
+                m_popupAssetType = "spheremap";
+                m_browserAction = EBrowserAction::CREATING;
+
+            }
 
             ImGui::EndMenu();
         }
@@ -718,18 +729,98 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
         directoryNode.m_parentDirectory = parentDirectory;
 
-        directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true);
+        directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true, true, ETextureFormat::RGBA);
 
         auto directory_iterator = std::filesystem::directory_iterator(m_path);
 
         auto pair = m_assetNodes.insert({ directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode)});
         AssetNode* assetNode = pair.first->second.get();
 
+        #pragma region Sort AssetNode
+
+        std::set<std::filesystem::directory_entry> entries;
         for (const std::filesystem::directory_entry& entry : directory_iterator)
+            entries.emplace(entry);
+
+        DirectoryNode* directoryNodePtr = static_cast<DirectoryNode*>(assetNode);
+
+        std::vector<AssetNode*> directoryNodes;
+        std::vector<AssetNode*> sceneNodes;
+        std::vector<AssetNode*> modelNodes;
+        std::vector<AssetNode*> textureNodes;
+        std::vector<AssetNode*> shaderNodes;
+        std::vector<AssetNode*> scriptNodes;
+        std::vector<AssetNode*> materialNodes;
+        std::vector<AssetNode*> soundNodes;
+        std::vector<AssetNode*> otherNodes;
+
+        for (const auto& entry : entries)
         {
-            DirectoryNode* directoryNodePtr = static_cast<DirectoryNode*>(assetNode);
-            directoryNodePtr->m_assetNodes.insert(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+            if (std::filesystem::is_directory(entry.path()))
+            {
+                directoryNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            std::string extension = entry.path().extension().string();
+
+            if (!sceneExtensions.compare(extension))
+            {
+                sceneNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            if (modelExtensions.end() != modelExtensions.find(extension))
+            {
+                modelNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            if (textureExtensions.end() != textureExtensions.find(extension))
+            {
+                textureNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            if (shaderExtensions.end() != shaderExtensions.find(extension))
+            {
+                shaderNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            if (!scriptExtensions.compare(extension))
+            {
+                scriptNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            if (!matExtensions.compare(extension))
+            {
+                materialNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            if (soundExtensions.end() != soundExtensions.find(extension))
+            {
+                soundNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                continue;
+            }
+
+            otherNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
         }
+
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), directoryNodes.begin(), directoryNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), sceneNodes.begin(), sceneNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), modelNodes.begin(), modelNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), textureNodes.begin(), textureNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), shaderNodes.begin(), shaderNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), scriptNodes.begin(), scriptNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), materialNodes.begin(), materialNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), soundNodes.begin(), soundNodes.end());
+        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), otherNodes.begin(), otherNodes.end());
+
+       
+        #pragma endregion
 
         return assetNode;
     }
@@ -738,11 +829,9 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
     {
         std::string extension = m_path.extension().string();
 
-
         //-- Texture --//
         {
-            auto it = textureExtensions.find(extension);
-            if (it != textureExtensions.end())
+            if (textureExtensions.end() != textureExtensions.find(extension))
             {
                 TextureNode textureNode;
                 SetAssetNode(m_path, textureNode);
@@ -760,8 +849,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
         //-- Model --//
         {
-            auto it = modelExtensions.find(extension);
-            if (it != modelExtensions.end())
+            if (modelExtensions.end() != modelExtensions.find(extension))
             {
                 ModelNode modelNode;
                 SetAssetNode(m_path, modelNode);
@@ -770,12 +858,10 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<ModelBase> modelBase = resourceManager->AddResource<ModelBase>(filepath.c_str(), true);
                 modelNode.m_resource = modelBase;
 
-                modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true);
+                modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) });
                 AssetNode* assetNode = pair.first->second.get();
-
-                modelBase->m_OnReloaded.Bind(&AssetBrowser::ResourceAssetNode<ModelBase>::ReloadPreviewTexture, static_cast<ResourceAssetNode<ModelBase>*>(assetNode));
 
                 return assetNode;
             }
@@ -783,8 +869,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
         //-- Shader --//
         {
-            auto it = shaderExtensions.find(extension);
-            if (it != shaderExtensions.end())
+            if (shaderExtensions.end() != shaderExtensions.find(extension))
             {
                 ShaderNode shaderNode;
                 SetAssetNode(m_path, shaderNode);
@@ -793,7 +878,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<Shader> shader = resourceManager->AddResource<Shader>(filepath.c_str(), true);
                 shaderNode.m_resource = shader;
 
-                shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true);
+                shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) });
                 return pair.first->second.get();
@@ -808,7 +893,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
             std::string filepath(scriptNode.m_relativePath.string() + scriptNode.m_filename + scriptNode.m_extension);
 
-            scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true);
+            scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true, true, ETextureFormat::RGBA);
 
             auto pair = m_assetNodes.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
 
@@ -845,7 +930,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             EmptyNode emptyNode;
             SetAssetNode(m_path, emptyNode);
 
-            emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true);
+            emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
 
             auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode) });
             return pair.first->second.get();
@@ -862,7 +947,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<Material> material = resourceManager->AddResource<Material>(filepath.c_str(), true);
                 materialNode.m_resource = material;
 
-                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ materialNode.m_path.string(), std::make_unique<MaterialNode>(materialNode) });
                 return pair.first->second.get();
@@ -870,10 +955,8 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         }
 
         //-- Sound --//
-        /*
         {
-            auto it = textureExtensions.find(extension);
-            if (it != textureExtensions.end())
+            if (soundExtensions.end() !=soundExtensions.find(extension))
             {
                 SoundNode soundNode;
                 SetAssetNode(m_path, soundNode);
@@ -881,19 +964,19 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::string filepath(soundNode.m_relativePath.string() + soundNode.m_filename + soundNode.m_extension);
                 soundNode.m_resource = resourceManager->AddResource<Sound>(filepath.c_str(), true);
 
-                soundNode.m_icon = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true);
+                soundNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_allAssetNode.insert(std::make_unique<SoundNode>(soundNode));
-                return pair.first->get();
+                auto pair = m_assetNodes.insert({ soundNode.m_path.string(), std::make_unique<SoundNode>(soundNode) });
+                return pair.first->second.get();
             }
-        }*/
+        }
         
     }
 
     EmptyNode emptyNode;
     SetAssetNode(m_path, emptyNode);
 
-    emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true);
+    emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
     auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode)});
     return pair.first->second.get();
@@ -907,12 +990,14 @@ void AssetBrowser::SetPath(const std::filesystem::path& path)
 
 void AssetBrowser::QuerryBrowser()
 {
+    std::string currentDirectoryPath;
+    if (m_currentDirectoryNode != nullptr)
+        currentDirectoryPath = m_currentDirectoryNode->m_path.string();
+
 	m_currentDirectoryNode = nullptr;
 	m_assetsDirectoryNode = nullptr;
 	m_assetNodes.clear();
     m_allAssetNode.clear();
-
-    RenderManager::GetInstance(); //TODO: Erase when renderer manager instance is initialized in ENGINE
 
     if (std::filesystem::exists(m_assetsDirectory))
     {
@@ -925,10 +1010,18 @@ void AssetBrowser::QuerryBrowser()
     for (const auto& assetNode : m_assetNodes)
     {
         m_textureGenerator.Generate(assetNode.second->m_previewTexture.get());
-        m_allAssetNode.insert(assetNode.second.get());
+        m_allAssetNode.push_back(assetNode.second.get());
     }
 
     ResourceManager::GetInstance()->Purge();
+
+    //Verif if old current directory still exists
+    if (!currentDirectoryPath.empty())
+    {
+        auto it = m_assetNodes.find(currentDirectoryPath);
+        if (it != m_assetNodes.end())
+            m_currentDirectoryNode = static_cast<DirectoryNode*>(it->second.get());
+    }
 }
 
 void AssetBrowser::ReloadScripts()

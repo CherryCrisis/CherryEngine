@@ -6,22 +6,24 @@
 
 #include "element_mesh_generator.hpp"
 
-#include "spheremap.hpp"
+#include "texture.hpp"
+#include "sky_renderer.hpp"
 
-class Skydome;
+class SkyRenderer;
 class Viewer;
 
 class BRDFRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
+	SkyRenderer* m_skyRenderer = nullptr;
 
-	Skydome*	m_skydome		= nullptr;
-	const int	m_resolution	= 520;
-
+	//BRDF Map is generated once
+	void GenerateBRDF();
 
 public:
-	struct GPUBRDFSphereMap : GPUBRDF
+	struct GPUBRDFSphereMap : public GPUBRDF
 	{
+		const int	resolution = 520;
 		GLuint		ID = 0u;
 	};
 
@@ -40,11 +42,9 @@ public:
 	}
 
 	template <>
-	int Subscribe(Skydome* toGenerate);
+	int Subscribe(SkyRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Skydome* toGenerate);
-
-	void Execute(Framebuffer& fb, Viewer*& viewer);
+	void Unsubscribe(SkyRenderer* toGenerate);
 
 };

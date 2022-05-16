@@ -98,8 +98,9 @@ public:
 
 		resource->SetResourceState(EResourceState::LOADING);
 		resource->Reload(args...);
-		resource->m_OnReloaded.Invoke(std::move(resource));
 		resource->SetResourceState(EResourceState::LOADED);
+
+		resource->m_OnReloaded.Invoke(std::move(resource));
 	}
 };
 
