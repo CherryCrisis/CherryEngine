@@ -72,9 +72,121 @@ void Mesh::Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, float xHalfRes
         CreateCube(mesh, xHalfRes, yHalfRes, zHalfRes);
         break;
 
+    case EMeshShape::SPHERE:
+        CreateSphere(mesh, xHalfRes, yHalfRes, zHalfRes);
+        break;
+
+    case EMeshShape::CYLINDER:
+        CreateCylinder(mesh, xHalfRes, yHalfRes, zHalfRes);
+        break;
+
     default:
         return;
     }
+}
+
+void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHeight, float longitude)
+{
+    std::vector<Vertex> vertices;
+    vertices.reserve((size_t)longitude * 2);
+
+    float const S = 1.f / (longitude - 1.f);
+    float add = 2 * PI / longitude;
+
+    for (int s = 0; s < longitude; s++)
+    {
+        Vertex vertex;
+
+        float x = cosf(add * s) * radius;
+        float z = sinf(add * s) * radius;
+
+        vertex.uv.x = s * S;
+        vertex.uv.y = 0;
+
+        vertex.position.x = x;
+        vertex.position.y = 0.f;
+        vertex.position.z = z;
+
+        vertex.normal = CCMaths::Vector3(x, 0, z);
+        vertex.tangent = CCMaths::Vector3(x, 0, z);
+        vertex.bitangent = CCMaths::Vector3(x, 0, z);
+
+        vertex.position.y = halfHeight;
+        vertices.push_back(vertex);
+
+        vertex.position.y = -halfHeight;
+        vertex.uv.y = 1;
+        vertices.push_back(vertex);
+    }
+
+    std::vector<unsigned int> indices;
+    indices.reserve((size_t)longitude * 6);
+
+    for (int s = 0; s < longitude; s++)
+    {
+        indices.push_back(2 * s);
+        indices.push_back((2 * s + 2) % ((int)longitude * 2));
+        indices.push_back(2 * s + 1);
+
+        indices.push_back((2 * s + 3) % ((int)longitude * 2));
+        indices.push_back(2 * s + 1);
+        indices.push_back((2 * s + 2) % ((int)longitude * 2));
+    }
+
+    Load(mesh, vertices, indices);
+}
+
+void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude, float longitude)
+{
+    std::vector<Vertex> vertices;
+    vertices.reserve((size_t)latitude * (size_t)longitude);
+
+	float const R = 1.f / (latitude - 1.f);
+	float const S = 1.f / (longitude - 1.f);
+
+    for (int r = 0; r < latitude; r++)
+    {
+        for (int s = 0; s < longitude; s++)
+        {
+            Vertex vertex;
+            
+            float const y = CCMaths::Sin(-(CCMaths::PI * 0.5f) + CCMaths::PI * r * R);
+            float const x = CCMaths::Cos(2 * CCMaths::PI * s * S) * sin(PI * r * R);
+            float const z = CCMaths::Sin(2 * CCMaths::PI * s * S) * sin(PI * r * R);
+
+            vertex.uv.x = s * S;
+            vertex.uv.y = r * R;
+
+            vertex.position.x = x * radius;
+            vertex.position.y = y * radius;
+            vertex.position.z = z * radius;
+
+            vertex.normal = CCMaths::Vector3(x, y, z);
+            vertex.tangent = CCMaths::Vector3(x, y, z);
+            vertex.bitangent = CCMaths::Vector3(x, y, z);
+
+            vertices.push_back(vertex);
+        }
+    }
+
+    std::vector<unsigned int> indices;
+    indices.reserve((size_t)latitude * (size_t)longitude * 6);
+	
+    for (int r = 0; r < latitude; r++)
+    {
+        for (int s = 0; s < longitude; s++)
+        {
+            indices.push_back(r * longitude + s);
+            indices.push_back((r + 1) * longitude + s);
+            indices.push_back(r * longitude + (s + 1));
+
+            indices.push_back((r + 1) * longitude + (s + 1));
+            indices.push_back(r * longitude + (s + 1));
+            indices.push_back((r + 1) * longitude + s);
+	    }
+    }
+
+    Load(mesh, vertices, indices);
 }
 
 void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes, float zHalfRes)

@@ -82,7 +82,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
         if (bname == "AudioEmitter")
             emitter = (AudioEmitter*)behaviour;
         // check if right clicked
-        if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
+        if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
         {
             ImGui::OpenPopup("context");
         }
@@ -409,7 +409,7 @@ void Inspector::Render()
                 ImGui::OpenPopup("Add Component");
         }
 
-        ImVec2 center = { InputManager::GetInstance()->GetMousePos().x, InputManager::GetInstance()->GetMousePos().y };
+        ImVec2 center = { InputManager::GetMousePos().x, InputManager::GetMousePos().y };
         ImGui::SetNextWindowPos(center, ImGuiCond_Appearing);
         if (ImGui::BeginPopupModal("Add Component", NULL, ImGuiWindowFlags_AlwaysAutoResize))
         {

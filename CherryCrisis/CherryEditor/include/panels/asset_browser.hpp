@@ -31,7 +31,7 @@ const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glb", ".gltf" 
 const std::set<std::string> shaderExtensions = { ".frag", ".vert" };
 const std::set<std::string> soundExtensions = { ".wav" };
 const std::string scriptExtensions = ".cs";
-const std::string sceneExtensions = ".cherry";
+const std::string sceneExtensions = ".ccscene";
 const std::string matExtensions = ".mat";
 
 class AssetBrowser : public Panel

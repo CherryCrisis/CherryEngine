@@ -32,8 +32,6 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera
 
 void FrameDisplayer::Init() 
 {
-    m_inputs = InputManager::GetInstance();
-
     glGenFramebuffers(1, &m_framebuffer.FBO);
     glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
 

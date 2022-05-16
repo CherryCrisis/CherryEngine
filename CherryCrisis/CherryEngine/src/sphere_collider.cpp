@@ -4,22 +4,49 @@
 
 #include <PxPhysicsAPI.h>
 
+#include "resource_manager.hpp"
 #include "physic_manager.hpp"
+
+#include "collider_renderpass.hpp"
+#include "camera_component.hpp"
 #include "transform.hpp"
+#include "mesh.hpp"
 
 SphereCollider::SphereCollider()
 {
 	PopulateMetadatas();
+
+	m_type = EColliderType::SPHERE;
+
+	Camera* cam = CameraComponent::m_editorCamera;
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
 {
 	PopulateMetadatas();
+
+	m_type = EColliderType::SPHERE;
+
+	Camera* cam = CameraComponent::m_editorCamera;
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 SphereCollider::~SphereCollider()
 {
 	Unregister();
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Unbind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Unbind(&SphereCollider::InvalidateTransform, this);
+	}
 }
 
 void SphereCollider::BindToSignals()
@@ -29,8 +56,29 @@ void SphereCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	Transform* t = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
-	SetEntityScale(t->GetScale());
+	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
+
+	GetHost().m_OnAwake.Bind(&SphereCollider::Initialize, this);
+}
+
+void SphereCollider::Initialize()
+{
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Bind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Bind(&SphereCollider::InvalidateTransform, this);
+	}
+
+	GetHost().m_OnAwake.Unbind(&SphereCollider::Initialize, this);
+
+	SetEntityScale(m_transform->GetGlobalScale());
+}
+
+void SphereCollider::InvalidateTransform()
+{
+	m_transform = nullptr;
 }
 
 void SphereCollider::Unregister()
@@ -55,16 +103,17 @@ void SphereCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
-void SphereCollider::SetEntityScale(const CCMaths::Vector3& scale)
+void SphereCollider::SetEntityScale(const CCMaths::Vector3& s)
 {
-	m_entityScale = scale.Length();
+	CCMaths::Vector3 scale = m_transform->GetGlobalScale();
+	m_entityScale = CCMaths::Max(CCMaths::Max(scale.x, scale.y), scale.z);
+
+	m_totalScale = m_baseEntityScale * m_editableScale * m_entityScale;
 }
 
 void SphereCollider::SetPxShape()
 {
-	float scale = m_baseEntityScale * m_editableScale * m_entityScale;
-
-	m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(scale));
+	m_pxShape = m_physicActor->CreateShape(physx::PxSphereGeometry(m_totalScale));
 	SetPxLocalPos();
 
 	m_pxShape->userData = this;
@@ -115,4 +164,28 @@ void SphereCollider::SetPxData()
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}
+}
+
+void SphereCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+}
+
+void SphereCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+}
+
+void SphereCollider::SetScale(const float& scale)
+{
+	m_editableScale = scale;
+
+	m_totalScale = m_baseEntityScale * m_editableScale * m_entityScale;
+
+	ResetPxShape();
+}
+
+CCMaths::Matrix4 SphereCollider::GetTranformMatrix()
+{
+	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale(m_totalScale);
 }

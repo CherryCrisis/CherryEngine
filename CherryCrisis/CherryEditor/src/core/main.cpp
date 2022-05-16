@@ -113,7 +113,7 @@ int main(int argc, char** argv)
     glfwSetWindowUserPointer(window, &editor);
     glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
     {
-        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->KeyCallback(w, k, s, a, m);
+        InputManager::KeyCallback(w, k, s, a, m);
     });
     glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int i)
     {
@@ -121,15 +121,15 @@ int main(int argc, char** argv)
     });
     glfwSetScrollCallback(window, [](GLFWwindow* w, double x, double y)
     {
-        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseWheelCallback(w, x, y);
+        InputManager::MouseWheelCallback(w, x, y);
     });
     glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y)
     {
-        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MousePosCallback(w, x, y);
+        InputManager::MousePosCallback(w, x, y);
     });
     glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int k, int a, int m)
     {
-        static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->inputs->MouseClickCallback(w, k, a, m);
+        InputManager::MouseClickCallback(w, k, a, m);
     });
     ImGui_ImplGlfw_InitForOpenGL(window, true);
 
@@ -138,6 +138,8 @@ int main(int argc, char** argv)
     InputManager::GetInstance()->HideCursor = HideCursor;
     InputManager::GetInstance()->ShowCursor = ShowCursor;
     Engine::window_handle = window;
+
+    Serializer::UnserializeInputs();
 
     editor.LinkEngine(&engine);
     engine.window_handle = window;
@@ -153,9 +155,11 @@ int main(int argc, char** argv)
     ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
     //-----------------------------------
 
+    int isSceneFocused = false;
+
     while (glfwWindowShouldClose(window) == false)
     {
-        InputManager::GetInstance()->UpdateKeys();
+        InputManager::UpdateKeys();
         TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
@@ -166,19 +170,25 @@ int main(int argc, char** argv)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
-
+        
         editor.DisplayEditorUI(window);
 
         engine.TickEngine();
 
-        if (engine.isPlaying)
+        if (engine.m_isPlaying && !engine.m_isPaused)
         {
-            InputManager::GetInstance()->PushContext("User Context");
+            InputManager::PushContext("User Context");
             engine.Tick();
-            InputManager::GetInstance()->PopContext();
+            InputManager::PopContext();
         }
 
         glfwSwapBuffers(window);
+
+        if (!isSceneFocused)
+        {
+            ImGui::SetWindowFocus("Scene");
+            isSceneFocused = true;
+        }
     }
     //Save editor file
     Serializer::SerializeEditor();

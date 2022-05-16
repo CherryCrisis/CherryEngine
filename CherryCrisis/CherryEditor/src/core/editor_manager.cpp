@@ -28,7 +28,6 @@
 
 EditorManager::EditorManager(const std::string& projectPath) 
 {
-    inputs = InputManager::GetInstance();
     ResourceManager* RM = ResourceManager::GetInstance();
 
     m_menuBarTextures[0] = RM->AddResource<Texture>("Internal/Icons/play_icon.png", true, false, ETextureFormat::RGBA);
@@ -210,14 +209,18 @@ void EditorManager::HandleMenuBar()
         ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg]);
         ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f * 3.f));
 
-        if (ImGui::ImageButton(m_engine->isPlaying ? (ImTextureID)m_gpuTextureIDs[3] : (ImTextureID)m_gpuTextureIDs[0], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        // Start or Stop game in editor
+        if (ImGui::ImageButton(m_engine->m_isPlaying ? (ImTextureID)m_gpuTextureIDs[3] : (ImTextureID)m_gpuTextureIDs[0], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
-            if (m_engine->isPlaying)
+            // Stop game if playing
+            if (m_engine->m_isPlaying)
             {
                 m_engine->Stop();
                 m_entitySelector.Clear();
                 m_gameDisplayer.Unfocus();
             }
+
+            // Start game if not playing
             else
             {
                 m_logDisplayer.TryClearOnPlay();
@@ -226,15 +229,26 @@ void EditorManager::HandleMenuBar()
             }
 
         } ImGui::SameLine();
-        
-        if (ImGui::ImageButton((ImTextureID)m_gpuTextureIDs[1], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+
+        // Pause game in editor
+        if (ImGui::ImageButton((ImTextureID)m_gpuTextureIDs[1], ImVec2(size, size), { 0,0 }, { 1,1 }, -1, m_engine->m_isPaused ? ImVec4(1.f, 1.f, 1.f, 0.3f) : ImVec4(0.f, 0.f, 0.f, 0.f)))
         {
+            if (m_engine->m_isPlaying)
+                m_engine->m_isPaused = !m_engine->m_isPaused;
 
         } ImGui::SameLine();
         
+        // Restart game in editor
         if (ImGui::ImageButton((ImTextureID)m_gpuTextureIDs[2], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
+            // Stop game
+            m_engine->Stop();
+            m_entitySelector.Clear();
 
+            // Launch game
+            m_logDisplayer.TryClearOnPlay();
+            m_engine->Launch(false);
+            m_gameDisplayer.Focus();
         }
         ImGui::PopStyleColor(1);
         ImGui::EndMainMenuBar();
@@ -302,24 +316,22 @@ void EditorManager::HandleNotifications()
 
 void EditorManager::UpdateFocusGame()
 {
-    InputManager* IM = InputManager::GetInstance();
-
     if (!m_gameDisplayer.m_isFocused)
     {
-        IM->PushContext("Editor Context");
-        if (m_gameDisplayer.m_isHovered && m_engine->isPlaying && IM->GetKeyDown(Keycode::LEFT_CLICK))
+        InputManager::PushContext("Editor Context");
+        if (m_gameDisplayer.m_isHovered && m_engine->m_isPlaying && InputManager::GetKeyDown(Keycode::LEFT_CLICK))
             m_gameDisplayer.Focus();
-        IM->PopContext();
+        InputManager::PopContext();
     }
-    else if (m_gameDisplayer.m_isFocused && m_engine->isPlaying)
+    else if (m_gameDisplayer.m_isFocused && m_engine->m_isPlaying)
     {
-        IM->PushContext("User Context");
+        InputManager::PushContext("User Context");
 
-        if (IM->GetKeyDown(Keycode::ESCAPE))
+        if (InputManager::GetKeyDown(Keycode::ESCAPE))
         {
             m_gameDisplayer.Unfocus();
         }
-        IM->PopContext();
+        InputManager::PopContext();
     }
 }
 

@@ -12,11 +12,13 @@ class SkyboxRenderPass;
 class BloomRenderPass;
 class PortalRenderPass;
 class HDRRenderPass;
+class ColliderRenderPass;
 
 class BasicPostProcessRenderPass;
 
 class CCENGINE_API BasicRPipeline : public ARenderingPipeline
 {
+	ColliderRenderPass*			m_colliderPass = nullptr;
 	PortalRenderPass*			m_portalPass = nullptr;
 	ShadowRenderPass*			m_shadowPass = nullptr;
 	BasicRenderPass*			m_basicPass = nullptr;

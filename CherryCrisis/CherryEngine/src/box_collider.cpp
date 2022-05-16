@@ -4,22 +4,55 @@
 
 #include <PxPhysicsAPI.h>
 
+#include "resource_manager.hpp"
 #include "physic_manager.hpp"
+
+#include "collider_renderpass.hpp"
+#include "camera_component.hpp"
 #include "transform.hpp"
+#include "mesh.hpp"
 
 BoxCollider::BoxCollider()
 {
 	PopulateMetadatas();
+
+	m_type = EColliderType::BOX;
+
+	Camera* cam = CameraComponent::m_editorCamera;
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
 {
 	PopulateMetadatas();
+
+	m_type = EColliderType::BOX;
+
+	Camera* cam = CameraComponent::m_editorCamera;
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 BoxCollider::~BoxCollider()
 {
 	Unregister();
+
+	Camera* cam = CameraComponent::m_editorCamera;
+	if (!cam)
+		return;
+
+	//UnsubscribeToPipeline(cam->m_pipeline.get());
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Unbind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Unbind(&BoxCollider::InvalidateTransform, this);
+	}
 }
 
 void BoxCollider::BindToSignals()
@@ -29,8 +62,27 @@ void BoxCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	Transform* t = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
-	SetEntityScale(t->GetScale());
+	GetHost().m_OnAwake.Bind(&BoxCollider::Initialize, this);
+}
+
+void BoxCollider::Initialize()
+{
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Bind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
+	}
+
+	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);
+
+	SetEntityScale(m_transform->GetGlobalScale());
+}
+
+void BoxCollider::InvalidateTransform()
+{
+	m_transform = nullptr;
 }
 
 void BoxCollider::Unregister()
@@ -57,16 +109,16 @@ void BoxCollider::PopulateMetadatas()
 
 void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
 {
-	m_entityScale = scale;
+	m_entityScale = m_transform->GetGlobalScale();
+
+	m_totalScale = m_baseEntityScale;
+	m_totalScale *= m_editableScale;
+	m_totalScale *= m_entityScale;
 }
 
 void BoxCollider::SetPxShape()
 {
-	CCMaths::Vector3 scale = m_baseEntityScale;
-	scale *= m_editableScale;
-	scale *= m_entityScale;
-
-	physx::PxVec3 scalePx = { scale.x, scale.y, scale.z };
+	physx::PxVec3 scalePx = { m_totalScale.x, m_totalScale.y, m_totalScale.z };
 	m_pxShape = m_physicActor->CreateShape(physx::PxBoxGeometry(scalePx));
 
 	SetPxLocalPos();
@@ -109,7 +161,7 @@ void BoxCollider::SetPxData()
 		{
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, false);
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eTRIGGER_SHAPE, true);
-			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
+			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, false);
 		}
 		else
 		{
@@ -118,4 +170,30 @@ void BoxCollider::SetPxData()
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}
+}
+
+void BoxCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+}
+
+void BoxCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+}
+
+void BoxCollider::SetScale(const CCMaths::Vector3& scale)
+{
+	m_editableScale = scale;
+
+	m_totalScale = m_baseEntityScale;
+	m_totalScale *= m_editableScale;
+	m_totalScale *= m_entityScale;
+	
+	ResetPxShape();
+}
+
+CCMaths::Matrix4 BoxCollider::GetTranformMatrix()
+{
+	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale(m_totalScale);
 }

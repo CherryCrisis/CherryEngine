@@ -910,7 +910,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                         // TODO: check if reload already started
                         if (m_manager->m_engine) 
                         {
-                            if (m_manager->m_engine->isPlaying)
+                            if (m_manager->m_engine->m_isPlaying)
                                 m_manager->m_engine->m_OnStop.Bind(&AssetBrowser::ReloadScripts, this);
                             else
                                 ReloadScripts();

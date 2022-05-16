@@ -1254,6 +1254,9 @@
     <ClInclude Include="include\sky_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\collider_renderpass.hpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1419,6 +1422,12 @@
     </None>
     <None Include="interface\physic_scene.i">
       <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\Shaders\colliderShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Debug\Assets\Shaders\colliderShader.frag">
+      <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1661,6 +1670,9 @@
     </ClCompile>
     <ClCompile Include="src\sky_renderer.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\collider_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -40,11 +40,11 @@ private:
 	public:
 		Input(std::string name = "default");
 		void Fill() override;
-		void CreateAction(InputManager* IM, int& type);
-		void CreateButtons(InputManager* IM, const char* name);
-		void CreateAxes(InputManager* IM, const char* name);
-		void SetButtons(InputManager* IM);
-		void SetAxes(InputManager* IM);
+		void CreateAction(int& type);
+		void CreateButtons(const char* name);
+		void CreateAxes(const char* name);
+		void SetButtons();
+		void SetAxes();
 
 		InputManager::InputContext* userContext = nullptr;
 	};

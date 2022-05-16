@@ -35,12 +35,13 @@ Engine::Engine()
 
 	CsScriptingSystem::GetInstance()->Init();
 	SoundManager::Init();
+	InputManager::GetInstance()->Init();
 }
 
 Engine::~Engine()
 {
-	InputManager::Kill();
 	PhysicSystem::PhysicManager::Kill();
+	InputManager::Kill();
 	SoundManager::Kill();
 	TimeManager::Kill();
 	ResourceManager::Kill();
@@ -64,22 +65,20 @@ void Engine::Tick()
 	PhysicSystem::PhysicManager::GetInstance()->Simulate(1/60.f);
 }
 
-void Engine::Launch() 
+void Engine::Launch(bool flipScene) 
 {
-	isPlaying = true;
-	SceneManager::FlipScene();
-	PhysicSystem::PhysicManager::GetInstance()->Launch();
-}
-
-void Engine::LaunchStandalone() 
-{
-	isPlaying = true;
+	m_isPlaying = true;
+	
+	if (flipScene)
+		SceneManager::FlipScene();
+	
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
 }
 
 void Engine::Stop()
 {
-	isPlaying = false;
+	m_isPlaying = false;
+	m_isPaused = false;
 	PhysicSystem::PhysicManager::GetInstance()->Stop();
 	SceneManager::ResetScene();
 	m_OnStop.Invoke();

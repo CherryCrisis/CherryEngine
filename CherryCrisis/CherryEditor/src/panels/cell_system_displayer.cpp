@@ -23,20 +23,19 @@ CellSystemDisplayer::CellSystemDisplayer()
             SelectCell(&sceneManager->m_currentScene->m_cells.begin()->second);
     }
 
-    InputManager* IM = InputManager::GetInstance();
-    IM->PushContext("Editor Context");
+    InputManager::PushContext("Editor Context");
 
     int i = 0;
-    IM->AddActionAxes("FrontBack", i);
-    IM->AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
+    InputManager::AddActionAxes("FrontBack", i);
+    InputManager::AddAxisToAction("FrontBack", { Keycode::W, Keycode::S });
 
-    IM->AddActionAxes("RightLeft", i);
-    IM->AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
+    InputManager::AddActionAxes("RightLeft", i);
+    InputManager::AddAxisToAction("RightLeft", { Keycode::D, Keycode::A });
 
-    IM->AddActionButtons("Pick", i);
-    IM->AddInputToAction("Pick", Keycode::LEFT_CLICK);
+    InputManager::AddActionSingle("Pick", i);
+    InputManager::AddInputToAction("Pick", Keycode::LEFT_CLICK);
 
-    IM->PopContext();
+    InputManager::PopContext();
 }
 
 void CellSystemDisplayer::UpdateCamera()

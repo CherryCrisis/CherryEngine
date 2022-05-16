@@ -74,7 +74,6 @@ int main()
 
     Engine engine{};
     Context context;
-    context.inputs = InputManager::GetInstance();
     //Callbacks
     {
         glfwSetWindowUserPointer(window, &context);
@@ -103,19 +102,19 @@ int main()
     
     Engine::window_handle = window;
     Serializer::UnserializeGame("master");
-    InputManager::GetInstance()->SetCursorHidden();
+    InputManager::SetCursorHidden();
 
     Framebuffer framebuffer;
 
-    engine.LaunchStandalone();
-    
-    InputManager::GetInstance()->AddContext("User Context");
-    InputManager::GetInstance()->SetPollContext("User Context");
-    InputManager::GetInstance()->PushContext("User Context");
-    
+    engine.Launch(false);
+
+    Serializer::UnserializeInputs();
+    InputManager::SetPollContext("User Context");
+    InputManager::PushContext("User Context");
+
     while (glfwWindowShouldClose(window) == false)
     {
-        InputManager::GetInstance()->UpdateKeys();
+        InputManager::UpdateKeys();
         TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
@@ -133,13 +132,13 @@ int main()
         }
 
         engine.TickEngine();
-        if (engine.isPlaying)
+        if (engine.m_isPlaying)
             engine.Tick();
 
         glfwSwapBuffers(window);
     }
-    
-    InputManager::GetInstance()->PopContext();
+
+    InputManager::PopContext();
 
     // Terminate glfw
     glfwDestroyWindow(window);

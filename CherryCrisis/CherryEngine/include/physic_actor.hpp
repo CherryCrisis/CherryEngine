@@ -6,6 +6,7 @@
 #include "bool3.hpp"
 
 class CharacterController;
+class Transform;
 class Rigidbody;
 class Collider;
 
@@ -29,7 +30,7 @@ namespace PhysicSystem
 	protected:
 		physx::PxRigidActor* m_pxActor = nullptr;
 
-
+		Transform* m_transform = nullptr;
 		Rigidbody* m_rigidbody = nullptr;
 		CharacterController* m_controller = nullptr;
 		std::vector<Collider*> m_colliders;
@@ -57,6 +58,11 @@ namespace PhysicSystem
 
 	public:
 		Entity* m_owner = nullptr;
+
+		~PhysicActor();
+
+		void Init();
+		void InvalidateTransform();
 
 		void Update();
 		void SetActorPosition(const CCMaths::Vector3& position);

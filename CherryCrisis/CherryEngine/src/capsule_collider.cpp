@@ -4,22 +4,49 @@
 
 #include <PxPhysicsAPI.h>
 
+#include "resource_manager.hpp"
 #include "physic_manager.hpp"
+
+#include "collider_renderpass.hpp"
+#include "camera_component.hpp"
 #include "transform.hpp"
+#include "mesh.hpp"
 
 CapsuleCollider::CapsuleCollider()
 {
 	PopulateMetadatas();
+
+	m_type = EColliderType::CAPSULE;
+
+	Camera* cam = CameraComponent::m_editorCamera;
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
 {
 	PopulateMetadatas();
+
+	m_type = EColliderType::CAPSULE;
+
+	Camera* cam = CameraComponent::m_editorCamera;
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Unbind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Unbind(&CapsuleCollider::InvalidateTransform, this);
+	}
 }
 
 void CapsuleCollider::BindToSignals()
@@ -29,8 +56,29 @@ void CapsuleCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	Transform* t = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
-	SetEntityScale(t->GetScale());
+	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
+
+	GetHost().m_OnAwake.Bind(&CapsuleCollider::Initialize, this);
+}
+
+void CapsuleCollider::Initialize()
+{
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Bind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Bind(&CapsuleCollider::InvalidateTransform, this);
+	}
+
+	GetHost().m_OnAwake.Unbind(&CapsuleCollider::Initialize, this);
+
+	SetEntityScale(m_transform->GetGlobalScale());
+}
+
+void CapsuleCollider::InvalidateTransform()
+{
+	m_transform = nullptr;
 }
 
 void CapsuleCollider::Unregister()
@@ -56,18 +104,21 @@ void CapsuleCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
-void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& scale)
+void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& s)
 {
-	m_entityRadius = CCMaths::Min(scale.x, scale.z);
-	m_entityScale = CCMaths::Max(0.01f, (scale.y - m_entityRadius));
+	CCMaths::Vector3 scale = m_transform->GetGlobalScale();
+
+	m_entityRadius = CCMaths::Max(scale.x, scale.z);
+	m_entityScale = scale.y;
+
+	m_totalRadius = m_editableRadius * m_entityRadius;
+
+	m_totalScale = CCMaths::Max(0.0f, (m_editableScale * m_entityScale) - m_totalRadius);
 }
 
 void CapsuleCollider::SetPxShape()
 {
-	float scale = m_editableScale * m_entityScale;
-	float totalRadius = m_editableRadius * m_entityRadius;
-
-	m_pxShape = m_physicActor->CreateShape(physx::PxCapsuleGeometry(totalRadius, scale));
+	m_pxShape = m_physicActor->CreateShape(physx::PxCapsuleGeometry(m_totalRadius, m_totalScale));
 
 	physx::PxTransform transform = m_pxShape->getLocalPose();
 	physx::PxTransform relativeRot = physx::PxTransform(physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1)));
@@ -122,4 +173,47 @@ void CapsuleCollider::SetPxData()
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSCENE_QUERY_SHAPE, true);
 		}
 	}
+}
+
+void CapsuleCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+}
+
+void CapsuleCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+}
+
+void CapsuleCollider::SetScale(const float& scale)
+{
+	m_editableScale = scale;
+
+	m_totalScale = CCMaths::Max(0.0f, (m_editableScale * m_entityScale) - m_totalRadius);
+
+	ResetPxShape();
+}
+
+void CapsuleCollider::SetRadius(const float& radius)
+{
+	m_editableRadius = radius;
+
+	m_totalRadius = m_editableRadius * m_entityRadius;
+
+	ResetPxShape();
+}
+
+CCMaths::Matrix4 CapsuleCollider::GetTranformMatrix()
+{
+	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale({ m_totalRadius, m_totalScale, m_totalRadius });
+}
+
+CCMaths::Matrix4 CapsuleCollider::GetTopMatrix()
+{
+	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition + CCMaths::Vector3::YAxis * m_totalScale * 0.5f) * CCMaths::Matrix4::Scale(m_totalRadius);
+}
+
+CCMaths::Matrix4 CapsuleCollider::GetBotMatrix()
+{
+	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition - CCMaths::Vector3::YAxis * m_totalScale * 0.5f) * CCMaths::Matrix4::Scale(m_totalRadius);
 }

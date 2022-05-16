@@ -15,10 +15,10 @@ public:
 	Engine();
 	~Engine();
 
-	bool isPlaying = false;
+	bool m_isPlaying = false;
+	bool m_isPaused = false;
 
-	void Launch();
-	void LaunchStandalone();
+	void Launch(bool flipScene = true);
 
 	void Stop();
 

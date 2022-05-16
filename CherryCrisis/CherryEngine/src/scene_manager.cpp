@@ -42,8 +42,8 @@ bool SceneManager::LoadScene(const char* filepath)
 
 bool SceneManager::LoadEmptyScene(const char* filepath) 
 {
-	CopyFile("Internal/SampleScene.cherry", filepath);
-	return LoadScene("Assets/Empty.cherry");
+	CopyFile("Internal/SampleScene.ccscene", filepath);
+	return LoadScene("Assets/Empty.ccscene");
 }
 
 

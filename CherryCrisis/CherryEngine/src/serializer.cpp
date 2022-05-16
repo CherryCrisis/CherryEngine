@@ -24,6 +24,7 @@
 #include "model.hpp"
 #include "character_controller.hpp"
 #include "model_base.hpp"
+#include "input_manager.hpp"
 #include "sky_renderer.hpp"
 #include "object.hpp"
 
@@ -601,10 +602,9 @@ bool Serializer::SerializeEditor(const char* filepath)
 
 bool Serializer::UnserializeEditor(const char* filepath)
 {
-
 	if (!std::filesystem::exists(filepath)) 
 	{
-		SceneManager::LoadEmptyScene("Assets/Empty.cherry");
+		SceneManager::LoadEmptyScene("Assets/Empty.ccscene");
 		return false;
 	}
 
@@ -617,11 +617,109 @@ bool Serializer::UnserializeEditor(const char* filepath)
 	}
 	else 
 	{
-		SceneManager::LoadEmptyScene("Assets/Empty.cherry");
+		SceneManager::LoadEmptyScene("Assets/Empty.ccscene");
 	}
 
 	//Save project settings
 	//Save preferences
+	return true;
+}
+
+bool Serializer::SerializeInputs()
+{
+	YAML::Node save;
+
+	InputManager::InputContext* userContext = InputManager::GetContext("User Context");
+	if (!userContext)
+		return false;
+
+	YAML::Node singleActions = save["ActionSingle"];
+	for (auto& action : userContext->m_single)
+	{
+		YAML::Node currentAction = singleActions[action.first];
+
+		if (action.second.Inputs().size() == 0)
+		{
+			currentAction.push_back(action.second.GetAsString(Keycode::UNKNOWN));
+			continue;
+		}
+
+		for (auto& input : action.second.Inputs())
+		{
+			currentAction.push_back(action.second.GetAsString(input.first));
+		}
+	}
+
+	YAML::Node axesActions = save["ActionAxes"];
+	for (auto& action : userContext->m_axes)
+	{
+		YAML::Node currentAction = axesActions[action.first];
+
+		if (action.second.Axes().size() == 0)
+		{
+			currentAction.push_back(action.second.GetAsString(nullptr));
+			continue;
+		}
+
+		for (auto& input : action.second.Axes())
+		{
+			currentAction.push_back(action.second.GetAsString(input));
+		}
+	}
+
+	std::string fileName = "Assets/GameInputs.ccinputs";
+	std::ofstream out(fileName);
+
+	bool opened = out.is_open();
+	out << save;
+	out.close();
+
+	return opened;
+}
+
+bool Serializer::UnserializeInputs()
+{
+	const char* filepath = "Assets/GameInputs.ccinputs";
+	if (!std::filesystem::exists(filepath))
+		return false;
+
+	InputManager::InputContext* userContext = InputManager::GetContext("User Context");
+	InputManager::SetPollContext(userContext);
+	InputManager::PushContext(userContext);
+
+	YAML::Node loader = YAML::LoadFile(filepath);
+
+	int success = 0;
+	if (loader["ActionSingle"])
+	{
+		for (YAML::const_iterator it = loader["ActionSingle"].begin(); it != loader["ActionSingle"].end(); ++it)
+		{
+			auto* action = InputManager::AddActionSingle(it->first.as<std::string>(), success);
+			for (auto key : it->second)
+			{
+				std::string str = key.as<std::string>();
+				InputManager::AddInputToAction(action, InputManager::GetKeycode(str.c_str()));
+			}
+		}
+	}
+
+	if (loader["ActionAxes"])
+	{
+		for (YAML::const_iterator it = loader["ActionAxes"].begin(); it != loader["ActionAxes"].end(); ++it)
+		{
+			auto* action = InputManager::AddActionAxes(it->first.as<std::string>(), success);
+			for (auto key : it->second)
+			{
+				std::string str = key.as<std::string>();
+				auto axis = InputManager::GetFromString(str);
+				InputManager::AddAxisToAction(action, axis);
+			}
+		}
+	}
+
+	InputManager::PopContext();
+	InputManager::SetPollContext(nullptr);
+
 	return true;
 }
 

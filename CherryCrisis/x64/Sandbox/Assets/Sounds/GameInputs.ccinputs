@@ -1,0 +1,10 @@
+ActionSingle:
+  b_marin00:
+    - B
+    - M
+    - KP_0
+ActionAxes:
+  Rayane:
+    - D/F
+  Moi:
+    - NONE/NONE

@@ -19,8 +19,6 @@ private:
 
 protected:
 	Framebuffer m_framebuffer;
-	
-	InputManager* m_inputs = nullptr;
 
 	bool m_isActive = false;
 

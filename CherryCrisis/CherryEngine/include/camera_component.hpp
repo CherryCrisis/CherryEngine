@@ -21,6 +21,8 @@ protected:
 	void PopulateMetadatas() override;
 
 public:
+	static Camera* m_editorCamera;
+	
 	Camera		m_camera;
 	Transform*	m_transform = nullptr;
 

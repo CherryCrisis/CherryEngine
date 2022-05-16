@@ -4,10 +4,12 @@
 
 #include "maths.hpp"
 #include "collider.hpp"
+#include "renderer.hpp"
 
 class Transform;
+class Mesh;
 
-class CCENGINE_API BoxCollider : public Collider
+class CCENGINE_API BoxCollider : public Collider, public ARenderer
 {
 private:
 	using Vector3Property = CCProperty::ConstRefProperty<BoxCollider, CCMaths::Vector3>;
@@ -15,6 +17,7 @@ private:
 	CCMaths::Vector3 m_baseEntityScale = CCMaths::Vector3::One;
 	CCMaths::Vector3 m_entityScale = CCMaths::Vector3::One;
 	CCMaths::Vector3 m_editableScale = CCMaths::Vector3::One;
+	CCMaths::Vector3 m_totalScale = CCMaths::Vector3::One;
 
 	void PopulateMetadatas() override;
 
@@ -24,6 +27,8 @@ public:
 	~BoxCollider();
 
 	void BindToSignals() override;
+	void Initialize() override;
+	void InvalidateTransform() override;
 	void Unregister() override;
 
 	void SetEntityScale(const CCMaths::Vector3& scale) override;
@@ -33,8 +38,13 @@ public:
 
 	void SetPxData() override;
 
-	void SetScale(const CCMaths::Vector3& scale) { m_editableScale = scale; ResetPxShape(); }
+	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
+	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
+
+	void SetScale(const CCMaths::Vector3& scale);
 	CCMaths::Vector3 GetScale() { return m_editableScale; }
+
+	CCMaths::Matrix4 GetTranformMatrix() override;
 
 	Vector3Property editableScale{ this, &BoxCollider::SetScale, &BoxCollider::GetScale };
 };

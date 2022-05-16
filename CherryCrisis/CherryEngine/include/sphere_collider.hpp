@@ -4,10 +4,12 @@
 
 #include "maths.hpp"
 #include "collider.hpp"
+#include "renderer.hpp"
 
 class Transform;
+class Mesh;
 
-class CCENGINE_API SphereCollider : public Collider
+class CCENGINE_API SphereCollider : public Collider, public ARenderer
 {
 private:
 	using floatProperty = CCProperty::ConstRefProperty<SphereCollider, float>;
@@ -15,6 +17,8 @@ private:
 	float m_baseEntityScale = 1.f;
 	float m_entityScale = 1.f;
 	float m_editableScale = 1.f;
+
+	float m_totalScale = 1.f;
 
 	void PopulateMetadatas() override;
 
@@ -24,6 +28,8 @@ public:
 	~SphereCollider();
 
 	void BindToSignals() override;
+	void Initialize() override;
+	void InvalidateTransform() override;
 	void Unregister() override;
 
 	void SetEntityScale(const CCMaths::Vector3& scale) override;
@@ -33,8 +39,13 @@ public:
 
 	void SetPxData() override;
 
-	void SetScale(const float& scale) { m_editableScale = scale; ResetPxShape(); }
+	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
+	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
+
+	void SetScale(const float& scale);
 	float GetScale() { return m_editableScale; }
+
+	CCMaths::Matrix4 GetTranformMatrix() override;
 
 	floatProperty editableScale{ this, &SphereCollider::SetScale, &SphereCollider::GetScale };
 };
