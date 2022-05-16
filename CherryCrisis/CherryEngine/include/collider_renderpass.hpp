@@ -21,8 +21,14 @@ class CCENGINE_API ColliderRenderPass : public ARenderingRenderPass
 	ElementTBNGenerator m_meshGenerator;
 	std::unordered_set<Collider*>	m_colliders;
 
+	std::shared_ptr<Mesh> m_box = nullptr;
+	std::shared_ptr<Mesh> m_sphere = nullptr;
+	std::shared_ptr<Mesh> m_cylinder = nullptr;
+
 public:
 	ColliderRenderPass(const char* name);
+
+	void DrawMesh(Mesh* mesh, const CCMaths::Matrix4& model);
 
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)

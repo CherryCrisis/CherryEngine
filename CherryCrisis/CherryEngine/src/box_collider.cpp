@@ -16,7 +16,7 @@ BoxCollider::BoxCollider()
 {
 	PopulateMetadatas();
 
-	m_boxCollider = ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
+	m_type = EColliderType::BOX;
 
 	Camera* cam = CameraComponent::m_editorCamera;
 	if (!cam)
@@ -29,7 +29,7 @@ BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
 {
 	PopulateMetadatas();
 
-	m_boxCollider = ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
+	m_type = EColliderType::BOX;
 
 	Camera* cam = CameraComponent::m_editorCamera;
 	if (!cam)
@@ -62,10 +62,20 @@ void BoxCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
+	GetHost().m_OnAwake.Bind(&BoxCollider::Initialize, this);
+}
 
-	m_transform->m_onScaleChange.Bind(&BoxCollider::SetEntityScale, this);
-	m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
+void BoxCollider::Initialize()
+{
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Bind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
+	}
+
+	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);
 
 	SetEntityScale(m_transform->GetGlobalScale());
 }
@@ -164,17 +174,11 @@ void BoxCollider::SetPxData()
 
 void BoxCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	if (!m_boxCollider.get())
-		return;
-
 	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
 }
 
 void BoxCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	if (!m_boxCollider.get())
-		return;
-
 	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
 }
 
@@ -192,9 +196,4 @@ void BoxCollider::SetScale(const CCMaths::Vector3& scale)
 CCMaths::Matrix4 BoxCollider::GetTranformMatrix()
 {
 	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale(m_totalScale);
-}
-
-Mesh* BoxCollider::GetMesh()
-{
-	return m_boxCollider.get();
 }

@@ -20,8 +20,6 @@ private:
 
 	float m_totalScale = 1.f;
 
-	std::shared_ptr<Mesh> m_sphereCollider = nullptr;
-
 	void PopulateMetadatas() override;
 
 public:
@@ -30,6 +28,7 @@ public:
 	~SphereCollider();
 
 	void BindToSignals() override;
+	void Initialize() override;
 	void InvalidateTransform() override;
 	void Unregister() override;
 
@@ -47,7 +46,6 @@ public:
 	float GetScale() { return m_editableScale; }
 
 	CCMaths::Matrix4 GetTranformMatrix() override;
-	Mesh* GetMesh() override;
 
 	floatProperty editableScale{ this, &SphereCollider::SetScale, &SphereCollider::GetScale };
 };

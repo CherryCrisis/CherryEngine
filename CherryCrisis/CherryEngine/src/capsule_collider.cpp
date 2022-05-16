@@ -16,8 +16,7 @@ CapsuleCollider::CapsuleCollider()
 {
 	PopulateMetadatas();
 
-	m_capsBodyCollider = ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 0.5f, 0.5f, 16.f);
-	m_capsTopCollider = ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 0.5f, 8.f, 16.f);
+	m_type = EColliderType::CAPSULE;
 
 	Camera* cam = CameraComponent::m_editorCamera;
 	if (!cam)
@@ -30,8 +29,7 @@ CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
 {
 	PopulateMetadatas();
 
-	m_capsBodyCollider = ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 0.5f, 0.5f, 16.f);
-	m_capsTopCollider = ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 0.5f, 8.f, 16.f);
+	m_type = EColliderType::CAPSULE;
 
 	Camera* cam = CameraComponent::m_editorCamera;
 	if (!cam)
@@ -60,10 +58,22 @@ void CapsuleCollider::BindToSignals()
 
 	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
 
-	m_transform->m_onScaleChange.Bind(&CapsuleCollider::SetEntityScale, this);
-	m_transform->m_OnDestroy.Bind(&CapsuleCollider::InvalidateTransform, this);
+	GetHost().m_OnAwake.Bind(&CapsuleCollider::Initialize, this);
+}
 
-	SetEntityScale(m_transform->GetScale());
+void CapsuleCollider::Initialize()
+{
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
+
+	if (m_transform)
+	{
+		m_transform->m_onScaleChange.Bind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_OnDestroy.Bind(&CapsuleCollider::InvalidateTransform, this);
+	}
+
+	GetHost().m_OnAwake.Unbind(&CapsuleCollider::Initialize, this);
+
+	SetEntityScale(m_transform->GetGlobalScale());
 }
 
 void CapsuleCollider::InvalidateTransform()
@@ -103,7 +113,7 @@ void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& s)
 
 	m_totalRadius = m_editableRadius * m_entityRadius;
 
-	m_totalScale = (m_editableScale * m_entityScale) - m_totalRadius;
+	m_totalScale = CCMaths::Max(0.0f, (m_editableScale * m_entityScale) - m_totalRadius);
 }
 
 void CapsuleCollider::SetPxShape()
@@ -167,9 +177,6 @@ void CapsuleCollider::SetPxData()
 
 void CapsuleCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	if (!m_capsTopCollider || !m_capsBodyCollider)
-		return;
-
 	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
 }
 
@@ -182,7 +189,7 @@ void CapsuleCollider::SetScale(const float& scale)
 {
 	m_editableScale = scale;
 
-	m_totalScale = (m_editableScale * m_entityScale) - m_totalRadius;
+	m_totalScale = CCMaths::Max(0.0f, (m_editableScale * m_entityScale) - m_totalRadius);
 
 	ResetPxShape();
 }
@@ -201,7 +208,12 @@ CCMaths::Matrix4 CapsuleCollider::GetTranformMatrix()
 	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale({ m_totalRadius, m_totalScale, m_totalRadius });
 }
 
-Mesh* CapsuleCollider::GetMesh()
+CCMaths::Matrix4 CapsuleCollider::GetTopMatrix()
 {
-	return m_capsBodyCollider.get();
+	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition + CCMaths::Vector3::YAxis * m_totalScale * 0.5f) * CCMaths::Matrix4::Scale(m_totalRadius);
+}
+
+CCMaths::Matrix4 CapsuleCollider::GetBotMatrix()
+{
+	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition - CCMaths::Vector3::YAxis * m_totalScale * 0.5f) * CCMaths::Matrix4::Scale(m_totalRadius);
 }

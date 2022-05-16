@@ -19,8 +19,6 @@ private:
 	CCMaths::Vector3 m_editableScale = CCMaths::Vector3::One;
 	CCMaths::Vector3 m_totalScale = CCMaths::Vector3::One;
 
-	std::shared_ptr<Mesh> m_boxCollider = nullptr;
-
 	void PopulateMetadatas() override;
 
 public:
@@ -29,6 +27,7 @@ public:
 	~BoxCollider();
 
 	void BindToSignals() override;
+	void Initialize() override;
 	void InvalidateTransform() override;
 	void Unregister() override;
 
@@ -46,7 +45,6 @@ public:
 	CCMaths::Vector3 GetScale() { return m_editableScale; }
 
 	CCMaths::Matrix4 GetTranformMatrix() override;
-	Mesh* GetMesh() override;
 
 	Vector3Property editableScale{ this, &BoxCollider::SetScale, &BoxCollider::GetScale };
 };

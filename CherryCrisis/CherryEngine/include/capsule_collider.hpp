@@ -23,9 +23,6 @@ private:
 	float m_totalRadius = 1.f;
 	float m_totalScale = 1.f;
 
-	std::shared_ptr<Mesh> m_capsTopCollider = nullptr;
-	std::shared_ptr<Mesh> m_capsBodyCollider = nullptr;
-
 	void PopulateMetadatas() override;
 
 public:
@@ -34,6 +31,7 @@ public:
 	~CapsuleCollider();
 
 	void BindToSignals() override;
+	void Initialize() override;
 	void InvalidateTransform() override;
 	void Unregister() override;
 
@@ -54,7 +52,8 @@ public:
 	float GetRadius() { return m_editableRadius; }
 
 	CCMaths::Matrix4 GetTranformMatrix() override;
-	Mesh* GetMesh() override;
+	CCMaths::Matrix4 GetTopMatrix();
+	CCMaths::Matrix4 GetBotMatrix();
 
 	floatProperty editableScale{ this, &CapsuleCollider::SetScale, &CapsuleCollider::GetScale };
 	floatProperty radius{ this, &CapsuleCollider::SetRadius, &CapsuleCollider::GetRadius };
