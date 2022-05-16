@@ -119,8 +119,9 @@ void AudioEmitter::ChangePosition(const CCMaths::Vector3& position)
 
 void AudioEmitter::ChangeRotation(const CCMaths::Vector3& rotation)
 {
-	// TODO: Fix this, need forward and up as param
-	//alListener3f(AL_ORIENTATION, position.x, position.y, position.z);
+	if (!m_sound || !m_isSpatial) return;
+	return;
+	m_sound->SetDirection(rotation);
 }
 
 void AudioEmitter::PopulateMetadatas() 

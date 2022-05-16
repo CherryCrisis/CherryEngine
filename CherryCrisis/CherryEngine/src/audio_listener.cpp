@@ -49,6 +49,15 @@ void AudioListener::ChangePosition(const CCMaths::Vector3& position)
 
 void AudioListener::ChangeRotation(const CCMaths::Vector3& rotation)
 {
-	// TODO: Fix this, need forward and up as param
-	//alListener3f(AL_ORIENTATION, position.x, position.y, position.z);
+	if (!m_transform)return;
+
+	CCMaths::Vector3 up  = m_transform->GetWorldMatrix().up;
+	CCMaths::Vector3 fwd = m_transform->GetWorldMatrix().back;
+	ALfloat listenerOri[] = 
+	{ 
+		fwd.x,fwd.y,fwd.z,
+		up.x,up.y,up.z 
+	};
+
+	alListenerfv(AL_ORIENTATION, listenerOri);
 }
