@@ -46,6 +46,7 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
     m_cellSystemDisplayer.m_camera = &m_sceneDisplayer.m_camera;
 
+    m_uiEditor.m_manager = this;
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
 
     Serializer::UnserializeEditor("editor.meta");
@@ -237,6 +238,8 @@ void EditorManager::HandleMenuBar()
 
         }
         ImGui::PopStyleColor(1);
+
+        m_menubarSize = ImGui::GetWindowSize().y;
         ImGui::EndMainMenuBar();
     }
 }

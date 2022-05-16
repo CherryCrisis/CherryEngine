@@ -3,6 +3,8 @@
 #include "picking_renderpass.hpp"
 
 #include "model_renderer.hpp"
+#include "ui_item.hpp"
+
 #include "transform.hpp"
 #include "model.hpp"
 #include "framebuffer.hpp"
@@ -34,6 +36,23 @@ template <>
 void PickingRenderPass::Unsubscribe(ModelRenderer* toGenerate)
 {
 	m_modelRenderers.erase(toGenerate);
+}
+
+template <>
+int PickingRenderPass::Subscribe(UIItem* toGenerate)
+{
+	if (!toGenerate)
+		return -1;
+
+	m_uiRenderers.insert(toGenerate);
+
+	return 1;
+}
+
+template <>
+void PickingRenderPass::Unsubscribe(UIItem* toGenerate)
+{
+	m_uiRenderers.erase(toGenerate);
 }
 
 CCMaths::Vector3 RGB(uint32_t ID)
@@ -74,6 +93,32 @@ void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 			continue;
 
 		CCMaths::Vector3 colorID = RGB(modelRdr->m_id);
+		glUniform4f(glGetUniformLocation(m_program->m_shaderProgram, "uColorID"), colorID.r, colorID.g, colorID.b, 1.f);
+
+		auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
+
+		if (!gpuMesh)
+			continue;
+
+		glBindVertexArray(gpuMesh->VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+	}
+
+	viewProjection = CCMaths::Matrix4::Orthographic(0.0f, fb.colorTex.width, 0.0f, fb.colorTex.height, -1.f, 5.f);
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
+
+	for (UIItem* uiRdr : m_uiRenderers)
+	{
+		Mesh* mesh = uiRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
+		CCMaths::Matrix4 modelMat = uiRdr->GetModel();
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
+
+		CCMaths::Vector3 colorID = RGB(uiRdr->m_id);
 		glUniform4f(glGetUniformLocation(m_program->m_shaderProgram, "uColorID"), colorID.r, colorID.g, colorID.b, 1.f);
 
 		auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());

@@ -8,6 +8,7 @@
 #include "ui_context.hpp"
 
 class UIItem;
+class EditorManager;
 
 class UIEditor : public FrameDisplayer
 {
@@ -18,6 +19,7 @@ private:
 
 	UIItem* m_selectedItem = nullptr;
 public:
+	EditorManager* m_manager = nullptr;
 	UIEditor();
 	void Render() override;
 

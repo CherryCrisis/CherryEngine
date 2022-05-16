@@ -3,14 +3,13 @@
 #include "ui_item.hpp"
 
 #include "font.hpp"
-#include "renderer.hpp"
 
-class UIText : public UIItem, ARenderer
+class UIText : public UIItem
 {
 private:
 	std::string m_value	   = "sample text";
 	std::string m_fontPath = " ";
-	float		m_size	   = 10.f;
+	float		m_size	   = 50.f;
 protected: 
 	void PopulateMetadatas() override;
 

@@ -13,24 +13,12 @@
 #include "ui_vertical_layout.hpp"
 
 #include "camera_component.hpp"
-void UIContext::AddImage() 
-{
-	UIImage* img = new UIImage("Internal/Icons/file_icon.png");
-	m_items.push_back(img);
-	CameraComponent* cam = CameraComponent::GetMainCamera();
-	img->SubscribeToPipeline(cam->m_camera.m_pipeline.get());
-}
 
 void UIContext::RemoveItem(UIItem* item)
 {
 	item->Delete();
 	m_items.erase(std::remove(m_items.begin(), m_items.end(), item), m_items.end());
 	delete item;
-}
-
-EItemUI UIContext::GetItemTypeByString(const std::string& str) 
-{
-	return EItemUI::BUTTON;
 }
 
 UIContext::~UIContext() 
@@ -104,4 +92,13 @@ void UIContext::AddItemByType(const EItemUI& type)
 	case EItemUI::VERTICAL_LAYOUT:	 {  AddItem<UIVerticalLayout>();   break;  }
 	case EItemUI::HORIZONTAL_LAYOUT: {  AddItem<UIHorizontalLayout>(); break;   }
 	}
+}
+
+UIItem* UIContext::Get(uint32_t id)
+{
+	for (UIItem* item : m_items)
+		if (item->CompareId(id))	
+			return item;
+	
+	return nullptr;
 }

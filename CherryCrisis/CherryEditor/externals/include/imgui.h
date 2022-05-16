@@ -754,6 +754,7 @@ namespace ImGui
     IMGUI_API void          TableSetupColumn(const char* label, ImGuiTableColumnFlags flags = 0, float init_width_or_weight = 0.0f, ImGuiID user_id = 0);
     IMGUI_API void          TableSetupScrollFreeze(int cols, int rows); // lock columns/rows so they stay visible when scrolled.
     IMGUI_API void          TableHeadersRow();                          // submit all headers cells based on data provided to TableSetupColumn() + submit context menu
+    IMGUI_API float         TableGetHeaderRowHeight();
     IMGUI_API void          TableHeader(const char* label);             // submit one header cell manually (rarely used)
 
     // Tables: Sorting

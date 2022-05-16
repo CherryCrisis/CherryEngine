@@ -45,6 +45,7 @@ void TextRenderPass::Unsubscribe(UIText* toGenerate)
 }
 // Font rendering from LearnGL
 // https://learnopengl.com/In-Practice/Text-Rendering
+// TODO: Optimize quad size calculation
 void TextRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 {
 	if (!viewer)
@@ -74,7 +75,7 @@ void TextRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		// iterate through all characters
 		std::string::const_iterator c;
 		std::string textValue = text->GetText();
-		float size = text->GetSize();
+		float size = text->GetSize() / 50.f;
  		for (c = textValue.begin(); c != textValue.end(); c++)
 		{
 			Character ch = text->m_font->Characters[*c];

@@ -23,8 +23,6 @@ enum class EItemUI
 class CCENGINE_API UIContext 
 {
 public:
-	void AddImage();
-
 	template<class ItemT>
 	ItemT* AddItem();
 	void AddItemByType(const EItemUI& type);
@@ -37,7 +35,6 @@ public:
 	template<class ItemT>
 	ItemT* Get(const std::string& name);
 
-	static EItemUI GetItemTypeByString(const std::string& str);
-
+	UIItem* Get(uint32_t id);
 	~UIContext();
 };

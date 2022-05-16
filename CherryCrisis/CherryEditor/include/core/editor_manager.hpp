@@ -103,6 +103,7 @@ public:
     InputManager::InputContext* m_editorContext;
 
     std::string m_projectPath = "";
+    float m_menubarSize = 0.f;
 };
 
 // Wrapper for generic notifications

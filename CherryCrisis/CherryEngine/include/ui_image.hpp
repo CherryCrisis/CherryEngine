@@ -3,12 +3,11 @@
 #include "ui_item.hpp"
 
 #include "texture.hpp"
-#include "renderer.hpp"
 #include "cherry_macros.hpp"
 
 class ARenderingPipeline;
 
-class CCENGINE_API UIImage : public UIItem , ARenderer
+class CCENGINE_API UIImage : public UIItem
 {
 private:
 	std::string m_texturePath = ""; // Useful for metadata 
@@ -23,7 +22,6 @@ public:
 	UIImage();
 	UIImage(const char* filepath);
 	std::shared_ptr<Texture> m_texture = nullptr;
-	std::shared_ptr<Mesh> m_mesh = nullptr;
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;

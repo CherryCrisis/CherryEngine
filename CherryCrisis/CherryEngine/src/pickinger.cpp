@@ -3,6 +3,7 @@
 #include "pickinger.hpp"
 
 #include "entity.hpp"
+#include "ui_item.hpp"
 #include "framebuffer.hpp"
 #include "picking_renderpass.hpp"
 #include "render_manager.hpp"
@@ -51,4 +52,28 @@ void Pickinger::SetBuffer(Framebuffer* buffer, Viewer* camera)
 	
 	instance->m_fbo = buffer; instance->m_viewer = camera;
 	instance->m_renderpass = camera->m_pipeline->LoadSubpipeline<PickingRenderPass>();
+}
+
+UIItem* Pickinger::GetUIItem(float x, float y)
+{
+	Pickinger* instance = GetInstance();
+
+	// flip texture
+	y = (float)instance->m_fbo->colorTex.height - y;
+
+	instance->m_renderpass->Execute(*instance->m_fbo, instance->m_viewer);
+
+	glFlush();
+	glFinish();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	unsigned char data[3];
+	glReadPixels((int)x, (int)y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	return SceneManager::GetInstance()->m_currentScene->m_UIContext.Get(ColorToID(data));
+}
+
+
+UIItem* Pickinger::GetUIItem(const CCMaths::Vector2& position)
+{
+	return GetUIItem(position.x, position.y);
 }

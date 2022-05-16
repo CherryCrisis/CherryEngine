@@ -24,11 +24,13 @@ void UIImage::SubscribeToPipeline(ARenderingPipeline* pipeline)
     if (!m_mesh || !m_texture)
 		return;
 
-	pipeline->SubscribeToPipeline<UIRenderPass>(this);
+    UIItem::SubscribeToPipeline(pipeline);
+    pipeline->SubscribeToPipeline<UIRenderPass>(this);
 }
 
 void UIImage::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
+    UIItem::UnsubscribeToPipeline(pipeline);
     pipeline->UnsubscribeToPipeline<UIRenderPass>(this);
 }
 
@@ -57,7 +59,6 @@ void UIImage::Init(const std::string& str)
 
     SetName("Image");
 
-    
     CameraComponent* cam = CameraComponent::GetMainCamera();
     if (!cam)
         return;
