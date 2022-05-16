@@ -11,6 +11,11 @@ EnvironmentMapRenderPass::EnvironmentMapRenderPass(const char* name)
 // TODO: Set real path
 	: ARenderingRenderPass(name, "Assets/Shaders/PBR/environmentMapShader.vert", "Assets/Shaders/PBR/environmentMapShader.frag")
 {
+	if (m_program)
+	{
+		glUseProgram(m_program->m_shaderProgram);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "equirectangularMap"), 0);
+	}
 }
 
 template <>
@@ -62,9 +67,6 @@ void EnvironmentMapRenderPass::SetupEnvironmentMap()
 		std::unique_ptr<GPUEnvironmentMap> gpuEnvMap = std::make_unique<GPUEnvironmentMap>(spheremap);
 		gpuEnvMap->m_OnGpuReloaded = CCCallback::BindCallback(&EnvironmentMapRenderPass::GenerateEnvironmentMap, this);
 
-		glUseProgram(m_program->m_shaderProgram);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "equirectangularMap"), 0);
-
 		spheremap->m_gpuTextureSpheremap = std::move(gpuEnvMap);
 		
 		GenerateEnvironmentMap();
@@ -91,7 +93,7 @@ void EnvironmentMapRenderPass::GenerateEnvironmentMap()
 	{
 		glCullFace(GL_BACK);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		
 		// convert HDR equirectangular environment map to cubemap equivalent
 		glUseProgram(m_program->m_shaderProgram);
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, captureProjectionMatrix.data);
@@ -102,48 +104,48 @@ void EnvironmentMapRenderPass::GenerateEnvironmentMap()
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, gpuSpheremap->ID);
-
+		
 		glViewport(0, 0, gpuSpheremap->envMapSize, gpuSpheremap->envMapSize);
 
-	GLuint FBO;
-	GLuint RBO;
-
-	//--- Generate FBO and RBO  to convert sphereMap in Cubemap--//
-	glGenFramebuffers(1, &FBO);
-	glGenRenderbuffers(1, &RBO);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, RBO);
-
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, gpuSpheremap->envMapSize, gpuSpheremap->envMapSize);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RBO);
-
+		GLuint FBO;
+		GLuint RBO;
+		
+		//--- Generate FBO and RBO  to convert sphereMap in Cubemap--//
+		glGenFramebuffers(1, &FBO);
+		glGenRenderbuffers(1, &RBO);
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+		glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+		
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, gpuSpheremap->envMapSize, gpuSpheremap->envMapSize);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RBO);
+		
 		//glBindFramebuffer(GL_FRAMEBUFFER, gpuSpheremap->FBO);
-
+		
 		Mesh* mesh = m_skyRenderer->m_cube.get();
 		GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
-
+		
 		for (unsigned int i = 0; i < 6; ++i)
 		{
-
+		
 			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, captureViews[i].data);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, gpuCubemap->ID, 0);
-
+		
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		
 			glBindVertexArray(gpuMesh->VAO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 			glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 		}
-
+		
 		glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
 		glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-
+		
 		glBindVertexArray(0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-
+		
 		glDeleteFramebuffers(1, &FBO);
 		glDeleteRenderbuffers(1, &RBO);
 	}
@@ -153,12 +155,12 @@ void EnvironmentMapRenderPass::GPUEnvironmentMap::Generate(Texture* texture)
 {
 	//--- Generate environment map --//
 	glCreateTextures(GL_TEXTURE_2D, 1, &ID);
-
+	
 	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+	
 	//TODO: Integer Compressed spheremap
 	glTextureStorage2D(ID, 1, GL_RGB16F, texture->GetWidth(), texture->GetHeight());
 	glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (GLenum)texture->GetInternalFormat(), GL_UNSIGNED_BYTE, texture->GetData());

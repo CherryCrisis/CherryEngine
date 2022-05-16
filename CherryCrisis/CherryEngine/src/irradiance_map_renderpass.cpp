@@ -97,11 +97,8 @@ void IrradianceMapRenderPass::GenerateIrradianceMap()
 
 	glViewport(0, 0, gpuIrradianceMap->mapSize, gpuIrradianceMap->mapSize);
 
-
 	GLuint FBO;
-
-	glGenRenderbuffers(1, &FBO);
-
+	glGenFramebuffers(1, &FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
 	for (unsigned int i = 0; i < 6; ++i)

@@ -97,16 +97,16 @@ int main(int argc, char** argv)
     if (argc > 1) 
         projectPath = argv[1];
 
-
     if (projectPath.size() > 0)
         std::filesystem::current_path(projectPath);
 
+#ifdef NDEBUG
     std::string solutionPath = projectPath + "/CherryScripting.sln /Build";
     callEx("open", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv", solutionPath.c_str());
+#endif
+
     Engine engine{};
     std::cout << "engine created " << std::endl;
-
-
 
     EditorManager editor{projectPath};
 

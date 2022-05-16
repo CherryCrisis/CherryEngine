@@ -1,5 +1,7 @@
+resources:
+  - Assets\Models\Backpack\backpack.obj
 cells:
   1935981542:
     name: Default
     settings:
-      texturePath: ""
+      texturePath: Assets\skydome\Arches_3k.hdr
