@@ -14,7 +14,7 @@
 #include "camera_component.hpp"
 #include "scripted_behaviour.hpp"
 
-#include "model_base.hpp"
+#include "model.hpp"
 #include "mesh.hpp"
 
 #include "serializer.hpp"
@@ -162,7 +162,7 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 		GenerateEntitiesRecursive(childNode, entity, entities, cell);
 }
 
-void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
+void Scene::GenerateEntities(std::shared_ptr<Model> modelBase)
 {
 	if (m_cells.size() == 0)
 	{
@@ -184,7 +184,7 @@ void Scene::GenerateEntities(std::shared_ptr<ModelBase> modelBase)
 	}
 }
 
-void Scene::GenerateEntitiesInCell(std::shared_ptr<ModelBase> modelBase, Cell* cell)
+void Scene::GenerateEntitiesInCell(std::shared_ptr<Model> modelBase, Cell* cell)
 {
 	std::vector<Entity*> entities;
 

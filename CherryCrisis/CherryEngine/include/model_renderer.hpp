@@ -6,7 +6,7 @@
 
 #include "renderer.hpp"
 
-#include "model_base.hpp"
+#include "model.hpp"
 
 #include "property.hpp"
 

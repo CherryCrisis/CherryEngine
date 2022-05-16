@@ -11,7 +11,7 @@
 
 #include "utils.hpp"
 #include "resource.hpp"
-#include "model_base.hpp"
+#include "model.hpp"
 #include "csassembly.hpp"
 #include "command.hpp"
 #include "model_loader.hpp"
@@ -855,7 +855,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 SetAssetNode(m_path, modelNode);
 
                 std::string filepath(modelNode.m_relativePath.string() + modelNode.m_filename + modelNode.m_extension);
-                std::shared_ptr<ModelBase> modelBase = resourceManager->AddResource<ModelBase>(filepath.c_str(), true);
+                std::shared_ptr<Model> modelBase = resourceManager->AddResource<Model>(filepath.c_str(), true);
                 modelNode.m_resource = modelBase;
 
                 modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true, true, ETextureFormat::RGBA);

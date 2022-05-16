@@ -5,7 +5,6 @@
 #include <string>
 
 #include "model.hpp"
-#include "model_base.hpp"
 #include "mesh.hpp"
 #include "cherry_macros.hpp"
 
@@ -122,7 +121,7 @@ namespace CCImporter
     static const char* cacheDirectory("Cache/");
     static const char* cacheExtension(".ccfile");
     static const char* cacheMaterialExtension(".ccmat");
-    static const char* materialExtension(".mat");
+    static const char* materialExtension(".ccmat");
     static const char* spheremapExtension(".ccspheremap");
     static const char* cubemapExtension(".cccubemap");
 

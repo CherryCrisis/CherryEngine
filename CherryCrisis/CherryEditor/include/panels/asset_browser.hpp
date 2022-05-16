@@ -23,7 +23,7 @@
 
 
 class AResource;
-class ModelBase;
+class Model;
 class EditorManager;
 
 const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr"};
@@ -32,7 +32,7 @@ const std::set<std::string> shaderExtensions = { ".frag", ".vert" };
 const std::set<std::string> soundExtensions = { ".wav" };
 const std::string scriptExtensions = ".cs";
 const std::string sceneExtensions = ".ccscene";
-const std::string matExtensions = ".mat";
+const std::string matExtensions = ".ccmat";
 
 class AssetBrowser : public Panel
 {
@@ -152,7 +152,7 @@ namespace CCScripting
 		};
 	};
 
-	struct ModelNode : public ResourceAssetNode<ModelBase>
+	struct ModelNode : public ResourceAssetNode<Model>
 	{
 		void Action() override {};
 	};

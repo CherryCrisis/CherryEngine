@@ -14,12 +14,12 @@
 #include "resource_manager.hpp"
 
 #include "pickinger.hpp"
-#include "cell_system.hpp"
 
 #include "mixed_rendering_pipeline.hpp"
 
 #include "utils.hpp"
 #include "camera_component.hpp"
+#include "model.hpp"
 
 #undef near
 #undef far
@@ -205,7 +205,7 @@ void SceneDisplayer::Render()
                 }
                 else if (modelExtensions.end() != modelExtensions.find("." + extension))
                 {
-                    std::shared_ptr<ModelBase> model = ResourceManager::GetInstance()->GetResource<ModelBase>(data);
+                    std::shared_ptr<Model> model = ResourceManager::GetInstance()->GetResource<Model>(data);
 
                     if (Cell* cell = m_manager->GetCellSystemDisplayer()->GetSelectedCell())
                         SceneManager::GetInstance()->m_currentScene->GenerateEntitiesInCell(model, cell);

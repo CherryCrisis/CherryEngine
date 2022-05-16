@@ -13,7 +13,6 @@
 #include "portal_component.hpp"
 #include "core/editor_manager.hpp"
 #include "callback.hpp"
-#include "model.hpp"
 #include "cell.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
@@ -255,14 +254,51 @@ void HierarchyDisplayer::ContextCallback()
             }
 
             if (ImGui::MenuItem("ModelRenderer")) {}
-            if (ImGui::MenuItem("Portal"))
+            if (ImGui::BeginMenu("Portal"))
             {
-                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                if (ImGui::MenuItem("One Portal"))
                 {
-                    newEntity = new Entity("Portal", cell);
+                    if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                    {
+                        newEntity = new Entity("Portal", cell);
+                    }
+
+                    newEntity->AddBehaviour<PortalComponent>();
                 }
-                newEntity->AddBehaviour<PortalComponent>();
+
+                if (ImGui::MenuItem("Pair Portals"))
+                {
+                    if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                    {
+                        Scene* scene = SceneManager::GetInstance()->m_currentScene.get();
+                        Entity* entity_0 = new Entity("Portal_0", cell);
+
+                        Entity* entity_1 = new Entity("Portal_1", cell);
+
+                        entity_0->AddBehaviour<Transform>();
+                        entity_1->AddBehaviour<Transform>();
+
+                        PortalComponent* portal_0 = entity_0->AddBehaviour<PortalComponent>();
+                        PortalComponent* portal_1 = entity_1->AddBehaviour<PortalComponent>();
+
+                        entity_0->Initialize();
+                        entity_1->Initialize();
+
+                        scene->AddEntity(entity_0);
+                        m_manager->FocusEntity(entity_0);
+
+                        scene->AddEntity(entity_1);
+                        m_manager->FocusEntity(entity_1);
+
+                        portal_0->SetLinkedPortal(entity_1);
+                        portal_1->SetLinkedPortal(entity_0);
+
+                    }
+                }
+
+                ImGui::EndMenu();
             }
+
             if (ImGui::MenuItem("Camera")) {}
             if (ImGui::MenuItem("Particle System")) {}
             if (ImGui::MenuItem("Audio Source")) {}

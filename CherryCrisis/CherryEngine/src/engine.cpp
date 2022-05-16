@@ -13,7 +13,6 @@
 #include "physic_manager.hpp"
 #include "sound_manager.hpp"
 #include "time_manager.hpp"
-#include "cell_system.hpp"
 #include "debug.hpp"
 #include "pickinger.hpp"
 
@@ -46,7 +45,6 @@ Engine::~Engine()
 	TimeManager::Kill();
 	ResourceManager::Kill();
 	SceneManager::Kill();
-	CellSystem::Kill();
 	CsScriptingSystem::Kill();
 	RenderManager::Kill();
 	Debug::Kill();

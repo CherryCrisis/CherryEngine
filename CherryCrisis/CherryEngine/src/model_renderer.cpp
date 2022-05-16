@@ -12,7 +12,6 @@
 #include "pbr_renderpass.hpp"
 #include "picking_renderpass.hpp"
 #include "entity.hpp"
-#include "model.hpp"
 #include "texture.hpp"
 #include "material.hpp"
 
@@ -57,7 +56,7 @@ void ModelRenderer::PopulateMetadatas()
 void ModelRenderer::LoadModelFromPath(std::string modelPath)
 {
 	if (!modelPath.empty())
-		ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(modelPath.c_str(), true, nullptr);
+		ResourceManager::GetInstance()->AddResourceMultiThreads<Model>(modelPath.c_str(), true, nullptr);
 }
 
 std::string ModelRenderer::GetModelPath()

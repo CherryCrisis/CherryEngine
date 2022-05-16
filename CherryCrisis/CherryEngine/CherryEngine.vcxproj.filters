@@ -159,9 +159,6 @@
     <ClInclude Include="include\model.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="include\model_base.hpp">
-      <Filter>Fichiers d%27en-tête\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="include\model_loader.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
@@ -1107,9 +1104,6 @@
     <ClInclude Include="include\cell.hpp">
       <Filter>Fichiers d%27en-tête\Cells</Filter>
     </ClInclude>
-    <ClInclude Include="include\cell_system.hpp">
-      <Filter>Fichiers d%27en-tête\Cells</Filter>
-    </ClInclude>
     <ClInclude Include="include\serializer.hpp">
       <Filter>Fichiers d%27en-tête\Serialization</Filter>
     </ClInclude>
@@ -1452,7 +1446,7 @@
     <ClCompile Include="src\mesh.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\model_base.cpp">
+    <ClCompile Include="src\model.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\model_loader.cpp">
@@ -1462,9 +1456,6 @@
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\shader.cpp">
-      <Filter>Fichiers sources\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="src\model.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\texture.cpp">
@@ -1555,9 +1546,6 @@
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\cell.cpp">
-      <Filter>Fichiers sources\Cells</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cell_system.cpp">
       <Filter>Fichiers sources\Cells</Filter>
     </ClCompile>
     <ClCompile Include="src\utils.cpp">

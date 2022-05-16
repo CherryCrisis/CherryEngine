@@ -21,9 +21,8 @@
 #include "capsule_collider.hpp"
 #include "audio_emitter.hpp"
 #include "audio_listener.hpp"
-#include "model.hpp"
 #include "character_controller.hpp"
-#include "model_base.hpp"
+#include "model.hpp"
 #include "input_manager.hpp"
 #include "sky_renderer.hpp"
 #include "object.hpp"
@@ -82,7 +81,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 	//Resources Saving
 	for (const auto& [type, paths] : pathList)
 	{
-		if (type == typeid(ModelBase))
+		if (type == typeid(Model))
 			for (const auto& path : paths)
 				resources.push_back(path->string());
 	}
@@ -352,7 +351,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 		{
 			std::string str = resource.as<std::string>();
 			const char* Cstr = str.c_str(); // need to casts it as a const char for MultiThread
-			ResourceManager::GetInstance()->AddResourceMultiThreads<ModelBase>(Cstr, true, nullptr);
+			ResourceManager::GetInstance()->AddResourceMultiThreads<Model>(Cstr, true, nullptr);
 		}
 	}
 

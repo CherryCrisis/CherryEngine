@@ -9,7 +9,6 @@
 #include "camera.hpp"
 #include "model_renderer.hpp"
 #include "transform.hpp"
-#include "model.hpp"
 #include "sky_renderer.hpp"
 #include "irradiance_map_renderpass.hpp"
 #include "prefilter_map_renderpass.hpp"

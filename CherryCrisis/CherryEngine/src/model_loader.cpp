@@ -21,7 +21,7 @@
 #include "debug.hpp"
 
 #include "mesh.hpp"
-#include "model_base.hpp"
+#include "model.hpp"
 #include "material.hpp"
 #include "texture.hpp"
 #include "utils.hpp"

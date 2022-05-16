@@ -7,7 +7,6 @@
 #include "light.hpp"
 
 #include "transform.hpp"
-#include "model.hpp"
 #include "mesh.hpp"
 
 #include "viewer.hpp"

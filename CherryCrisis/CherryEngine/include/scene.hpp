@@ -8,7 +8,7 @@
 #include "entity.hpp"
 #include "cell.hpp"
 
-class ModelBase;
+class Model;
 struct ModelNode;
 
 class CCENGINE_API Scene : public Resource<Scene>
@@ -56,8 +56,8 @@ public:
 	//!!INTERNAL!! - Find Entity by its modelID (picking)
 	Entity* FindModelEntity(uint32_t id);
 
-	void GenerateEntities(std::shared_ptr<ModelBase> resource);
-	void GenerateEntitiesInCell(std::shared_ptr<ModelBase> resource, Cell* cell);
+	void GenerateEntities(std::shared_ptr<Model> resource);
+	void GenerateEntitiesInCell(std::shared_ptr<Model> resource, Cell* cell);
 	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities, Cell* cell);
 
 	std::string GetName() { return GetFilepath(); }

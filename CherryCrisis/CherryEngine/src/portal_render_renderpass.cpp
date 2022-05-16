@@ -7,7 +7,6 @@
 #include "camera.hpp"
 #include "model_renderer.hpp"
 #include "transform.hpp"
-#include "model.hpp"
 
 #include "shadow_renderpass.hpp"
 #include "portal.hpp"

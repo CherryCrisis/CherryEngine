@@ -4,7 +4,6 @@
 
 #include "model_renderer.hpp"
 #include "transform.hpp"
-#include "model.hpp"
 #include "framebuffer.hpp"
 
 #include "viewer.hpp"

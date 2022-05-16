@@ -221,7 +221,6 @@
     <ClInclude Include="include\builder.hpp" />
     <ClInclude Include="include\capsule_collider.hpp" />
     <ClInclude Include="include\cell.hpp" />
-    <ClInclude Include="include\cell_system.hpp" />
     <ClInclude Include="include\character_controller.hpp" />
     <ClInclude Include="include\collider_renderpass.hpp" />
     <ClInclude Include="include\command.hpp" />
@@ -346,7 +345,6 @@
     <ClInclude Include="include\mesh.hpp" />
     <ClInclude Include="include\metadata.hpp" />
     <ClInclude Include="include\model.hpp" />
-    <ClInclude Include="include\model_base.hpp" />
     <ClInclude Include="include\model_loader.hpp" />
     <ClInclude Include="include\model_renderer.hpp" />
     <ClInclude Include="include\monowrapper.hpp" />
@@ -501,7 +499,6 @@
     <ClCompile Include="src\builder.cpp" />
     <ClCompile Include="src\capsule_collider.cpp" />
     <ClCompile Include="src\cell.cpp" />
-    <ClCompile Include="src\cell_system.cpp" />
     <ClCompile Include="src\character_controller.cpp" />
     <ClCompile Include="src\collider_renderpass.cpp" />
     <ClCompile Include="src\command.cpp" />
@@ -565,7 +562,6 @@
     <ClCompile Include="src\maths.cpp" />
     <ClCompile Include="src\mesh.cpp" />
     <ClCompile Include="src\model.cpp" />
-    <ClCompile Include="src\model_base.cpp" />
     <ClCompile Include="src\model_loader.cpp" />
     <ClCompile Include="src\model_renderer.cpp" />
     <ClCompile Include="src\monowrapper.cpp" />
