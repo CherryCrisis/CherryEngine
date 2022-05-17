@@ -8,22 +8,14 @@
 #include <string>
 
 #include "property.hpp"
-
-struct CCENGINE_API Field
-{
-	std::string m_name;
-    std::any m_value;
-	std::type_index m_type = typeid(void);
-
-	Field() = default;
-	Field(const std::string& name, std::any value, const std::type_index& type)
-		: m_name(name), m_value(value), m_type(type)
-	{
-
-	}
-};
+#include "field.hpp"
 
 struct CCENGINE_API Metadata
+{
+};
+
+
+struct CCENGINE_API Metapack
 {
 	std::unordered_map<std::string, Field> m_fields;
 	std::unordered_map<std::string, CCProperty::IClearProperty*> m_properties;

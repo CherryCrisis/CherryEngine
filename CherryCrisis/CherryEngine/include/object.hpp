@@ -18,5 +18,5 @@ public:
 
 	uint32_t GetUUID() const { return (uint32_t)m_uuid; }
 
-	Metadata m_metadatas;
+	Metapack m_metadatas;
 };
