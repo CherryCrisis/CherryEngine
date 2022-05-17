@@ -376,6 +376,8 @@ void AssetBrowser::BrowserActionCreate()
                     myfile.close();
 
                     EditorManager::SendNotification("Script Created", ENotifType::Success);
+
+                    ReloadScripts();
                 }
             }
             else if (!m_popupAssetType.compare("folder"))
@@ -912,10 +914,14 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                         // TODO: check if reload already started
                         if (m_manager->m_engine) 
                         {
-                            if (m_manager->m_engine->m_isPlaying)
+                            if (m_manager->m_engine->m_isPlaying) 
+                            {
                                 m_manager->m_engine->m_OnStop.Bind(&AssetBrowser::ReloadScripts, this);
-                            else
+                            }
+                            else 
+                            {
                                 ReloadScripts();
+                            }
                         }
                     }
                 }
@@ -923,6 +929,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                     m_timeModified.insert({ scriptNode.m_filename, mod_time });
             }
 
+            CsScriptingSystem::GetInstance()->SubmitScript(scriptNode.m_filename.c_str());
             return pair.first->second.get();
         }
 
@@ -1027,8 +1034,9 @@ void AssetBrowser::QuerryBrowser()
 }
 
 void AssetBrowser::ReloadScripts()
-{
+{   
     std::string solutionPath = (m_assetsDirectory.parent_path() / "CherryScripting.sln").string();
     CsScriptingSystem::GetInstance()->InitializeHotReload(m_manager->GetCompilerPath().c_str(), solutionPath.c_str());
     m_manager->m_engine->m_OnStop.Unbind(&AssetBrowser::ReloadScripts, this);
+    QuerryBrowser();
 }
