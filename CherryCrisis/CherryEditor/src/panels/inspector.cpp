@@ -95,173 +95,97 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
         if (opened)
         {
-            auto& fields = behaviour->GetFields();
-            for (auto& [fieldName, fieldRef] : fields)
+            auto& metapack = behaviour->GetMetapack();
+            for (auto& [metaname, metadata] : metapack)
             {
-                const std::type_index type = fieldRef.m_value.type();
+                const std::type_index& type = metadata->GetType();
 
-                if (type == typeid(CCMaths::Vector3*))
+                if (type == typeid(CCMaths::Vector3))
                 {
-                    CCMaths::Vector3* val = std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
-                    ImCherry::ColoredDragFloat3(fieldRef.m_name.c_str(), val->data, color1, color2, color3, 0.5f);
+                    CCMaths::Vector3 defaultVal;
+                    CCMaths::Vector3* valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
+                    if (valPtr && ImCherry::ColoredDragFloat3(metaname.c_str(), valPtr->data, color1, color2, color3, 0.5f))
+                        metadata->Set(valPtr);
                     continue;
                 }
 
-                if (type == typeid(Bool3*))
+                if (type == typeid(Bool3))
                 {
-                    Bool3* val = std::any_cast<Bool3*>(fieldRef.m_value);
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val->x); ImGui::SameLine();
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val->y); ImGui::SameLine();
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), &val->z);
-                    continue;
-                }
+                    Bool3 defaultVal;
+                    Bool3* valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
 
-                if (type == typeid(bool*))
-                {
-                    bool* val = std::any_cast<bool*>(fieldRef.m_value);
-                    ImGui::Checkbox(fieldRef.m_name.c_str(), val);
-                    continue;
-                }
-                if (type == typeid(int*))
-                {
-                    int* val = std::any_cast<int*>(fieldRef.m_value);
-                    ImGui::DragInt(fieldRef.m_name.c_str(), val, 0.5f);
-                    continue;
-                }
-                if (type == typeid(float*))
-                {
-                    float* val = std::any_cast<float*>(fieldRef.m_value);
-                    ImGui::DragFloat(fieldRef.m_name.c_str(), val, 0.5f, 0.0f, 0.0f, *val >= 1.0e+5 ? "%e" : "%.3f");
-                    continue;
-                }
-
-                if (type == typeid(std::string*))
-                {
-                    std::string* val = std::any_cast<std::string*>(fieldRef.m_value);
-                    ImGui::InputText(fieldRef.m_name.c_str(), &(*val)[0], val->size() + 1);
-                    continue;
-                }
-            }
-
-            std::unordered_map <std::string, CCProperty::IClearProperty*>& properties = behaviour->GetProperties();
-
-            for (const auto& [propName, propRef] : properties)
-            {
-                auto& propType = propRef->GetGetType();
-
-                if (propType == typeid(CCMaths::Vector3))
-                {
-                    CCMaths::Vector3 val;
-                    propRef->Get(&val); 
-                    if (ImCherry::ColoredDragFloat3(propName.c_str(), val.data, color1, color2, color3, 0.5f))
-                        propRef->Set(&val);
-
-                    continue;
-                }
-
-                if (propType == typeid(int))
-                {
-                    int val;
-                    propRef->Get(&val);
-                    if (ImGui::DragInt(propName.c_str(), &val, 0.5f))
-                        propRef->Set(&val);
-
-                    continue;
-                }
-
-                if (propType == typeid(bool))
-                {
-                    bool val;
-                    propRef->Get(&val);
-                    if (ImGui::Checkbox(propName.c_str(), &val))
-                        propRef->Set(&val);
-
-                    continue;
-                }
-
-                if (propType == typeid(Bool3))
-                {
-                    Bool3 val;
-                    propRef->Get(&val);
-                    if (ImGui::TreeNode(propName.c_str()))
+                    if (valPtr)
                     {
-                        ImGui::Checkbox("X", &val.x); ImGui::SameLine();
-                        ImGui::Checkbox("Y", &val.y); ImGui::SameLine();
-                        ImGui::Checkbox("Z", &val.z);
-                        propRef->Set(&val);
+                        bool hasChecked = false;
+                        hasChecked |= ImGui::Checkbox(metaname.c_str(), &valPtr->x); ImGui::SameLine();
+                        hasChecked |= ImGui::Checkbox(metaname.c_str(), &valPtr->y); ImGui::SameLine();
+                        hasChecked |= ImGui::Checkbox(metaname.c_str(), &valPtr->z);
 
-                        ImGui::TreePop();
+                        if (hasChecked)
+                            metadata->Set(valPtr);
                     }
+                    
                     continue;
                 }
 
-                if (propType == typeid(float))
+                if (type == typeid(bool))
                 {
-                    float val;
-                    propRef->Get(&val);
-                    if (ImGui::DragFloat(propName.c_str(), &val, 0.5f, 0.0f, 0.0f, val >= 1.0e+5 ? "%e" : "%.3f"))
-                        propRef->Set(&val);
-
+                    bool defaultVal;
+                    bool* valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
+                    if (valPtr && ImGui::Checkbox(metaname.c_str(), valPtr))
+                        metadata->Set(valPtr);
 
                     continue;
                 }
-
-                if (propType == typeid(std::string))
+                if (type == typeid(int))
                 {
-                    std::string val;
-                    propRef->Get(&val);
-                    if (ImGui::InputText(propName.c_str(), &val[0], val.size() + 2))
-                        propRef->Set(&val);
+                    int defaultVal;
+                    int* valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
+                    if (valPtr && ImGui::DragInt(metaname.c_str(), valPtr, 0.5f))
+                        metadata->Set(valPtr);
 
-                    // if sound then accept drag and drop
-                    if (emitter && ImGui::BeginDragDropTarget())
-                    {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-                        {
-                            const char* data = (const char*)payload->Data;
-                            std::string strData = data;
-                            std::string extension = String::ExtractValue(data, '.');
-
-                            if (extension == "wav")
-                                propRef->Set(&strData);
-                        }
-                        ImGui::EndDragDropTarget();
-                    }
                     continue;
                 }
-
-                if (propType == typeid(char*))
+                if (type == typeid(float))
                 {
-                    char* val;
-                    propRef->Get(&val);
-                    if (ImGui::InputText(propName.c_str(), val, strlen(val) + 2))
-                        propRef->Set(&val);
+                    float defaultVal;
+                    float* valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
+                    if (valPtr && ImGui::DragFloat(metaname.c_str(), valPtr, 0.5f, 0.0f, 0.0f, *valPtr >= 1.0e+5 ? "%e" : "%.3f"))
+                        metadata->Set(valPtr);
 
                     continue;
                 }
 
-                if (propType == typeid(const char*))
+                if (type == typeid(std::string))
                 {
-                    const char* val = nullptr;
-                    propRef->Get(&val);
+                    std::string defaultVal;
+                    std::string* valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
+                    if(valPtr && ImGui::InputText(metaname.c_str(), &(*valPtr)[0], valPtr->size() + 1))
+                        metadata->Set(valPtr);
 
-                    ImGui::Text("%s %s", propName.c_str(), val ? val : "X");
                     continue;
                 }
 
-                if (propType == typeid(Entity*))
+                if (type == typeid(Entity*))
                 {
-                    Entity* val = nullptr;
-                    propRef->Get(&val);
+                    Entity* defaultVal = nullptr;
+                    Entity** valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
 
-                    ImGui::Text("%s", propName.c_str());
+                    ImGui::Text("%s", metaname.c_str());
 
                     if (ImGui::BeginDragDropTarget())
                     {
                         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
                         {
                             Entity* m_draggedObject = (Entity*)payload->Data;
-                            propRef->Set(&m_draggedObject);
+                            metadata->Set(&m_draggedObject);
                         }
 
                         ImGui::EndDragDropTarget();
@@ -270,20 +194,21 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     continue;
                 }
 
-                if (propType == typeid(Behaviour*))
+                if (type == typeid(Behaviour*))
                 {
-                    Behaviour* val = nullptr;
-                    propRef->Get(&val);
+                    Behaviour* defaultBal = nullptr;
+                    Behaviour* valPtr = nullptr;
+                    metadata->Get((void**)&valPtr);
 
-                    ImGui::Text("%s", propName.c_str());
+                    ImGui::Text("%s", metaname.c_str());
 
                     if (ImGui::BeginDragDropTarget())
                     {
                         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
                         {
                             Entity* m_draggedObject = (Entity*)payload->Data;
-
-                            propRef->Set(&m_draggedObject);
+                            //m_draggedObject->GetBehaviour()
+                            metadata->Set(&m_draggedObject);
                         }
 
                         ImGui::EndDragDropTarget();
@@ -291,7 +216,9 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
                     continue;
                 }
+
             }
+
             ImGui::TreePop();
         }
         ImGui::Separator();

@@ -104,123 +104,82 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 			YAML::Node node = components[UUID];
 			node["type"] = String::ExtractValue(typeid(*behaviour).name(), ' ');
 			// Field Saving
-			for (const auto& [fieldName, fieldRef] : behaviour->m_metadatas.m_fields)
-			{
-				const std::type_index& type = fieldRef.m_type;
-
-				if (type == typeid(CCMaths::Vector3))
-				{
-					node[fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
-				 continue;
-				}
-				
-				if (type == typeid(Bool3)) 
-				{
-					node[fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(std::string)) 
-				{
-					node[fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(float)) 
-				{
-					node[fieldName] = *std::any_cast<float*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(int)) 
-				{
-					node[fieldName] = *std::any_cast<int*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(bool)) 
-				{
-					node[fieldName] = *std::any_cast<bool*>(fieldRef.m_value);
-					continue;
-				}
-
-				if (type == typeid(Object*)) 
-				{
-					Object** objPtr = std::any_cast<Object**>(fieldRef.m_value);
-
-					if (!objPtr) continue;
-						
-					Object* obj = *objPtr;
-					node[fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
-					continue;
-				}
-				//Unhandled Cases (useful to find them)
-					node[fieldName] = std::format(parseError, type.name());
-			}
-
+			
 			//Properties saving
-			for (const auto& [propName, propRef] : behaviour->m_metadatas.m_properties)
+			for (const auto& [metaName, metaData] : behaviour->GetMetapack())
 			{
-				const std::type_index& type = propRef->GetGetType();
+				const std::type_index& type = metaData->GetType();
 
 				if (type == typeid(CCMaths::Vector3))
 				{
 					CCMaths::Vector3 val;
-					propRef->Get(&val);
-					node[propName] = val;
+					CCMaths::Vector3* valPtr = &val;
+					metaData->Get((void**)&valPtr);
+					node[metaName] = *valPtr;
 					continue;
 				}
 				if (type == typeid(Bool3))
 				{
-					Bool3 val;
-					propRef->Get(&val);
-					node[propName] = val;
+					Bool3 defaultVal;
+					Bool3* valPtr = &defaultVal;
+					metaData->Get((void**)&valPtr);
+					node[metaName] = *valPtr;
 					continue;
 				}
 				if (type == typeid(std::string))
 				{
-					std::string val;
-					propRef->Get(&val);
-					node[propName] = val;
+					std::string defaultVal;
+					std::string* valPtr = &defaultVal;
+					metaData->Get((void**)&valPtr);
+					node[metaName] = *valPtr;
 					continue;
 				}
 				if (type == typeid(float))
 				{
-					float val;
-					propRef->Get(&val);
-					node[propName] = val;
+					float defaultVal;
+					float* valPtr = &defaultVal;
+					metaData->Get((void**)&valPtr);
+					node[metaName] = *valPtr;
 					continue;
 				}
 				if (type == typeid(int))
 				{
-					int val;
-					propRef->Get(&val);
-					node[propName] = val;
+					int defaultVal;
+					int* valPtr = &defaultVal;
+					metaData->Get((void**)&valPtr);
+					node[metaName] = *valPtr;
 					continue;
 				}
 				if (type == typeid(bool))
 				{
-					bool val;
-					propRef->Get(&val);
-					node[propName] = val;
+					bool defaultVal;
+					bool* valPtr = &defaultVal;
+					metaData->Get((void**)&valPtr);
+					node[metaName] = *valPtr;
 					continue;
 				}
 				if (type == typeid(const char*))
 				{
-					const char* val;
-					propRef->Get(&val);
-					node[propName] = std::string(val);
+					const char* defaultVal;
+					const char** valPtr = &defaultVal;
+
+					metaData->Get((void**)&valPtr);
+					node[metaName] = std::string(*valPtr);
+
 					continue;
 				}
 				if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
 				{
-					Object* ptr;
-					propRef->Get(&ptr);
-					node[propName] = ptr ? YAML::Node(*ptr) : YAML::Node();
+					Object* defaultVal = nullptr;
+					Object** valPtr = &defaultVal;
+					metaData->Get((void**)&valPtr);
+					node[metaName] = *valPtr ? YAML::Node(**valPtr) : YAML::Node();
+
 					continue;
 				}
+
 				//Unhandled Cases (useful to find them)
-					node[propName] = std::format(parseError, type.name());
+				node[metaName] = std::format(parseError, type.name());
 			}
 		}
 	}
@@ -310,67 +269,41 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				if (value.as<std::string>() == "null")
 					continue;
 
-				if (behaviourPtr->m_metadatas.m_properties.contains(key))
+				if (behaviourPtr->GetMetapack().contains(key))
 				{
-					CCProperty::IClearProperty* prop = behaviourPtr->m_metadatas.m_properties[key];
+					AMetadata* metadata = behaviourPtr->GetMetapack()[key];
 
-					auto& propType = prop->GetGetType();
+					auto& type = metadata->GetType();
 					
-					if (propType == typeid(Transform*) || propType == typeid(Entity*))
+					if (type == typeid(Transform*) || type == typeid(Entity*))
 					{
 						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, value.as<uint32_t>()});
 					}
-					else if (propType == typeid(CCMaths::Vector3))
+					else if (type == typeid(CCMaths::Vector3))
 					{
 						Vector3 vec = value.as<CCMaths::Vector3>();
-						prop->Set(&vec);
+						metadata->Set(&vec);
 					}
-					else if (propType == typeid(Bool3))
+					else if (type == typeid(Bool3))
 					{
 						Bool3 vec = value.as<Bool3>();
-						prop->Set(&vec);
+						metadata->Set(&vec);
 					}
-					else if (propType == typeid(std::string))
+					else if (type == typeid(std::string))
 					{
 						std::string str = value.as<std::string>();
-						prop->Set(&str);
+						metadata->Set(&str);
 					}
-					else if (propType == typeid(bool))
+					else if (type == typeid(bool))
 					{
 						bool str = value.as<bool>();
-						prop->Set(&str);
+						metadata->Set(&str);
 					}
-					else if (propType == typeid(const char*))
+					else if (type == typeid(const char*))
 					{
 						std::string str = value.as<std::string>();
 						const char* val = str.c_str();
-						prop->Set(&val);
-					}
-				}
-
-				if (behaviourPtr->m_metadatas.m_fields.contains(key))
-				{
-					auto& info = behaviourPtr->m_metadatas.m_fields[key].m_type;
-					Field& field = behaviourPtr->m_metadatas.m_fields[key];
-
-					if (info == typeid(CCMaths::Vector3))
-					{
-						CCMaths::Vector3* valPtr = std::any_cast<CCMaths::Vector3*>(field.m_value);
-						*valPtr = value.as<CCMaths::Vector3>();
-					}
-					else if (info == typeid(bool))
-					{
-						bool* valPtr = std::any_cast<bool*>(field.m_value);
-						*valPtr = value.as<bool>();
-					}
-					else if (info == typeid(Object*))
-					{
-						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, value.as<uint32_t>() });
-					}
-					else if (info == typeid(std::string))
-					{
-						std::string* valPtr = std::any_cast<std::string*>(field.m_value);
-						*valPtr = value.as<std::string>();
+						metadata->Set(&val);
 					}
 				}
 			}
@@ -387,13 +320,13 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 			continue;
 
 		//Loop over the fields of the behaviour
-		for (auto& [fieldName, fieldRef] : behaviourRef->m_metadatas.m_fields)
+		for (auto& [metaname, metadata] : behaviourRef->m_metadatas.m_metadatas)
 		{
-			auto& info = fieldRef.m_type;
-			if (info == typeid(Object*))
+			auto& type = metadata->GetType();
+			if (type == typeid(Object*))
 			{
 				//find the field in the UUID list of the behaviour
-				auto refIt = grave->second.find(fieldName);
+				auto refIt = grave->second.find(metaname);
 
 				if (refIt == grave->second.end())
 					continue;
@@ -404,23 +337,25 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				if (behaviourIt == m_wrappedBehaviours.end())
 					continue;
 
-				Object** valuePtr = std::any_cast<Object**>(fieldRef.m_value);
+				metadata->Set(&behaviourIt->second);
+
+				/*Object** valuePtr = std::any_cast<Object**>(fieldRef.m_value);
 
 				Object* bhave = behaviourIt->second;
 
-				*valuePtr = bhave;
+				*valuePtr = bhave;*/
 			}
 		}
 
 		//Loop over the fields of the behaviour
-		for (auto& [propName, propRef] : behaviourRef->m_metadatas.m_properties)
+		for (auto& [metaname, metadata] : behaviourRef->m_metadatas.m_metadatas)
 		{
-			auto& propType = propRef->GetGetType();
+			auto& type = metadata->GetType();
 
-			if (propType == typeid(Entity*) || propType == typeid(Transform*))
+			if (type == typeid(Entity*) || type == typeid(Transform*))
 			{
 				//find the field in the UUID list of the behaviour
-				auto refIt = grave->second.find(propName);
+				auto refIt = grave->second.find(metaname);
 
 				if (refIt == grave->second.end())
 					continue;
@@ -431,8 +366,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				if (behaviourIt == m_wrappedBehaviours.end())
 					continue;
 
-				Object* bhave = behaviourIt->second;
-				propRef->Set(&bhave);
+				metadata->Set(&behaviourIt->second);
 			}
 		}
 	}

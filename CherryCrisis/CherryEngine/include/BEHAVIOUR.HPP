@@ -34,8 +34,7 @@ public:
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
 
-	std::unordered_map<std::string, Field>& GetFields() { return m_metadatas.m_fields; }
-	std::unordered_map<std::string, CCProperty::IClearProperty*>& GetProperties() { return m_metadatas.m_properties; }
+	std::unordered_map<std::string, AMetadata*>& GetMetapack() { return m_metadatas.m_metadatas; }
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }
