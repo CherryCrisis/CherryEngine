@@ -35,6 +35,7 @@ protected:
 	float	m_contactOffset = 0.02f;
 
 	CCMaths::Vector3 m_localPosition = CCMaths::Vector3::Zero;
+	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;
 
 	virtual void PopulateMetadatas() override {}
 
@@ -97,7 +98,8 @@ public:
 	void				SetLocalPos(const CCMaths::Vector3& localPos);
 	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
 
-	virtual CCMaths::Matrix4 GetTranformMatrix() = 0;
+	virtual void ComputeModelMatrices() = 0;
+	virtual CCMaths::Matrix4 GetModelMatrix() = 0;
 
 	boolProperty isEnabled{ this, &Collider::SetEnabled, &Collider::GetEnabled };
 	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };

@@ -7,8 +7,8 @@
 void Collider::SetPxLocalPos()
 {
 	physx::PxTransform transform = m_pxShape->getLocalPose();
-	physx::PxTransform relativePos = physx::PxTransform(physx::PxVec3(m_localPosition.x, m_localPosition.y, m_localPosition.z));
-	m_pxShape->setLocalPose(transform * relativePos);
+	transform.p = physx::PxVec3(m_localPosition.x, m_localPosition.y, m_localPosition.z);
+	m_pxShape->setLocalPose(transform);
 }
 
 void Collider::SetEnabled(const bool& isEnabled)

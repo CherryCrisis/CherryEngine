@@ -27,9 +27,9 @@ ColliderRenderPass::ColliderRenderPass(const char* name)
 		glUseProgram(0);
 	}
 
-	m_box		= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 0.5f, 0.5f, 0.5f);
-	m_sphere	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 0.5f, 8.f, 17.f);
-	m_cylinder	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 0.5f, 0.5f, 16.f);
+	m_box		= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 1.f, 1.f, 1.f);
+	m_sphere	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 1.f, 9.f, 17.f);
+	m_cylinder	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 1.f, 1.f, 16.f);
 
 	m_meshGenerator.Generate(m_box.get());
 	m_meshGenerator.Generate(m_sphere.get());
@@ -79,18 +79,18 @@ void ColliderRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		switch (collider->m_type)
 		{
 		case EColliderType::BOX:
-			DrawMesh(m_box.get(), collider->GetTranformMatrix());
+			DrawMesh(m_box.get(), collider->GetModelMatrix());
 			break;
 
 		case EColliderType::SPHERE:
-			DrawMesh(m_sphere.get(), collider->GetTranformMatrix());
+			DrawMesh(m_sphere.get(), collider->GetModelMatrix());
 			break;
 
 		case EColliderType::CAPSULE:
 			capsColl = reinterpret_cast<CapsuleCollider*>(collider);
 			DrawMesh(m_sphere.get(), capsColl->GetTopMatrix());
 			DrawMesh(m_sphere.get(), capsColl->GetBotMatrix());
-			DrawMesh(m_cylinder.get(), capsColl->GetTranformMatrix());
+			DrawMesh(m_cylinder.get(), capsColl->GetModelMatrix());
 			break;
 
 		default:

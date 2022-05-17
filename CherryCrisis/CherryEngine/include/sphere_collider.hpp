@@ -20,6 +20,8 @@ private:
 
 	float m_totalScale = 1.f;
 
+	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;
+
 	void PopulateMetadatas() override;
 
 public:
@@ -45,7 +47,8 @@ public:
 	void SetScale(const float& scale);
 	float GetScale() { return m_editableScale; }
 
-	CCMaths::Matrix4 GetTranformMatrix() override;
+	void ComputeModelMatrices() override;
+	CCMaths::Matrix4 GetModelMatrix() override;
 
 	floatProperty editableScale{ this, &SphereCollider::SetScale, &SphereCollider::GetScale };
 };

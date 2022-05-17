@@ -10,7 +10,6 @@
 #include "collider_renderpass.hpp"
 #include "camera_component.hpp"
 #include "transform.hpp"
-#include "mesh.hpp"
 
 CapsuleCollider::CapsuleCollider()
 {
@@ -113,7 +112,9 @@ void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& s)
 
 	m_totalRadius = m_editableRadius * m_entityRadius;
 
-	m_totalScale = CCMaths::Max(0.0f, (m_editableScale * m_entityScale) - m_totalRadius);
+	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale) - m_totalRadius);
+
+	ComputeModelMatrices();
 }
 
 void CapsuleCollider::SetPxShape()
@@ -189,7 +190,8 @@ void CapsuleCollider::SetScale(const float& scale)
 {
 	m_editableScale = scale;
 
-	m_totalScale = CCMaths::Max(0.0f, (m_editableScale * m_entityScale) - m_totalRadius);
+	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale) - m_totalRadius);
+	ComputeModelMatrices();
 
 	ResetPxShape();
 }
@@ -199,21 +201,40 @@ void CapsuleCollider::SetRadius(const float& radius)
 	m_editableRadius = radius;
 
 	m_totalRadius = m_editableRadius * m_entityRadius;
+	ComputeModelMatrices();
 
 	ResetPxShape();
 }
 
-CCMaths::Matrix4 CapsuleCollider::GetTranformMatrix()
+void CapsuleCollider::ComputeModelMatrices()
 {
-	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale({ m_totalRadius, m_totalScale, m_totalRadius });
+	if (!m_transform)
+		return;
+
+	m_topModel = m_transform->GetWorldMatrix().NormalizedScale() * 
+				 CCMaths::Matrix4::Translate(m_localPosition + CCMaths::Vector3::YAxis * m_totalScale) *
+				 CCMaths::Matrix4::Scale(m_totalRadius);
+
+	m_botModel = m_transform->GetWorldMatrix().NormalizedScale() *
+				 CCMaths::Matrix4::Translate(m_localPosition - CCMaths::Vector3::YAxis * m_totalScale) * 
+				 CCMaths::Matrix4::Scale(m_totalRadius);
+
+	m_model = m_transform->GetWorldMatrix().NormalizedScale() * 
+				  CCMaths::Matrix4::Translate(m_localPosition) * 
+				  CCMaths::Matrix4::Scale({ m_totalRadius, m_totalScale, m_totalRadius });
+}
+
+CCMaths::Matrix4 CapsuleCollider::GetModelMatrix()
+{
+	return m_model;
 }
 
 CCMaths::Matrix4 CapsuleCollider::GetTopMatrix()
 {
-	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition + CCMaths::Vector3::YAxis * m_totalScale * 0.5f) * CCMaths::Matrix4::Scale(m_totalRadius);
+	return m_topModel;
 }
 
 CCMaths::Matrix4 CapsuleCollider::GetBotMatrix()
 {
-	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition - CCMaths::Vector3::YAxis * m_totalScale * 0.5f) * CCMaths::Matrix4::Scale(m_totalRadius);
+	return m_botModel;
 }

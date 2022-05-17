@@ -109,6 +109,8 @@ void SphereCollider::SetEntityScale(const CCMaths::Vector3& s)
 	m_entityScale = CCMaths::Max(CCMaths::Max(scale.x, scale.y), scale.z);
 
 	m_totalScale = m_baseEntityScale * m_editableScale * m_entityScale;
+	
+	ComputeModelMatrices();
 }
 
 void SphereCollider::SetPxShape()
@@ -181,11 +183,22 @@ void SphereCollider::SetScale(const float& scale)
 	m_editableScale = scale;
 
 	m_totalScale = m_baseEntityScale * m_editableScale * m_entityScale;
+	ComputeModelMatrices();
 
 	ResetPxShape();
 }
 
-CCMaths::Matrix4 SphereCollider::GetTranformMatrix()
+void SphereCollider::ComputeModelMatrices()
 {
-	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale(m_totalScale);
+	if (!m_transform)
+		return;
+
+	m_model = m_transform->GetWorldMatrix().NormalizedScale() *
+			  CCMaths::Matrix4::Translate(m_localPosition) *
+			  CCMaths::Matrix4::Scale(m_totalScale);
+}
+
+CCMaths::Matrix4 SphereCollider::GetModelMatrix()
+{
+	return m_model;
 }

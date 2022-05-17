@@ -114,6 +114,8 @@ void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
 	m_totalScale = m_baseEntityScale;
 	m_totalScale *= m_editableScale;
 	m_totalScale *= m_entityScale;
+
+	ComputeModelMatrices();
 }
 
 void BoxCollider::SetPxShape()
@@ -189,11 +191,23 @@ void BoxCollider::SetScale(const CCMaths::Vector3& scale)
 	m_totalScale = m_baseEntityScale;
 	m_totalScale *= m_editableScale;
 	m_totalScale *= m_entityScale;
-	
+
+	ComputeModelMatrices();
+
 	ResetPxShape();
 }
 
-CCMaths::Matrix4 BoxCollider::GetTranformMatrix()
+void BoxCollider::ComputeModelMatrices()
 {
-	return m_transform->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Translate(m_localPosition) * CCMaths::Matrix4::Scale(m_totalScale);
+	if (!m_transform)
+		return;
+
+	m_model = m_transform->GetWorldMatrix().NormalizedScale() *
+				CCMaths::Matrix4::Translate(m_localPosition) *
+				CCMaths::Matrix4::Scale(m_totalScale);
+}
+
+CCMaths::Matrix4 BoxCollider::GetModelMatrix()
+{
+	return m_model;
 }
