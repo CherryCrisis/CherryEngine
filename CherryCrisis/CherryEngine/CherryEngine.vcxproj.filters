@@ -1302,6 +1302,9 @@
     <ClInclude Include="include\ui_text_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
+    <ClInclude Include="include\ui_button_behaviour.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1738,6 +1741,9 @@
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
     <ClCompile Include="src\ui_button.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_button_behaviour.cpp">
       <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
   </ItemGroup>

@@ -394,6 +394,7 @@
     <ClInclude Include="include\time_manager.hpp" />
     <ClInclude Include="include\transform.hpp" />
     <ClInclude Include="include\ui_button.hpp" />
+    <ClInclude Include="include\ui_button_behaviour.hpp" />
     <ClInclude Include="include\ui_context.hpp" />
     <ClInclude Include="include\ui_horizontal_layout.hpp" />
     <ClInclude Include="include\ui_image.hpp" />
@@ -608,6 +609,7 @@
     <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\ui_button.cpp" />
+    <ClCompile Include="src\ui_button_behaviour.cpp" />
     <ClCompile Include="src\ui_context.cpp" />
     <ClCompile Include="src\ui_image.cpp" />
     <ClCompile Include="src\ui_item.cpp" />

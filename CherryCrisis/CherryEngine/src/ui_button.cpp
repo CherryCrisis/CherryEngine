@@ -56,6 +56,11 @@ void UIButton::PopulateMetadatas()
 	m_metadatas.m_properties["Background"] = m_background.m_metadatas.m_properties["Texture"];
 	m_metadatas.m_properties["Background Size"] = m_background.m_metadatas.m_properties["Size"];
 	m_metadatas.m_properties["Background Position"] = m_background.m_metadatas.m_properties["Position"];
+
+	//----------------------------
+	// Button Metadatas
+	//----------------------------
+	m_metadatas.SetProperty("Behaviour", &Behaviour);
 }
 
 void UIButton::OnSetPos() 
@@ -78,4 +83,12 @@ bool UIButton::CompareId(int id)
 void UIButton::Interact() 
 {
 	m_onClicked.Invoke();
+}
+
+void UIButton::SetBehaviourName(const std::string& path)
+{
+	std::filesystem::path file = path;
+	behaviour.SetScriptClass(file.filename().string());
+	behaviourPath = path;
+	m_onClicked.Bind(&ButtonBehaviour::OnClick, &behaviour);
 }
