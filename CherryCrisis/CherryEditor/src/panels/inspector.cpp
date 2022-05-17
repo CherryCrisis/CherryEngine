@@ -470,12 +470,12 @@ void Inspector::Render()
             if (ImGui::MenuItem("Capsule Collider")) 
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<CapsuleCollider>();
+                    addBehaviours.push_back(entity->AddBehaviour<CapsuleCollider>());
             }
             if (ImGui::MenuItem("Character Controller"))
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->AddBehaviour<CharacterController>();
+                    addBehaviours.push_back(entity->AddBehaviour<CharacterController>());
             }
             if (ImGui::MenuItem("Portal Component"))
             {
@@ -496,9 +496,6 @@ void Inspector::Render()
 
             if (addBehaviours.size() > 0)
             {
-                for (Behaviour* behaviour : addBehaviours)
-                    behaviour->BindToSignals();
-
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
                     entity->m_OnAwake.Invoke();
             }

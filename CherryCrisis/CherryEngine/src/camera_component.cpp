@@ -54,6 +54,9 @@ CameraComponent::~CameraComponent()
 		m_transform->m_onRotationChange.Unbind(&CameraComponent::ChangeRotation, this);
 		m_transform->m_OnDestroy.Unbind(&CameraComponent::InvalidateTransform, this);
 	}
+
+	if (m_editorCamera)
+		UnsubscribeToPipeline(m_editorCamera->m_pipeline.get());
 }
 
 void CameraComponent::PopulateMetadatas()

@@ -97,15 +97,15 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
     {
         Vertex vertex;
 
-        float x = cosf(add * s) * radius;
-        float z = sinf(add * s) * radius;
+        float x = cosf(add * s);
+        float z = sinf(add * s);
 
         vertex.uv.x = s * S;
         vertex.uv.y = 0;
 
-        vertex.position.x = x;
-        vertex.position.y = 0.f;
-        vertex.position.z = z;
+        vertex.position = { x, 0.f, z };
+        vertex.position = vertex.position.Normalized() * radius;
+
 
         vertex.normal = CCMaths::Vector3(x, 0, z);
         vertex.tangent = CCMaths::Vector3(x, 0, z);
@@ -157,9 +157,8 @@ void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude
             vertex.uv.x = s * S;
             vertex.uv.y = r * R;
 
-            vertex.position.x = x * radius;
-            vertex.position.y = y * radius;
-            vertex.position.z = z * radius;
+            vertex.position = { x, y, z };
+            vertex.position = vertex.position.Normalized() * radius;
 
             vertex.normal = CCMaths::Vector3(x, y, z);
             vertex.tangent = CCMaths::Vector3(x, y, z);

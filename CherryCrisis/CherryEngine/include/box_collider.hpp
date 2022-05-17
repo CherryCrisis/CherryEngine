@@ -44,7 +44,8 @@ public:
 	void SetScale(const CCMaths::Vector3& scale);
 	CCMaths::Vector3 GetScale() { return m_editableScale; }
 
-	CCMaths::Matrix4 GetTranformMatrix() override;
+	void ComputeModelMatrices() override;
+	CCMaths::Matrix4 GetModelMatrix() override;
 
 	Vector3Property editableScale{ this, &BoxCollider::SetScale, &BoxCollider::GetScale };
 };

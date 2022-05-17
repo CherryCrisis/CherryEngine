@@ -23,6 +23,9 @@ private:
 	float m_totalRadius = 1.f;
 	float m_totalScale = 1.f;
 
+	CCMaths::Matrix4 m_topModel	= CCMaths::Matrix4::Identity;
+	CCMaths::Matrix4 m_botModel	= CCMaths::Matrix4::Identity;
+
 	void PopulateMetadatas() override;
 
 public:
@@ -51,7 +54,8 @@ public:
 	void SetRadius(const float& radius);
 	float GetRadius() { return m_editableRadius; }
 
-	CCMaths::Matrix4 GetTranformMatrix() override;
+	void ComputeModelMatrices() override;
+	CCMaths::Matrix4 GetModelMatrix() override;
 	CCMaths::Matrix4 GetTopMatrix();
 	CCMaths::Matrix4 GetBotMatrix();
 
