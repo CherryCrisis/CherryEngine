@@ -30,9 +30,6 @@ Entity::~Entity()
 
 void Entity::Initialize() 
 {
-	for (auto& [type, behaviour] : m_behaviours)
-		behaviour->BindToSignals();
-	
 	m_OnAwake.Invoke();	
 }
 

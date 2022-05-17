@@ -65,11 +65,9 @@ void Scene::PopulateEmpty()
 	Entity* camera = new Entity("Camera", cell);
 	camera->AddBehaviour<Transform>();
 	auto cameraComp = camera->AddBehaviour<CameraComponent>();
-	cameraComp->BindToSignals();
 
 	ScriptedBehaviour* bhave1 = camera->AddBehaviour<ScriptedBehaviour>();
 	bhave1->SetScriptClass("CameraController"); 
-	bhave1->BindToSignals();
 	AddEntity(camera);
 }
 
@@ -128,8 +126,6 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 
 	Entity* entity = new Entity(entityName, cell);
 
-
-
 	Transform* transform = entity->GetOrAddBehaviour<Transform>();
 
 	ModelRenderer* modelRdr;
@@ -140,15 +136,11 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 		modelRdr->m_transform = transform;
 		modelRdr->SetMesh(node->m_mesh);
 		modelRdr->SetMaterial(node->m_material);
-		modelRdr->BindToSignals();
-
 	}
 
 	transform->SetPosition(node->m_baseTRS[0]);
 	transform->SetRotation(node->m_baseTRS[1]);
 	transform->SetScale(node->m_baseTRS[2]);
-
-	transform->BindToSignals();
 
 	if (parentEntity)
 	{

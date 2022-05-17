@@ -42,6 +42,11 @@ void HierarchyDisplayer::Render()
 
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
+
+#ifdef _DEBUG
+        ImGui::Text(std::format("FPS : {}", ImGui::GetIO().Framerate).c_str());
+#endif
+
         ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
 
         Cell* selectedCell = m_cellSystemDisplayer->GetSelectedCell();
@@ -238,6 +243,7 @@ void HierarchyDisplayer::ContextCallback()
 {
     if (ImGui::BeginPopupContextItem("context"))
     {
+
         ImGui::Text("Actions ...");
         ImGui::Separator();
         if (ImGui::BeginMenu("New"))
@@ -274,9 +280,6 @@ void HierarchyDisplayer::ContextCallback()
 
                         Entity* entity_1 = new Entity("Portal_1", cell);
 
-                        entity_0->AddBehaviour<Transform>();
-                        entity_1->AddBehaviour<Transform>();
-
                         PortalComponent* portal_0 = entity_0->AddBehaviour<PortalComponent>();
                         PortalComponent* portal_1 = entity_1->AddBehaviour<PortalComponent>();
 
@@ -290,8 +293,6 @@ void HierarchyDisplayer::ContextCallback()
                         m_manager->FocusEntity(entity_1);
 
                         portal_0->SetLinkedPortal(entity_1);
-                        portal_1->SetLinkedPortal(entity_0);
-
                     }
                 }
 

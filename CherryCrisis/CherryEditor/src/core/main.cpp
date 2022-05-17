@@ -156,6 +156,8 @@ int main(int argc, char** argv)
     //-----------------------------------
 
     int isSceneFocused = false;
+    glfwSwapInterval(0);
+
 
     while (glfwWindowShouldClose(window) == false)
     {

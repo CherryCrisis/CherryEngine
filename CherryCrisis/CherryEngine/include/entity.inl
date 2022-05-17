@@ -92,5 +92,6 @@ template <class CompT>
 void Entity::SubscribeComponent(CompT* behaviour)
 {
 	behaviour->m_owner = this;
+	behaviour->BindToSignals();
 	m_behaviours.insert({ typeid(CompT), behaviour });
 }

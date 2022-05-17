@@ -24,7 +24,6 @@ namespace CCScripting
 			if (!isMoving) 
 				return; 
 			 
-			if (BMARIN > 20) 
 				transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, CherryEngine.Sin(time));
 			
 				//transform.eulerAngles = new Vector3(transform.eulerAngles.x, CherryEngine.Sin(time), transform.eulerAngles.z);
