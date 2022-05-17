@@ -84,13 +84,13 @@ void UIContext::AddItemByType(const EItemUI& type)
 	{
 	case EItemUI::BUTTON:			 {  AddItem<UIButton>(); break; }
 	case EItemUI::IMAGE:			 {  AddItem<UIImage>();  break; }
-	case EItemUI::TOGGLE:			 {  AddItem<UIToggle>(); break; }
-	case EItemUI::SLIDER:			 {  AddItem<UISlider>(); break; }
+	//case EItemUI::TOGGLE:			 {  AddItem<UIToggle>(); break; }
+	//case EItemUI::SLIDER:			 {  AddItem<UISlider>(); break; }
 	case EItemUI::TEXT:				 {  AddItem<UIText>();   break; }
-	case EItemUI::PROGRESS_BAR:		 {  AddItem<UIProgressBar>(); break; }
-	case EItemUI::INPUT_TEXT:		 {  AddItem<UIInputText>();   break; }
-	case EItemUI::VERTICAL_LAYOUT:	 {  AddItem<UIVerticalLayout>();   break;  }
-	case EItemUI::HORIZONTAL_LAYOUT: {  AddItem<UIHorizontalLayout>(); break;   }
+	//case EItemUI::PROGRESS_BAR:		 {  AddItem<UIProgressBar>(); break; }
+	//case EItemUI::INPUT_TEXT:		 {  AddItem<UIInputText>();   break; }
+	//case EItemUI::VERTICAL_LAYOUT:	 {  AddItem<UIVerticalLayout>();   break;  }
+	//case EItemUI::HORIZONTAL_LAYOUT: {  AddItem<UIHorizontalLayout>(); break;   }
 	}
 }
 

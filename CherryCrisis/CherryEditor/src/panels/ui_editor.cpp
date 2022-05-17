@@ -15,14 +15,11 @@
 UIEditor::UIEditor() 
 {
     m_items.push_back("Image");
-    m_items.push_back("Horizontal Layout");
-    m_items.push_back("Vertical Layout");
     m_items.push_back("Text");
-    m_items.push_back("Progress Bar");
     m_items.push_back("Button");
-    m_items.push_back("Toggle");
-    m_items.push_back("Slider");
-    m_items.push_back("Input Text");
+    //m_items.push_back("Toggle");
+    //m_items.push_back("Slider");
+    //m_items.push_back("Input Text");
 }
 
 void UIEditor::Render() 
@@ -35,8 +32,6 @@ void UIEditor::Render()
 
         m_isActive = !ImGui::IsWindowCollapsed();
 
-        // Add UI picking
-        
         // Splits window into 3 panels : left is UI Items list, middle if main camera feedback with UI and right is item inspector
         uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
 
@@ -116,8 +111,8 @@ void UIEditor::Render()
 
                 ImGui::EndDragDropTarget();
             }
-
             ImGui::TableSetColumnIndex(2);
+
             // loop on every fields of the selected UI
             InspectSelectedItem();
             if (ImGui::Button("rm")) 
@@ -128,8 +123,6 @@ void UIEditor::Render()
 
             ImGui::EndTable();
         }
-
-
         // Add UI gizmos
 	}
 
@@ -305,25 +298,6 @@ void UIEditor::InspectSelectedItem()
                 ImGui::EndDragDropTarget();
             }
 
-            continue;
-        }
-
-        if (propType == typeid(char*))
-        {
-            char* val;
-            propRef->Get(&val);
-            if (ImGui::InputText(propName.c_str(), val, strlen(val) + 2))
-                propRef->Set(&val);
-
-            continue;
-        }
-
-        if (propType == typeid(const char*))
-        {
-            const char* val = nullptr;
-            propRef->Get(&val);
-
-            ImGui::Text("%s %s", propName.c_str(), val ? val : "X");
             continue;
         }
 
