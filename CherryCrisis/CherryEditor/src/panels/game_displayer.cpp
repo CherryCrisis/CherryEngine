@@ -7,6 +7,8 @@
 
 #include "scene_manager.hpp"
 #include "camera_component.hpp"
+#include "pickinger.hpp"
+#include "core/editor_manager.hpp"
 
 void GameDisplayer::Render() 
 {
@@ -27,6 +29,33 @@ void GameDisplayer::Render()
         FrameDisplayer::Render();
         ImGui::BeginChild("GameFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
+
+        if (m_manager->m_engine && m_manager->m_engine->m_isPlaying)
+        {
+            CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
+
+            ImVec2 bufferPos = ImGui::GetWindowContentRegionMin(); bufferPos.x;
+
+            CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y) };
+            CCMaths::Vector2 framebufferPos = { ImGui::GetWindowPos().x + bufferPos.x, ImGui::GetWindowPos().y + bufferPos.y };
+
+            if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK)
+                && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
+                && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + m_framebuffer.colorTex.width
+                && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + m_framebuffer.colorTex.height)
+            {
+                glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
+                Pickinger::SetBuffer(&m_framebuffer, &CameraComponent::GetMainCamera()->m_camera);
+                CCMaths::Vector2 mousebufferPos = { mousePos.x - framebufferPos.x, mousePos.y - framebufferPos.y };
+
+                if (UIItem* item = Pickinger::GetUIItem(mousebufferPos))
+                    item->Interact();
+
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            }
+        }
+        
+
 
         if (m_isActive && CameraComponent::GetMainCamera())
             if (Camera* cam = &CameraComponent::GetMainCamera()->m_camera)

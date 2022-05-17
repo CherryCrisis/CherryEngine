@@ -45,6 +45,7 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
     m_cellSystemDisplayer.m_camera = &m_sceneDisplayer.m_camera;
 
+    m_uiEditor.m_manager = this;
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
     m_browser.SetPath(m_projectPath);
 
@@ -100,6 +101,7 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_preferencesDisplayer.Render();
     m_projSettingsDisplayer.Render();
     m_buildDisplayer.Render();
+    m_uiEditor.Render();
     HandleFeaturerWindow(window);
 
     HandleNotifications();
@@ -190,14 +192,16 @@ void EditorManager::HandleMenuBar()
         {
             if (ImGui::BeginMenu("Open"))
             {
-                if (ImGui::MenuItem("Browser")) { m_browser.Toggle(true); }
-                if (ImGui::MenuItem("Hierarchy")) { m_hierarchyDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Log"))       { m_logDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Inspector")) { m_inspector.Toggle(true); }
+                if (ImGui::MenuItem("Browser"))        { m_browser.Toggle(true); }
+                if (ImGui::MenuItem("Hierarchy"))      { m_hierarchyDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Log"))            { m_logDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Inspector"))      { m_inspector.Toggle(true); }
                 if (ImGui::MenuItem("Asset Settings")) { m_assetSettingsDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Game"))      { m_gameDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Scene"))     { m_sceneDisplayer.Toggle(true); }
-                if (ImGui::MenuItem("Featurer"))  { m_isFeaturerOpened = true; }
+                if (ImGui::MenuItem("Game"))           { m_gameDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Scene"))          { m_sceneDisplayer.Toggle(true); }
+                if (ImGui::MenuItem("Featurer"))       { m_isFeaturerOpened = true; }
+                if (ImGui::MenuItem("UI Editor"))      { m_uiEditor.Toggle(true);}
+
                 ImGui::EndMenu();
             }
 
@@ -251,6 +255,8 @@ void EditorManager::HandleMenuBar()
             m_gameDisplayer.Focus();
         }
         ImGui::PopStyleColor(1);
+
+        m_menubarSize = ImGui::GetWindowSize().y;
         ImGui::EndMainMenuBar();
     }
 }

@@ -10,6 +10,8 @@
 #include "bloom_renderpass.hpp"
 #include "hdr_renderpass.hpp"
 #include "basic_postprocess_renderpass.hpp"
+#include "ui_renderpass.hpp"
+#include "ui_text_renderpass.hpp"
 #include "collider_renderpass.hpp"
 #include "guizmo_renderpass.hpp"
 
@@ -33,6 +35,8 @@ MixedPipeline::MixedPipeline()
 	m_bloomPass = LoadSubpipeline<BloomRenderPass>();
 	m_hdrPass = LoadSubpipeline<HDRRenderPass>();
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
+	m_uiPass = LoadSubpipeline<UIRenderPass>();
+	m_uiTextPass = LoadSubpipeline<TextRenderPass>();
 
 	//-- PBR --//
 	m_environmentMapPass = LoadSubpipeline<EnvironmentMapRenderPass>();
@@ -63,5 +67,7 @@ void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 	
 	m_guizmoPass->CallOnExecute(framebuffer, viewer);
 
+	m_uiPass->CallOnExecute(framebuffer, viewer);
+	m_uiTextPass->CallOnExecute(framebuffer, viewer);
 	//m_postprocessPass->CallOnExecute(framebuffer);
 }

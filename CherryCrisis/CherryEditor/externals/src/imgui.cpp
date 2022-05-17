@@ -6203,6 +6203,7 @@ void ImGui::RenderWindowTitleBarContents(ImGuiWindow* window, const ImRect& titl
     float pad_r = style.FramePadding.x;
     float button_sz = g.FontSize;
     ImVec2 close_button_pos;
+    ImVec2 maximise_button_pos;
     ImVec2 collapse_button_pos;
     if (has_close_button)
     {
@@ -6220,6 +6221,9 @@ void ImGui::RenderWindowTitleBarContents(ImGuiWindow* window, const ImRect& titl
         pad_l += button_sz;
     }
 
+    pad_r += button_sz*1.5;
+    maximise_button_pos = ImVec2(title_bar_rect.Max.x - pad_r - style.FramePadding.x, title_bar_rect.Min.y);
+
     // Collapse button (submitting first so it gets priority when choosing a navigation init fallback)
     if (has_collapse_button)
         if (CollapseButton(window->GetID("#COLLAPSE"), collapse_button_pos, NULL))
@@ -6229,6 +6233,22 @@ void ImGui::RenderWindowTitleBarContents(ImGuiWindow* window, const ImRect& titl
     if (has_close_button)
         if (CloseButton(window->GetID("#CLOSE"), close_button_pos))
             *p_open = false;
+
+    if (MaximiseButton(window->GetID("#MAXIMISE"), maximise_button_pos))
+    {
+        if (!window->IsMaximised) 
+        {
+            window->SaveUnMaximisedParams();
+            window->SizeFull = GetIO().DisplaySize;
+            window->Pos = ImVec2(0, 0);
+            BringWindowToDisplayFront(window);
+            BringWindowToFocusFront(window);
+        }
+        else 
+            window->UnMaximise();
+
+        window->IsMaximised = !window->IsMaximised;
+    }
 
     window->DC.NavLayerCurrent = ImGuiNavLayer_Main;
     g.CurrentItemFlags = item_flags_backup;
@@ -15403,12 +15423,12 @@ static void ImGui::DockNodeUpdateTabBar(ImGuiDockNode* node, ImGuiWindow* host_w
             PushItemFlag(ImGuiItemFlags_Disabled, true);
             PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_Text] * ImVec4(1.0f,1.0f,1.0f,0.4f));
         }
-        if (CloseButton(host_window->GetID("#CLOSE"), close_button_pos))
-        {
-            node->WantCloseAll = true;
-            for (int n = 0; n < tab_bar->Tabs.Size; n++)
-                TabBarCloseTab(tab_bar, &tab_bar->Tabs[n]);
-        }
+        //if (CloseButton(host_window->GetID("#CLOSE"), close_button_pos))
+        //{
+        //    node->WantCloseAll = true;
+        //    for (int n = 0; n < tab_bar->Tabs.Size; n++)
+        //        TabBarCloseTab(tab_bar, &tab_bar->Tabs[n]);
+        //}
         //if (IsItemActive())
         //    focus_tab_id = tab_bar->SelectedTabId;
         if (!close_button_is_enabled)

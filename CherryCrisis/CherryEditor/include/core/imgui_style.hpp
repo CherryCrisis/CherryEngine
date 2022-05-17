@@ -17,7 +17,7 @@ void SetDarkStyle(ImGuiStyle* dst = 0)
     style->GrabMinSize = 5.0f;
     
     style->GrabRounding = 0.0f;
-    style->TabRounding = 0.0f;
+    style->TabRounding = 3.0f;
     style->ScrollbarRounding = 0.0f;
     style->ChildRounding = 0.0f;
     style->FrameRounding = 0.0f;

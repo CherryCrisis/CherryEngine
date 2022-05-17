@@ -393,6 +393,20 @@
     <ClInclude Include="include\threadpool.hpp" />
     <ClInclude Include="include\time_manager.hpp" />
     <ClInclude Include="include\transform.hpp" />
+    <ClInclude Include="include\ui_button.hpp" />
+    <ClInclude Include="include\ui_button_behaviour.hpp" />
+    <ClInclude Include="include\ui_context.hpp" />
+    <ClInclude Include="include\ui_horizontal_layout.hpp" />
+    <ClInclude Include="include\ui_image.hpp" />
+    <ClInclude Include="include\ui_input_text.hpp" />
+    <ClInclude Include="include\ui_item.hpp" />
+    <ClInclude Include="include\ui_progressbar.hpp" />
+    <ClInclude Include="include\ui_renderpass.hpp" />
+    <ClInclude Include="include\ui_slider.hpp" />
+    <ClInclude Include="include\ui_text.hpp" />
+    <ClInclude Include="include\ui_text_renderpass.hpp" />
+    <ClInclude Include="include\ui_toggle.hpp" />
+    <ClInclude Include="include\ui_vertical_layout.hpp" />
     <ClInclude Include="include\utils.hpp" />
     <ClInclude Include="include\uuid.hpp" />
     <ClInclude Include="include\viewer.hpp" />
@@ -521,6 +535,7 @@
     </ClCompile>
     <ClCompile Include="src\ebo_tbn_generator.cpp" />
     <ClCompile Include="src\environment_map_renderpass.cpp" />
+    <ClCompile Include="src\font.cpp" />
     <ClCompile Include="src\guizmo_renderpass.cpp" />
     <ClCompile Include="src\hdr_renderpass.cpp" />
     <ClCompile Include="src\irradiance_map_renderpass.cpp" />
@@ -593,6 +608,14 @@
     <ClCompile Include="src\time_manager.cpp" />
     <ClCompile Include="src\threadpool.cpp" />
     <ClCompile Include="src\transform.cpp" />
+    <ClCompile Include="src\ui_button.cpp" />
+    <ClCompile Include="src\ui_button_behaviour.cpp" />
+    <ClCompile Include="src\ui_context.cpp" />
+    <ClCompile Include="src\ui_image.cpp" />
+    <ClCompile Include="src\ui_item.cpp" />
+    <ClCompile Include="src\ui_renderpass.cpp" />
+    <ClCompile Include="src\ui_text.cpp" />
+    <ClCompile Include="src\ui_text_renderpass.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\uuid.cpp" />
   </ItemGroup>
@@ -734,7 +757,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Debug;$(ProjectDir)lib\PhysX\debug</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mono-2.0-sgen.lib;yaml-cppd.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glfw3.lib;PhysX_static.lib;PhysXCharacterKinematic_static.lib;PhysXCommon_static.lib;PhysXCooking_static.lib;PhysXExtensions_static.lib;PhysXFoundation_static.lib;PhysXPvdSDK_static.lib;PhysXVehicle_static.lib;nvtt30106.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;freetype.lib;yaml-cppd.lib;assimp-vc142-mtd.lib;zlibstaticd.lib;OpenAL32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glfw3.lib;PhysX_static.lib;PhysXCharacterKinematic_static.lib;PhysXCommon_static.lib;PhysXCooking_static.lib;PhysXExtensions_static.lib;PhysXFoundation_static.lib;PhysXPvdSDK_static.lib;PhysXVehicle_static.lib;nvtt30106.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -759,7 +782,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Release;$(ProjectDir)lib\PhysX\release;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mono-2.0-sgen.lib;yaml-cpp.lib;assimp-vc142-mt.lib;zlibstatic.lib;OpenAL32.lib;PhysX_static.lib;PhysXCharacterKinematic_static.lib;PhysXCommon_static.lib;PhysXCooking_static.lib;PhysXExtensions_static.lib;PhysXFoundation_static.lib;PhysXPvdSDK_static.lib;PhysXVehicle_static.lib;nvtt30106.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;freetype.lib;yaml-cpp.lib;assimp-vc142-mt.lib;zlibstatic.lib;OpenAL32.lib;PhysX_static.lib;PhysXCharacterKinematic_static.lib;PhysXCommon_static.lib;PhysXCooking_static.lib;PhysXExtensions_static.lib;PhysXFoundation_static.lib;PhysXPvdSDK_static.lib;PhysXVehicle_static.lib;nvtt30106.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

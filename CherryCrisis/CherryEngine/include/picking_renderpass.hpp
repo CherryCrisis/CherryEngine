@@ -12,11 +12,14 @@
 #include "mesh.hpp"
 
 class ModelRenderer;
+class UIItem;
+
 class Viewer;
 
 class PickingRenderPass : public ARenderingRenderPass
 {
 	std::unordered_set<ModelRenderer*>	m_modelRenderers;
+	std::unordered_set<UIItem*>	m_uiRenderers;
 
 public:
 	ElementMeshGenerator m_meshGenerator;
@@ -45,6 +48,12 @@ public:
 
 	template <>
 	void Unsubscribe(ModelRenderer* toGenerate);
+
+	template <>
+	int Subscribe(UIItem* toGenerate);
+
+	template <>
+	void Unsubscribe(UIItem* toGenerate);
 
 	void Execute(Framebuffer& fb, Viewer*& viewer);
 };

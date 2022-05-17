@@ -118,6 +118,12 @@
     <Filter Include="Fichiers sources\CSGenerated">
       <UniqueIdentifier>{7345006b-0b31-4718-8917-eafda2e01f1a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\UI">
+      <UniqueIdentifier>{bce46874-fe88-47c5-8b55-37fdd2da56b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\UI">
+      <UniqueIdentifier>{3322e815-47c3-45c9-bd2c-3e3ed060c9fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\maths\matrix3.hpp">
@@ -1248,6 +1254,48 @@
     <ClInclude Include="include\character_controller.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\ui_context.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_item.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_image.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_button.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_input_text.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_progressbar.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_slider.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_toggle.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_horizontal_layout.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_vertical_layout.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_text.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_text_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui_button_behaviour.hpp">
+      <Filter>Fichiers d%27en-tête\UI</Filter>
+    </ClInclude>
     <ClInclude Include="include\texture_generator.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -1662,14 +1710,32 @@
     <ClCompile Include="src\portal_generator.cpp">
       <Filter>Fichiers sources\Rendering\Generator</Filter>
     </ClCompile>
-    <ClCompile Include="src\sky_renderer.cpp">
-      <Filter>Fichiers sources\Rendering</Filter>
+    <ClCompile Include="src\ui_context.cpp">
+      <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
-    <ClCompile Include="src\guizmo_renderpass.cpp">
+    <ClCompile Include="src\ui_image.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
-    <ClCompile Include="src\collider_renderpass.cpp">
+    <ClCompile Include="src\ui_item.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_text.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\font.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_text_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_button.cpp">
+      <Filter>Fichiers sources\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui_button_behaviour.cpp">
+      <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

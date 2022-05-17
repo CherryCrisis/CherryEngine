@@ -6,6 +6,7 @@
 
 #include "resource.hpp"
 #include "entity.hpp"
+#include "ui_context.hpp"
 #include "cell.hpp"
 
 class Model;
@@ -37,6 +38,7 @@ public:
 	void	MoveEntityFromCellToCell(const std::string& fromCell, const std::string& toCell, Entity* entity);
 	void	MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entity);
 
+	UIContext m_UIContext;
 	//Call entities Initialize 
 	void Initialize();
 	

@@ -3,6 +3,7 @@
 #include <cherry_macros.hpp>
 #include "uuid.hpp"
 #include "metadata.hpp"
+#include "property.hpp"
 
 // General Object used by the engine such as entity or behaviour
 class CCENGINE_API Object
@@ -11,12 +12,25 @@ class CCENGINE_API Object
 
 private:
 	CCUUID m_uuid = {};
+	bool m_isActive = true;
+
+protected:
+	virtual void PopulateMetadatas() { m_metadatas.SetProperty("IsActive", &Active); };
 
 public:
 	Object(CCUUID id = {}): m_uuid(id) {};
 	virtual ~Object() = default;
 
-	uint32_t GetUUID() const { return (uint32_t)m_uuid; }
 
 	Metadata m_metadatas;
+
+	bool IsActive() { return m_isActive; }
+	void SetActive(bool value) { m_isActive = value; }
+
+	uint32_t GetUUID() const { return (uint32_t)m_uuid; }
+
+	std::unordered_map<std::string, Field>& GetFields() { return m_metadatas.m_fields; }
+	std::unordered_map<std::string, CCProperty::IClearProperty*>& GetProperties() { return m_metadatas.m_properties; }
+
+	CCProperty::CopyProperty<Object, bool> Active{ this, &Object::SetActive, &Object::IsActive };
 };

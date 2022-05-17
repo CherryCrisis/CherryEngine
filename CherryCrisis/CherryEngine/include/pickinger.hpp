@@ -6,6 +6,7 @@
 
 struct Framebuffer;
 class Entity;
+class UIItem;
 class PickingRenderPass;
 class Viewer;
 
@@ -20,6 +21,9 @@ public:
 
 	static Entity* GetEntity(float x, float y);
 	static Entity* GetEntity(const CCMaths::Vector2& position);
+
+	static UIItem* GetUIItem(float x, float y);
+	static UIItem* GetUIItem(const CCMaths::Vector2& position);
 
 	static void SetBuffer(Framebuffer* buffer, Viewer* camera);
 };

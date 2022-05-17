@@ -16,6 +16,8 @@ class HDRRenderPass;
 class ColliderRenderPass;
 class GuizmoRenderPass;
 
+class UIRenderPass;
+class TextRenderPass;
 class BasicPostProcessRenderPass;
 
 //-- PBR --//
@@ -40,6 +42,8 @@ class CCENGINE_API MixedPipeline : public ARenderingPipeline
 	BloomRenderPass* m_bloomPass = nullptr;
 	HDRRenderPass* m_hdrPass = nullptr;
 	BasicPostProcessRenderPass* m_postprocessPass = nullptr;
+	UIRenderPass* m_uiPass = nullptr;
+	TextRenderPass* m_uiTextPass = nullptr;
 
 	//-- PBR --//
 	EnvironmentMapRenderPass* m_environmentMapPass = nullptr;

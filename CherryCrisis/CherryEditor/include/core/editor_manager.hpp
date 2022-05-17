@@ -18,6 +18,7 @@
 #include "panels/project_settings_displayer.hpp"
 #include "panels/build_displayer.hpp"
 #include "panels/asset_settings.hpp"
+#include "panels/ui_editor.hpp"
 
 #include "maths.hpp"
  
@@ -57,13 +58,14 @@ private:
     AssetBrowser             m_browser               {&m_assetSettingsDisplayer, this};
     LogDisplayer             m_logDisplayer          {};
     Inspector                m_inspector             {true, this, &m_assetSettingsDisplayer};
-    GameDisplayer            m_gameDisplayer         {};
+    GameDisplayer            m_gameDisplayer         {this};
     SceneDisplayer           m_sceneDisplayer        {};
     CellSystemDisplayer      m_cellSystemDisplayer   {};
     HierarchyDisplayer       m_hierarchyDisplayer    {true, this};
     PreferencesDisplayer     m_preferencesDisplayer  {false};
     ProjectSettingsDisplayer m_projSettingsDisplayer {false};
-    BuildDisplayer           m_buildDisplayer        {false};
+    BuildDisplayer           m_buildDisplayer        { false };
+    UIEditor                 m_uiEditor              {};
     //--------------
 
 
@@ -105,6 +107,7 @@ public:
     InputManager::InputContext* m_editorContext;
 
     std::string m_projectPath = "";
+    float m_menubarSize = 0.f;
 
     std::string GetCompilerPath() { return m_preferencesDisplayer.GetCompilerPath(); }
 };
