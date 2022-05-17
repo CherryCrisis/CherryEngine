@@ -4,8 +4,8 @@
 #include "singleton.hpp"
 #include "maths/vector3.hpp"
 
-class ALCdevice;
-class ALCcontext;
+struct ALCdevice;
+struct ALCcontext;
 
 class CCENGINE_API SoundManager : public Singleton<SoundManager> 
 {

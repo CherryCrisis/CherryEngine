@@ -252,8 +252,8 @@ namespace CCImporter
         textureHeader.mipmapsLevel = image.countMipmaps();
 
         Vector2 faceSize;
-        faceSize.y = image.height() / 3;
-        faceSize.x = image.width() / 4;
+        faceSize.y = image.height() / 3.f;
+        faceSize.x = image.width() / 4.f;
 
         if (faceSize.y != faceSize.x)
         {
@@ -291,7 +291,7 @@ namespace CCImporter
                 else if ((faceY == 1 && faceX == 3))
                     faceId = 5; //Back
 
-                nvtt::Surface cubeImage = image.createSubImage(pos.x, pos.x + faceSize.x - 1, pos.y, pos.y + faceSize.y - 1, 0, 0);
+                nvtt::Surface cubeImage = image.createSubImage((int)pos.x, (int)pos.x + (int)faceSize.x - 1, (int)pos.y, (int)pos.y + (int)faceSize.y - 1, 0, 0);
 
                 OuputHandler outputHandler;
                 outputOptions.setOutputHandler(((nvtt::OutputHandler*)&outputHandler));
@@ -306,12 +306,13 @@ namespace CCImporter
                     dataSettingsInitialized = true;
                 }
 
-                std::move(outputHandler.m_data.begin(), outputHandler.m_data.end(), *textureData + faceDataSize * faceId);
+                size_t add = static_cast<size_t>(faceDataSize) * static_cast<size_t>(faceId);
+                std::move(outputHandler.m_data.begin(), outputHandler.m_data.end(), *textureData + add);
             }
         }
 
-        textureHeader.height = faceSize.y * 6;
-        textureHeader.width = faceSize.x * 1;
+        textureHeader.height = static_cast<int>(faceSize.y) * 6;
+        textureHeader.width = static_cast<int>(faceSize.x) * 1;
 
         return true;
     }

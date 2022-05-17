@@ -101,10 +101,10 @@ void Sound::Load(std::shared_ptr<Sound> sound)
     {
         monoBuffer = (short*)malloc(frameCount * sizeof(short));
         for (int i = 0; i < frameCount; i++)
-            monoBuffer[i] = .5f * buffer[i * 2] + .5f * buffer[i * 2 + 1];
+            monoBuffer[i] = static_cast<short>(.5f * buffer[i * 2]) + static_cast<short>(.5f * buffer[i * 2 + 1]);
     }
 
-    alBufferData(sound->m_buffer, format, channels == 1 ? buffer : monoBuffer, channels == 1 ? size : size * .5f, sampleRate);
+    alBufferData(sound->m_buffer, format, channels == 1 ? buffer : monoBuffer, channels == 1 ? (ALsizei)size : (ALsizei)(size * .5f), (ALsizei)sampleRate);
     free(buffer);
     free(monoBuffer);
 

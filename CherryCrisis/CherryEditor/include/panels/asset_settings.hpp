@@ -25,7 +25,7 @@ public :
 	virtual void Render() = 0;
 
 
-	AssetSettingsDisplayer* m_assetSettingsDisplayer;
+	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
 };
 
 class AssetSettingsDisplayer : public Panel

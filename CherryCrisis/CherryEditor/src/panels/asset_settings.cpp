@@ -198,6 +198,8 @@ void MaterialSettings::Render()
         ImGui::EndCombo();
     }
 
+#pragma warning(push, 3)
+#pragma warning(disable : 4804)
     if (EPipelineType::LIT == static_cast<EPipelineType>(currentPipeline))
     {
         m_settingsChanged += ImGui::DragFloat3("Ambient", m_material->m_ambient.data, 0.1f, 0.f) +
@@ -217,6 +219,7 @@ void MaterialSettings::Render()
             ImGui::DragFloat("Clear coat roughness factor", &m_material->m_clearCoatRoughnessFactor, 0.1f, 0.f, 1.f) +
             ImGui::Checkbox("Use normal map", &m_material->m_hasNormal);
     }
+#pragma warning(pop)
 
     if (ImGui::BeginTable("texturesTable", 2))
     {

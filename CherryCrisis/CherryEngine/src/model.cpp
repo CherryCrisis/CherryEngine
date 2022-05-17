@@ -239,6 +239,6 @@ void Model::Reload()
         }
     }
 
-    m_meshCount = modelNodes.size();
+    m_meshCount = static_cast<unsigned int>(modelNodes.size());
     m_rootNode = rootNode;
 }

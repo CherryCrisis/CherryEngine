@@ -1737,6 +1737,15 @@
     <ClCompile Include="src\ui_button_behaviour.cpp">
       <Filter>Fichiers sources\UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\collider_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\guizmo_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sky_renderer.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="interface\ccengine.i">

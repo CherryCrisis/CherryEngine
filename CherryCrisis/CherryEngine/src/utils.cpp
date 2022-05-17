@@ -39,7 +39,7 @@ namespace String
 
 	std::string ExtractKey(std::string& str, const char key, bool erase)
 	{
-		int len = str.find(key);
+		int len = static_cast<int>(str.find(key));
 
 		std::string strr = str;
 
@@ -59,7 +59,7 @@ namespace String
 
 	std::string ExtractLastKey(std::string& str, const char key, bool erase)
 	{
-		int len = str.find_last_of(key);
+		int len = static_cast<int>(str.find_last_of(key));
 
 		std::string strr = str;
 

@@ -139,17 +139,20 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
 void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude, float longitude)
 {
     std::vector<Vertex> vertices;
-    vertices.reserve((size_t)latitude * (size_t)longitude);
+
+    unsigned int uint_lon = static_cast<unsigned int>(longitude);
+    unsigned int uint_lat = static_cast<unsigned int>(latitude);
+    vertices.reserve((size_t)uint_lat * (size_t)uint_lon);
 
 	float const R = 1.f / (latitude - 1.f);
 	float const S = 1.f / (longitude - 1.f);
 
-    for (int r = 0; r < latitude; r++)
+    for (unsigned int r = 0; r < uint_lat; r++)
     {
-        for (int s = 0; s < longitude; s++)
+        for (unsigned int s = 0; s < uint_lon; s++)
         {
             Vertex vertex;
-            
+
             float const y = CCMaths::Sin(-(CCMaths::PI * 0.5f) + CCMaths::PI * r * R);
             float const x = CCMaths::Cos(2 * CCMaths::PI * s * S) * sin(PI * r * R);
             float const z = CCMaths::Sin(2 * CCMaths::PI * s * S) * sin(PI * r * R);
@@ -169,19 +172,19 @@ void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude
     }
 
     std::vector<unsigned int> indices;
-    indices.reserve((size_t)latitude * (size_t)longitude * 6);
-	
-    for (int r = 0; r < latitude; r++)
-    {
-        for (int s = 0; s < longitude; s++)
-        {
-            indices.push_back(r * longitude + s);
-            indices.push_back((r + 1) * longitude + s);
-            indices.push_back(r * longitude + (s + 1));
+    indices.reserve((size_t)uint_lat * (size_t)uint_lon * 6);
 
-            indices.push_back((r + 1) * longitude + (s + 1));
-            indices.push_back(r * longitude + (s + 1));
-            indices.push_back((r + 1) * longitude + s);
+    for (unsigned int r = 0; r < uint_lat; r++)
+    {
+        for (unsigned int s = 0; s < uint_lon; s++)
+        {
+            indices.push_back(r * uint_lon + s);
+            indices.push_back((r + 1) * uint_lon + s);
+            indices.push_back(r * uint_lon + (s + 1));
+
+            indices.push_back((r + 1) * uint_lon + (s + 1));
+            indices.push_back(r * uint_lon + (s + 1));
+            indices.push_back((r + 1) * uint_lon + s);
 	    }
     }
 

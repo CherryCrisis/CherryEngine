@@ -10,6 +10,9 @@
 #include "cherry_header.hpp"
 #include "keycode.hpp"
 
+#pragma warning(push, 3)
+#pragma warning(disable : 26495)
+
 class InputContext;
 
 struct GLFWwindow {};
@@ -670,3 +673,5 @@ public:
 	static Keycode		GetKeycode(const char* name);
 	static int			GetKeycodeIndex(Keycode code);
 };
+
+#pragma warning(pop)

@@ -63,7 +63,9 @@ void TextRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, framebuffer.colorTex.width, 0.0f, framebuffer.colorTex.height, -1.f, 5.f);
+	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer.colorTex.width),
+														   0.0f, static_cast<const float>(framebuffer.colorTex.height), -1.f, 5.f);
+
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "projection"), 1, GL_FALSE, proj.data);
 	for (UIText* text : m_texts)
 	{

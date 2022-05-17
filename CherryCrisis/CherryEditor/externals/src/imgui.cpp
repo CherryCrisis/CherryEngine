@@ -6221,7 +6221,7 @@ void ImGui::RenderWindowTitleBarContents(ImGuiWindow* window, const ImRect& titl
         pad_l += button_sz;
     }
 
-    pad_r += button_sz*1.5;
+    pad_r += button_sz*1.5f;
     maximise_button_pos = ImVec2(title_bar_rect.Max.x - pad_r - style.FramePadding.x, title_bar_rect.Min.y);
 
     // Collapse button (submitting first so it gets priority when choosing a navigation init fallback)

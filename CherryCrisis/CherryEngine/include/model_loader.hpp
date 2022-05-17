@@ -70,8 +70,8 @@ namespace CCImporter
         float m_clearCoatFactor = 0.f;
         float m_clearCoatRoughnessFactor = 0.f;
 
-        unsigned int    m_texturesCount;
-        unsigned int    m_pipeline;
+        unsigned int    m_texturesCount = 0;
+        unsigned int    m_pipeline = 0;
     };
 
     struct MaterialArgs
