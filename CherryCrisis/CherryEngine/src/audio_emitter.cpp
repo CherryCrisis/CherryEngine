@@ -4,6 +4,7 @@
 
 #include "resource_manager.hpp"
 #include "transform.hpp"
+#include "guizmo_renderpass.hpp"
 
 void AudioEmitter::Play()
 {
@@ -144,4 +145,14 @@ void AudioEmitter::Start()
 		Play();
 
 	GetHost().m_OnStart.Unbind(&AudioEmitter::Start, this);
+}
+
+void AudioEmitter::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
+}
+
+void AudioEmitter::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
 }

@@ -7,6 +7,7 @@
 #include "basic_renderpass.hpp"
 #include "shadow_renderpass.hpp"
 #include "pbr_renderpass.hpp"
+#include "guizmo_renderpass.hpp"
 
 #include "maths.hpp"
 #include "transform.hpp"
@@ -92,6 +93,7 @@ void LightComponent::SubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->SubscribeToPipeline<ShadowRenderPass>(&m_light);
 	pipeline->SubscribeToPipeline<BasicRenderPass>(&m_light);
 	pipeline->SubscribeToPipeline<PBRRenderPass>(&m_light);
+	pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
 }
 
 void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
@@ -99,6 +101,7 @@ void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(&m_light);
+	pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
 }
 
 void LightComponent::OnCellAdded(Cell* newCell)

@@ -15,7 +15,7 @@ class AudioEmitter;
 class CameraComponent;
 class LightComponent;
 
-class GuizmoRenderpass : public ARenderingRenderPass
+class GuizmoRenderPass : public ARenderingRenderPass
 {
 private:
 
@@ -33,7 +33,7 @@ protected:
 	ElementMeshGenerator m_meshGenerator;
 
 public:
-	GuizmoRenderpass(const char* name);
+	GuizmoRenderPass(const char* name);
 
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)
@@ -48,10 +48,19 @@ public:
 	}
 
 	template <>
-	int Subscribe(Behaviour* toGenerate);
+	int Subscribe(AudioEmitter* toGenerate);
+	template <>
+	void Unsubscribe(AudioEmitter* toGenerate);
 
 	template <>
-	void Unsubscribe(Behaviour* toGenerate);
+	int Subscribe(CameraComponent* toGenerate);
+	template <>
+	void Unsubscribe(CameraComponent* toGenerate);
+
+	template <>
+	int Subscribe(LightComponent* toGenerate);
+	template <>
+	void Unsubscribe(LightComponent* toGenerate);
 
 	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

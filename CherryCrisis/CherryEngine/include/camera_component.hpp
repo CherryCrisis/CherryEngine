@@ -11,7 +11,7 @@
 
 class Transform;
 
-class CCENGINE_API CameraComponent : public Behaviour
+class CCENGINE_API CameraComponent : public Behaviour, public ARenderer
 {
 private:
 	static unsigned int m_count;
@@ -42,4 +42,7 @@ public:
 
 	void SetAsMain();
 	void InvalidateTransform();
+
+	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
+	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 };

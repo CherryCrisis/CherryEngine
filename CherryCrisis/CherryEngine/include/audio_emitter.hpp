@@ -5,10 +5,11 @@
 #include "cherry_macros.hpp"
 #include "sound.hpp"
 #include "maths/vector3.hpp"
+#include "renderer.hpp"
 
 class Transform;
 
-class CCENGINE_API AudioEmitter : public Behaviour
+class CCENGINE_API AudioEmitter : public Behaviour, public ARenderer
 {
 private:
 	using boolProperty = CCProperty::ConstRefProperty<AudioEmitter, bool>;
@@ -70,4 +71,7 @@ public:
 	floatProperty	ReferenceDistance{ this, &AudioEmitter::SetReferenceDistance,   &AudioEmitter::GetReferenceDistance};
 	
 	CCProperty::ConstRefProperty<AudioEmitter, std::string> SoundPath{ this, &AudioEmitter::AddSound, &AudioEmitter::GetSoundPath };
+
+	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
+	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 };
