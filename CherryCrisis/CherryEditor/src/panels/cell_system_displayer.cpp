@@ -268,21 +268,26 @@ void CellSystemDisplayer::RenameCell()
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     if (ImGui::BeginPopupModal("RenameCell", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        static char name[32];
-        IMGUI_LEFT_LABEL(ImGui::InputText, "Name:", name, IM_ARRAYSIZE(name));
-
+        std::string str = "Renaming ";
+        str += m_rightClickedCell->GetName();
+        str += " ? \n\n";
+        ImGui::Text(str.c_str());
         ImGui::Separator();
 
-        if (ImGui::Button("Rename", ImVec2(120, 0)))
+        static char newName[32];
+        IMGUI_LEFT_LABEL(ImGui::InputText, "Name:", newName, IM_ARRAYSIZE(newName));
+        ImGui::Separator();
+
+        if (ImGui::Button("Rename", ImVec2(120, 0)) && std::string(newName) != "")
         {
             if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
             {
-                scene->RenameCell(m_rightClickedCell->GetName(), name);
+                scene->RenameCell(m_rightClickedCell->GetName(), newName);
             }
 
             ImGui::CloseCurrentPopup();
 
-            memset(name, 0, IM_ARRAYSIZE(name));
+            memset(newName, 0, IM_ARRAYSIZE(newName));
         }
         ImGui::SetItemDefaultFocus();
         ImGui::SameLine();
