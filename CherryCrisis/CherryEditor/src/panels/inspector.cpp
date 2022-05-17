@@ -444,7 +444,6 @@ void Inspector::Render()
                 for (Entity* entity : m_manager->m_entitySelector.m_entities) 
                 {
                     AudioListener* listener =  entity->AddBehaviour<AudioListener>();
-                    listener->BindToSignals();
                     listener->Initialize();
                 }
             }
@@ -453,7 +452,6 @@ void Inspector::Render()
                 for (Entity* entity : m_manager->m_entitySelector.m_entities) 
                 {
                     AudioEmitter* emitter = entity->AddBehaviour<AudioEmitter>();
-                    emitter->BindToSignals();
                     emitter->Initialize();
                 }
             }
@@ -496,11 +494,8 @@ void Inspector::Render()
 
             if (addBehaviours.size() > 0)
             {
-                for (Behaviour* behaviour : addBehaviours)
-                    behaviour->BindToSignals();
-
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->m_OnAwake.Invoke();
+                    entity->Initialize();
             }
 
             //---------------------------------------------------

@@ -12,6 +12,7 @@
 #include "sky_renderer.hpp"
 #include "irradiance_map_renderpass.hpp"
 #include "prefilter_map_renderpass.hpp"
+#include "environment_map_renderpass.hpp" //TODO: Delete
 #include "brdf_renderpass.hpp"
 #include "material.hpp"
 #include "texture.hpp"

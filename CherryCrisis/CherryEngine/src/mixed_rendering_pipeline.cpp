@@ -45,7 +45,6 @@ MixedPipeline::MixedPipeline()
 
 void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 {
-
 	m_portalPass->CallOnExecute(framebuffer, viewer);
 	m_shadowPass->CallOnExecute(framebuffer, viewer);
 
@@ -59,8 +58,8 @@ void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 	m_guizmoPass->CallOnExecute(framebuffer, viewer);
 	m_colliderPass->CallOnExecute(framebuffer, viewer);
 
-	m_skydomePass->CallOnExecute(framebuffer, viewer);
 	m_skyboxPass->CallOnExecute(framebuffer, viewer);
+	m_skydomePass->CallOnExecute(framebuffer, viewer);
 	
 
 	//m_postprocessPass->CallOnExecute(framebuffer);

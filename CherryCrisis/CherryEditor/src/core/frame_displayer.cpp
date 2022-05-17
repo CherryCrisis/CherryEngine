@@ -26,7 +26,7 @@ void FrameDisplayer::UpdateFramebuffer(float width, float height, Camera& camera
     camera.m_projectionMatrix = Matrix4::Perspective(camera.fovY, aspect, camera.near, camera.far);
 
     // TODO: Make this parametrable
-    camera.Draw(m_framebuffer, 5);
+    camera.Draw(m_framebuffer, 1);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

@@ -95,17 +95,18 @@ void SkydomeRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, viewer->m_projectionMatrix.data);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, viewer->m_viewMatrix.data);
 
-	Mesh* mesh = m_skyRenderer->m_cube.get();
-
-	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
-	glBindVertexArray(gpuMesh->VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-	glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
-
 	Texture* spheremap = m_skyRenderer->m_texture.get();
 	GPUSkydomeCubemap* gpuCubemap = static_cast<GPUSkydomeCubemap*>(spheremap->m_gpuTextureCubemap.get());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, gpuCubemap->ID);
+
+	Mesh* mesh = m_skyRenderer->m_cube.get();
+	GPUMeshBasic* gpuMesh = static_cast<GPUMeshBasic*>(mesh->m_gpuMesh.get());
+
+	glBindVertexArray(gpuMesh->VAO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+	glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+
 
 	glUseProgram(0);
 

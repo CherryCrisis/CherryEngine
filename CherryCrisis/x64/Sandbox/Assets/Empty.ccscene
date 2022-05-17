@@ -4,1225 +4,2468 @@ cells:
   1935981542:
     name: Default
     settings:
+      texturePath: Assets\Skybox\kisspng-skybox-texture-mapping-deviantart-red-skybox-texture-5b556053b38be8.6491123315323218757354.png
+    entities:
+      3323602853:
+        name: backpack.obj
+      390927502:
+        name: Cube.028__0
+      3730003192:
+        name: Plane.008__0
+      2802939098:
+        name: Cube.029__0
+      3334287303:
+        name: Plane.009__0
+      482883760:
+        name: Plane.010__0
+      2260050790:
+        name: Plane.011__0
+      3109656721:
+        name: Cylinder.029__0
+      1748610583:
+        name: Cube.030__0
+      800872404:
+        name: Plane.012__0
+      113522759:
+        name: Plane.013__0
+      3428707640:
+        name: Cylinder.030__0
+      2553181219:
+        name: Plane.014__0
+      1397279127:
+        name: Cube.031__0
+      656253302:
+        name: Cylinder.031__0
+      2012672035:
+        name: Cube.032__0
+      552199042:
+        name: Cylinder.032__0
+      2026977307:
+        name: Cube.033__0
+      294732330:
+        name: Cube.034__0
+      2388957472:
+        name: Cube.035__0
+      3722249332:
+        name: Cube.036__0
+      3343947031:
+        name: Cylinder.033__0
+      3709404141:
+        name: Cube.037__0
+      2893453793:
+        name: Cylinder.034__0
+      2691777185:
+        name: Cylinder.035__0
+      3772980191:
+        name: Cube.038__0
+      1158336498:
+        name: Cube.039__0
+      1633970140:
+        name: Cylinder.036__0
+      2041889769:
+        name: Cylinder.037__0
+      262833035:
+        name: Cylinder.038__0
+      2906139075:
+        name: Cylinder.039__0
+      1262774041:
+        name: Cylinder.040__0
+      466367324:
+        name: Cylinder.041__0
+      1526265887:
+        name: Cylinder.042__0
+      3127374171:
+        name: Cylinder.043__0
+      2573389165:
+        name: Cylinder.044__0
+      805121428:
+        name: Cylinder.045__0
+      3293431065:
+        name: Cylinder.046__0
+      3758024165:
+        name: Cylinder.047__0
+      3073833738:
+        name: Cylinder.048__0
+      3942870222:
+        name: Cylinder.049__0
+      3763020969:
+        name: Cube.040__0
+      3106119216:
+        name: Cube.041__0
+      453137563:
+        name: Cube.042__0
+      3238745171:
+        name: Cube.043__0
+      452928299:
+        name: Cube.044__0
+      1687809141:
+        name: Cube.045__0
+      798795211:
+        name: Plane.015__0
+      1305665560:
+        name: Cube.046__0
+      1367050002:
+        name: Cube.047__0
+      782860504:
+        name: Cylinder.050__0
+      764385428:
+        name: Cube.048__0
+      520387755:
+        name: Cylinder.051__0
+      833414148:
+        name: Cylinder.052__0
+      3659519162:
+        name: Cylinder.053__0
+      4161645269:
+        name: Cylinder.054__0
+      1949143468:
+        name: BezierCurve.003__0
+      991318542:
+        name: Cube.049__0
+      604412691:
+        name: Cylinder.055__0
+      740966416:
+        name: Cylinder.056__0
+      214673515:
+        name: Cube.050__0
+      4022296764:
+        name: Sphere.014__0
+      1843156533:
+        name: Sphere.015__0
+      4067441111:
+        name: Sphere.016__0
+      2053606698:
+        name: Sphere.017__0
+      2547632183:
+        name: Cube.051__0
+      521811771:
+        name: Sphere.018__0
+      3392159053:
+        name: Sphere.019__0
+      2013567614:
+        name: Sphere.020__0
+      3110421469:
+        name: Sphere.021__0
+      1865385601:
+        name: Cube.052__0
+      345863660:
+        name: Cube.053__0
+      910752991:
+        name: Cube.054__0
+      1570821454:
+        name: Sphere.022__0
+      96175951:
+        name: Sphere.023__0
+      3322012782:
+        name: Sphere.024__0
+      3801837605:
+        name: Sphere.025__0
+      2816458356:
+        name: Sphere.026__0
+      1531416985:
+        name: Sphere.027__0
+      1495349646:
+        name: Cube.055__0
+      254588247:
+        name: Light
+      3846905002:
+        name: Portal_0
+  617354314:
+    name: dfsdsg
+    settings:
       texturePath: Assets\skydome\Arches_3k.hdr
     entities:
-      1043973658:
-        name: Empty
-      486933633:
+      844050668:
         name: backpack.obj
-      76580315:
+      2831106215:
         name: Cube.028__0
-      996594404:
+      1243340254:
         name: Plane.008__0
-      1287716812:
+      2464876793:
         name: Cube.029__0
-      754188473:
+      1703723467:
         name: Plane.009__0
-      3190550757:
+      3287844234:
         name: Plane.010__0
-      3912126357:
+      705532616:
         name: Plane.011__0
-      2968912089:
+      1986558389:
         name: Cylinder.029__0
-      787785753:
+      826536590:
         name: Cube.030__0
-      129553487:
+      1232326380:
         name: Plane.012__0
-      70259215:
+      1909886026:
         name: Plane.013__0
-      1155963171:
+      3270927642:
         name: Cylinder.030__0
-      9510721:
+      225522377:
         name: Plane.014__0
-      3097519651:
+      1897107153:
         name: Cube.031__0
-      1170110163:
+      4111641578:
         name: Cylinder.031__0
-      1276325373:
+      1012577082:
         name: Cube.032__0
-      4187293802:
+      851412263:
         name: Cylinder.032__0
-      4071817610:
+      725376180:
         name: Cube.033__0
-      4158587501:
+      388218938:
         name: Cube.034__0
-      1848116249:
+      2963014577:
         name: Cube.035__0
-      2232794747:
+      1979147460:
         name: Cube.036__0
-      3126112966:
+      1465327523:
         name: Cylinder.033__0
-      271303523:
+      1977092326:
         name: Cube.037__0
-      550190193:
+      227546545:
         name: Cylinder.034__0
-      3533184494:
+      3680879087:
         name: Cylinder.035__0
-      3738637013:
+      3119774332:
         name: Cube.038__0
-      568405118:
+      2504842439:
         name: Cube.039__0
-      2557489751:
+      3477917258:
         name: Cylinder.036__0
-      1805745824:
+      220468486:
         name: Cylinder.037__0
-      1403956068:
+      4264117881:
         name: Cylinder.038__0
-      2174610631:
+      3894631559:
         name: Cylinder.039__0
-      1247193657:
+      4063015129:
         name: Cylinder.040__0
-      3183892516:
+      3452574965:
         name: Cylinder.041__0
-      2476859864:
+      1888823287:
         name: Cylinder.042__0
-      2174593306:
+      142355983:
         name: Cylinder.043__0
-      1249332973:
+      4056928974:
         name: Cylinder.044__0
-      1473669383:
+      2889959662:
         name: Cylinder.045__0
-      3827796169:
+      681233699:
         name: Cylinder.046__0
-      2867138134:
+      3503370247:
         name: Cylinder.047__0
-      3918089914:
+      3944278829:
         name: Cylinder.048__0
-      366079778:
+      3210634486:
         name: Cylinder.049__0
-      3892848099:
+      1280923021:
         name: Cube.040__0
-      2852892213:
+      3936514004:
         name: Cube.041__0
-      2012229568:
+      2345654449:
         name: Cube.042__0
-      369084438:
+      4248073866:
         name: Cube.043__0
-      375691307:
+      1793421552:
         name: Cube.044__0
-      1742692121:
+      1834453166:
         name: Cube.045__0
-      427827525:
+      3028331148:
         name: Plane.015__0
-      3564325615:
+      3378244087:
         name: Cube.046__0
-      2801431855:
+      1033067401:
         name: Cube.047__0
-      3877617560:
+      3371400376:
         name: Cylinder.050__0
-      2590585932:
+      384876323:
         name: Cube.048__0
-      1353035925:
+      2260852642:
         name: Cylinder.051__0
-      4170241209:
+      2998544471:
         name: Cylinder.052__0
-      1891940192:
+      2631004484:
         name: Cylinder.053__0
-      1194913392:
+      2006797427:
         name: Cylinder.054__0
-      298381285:
+      2217276649:
         name: BezierCurve.003__0
-      3615735767:
+      1332834157:
         name: Cube.049__0
-      2520977592:
+      3287801671:
         name: Cylinder.055__0
-      2920748016:
+      1417442424:
         name: Cylinder.056__0
-      2664729410:
+      3473604645:
         name: Cube.050__0
-      1727567236:
+      1025457086:
         name: Sphere.014__0
-      3871592484:
+      2004994780:
         name: Sphere.015__0
-      2979764073:
+      1031415941:
         name: Sphere.016__0
-      3515571651:
+      2811183375:
         name: Sphere.017__0
-      2384970912:
+      3489982296:
         name: Cube.051__0
-      2874314502:
+      2497305912:
         name: Sphere.018__0
-      585396148:
+      2951907421:
         name: Sphere.019__0
-      3659396746:
+      3826776592:
         name: Sphere.020__0
-      4097654377:
+      2123085067:
         name: Sphere.021__0
-      3136013747:
+      4166329939:
         name: Cube.052__0
-      3831812490:
+      3434487899:
         name: Cube.053__0
-      2505230017:
+      426823982:
         name: Cube.054__0
-      1474726329:
+      1046073790:
         name: Sphere.022__0
-      2279904107:
+      2121255070:
         name: Sphere.023__0
-      1777506583:
+      3567629011:
         name: Sphere.024__0
-      1533077657:
+      2576280035:
         name: Sphere.025__0
-      2016423470:
+      1260643172:
         name: Sphere.026__0
-      3330960357:
+      1646718945:
         name: Sphere.027__0
-      1825265914:
+      3351569605:
         name: Cube.055__0
+      1599976376:
+        name: Empty
+      3208164427:
+        name: Portal_1
 components:
-  599775409:
+  271927964:
+    type: Transform
+    m_owner: 3323602853
+    position: 0.000000/0.000000/-5.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  2207602559:
+    type: ScriptedBehaviour
+    pos: 5.000000/3.000000/7.000000
+    scriptName: BackpackBehaviour
+    time: 0
+    i: 0
+    m_owner: 3323602853
+    BMARIN: 0
+    deltaTime: 0.00999999978
+  744744353:
+    type: ModelRenderer
+    transform: 3403454412
+    m_owner: 390927502
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.028__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3403454412:
+    type: Transform
+    m_owner: 390927502
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2045208166:
+    type: ModelRenderer
+    transform: 3423073071
+    m_owner: 3730003192
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.008__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3423073071:
+    type: Transform
+    m_owner: 3730003192
+    position: 0.000000/0.000000/-1.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1333305000:
+    type: Transform
+    m_owner: 2802939098
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3939943292:
+    type: ModelRenderer
+    transform: 1333305000
+    m_owner: 2802939098
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.029__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2156298727:
+    type: ModelRenderer
+    transform: 387038456
+    m_owner: 3334287303
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.009__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  387038456:
+    type: Transform
+    m_owner: 3334287303
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3503429476:
+    type: Transform
+    m_owner: 482883760
+    position: 0.000000/0.000000/1.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2842242491:
+    type: ModelRenderer
+    transform: 3503429476
+    m_owner: 482883760
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.010__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4070480821:
+    type: Transform
+    m_owner: 2260050790
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3932899590:
+    type: ModelRenderer
+    transform: 4070480821
+    m_owner: 2260050790
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.011__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  887553719:
+    type: Transform
+    m_owner: 3109656721
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3373004445:
+    type: ModelRenderer
+    transform: 887553719
+    m_owner: 3109656721
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.029__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1931087884:
+    type: Transform
+    m_owner: 1748610583
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3959976852:
+    type: ModelRenderer
+    transform: 1931087884
+    m_owner: 1748610583
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.030__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1470268815:
+    type: ModelRenderer
+    transform: 4178189733
+    m_owner: 800872404
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.012__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4178189733:
+    type: Transform
+    m_owner: 800872404
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  16311307:
+    type: Transform
+    m_owner: 113522759
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3705015455:
+    type: ModelRenderer
+    transform: 16311307
+    m_owner: 113522759
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.013__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3073217729:
+    type: Transform
+    m_owner: 3428707640
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3659777993:
+    type: ModelRenderer
+    transform: 3073217729
+    m_owner: 3428707640
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.030__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3031065611:
+    type: Transform
+    m_owner: 2553181219
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  851290232:
+    type: ModelRenderer
+    transform: 3031065611
+    m_owner: 2553181219
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.014__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3543602915:
+    type: ModelRenderer
+    transform: 1037179963
+    m_owner: 1397279127
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.031__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1037179963:
+    type: Transform
+    m_owner: 1397279127
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  4076838195:
+    type: Transform
+    m_owner: 656253302
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1785171015:
+    type: ModelRenderer
+    transform: 4076838195
+    m_owner: 656253302
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.031__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1205478194:
+    type: Transform
+    m_owner: 2012672035
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3071341757:
+    type: ModelRenderer
+    transform: 1205478194
+    m_owner: 2012672035
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.032__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2013968054:
+    type: Transform
+    m_owner: 552199042
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3629453764:
+    type: ModelRenderer
+    transform: 2013968054
+    m_owner: 552199042
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.032__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  830917915:
+    type: Transform
+    m_owner: 2026977307
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2310845639:
+    type: ModelRenderer
+    transform: 830917915
+    m_owner: 2026977307
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.033__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1145444528:
+    type: Transform
+    m_owner: 294732330
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3621771616:
+    type: ModelRenderer
+    transform: 1145444528
+    m_owner: 294732330
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.034__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  232393035:
+    type: Transform
+    m_owner: 2388957472
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2747312088:
+    type: ModelRenderer
+    transform: 232393035
+    m_owner: 2388957472
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.035__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  462095426:
+    type: Transform
+    m_owner: 3722249332
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2219839671:
+    type: ModelRenderer
+    transform: 462095426
+    m_owner: 3722249332
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.036__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3991907465:
+    type: Transform
+    m_owner: 3343947031
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  236918635:
+    type: ModelRenderer
+    transform: 3991907465
+    m_owner: 3343947031
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.033__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  777007891:
+    type: Transform
+    m_owner: 3709404141
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2982990057:
+    type: ModelRenderer
+    transform: 777007891
+    m_owner: 3709404141
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.037__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1475887067:
+    type: Transform
+    m_owner: 2893453793
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2198125699:
+    type: ModelRenderer
+    transform: 1475887067
+    m_owner: 2893453793
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.034__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3116630454:
+    type: Transform
+    m_owner: 2691777185
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2383527359:
+    type: ModelRenderer
+    transform: 3116630454
+    m_owner: 2691777185
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.035__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2590638858:
+    type: Transform
+    m_owner: 3772980191
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3646718317:
+    type: ModelRenderer
+    transform: 2590638858
+    m_owner: 3772980191
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.038__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4186043517:
+    type: Transform
+    m_owner: 1158336498
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  139673132:
+    type: ModelRenderer
+    transform: 4186043517
+    m_owner: 1158336498
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.039__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  556002102:
+    type: Transform
+    m_owner: 1633970140
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1906287589:
+    type: ModelRenderer
+    transform: 556002102
+    m_owner: 1633970140
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.036__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1717837351:
+    type: ModelRenderer
+    transform: 2063876071
+    m_owner: 2041889769
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.037__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2063876071:
+    type: Transform
+    m_owner: 2041889769
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1763516924:
+    type: Transform
+    m_owner: 262833035
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2869143891:
+    type: ModelRenderer
+    transform: 1763516924
+    m_owner: 262833035
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.038__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1939198523:
+    type: Transform
+    m_owner: 2906139075
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1649073134:
+    type: ModelRenderer
+    transform: 1939198523
+    m_owner: 2906139075
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.039__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  825903646:
+    type: ModelRenderer
+    transform: 3077387073
+    m_owner: 1262774041
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.040__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3077387073:
+    type: Transform
+    m_owner: 1262774041
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1023864441:
+    type: Transform
+    m_owner: 466367324
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2730313179:
+    type: ModelRenderer
+    transform: 1023864441
+    m_owner: 466367324
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.041__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1719525636:
+    type: Transform
+    m_owner: 1526265887
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2331190932:
+    type: ModelRenderer
+    transform: 1719525636
+    m_owner: 1526265887
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.042__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3869204077:
+    type: Transform
+    m_owner: 3127374171
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2103581430:
+    type: ModelRenderer
+    transform: 3869204077
+    m_owner: 3127374171
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.043__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1418991430:
+    type: ModelRenderer
+    transform: 2018647156
+    m_owner: 2573389165
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.044__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2018647156:
+    type: Transform
+    m_owner: 2573389165
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  326817810:
+    type: ModelRenderer
+    transform: 1082939595
+    m_owner: 805121428
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.045__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1082939595:
+    type: Transform
+    m_owner: 805121428
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  207546541:
+    type: Transform
+    m_owner: 3293431065
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2150876569:
+    type: ModelRenderer
+    transform: 207546541
+    m_owner: 3293431065
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.046__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1517190615:
+    type: Transform
+    m_owner: 3758024165
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3010132315:
+    type: ModelRenderer
+    transform: 1517190615
+    m_owner: 3758024165
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.047__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3584824135:
+    type: Transform
+    m_owner: 3073833738
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1434431665:
+    type: ModelRenderer
+    transform: 3584824135
+    m_owner: 3073833738
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.048__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2499368623:
+    type: Transform
+    m_owner: 3942870222
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2683986320:
+    type: ModelRenderer
+    transform: 2499368623
+    m_owner: 3942870222
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.049__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3599181977:
+    type: ModelRenderer
+    transform: 2462262089
+    m_owner: 3763020969
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.040__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2462262089:
+    type: Transform
+    m_owner: 3763020969
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1152290631:
+    type: Transform
+    m_owner: 3106119216
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3430623457:
+    type: ModelRenderer
+    transform: 1152290631
+    m_owner: 3106119216
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.041__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  786938397:
+    type: ModelRenderer
+    transform: 311174767
+    m_owner: 453137563
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.042__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  311174767:
+    type: Transform
+    m_owner: 453137563
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1622898682:
+    type: Transform
+    m_owner: 3238745171
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3506881517:
+    type: ModelRenderer
+    transform: 1622898682
+    m_owner: 3238745171
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.043__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2188896673:
+    type: ModelRenderer
+    transform: 720800588
+    m_owner: 452928299
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.044__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  720800588:
+    type: Transform
+    m_owner: 452928299
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  4232870124:
+    type: Transform
+    m_owner: 1687809141
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3533785002:
+    type: ModelRenderer
+    transform: 4232870124
+    m_owner: 1687809141
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.045__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  770634736:
+    type: ModelRenderer
+    transform: 469057701
+    m_owner: 798795211
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.015__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  469057701:
+    type: Transform
+    m_owner: 798795211
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1355589194:
+    type: Transform
+    m_owner: 1305665560
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1132345298:
+    type: ModelRenderer
+    transform: 1355589194
+    m_owner: 1305665560
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.046__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2276017146:
+    type: Transform
+    m_owner: 1367050002
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3163389901:
+    type: ModelRenderer
+    transform: 2276017146
+    m_owner: 1367050002
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.047__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  561630094:
+    type: Transform
+    m_owner: 782860504
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1353703901:
+    type: ModelRenderer
+    transform: 561630094
+    m_owner: 782860504
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.050__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1154798459:
+    type: Transform
+    m_owner: 764385428
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1554654671:
+    type: ModelRenderer
+    transform: 1154798459
+    m_owner: 764385428
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.048__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  423072174:
+    type: Transform
+    m_owner: 520387755
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2211597958:
+    type: ModelRenderer
+    transform: 423072174
+    m_owner: 520387755
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.051__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3226992513:
+    type: Transform
+    m_owner: 833414148
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2286069165:
+    type: ModelRenderer
+    transform: 3226992513
+    m_owner: 833414148
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.052__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3138561126:
+    type: Transform
+    m_owner: 3659519162
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  992650189:
+    type: ModelRenderer
+    transform: 3138561126
+    m_owner: 3659519162
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.053__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  464239539:
+    type: Transform
+    m_owner: 4161645269
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2160476202:
+    type: ModelRenderer
+    transform: 464239539
+    m_owner: 4161645269
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.054__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3429367957:
+    type: Transform
+    m_owner: 1949143468
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3263775092:
+    type: ModelRenderer
+    transform: 3429367957
+    m_owner: 1949143468
+    meshFile: Assets\Models\Backpack\backpack.obj/BezierCurve.003__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2864358545:
+    type: Transform
+    m_owner: 991318542
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2593010866:
+    type: ModelRenderer
+    transform: 2864358545
+    m_owner: 991318542
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.049__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1873039404:
+    type: Transform
+    m_owner: 604412691
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  156469861:
+    type: ModelRenderer
+    transform: 1873039404
+    m_owner: 604412691
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.055__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1410380219:
+    type: Transform
+    m_owner: 740966416
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2393386533:
+    type: ModelRenderer
+    transform: 1410380219
+    m_owner: 740966416
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.056__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4065936789:
+    type: ModelRenderer
+    transform: 3724378785
+    m_owner: 214673515
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.050__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3724378785:
+    type: Transform
+    m_owner: 214673515
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2640084459:
+    type: ModelRenderer
+    transform: 560680251
+    m_owner: 4022296764
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.014__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  560680251:
+    type: Transform
+    m_owner: 4022296764
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  646423213:
+    type: Transform
+    m_owner: 1843156533
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2121864733:
+    type: ModelRenderer
+    transform: 646423213
+    m_owner: 1843156533
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.015__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2139304469:
+    type: Transform
+    m_owner: 4067441111
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2175032503:
+    type: ModelRenderer
+    transform: 2139304469
+    m_owner: 4067441111
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.016__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2593214739:
+    type: Transform
+    m_owner: 2053606698
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2965391457:
+    type: ModelRenderer
+    transform: 2593214739
+    m_owner: 2053606698
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.017__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4209701309:
+    type: Transform
+    m_owner: 2547632183
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3084475548:
+    type: ModelRenderer
+    transform: 4209701309
+    m_owner: 2547632183
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.051__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  80496778:
+    type: Transform
+    m_owner: 521811771
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3981685886:
+    type: ModelRenderer
+    transform: 80496778
+    m_owner: 521811771
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.018__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3266909382:
+    type: Transform
+    m_owner: 3392159053
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2138577229:
+    type: ModelRenderer
+    transform: 3266909382
+    m_owner: 3392159053
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.019__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1522487153:
+    type: ModelRenderer
+    transform: 2478424900
+    m_owner: 2013567614
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.020__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2478424900:
+    type: Transform
+    m_owner: 2013567614
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2092883904:
+    type: Transform
+    m_owner: 3110421469
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  2399350307:
+    type: ModelRenderer
+    transform: 2092883904
+    m_owner: 3110421469
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.021__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2658286594:
+    type: ModelRenderer
+    transform: 4104037225
+    m_owner: 1865385601
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.052__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4104037225:
+    type: Transform
+    m_owner: 1865385601
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  4112590022:
+    type: ModelRenderer
+    transform: 3134275513
+    m_owner: 345863660
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.053__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3134275513:
+    type: Transform
+    m_owner: 345863660
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  633995672:
+    type: ModelRenderer
+    transform: 1675797029
+    m_owner: 910752991
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.054__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1675797029:
+    type: Transform
+    m_owner: 910752991
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  3452732152:
+    type: Transform
+    m_owner: 1570821454
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  817207760:
+    type: ModelRenderer
+    transform: 3452732152
+    m_owner: 1570821454
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.022__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3011228285:
+    type: ModelRenderer
+    transform: 1863378130
+    m_owner: 96175951
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.023__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1863378130:
+    type: Transform
+    m_owner: 96175951
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1556739915:
+    type: Transform
+    m_owner: 3322012782
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1036546436:
+    type: ModelRenderer
+    transform: 1556739915
+    m_owner: 3322012782
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.024__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1667449175:
+    type: Transform
+    m_owner: 3801837605
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1861579388:
+    type: ModelRenderer
+    transform: 1667449175
+    m_owner: 3801837605
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.025__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1466874165:
+    type: Transform
+    m_owner: 2816458356
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  813366729:
+    type: ModelRenderer
+    transform: 1466874165
+    m_owner: 2816458356
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.026__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2436930219:
+    type: Transform
+    m_owner: 1531416985
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  1768783776:
+    type: ModelRenderer
+    transform: 2436930219
+    m_owner: 1531416985
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.027__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3023749060:
+    type: Transform
+    m_owner: 1495349646
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 271927964
+  291825569:
+    type: ModelRenderer
+    transform: 3023749060
+    m_owner: 1495349646
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.055__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1158555475:
+    type: Transform
+    m_owner: 254588247
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  2804865018:
+    type: LightComponent
+    ambient: 1.000000/1.000000/1.000000
+    diffuse: 1.000000/1.000000/1.000000
+    specular: 1.000000/1.000000/1.000000
+    attenuation: 1.000000/0.000000/0.000000
+    isPoint: true
+    m_owner: 254588247
+  2521351286:
+    type: Transform
+    m_owner: 844050668
+    position: 0.000000/0.000000/-5.000000
+    rotation: 0.000000/-2.500000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  3045441901:
+    type: Transform
+    m_owner: 2831106215
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  903801209:
+    type: ModelRenderer
+    transform: 3045441901
+    m_owner: 2831106215
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.028__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2975924064:
+    type: Transform
+    m_owner: 1243340254
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  581875053:
+    type: ModelRenderer
+    transform: 2975924064
+    m_owner: 1243340254
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.008__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3794060763:
+    type: Transform
+    m_owner: 2464876793
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3831455239:
+    type: ModelRenderer
+    transform: 3794060763
+    m_owner: 2464876793
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.029__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  154840331:
+    type: Transform
+    m_owner: 1703723467
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1096651732:
+    type: ModelRenderer
+    transform: 154840331
+    m_owner: 1703723467
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.009__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1313572127:
+    type: Transform
+    m_owner: 3287844234
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  297358767:
+    type: ModelRenderer
+    transform: 1313572127
+    m_owner: 3287844234
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.010__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1821090214:
+    type: ModelRenderer
+    transform: 2208500924
+    m_owner: 705532616
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.011__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2208500924:
+    type: Transform
+    m_owner: 705532616
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2762180066:
+    type: ModelRenderer
+    transform: 1975235736
+    m_owner: 1986558389
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.029__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1975235736:
+    type: Transform
+    m_owner: 1986558389
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  115518626:
+    type: ModelRenderer
+    transform: 3230744181
+    m_owner: 826536590
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.030__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3230744181:
+    type: Transform
+    m_owner: 826536590
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  878839239:
+    type: Transform
+    m_owner: 1232326380
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1876121912:
+    type: ModelRenderer
+    transform: 878839239
+    m_owner: 1232326380
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.012__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  918912950:
+    type: ModelRenderer
+    transform: 1314624746
+    m_owner: 1909886026
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.013__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1314624746:
+    type: Transform
+    m_owner: 1909886026
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  82941324:
+    type: Transform
+    m_owner: 3270927642
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3784874125:
+    type: ModelRenderer
+    transform: 82941324
+    m_owner: 3270927642
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.030__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2164746520:
+    type: Transform
+    m_owner: 225522377
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  4091238263:
+    type: ModelRenderer
+    transform: 2164746520
+    m_owner: 225522377
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.014__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2497277961:
+    type: ModelRenderer
+    transform: 697985247
+    m_owner: 1897107153
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.031__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  697985247:
+    type: Transform
+    m_owner: 1897107153
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3994780713:
+    type: ModelRenderer
+    transform: 65543342
+    m_owner: 4111641578
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.031__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  65543342:
+    type: Transform
+    m_owner: 4111641578
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  661034169:
+    type: ModelRenderer
+    transform: 1208348838
+    m_owner: 1012577082
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.032__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1208348838:
+    type: Transform
+    m_owner: 1012577082
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  171758507:
+    type: Transform
+    m_owner: 851412263
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  23693732:
+    type: ModelRenderer
+    transform: 171758507
+    m_owner: 851412263
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.032__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4151253192:
+    type: Transform
+    m_owner: 725376180
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1771193908:
+    type: ModelRenderer
+    transform: 4151253192
+    m_owner: 725376180
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.033__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3377453755:
+    type: ModelRenderer
+    transform: 2568666587
+    m_owner: 388218938
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.034__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2568666587:
+    type: Transform
+    m_owner: 388218938
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1406394625:
+    type: Transform
+    m_owner: 2963014577
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1477766586:
+    type: ModelRenderer
+    transform: 1406394625
+    m_owner: 2963014577
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.035__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2251598690:
+    type: Transform
+    m_owner: 1979147460
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3224498981:
+    type: ModelRenderer
+    transform: 2251598690
+    m_owner: 1979147460
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.036__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1199057084:
+    type: ModelRenderer
+    transform: 3854146758
+    m_owner: 1465327523
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.033__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3854146758:
+    type: Transform
+    m_owner: 1465327523
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  820856118:
+    type: Transform
+    m_owner: 1977092326
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3199972844:
+    type: ModelRenderer
+    transform: 820856118
+    m_owner: 1977092326
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.037__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1090949676:
+    type: Transform
+    m_owner: 227546545
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1650205840:
+    type: ModelRenderer
+    transform: 1090949676
+    m_owner: 227546545
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.034__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3199464842:
+    type: Transform
+    m_owner: 3680879087
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3941859133:
+    type: ModelRenderer
+    transform: 3199464842
+    m_owner: 3680879087
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.035__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1817959683:
+    type: ModelRenderer
+    transform: 2969586269
+    m_owner: 3119774332
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.038__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2969586269:
+    type: Transform
+    m_owner: 3119774332
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2268966091:
+    type: ModelRenderer
+    transform: 2672351181
+    m_owner: 2504842439
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.039__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2672351181:
+    type: Transform
+    m_owner: 2504842439
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3919841605:
+    type: Transform
+    m_owner: 3477917258
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2327105178:
+    type: ModelRenderer
+    transform: 3919841605
+    m_owner: 3477917258
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.036__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3694133502:
+    type: ModelRenderer
+    transform: 1798145853
+    m_owner: 220468486
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.037__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1798145853:
+    type: Transform
+    m_owner: 220468486
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1829657082:
+    type: Transform
+    m_owner: 4264117881
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2406730956:
+    type: ModelRenderer
+    transform: 1829657082
+    m_owner: 4264117881
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.038__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3806776527:
+    type: Transform
+    m_owner: 3894631559
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2066269363:
+    type: ModelRenderer
+    transform: 3806776527
+    m_owner: 3894631559
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.039__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2088992593:
+    type: ModelRenderer
+    transform: 345471608
+    m_owner: 4063015129
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.040__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  345471608:
+    type: Transform
+    m_owner: 4063015129
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1466196306:
+    type: Transform
+    m_owner: 3452574965
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3511674243:
+    type: ModelRenderer
+    transform: 1466196306
+    m_owner: 3452574965
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.041__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2478382626:
+    type: Transform
+    m_owner: 1888823287
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  979896978:
+    type: ModelRenderer
+    transform: 2478382626
+    m_owner: 1888823287
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.042__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4052369046:
+    type: Transform
+    m_owner: 142355983
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1176764465:
+    type: ModelRenderer
+    transform: 4052369046
+    m_owner: 142355983
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.043__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1640165518:
+    type: Transform
+    m_owner: 4056928974
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3205718766:
+    type: ModelRenderer
+    transform: 1640165518
+    m_owner: 4056928974
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.044__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2613458524:
+    type: Transform
+    m_owner: 2889959662
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2832058398:
+    type: ModelRenderer
+    transform: 2613458524
+    m_owner: 2889959662
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.045__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1370771457:
+    type: ModelRenderer
+    transform: 1306117552
+    m_owner: 681233699
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.046__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1306117552:
+    type: Transform
+    m_owner: 681233699
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2070275868:
+    type: Transform
+    m_owner: 3503370247
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  807626523:
+    type: ModelRenderer
+    transform: 2070275868
+    m_owner: 3503370247
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.047__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  228881551:
+    type: Transform
+    m_owner: 3944278829
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2197425866:
+    type: ModelRenderer
+    transform: 228881551
+    m_owner: 3944278829
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.048__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2020766948:
+    type: ModelRenderer
+    transform: 1567995208
+    m_owner: 3210634486
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.049__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1567995208:
+    type: Transform
+    m_owner: 3210634486
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2316216176:
+    type: Transform
+    m_owner: 1280923021
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  290147527:
+    type: ModelRenderer
+    transform: 2316216176
+    m_owner: 1280923021
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.040__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  955364595:
+    type: Transform
+    m_owner: 3936514004
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  688579874:
+    type: ModelRenderer
+    transform: 955364595
+    m_owner: 3936514004
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.041__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  292391785:
+    type: Transform
+    m_owner: 2345654449
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3315100125:
+    type: ModelRenderer
+    transform: 292391785
+    m_owner: 2345654449
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.042__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2467904880:
+    type: Transform
+    m_owner: 4248073866
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2709560355:
+    type: ModelRenderer
+    transform: 2467904880
+    m_owner: 4248073866
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.043__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2853899888:
+    type: Transform
+    m_owner: 1793421552
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3658433511:
+    type: ModelRenderer
+    transform: 2853899888
+    m_owner: 1793421552
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.044__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1790778682:
+    type: Transform
+    m_owner: 1834453166
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  52614992:
+    type: ModelRenderer
+    transform: 1790778682
+    m_owner: 1834453166
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.045__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4211627377:
+    type: Transform
+    m_owner: 3028331148
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1988904832:
+    type: ModelRenderer
+    transform: 4211627377
+    m_owner: 3028331148
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.015__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2087877386:
+    type: Transform
+    m_owner: 3378244087
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  653545145:
+    type: ModelRenderer
+    transform: 2087877386
+    m_owner: 3378244087
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.046__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3369120832:
+    type: ModelRenderer
+    transform: 4224516067
+    m_owner: 1033067401
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.047__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4224516067:
+    type: Transform
+    m_owner: 1033067401
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  818417815:
+    type: Transform
+    m_owner: 3371400376
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  890869665:
+    type: ModelRenderer
+    transform: 818417815
+    m_owner: 3371400376
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.050__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3520617040:
+    type: Transform
+    m_owner: 384876323
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3862141312:
+    type: ModelRenderer
+    transform: 3520617040
+    m_owner: 384876323
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.048__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2774723877:
+    type: Transform
+    m_owner: 2260852642
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2173084053:
+    type: ModelRenderer
+    transform: 2774723877
+    m_owner: 2260852642
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.051__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  781811220:
+    type: ModelRenderer
+    transform: 849428227
+    m_owner: 2998544471
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.052__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  849428227:
+    type: Transform
+    m_owner: 2998544471
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  4110563397:
+    type: Transform
+    m_owner: 2631004484
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  87405666:
+    type: ModelRenderer
+    transform: 4110563397
+    m_owner: 2631004484
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.053__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  436366143:
+    type: Transform
+    m_owner: 2006797427
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3016608143:
+    type: ModelRenderer
+    transform: 436366143
+    m_owner: 2006797427
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.054__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2335887656:
+    type: Transform
+    m_owner: 2217276649
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1656620554:
+    type: ModelRenderer
+    transform: 2335887656
+    m_owner: 2217276649
+    meshFile: Assets\Models\Backpack\backpack.obj/BezierCurve.003__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  947479586:
+    type: Transform
+    m_owner: 1332834157
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  908777285:
+    type: ModelRenderer
+    transform: 947479586
+    m_owner: 1332834157
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.049__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1234998415:
+    type: Transform
+    m_owner: 3287801671
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2061858790:
+    type: ModelRenderer
+    transform: 1234998415
+    m_owner: 3287801671
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.055__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1619327685:
+    type: Transform
+    m_owner: 1417442424
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  51736403:
+    type: ModelRenderer
+    transform: 1619327685
+    m_owner: 1417442424
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.056__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3315758341:
+    type: ModelRenderer
+    transform: 1138929898
+    m_owner: 3473604645
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.050__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1138929898:
+    type: Transform
+    m_owner: 3473604645
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2899817272:
+    type: ModelRenderer
+    transform: 3578779925
+    m_owner: 1025457086
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.014__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3578779925:
+    type: Transform
+    m_owner: 1025457086
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1132499607:
+    type: ModelRenderer
+    transform: 4062438799
+    m_owner: 2004994780
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.015__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4062438799:
+    type: Transform
+    m_owner: 2004994780
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1314115534:
+    type: ModelRenderer
+    transform: 835295614
+    m_owner: 1031415941
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.016__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  835295614:
+    type: Transform
+    m_owner: 1031415941
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1246143532:
+    type: Transform
+    m_owner: 2811183375
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1597646046:
+    type: ModelRenderer
+    transform: 1246143532
+    m_owner: 2811183375
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.017__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4040835430:
+    type: Transform
+    m_owner: 3489982296
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2477873255:
+    type: ModelRenderer
+    transform: 4040835430
+    m_owner: 3489982296
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.051__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3067192255:
+    type: Transform
+    m_owner: 2497305912
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  786250320:
+    type: ModelRenderer
+    transform: 3067192255
+    m_owner: 2497305912
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.018__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1270527005:
+    type: ModelRenderer
+    transform: 2250235263
+    m_owner: 2951907421
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.019__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2250235263:
+    type: Transform
+    m_owner: 2951907421
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1132745835:
+    type: ModelRenderer
+    transform: 8969491
+    m_owner: 3826776592
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.020__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  8969491:
+    type: Transform
+    m_owner: 3826776592
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  509008884:
+    type: ModelRenderer
+    transform: 4289534800
+    m_owner: 2123085067
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.021__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  4289534800:
+    type: Transform
+    m_owner: 2123085067
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2961358409:
+    type: ModelRenderer
+    transform: 2835880232
+    m_owner: 4166329939
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.052__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2835880232:
+    type: Transform
+    m_owner: 4166329939
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1623724513:
+    type: Transform
+    m_owner: 3434487899
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1010589480:
+    type: ModelRenderer
+    transform: 1623724513
+    m_owner: 3434487899
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.053__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3212908464:
+    type: ModelRenderer
+    transform: 2540191917
+    m_owner: 426823982
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.054__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2540191917:
+    type: Transform
+    m_owner: 426823982
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  376077076:
+    type: Transform
+    m_owner: 1046073790
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  915684955:
+    type: ModelRenderer
+    transform: 376077076
+    m_owner: 1046073790
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.022__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3413406228:
+    type: Transform
+    m_owner: 2121255070
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  4003677157:
+    type: ModelRenderer
+    transform: 3413406228
+    m_owner: 2121255070
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.023__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1464168874:
+    type: Transform
+    m_owner: 3567629011
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3027455936:
+    type: ModelRenderer
+    transform: 1464168874
+    m_owner: 3567629011
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.024__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  3910234528:
+    type: Transform
+    m_owner: 2576280035
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  1593603518:
+    type: ModelRenderer
+    transform: 3910234528
+    m_owner: 2576280035
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.025__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  123603715:
+    type: Transform
+    m_owner: 1260643172
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  3743310496:
+    type: ModelRenderer
+    transform: 123603715
+    m_owner: 1260643172
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.026__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  780074987:
+    type: Transform
+    m_owner: 1646718945
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  2495031097:
+    type: ModelRenderer
+    transform: 780074987
+    m_owner: 1646718945
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.027__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  2065365614:
+    type: ModelRenderer
+    transform: 1034337236
+    m_owner: 3351569605
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.055__0
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+  1034337236:
+    type: Transform
+    m_owner: 3351569605
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2521351286
+  852148087:
     type: CameraComponent
     aspect: 1.33333337
     fovY: 1.04719758
     near: 0.00999999978
     far: 1500
-    transform: 2843595682
-    m_owner: 1043973658
-  2843595682:
+    transform: 2908843488
+    m_owner: 1599976376
+  2908843488:
     type: Transform
-    m_owner: 1043973658
+    m_owner: 1599976376
+    position: 0.000000/1.000000/2.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  712070455:
+    type: PortalComponent
+    m_owner: 3846905002
+    linkedPortalProp: 3208164427
+  3184977263:
+    type: Transform
+    m_owner: 3846905002
     position: 0.000000/0.000000/0.000000
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
-  2788121859:
-    type: BoxCollider
-    m_owner: 1043973658
-    Contact Offset: 0.0199999996
-    Enabled: true
-    Scale: 1.000000/1.000000/1.000000
-    Is Trigger: false
-    Local Position: 0.000000/0.000000/0.000000
-  707130013:
+  2529464378:
+    type: PortalComponent
+    m_owner: 3208164427
+    linkedPortalProp: 3846905002
+  3585030042:
     type: Transform
-    m_owner: 486933633
-    position: 1.000000/0.000000/-3.000000
+    m_owner: 3208164427
+    position: 1.000000/0.000000/1.000000
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
-  135849515:
-    type: Transform
-    m_owner: 76580315
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3067854787:
-    type: ModelRenderer
-    transform: 135849515
-    m_owner: 76580315
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.028__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3022199814:
-    type: Transform
-    m_owner: 996594404
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3561873808:
-    type: ModelRenderer
-    transform: 3022199814
-    m_owner: 996594404
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.008__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  857656609:
-    type: Transform
-    m_owner: 1287716812
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  810838207:
-    type: ModelRenderer
-    transform: 857656609
-    m_owner: 1287716812
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.029__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  916217230:
-    type: Transform
-    m_owner: 754188473
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1556100247:
-    type: ModelRenderer
-    transform: 916217230
-    m_owner: 754188473
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.009__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  373760861:
-    type: Transform
-    m_owner: 3190550757
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  4175901866:
-    type: ModelRenderer
-    transform: 373760861
-    m_owner: 3190550757
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.010__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2698505756:
-    type: Transform
-    m_owner: 3912126357
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1900116859:
-    type: ModelRenderer
-    transform: 2698505756
-    m_owner: 3912126357
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.011__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1908602818:
-    type: Transform
-    m_owner: 2968912089
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2002756113:
-    type: ModelRenderer
-    transform: 1908602818
-    m_owner: 2968912089
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.029__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2089133529:
-    type: Transform
-    m_owner: 787785753
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  155086985:
-    type: ModelRenderer
-    transform: 2089133529
-    m_owner: 787785753
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.030__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3819893982:
-    type: Transform
-    m_owner: 129553487
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2757832248:
-    type: ModelRenderer
-    transform: 3819893982
-    m_owner: 129553487
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.012__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3494292959:
-    type: Transform
-    m_owner: 70259215
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  741959251:
-    type: ModelRenderer
-    transform: 3494292959
-    m_owner: 70259215
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.013__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2946672534:
-    type: Transform
-    m_owner: 1155963171
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3995165123:
-    type: ModelRenderer
-    transform: 2946672534
-    m_owner: 1155963171
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.030__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2397057837:
-    type: Transform
-    m_owner: 9510721
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3443791462:
-    type: ModelRenderer
-    transform: 2397057837
-    m_owner: 9510721
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.014__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2644900184:
-    type: Transform
-    m_owner: 3097519651
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2816647127:
-    type: ModelRenderer
-    transform: 2644900184
-    m_owner: 3097519651
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.031__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3208444123:
-    type: Transform
-    m_owner: 1170110163
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2526752436:
-    type: ModelRenderer
-    transform: 3208444123
-    m_owner: 1170110163
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.031__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3793531790:
-    type: Transform
-    m_owner: 1276325373
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3469552949:
-    type: ModelRenderer
-    transform: 3793531790
-    m_owner: 1276325373
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.032__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3554538384:
-    type: Transform
-    m_owner: 4187293802
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3664948398:
-    type: ModelRenderer
-    transform: 3554538384
-    m_owner: 4187293802
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.032__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2197180077:
-    type: Transform
-    m_owner: 4071817610
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1497417855:
-    type: ModelRenderer
-    transform: 2197180077
-    m_owner: 4071817610
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.033__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  667099015:
-    type: Transform
-    m_owner: 4158587501
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  390139926:
-    type: ModelRenderer
-    transform: 667099015
-    m_owner: 4158587501
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.034__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3520664480:
-    type: Transform
-    m_owner: 1848116249
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3304712056:
-    type: ModelRenderer
-    transform: 3520664480
-    m_owner: 1848116249
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.035__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1705406754:
-    type: Transform
-    m_owner: 2232794747
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1379341760:
-    type: ModelRenderer
-    transform: 1705406754
-    m_owner: 2232794747
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.036__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3724526372:
-    type: Transform
-    m_owner: 3126112966
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  871855683:
-    type: ModelRenderer
-    transform: 3724526372
-    m_owner: 3126112966
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.033__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  933945422:
-    type: Transform
-    m_owner: 271303523
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3119842545:
-    type: ModelRenderer
-    transform: 933945422
-    m_owner: 271303523
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.037__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3761356843:
-    type: Transform
-    m_owner: 550190193
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  307742757:
-    type: ModelRenderer
-    transform: 3761356843
-    m_owner: 550190193
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.034__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2460248898:
-    type: Transform
-    m_owner: 3533184494
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2096149099:
-    type: ModelRenderer
-    transform: 2460248898
-    m_owner: 3533184494
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.035__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3489127965:
-    type: Transform
-    m_owner: 3738637013
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2477479364:
-    type: ModelRenderer
-    transform: 3489127965
-    m_owner: 3738637013
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.038__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1346537001:
-    type: Transform
-    m_owner: 568405118
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  4025629455:
-    type: ModelRenderer
-    transform: 1346537001
-    m_owner: 568405118
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.039__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  39295097:
-    type: Transform
-    m_owner: 2557489751
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  4183621656:
-    type: ModelRenderer
-    transform: 39295097
-    m_owner: 2557489751
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.036__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1068218843:
-    type: Transform
-    m_owner: 1805745824
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  76821625:
-    type: ModelRenderer
-    transform: 1068218843
-    m_owner: 1805745824
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.037__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1776283992:
-    type: Transform
-    m_owner: 1403956068
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  319036054:
-    type: ModelRenderer
-    transform: 1776283992
-    m_owner: 1403956068
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.038__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2927603405:
-    type: Transform
-    m_owner: 2174610631
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  948575825:
-    type: ModelRenderer
-    transform: 2927603405
-    m_owner: 2174610631
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.039__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3840238824:
-    type: Transform
-    m_owner: 1247193657
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2127940673:
-    type: ModelRenderer
-    transform: 3840238824
-    m_owner: 1247193657
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.040__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1149393411:
-    type: Transform
-    m_owner: 3183892516
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2133734668:
-    type: ModelRenderer
-    transform: 1149393411
-    m_owner: 3183892516
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.041__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  461641965:
-    type: Transform
-    m_owner: 2476859864
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1912620765:
-    type: ModelRenderer
-    transform: 461641965
-    m_owner: 2476859864
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.042__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3795847576:
-    type: Transform
-    m_owner: 2174593306
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2383390655:
-    type: ModelRenderer
-    transform: 3795847576
-    m_owner: 2174593306
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.043__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2647189900:
-    type: Transform
-    m_owner: 1249332973
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2792729627:
-    type: ModelRenderer
-    transform: 2647189900
-    m_owner: 1249332973
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.044__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1460151996:
-    type: Transform
-    m_owner: 1473669383
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  450020546:
-    type: ModelRenderer
-    transform: 1460151996
-    m_owner: 1473669383
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.045__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3705471118:
-    type: Transform
-    m_owner: 3827796169
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  880102797:
-    type: ModelRenderer
-    transform: 3705471118
-    m_owner: 3827796169
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.046__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3217337099:
-    type: Transform
-    m_owner: 2867138134
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2115511729:
-    type: ModelRenderer
-    transform: 3217337099
-    m_owner: 2867138134
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.047__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3967466387:
-    type: Transform
-    m_owner: 3918089914
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3344975125:
-    type: ModelRenderer
-    transform: 3967466387
-    m_owner: 3918089914
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.048__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  278773397:
-    type: Transform
-    m_owner: 366079778
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  4024355796:
-    type: ModelRenderer
-    transform: 278773397
-    m_owner: 366079778
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.049__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3260664713:
-    type: Transform
-    m_owner: 3892848099
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1991062850:
-    type: ModelRenderer
-    transform: 3260664713
-    m_owner: 3892848099
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.040__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3406304444:
-    type: Transform
-    m_owner: 2852892213
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1090347714:
-    type: ModelRenderer
-    transform: 3406304444
-    m_owner: 2852892213
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.041__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2900289187:
-    type: Transform
-    m_owner: 2012229568
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1882442433:
-    type: ModelRenderer
-    transform: 2900289187
-    m_owner: 2012229568
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.042__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2301490018:
-    type: Transform
-    m_owner: 369084438
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2698846057:
-    type: ModelRenderer
-    transform: 2301490018
-    m_owner: 369084438
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.043__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  48720932:
-    type: Transform
-    m_owner: 375691307
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1060214031:
-    type: ModelRenderer
-    transform: 48720932
-    m_owner: 375691307
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.044__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1509480537:
-    type: Transform
-    m_owner: 1742692121
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1954311196:
-    type: ModelRenderer
-    transform: 1509480537
-    m_owner: 1742692121
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.045__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3494756374:
-    type: Transform
-    m_owner: 427827525
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1439825755:
-    type: ModelRenderer
-    transform: 3494756374
-    m_owner: 427827525
-    meshFile: Assets\Models\Backpack\backpack.obj/Plane.015__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1004771170:
-    type: Transform
-    m_owner: 3564325615
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1607907402:
-    type: ModelRenderer
-    transform: 1004771170
-    m_owner: 3564325615
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.046__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1790889975:
-    type: Transform
-    m_owner: 2801431855
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3382829386:
-    type: ModelRenderer
-    transform: 1790889975
-    m_owner: 2801431855
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.047__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  211650415:
-    type: Transform
-    m_owner: 3877617560
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1481174798:
-    type: ModelRenderer
-    transform: 211650415
-    m_owner: 3877617560
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.050__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  726161055:
-    type: Transform
-    m_owner: 2590585932
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  4274402307:
-    type: ModelRenderer
-    transform: 726161055
-    m_owner: 2590585932
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.048__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1335109433:
-    type: Transform
-    m_owner: 1353035925
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2550134:
-    type: ModelRenderer
-    transform: 1335109433
-    m_owner: 1353035925
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.051__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1980321609:
-    type: Transform
-    m_owner: 4170241209
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3199217236:
-    type: ModelRenderer
-    transform: 1980321609
-    m_owner: 4170241209
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.052__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2167048991:
-    type: Transform
-    m_owner: 1891940192
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1783615770:
-    type: ModelRenderer
-    transform: 2167048991
-    m_owner: 1891940192
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.053__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3197253958:
-    type: Transform
-    m_owner: 1194913392
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1494573423:
-    type: ModelRenderer
-    transform: 3197253958
-    m_owner: 1194913392
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.054__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  873096844:
-    type: Transform
-    m_owner: 298381285
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  566382346:
-    type: ModelRenderer
-    transform: 873096844
-    m_owner: 298381285
-    meshFile: Assets\Models\Backpack\backpack.obj/BezierCurve.003__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3371617370:
-    type: Transform
-    m_owner: 3615735767
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1010491585:
-    type: ModelRenderer
-    transform: 3371617370
-    m_owner: 3615735767
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.049__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2056217748:
-    type: Transform
-    m_owner: 2520977592
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3235422882:
-    type: ModelRenderer
-    transform: 2056217748
-    m_owner: 2520977592
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.055__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2454127658:
-    type: Transform
-    m_owner: 2920748016
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1800554273:
-    type: ModelRenderer
-    transform: 2454127658
-    m_owner: 2920748016
-    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.056__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3802357244:
-    type: Transform
-    m_owner: 2664729410
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3396611036:
-    type: ModelRenderer
-    transform: 3802357244
-    m_owner: 2664729410
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.050__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  283007705:
-    type: Transform
-    m_owner: 1727567236
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  502927290:
-    type: ModelRenderer
-    transform: 283007705
-    m_owner: 1727567236
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.014__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  85384808:
-    type: Transform
-    m_owner: 3871592484
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  4103087456:
-    type: ModelRenderer
-    transform: 85384808
-    m_owner: 3871592484
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.015__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  4163029892:
-    type: Transform
-    m_owner: 2979764073
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1473960301:
-    type: ModelRenderer
-    transform: 4163029892
-    m_owner: 2979764073
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.016__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1926679703:
-    type: Transform
-    m_owner: 3515571651
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  613018112:
-    type: ModelRenderer
-    transform: 1926679703
-    m_owner: 3515571651
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.017__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2457725730:
-    type: Transform
-    m_owner: 2384970912
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2747699465:
-    type: ModelRenderer
-    transform: 2457725730
-    m_owner: 2384970912
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.051__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1975883341:
-    type: Transform
-    m_owner: 2874314502
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  959070562:
-    type: ModelRenderer
-    transform: 1975883341
-    m_owner: 2874314502
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.018__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3877461187:
-    type: Transform
-    m_owner: 585396148
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1208807800:
-    type: ModelRenderer
-    transform: 3877461187
-    m_owner: 585396148
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.019__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2918677464:
-    type: Transform
-    m_owner: 3659396746
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1190143367:
-    type: ModelRenderer
-    transform: 2918677464
-    m_owner: 3659396746
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.020__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2423016784:
-    type: Transform
-    m_owner: 4097654377
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2485548503:
-    type: ModelRenderer
-    transform: 2423016784
-    m_owner: 4097654377
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.021__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  680551503:
-    type: Transform
-    m_owner: 3136013747
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2363993695:
-    type: ModelRenderer
-    transform: 680551503
-    m_owner: 3136013747
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.052__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1806074491:
-    type: Transform
-    m_owner: 3831812490
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3078361234:
-    type: ModelRenderer
-    transform: 1806074491
-    m_owner: 3831812490
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.053__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  4034905298:
-    type: Transform
-    m_owner: 2505230017
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  332074396:
-    type: ModelRenderer
-    transform: 4034905298
-    m_owner: 2505230017
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.054__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  3295783658:
-    type: Transform
-    m_owner: 1474726329
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2938487933:
-    type: ModelRenderer
-    transform: 3295783658
-    m_owner: 1474726329
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.022__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2267402307:
-    type: Transform
-    m_owner: 2279904107
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  194344621:
-    type: ModelRenderer
-    transform: 2267402307
-    m_owner: 2279904107
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.023__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  4225950083:
-    type: Transform
-    m_owner: 1777506583
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  84953248:
-    type: ModelRenderer
-    transform: 4225950083
-    m_owner: 1777506583
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.024__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  429421438:
-    type: Transform
-    m_owner: 1533077657
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  3633014111:
-    type: ModelRenderer
-    transform: 429421438
-    m_owner: 1533077657
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.025__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  1512332443:
-    type: Transform
-    m_owner: 2016423470
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  2363773901:
-    type: ModelRenderer
-    transform: 1512332443
-    m_owner: 2016423470
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.026__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2954157002:
-    type: Transform
-    m_owner: 3330960357
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1238921977:
-    type: ModelRenderer
-    transform: 2954157002
-    m_owner: 3330960357
-    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.027__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat
-  2908440737:
-    type: Transform
-    m_owner: 1825265914
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/-0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 707130013
-  1181107461:
-    type: ModelRenderer
-    transform: 2908440737
-    m_owner: 1825265914
-    meshFile: Assets\Models\Backpack\backpack.obj/Cube.055__0
-    matFile: Assets\Models\Backpack\Scene_-_Root.mat

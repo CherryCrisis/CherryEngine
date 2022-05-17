@@ -167,8 +167,8 @@ void EnvironmentMapRenderPass::GPUEnvironmentMap::Generate(Texture* texture)
 
 	texture->ClearData();
 
-	if (m_OnGpuReloaded)
-		m_OnGpuReloaded->Invoke();
+	//if (m_OnGpuReloaded)
+	//	m_OnGpuReloaded->Invoke();
 }
 
 void EnvironmentMapRenderPass::GPUEnvironmentMap::Regenerate(Texture* texture)
