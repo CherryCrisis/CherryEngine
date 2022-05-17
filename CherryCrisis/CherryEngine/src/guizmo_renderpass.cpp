@@ -19,18 +19,24 @@
 
 #include "texture_generator.hpp"
 
-GuizmoRenderpass::GuizmoRenderpass(const char* name)
-	: ARenderingRenderPass(name, "Assets/Shaders/portalShader.vert", "Assets/Shaders/portalShader.frag")
+GuizmoRenderPass::GuizmoRenderPass(const char* name)
+	: ARenderingRenderPass(name, "Assets/Shaders/billboard.vert", "Assets/Shaders/billboard.frag")
 {
 	if (m_program)
-		m_callExecute = CCCallback::BindCallback(&GuizmoRenderpass::Execute, this);
+		m_callExecute = CCCallback::BindCallback(&GuizmoRenderPass::Execute, this);
 
 	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
 
-	m_audioIcon  = ResourceManager::GetInstance()->AddResource<Texture>("Internal/Icons/sound_guizmo_icon.png", true);
-	m_cameraIcon = ResourceManager::GetInstance()->AddResource<Texture>("Internal/Icons/camera_guizmo_icon.png", true);
-	m_lightIcon  = ResourceManager::GetInstance()->AddResource<Texture>("Internal/Icons/light_guizmo_icon.png", true);
+	m_audioIcon  = ResourceManager::GetInstance()->AddResource<Texture>("Internal/Icons/sound_guizmo_icon.png", true,  false, ETextureFormat::RGBA);
+	m_cameraIcon = ResourceManager::GetInstance()->AddResource<Texture>("Internal/Icons/camera_guizmo_icon.png", true, false, ETextureFormat::RGBA);
+	m_lightIcon  = ResourceManager::GetInstance()->AddResource<Texture>("Internal/Icons/light_guizmo_icon.png", true,  false, ETextureFormat::RGBA);
 
+	TextureGenerator texGenerator;
+
+	texGenerator.Generate(m_audioIcon.get());
+	texGenerator.Generate(m_cameraIcon.get());
+	texGenerator.Generate(m_lightIcon.get());
+	
 	if (!m_quadMesh->m_gpuMesh)
 	{
 		Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
@@ -38,45 +44,44 @@ GuizmoRenderpass::GuizmoRenderpass(const char* name)
 	}
 }
 
-template <class Tsearched>
-Tsearched* GetDerived() {
-	for (auto c : m_classes) {
-		if (Tsearched* ptr = dynamic_cast<Tsearched*>(c))
-			return ptr;
-	}
-	return nullptr;
-}
-
 template <>
-int GuizmoRenderpass::Subscribe(Behaviour* toGenerate)
+int GuizmoRenderPass::Subscribe(LightComponent* toGenerate)
 {
-	// check if behaviour is type of light, camera or audio emitter
-	if (CameraComponent* comp = dynamic_cast<CameraComponent*>(toGenerate))
-		m_cameraComponents.insert(comp);
-
-	if (AudioEmitter* comp = dynamic_cast<AudioEmitter*>(toGenerate))
-		m_audioEmitters.insert(comp); 
-
-	if (LightComponent* comp = dynamic_cast<LightComponent*>(toGenerate))
-		m_lightComponents.insert(comp);
-	
+	m_lightComponents.insert(toGenerate);
 	return 1;
 }
-
 template <>
-void GuizmoRenderpass::Unsubscribe(Behaviour* toGenerate)
+void GuizmoRenderPass::Unsubscribe(LightComponent* toGenerate)
 {
-	if (CameraComponent* comp = dynamic_cast<CameraComponent*>(toGenerate))
-		m_cameraComponents.erase(comp);
-
-	if (AudioEmitter* comp = dynamic_cast<AudioEmitter*>(toGenerate))
-		m_audioEmitters.erase(comp);
-
-	if (LightComponent* comp = dynamic_cast<LightComponent*>(toGenerate))
-		m_lightComponents.erase(comp);
+	m_lightComponents.erase(toGenerate);
 }
 
-void GuizmoRenderpass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+template <>
+int GuizmoRenderPass::Subscribe(CameraComponent* toGenerate)
+{
+	m_cameraComponents.insert(toGenerate);
+	return 1;
+}
+template <>
+void GuizmoRenderPass::Unsubscribe(CameraComponent* toGenerate)
+{
+	m_cameraComponents.erase(toGenerate);
+}
+
+template <>
+int GuizmoRenderPass::Subscribe(AudioEmitter* toGenerate)
+{
+	m_audioEmitters.insert(toGenerate);
+	return 1;
+}
+template <>
+void GuizmoRenderPass::Unsubscribe(AudioEmitter* toGenerate)
+{
+	m_audioEmitters.erase(toGenerate);
+}
+
+
+void GuizmoRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 {
 	if (!viewer)
 		return;
@@ -86,13 +91,10 @@ void GuizmoRenderpass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glDepthFunc(GL_LESS);
-
-	glCullFace(GL_BACK);
-
-	glClearColor(0.f, 0.f, 0.f, 1.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_CULL_FACE);
+	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glUseProgram(m_program->m_shaderProgram);
 	
@@ -110,17 +112,40 @@ void GuizmoRenderpass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	glBindVertexArray(gpuMesh->VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 
+	// TODO: Clean this mess
+
+
+
+	auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_cameraIcon->m_gpuTexture2D.get());
+	glBindTextureUnit(0, gpuTexture->ID);
+
 	for (CameraComponent* cameraComp : m_cameraComponents) 
 	{
-		CCMaths::Matrix4 model = cameraComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix();
+		CCMaths::Matrix4 model = cameraComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
-
-		auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_cameraIcon->m_gpuTexture2D.get());
-		glBindTextureUnit(0, gpuTexture->ID);
-
 		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 
+	gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_lightIcon->m_gpuTexture2D.get());
+	glBindTextureUnit(0, gpuTexture->ID);
+
+	for (LightComponent* lightComp : m_lightComponents)
+	{
+		CCMaths::Matrix4 model = lightComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+	}
+
+	gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_audioIcon->m_gpuTexture2D.get());
+	glBindTextureUnit(0, gpuTexture->ID);
+
+	for (AudioEmitter* audioComp : m_audioEmitters)
+	{
+		CCMaths::Matrix4 model = audioComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+	}
+	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glBindVertexArray(0);

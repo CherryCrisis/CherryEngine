@@ -31,5 +31,8 @@ public:
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 
+	void SubscribeGuizmo();
+	void UnsubscribeGuizmo();
+
 	void InvalidateTransform();
 };

@@ -6,6 +6,8 @@ CherryCrisis/x64/*/*
 !Assets
 !Internal
 !imgui.ini
+!CherryScriptInterface.dll
+!lib
 !Properties
 !ProjectKit
 !CherryScripting.csproj

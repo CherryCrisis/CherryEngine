@@ -4,6 +4,8 @@
 
 #include "resource_manager.hpp"
 #include "transform.hpp"
+#include "guizmo_renderpass.hpp"
+#include "camera_component.hpp"
 
 void AudioEmitter::Play()
 {
@@ -75,11 +77,17 @@ void AudioEmitter::AddSound(std::shared_ptr<Sound> sound)
 AudioEmitter::AudioEmitter()
 {
 	PopulateMetadatas();
+
+	if (CameraComponent::m_editorCamera)
+		SubscribeToPipeline(CameraComponent::m_editorCamera->m_pipeline.get());
 }
 
 AudioEmitter::AudioEmitter(CCUUID& id) : Behaviour(id)
 {
 	PopulateMetadatas();
+
+	if (CameraComponent::m_editorCamera)
+		SubscribeToPipeline(CameraComponent::m_editorCamera->m_pipeline.get());
 }
 
 AudioEmitter::~AudioEmitter()
@@ -144,4 +152,14 @@ void AudioEmitter::Start()
 		Play();
 
 	GetHost().m_OnStart.Unbind(&AudioEmitter::Start, this);
+}
+
+void AudioEmitter::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
+}
+
+void AudioEmitter::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
 }

@@ -11,6 +11,7 @@
 #include "hdr_renderpass.hpp"
 #include "basic_postprocess_renderpass.hpp"
 #include "collider_renderpass.hpp"
+#include "guizmo_renderpass.hpp"
 
 //-- PBR --//
 #include "environment_map_renderpass.hpp"
@@ -24,6 +25,7 @@ MixedPipeline::MixedPipeline()
 {
 	//-- LIT --//
 	m_colliderPass = LoadSubpipeline<ColliderRenderPass>();
+	m_guizmoPass = LoadSubpipeline<GuizmoRenderPass>();
 	m_portalPass = LoadSubpipeline<PortalRenderPass>();
 	m_shadowPass = LoadSubpipeline<ShadowRenderPass>();
 	m_basicPass = LoadSubpipeline<BasicRenderPass>();
@@ -58,6 +60,8 @@ void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
 
 	m_skydomePass->CallOnExecute(framebuffer, viewer);
 	m_skyboxPass->CallOnExecute(framebuffer, viewer);
+	
+	m_guizmoPass->CallOnExecute(framebuffer, viewer);
 
 	//m_postprocessPass->CallOnExecute(framebuffer);
 }

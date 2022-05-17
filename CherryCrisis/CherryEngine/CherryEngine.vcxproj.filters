@@ -159,6 +159,9 @@
     <ClInclude Include="include\model.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
+    <ClInclude Include="include\model_base.hpp">
+      <Filter>Fichiers d%27en-tête\Resource</Filter>
+    </ClInclude>
     <ClInclude Include="include\model_loader.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
@@ -1104,6 +1107,9 @@
     <ClInclude Include="include\cell.hpp">
       <Filter>Fichiers d%27en-tête\Cells</Filter>
     </ClInclude>
+    <ClInclude Include="include\cell_system.hpp">
+      <Filter>Fichiers d%27en-tête\Cells</Filter>
+    </ClInclude>
     <ClInclude Include="include\serializer.hpp">
       <Filter>Fichiers d%27en-tête\Serialization</Filter>
     </ClInclude>
@@ -1248,8 +1254,8 @@
     <ClInclude Include="include\sky_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\collider_renderpass.hpp">
-      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
+    <ClInclude Include="include\guizmo_renderpass.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1446,9 +1452,6 @@
     <ClCompile Include="src\mesh.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="src\model.cpp">
-      <Filter>Fichiers sources\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="src\model_loader.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
@@ -1456,6 +1459,9 @@
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\shader.cpp">
+      <Filter>Fichiers sources\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model.cpp">
       <Filter>Fichiers sources\Resource</Filter>
     </ClCompile>
     <ClCompile Include="src\texture.cpp">
@@ -1658,6 +1664,9 @@
     </ClCompile>
     <ClCompile Include="src\sky_renderer.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\guizmo_renderpass.cpp">
+      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
     <ClCompile Include="src\collider_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>

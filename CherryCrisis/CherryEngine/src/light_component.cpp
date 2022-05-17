@@ -7,11 +7,14 @@
 #include "basic_renderpass.hpp"
 #include "shadow_renderpass.hpp"
 #include "pbr_renderpass.hpp"
+#include "guizmo_renderpass.hpp"
 
 #include "maths.hpp"
 #include "transform.hpp"
 
 #include "cell.hpp"
+
+#include "camera_component.hpp"
 
 LightComponent::LightComponent()
 {
@@ -92,6 +95,7 @@ void LightComponent::SubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->SubscribeToPipeline<ShadowRenderPass>(&m_light);
 	pipeline->SubscribeToPipeline<BasicRenderPass>(&m_light);
 	pipeline->SubscribeToPipeline<PBRRenderPass>(&m_light);
+	SubscribeGuizmo();
 }
 
 void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
@@ -99,6 +103,7 @@ void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(&m_light);
+	UnsubscribeGuizmo();
 }
 
 void LightComponent::OnCellAdded(Cell* newCell)
@@ -114,4 +119,16 @@ void LightComponent::OnCellRemoved(Cell* newCell)
 void LightComponent::InvalidateTransform()
 {
 	m_transform = nullptr;
+}
+
+void LightComponent::SubscribeGuizmo()
+{
+	if (CameraComponent::m_editorCamera)
+		CameraComponent::m_editorCamera->m_pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
+}
+
+void LightComponent::UnsubscribeGuizmo()
+{
+	if (CameraComponent::m_editorCamera)
+		CameraComponent::m_editorCamera->m_pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
 }

@@ -70,6 +70,8 @@ SceneDisplayer::SceneDisplayer()
 
 SceneDisplayer::~SceneDisplayer()
 {
+    CameraComponent::m_editorCamera = nullptr;
+
     if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
     {
         if (Cell* cell = m_manager->GetCellSystemDisplayer()->GetSelectedCell())

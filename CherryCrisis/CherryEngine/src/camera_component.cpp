@@ -8,6 +8,7 @@
 
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
+#include "guizmo_renderpass.hpp"
 #include "render_manager.hpp"
 #include "camera_component.hpp"
 
@@ -23,6 +24,8 @@ CameraComponent::CameraComponent()
 	m_count++;
 	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
+	if (m_editorCamera)
+		SubscribeToPipeline(m_editorCamera->m_pipeline.get());
 }
 
 CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
@@ -31,11 +34,17 @@ CameraComponent::CameraComponent(CCUUID& id) : Behaviour(id)
 	m_count++;
 	m_camera.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
+	if (m_editorCamera)
+		SubscribeToPipeline(m_editorCamera->m_pipeline.get());
 }
 
 CameraComponent::~CameraComponent()
 {
+	if (m_editorCamera)
+		UnsubscribeToPipeline(m_editorCamera->m_pipeline.get());
+
 	if (m_mainCamera == this) m_mainCamera = nullptr;
+
 	m_count--;
 	GetHost().m_cell->RemoveViewer(&m_camera);
 
@@ -115,5 +124,15 @@ void CameraComponent::SetAsMain()
 void CameraComponent::InvalidateTransform()
 {
 	m_transform = nullptr;
+}
+
+void CameraComponent::SubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
+}
+
+void CameraComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
+{
+	pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
 }
 
