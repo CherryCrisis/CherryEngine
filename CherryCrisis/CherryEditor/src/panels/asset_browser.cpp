@@ -485,15 +485,14 @@ void AssetBrowser::BrowserActionRename()
         std::string str = "Renaming ";
         str += m_focusedNode->m_filename;
         str += " ? \n\n";
-
         ImGui::Text(str.c_str());
-
         ImGui::Separator();
 
-        static char newName[32] = "New Name";
+        static char newName[32];
         IMGUI_LEFT_LABEL(ImGui::InputText, "New Name:", newName, IM_ARRAYSIZE(newName));
+        ImGui::Separator();
 
-        if (ImGui::Button("Rename", ImVec2(120, 0)))
+        if (ImGui::Button("Rename", ImVec2(120, 0)) && std::string(newName) != "")
         {
             ImGui::CloseCurrentPopup();
             std::filesystem::path newPath = m_currentDirectoryNode->m_path;
@@ -522,6 +521,9 @@ void AssetBrowser::BrowserActionRename()
             QuerryBrowser();
 
             m_browserAction = EBrowserAction::NONE;
+
+            m_focusedNode = nullptr;
+            memset(newName, 0, sizeof(char) * strlen(newName));
         }
 
         ImGui::SameLine();

@@ -115,12 +115,11 @@ void HierarchyDisplayer::Render()
         ImGui::Text(str.c_str());
         ImGui::Separator();
 
-        static char newName[32] = "New Name";
+        static char newName[32];
         IMGUI_LEFT_LABEL(ImGui::InputText, "New Name:", newName, IM_ARRAYSIZE(newName));
-
         ImGui::Separator();
 
-        if (ImGui::Button("Rename", ImVec2(120, 0)))
+        if (ImGui::Button("Rename", ImVec2(120, 0)) && std::string(newName) != "")
         {
             ImGui::CloseCurrentPopup();
             m_manager->m_entitySelector.m_entities[0]->SetName(newName);
