@@ -2,7 +2,16 @@
 
 #include "rendering_pipeline_interface.hpp"
 
-ARenderingPipeline::~ARenderingPipeline() = default;
+ARenderingPipeline::~ARenderingPipeline() 
+{/*
+	//Delete entries
+	for (auto [name, rawPtr] : m_existingRenderpasses)
+	{
+		ARenderPass* pass = rawPtr;
+		m_existingRenderpasses.erase(name);
+		delete pass;
+	}*/
+}
 
 ARenderPass* ARenderingPipeline::GetRenderpass(const char* typeName)
 {

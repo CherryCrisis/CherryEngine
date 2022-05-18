@@ -22,6 +22,7 @@
 #include "prefilter_map_renderpass.hpp"
 #include "brdf_renderpass.hpp"
 #include "pbr_renderpass.hpp"
+#include "picking_renderpass.hpp"
 
 MixedPipeline::MixedPipeline()
 {
@@ -37,6 +38,7 @@ MixedPipeline::MixedPipeline()
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
 	m_uiPass = LoadSubpipeline<UIRenderPass>();
 	m_uiTextPass = LoadSubpipeline<TextRenderPass>();
+	m_pickingRenderpass = LoadSubpipeline<PickingRenderPass>();
 
 	//-- PBR --//
 	m_environmentMapPass = LoadSubpipeline<EnvironmentMapRenderPass>();
@@ -45,6 +47,31 @@ MixedPipeline::MixedPipeline()
 	m_brdfPass = LoadSubpipeline<BRDFRenderPass>();
 	m_pbrPass = LoadSubpipeline<PBRRenderPass>();
 	m_skydomePass = LoadSubpipeline<SkydomeRenderPass>();
+}
+
+MixedPipeline::~MixedPipeline()
+{
+	//-- LIT --//
+	delete m_colliderPass;
+	delete m_guizmoPass;
+	delete m_portalPass;
+	delete m_shadowPass;
+	delete m_basicPass;
+	delete m_skyboxPass;
+	delete m_bloomPass;
+	delete m_hdrPass;
+	delete m_postprocessPass;
+	delete m_uiPass;
+	delete m_uiTextPass;
+	delete m_pickingRenderpass;
+	
+	//-- PBR --//
+	delete m_environmentMapPass;
+	delete m_irradianceMapPass;
+	delete m_prefilterPass;
+	delete m_brdfPass;
+	delete m_pbrPass;
+	delete m_skydomePass;
 }
 
 void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)

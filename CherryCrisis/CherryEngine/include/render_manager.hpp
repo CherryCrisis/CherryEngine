@@ -16,4 +16,5 @@ class CCENGINE_API RenderManager : public Singleton<RenderManager>
 
 public:
 	RenderManager();
+	~RenderManager();
 };

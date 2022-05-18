@@ -12,7 +12,12 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
+	std::lock_guard<std::mutex> lock(m_lockResources);
 
+	for (auto& pair : m_resources)
+	{
+		pair.second->RemoveAll();
+	}
 }
 
 void ResourceManager::Purge()

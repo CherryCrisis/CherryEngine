@@ -17,6 +17,8 @@ class ColliderRenderPass;
 class GuizmoRenderPass;
 
 class UIRenderPass;
+class PickingRenderPass;
+
 class TextRenderPass;
 class BasicPostProcessRenderPass;
 
@@ -44,6 +46,7 @@ class CCENGINE_API MixedPipeline : public ARenderingPipeline
 	BasicPostProcessRenderPass* m_postprocessPass = nullptr;
 	UIRenderPass* m_uiPass = nullptr;
 	TextRenderPass* m_uiTextPass = nullptr;
+	PickingRenderPass* m_pickingRenderpass = nullptr;
 
 	//-- PBR --//
 	EnvironmentMapRenderPass* m_environmentMapPass = nullptr;
@@ -55,6 +58,7 @@ class CCENGINE_API MixedPipeline : public ARenderingPipeline
 
 public:
 	MixedPipeline();
+	~MixedPipeline();
 
 	void Execute(Framebuffer& framebuffer, Viewer* viewer) override;
 };

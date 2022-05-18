@@ -27,6 +27,11 @@ AssetBrowser::AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer, Edito
 
 }
 
+AssetBrowser::~AssetBrowser()  
+{
+    m_assetNodes.clear();
+}
+
 void AssetBrowser::Render()
 {
     if (!m_isOpened) return;

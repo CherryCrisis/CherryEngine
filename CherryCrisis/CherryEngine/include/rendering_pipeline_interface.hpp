@@ -16,7 +16,6 @@ class APostProcessRenderPass;
 class CCENGINE_API ARenderingPipeline
 {
 private:
-	//std::unordered_map<std::string, std::unique_ptr<ARenderPass>> m_existingRenderpasses;
 	std::unordered_map<std::string, ARenderPass*> m_existingRenderpasses;
 
 public:
@@ -40,12 +39,8 @@ public:
 
 		const char* typeName = typeid(SubPipelineT).name();
 
-		//auto renderpassPtr = std::make_unique<SubPipelineT>(typeName);
-		//SubPipelineT* rawPtr = renderpassPtr.get();
-		//m_existingRenderpasses.emplace(typeName, std::move(renderpassPtr));
-
 		SubPipelineT* rawPtr = new SubPipelineT(typeName);
-		m_existingRenderpasses.emplace(typeName, std::move(rawPtr));
+		m_existingRenderpasses.emplace(typeName, rawPtr);
 
 		return rawPtr;
 	}

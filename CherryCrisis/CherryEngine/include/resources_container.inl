@@ -82,6 +82,18 @@ void ResourcesContainer<ResourceT>::Remove(const std::filesystem::path& filepath
 }
 
 template<class ResourceT>
+void ResourcesContainer<ResourceT>::RemoveAll()
+{
+	auto resources = m_resources;
+	for (const auto [key, resource] : resources)
+	{
+		resource->DeleteResource();
+	}
+
+	m_resources.clear();
+}
+
+template<class ResourceT>
 void ResourcesContainer<ResourceT>::Erase(const std::filesystem::path& filepath)
 {
 	m_resources.erase(std::hash<std::string>{}(filepath.string()));

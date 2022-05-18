@@ -223,6 +223,15 @@ void Scene::Empty()
 	}
 }
 
+void Scene::EmptyUI() 
+{
+	while (m_UIContext.m_items.size() > 0)
+	{
+		delete m_UIContext.m_items[0];
+		m_UIContext.m_items.erase(m_UIContext.m_items.begin());
+	}
+}
+
 Cell* Scene::AddCell(const std::string& name, CCUUID uuid)
 {
 	Cell* cell = nullptr;

@@ -42,7 +42,8 @@ namespace CCCallback
 
 		virtual void Invoke(Args&&... args) const override
 		{
-			(m_member->*m_func)(args...);
+			if (m_member)
+				(m_member->*m_func)(args...);
 		}
 
 		bool IsEqual(ACallback<Args...>* callback) const override
