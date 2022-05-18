@@ -19,6 +19,8 @@ public:
 	Portal	   m_portal;
 	Transform* m_transform = nullptr;
 
+	bool test = false;
+
 	PortalComponent* m_linkedPortal = nullptr;
 
 	PortalComponent();

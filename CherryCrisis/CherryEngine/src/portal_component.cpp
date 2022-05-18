@@ -73,8 +73,6 @@ void PortalComponent::ChangePosition(const CCMaths::Vector3& position)
 	m_portal.m_viewMatrix = Matrix4::RotateXYZ(-rot) * Matrix4::Translate(-pos);
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 	m_portal.m_localMatrix = m_transform->GetLocalMatrix();
-
-	m_portal.m_worldMatrix = Matrix4::Translate(pos) * Matrix4::RotateZYX(rot);
 }
 
 void PortalComponent::ChangeRotation(const CCMaths::Vector3& rotation)
@@ -85,8 +83,6 @@ void PortalComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 	m_portal.m_viewMatrix = Matrix4::RotateXYZ(-rot) * Matrix4::Translate(-pos);
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 	m_portal.m_localMatrix = m_transform->GetLocalMatrix();
-
-	m_portal.m_worldMatrix = Matrix4::Translate(pos) * Matrix4::RotateZYX(rot);
 
 }
 
@@ -148,4 +144,6 @@ void PortalComponent::OnCellRemoved(Cell* newCell)
 {
 	newCell->RemoveRenderer(&m_portal);
 	newCell->RemoveViewer(&m_portal);
+
+	test = true;
 }

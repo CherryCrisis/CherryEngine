@@ -57,22 +57,16 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			
 		if (GPUBasicPortal* gpuPortal = static_cast<GPUBasicPortal*>(portal->m_gpuPortal.get()))
 		{
-			CCMaths::Matrix4 m = portal->m_linkedPortal->m_modelMatrix * viewer->m_worldMatrix;
+			
+			CCMaths::Matrix4 m =  portal->m_linkedPortal->m_modelMatrix * portal->m_modelMatrix.Inverse() * viewer->m_viewMatrix.Inverse();
 
 			portal->m_linkedPortal->m_viewMatrix = m.Inverse();
+			//portal->m_linkedPortal->m_viewMatrix = m;
 			
 			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader 
-			//portal->m_linkedPortal->m_viewMatrix = m;
 			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
 			
 			portal->m_linkedPortal->Draw(gpuPortal->framebuffer, 0);
-
-			//portal->m_linkedPortal->m_currentIteration = 0;
-			//viewer->m_currentIteration = 0;
-			//portal->m_linkedPortal->m_pipeline->Execute(gpuPortal->framebuffer, viewer);
-
-			//m_currentIteration = iteration;
-			//m_pipeline->Execute(fb, this);
 		}
 	}
 
@@ -109,6 +103,11 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			continue;
 
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, portal->m_modelMatrix.data);
+
+		if (portal->m_linkedPortal)
+		{
+			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModelLinked"), 1, GL_FALSE, portal->m_linkedPortal->m_modelMatrix.Inverse().data);
+		}
 
 		glBindTextureUnit(0, gpuPortal->framebuffer.colorTex.texID);
 
