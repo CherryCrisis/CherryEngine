@@ -8,46 +8,110 @@
 #include <string>
 
 #include "property.hpp"
+#include "field.hpp"
 
-struct CCENGINE_API Field
+struct CCENGINE_API AMetadata
 {
-	std::string m_name;
-    std::any m_value;
-	std::type_index m_type = typeid(void);
+	virtual void Get(void** outValue) = 0;
+	virtual void Set(void* inValue) = 0;
 
-	Field() = default;
-	Field(const std::string& name, std::any value, const std::type_index& type)
-		: m_name(name), m_value(value), m_type(type)
+	virtual const std::type_index& GetType() = 0;
+
+	std::string m_identifier;
+	std::string m_name;
+
+	AMetadata(const char* name, const char* identifier)
+		: m_identifier(identifier) { }
+};
+
+template <typename T>
+struct CCENGINE_API MetaField : public AMetadata
+{
+	Field m_field;
+
+	void Get(void** outValue)
+	{
+		*outValue = std::any_cast<T>(m_field.m_value);
+	}
+
+	void Set(void* inValue)
+	{
+		*std::any_cast<T>(m_field.m_value) = *reinterpret_cast<T>(inValue);
+	}
+
+	const std::type_index& GetType() override
+	{
+		return m_field.m_type;
+	}
+
+	MetaField(const char* name, const Field& field, const char* identifier)
+		: AMetadata(name, identifier), m_field(field)
+	{
+
+	}
+
+	MetaField(const char* name, std::any value, const std::type_index& type, const char* identifier)
+		: AMetadata(name, identifier), m_field(value, type)
 	{
 
 	}
 };
 
-struct CCENGINE_API Metadata
+struct CCENGINE_API MetaProperty : public AMetadata
 {
-	std::unordered_map<std::string, Field> m_fields;
-	std::unordered_map<std::string, CCProperty::IClearProperty*> m_properties;
+	CCProperty::IClearProperty* m_property = nullptr;
 
-	void SetField(const char* fieldName, Field& fieldToSet)
+	void Get(void** outValue) override
 	{
-		m_fields[fieldName] = std::move(fieldToSet);
+		m_property->Get(*outValue);
 	}
 
-	void SetField(const char* fieldName, std::any value, std::type_index fieldType)
+	void Set(void* inValue) override
 	{
-		m_fields[fieldName] = Field(fieldName, value, fieldType);
+		m_property->Set(inValue);
+	}
+
+	const std::type_index& GetType() override
+	{
+		return m_property->GetGetType();
+	}
+
+	MetaProperty(const char* name, CCProperty::IClearProperty* prop, const char* identifier)
+		: AMetadata(name, identifier), m_property(prop)
+	{
+
+	}
+};
+
+struct CCENGINE_API Metapack
+{
+	std::unordered_map<std::string, AMetadata*> m_metadatas;
+
+	template <typename T>
+	void SetField(const char* fieldName, Field& fieldToSet, const char* identifier = "0")
+	{
+		// todo use unique ptr
+		m_metadatas[fieldName] = new MetaField<T>(fieldName, fieldToSet, identifier);
+	}
+
+	template <typename T>
+	void SetField(const char* fieldName, std::any value, const std::type_index& fieldType, const char* identifier = "0")
+	{
+		// todo use unique ptr
+
+		m_metadatas[fieldName] = new MetaField<T>(fieldName, value, fieldType, identifier);
 	}
 
 	template <typename CastT, typename RefT>
 	void SetFieldFromPtr(const char* fieldName, RefT* ref)
 	{
-		SetField(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(ref)), typeid(CastT));
+		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT>, reinterpret_cast<CastT>(ref)), typeid(std::remove_pointer<CastT>));
 	}
 
 	template <typename RefT>
 	void SetFieldFromPtr(const char* fieldName, RefT* ref)
 	{
-		SetField(fieldName, std::any(ref), typeid(RefT));
+		SetField<RefT*>(fieldName, std::any(ref), typeid(RefT));
 	}
 
 	template <typename RefT>
@@ -59,11 +123,13 @@ struct CCENGINE_API Metadata
 	template <typename CastT, typename RefT>
 	void SetField(const char* fieldName, RefT& ref)
 	{
-		SetField(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref)), typeid(CastT));
+		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref)), typeid(CastT));
 	}
 
-	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop)
+	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop, const char* identifier = "0")
 	{
-		m_properties[fieldName] = { prop };
+		// todo use unique ptr
+
+		m_metadatas[fieldName] = new MetaProperty(fieldName, prop, identifier);
 	}
 };

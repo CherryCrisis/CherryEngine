@@ -1,21 +1,23 @@
 #include "pch.hpp"
 
-#include <string>
-
 #include "model_renderer.hpp"
+
+#include <string>
 
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
 
+#include "entity.hpp"
+#include "cell.hpp"
+
 #include "shadow_renderpass.hpp"
 #include "basic_renderpass.hpp"
 #include "pbr_renderpass.hpp"
+#include "model.hpp"
 #include "picking_renderpass.hpp"
 #include "entity.hpp"
 #include "texture.hpp"
 #include "material.hpp"
-
-#include "cell.hpp"
 
 int ModelRenderer::count = 1;
 
@@ -48,7 +50,7 @@ void ModelRenderer::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetField<Object*>("transform", m_transform);
+	m_metadatas.SetField<Behaviour*>("transform", m_transform);
 	m_metadatas.SetProperty("meshFile", &m_MeshPath);
 	m_metadatas.SetProperty("matFile", &m_MaterialPath);
 }

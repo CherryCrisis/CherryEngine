@@ -3,6 +3,8 @@
 #include "audio_emitter.hpp"
 
 #include "resource_manager.hpp"
+
+#include "entity.hpp"
 #include "transform.hpp"
 #include "guizmo_renderpass.hpp"
 #include "camera_component.hpp"

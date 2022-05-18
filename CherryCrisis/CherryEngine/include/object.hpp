@@ -22,15 +22,14 @@ public:
 	virtual ~Object() = default;
 
 
-	Metadata m_metadatas;
+	Metapack m_metadatas;
 
 	bool IsActive() { return m_isActive; }
 	void SetActive(bool value) { m_isActive = value; }
 
 	uint32_t GetUUID() const { return (uint32_t)m_uuid; }
 
-	std::unordered_map<std::string, Field>& GetFields() { return m_metadatas.m_fields; }
-	std::unordered_map<std::string, CCProperty::IClearProperty*>& GetProperties() { return m_metadatas.m_properties; }
+	std::unordered_map<std::string, AMetadata*>& GetMetapack() { return m_metadatas.m_metadatas;  }
 
 	CCProperty::CopyProperty<Object, bool> Active{ this, &Object::SetActive, &Object::IsActive };
 };

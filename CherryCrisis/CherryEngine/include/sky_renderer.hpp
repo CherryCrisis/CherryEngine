@@ -18,7 +18,7 @@ private:
 
 	void PopulateMetadatas();
 public:
-	Metadata m_metadatas;
+	Metapack m_metadatas;
 
 	std::shared_ptr<Mesh>		m_cube = nullptr;
 	std::shared_ptr<Mesh>		m_quad = nullptr;
@@ -37,6 +37,8 @@ public:
 
 	void SetTextureFromPath(std::string);
 	std::string GetTexturePath();
+
+	std::unordered_map<std::string, AMetadata*>& GetMetapack() { return m_metadatas.m_metadatas; }
 
 	//Verif is the texture when is reloaded the surface is compatible with skyRenderer
 	void OnReloadTexture(std::shared_ptr<Texture> texture);

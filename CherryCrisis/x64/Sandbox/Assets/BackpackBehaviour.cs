@@ -11,12 +11,14 @@ namespace CCScripting
 		{
 		}
 
+		public void Awake()
+		{
+			transform = GetComponent<Transform>();
+		}
+
 		public void Start()
 		{
 
-			transform = GetComponent<Transform>();
-			Debug.GetInstance().Log(ELogType.INFO, pos);
-			transform.position = new Vector3(0f, 0f, -5f);
 		}
 
 		void SetRotation()

@@ -12,6 +12,8 @@
 
 #include "csreflection_ex.hpp"
 
+#include "entity.hpp"
+
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
@@ -53,26 +55,34 @@ ScriptedBehaviour::~ScriptedBehaviour()
 		m_scriptingAssembly->m_OnDeleted.Unbind(&ScriptedBehaviour::InvalidateAssembly, this);
 	}
 
-	if (managedInstance)
-		managedInstance->Dispose();
+	if (m_managedInstance)
+		m_managedInstance->Dispose();
 }
 
 void ScriptedBehaviour::BindToSignals() 
 {
-	if (!managedInstance)
+	if (!m_managedInstance)
 		return;
 
-	if (managedUpdate)
+	if (m_managedUpdate)
 		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
 
-	if (managedStart)
+	if (m_managedStart)
 		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
+
+	if (m_managedAwake)
+		GetHost().m_OnAwake.Bind(&ScriptedBehaviour::Awake, this);
 
 	GetHost().m_OnCollisionEnter.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
 	GetHost().m_OnCollisionStay.Bind(&ScriptedBehaviour::OnCollisionStay, this);
 	GetHost().m_OnCollisionExit.Bind(&ScriptedBehaviour::OnCollisionExit, this);
 	GetHost().m_OnTriggerEnter.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
 	GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
+}
+
+void ScriptedBehaviour::OnSetOwner(Entity* newOwner)
+{
+	newOwner->SubscribeComponent(this, m_scriptName);
 }
 
 void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
@@ -82,15 +92,18 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 	if (!m_scriptingAssembly || !m_scriptingAssembly->m_context)
 		return;
 
-	managedClass = m_scriptingAssembly->m_context->FindClass("CCScripting", scriptName.c_str());
+	m_managedClass = m_scriptingAssembly->m_context->FindClass("CCScripting", scriptName.c_str());
 
-	if (managedUpdate = managedClass->FindMethod("Update"))
-		csUpdate = managedUpdate->GetMemberUnmanagedThunk<void>();
+	if (m_managedUpdate = m_managedClass->FindMethod("Update"))
+		csUpdate = m_managedUpdate->GetMemberUnmanagedThunk<void>();
 
-	if (managedStart = managedClass->FindMethod("Start"))
-		csStart = managedStart->GetMemberUnmanagedThunk<void>();
+	if (m_managedStart = m_managedClass->FindMethod("Start"))
+		csStart = m_managedStart->GetMemberUnmanagedThunk<void>();
 
-	managedInstance = managedClass->CreateUnmanagedInstance(this, false);
+	if (m_managedAwake = m_managedClass->FindMethod("Awake"))
+		csAwake= m_managedAwake->GetMemberUnmanagedThunk<void>();
+
+	m_managedInstance = m_managedClass->CreateUnmanagedInstance(this, false);
 
 	PopulateMetadatas();
 
@@ -103,15 +116,13 @@ void ScriptedBehaviour::PopulateMetadatas()
 
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
-
 	auto handleRefClass = m_scriptingAssembly->m_context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
 	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
 
-	auto managedVector = m_interfaceAssembly->m_context->FindClass("CCEngine", "Vector3");
-	auto managedTransform = m_interfaceAssembly->m_context->FindClass("CCEngine", "Transform");
+	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
 
-	const auto& fields = managedClass->Fields();
+	const auto& fields = m_managedClass->Fields();
 
 	for (const auto& [fieldName, fieldRef] : fields)
 	{
@@ -119,48 +130,74 @@ void ScriptedBehaviour::PopulateMetadatas()
 
 		if (fieldType->Equals(mono::ManagedType::GetInt32()))
 		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<int>(managedInstance, fieldRef.get()));
+			// TODO: FREE ALLOCATIONS
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<int>(m_managedInstance, fieldRef.get()));
 			continue;
 		}
 
 		if (fieldType->Equals(mono::ManagedType::GetString()))
 		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<std::string>(managedInstance, fieldRef.get()));
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<std::string>(m_managedInstance, fieldRef.get()));
 			continue;
 		}
 
 		if (fieldType->Equals(mono::ManagedType::GetSingle()))
 		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<float>(managedInstance, fieldRef.get()));
+			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<float>(m_managedInstance, fieldRef.get()));
 			continue;
 		}
 
-		if (fieldType->Equals("CCEngine.Vector3"))
+		auto name = fieldType->Name();
+
+		const std::string& fullName = fieldType->Name();
+
+		mono::ManagedClass* managedClass = m_interfaceAssembly->m_context->FindClass(fullName.c_str());
+		if (!managedClass)
+			managedClass = m_scriptingAssembly->m_context->FindClass(fullName.c_str());
+
+		if (managedClass)
+		if (mono::ManagedMethod* managedGetCPtr = managedClass->FindMethod("getCPtr"))
 		{
-			auto managedGetCPtr = managedVector->FindMethod("getCPtr");
+			MonoObject* managedFieldInstance = nullptr, *excep = nullptr;
+			m_managedInstance->GetField(fieldName.c_str(), &managedFieldInstance);
 
-			auto getCPtr = managedGetCPtr->GetStaticUnmanagedThunk<MonoObject*, MonoObject*>();
-			MonoObject* managedVec = nullptr;
-			managedInstance->GetField(fieldName.c_str(), &managedVec);
-
-			MonoException* excep = nullptr;
-			MonoObject* ptrHandle = getCPtr->Invoke(managedVec, &excep);
+			MonoObject* ptrHandle = managedGetCPtr->InvokeStatic((void**)&managedFieldInstance, &excep);
 
 			void* unboxedHandle = mono_object_unbox(ptrHandle);
-
-			MonoObject* excepObj;
-			MonoObject* res = mono_runtime_invoke(getHandleMethod, unboxedHandle, nullptr, &excepObj);
+			MonoObject* res = mono_runtime_invoke(getHandleMethod, unboxedHandle, nullptr, &excep);
 
 			if (!res || excep)
 				return;
 
-			CCMaths::Vector3* vecPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
+			
 
-			m_metadatas.SetFieldFromPtr(fieldName.c_str(), vecPtr);
+			if (fieldType->Equals("CCEngine.Vector3"))
+			{
+				CCMaths::Vector3* valPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
+
+				m_metadatas.SetFieldFromPtr(fieldName.c_str(), valPtr);
+				continue;
+			}
+
+			if (fieldType->Equals("CCEngine.Entity"))
+			{
+				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Entity*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod));
+				continue;
+			}
+
+			std::string compName = fieldType->Name().substr(fieldType->Name().find_last_of('.') + 1);
+
+			if (fieldType->InheritOf(behaviourClass))
+			{
+				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Behaviour*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod), compName.c_str());
+				continue;
+			}
+
+			continue;
 		}
 	}
 
-	const auto& properties = managedClass->Properties();
+	const auto& properties = m_managedClass->Properties();
 
 	for (const auto& [propName, propRef] : properties)
 	{
@@ -170,30 +207,38 @@ void ScriptedBehaviour::PopulateMetadatas()
 		if (getType && getType->Equals(mono::ManagedType::GetInt32()) ||
 			setType && setType->Equals(mono::ManagedType::GetInt32()))
 		{
-			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<int>(managedInstance, propRef.get()));
+			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<int>(m_managedInstance, propRef.get()));
 			continue;
 		}
 
 		if (getType && getType->Equals(mono::ManagedType::GetString()) ||
 			setType && setType->Equals(mono::ManagedType::GetString()))
 		{
-			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<std::string>(managedInstance, propRef.get()));
+			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<std::string>(m_managedInstance, propRef.get()));
 			continue;
 		}
 
 		if (getType && getType->Equals(mono::ManagedType::GetSingle()) ||
 			setType && setType->Equals(mono::ManagedType::GetSingle()))
 		{
-			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<float>(managedInstance, propRef.get()));
+			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<float>(m_managedInstance, propRef.get()));
 			continue;
 		}
 	}
 }
 
+void ScriptedBehaviour::Awake()
+{
+	MonoException* excep = nullptr;
+	csAwake->Invoke(m_managedInstance->RawObject(), &excep);
+
+	GetHost().m_OnAwake.Unbind(&ScriptedBehaviour::Awake, this);
+}
+
 void ScriptedBehaviour::Start()
 {
 	MonoException* excep = nullptr;
-	csStart->Invoke(managedInstance->RawObject(), &excep);
+	csStart->Invoke(m_managedInstance->RawObject(), &excep);
 
 	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 }
@@ -201,7 +246,7 @@ void ScriptedBehaviour::Start()
 void ScriptedBehaviour::Update()
 {
 	MonoException* excep = nullptr;
-	csUpdate->Invoke(managedInstance->RawObject(), &excep);
+	csUpdate->Invoke(m_managedInstance->RawObject(), &excep);
 }
 
 void ScriptedBehaviour::OnCollisionEnter()
@@ -236,12 +281,11 @@ void ScriptedBehaviour::OnTriggerExit()
 
 void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
 {
-	m_metadatas.m_fields.clear();
-	m_metadatas.m_properties.clear();
+	m_metadatas.m_metadatas.clear();
 	PopulateMetadatas();
 }
 
 _MonoObject* ScriptedBehaviour::GetRawInstance()
 {
-	return managedInstance->RawObject();
+	return m_managedInstance->RawObject();
 }

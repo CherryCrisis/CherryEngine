@@ -3,6 +3,7 @@
 #include "portal_component.hpp"
 
 #include "cell.hpp"
+#include "entity.hpp"
 
 #include "transform.hpp"
 
@@ -37,7 +38,7 @@ void PortalComponent::PopulateMetadatas()
 	Behaviour::PopulateMetadatas();
 
 	// Add property
-	m_metadatas.SetProperty("linkedPortalProp", &m_LinkedPortalProp);
+	m_metadatas.SetProperty("linkedPortalProp", &m_LinkedPortalProp, "PortalComponent");
 }
 
 void PortalComponent::BindToSignals()
@@ -105,33 +106,30 @@ void PortalComponent::InvalidateLinkedPortal()
 	m_linkedPortal = m_linkedPortal->m_linkedPortal = nullptr;
 };
 
-void PortalComponent::SetLinkedPortal(Object* linkedObject)
+void PortalComponent::SetLinkedPortal(Behaviour* linkedObject)
 {
 	InvalidateLinkedPortal();
 
-	auto linkedEntity = dynamic_cast<Entity*>(linkedObject);
-
-	if (!linkedEntity)
+	if (!linkedObject)
 		return;
 
-	if (PortalComponent* linkedPortalComp = linkedEntity->GetBehaviour<PortalComponent>())
-	{
-		m_linkedPortal = linkedPortalComp;
-		
-		m_linkedPortal->m_OnDestroy.Bind(&PortalComponent::InvalidateLinkedPortal, this);
+	PortalComponent* linkedPortal = static_cast<PortalComponent*>(linkedObject);
 
-		//linkedPortalComp->m_linkedPortal = this;
-		//Portal* tempPortal = &m_portal;
-		m_portal.m_linkedPortal = &linkedPortalComp->m_portal;
-		//linkedPortalComp->m_portal.m_linkedPortal = tempPortal;
-		
-		m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
-	}
+	m_linkedPortal = linkedPortal;
+
+	m_linkedPortal->m_OnDestroy.Bind(&PortalComponent::InvalidateLinkedPortal, this);
+
+	linkedPortal->m_linkedPortal = this;
+	Portal* tempPortal = &m_portal;
+	m_portal.m_linkedPortal = &linkedPortal->m_portal;
+	linkedPortal->m_portal.m_linkedPortal = tempPortal;
+
+	m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
 }
 
-Object* PortalComponent::GetLinkedPortal()
+Behaviour* PortalComponent::GetLinkedPortal()
 {
-	return m_linkedPortal ? m_linkedPortal->GetHostPtr() : nullptr;
+	return m_linkedPortal;
 }
 
 void PortalComponent::OnCellAdded(Cell* newCell)

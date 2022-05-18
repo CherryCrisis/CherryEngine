@@ -27,12 +27,14 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	std::shared_ptr<class CsAssembly> m_scriptingAssembly;
 	std::shared_ptr<class CsAssembly> m_interfaceAssembly;
-	mono::ManagedObject* managedInstance;
-	mono::ManagedClass* managedClass;
-	mono::ManagedMethod* managedUpdate;
-	mono::ManagedMethod* managedStart;
+	mono::ManagedObject*	m_managedInstance;
+	mono::ManagedClass*		m_managedClass;
+	mono::ManagedMethod*	m_managedUpdate;
+	mono::ManagedMethod*	m_managedAwake;
+	mono::ManagedMethod*	m_managedStart;
 
 	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
+	mono::ManagedThunk<void, struct _MonoObject*>* csAwake;
 	mono::ManagedThunk<void, struct _MonoObject*>* csStart;
 	mono::ManagedThunk<void, struct _MonoObject*>* csCollideIn;
 	mono::ManagedThunk<void, struct _MonoObject*>* csCollideStay;
@@ -51,6 +53,8 @@ public:
 
 	void SetScriptClass(const std::string& scriptName);
 	void BindToSignals() override;
+	void OnSetOwner(Entity* newOwner)  override;
+	void Awake();
 	void Start();
 	void Update();
 

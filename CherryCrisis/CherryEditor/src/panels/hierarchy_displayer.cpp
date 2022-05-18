@@ -296,8 +296,8 @@ void HierarchyDisplayer::ContextCallback()
                         scene->AddEntity(entity_1);
                         m_manager->FocusEntity(entity_1);
 
-                        portal_0->SetLinkedPortal(entity_1);
-                        //portal_1->SetLinkedPortal(entity_0);
+                        portal_0->SetLinkedPortal(portal_1);
+                        //portal_1->SetLinkedPortal(portal_0);
                     }
                 }
 

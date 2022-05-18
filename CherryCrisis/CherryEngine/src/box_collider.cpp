@@ -10,7 +10,7 @@
 #include "collider_renderpass.hpp"
 #include "camera_component.hpp"
 #include "transform.hpp"
-#include "mesh.hpp"
+#include "entity.hpp"
 
 BoxCollider::BoxCollider()
 {

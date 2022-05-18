@@ -6,13 +6,12 @@
 
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
+#include "debug.hpp"
 
 // TODO: Remove this
+#include "entity.hpp"
 #include "transform.hpp"
-#include "light_component.hpp"
 #include "model_renderer.hpp"
-#include "camera_component.hpp"
-#include "scripted_behaviour.hpp"
 
 #include "model.hpp"
 #include "mesh.hpp"
@@ -48,27 +47,6 @@ void Scene::Update()
 {
  	for (Entity* entity : m_entities)
 		entity->Update();
-}
-
-void Scene::PopulateEmpty() 
-{
-	AddCell(m_defaultCellName);
-
-	assert(m_cells.size() != 0);
-
-	Cell* cell = &m_cells.begin()->second;
-
-	Entity* light = new Entity("Light", cell);
-	light->AddBehaviour<LightComponent>(); 	
-	AddEntity(light);
-
-	Entity* camera = new Entity("Camera", cell);
-	camera->AddBehaviour<Transform>();
-	auto cameraComp = camera->AddBehaviour<CameraComponent>();
-
-	ScriptedBehaviour* bhave1 = camera->AddBehaviour<ScriptedBehaviour>();
-	bhave1->SetScriptClass("CameraController"); 
-	AddEntity(camera);
 }
 
 void Scene::AddEntity(Entity* toAdd)

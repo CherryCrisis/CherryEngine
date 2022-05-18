@@ -14,6 +14,7 @@ class Transform;
 class Material;
 class Mesh;
 class Texture;
+class Cell;
 
 class CCENGINE_API ModelRenderer : public Behaviour, public ARenderer
 {

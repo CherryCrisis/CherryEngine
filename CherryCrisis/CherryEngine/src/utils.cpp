@@ -18,6 +18,11 @@ std::filesystem::path CopyTemporaryFile(const char* path)
 
 namespace String
 {
+	std::string ExtractTypeIndexName(const std::type_index& typeindex)
+	{
+		return ExtractValue(typeindex.name(), ' ');
+	}
+
 	std::string ExtractValue(const std::string& str, const char key)
 	{
 		return str.substr(str.find_first_of(key) + 1);

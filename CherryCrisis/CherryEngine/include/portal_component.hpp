@@ -38,8 +38,8 @@ public:
 
 	void InvalidateLinkedPortal();
 
-	void SetLinkedPortal(Object* linkedObject);
-	Object* GetLinkedPortal();
+	void SetLinkedPortal(Behaviour* linkedObject);
+	Behaviour* GetLinkedPortal();
 
-	CCProperty::CopyProperty<PortalComponent, Object*> m_LinkedPortalProp { this, &PortalComponent::SetLinkedPortal, &PortalComponent::GetLinkedPortal };
+	CCProperty::CopyProperty<PortalComponent, Behaviour*> m_LinkedPortalProp { this, &PortalComponent::SetLinkedPortal, &PortalComponent::GetLinkedPortal };
 };

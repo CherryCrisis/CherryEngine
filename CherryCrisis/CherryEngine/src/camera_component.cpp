@@ -13,6 +13,7 @@
 #include "camera_component.hpp"
 
 #include "mixed_rendering_pipeline.hpp"
+#include "entity.hpp"
 
 unsigned int	 CameraComponent::m_count	    = 0;
 CameraComponent* CameraComponent::m_mainCamera      = nullptr;

@@ -19,7 +19,6 @@ Entity::Entity(const std::string& name, Cell* cell, CCUUID id)
 	cell->AddEntity(this);
 }
 
-
 Entity::~Entity()
 {
 	for (auto& [type, behaviour] : m_behaviours)
@@ -35,11 +34,11 @@ void Entity::Initialize()
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {
-	auto compIt = m_behaviours.find(typeid(*behaviour));
+	auto compIt = m_behaviours.find(String::ExtractTypeIndexName(typeid(*behaviour)));
 
 	if (compIt == m_behaviours.end())
 	{
-		auto itPair = m_behaviours.equal_range(typeid(Behaviour));
+		auto itPair = m_behaviours.equal_range("Behaviour");
 
 		for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
 		{
@@ -61,6 +60,7 @@ bool Entity::RemoveBehaviour(Behaviour* behaviour)
 
 void Entity::Update()
 {
+	m_OnAwake.Invoke();
 	m_OnStart.Invoke();
 	m_OnTick.Invoke();
 }
@@ -96,12 +96,51 @@ void Entity::Destroy()
 	delete this;
 }
 
+Behaviour* Entity::GetBehaviour(const std::string& componentTypeName)
+{
+	auto compIt = m_behaviours.find(componentTypeName);
+
+	if (compIt != m_behaviours.end())
+		return compIt->second;
+
+	auto itPair = m_behaviours.equal_range("Behaviour");
+
+	for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
+	{
+		std::string behaviourTypeName = String::ExtractTypeIndexName(typeid(*findIt->second));
+
+		if (componentTypeName == behaviourTypeName)
+			return findIt->second;
+	}
+
+	return nullptr;
+}
+
 std::vector<Behaviour*> Entity::GetAllBehaviours()
 {
 	std::vector<Behaviour*> behaviours;
 
 	for (auto& [type, behaviour] : m_behaviours)
 		behaviours.push_back(behaviour);
+
+	return behaviours;
+}
+
+void Entity::SubscribeComponent(Behaviour* behaviour, const std::string& componentTypeName)
+{
+	behaviour->m_owner = this;
+	m_behaviours.insert({ componentTypeName, behaviour });
+	behaviour->BindToSignals();
+}
+
+std::vector<Behaviour*> Entity::GetBehavioursOfType(const std::string& componentTypeName)
+{
+	std::vector<Behaviour*> behaviours;
+
+	auto itPair = m_behaviours.equal_range(componentTypeName);
+
+	for (auto compIt = itPair.first; compIt != itPair.second; compIt++)
+		behaviours.push_back(compIt->second);
 
 	return behaviours;
 }

@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <string>
-#include <fstream>
 #include <unordered_map>
 
 #include <cherry_macros.hpp>
@@ -10,16 +9,21 @@
 #include "uuid.hpp"
 #include "event.hpp"
 #include "object.hpp"
+#include "behaviour.hpp"
 
 class Scene;
 class Behaviour;
+
+template<class CompT>
+concept BehaviourT = std::is_base_of_v<Behaviour, CompT>;
+
 class Cell;
 
 class CCENGINE_API Entity : public Object
 {
 protected:
 	std::string m_name = m_defaultName;
-	std::unordered_multimap<std::type_index, Behaviour*> m_behaviours;
+	std::unordered_multimap<std::string, Behaviour*> m_behaviours;
 
 public:
 	static std::string m_defaultName;
@@ -28,29 +32,36 @@ public:
 	Entity(const std::string& name, Cell* cell, CCUUID uuid = {});
 	virtual ~Entity();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* AddBehaviour();
 
-	template <class CompT>
+	template <BehaviourT CompT>
+	CompT* AddBehaviour(const std::string& componentTypeName);
+
+	template <BehaviourT CompT>
 	CompT* GetBehaviour();
+	Behaviour* GetBehaviour(const std::string& componentTypeName);
 
 	bool RemoveBehaviour(Behaviour* behaviour);
 
 	std::vector<Behaviour*> GetAllBehaviours();
 
-	template <class CompT>
-	std::vector<CompT*> GetBehaviours();
+	std::vector<Behaviour*> GetBehavioursOfType(const std::string& componentTypeName);
 
-	template <class CompT>
+	template <BehaviourT CompT>
+	std::vector<CompT*> GetBehavioursOfType();
+
+	template <BehaviourT CompT>
 	void SubscribeComponent(CompT* behaviour);
+	void SubscribeComponent(Behaviour* behaviour, const std::string& componentTypeName);
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	bool HasBehaviour();
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	bool TryGetBehaviour(CompT*& componentToReturn);
 
-	template <class CompT>
+	template <BehaviourT CompT>
 	CompT* GetOrAddBehaviour();
 
 	Event<> m_OnAwake;

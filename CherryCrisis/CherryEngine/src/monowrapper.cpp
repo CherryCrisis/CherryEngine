@@ -235,6 +235,14 @@ namespace mono
 		voidType		= std::make_unique<ManagedType>(ManagedClass::GetVoid()->RawType());
 	}
 
+	bool ManagedType::InheritOf(const ManagedClass* other) const { return InheritOf(other->RawClass()); }
+
+	bool ManagedType::InheritOf(const MonoClass* other) const
+	{
+		MonoClass* rawClass = mono_type_get_class(m_type);
+		return mono_class_is_subclass_of(rawClass, (MonoClass*)other, true);
+	}
+
 	bool ManagedType::Equals(const ManagedType* other) const
 	{
 		return m_typeindex == other->m_typeindex;
@@ -1180,6 +1188,17 @@ namespace mono
 			return true;
 		}
 		return false;
+	}
+
+	ManagedClass* ManagedScriptContext::FindClass(const char* fullname)
+	{
+		std::string fullNameStr = fullname;
+		size_t separatorID = fullNameStr.find_last_of('.');
+
+		std::string namespaceStr = fullNameStr.substr(0, separatorID);
+		std::string classStr = fullNameStr.substr(separatorID + 1, fullNameStr.size());
+
+		return FindClass(namespaceStr.c_str(), classStr.c_str());
 	}
 
 	/* Performs a class search in all loaded assemblies */

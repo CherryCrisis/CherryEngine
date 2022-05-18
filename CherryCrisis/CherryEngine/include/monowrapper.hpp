@@ -245,6 +245,8 @@ namespace mono
 		bool IsRef()	const { return m_isRef; }
 		bool IsPtr()	const { return m_isPtr; }
 
+		bool InheritOf(const ManagedClass* other) const;
+		bool InheritOf(const MonoClass* other) const;
 		bool Equals(const ManagedType* other) const;
 		bool Equals(const MonoType* other) const;
 		bool Equals(const std::string& otherName) const;
@@ -727,6 +729,7 @@ namespace mono
 		/* Performs a class search in all loaded assemblies */
 		/* If you have the assembly name, please use the alternative version of this
 		 * function */
+		ManagedClass* FindClass(const char* fullname);
 		ManagedClass* FindClass(const char* ns, const char* cls);
 
 		ManagedClass* FindClass(ManagedAssembly* assembly, const char* ns, const char* cls);

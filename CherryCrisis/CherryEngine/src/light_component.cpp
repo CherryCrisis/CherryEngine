@@ -13,6 +13,7 @@
 #include "transform.hpp"
 
 #include "cell.hpp"
+#include "entity.hpp"
 
 #include "camera_component.hpp"
 

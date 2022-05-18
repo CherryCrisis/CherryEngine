@@ -4,6 +4,7 @@
 
 #include "al.h"
 
+#include "entity.hpp"
 #include "transform.hpp"
 
 AudioListener::AudioListener()

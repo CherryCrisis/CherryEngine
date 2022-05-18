@@ -4,6 +4,7 @@
 #include <string>
 #include <maths/vector3.hpp>
 #include <cherry_macros.hpp>
+#include <typeindex>
 
 std::filesystem::path CopyTemporaryFile(const char* path);
 
@@ -11,26 +12,36 @@ struct Bool3;
 
 namespace String
 {
-	//return the string chunk after the separator
-	std::string CCENGINE_API ExtractValue(const std::string& str, const char separator = ':');
+	// return the raw type name of a typeindex
+	CCENGINE_API std::string ExtractTypeIndexName(const std::type_index& typeindex);
+
+	// return the raw type name of a typeindex
+	template <typename T>
+	std::string ExtractTypeName()
+	{
+		return ExtractTypeIndexName(typeid(T));
+	}
 
 	//return the string chunk after the separator
-	std::string CCENGINE_API ExtractLastValue(const std::string& str, const char separator = ':');
+	CCENGINE_API std::string ExtractValue(const std::string& str, const char separator = ':');
+
+	//return the string chunk after the separator
+	CCENGINE_API std::string ExtractLastValue(const std::string& str, const char separator = ':');
 	
 	//return the string chunk before the separator
-	std::string CCENGINE_API ExtractKey(std::string& str, const char key = ':', bool erase = false);
+	CCENGINE_API std::string ExtractKey(std::string& str, const char key = ':', bool erase = false);
 
 	//return the string chunk before the separator
-	std::string CCENGINE_API ExtractLastKey(std::string& str, const char key = ':', bool erase = false);
+	CCENGINE_API std::string ExtractLastKey(std::string& str, const char key = ':', bool erase = false);
 
 	//return the string chunk before the substring
-	std::string CCENGINE_API ExtractKeyStr(const std::string& str, const char* key = "");
+	CCENGINE_API std::string ExtractKeyStr(const std::string& str, const char* key = "");
 
 	//return the string chunk after the substring
-	std::string CCENGINE_API ExtractValueStr(const std::string& str, const char* key = "");
+	CCENGINE_API std::string ExtractValueStr(const std::string& str, const char* key = "");
 
 	//Replace "from" string to "to" string in the str
-	void CCENGINE_API ReplaceAll(std::string& str, const std::string& from, const std::string& to);
+	CCENGINE_API void ReplaceAll(std::string& str, const std::string& from, const std::string& to);
 
 	//-----------------------------------------------------
 	// Extract the given value in the string and 

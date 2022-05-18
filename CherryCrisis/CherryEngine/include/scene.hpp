@@ -5,11 +5,12 @@
 #include <map>
 
 #include "resource.hpp"
-#include "entity.hpp"
 #include "ui_context.hpp"
 #include "cell.hpp"
 
 class Model;
+class Entity;
+class Debug;
 struct ModelNode;
 
 class CCENGINE_API Scene : public Resource<Scene>
@@ -46,9 +47,7 @@ public:
 	void Update();
 
 	static void Load(std::shared_ptr<Scene> scene);
-
-	void PopulateEmpty();
-
+	
 	void AddEntity(Entity* toAdd);
 	void RemoveEntity(Entity* toRemove);
 	void RemoveEntity(const std::string& name);

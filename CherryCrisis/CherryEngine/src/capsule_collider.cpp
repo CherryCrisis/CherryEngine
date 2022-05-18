@@ -10,6 +10,7 @@
 #include "collider_renderpass.hpp"
 #include "camera_component.hpp"
 #include "transform.hpp"
+#include "entity.hpp"
 
 CapsuleCollider::CapsuleCollider()
 {

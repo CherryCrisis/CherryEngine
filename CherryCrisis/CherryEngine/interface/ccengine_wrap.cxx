@@ -4160,7 +4160,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfCameraComponent(voi
   std::vector< CameraComponent * > result;
   
   arg1 = (Entity *)jarg1; 
-  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviours< CameraComponent >();
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< CameraComponent >();
   jresult = new std::vector< CameraComponent * >((const std::vector< CameraComponent * > &)result); 
   return jresult;
 }
@@ -4196,7 +4196,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfScriptedBehaviour(v
   std::vector< ScriptedBehaviour * > result;
   
   arg1 = (Entity *)jarg1; 
-  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviours< ScriptedBehaviour >();
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< ScriptedBehaviour >();
   jresult = new std::vector< ScriptedBehaviour * >((const std::vector< ScriptedBehaviour * > &)result); 
   return jresult;
 }
@@ -4232,7 +4232,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfTransform(void * ja
   std::vector< Transform * > result;
   
   arg1 = (Entity *)jarg1; 
-  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviours< Transform >();
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< Transform >();
   jresult = new std::vector< Transform * >((const std::vector< Transform * > &)result); 
   return jresult;
 }

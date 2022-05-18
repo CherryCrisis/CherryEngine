@@ -59,17 +59,17 @@ void UIButton::PopulateMetadatas()
 	//----------------------------
 	// Text Metadatas
 	//----------------------------
-	m_metadatas.m_properties["Text"] = m_text.m_metadatas.m_properties["Text"];
-	m_metadatas.m_properties["Text Size"] = m_text.m_metadatas.m_properties["Size"];
-	m_metadatas.m_properties["Font"] = m_text.m_metadatas.m_properties["Font"];
-	m_metadatas.m_properties["Text Position"] = m_text.m_metadatas.m_properties["Position"];
+	m_metadatas.m_metadatas["Text"] = m_text.m_metadatas.m_metadatas["Text"];
+	m_metadatas.m_metadatas["Text Size"] = m_text.m_metadatas.m_metadatas["Size"];
+	m_metadatas.m_metadatas["Font"] = m_text.m_metadatas.m_metadatas["Font"];
+	m_metadatas.m_metadatas["Text Position"] = m_text.m_metadatas.m_metadatas["Position"];
 
 	//----------------------------
 	// Image Metadatas
 	//----------------------------
-	m_metadatas.m_properties["Background"] = m_background.m_metadatas.m_properties["Texture"];
-	m_metadatas.m_properties["Background Size"] = m_background.m_metadatas.m_properties["Size"];
-	m_metadatas.m_properties["Background Position"] = m_background.m_metadatas.m_properties["Position"];
+	m_metadatas.m_metadatas["Background"] = m_background.m_metadatas.m_metadatas["Texture"];
+	m_metadatas.m_metadatas["Background Size"] = m_background.m_metadatas.m_metadatas["Size"];
+	m_metadatas.m_metadatas["Background Position"] = m_background.m_metadatas.m_metadatas["Position"];
 
 	//----------------------------
 	// Button Metadatas

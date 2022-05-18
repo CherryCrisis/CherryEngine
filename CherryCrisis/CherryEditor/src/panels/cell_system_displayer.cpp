@@ -4,6 +4,8 @@
 
 #include <imgui.h>
 
+#include "entity.hpp"
+
 #include "core/editor_manager.hpp"
 #include "transform.hpp"
 #include "camera.hpp"
