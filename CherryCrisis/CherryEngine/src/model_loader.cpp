@@ -581,6 +581,7 @@ namespace CCImporter
             bool opened = out.is_open();
             out << yamlSave;
             out.close();
+            settingsSave.reset();
     }
 
     void SaveMaterial(Material* material)
@@ -731,6 +732,9 @@ namespace CCImporter
             materialArgs.m_texturesPath.push_back(settingsLoaded[textureId.c_str()].as<std::string>());
             materialArgs.m_texturesType.push_back(settingsLoaded[textureTypeId.c_str()].as<unsigned int>());
         }
+
+        settingsLoaded.reset();
+        loader.reset();
 
         return true;
     }

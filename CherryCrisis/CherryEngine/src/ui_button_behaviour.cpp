@@ -57,6 +57,9 @@ void ButtonBehaviour::SetScriptClass(const std::string& scriptName)
 		return;
 
 	managedClass = m_assembly->m_context->FindClass("CCScripting", scriptName.c_str());
+	
+	if (!managedClass)
+		return;
 
 	if (managedOnClick = managedClass->FindMethod("OnClick"))
 		csOnClick = managedOnClick->GetMemberUnmanagedThunk<void>();

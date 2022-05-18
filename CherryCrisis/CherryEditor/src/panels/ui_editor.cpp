@@ -77,26 +77,28 @@ void UIEditor::Render()
             Camera* cam = nullptr;
             if (CameraComponent::GetMainCamera())
                 cam = &CameraComponent::GetMainCamera()->m_camera;
-
-            CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
-            
-            ImVec2 bufferPos = ImGui::GetWindowContentRegionMin(); bufferPos.x += tableOffset.x;
-            float headerHeight = ImGui::TableGetHeaderRowHeight();
-            
-            CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y + headerHeight) };
-            CCMaths::Vector2 framebufferPos = { ImGui::GetWindowPos().x + bufferPos.x, ImGui::GetWindowPos().y + bufferPos.y + headerHeight};
-            
-            if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK)
-                && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
-                && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x+m_framebuffer.colorTex.width
-                && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + m_framebuffer.colorTex.height)
+            if (cam) 
             {
-                glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-                Pickinger::SetBuffer(&m_framebuffer, cam);
-                CCMaths::Vector2 mousebufferPos = { mousePos.x - framebufferPos.x, mousePos.y - framebufferPos.y };
-                UIItem* pickedUIItem = Pickinger::GetUIItem(mousebufferPos);
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                m_selectedItem = pickedUIItem;
+                CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
+
+                ImVec2 bufferPos = ImGui::GetWindowContentRegionMin(); bufferPos.x += tableOffset.x;
+                float headerHeight = ImGui::TableGetHeaderRowHeight();
+
+                CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y + headerHeight) };
+                CCMaths::Vector2 framebufferPos = { ImGui::GetWindowPos().x + bufferPos.x, ImGui::GetWindowPos().y + bufferPos.y + headerHeight };
+
+                if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK)
+                    && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
+                    && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + m_framebuffer.colorTex.width
+                    && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + m_framebuffer.colorTex.height)
+                {
+                    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
+                    Pickinger::SetBuffer(&m_framebuffer, cam);
+                    CCMaths::Vector2 mousebufferPos = { mousePos.x - framebufferPos.x, mousePos.y - framebufferPos.y };
+                    UIItem* pickedUIItem = Pickinger::GetUIItem(mousebufferPos);
+                    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                    m_selectedItem = pickedUIItem;
+                }
             }
 
             if (m_isActive && cam)
