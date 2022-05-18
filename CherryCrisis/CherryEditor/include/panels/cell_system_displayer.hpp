@@ -15,7 +15,6 @@ private:
 	Cell*		m_displayedCell = nullptr;
 	Cell*		m_selectedCell = nullptr;
 	Cell*		m_rightClickedCell = nullptr;
-	Entity*		m_selectedEntity = nullptr;
 	bool		m_renameCell = false;
 
 	void SelectCell(Cell* cell);
@@ -38,4 +37,5 @@ public:
 	void Render() override;
 	void RenderCells();
 
+	void InvalidatePointers();
 };

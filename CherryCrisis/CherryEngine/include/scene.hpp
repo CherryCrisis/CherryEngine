@@ -31,7 +31,7 @@ public:
 	Cell*	AddCell(const std::string& name, CCUUID uuid = {});
 	Cell*	GetCell(const std::string& name);
 	bool	RenameCell(const std::string& oldName, const std::string& newName);
-	bool	RemoveCell(const std::string& name);
+	bool	RemoveCell(const std::string& name, bool forceRemove = false);
 
 	void	AddEntityToDefault(Entity* entity);
 	void	AddEntityToCell(Entity* entity, const std::string& cellName);
