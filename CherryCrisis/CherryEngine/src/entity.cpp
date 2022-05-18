@@ -133,6 +133,7 @@ void Entity::SubscribeComponent(Behaviour* behaviour, const std::string& compone
 {
 	behaviour->m_owner = this;
 	m_behaviours.insert({ componentTypeName, behaviour });
+	behaviour->BindToSignals();
 }
 
 std::vector<Behaviour*> Entity::GetBehavioursOfType(const std::string& componentTypeName)

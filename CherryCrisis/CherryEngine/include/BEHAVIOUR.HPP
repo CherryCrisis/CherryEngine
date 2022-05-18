@@ -33,6 +33,7 @@ public:
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
+	virtual void OnSetOwner(Entity* newOwner);
 
 	std::unordered_map<std::string, AMetadata*>& GetMetapack() { return m_metadatas.m_metadatas; }
 

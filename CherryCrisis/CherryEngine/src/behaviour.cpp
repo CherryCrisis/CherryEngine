@@ -3,7 +3,12 @@
 #include "behaviour.hpp"
 #include "entity.hpp"
 
-void Behaviour::SetHostPtr(Entity* newOwner)
+void Behaviour::OnSetOwner(Entity* newOwner)
 {
 	newOwner->SubscribeComponent(this);
+}
+
+void Behaviour::SetHostPtr(Entity* newOwner)
+{
+	OnSetOwner(newOwner);
 }

@@ -5,14 +5,19 @@
 template <BehaviourT CompT>
 CompT* Entity::AddBehaviour()
 {
-	CompT* rawPtr = new CompT();
-	rawPtr->m_owner = this;
+	return AddBehaviour<CompT>(String::ExtractTypeName<CompT>());
+}
 
-	m_behaviours.insert({ String::ExtractTypeName<CompT>(), rawPtr });
-	rawPtr->BindToSignals();
+template <BehaviourT CompT>
+CompT* Entity::AddBehaviour(const std::string& componentTypeName)
+{
+	CompT* rawPtr = new CompT();
+
+	SubscribeComponent(rawPtr, componentTypeName);
 
 	return rawPtr;
 }
+
 
 template <BehaviourT CompT>
 CompT* Entity::GetBehaviour()

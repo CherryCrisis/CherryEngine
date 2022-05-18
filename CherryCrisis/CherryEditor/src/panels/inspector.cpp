@@ -440,7 +440,7 @@ void Inspector::Render()
                 {
                     for (Entity* entity : m_manager->m_entitySelector.m_entities) 
                     {
-                        ScriptedBehaviour* behaviour = entity->AddBehaviour<ScriptedBehaviour>();
+                        ScriptedBehaviour* behaviour = entity->AddBehaviour<ScriptedBehaviour>(name);
                         behaviour->SetScriptClass(name);
                     }
                 }

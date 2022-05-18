@@ -36,6 +36,9 @@ public:
 	CompT* AddBehaviour();
 
 	template <BehaviourT CompT>
+	CompT* AddBehaviour(const std::string& componentTypeName);
+
+	template <BehaviourT CompT>
 	CompT* GetBehaviour();
 	Behaviour* GetBehaviour(const std::string& componentTypeName);
 

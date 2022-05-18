@@ -80,6 +80,11 @@ void ScriptedBehaviour::BindToSignals()
 	GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
 }
 
+void ScriptedBehaviour::OnSetOwner(Entity* newOwner)
+{
+	newOwner->SubscribeComponent(this, m_scriptName);
+}
+
 void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 {
 	m_scriptName = scriptName;
