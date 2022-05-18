@@ -30,9 +30,7 @@ public:
 	void Initialize();
 	void BindToSignals() override;
 
-	void ChangePosition(const CCMaths::Vector3& position);
-	void ChangeRotation(const CCMaths::Vector3& rotation);
-	void ChangeScale(const CCMaths::Vector3& scale);
+	void UpdatePortalMatrices(const CCMaths::Vector3& v);
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 

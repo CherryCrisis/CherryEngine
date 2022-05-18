@@ -11,12 +11,11 @@ class Cell;
 class CCENGINE_API Viewer
 {
 public:
-	int m_currentIteration = 1;
+	int m_currentIteration = 5;
 	Cell* m_ownerCell = nullptr;
 
 	CCMaths::Matrix4 m_viewMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_projectionMatrix = CCMaths::Matrix4::Identity;
-	CCMaths::Matrix4 m_worldMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Vector3 m_position;
 
 	std::unique_ptr<ARenderingPipeline> m_pipeline;
