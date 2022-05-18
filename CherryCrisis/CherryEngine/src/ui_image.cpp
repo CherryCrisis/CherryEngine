@@ -19,6 +19,11 @@ UIImage::UIImage()
     Init();
 }
 
+UIImage::UIImage(CCUUID& id) : UIItem(id)
+{
+    Init();
+}
+
 void UIImage::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
     if (!m_mesh || !m_texture)

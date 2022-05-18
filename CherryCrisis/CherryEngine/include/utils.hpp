@@ -41,6 +41,7 @@ namespace String
 	float			  CCENGINE_API ExtractFloat(const std::string& str);
 	int			      CCENGINE_API ExtractInt(const std::string& str);
 	CCMaths::Vector3  CCENGINE_API ExtractVector3(std::string str);
+	CCMaths::Vector2  CCENGINE_API ExtractVector2(std::string str);
 	Bool3			  CCENGINE_API ExtractBool3(std::string str);
 
 	std::string CCENGINE_API ToLower(const std::string& str);

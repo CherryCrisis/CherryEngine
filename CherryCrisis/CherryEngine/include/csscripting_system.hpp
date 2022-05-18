@@ -38,4 +38,6 @@ public:
 	void ReloadContextes();
 	
 	void InitializeHotReload(const char* compilerPath, const char* solutionPath);
+
+	void SubmitScript(const char* name);
 };

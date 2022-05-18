@@ -27,6 +27,7 @@ public:
 	CCMaths::Vector3 m_position;
 	std::shared_ptr<Mesh> m_mesh = nullptr;
 	UIItem();
+	UIItem(CCUUID& id);
 	int m_id = -1;
 
 	virtual void Delete();

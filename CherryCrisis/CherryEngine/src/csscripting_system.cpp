@@ -36,7 +36,7 @@ void CsScriptingSystem::Init()
 
 	m_scriptAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain", true);
 	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", true, "InterfaceDomain", false);
-
+	
 	mono::ManagedAssembly* scriptAssembly = m_scriptAssembly->m_context->FindAssembly("CherryScripting.copy.dll");
 	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
 
@@ -88,8 +88,29 @@ void CsScriptingSystem::ReloadContextes()
 
 void CsScriptingSystem::InitializeHotReload(const char* compilerPath, const char* solutionPath) 
 {
+	classesName.clear();
 	"\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv\"";
 	std::string fullArg = solutionPath + std::string(" /Build");
 	callEx("open", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv", fullArg.c_str());
 	ReloadContextes();
+}
+
+void CsScriptingSystem::SubmitScript(const char* name) 
+{
+	if (std::find(classesName.begin(), classesName.end(), std::string(name)) != classesName.end())
+		return;
+
+	mono::ManagedClass* theclass = m_scriptAssembly->m_context->FindClass("CCScripting", name);
+	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
+
+	if (!theclass || !behaviourClass)
+		return;
+
+	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
+
+	MonoClass* classParentMDR = mono_class_get_parent(theclass->RawClass());
+	MonoType* typeParentMDR = mono_class_get_type(classParentMDR);
+
+	if (mono_type_get_type(typeParentMDR) == behaviourTypeID)
+		classesName.push_back(name);
 }

@@ -15,6 +15,11 @@
 #include "callback.hpp"
 #include "cell.hpp"
 
+#include "camera_component.hpp"
+#include "audio_emitter.hpp"
+#include "audio_listener.hpp"
+#include "light_component.hpp"
+
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 template <typename T>
@@ -258,7 +263,6 @@ void HierarchyDisplayer::ContextCallback()
                 }
             }
 
-            if (ImGui::MenuItem("ModelRenderer")) {}
             if (ImGui::BeginMenu("Portal"))
             {
                 if (ImGui::MenuItem("One Portal"))
@@ -300,9 +304,40 @@ void HierarchyDisplayer::ContextCallback()
                 ImGui::EndMenu();
             }
 
-            if (ImGui::MenuItem("Camera")) {}
+            if (ImGui::MenuItem("Camera")) 
+            {
+                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                {
+                    newEntity = new Entity("Camera", cell);
+                    newEntity->AddBehaviour<CameraComponent>();
+                    newEntity->AddBehaviour<AudioListener>();
+                    newEntity->Initialize();
+                }
+            }
+
             if (ImGui::MenuItem("Particle System")) {}
-            if (ImGui::MenuItem("Audio Source")) {}
+            if (ImGui::MenuItem("Audio Source"))
+            {
+                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                {
+                    newEntity = new Entity("Audio Source", cell);
+                    newEntity->AddBehaviour<AudioEmitter>();
+                    newEntity->Initialize();
+                }
+            }
+
+            if (ImGui::MenuItem("Light"))
+            {
+                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
+                {
+                    Scene* scene = SceneManager::GetInstance()->m_currentScene.get();
+
+                    newEntity = new Entity("Light", cell);
+                    newEntity->AddBehaviour<LightComponent>();
+                    newEntity->Initialize();
+                }
+            }
+
             if (ImGui::BeginMenu("Shapes"))
             {
                 Entity* newEntity = nullptr;

@@ -129,6 +129,16 @@ namespace String
 		return value;
 	}
 
+	CCMaths::Vector2 ExtractVector2(std::string str)
+	{
+		CCMaths::Vector2 value{};
+		std::string temp = ExtractKey(str, '/', true);
+		value.x = std::stof(temp);
+		temp = ExtractKey(str, '/', true);
+		value.y = std::stof(temp);
+		return value;
+	}
+
 	Bool3 ExtractBool3(std::string str)
 	{
 		Bool3 value{};

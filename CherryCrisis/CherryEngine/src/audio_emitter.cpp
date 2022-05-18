@@ -92,7 +92,8 @@ AudioEmitter::AudioEmitter(CCUUID& id) : Behaviour(id)
 
 AudioEmitter::~AudioEmitter()
 {
-
+	if (CameraComponent::m_editorCamera)
+		UnsubscribeToPipeline(CameraComponent::m_editorCamera->m_pipeline.get());
 }
 
 void AudioEmitter::Initialize()

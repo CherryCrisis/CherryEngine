@@ -22,6 +22,22 @@ UIText::UIText()
 	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
 }
 
+UIText::UIText(CCUUID& id) : UIItem(id)
+{
+	//Load font
+	SetFont("Assets/Fonts/Urzeit.ttf");
+
+	PopulateMetadatas();
+
+	SetName("Text");
+
+	CameraComponent* cam = CameraComponent::GetMainCamera();
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
+}
+
 void UIText::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	UIItem::SubscribeToPipeline(pipeline);
