@@ -235,6 +235,14 @@ namespace mono
 		voidType		= std::make_unique<ManagedType>(ManagedClass::GetVoid()->RawType());
 	}
 
+	bool ManagedType::InheritOf(const ManagedClass* other) const { return InheritOf(other->RawClass()); }
+
+	bool ManagedType::InheritOf(const MonoClass* other) const
+	{
+		MonoClass* rawClass = mono_type_get_class(m_type);
+		return mono_class_is_subclass_of(rawClass, (MonoClass*)other, true);
+	}
+
 	bool ManagedType::Equals(const ManagedType* other) const
 	{
 		return m_typeindex == other->m_typeindex;

@@ -37,6 +37,7 @@ public:
 
 	template <BehaviourT CompT>
 	CompT* GetBehaviour();
+	Behaviour* GetBehaviour(const std::string& componentTypeName);
 
 	bool RemoveBehaviour(Behaviour* behaviour);
 

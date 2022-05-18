@@ -196,19 +196,29 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
                 if (type == typeid(Behaviour*))
                 {
-                    Behaviour* defaultBal = nullptr;
-                    Behaviour* valPtr = nullptr;
+                    Behaviour* defaultVal = nullptr;
+                    Behaviour** valPtr = &defaultVal;
                     metadata->Get((void**)&valPtr);
 
-                    ImGui::Text("%s", metaname.c_str());
+                    std::string fieldContent = metadata->m_identifier + " (" + (*valPtr ? (*valPtr)->GetHost().GetName() : "null") + ')';
+                    ImGui::BeginDisabled();
+                    ImGui::InputText(metaname.c_str(), (char*)fieldContent.c_str(), fieldContent.size());
+                    ImGui::EndDisabled();
 
                     if (ImGui::BeginDragDropTarget())
                     {
                         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
                         {
-                            Entity* m_draggedObject = (Entity*)payload->Data;
-                            //m_draggedObject->GetBehaviour()
-                            metadata->Set(&m_draggedObject);
+                            Entity* draggedObject = (Entity*)payload->Data;
+                            *valPtr = draggedObject->GetBehaviour(metadata->m_identifier);
+
+                            if (!*valPtr)
+                            {
+                                std::string dragError = draggedObject->GetName() + " does not have any " + metadata->m_identifier + " component!";
+                                EditorManager::SendNotification(dragError.c_str(), ENotifType::Error, 2.f);
+                            }
+
+                            metadata->Set(valPtr);
                         }
 
                         ImGui::EndDragDropTarget();

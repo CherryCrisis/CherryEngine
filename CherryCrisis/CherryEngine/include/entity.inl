@@ -17,22 +17,7 @@ CompT* Entity::AddBehaviour()
 template <BehaviourT CompT>
 CompT* Entity::GetBehaviour()
 {
-	auto compIt = m_behaviours.find(String::ExtractTypeName<CompT>());
-
-	if (compIt != m_behaviours.end())
-		return static_cast<CompT*>(compIt->second);
-
-	auto itPair = m_behaviours.equal_range("Behaviour");
-
-	for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
-	{
-		auto castedComp = dynamic_cast<CompT*>(findIt->second);
-
-		if (castedComp)
-			return castedComp;
-	}
-
-	return nullptr;
+	return static_cast<CompT*>(GetBehaviour(String::ExtractTypeName<CompT>()));
 }
 
 template <BehaviourT CompT>

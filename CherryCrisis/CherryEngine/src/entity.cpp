@@ -7,7 +7,6 @@
 #include "cell_system.hpp"
 
 #include "behaviour.hpp"
-#include "transform.hpp"
 
 Entity::Entity()
 {
@@ -98,6 +97,26 @@ void Entity::Destroy()
 {
 	m_OnDestroyed.Invoke();
 	delete this;
+}
+
+Behaviour* Entity::GetBehaviour(const std::string& componentTypeName)
+{
+	auto compIt = m_behaviours.find(componentTypeName);
+
+	if (compIt != m_behaviours.end())
+		return compIt->second;
+
+	auto itPair = m_behaviours.equal_range("Behaviour");
+
+	for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
+	{
+		std::string behaviourTypeName = String::ExtractTypeIndexName(typeid(*findIt->second));
+
+		if (componentTypeName == behaviourTypeName)
+			return findIt->second;
+	}
+
+	return nullptr;
 }
 
 std::vector<Behaviour*> Entity::GetAllBehaviours()

@@ -115,6 +115,8 @@ void ScriptedBehaviour::PopulateMetadatas()
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
 	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
 
+	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
+
 	const auto& fields = m_managedClass->Fields();
 
 	for (const auto& [fieldName, fieldRef] : fields)
@@ -144,7 +146,11 @@ void ScriptedBehaviour::PopulateMetadatas()
 
 		const std::string& fullName = fieldType->Name();
 
-		if (mono::ManagedClass* managedClass = m_interfaceAssembly->m_context->FindClass(fullName.c_str()))
+		mono::ManagedClass* managedClass = m_interfaceAssembly->m_context->FindClass(fullName.c_str());
+		if (!managedClass)
+			managedClass = m_scriptingAssembly->m_context->FindClass(fullName.c_str());
+
+		if (managedClass)
 		if (mono::ManagedMethod* managedGetCPtr = managedClass->FindMethod("getCPtr"))
 		{
 			MonoObject* managedFieldInstance = nullptr, *excep = nullptr;
@@ -157,6 +163,8 @@ void ScriptedBehaviour::PopulateMetadatas()
 
 			if (!res || excep)
 				return;
+
+			
 
 			if (fieldType->Equals("CCEngine.Vector3"))
 			{
@@ -172,9 +180,11 @@ void ScriptedBehaviour::PopulateMetadatas()
 				continue;
 			}
 
-			if (fieldType->Equals("CCEngine.Transform"))
+			std::string compName = fieldType->Name().substr(fieldType->Name().find_last_of('.') + 1);
+
+			if (fieldType->InheritOf(behaviourClass))
 			{
-				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Behaviour*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod));
+				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Behaviour*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod), compName.c_str());
 				continue;
 			}
 
