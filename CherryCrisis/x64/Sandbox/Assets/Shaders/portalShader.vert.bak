@@ -6,7 +6,7 @@ layout (location = 1) in vec2 aUV;
 uniform mat4 uModel;
 uniform mat4 uViewProjection;
 
-out vec4 uScreenPos;
+out vec4 screenPos;
 
 vec4 ComputeScreenPos (vec4 pos) 
 {
@@ -20,5 +20,5 @@ vec4 ComputeScreenPos (vec4 pos)
 void main()
 {
     gl_Position = uViewProjection * uModel * vec4(aPosition, 1.0);
-	uScreenPos = ComputeScreenPos(gl_Position);
+	vUV = ComputeScreenPos(gl_Position);
 }

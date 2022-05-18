@@ -128,7 +128,7 @@ int main()
             float aspect = (float)framebuffer.colorTex.width / (float)framebuffer.colorTex.height;
             cam->m_projectionMatrix = Matrix4::Perspective(cam->fovY, aspect, cam->near, cam->far);
 
-            cam->Draw(framebuffer, 5);
+            cam->Draw(framebuffer, 1);
         }
 
         engine.TickEngine();

@@ -9,6 +9,6 @@ uniform sampler2D uPortalTexture;
 
 void main()
 {
-	vec2 screenSpaceUV = uScreenPos.xy / uScreenPos.w;
+	vec2 screenSpaceUV = vUV.xy / vUV.w;
     oColor = texture(uPortalTexture, screenSpaceUV);
 }

@@ -1,6 +1,7 @@
 #include "pch.hpp"
 
 #include "portal_render_renderpass.hpp"
+#include "mixed_rendering_pipeline.hpp"
 
 #include "framebuffer.hpp"
 
@@ -51,14 +52,27 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 	if (viewer->m_currentIteration > 0)
 	for (Portal* portal : m_portals)
 	{
-			if (!portal->m_linkedPortal)
-				continue;
+		if (!portal->m_linkedPortal)
+			continue;
 			
 		if (GPUBasicPortal* gpuPortal = static_cast<GPUBasicPortal*>(portal->m_gpuPortal.get()))
 		{
-				portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
+			CCMaths::Matrix4 m = portal->m_linkedPortal->m_modelMatrix * viewer->m_worldMatrix;
 
-				portal->m_linkedPortal->Draw(gpuPortal->framebuffer, viewer->m_currentIteration - 1);
+			portal->m_linkedPortal->m_viewMatrix = m.Inverse();
+			
+			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader 
+			//portal->m_linkedPortal->m_viewMatrix = m;
+			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
+			
+			portal->m_linkedPortal->Draw(gpuPortal->framebuffer, 0);
+
+			//portal->m_linkedPortal->m_currentIteration = 0;
+			//viewer->m_currentIteration = 0;
+			//portal->m_linkedPortal->m_pipeline->Execute(gpuPortal->framebuffer, viewer);
+
+			//m_currentIteration = iteration;
+			//m_pipeline->Execute(fb, this);
 		}
 	}
 

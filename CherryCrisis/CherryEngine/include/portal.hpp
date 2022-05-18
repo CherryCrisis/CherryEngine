@@ -16,6 +16,7 @@ struct Portal : public Viewer, public ARenderer
 	Portal* m_linkedPortal = nullptr;
 
 	CCMaths::Matrix4 m_modelMatrix = CCMaths::Matrix4::Identity;
+	CCMaths::Matrix4 m_localMatrix = CCMaths::Matrix4::Identity;
 
 	void Link(Portal* toLinkTo);
 

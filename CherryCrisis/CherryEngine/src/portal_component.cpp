@@ -67,26 +67,35 @@ void PortalComponent::Initialize()
 
 void PortalComponent::ChangePosition(const CCMaths::Vector3& position)
 {
-	CCMaths::Vector3 pos = (CCMaths::Vector3)m_transform->position;
-	CCMaths::Vector3 rot = (CCMaths::Vector3)m_transform->rotation;
+	CCMaths::Vector3 pos = (CCMaths::Vector3)m_transform->GetPosition();
+	CCMaths::Vector3 rot = (CCMaths::Vector3)m_transform->GetRotation();
 
 	m_portal.m_viewMatrix = Matrix4::RotateXYZ(-rot) * Matrix4::Translate(-pos);
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
+	m_portal.m_localMatrix = m_transform->GetLocalMatrix();
+
+	m_portal.m_worldMatrix = Matrix4::Translate(pos) * Matrix4::RotateZYX(rot);
 }
 
 void PortalComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 {
-	CCMaths::Vector3 pos = (CCMaths::Vector3)m_transform->position;
-	CCMaths::Vector3 rot = (CCMaths::Vector3)m_transform->rotation;
+	CCMaths::Vector3 pos = (CCMaths::Vector3)m_transform->GetPosition();
+	CCMaths::Vector3 rot = (CCMaths::Vector3)m_transform->GetRotation();
 
 	m_portal.m_viewMatrix = Matrix4::RotateXYZ(-rot) * Matrix4::Translate(-pos);
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
+	m_portal.m_localMatrix = m_transform->GetLocalMatrix();
+
+	m_portal.m_worldMatrix = Matrix4::Translate(pos) * Matrix4::RotateZYX(rot);
+
 }
 
 void PortalComponent::ChangeScale(const CCMaths::Vector3& scale)
 {
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
+	m_portal.m_localMatrix = m_transform->GetLocalMatrix();
 }
+
 
 void PortalComponent::InvalidateLinkedPortal()
 {
@@ -112,14 +121,14 @@ void PortalComponent::SetLinkedPortal(Object* linkedObject)
 	if (PortalComponent* linkedPortalComp = linkedEntity->GetBehaviour<PortalComponent>())
 	{
 		m_linkedPortal = linkedPortalComp;
-
+		
 		m_linkedPortal->m_OnDestroy.Bind(&PortalComponent::InvalidateLinkedPortal, this);
 
-		linkedPortalComp->m_linkedPortal = this;
-		Portal* tempPortal = &m_portal;
+		//linkedPortalComp->m_linkedPortal = this;
+		//Portal* tempPortal = &m_portal;
 		m_portal.m_linkedPortal = &linkedPortalComp->m_portal;
-		linkedPortalComp->m_portal.m_linkedPortal = tempPortal;
-
+		//linkedPortalComp->m_portal.m_linkedPortal = tempPortal;
+		
 		m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
 	}
 }
