@@ -68,6 +68,6 @@ public:
 
 	//Clear the entity vector
 	void Empty();
-
+	void EmptyUI();
 	void Delete() override;
 };

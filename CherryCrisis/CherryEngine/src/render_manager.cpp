@@ -4,6 +4,9 @@
 
 #include <glad/gl.h>
 
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h> 
+
 #include "framebuffer.hpp"
 
 #include "viewer.hpp"
@@ -66,4 +69,9 @@ RenderManager::RenderManager()
 	glDebugMessageCallback(debugCallback, NULL);
 
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+}
+
+RenderManager::~RenderManager()
+{
+    glfwTerminate();
 }

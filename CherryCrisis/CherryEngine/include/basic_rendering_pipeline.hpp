@@ -13,7 +13,7 @@ class BloomRenderPass;
 class PortalRenderPass;
 class HDRRenderPass;
 class ColliderRenderPass;
-
+class PickingRenderPass;
 class BasicPostProcessRenderPass;
 
 class CCENGINE_API BasicRPipeline : public ARenderingPipeline
@@ -26,9 +26,11 @@ class CCENGINE_API BasicRPipeline : public ARenderingPipeline
 	BloomRenderPass*			m_bloomPass = nullptr;
 	HDRRenderPass*				m_hdrPass = nullptr;
 	BasicPostProcessRenderPass* m_postprocessPass = nullptr;
+	PickingRenderPass*		    m_pickingRenderpass = nullptr;
 
 public:
 	BasicRPipeline();
+	~BasicRPipeline();
 
 	void Execute(Framebuffer& framebuffer, Viewer* viewer) override;
 };

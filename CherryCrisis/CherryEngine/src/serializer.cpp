@@ -210,7 +210,12 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 		{
 			YAML::Node entitiesUUID = entities[entity->GetUUID()];
 			entitiesUUID["name"] = entity->GetName();
+			entitiesUUID.reset();
 		}
+
+		entities.reset();
+		cellNode.reset();
+		cellSettings.reset();
 	}
 
 		const char* parseError = "#ERROR {}  is not handled !";//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
@@ -309,6 +314,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 					//Unhandled Cases (useful to find them)
 					node[metaName] = std::format(parseError, type.name());
 				}
+				node.reset();
 			}
 		}
 
@@ -406,6 +412,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				//Unhandled Cases (useful to find them)
 				node[metaName] = std::format(parseError, type.name());
 			}
+			node.reset();
 		}
 
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
@@ -414,6 +421,11 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 	bool opened = out.is_open();
 	out << save;
 	out.close();
+
+	resources.reset();
+	ui.reset();
+	components.reset();
+	cells.reset();
 
 	return opened;
 }
@@ -729,6 +741,7 @@ bool Serializer::SerializeEditor(const char* filepath)
 	out << save;
 	out.close();
 
+	save.reset();
 	return opened;
 }
 

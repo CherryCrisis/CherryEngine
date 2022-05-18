@@ -8,6 +8,7 @@
 #include "prefilter_map_renderpass.hpp"
 #include "brdf_renderpass.hpp"
 #include "pbr_renderpass.hpp"
+#include "picking_renderpass.hpp"
 
 PBRRPipeline::PBRRPipeline()
 {
@@ -17,6 +18,18 @@ PBRRPipeline::PBRRPipeline()
 	m_brdfPass = LoadSubpipeline<BRDFRenderPass>();
 	m_pbrPass = LoadSubpipeline<PBRRenderPass>();
 	m_skydomePass = LoadSubpipeline<SkydomeRenderPass>();
+	m_pickingRenderpass = LoadSubpipeline<PickingRenderPass>();
+}
+
+PBRRPipeline::~PBRRPipeline()
+{
+	delete m_environmentMapPass;
+	delete m_irradianceMapPass;
+	delete m_prefilterPass;
+	delete m_brdfPass;
+	delete m_pbrPass;
+	delete m_skydomePass;
+	delete m_pickingRenderpass;
 }
 
 void PBRRPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)

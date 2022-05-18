@@ -39,16 +39,17 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	//ResourceManager::Kill();
 	PhysicSystem::PhysicManager::Kill();
 	InputManager::Kill();
-	SoundManager::Kill();
+ 	SoundManager::Kill();
 	TimeManager::Kill();
-	ResourceManager::Kill();
 	SceneManager::Kill();
 	CsScriptingSystem::Kill();
 	RenderManager::Kill();
 	Debug::Kill();
 	ThreadPool::Kill();
+	Pickinger::Kill();
 }
 
 void Engine::TickEngine()

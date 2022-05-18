@@ -11,6 +11,7 @@
 #include "bloom_renderpass.hpp"
 #include "hdr_renderpass.hpp"
 #include "basic_postprocess_renderpass.hpp"
+#include "picking_renderpass.hpp"
 
 BasicRPipeline::BasicRPipeline()
 {
@@ -21,8 +22,22 @@ BasicRPipeline::BasicRPipeline()
 	m_bloomPass = LoadSubpipeline<BloomRenderPass>();
 	m_hdrPass = LoadSubpipeline<HDRRenderPass>();
 	m_colliderPass = LoadSubpipeline<ColliderRenderPass>();
+	m_pickingRenderpass = LoadSubpipeline<PickingRenderPass>();
 
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
+}
+
+BasicRPipeline::~BasicRPipeline()
+{
+	delete m_portalPass;
+	delete m_shadowPass;
+	delete m_basicPass;
+	delete m_skyboxPass;
+	delete m_bloomPass;
+	delete m_hdrPass;
+	delete m_colliderPass;
+	delete m_pickingRenderpass;
+	delete m_postprocessPass;
 }
 
 void BasicRPipeline::Execute(Framebuffer& fb, Viewer* viewer)

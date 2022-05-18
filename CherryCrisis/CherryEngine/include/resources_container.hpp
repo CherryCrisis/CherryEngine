@@ -42,7 +42,7 @@ public:
 	virtual void Remove(const std::filesystem::path& filepath) = 0;
 	virtual void Erase(const std::filesystem::path& filepath) = 0;
 	virtual void Rename(const std::filesystem::path& filepath, const char* newFilepath) = 0;
-	
+	virtual void RemoveAll() = 0;
 	template<class ResourceT, typename... Args>
 	void Reload(const char* filename, Args... args);
 
@@ -65,6 +65,8 @@ public:
 	void Remove(const std::filesystem::path& filename) override;
 	void Erase(const std::filesystem::path& filename) override;
 	void Rename(const std::filesystem::path& filepath, const char* newFilepath) override;
+	
+	void RemoveAll() override;
 
 	template<class... Args>
 	void Reload(const std::filesystem::path& filepath, Args... args);

@@ -215,7 +215,7 @@ public :
 
 	std::unordered_map<std::string, time_t> m_timeModified;
 	AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer, EditorManager* manager = nullptr);
-
+	~AssetBrowser();
 	void SetCurrentDirectory(DirectoryNode* directoryNode) 
 	{ 
 		m_currentDirectoryNode = directoryNode; 

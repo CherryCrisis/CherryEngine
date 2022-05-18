@@ -44,6 +44,8 @@ ModelRenderer::~ModelRenderer()
 
 	GetHost().m_OnCellAdded.Unbind(&ModelRenderer::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Unbind(&ModelRenderer::OnCellRemoved, this);
+
+	
 }
 
 void ModelRenderer::PopulateMetadatas()
