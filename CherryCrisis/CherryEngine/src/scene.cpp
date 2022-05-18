@@ -221,6 +221,15 @@ void Scene::Empty()
 		m_entities[0]->Destroy();
 		m_entities.erase(m_entities.begin());
 	}
+
+	while (m_cells.size() > 0)
+	{
+		for (auto& cell : m_cells)
+		{
+			RemoveCell(cell.first, true);
+			break;
+		}
+	}
 }
 
 Cell* Scene::AddCell(const std::string& name, CCUUID uuid)
@@ -267,8 +276,18 @@ bool Scene::RenameCell(const std::string& oldName, const std::string& newName)
 	return false;
 }
 
-bool Scene::RemoveCell(const std::string& name)
+bool Scene::RemoveCell(const std::string& name, bool forceRemove)
 {
+	if (forceRemove)
+	{
+		auto entities = m_cells[name].GetEntities();
+		for (auto& entity : entities)
+			RemoveEntity(entity);
+
+		m_cells.erase(name);
+		return true;
+	}
+
 	if (name == m_defaultCellName)
 	{
 		m_debug->AddLog(ELogType::WARNING, "Cannot remove default cell");

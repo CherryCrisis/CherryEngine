@@ -222,6 +222,8 @@ void EditorManager::HandleMenuBar()
                 m_engine->Stop();
                 m_entitySelector.Clear();
                 m_gameDisplayer.Unfocus();
+                m_cellSystemDisplayer.InvalidatePointers();
+
             }
 
             // Start game if not playing
@@ -248,6 +250,7 @@ void EditorManager::HandleMenuBar()
             // Stop game
             m_engine->Stop();
             m_entitySelector.Clear();
+            m_cellSystemDisplayer.InvalidatePointers();
 
             // Launch game
             m_logDisplayer.TryClearOnPlay();

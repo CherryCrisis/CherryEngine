@@ -218,12 +218,15 @@ void CellSystemDisplayer::RenderCells()
         }
     }
 
-    //if (!itemSelected && ImGui::IsWindowHovered() && InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK))
-    //{
-    //    m_selectedCell = nullptr;
-    //}
-
     ImGui::EndChild(); ImGui::SameLine();
+}
+
+void CellSystemDisplayer::InvalidatePointers()
+{
+    m_scene = nullptr;
+    m_displayedCell = nullptr;
+    m_selectedCell = nullptr;
+    m_rightClickedCell = nullptr;
 }
 
 void CellSystemDisplayer::CreateCell()
