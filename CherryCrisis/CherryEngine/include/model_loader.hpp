@@ -87,6 +87,10 @@ namespace CCImporter
         size_t          m_meshNameSize;
         unsigned int    m_verticesCount;
         unsigned int    m_indicesCount;
+
+        //-- AABB --//
+        AABB            m_aabb;
+
     };
 
     struct ModelHeader

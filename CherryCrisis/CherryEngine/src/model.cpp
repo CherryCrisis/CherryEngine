@@ -42,7 +42,7 @@ void Model::Load(std::shared_ptr<Model> modelBase)
         if (modelUtils.modelHeader.m_meshHeader.m_hasMesh)
         {
             std::shared_ptr<Mesh> mesh = resourceManager->AddResource<Mesh>(modelUtils.m_meshName.c_str(), 
-                false, modelUtils.m_vertices, modelUtils.m_indices);
+                false, modelUtils.m_vertices, modelUtils.m_indices, modelUtils.modelHeader.m_meshHeader.m_aabb);
 
             std::shared_ptr<Material> material;
 
@@ -189,12 +189,12 @@ void Model::Reload()
 
             if (mesh)
             { 
-                Resource<Mesh>::ReloadResource(mesh, modelUtils.m_vertices, modelUtils.m_indices);
+                Resource<Mesh>::ReloadResource(mesh, modelUtils.m_vertices, modelUtils.m_indices, modelUtils.modelHeader.m_meshHeader.m_aabb);
             }
             else
             {
                 mesh = resourceManager->AddResource<Mesh>(modelUtils.m_meshName.c_str(),
-                    false, modelUtils.m_vertices, modelUtils.m_indices);
+                    false, modelUtils.m_vertices, modelUtils.m_indices, modelUtils.modelHeader.m_meshHeader.m_aabb);
             }
 
             std::shared_ptr<Material> material = resourceManager->GetResource<Material>(modelUtils.m_materialPath.c_str());

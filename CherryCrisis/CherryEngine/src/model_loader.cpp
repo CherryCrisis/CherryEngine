@@ -71,6 +71,13 @@ namespace CCImporter
         if (meshIndex > 0)
             model.m_meshName += '_' + meshIndex;
 
+        const aiVector3D& aiMin = assimpMesh->mAABB.mMin;
+        const aiVector3D& aiMax = assimpMesh->mAABB.mMax;
+        Vector3 min = { aiMin.x, aiMin.y, aiMin.z };
+        Vector3 max = { aiMax.x, aiMax.y, aiMax.z };
+
+        model.modelHeader.m_meshHeader.m_aabb = AABB(min, max);
+
         model.modelHeader.m_meshHeader.m_meshNameSize = model.m_meshName.size();
 
         std::vector<Vertex> vertices;
@@ -859,6 +866,7 @@ namespace CCImporter
             aiProcess_FlipUVs |
             aiProcess_CalcTangentSpace |
             aiProcess_GenBoundingBoxes);
+
 
         if (scene)
         {

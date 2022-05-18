@@ -48,9 +48,9 @@ void HierarchyDisplayer::Render()
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
         ImGui::Text(std::format("FPS : {}", ImGui::GetIO().Framerate).c_str());
-#endif
+//#endif
 
         ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
 
@@ -152,7 +152,7 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 
     if (selector->Contains(entity))                                     flags |= ImGuiTreeNodeFlags_Selected;
-    if (!entityTransform || entityTransform->GetChildren().size() <= 0) flags |= ImGuiTreeNodeFlags_Leaf;
+    if (!entityTransform || entityTransform->GetChildren()->size() <= 0) flags |= ImGuiTreeNodeFlags_Leaf;
 
     bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, entity->GetName().c_str());
 
@@ -235,8 +235,11 @@ bool HierarchyDisplayer::RenderEntity(Entity* entity)
     }
 
     if (opened && entityTransform)
-        for (const auto& child : entityTransform->GetChildren())
+    {
+        auto children = entityTransform->GetChildren();
+        for (const auto& child : *children)
             if (RenderEntity(&child->GetHost())) { ImGui::TreePop(); return true; }
+    }
 
     if (opened)
         ImGui::TreePop();

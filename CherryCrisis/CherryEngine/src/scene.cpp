@@ -61,12 +61,12 @@ void Scene::RemoveEntity(Entity* toRemove)
 
 	Transform* transform;
 	toRemove->TryGetBehaviour(transform);
-	if (transform && transform->GetChildren().size() > 0 )
-	{
-		std::vector<Transform*> children = transform->GetChildren();
 
-		for (int i = 0; i < children.size(); i++)
-			RemoveEntity(&children[i]->GetHost());
+	auto children = transform->GetChildren();
+	if (transform && children->size() > 0 )
+	{
+		for (int i = 0; i < children->size(); i++)
+			RemoveEntity(&(*children)[i]->GetHost());
 	}
 
 	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove), m_entities.end());

@@ -216,16 +216,16 @@ bool Transform::IsChildOf(Transform* parent, bool recursive)
 {
 	bool value = false;
 
-	std::vector<Transform*> childrens = parent->GetChildren();
-	if (childrens.size() > 0) 
+	auto childrens = parent->GetChildren();
+	if (childrens->size() > 0) 
 	{
-		if (std::find(childrens.begin(), childrens.end(), this) != childrens.end()) 
+		if (std::find(childrens->begin(), childrens->end(), this) != childrens->end())
 		{
 			return true;
 		}
 		if (recursive) 
 		{
-			for (Transform* t : childrens)
+			for (Transform* t : *childrens)
 			{
 				value |= IsChildOf(t, true);
 			}

@@ -88,7 +88,7 @@ public:
 	Event<const Vector3&> m_onRotationChange;
 	Event<const Vector3&> m_onScaleChange;
 
-	std::vector<Transform*> GetChildren() { return m_children; }
+	std::vector<Transform*>* GetChildren() { return &m_children; }
 	void AddChildren(Transform* transform);
 
 	void BindToSignals() override;
