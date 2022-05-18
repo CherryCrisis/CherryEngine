@@ -16,4 +16,6 @@ struct CCENGINE_API Field
 	{
 
 	}
+
+	virtual ~Field() = default;
 };

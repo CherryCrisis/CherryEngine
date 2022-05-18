@@ -5,69 +5,39 @@ cells:
   1935981542:
     name: Default
     settings:
-      texturePath: Assets\skydome\Arches_3k.hdr
+      texturePath: Assets\Skybox\Kiss_Skybox.png
     entities:
-      1438568415:
-        name: Empty
-      3806117551:
-        name: nonEuclideanModel.obj
-      3493441706:
-        name: Plane
-      4093183004:
-        name: Plane_Plane_None
+      4055011236:
+        name: Camera
 components:
-  563225551:
+  4292939994:
+    type: AudioListener
+    IsActive: true
+    m_owner: 4055011236
+  2973188634:
     type: CameraComponent
-    aspect: 1.33333337
     fovY: 1.04719758
     near: 0.00999999978
-    far: 1500
-    transform: 912351254
     IsActive: true
-    m_owner: 1438568415
-  912351254:
+    m_owner: 4055011236
+    aspect: 1.33333337
+    far: 1500
+    transform: 3128702407
+  3128702407:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 1438568415
-    position: 0.000000/0.000000/1.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: ~
-  171775477:
-    type: CharacterController
-    Move Speed: 10
-    IsActive: true
-    m_owner: 1438568415
-    Spring Dampling: 20
-    String Strength: 150
-  1462790562:
-    type: Transform
-    rotation: 0.000000/-1.570796/0.000000
-    IsActive: true
-    m_owner: 3806117551
-    position: 0.000000/-1.000000/-3.000000
-    scale: 3.000000/3.000000/3.000000
-    parent: ~
-  3691072562:
-    type: Transform
-    rotation: 0.000000/-0.000000/0.000000
-    IsActive: true
-    m_owner: 3493441706
+    m_owner: 4055011236
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 1462790562
-  3283349685:
-    type: Transform
-    rotation: 0.000000/-0.000000/0.000000
+    parent: ~
+  1902998943:
+    type: ScriptedBehaviour
+    pos: 5.000000/3.000000/7.000000
+    scriptName: BackpackBehaviour
     IsActive: true
-    m_owner: 4093183004
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 1462790562
-  222658531:
-    type: ModelRenderer
-    transform: 3283349685
-    IsActive: true
-    m_owner: 4093183004
-    meshFile: Assets\Models\NonEuclidean\nonEuclideanModel.obj/Plane_Plane_None
-    matFile: Assets\Models\NonEuclidean\None.ccmat
+    time: 0
+    i: 0
+    m_owner: 4055011236
+    BMARIN: 0
+    deltaTime: 0.00999999978

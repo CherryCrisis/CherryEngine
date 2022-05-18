@@ -21,7 +21,6 @@ public:
 	Object(CCUUID id = {}): m_uuid(id) {};
 	virtual ~Object() = default;
 
-
 	Metapack m_metadatas;
 
 	bool IsActive() { return m_isActive; }
@@ -29,7 +28,7 @@ public:
 
 	uint32_t GetUUID() const { return (uint32_t)m_uuid; }
 
-	std::unordered_map<std::string, AMetadata*>& GetMetapack() { return m_metadatas.m_metadatas;  }
+	std::unordered_map<std::string, std::shared_ptr<AMetadata>>& GetMetapack() { return m_metadatas.m_metadatas;  }
 
 	CCProperty::CopyProperty<Object, bool> Active{ this, &Object::SetActive, &Object::IsActive };
 };

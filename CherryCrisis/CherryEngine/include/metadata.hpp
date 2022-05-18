@@ -4,6 +4,7 @@
 
 #include <any>
 #include <unordered_map>
+#include <memory>
 #include <typeindex>
 #include <string>
 
@@ -85,13 +86,13 @@ struct CCENGINE_API MetaProperty : public AMetadata
 
 struct CCENGINE_API Metapack
 {
-	std::unordered_map<std::string, AMetadata*> m_metadatas;
+	std::unordered_map<std::string, std::shared_ptr<AMetadata>> m_metadatas;
 
 	template <typename T>
 	void SetField(const char* fieldName, Field& fieldToSet, const char* identifier = "0")
 	{
 		// todo use unique ptr
-		m_metadatas[fieldName] = new MetaField<T>(fieldName, fieldToSet, identifier);
+		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, fieldToSet, identifier);
 	}
 
 	template <typename T>
@@ -99,7 +100,7 @@ struct CCENGINE_API Metapack
 	{
 		// todo use unique ptr
 
-		m_metadatas[fieldName] = new MetaField<T>(fieldName, value, fieldType, identifier);
+		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, value, fieldType, identifier);
 	}
 
 	template <typename CastT, typename RefT>
@@ -130,6 +131,6 @@ struct CCENGINE_API Metapack
 	{
 		// todo use unique ptr
 
-		m_metadatas[fieldName] = new MetaProperty(fieldName, prop, identifier);
+		m_metadatas[fieldName] = std::make_shared<MetaProperty>(fieldName, prop, identifier);
 	}
 };

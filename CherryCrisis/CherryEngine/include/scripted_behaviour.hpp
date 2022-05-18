@@ -25,13 +25,13 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	bool m_linked = false;
 
-	std::shared_ptr<class CsAssembly> m_scriptingAssembly;
-	std::shared_ptr<class CsAssembly> m_interfaceAssembly;
-	mono::ManagedObject*	m_managedInstance;
-	mono::ManagedClass*		m_managedClass;
-	mono::ManagedMethod*	m_managedUpdate;
-	mono::ManagedMethod*	m_managedAwake;
-	mono::ManagedMethod*	m_managedStart;
+	std::shared_ptr<class CsAssembly>	m_scriptingAssembly;
+	std::shared_ptr<class CsAssembly>	m_interfaceAssembly;
+	mono::ManagedObject*				m_managedInstance;
+	mono::ManagedClass*					m_managedClass;
+	mono::ManagedMethod*				m_managedUpdate;
+	mono::ManagedMethod*				m_managedAwake;
+	mono::ManagedMethod*				m_managedStart;
 
 	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
 	mono::ManagedThunk<void, struct _MonoObject*>* csAwake;
@@ -46,10 +46,13 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	void InvalidateAssembly() { m_scriptingAssembly = nullptr; }
 
+	std::unordered_map<std::string, std::shared_ptr<class CCProperty::IClearProperty>> m_properties;
+	std::unordered_map<std::string, std::shared_ptr<class Field>> m_field;
+
 public:
 	ScriptedBehaviour();
 	ScriptedBehaviour(CCUUID& id);
-	~ScriptedBehaviour();
+	virtual ~ScriptedBehaviour();
 
 	void SetScriptClass(const std::string& scriptName);
 	void BindToSignals() override;

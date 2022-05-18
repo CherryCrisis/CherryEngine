@@ -5,7 +5,6 @@
 #include <format>
 #include <yaml-cpp/yaml.h>
 
-
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
 
@@ -33,7 +32,8 @@
 #include "ui_button.hpp"
 #include "ui_image.hpp"
 
-#include "maths/vector2.hpp";
+#include "maths/vector2.hpp"
+
 namespace YAML {
 	template<>
 	struct convert<CCMaths::Vector3> {
@@ -500,7 +500,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						auto& metadatas = cell->m_skyRenderer->GetMetapack();
 						if (metadatas.contains(key))
 						{
-							AMetadata* metadata = metadatas[key];
+							auto& metadata = metadatas[key];
 
 							auto& type = metadata->GetType();
 
@@ -573,7 +573,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				auto& metadatas = behaviourPtr->GetMetapack();
 				if (metadatas.contains(key))
 				{
-					AMetadata* metadata = behaviourPtr->GetMetapack()[key];
+					auto& metadata = behaviourPtr->GetMetapack()[key];
 
 					auto& type = metadata->GetType();
 					
@@ -635,7 +635,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				auto& metadatas = itemPtr->GetMetapack();
 				if (metadatas.contains(key))
 				{
-					AMetadata* metadata = metadatas[key];
+					auto& metadata = metadatas[key];
 
 					auto& type = metadata->GetType();
 

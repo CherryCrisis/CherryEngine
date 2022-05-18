@@ -14,6 +14,9 @@
 
 #include "entity.hpp"
 
+#include "field.hpp"
+#include "property.hpp"
+
 ScriptedBehaviour::ScriptedBehaviour()
 {
 	// TODO: Change path
@@ -128,22 +131,26 @@ void ScriptedBehaviour::PopulateMetadatas()
 	{
 		mono::ManagedType* fieldType = fieldRef->Type();
 
+		std::shared_ptr<CCProperty::IClearProperty> currentProperty;
+		std::string identifier;
+
 		if (fieldType->Equals(mono::ManagedType::GetInt32()))
 		{
-			// TODO: FREE ALLOCATIONS
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<int>(m_managedInstance, fieldRef.get()));
-			continue;
+			currentProperty = std::make_shared<ReflectedField<int>>(m_managedInstance, fieldRef.get());
+		}
+		else if (fieldType->Equals(mono::ManagedType::GetString()))
+		{
+			currentProperty = std::make_shared<ReflectedField<std::string>>(m_managedInstance, fieldRef.get());
+		}
+		else if (fieldType->Equals(mono::ManagedType::GetSingle()))
+		{
+			currentProperty = std::make_shared<ReflectedField<float>>(m_managedInstance, fieldRef.get());
 		}
 
-		if (fieldType->Equals(mono::ManagedType::GetString()))
+		if (currentProperty)
 		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<std::string>(m_managedInstance, fieldRef.get()));
-			continue;
-		}
-
-		if (fieldType->Equals(mono::ManagedType::GetSingle()))
-		{
-			m_metadatas.SetProperty(fieldName.c_str(), new ReflectedField<float>(m_managedInstance, fieldRef.get()));
+			m_properties[fieldName] = currentProperty;
+			m_metadatas.SetProperty(fieldName.c_str(), currentProperty.get());
 			continue;
 		}
 
@@ -169,8 +176,6 @@ void ScriptedBehaviour::PopulateMetadatas()
 			if (!res || excep)
 				return;
 
-			
-
 			if (fieldType->Equals("CCEngine.Vector3"))
 			{
 				CCMaths::Vector3* valPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
@@ -179,20 +184,27 @@ void ScriptedBehaviour::PopulateMetadatas()
 				continue;
 			}
 
-			if (fieldType->Equals("CCEngine.Entity"))
+			else if (fieldType->Equals("CCEngine.Entity"))
 			{
-				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Entity*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod));
+				currentProperty = std::make_shared<ReflectedManagedObjectField<Entity*>>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod);
+				continue;
+			}
+			else if (fieldType->InheritOf(behaviourClass))
+			{
+				std::string compName = fieldType->Name().substr(fieldType->Name().find_last_of('.') + 1);
+
+				identifier = compName;
+
+				currentProperty = std::make_shared<ReflectedManagedObjectField<Behaviour*>>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod);
 				continue;
 			}
 
-			std::string compName = fieldType->Name().substr(fieldType->Name().find_last_of('.') + 1);
-
-			if (fieldType->InheritOf(behaviourClass))
+			if (currentProperty)
 			{
-				m_metadatas.SetProperty(fieldName.c_str(), new ReflectedManagedObjectField<Behaviour*>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod), compName.c_str());
+				m_properties[fieldName] = currentProperty;
+				m_metadatas.SetProperty(fieldName.c_str(), currentProperty.get(), identifier.c_str());
 				continue;
 			}
-
 			continue;
 		}
 	}
@@ -204,24 +216,30 @@ void ScriptedBehaviour::PopulateMetadatas()
 		const mono::ManagedType* getType = propRef->GetType();
 		const mono::ManagedType* setType = propRef->SetType();
 
+		std::shared_ptr<CCProperty::IClearProperty> currentProperty;
+
 		if (getType && getType->Equals(mono::ManagedType::GetInt32()) ||
 			setType && setType->Equals(mono::ManagedType::GetInt32()))
 		{
-			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<int>(m_managedInstance, propRef.get()));
-			continue;
+			currentProperty = std::make_shared<ReflectedProperty<int>>(m_managedInstance, propRef.get());
 		}
 
-		if (getType && getType->Equals(mono::ManagedType::GetString()) ||
-			setType && setType->Equals(mono::ManagedType::GetString()))
+		else if (getType && getType->Equals(mono::ManagedType::GetString()) ||
+				setType && setType->Equals(mono::ManagedType::GetString()))
 		{
-			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<std::string>(m_managedInstance, propRef.get()));
-			continue;
+			currentProperty = std::make_shared<ReflectedProperty<std::string>>(m_managedInstance, propRef.get());
 		}
 
-		if (getType && getType->Equals(mono::ManagedType::GetSingle()) ||
-			setType && setType->Equals(mono::ManagedType::GetSingle()))
+		else if (getType && getType->Equals(mono::ManagedType::GetSingle()) ||
+				setType && setType->Equals(mono::ManagedType::GetSingle()))
 		{
-			m_metadatas.SetProperty(propName.c_str(), new ReflectedProperty<float>(m_managedInstance, propRef.get()));
+			currentProperty = std::make_shared<ReflectedProperty<float>>(m_managedInstance, propRef.get());
+		}
+
+		if (currentProperty)
+		{
+			m_properties[propName] = currentProperty;
+			m_metadatas.SetProperty(propName.c_str(), currentProperty.get());
 			continue;
 		}
 	}
