@@ -121,9 +121,12 @@ void GuizmoRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	for (CameraComponent* cameraComp : m_cameraComponents) 
 	{
-		CCMaths::Matrix4 model = cameraComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
-		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+		if (Transform* t = cameraComp->GetHostPtr()->GetBehaviour<Transform>())
+		{
+			CCMaths::Matrix4 model = cameraComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
+			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
+			glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+		}
 	}
 
 	gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_lightIcon->m_gpuTexture2D.get());
@@ -131,9 +134,12 @@ void GuizmoRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	for (LightComponent* lightComp : m_lightComponents)
 	{
-		CCMaths::Matrix4 model = lightComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
-		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+		if (Transform* t = lightComp->GetHostPtr()->GetBehaviour<Transform>())
+		{
+			CCMaths::Matrix4 model = lightComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
+			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
+			glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+		}
 	}
 
 	gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_audioIcon->m_gpuTexture2D.get());
@@ -141,9 +147,12 @@ void GuizmoRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	for (AudioEmitter* audioComp : m_audioEmitters)
 	{
-		CCMaths::Matrix4 model = audioComp->GetHostPtr()->GetBehaviour<Transform>()->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
-		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
-		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+		if (Transform* t = audioComp->GetHostPtr()->GetBehaviour<Transform>()) 
+		{
+			CCMaths::Matrix4 model = t->GetWorldMatrix().NormalizedScale() * CCMaths::Matrix4::Scale(.1f);
+			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
+			glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+		}
 	}
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

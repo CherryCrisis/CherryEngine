@@ -103,11 +103,14 @@ void CsScriptingSystem::SubmitScript(const char* name)
 	mono::ManagedClass* theclass = m_scriptAssembly->m_context->FindClass("CCScripting", name);
 	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
 
-	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
+	if (!theclass || !behaviourClass)
+		return;
 
+	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
 
 	MonoClass* classParentMDR = mono_class_get_parent(theclass->RawClass());
 	MonoType* typeParentMDR = mono_class_get_type(classParentMDR);
+
 	if (mono_type_get_type(typeParentMDR) == behaviourTypeID)
 		classesName.push_back(name);
 }
