@@ -20,6 +20,7 @@ protected:
 
 public:
 	UIImage();
+	UIImage(CCUUID& id);
 	UIImage(const char* filepath);
 	std::shared_ptr<Texture> m_texture = nullptr;
 

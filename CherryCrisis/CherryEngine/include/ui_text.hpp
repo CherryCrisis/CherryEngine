@@ -17,6 +17,7 @@ public:
 	std::shared_ptr<Font> m_font;
 	
 	UIText();
+	UIText(CCUUID& id);
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;

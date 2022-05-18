@@ -25,8 +25,8 @@ public:
 
 	bool CompareId(int id) override;
 	void Interact() override;
+	UIButton(CCUUID& id);
 	UIButton();
-
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 

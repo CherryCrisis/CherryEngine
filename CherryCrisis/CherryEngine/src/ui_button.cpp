@@ -22,6 +22,19 @@ UIButton::UIButton()
 	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
 }
 
+UIButton::UIButton(CCUUID& id) : UIItem(id)
+{
+	PopulateMetadatas();
+
+	SetName("Button");
+
+	CameraComponent* cam = CameraComponent::GetMainCamera();
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
+}
+
 void UIButton::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->SubscribeToPipeline<PickingRenderPass>((UIItem*)&m_background);

@@ -20,6 +20,12 @@ UIItem::UIItem()
 	count++;
 }
 
+UIItem::UIItem(CCUUID& id) : Object(id)
+{
+	m_id = count;
+	count++;
+}
+
 void UIItem::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->SubscribeToPipeline<PickingRenderPass>(this);

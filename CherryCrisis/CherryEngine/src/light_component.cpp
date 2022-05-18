@@ -19,11 +19,13 @@
 LightComponent::LightComponent()
 {
 	PopulateMetadatas();
+	SubscribeGuizmo();
 }
 
 LightComponent::LightComponent(CCUUID& id) : Behaviour(id)
 {
 	PopulateMetadatas();
+	SubscribeGuizmo();
 }
 
 LightComponent::~LightComponent()
@@ -36,6 +38,8 @@ LightComponent::~LightComponent()
 		m_transform->m_onRotationChange.Unbind(&LightComponent::ChangeRotation, this);
 		m_transform->m_OnDestroy.Unbind(&LightComponent::InvalidateTransform, this);
 	}
+
+	UnsubscribeGuizmo();
 }
 
 void LightComponent::BindToSignals()
@@ -95,7 +99,7 @@ void LightComponent::SubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->SubscribeToPipeline<ShadowRenderPass>(&m_light);
 	pipeline->SubscribeToPipeline<BasicRenderPass>(&m_light);
 	pipeline->SubscribeToPipeline<PBRRenderPass>(&m_light);
-	SubscribeGuizmo();
+
 }
 
 void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
@@ -103,7 +107,6 @@ void LightComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(&m_light);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(&m_light);
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(&m_light);
-	UnsubscribeGuizmo();
 }
 
 void LightComponent::OnCellAdded(Cell* newCell)

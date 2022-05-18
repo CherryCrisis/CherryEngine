@@ -131,11 +131,11 @@ void CameraComponent::InvalidateTransform()
 
 void CameraComponent::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
+	m_editorCamera->m_pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
 }
 
 void CameraComponent::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
+	m_editorCamera->m_pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
 }
 

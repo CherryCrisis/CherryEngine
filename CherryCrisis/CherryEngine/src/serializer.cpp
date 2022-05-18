@@ -27,6 +27,11 @@
 #include "sky_renderer.hpp"
 #include "object.hpp"
 
+#include "ui_text.hpp"
+#include "ui_button.hpp"
+#include "ui_image.hpp"
+
+#include "maths/vector2.hpp";
 namespace YAML {
 	template<>
 	struct convert<CCMaths::Vector3> {
@@ -40,6 +45,22 @@ namespace YAML {
 		static bool decode(const Node& node, CCMaths::Vector3& rhs)
 		{
 			rhs = String::ExtractVector3(node.as<std::string>());
+			return true;
+		}
+	};
+
+	template<>
+	struct convert<CCMaths::Vector2> {
+		static Node encode(const CCMaths::Vector2& rhs)
+		{
+			Node node;
+			node = (std::to_string(rhs.x) + '/' + std::to_string(rhs.y));
+			return node;
+		}
+
+		static bool decode(const Node& node, CCMaths::Vector2& rhs)
+		{
+			rhs = String::ExtractVector2(node.as<std::string>());
 			return true;
 		}
 	};
@@ -300,6 +321,143 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 			}
 		}
 
+		YAML::Node ui = save["UI"];
+		//UI Saving
+		for (UIItem* item : scene->m_UIContext.m_items)
+		{
+			uint32_t UUID = item->GetUUID();
+			YAML::Node node = ui[UUID];
+			node["type"] = String::ExtractValue(typeid(*item).name(), ' ');
+			// Field Saving
+			for (const auto& [fieldName, fieldRef] : item->m_metadatas.m_fields)
+			{
+				const std::type_index& type = fieldRef.m_type;
+
+				if (type == typeid(CCMaths::Vector3))
+				{
+					node[fieldName] = *std::any_cast<CCMaths::Vector3*>(fieldRef.m_value);
+					continue;
+				}
+
+				if (type == typeid(CCMaths::Vector2))
+				{
+					node[fieldName] = *std::any_cast<CCMaths::Vector2*>(fieldRef.m_value);
+					continue;
+				}
+
+				if (type == typeid(Bool3))
+				{
+					node[fieldName] = *std::any_cast<Bool3*>(fieldRef.m_value);
+					continue;
+				}
+
+				if (type == typeid(std::string))
+				{
+					node[fieldName] = *std::any_cast<std::string*>(fieldRef.m_value);
+					continue;
+				}
+
+				if (type == typeid(float))
+				{
+					node[fieldName] = *std::any_cast<float*>(fieldRef.m_value);
+					continue;
+				}
+
+				if (type == typeid(int))
+				{
+					node[fieldName] = *std::any_cast<int*>(fieldRef.m_value);
+					continue;
+				}
+
+				if (type == typeid(bool))
+				{
+					node[fieldName] = *std::any_cast<bool*>(fieldRef.m_value);
+					continue;
+				}
+
+				if (type == typeid(Object*))
+				{
+					Object* obj = *std::any_cast<Object**>(fieldRef.m_value);
+					node[fieldName] = obj ? YAML::Node(*obj) : YAML::Node();
+					continue;
+				}
+				//Unhandled Cases (useful to find them)
+				node[fieldName] = std::format(parseError, type.name());
+			}
+
+			//Properties saving
+			for (const auto& [propName, propRef] : item->m_metadatas.m_properties)
+			{
+				const std::type_index& type = propRef->GetGetType();
+
+				if (type == typeid(CCMaths::Vector3))
+				{
+					CCMaths::Vector3 val;
+					propRef->Get(&val);
+					node[propName] = val;
+					continue;
+				}
+				if (type == typeid(CCMaths::Vector2))
+				{
+					CCMaths::Vector2 val;
+					propRef->Get(&val);
+					node[propName] = val;
+					continue;
+				}
+				if (type == typeid(Bool3))
+				{
+					Bool3 val;
+					propRef->Get(&val);
+					node[propName] = val;
+					continue;
+				}
+				if (type == typeid(std::string))
+				{
+					std::string val;
+					propRef->Get(&val);
+					node[propName] = val;
+					continue;
+				}
+				if (type == typeid(float))
+				{
+					float val;
+					propRef->Get(&val);
+					node[propName] = val;
+					continue;
+				}
+				if (type == typeid(int))
+				{
+					int val;
+					propRef->Get(&val);
+					node[propName] = val;
+					continue;
+				}
+				if (type == typeid(bool))
+				{
+					bool val;
+					propRef->Get(&val);
+					node[propName] = val;
+					continue;
+				}
+				if (type == typeid(const char*))
+				{
+					const char* val;
+					propRef->Get(&val);
+					node[propName] = std::string(val);
+					continue;
+				}
+				if (type == typeid(Object*) || type == typeid(Entity*) || type == typeid(Transform*))
+				{
+					Object* ptr;
+					propRef->Get(&ptr);
+					node[propName] = ptr ? YAML::Node(*ptr) : YAML::Node();
+					continue;
+				}
+				//Unhandled Cases (useful to find them)
+				node[propName] = std::format(parseError, type.name());
+			}
+		}
+
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	std::ofstream out(fileName);
 
@@ -328,6 +486,19 @@ Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 	else if (type == "AudioListener")     b = new AudioListener(id);
 	else if (type == "CharacterController")	b = new CharacterController(id);
 	
+	return b;
+}
+
+
+UIItem* Serializer::CreateUIItem(const std::string& type, uint32_t uuid)
+{
+	CCUUID id(uuid);
+	UIItem* b = nullptr;
+
+	if (type == "UIImage")			 b = new UIImage(id);
+	else if (type == "UIText")		 b = new UIText(id);
+	else if (type == "UIButton")     b = new UIButton(id);
+
 	return b;
 }
 
@@ -512,6 +683,93 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				}
 			}
 			m_wrappedBehaviours[behaviourPtr->GetUUID()] = behaviourPtr;
+		}
+	}
+
+	// Iterates on Components entries
+	if (loader["UI"])
+	{
+		for (YAML::const_iterator it = loader["UI"].begin(); it != loader["UI"].end(); ++it)
+		{
+			UIItem* itemPtr = CreateUIItem(it->second["type"].as<std::string>(), it->first.as<uint32_t>());
+
+			//Create Behaviour by its type,
+			if (!itemPtr)
+				continue;
+
+			for (YAML::const_iterator entry = it->second.begin(); entry != it->second.end(); ++entry)
+			{
+				std::string key = entry->first.as<std::string>();
+				YAML::Node value = entry->second;
+
+				if (value.as<std::string>() == "null")
+					continue;
+
+				if (itemPtr->m_metadatas.m_properties.contains(key))
+				{
+					CCProperty::IClearProperty* prop = itemPtr->m_metadatas.m_properties[key];
+
+					auto& propType = prop->GetGetType();
+
+					if (propType == typeid(Transform*) || propType == typeid(Entity*))
+					{
+						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, value.as<uint32_t>() });
+					}
+					else if (propType == typeid(CCMaths::Vector3))
+					{
+						Vector3 vec = value.as<CCMaths::Vector3>();
+						prop->Set(&vec);
+					}
+					else if (propType == typeid(Bool3))
+					{
+						Bool3 vec = value.as<Bool3>();
+						prop->Set(&vec);
+					}
+					else if (propType == typeid(std::string))
+					{
+						std::string str = value.as<std::string>();
+						prop->Set(&str);
+					}
+					else if (propType == typeid(bool))
+					{
+						bool str = value.as<bool>();
+						prop->Set(&str);
+					}
+					else if (propType == typeid(const char*))
+					{
+						std::string str = value.as<std::string>();
+						const char* val = str.c_str();
+						prop->Set(&val);
+					}
+				}
+
+				if (itemPtr->m_metadatas.m_fields.contains(key))
+				{
+					auto& info = itemPtr->m_metadatas.m_fields[key].m_type;
+					Field& field = itemPtr->m_metadatas.m_fields[key];
+
+					if (info == typeid(CCMaths::Vector3))
+					{
+						CCMaths::Vector3* valPtr = std::any_cast<CCMaths::Vector3*>(field.m_value);
+						*valPtr = value.as<CCMaths::Vector3>();
+					}
+					else if (info == typeid(bool))
+					{
+						bool* valPtr = std::any_cast<bool*>(field.m_value);
+						*valPtr = value.as<bool>();
+					}
+					else if (info == typeid(Object*))
+					{
+						m_wrappedUUIDs[it->first.as<uint32_t>()].insert({ key, value.as<uint32_t>() });
+					}
+					else if (info == typeid(std::string))
+					{
+						std::string* valPtr = std::any_cast<std::string*>(field.m_value);
+						*valPtr = value.as<std::string>();
+					}
+				}
+			}
+			scene->m_UIContext.m_items.push_back(itemPtr);
 		}
 	}
 
