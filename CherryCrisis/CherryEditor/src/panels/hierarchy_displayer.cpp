@@ -8,17 +8,17 @@
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
 
-#include "scene.hpp"
-#include "transform.hpp"
-#include "portal_component.hpp"
-#include "core/editor_manager.hpp"
-#include "callback.hpp"
-#include "cell.hpp"
-
-#include "camera_component.hpp"
 #include "audio_emitter.hpp"
 #include "audio_listener.hpp"
+#include "callback.hpp"
+#include "camera_component.hpp"
+#include "cell.hpp"
+#include "core/editor_manager.hpp"
 #include "light_component.hpp"
+#include "scene.hpp"
+#include "shape_renderer.hpp"
+#include "transform.hpp"
+#include "portal_component.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -354,54 +354,52 @@ void HierarchyDisplayer::ContextCallback()
 
             if (ImGui::BeginMenu("Shapes"))
             {
-                Entity* newEntity = nullptr;
-               /* std::shared_ptr<Model> newModel = nullptr;
-                if (ImGui::MenuItem("Cube"))
+                //Entity* newEntity = nullptr;
+
+                //std::shared_ptr<Model> newModel = nullptr;
+                if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
                 {
-                    newEntity = new Entity("Cube");
-                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCube");
-                    std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResourceRef<Material>("CC_Mat");
-                    Mesh::CreateCube(mesh, 1, 1, 1);
-                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCube", true, mesh);
+                    ShapeRenderer* shape = nullptr;
+                    if (ImGui::MenuItem("Cube"))
+                    {
+                        newEntity = new Entity("Cube", cell);
+                        Transform* tranform = newEntity->AddBehaviour<Transform>();
+                        shape = newEntity->AddBehaviour<ShapeRenderer>();
+                        shape->m_transform = tranform;
+                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 1.f, 1.f, 1.f));
+                    }
+
+                    if (ImGui::MenuItem("Sphere"))
+                    {
+                        newEntity = new Entity("Sphere", cell);
+                        Transform* tranform = newEntity->AddBehaviour<Transform>();
+                        shape = newEntity->AddBehaviour<ShapeRenderer>();
+                        shape->m_transform = tranform;
+                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 1.f, 9.f, 17.f));
+                    }
+                    if (ImGui::MenuItem("Cylinder"))
+                    {
+                        newEntity = new Entity("Cylinder", cell);
+                        Transform* tranform = newEntity->AddBehaviour<Transform>();
+                        shape = newEntity->AddBehaviour<ShapeRenderer>();
+                        shape->m_transform = tranform;
+                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 1.f, 1.f, 16.f));
+                    }
+                    if (ImGui::MenuItem("Plane"))
+                    {
+                        newEntity = new Entity("Plane", cell);
+                        Transform* tranform = newEntity->AddBehaviour<Transform>();
+                        ShapeRenderer* shape = newEntity->AddBehaviour<ShapeRenderer>();
+                        shape->m_transform = tranform;
+                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedPlane", true, EMeshShape::QUAD, 1.f, 1.f));
+                    }
+
+                    if (newEntity)
+                    {
+                        shape->SetMaterialFromPath(R"(Assets\Models\NonEuclidean\None.ccmat)");
+                        newEntity->Initialize();
+                    }
                 }
-
-                if (ImGui::MenuItem("Sphere"))
-                {
-                    newEntity = new Entity("Sphere");
-                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedSphere");
-                    Mesh::CreateCube(mesh, 1, 1, 1);
-                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedSphere", true, mesh);
-                }
-                if (ImGui::MenuItem("Cone"))
-                {
-                    newEntity = new Entity("Cone");
-                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedCone");
-                    Mesh::CreateCube(mesh, 1, 1, 1);
-                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedCone", true, mesh);
-                }
-                if (ImGui::MenuItem("Plane"))
-                {
-                    newEntity = new Entity("Plane");
-                    std::shared_ptr<Mesh> mesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedPlane");
-                    Mesh::CreateQuad(mesh, 1, 1);
-                    newModel = ResourceManager::GetInstance()->AddResource<Model>("CC_NormalizedPlane", true, mesh);
-                }
-
-                if (newEntity && newModel)
-                {
-                    std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResourceRef<Material>("CC_Mat");
-
-                    newModel->SetMaterial(material);
-                    Transform* tr = newEntity->AddBehaviour<Transform>();
-                    ModelRenderer* rdr = newEntity->AddBehaviour<ModelRenderer>();
-                    rdr->m_transform = tr;
-                    rdr->SetModel(newModel);
-
-                    newEntity->Initialize();
-
-                    SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
-                    m_manager->FocusEntity(newEntity);
-                }*/
 
                 ImGui::EndMenu();
             }

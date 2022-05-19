@@ -1311,6 +1311,9 @@
     <ClInclude Include="include\field.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="include\shape_renderer.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix3.inl">
@@ -1751,6 +1754,9 @@
     </ClCompile>
     <ClCompile Include="src\sky_renderer.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shape_renderer.cpp">
+      <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,15 +2,14 @@
 
 #include "basic_renderpass.hpp"
 
-#include "framebuffer.hpp"
-
 #include "camera.hpp"
-#include "model_renderer.hpp"
-#include "transform.hpp"
+#include "framebuffer.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
-
+#include "model_renderer.hpp"
 #include "shadow_renderpass.hpp"
+#include "shape_renderer.hpp"
+#include "transform.hpp"
 #include "viewer.hpp"
 
 BasicRenderPass::BasicRenderPass(const char* name)
@@ -63,6 +62,12 @@ int BasicRenderPass::Subscribe(Light* toGenerate)
 }
 
 template <>
+void BasicRenderPass::Unsubscribe(Light* toGenerate)
+{
+	m_lights.erase(toGenerate);
+}
+
+template <>
 int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
 	// Generate GPU mesh
@@ -70,7 +75,7 @@ int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 		if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
 			return -1;
 
-		m_modelRenderers.insert(toGenerate);
+		m_models.insert(toGenerate);
 	}
 
 	// Generate GPU textures
@@ -79,6 +84,32 @@ int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 	}
 
 	return 1;
+}
+
+template <>
+void BasicRenderPass::Unsubscribe(ModelRenderer* toGenerate)
+{
+	m_models.erase(toGenerate);
+}
+
+template <>
+int BasicRenderPass::Subscribe(ShapeRenderer* toGenerate)
+{
+	if (!toGenerate->m_mesh)
+		return -1;
+
+	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
+		return -1;
+
+	m_shapes.insert(toGenerate);
+
+	return 1;
+}
+
+template <>
+void BasicRenderPass::Unsubscribe(ShapeRenderer* toGenerate)
+{
+	m_shapes.erase(toGenerate);
 }
 
 void BasicRenderPass::Generate(Material* toGenerate)
@@ -93,18 +124,6 @@ void BasicRenderPass::Generate(Material* toGenerate)
 	// Normal texture
 	if (Texture* normalMap = toGenerate->m_textures[ETextureType::NORMAL_MAP].get())
 		m_textureGenerator.Generate(normalMap);
-}
-
-template <>
-void BasicRenderPass::Unsubscribe(ModelRenderer* toGenerate)
-{
-	m_modelRenderers.erase(toGenerate);
-}
-
-template <>
-void BasicRenderPass::Unsubscribe(Light* toGenerate)
-{
-	m_lights.erase(toGenerate);
 }
 
 void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
@@ -180,7 +199,7 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		lightIt = std::next(m_lights.begin(), lightID);
 	}
 
-	for (ModelRenderer* modelRdr : m_modelRenderers)
+	for (ModelRenderer* modelRdr : m_models)
 	{
 		if (!modelRdr->m_isVisible)
 			continue;
@@ -201,6 +220,41 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		}
 
 		Mesh* mesh = modelRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
+		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
+
+		if (!gpuMesh)
+			continue;
+
+		glBindVertexArray(gpuMesh->VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+	}
+
+	for (ShapeRenderer* shapeRdr : m_shapes)
+	{
+		if (!shapeRdr->m_isVisible)
+			continue;
+
+		CCMaths::Matrix4 modelMat = shapeRdr->m_transform->GetWorldMatrix();
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
+
+		if (Material* material = shapeRdr->m_material.get())
+		{
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.ambientCol"), 1, material->m_ambient.data);
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.diffuseCol"), 1, material->m_diffuse.data);
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specularCol"), 1, material->m_specular.data);
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.emissiveCol"), 1, material->m_emissive.data);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.shininess"), material->m_shininess);
+
+			BindTexture(material, ETextureType::ALBEDO, 0);
+			BindTexture(material, ETextureType::NORMAL_MAP, 1);
+		}
+
+		Mesh* mesh = shapeRdr->m_mesh.get();
 
 		if (!mesh)
 			continue;

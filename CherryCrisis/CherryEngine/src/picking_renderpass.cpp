@@ -2,12 +2,11 @@
 
 #include "picking_renderpass.hpp"
 
-#include "model_renderer.hpp"
-#include "ui_item.hpp"
-
-#include "transform.hpp"
 #include "framebuffer.hpp"
-
+#include "model_renderer.hpp"
+#include "shape_renderer.hpp"
+#include "transform.hpp"
+#include "ui_item.hpp"
 #include "viewer.hpp"
 
 PickingRenderPass::PickingRenderPass(const char* name)
@@ -26,7 +25,7 @@ int PickingRenderPass::Subscribe(ModelRenderer* toGenerate)
 	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
 		return -1;
 
-	m_modelRenderers.insert(toGenerate);
+	m_models.insert(toGenerate);
 
 	return 1;
 }
@@ -34,7 +33,27 @@ int PickingRenderPass::Subscribe(ModelRenderer* toGenerate)
 template <>
 void PickingRenderPass::Unsubscribe(ModelRenderer* toGenerate)
 {
-	m_modelRenderers.erase(toGenerate);
+	m_models.erase(toGenerate);
+}
+
+template <>
+int PickingRenderPass::Subscribe(ShapeRenderer* toGenerate)
+{
+	if (!toGenerate->m_mesh)
+		return -1;
+
+	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
+		return -1;
+
+	m_shapes.insert(toGenerate);
+
+	return 1;
+}
+
+template <>
+void PickingRenderPass::Unsubscribe(ShapeRenderer* toGenerate)
+{
+	m_shapes.erase(toGenerate);
 }
 
 template <>
@@ -81,7 +100,7 @@ void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
-	for (ModelRenderer* modelRdr : m_modelRenderers)
+	for (ModelRenderer* modelRdr : m_models)
 	{
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
@@ -92,6 +111,29 @@ void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 			continue;
 
 		CCMaths::Vector3 colorID = RGB(modelRdr->m_id);
+		glUniform4f(glGetUniformLocation(m_program->m_shaderProgram, "uColorID"), colorID.r, colorID.g, colorID.b, 1.f);
+
+		auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
+
+		if (!gpuMesh)
+			continue;
+
+		glBindVertexArray(gpuMesh->VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+	}
+
+	for (ShapeRenderer* shapeRdr : m_shapes)
+	{
+		CCMaths::Matrix4 modelMat = shapeRdr->m_transform->GetWorldMatrix();
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
+
+		Mesh* mesh = shapeRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
+		CCMaths::Vector3 colorID = RGB(shapeRdr->m_id);
 		glUniform4f(glGetUniformLocation(m_program->m_shaderProgram, "uColorID"), colorID.r, colorID.g, colorID.b, 1.f);
 
 		auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());

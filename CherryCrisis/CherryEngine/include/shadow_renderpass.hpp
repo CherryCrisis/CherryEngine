@@ -6,16 +6,16 @@
 
 #include "framebuffer.hpp"
 #include "element_mesh_generator.hpp"
-
 #include "light.hpp"
 
 class ModelRenderer;
-struct Light;
+class ShapeRenderer;
 
 class ShadowRenderPass : public ARenderingRenderPass
 {
 	std::unordered_set<Light*> m_lights;
 	std::unordered_set<ModelRenderer*> m_models;
+	std::unordered_set<ShapeRenderer*> m_shapes;
 
 	ElementMeshGenerator m_meshGenerator;
 
@@ -46,13 +46,19 @@ public:
 	int Subscribe(Light* toGenerate);
 
 	template <>
+	void Unsubscribe(Light* toGenerate);
+
+	template <>
 	int Subscribe(ModelRenderer* toGenerate);
 
 	template <>
 	void Unsubscribe(ModelRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(Light* toGenerate);
+	int Subscribe(ShapeRenderer* toGenerate);
+
+	template <>
+	void Unsubscribe(ShapeRenderer* toGenerate);
 
 	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
 };

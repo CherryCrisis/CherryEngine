@@ -3,12 +3,11 @@
 #include "shadow_renderpass.hpp"
 #include "element_mesh_generator.hpp"
 
-#include "model_renderer.hpp"
-#include "light.hpp"
 
 #include "transform.hpp"
 #include "mesh.hpp"
-
+#include "model_renderer.hpp"
+#include "shape_renderer.hpp"
 #include "viewer.hpp"
 
 ShadowRenderPass::GPUShadowLight::~GPUShadowLight()
@@ -85,6 +84,12 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 }
 
 template <>
+void ShadowRenderPass::Unsubscribe(Light* toGenerate)
+{
+	m_lights.erase(toGenerate);
+}
+
+template <>
 int ShadowRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
 	if (!toGenerate->m_mesh)
@@ -105,9 +110,23 @@ void ShadowRenderPass::Unsubscribe(ModelRenderer* toGenerate)
 }
 
 template <>
-void ShadowRenderPass::Unsubscribe(Light* toGenerate)
+int ShadowRenderPass::Subscribe(ShapeRenderer* toGenerate)
 {
-	m_lights.erase(toGenerate);
+	if (!toGenerate->m_mesh)
+		return -1;
+
+	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
+		return -1;
+
+	m_shapes.insert(toGenerate);
+
+	return 1;
+}
+
+template <>
+void ShadowRenderPass::Unsubscribe(ShapeRenderer* toGenerate)
+{
+	m_shapes.erase(toGenerate);
 }
 
 void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)

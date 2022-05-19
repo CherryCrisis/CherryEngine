@@ -44,7 +44,7 @@ void Mesh::Load(std::shared_ptr<Mesh> mesh, EMeshShape shapeType, float xHalfRes
 void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHeight, float longitude)
 {
     std::vector<Vertex> vertices;
-    vertices.reserve((size_t)longitude * 2);
+    vertices.reserve((size_t)longitude * 2 + 2);
 
     float const S = 1.f / (longitude - 1.f);
     float add = 2 * PI / longitude;
@@ -56,12 +56,10 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
         float x = cosf(add * s);
         float z = sinf(add * s);
 
-        vertex.uv.x = s * S;
-        vertex.uv.y = 0;
+        vertex.uv = { s * S , 0 };
 
         vertex.position = { x, 0.f, z };
         vertex.position = vertex.position.Normalized() * radius;
-
 
         vertex.normal = CCMaths::Vector3(x, 0, z);
         vertex.tangent = CCMaths::Vector3(x, 0, z);
@@ -75,8 +73,20 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
         vertices.push_back(vertex);
     }
 
+    Vertex vertex;
+    vertex.uv = { 0.5f, 0.5f };
+    vertex.position = { 0.f, 0.f, 0.f };
+
+    vertex.normal = CCMaths::Vector3(0, 1, 0);
+    vertex.tangent = CCMaths::Vector3(0, 1, 0);
+    vertex.bitangent = CCMaths::Vector3(0, 1, 0);
+    vertex.position.y = halfHeight;
+    vertices.push_back(vertex);
+    vertex.position.y = -halfHeight;
+    vertices.push_back(vertex);
+
     std::vector<unsigned int> indices;
-    indices.reserve((size_t)longitude * 6);
+    indices.reserve((size_t)longitude * 12);
 
     for (int s = 0; s < longitude; s++)
     {
@@ -87,6 +97,14 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
         indices.push_back((2 * s + 3) % ((int)longitude * 2));
         indices.push_back(2 * s + 1);
         indices.push_back((2 * s + 2) % ((int)longitude * 2));
+
+        indices.push_back(vertices.size() - 2);
+        indices.push_back((2 * s + 2) % ((int)longitude * 2));
+        indices.push_back(2 * s);
+
+        indices.push_back(vertices.size() - 1);
+        indices.push_back(2 * s + 1);
+        indices.push_back((2 * s + 3) % ((int)longitude * 2));
     }
 
     Load(mesh, vertices, indices);

@@ -4,21 +4,19 @@
 
 #include "resource_manager.hpp"
 
-#include "framebuffer.hpp"
-
 #include "camera.hpp"
+#include "framebuffer.hpp"
+#include "material.hpp"
 #include "model_renderer.hpp"
-#include "transform.hpp"
+#include "shape_renderer.hpp"
 #include "sky_renderer.hpp"
+#include "texture.hpp"
+#include "transform.hpp"
+#include "viewer.hpp"
+#include "brdf_renderpass.hpp"
 #include "irradiance_map_renderpass.hpp"
 #include "prefilter_map_renderpass.hpp"
-#include "environment_map_renderpass.hpp" //TODO: Delete
-#include "brdf_renderpass.hpp"
-#include "material.hpp"
-#include "texture.hpp"
-
 #include "shadow_renderpass.hpp"
-#include "viewer.hpp"
 
 PBRRenderPass::PBRRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/PBR/pbrShader.vert", "Assets/Shaders/PBR/pbrShader.frag")
@@ -68,6 +66,12 @@ int PBRRenderPass::Subscribe(Light* toGenerate)
 }
 
 template <>
+void PBRRenderPass::Unsubscribe(Light* toGenerate)
+{
+	m_lights.erase(toGenerate);
+}
+
+template <>
 int PBRRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
 	// Generate GPU mesh
@@ -75,7 +79,7 @@ int PBRRenderPass::Subscribe(ModelRenderer* toGenerate)
 		if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
 			return -1;
 
-		m_modelRenderers.insert(toGenerate);
+		m_models.insert(toGenerate);
 	}
 
 	// Generate GPU textures
@@ -84,6 +88,52 @@ int PBRRenderPass::Subscribe(ModelRenderer* toGenerate)
 	}
 
 	return 1;
+}
+
+template <>
+void PBRRenderPass::Unsubscribe(ModelRenderer* toGenerate)
+{
+	m_models.erase(toGenerate);
+}
+
+template <>
+int PBRRenderPass::Subscribe(ShapeRenderer* toGenerate)
+{
+	if (!toGenerate->m_mesh)
+		return -1;
+
+	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
+		return -1;
+
+	m_shapes.insert(toGenerate);
+
+	return 1;
+}
+
+template <>
+void PBRRenderPass::Unsubscribe(ShapeRenderer* toGenerate)
+{
+	m_shapes.erase(toGenerate);
+}
+
+template <>
+int PBRRenderPass::Subscribe(SkyRenderer* toGenerate)
+{
+	if (!toGenerate)
+		return -1;
+
+	m_skyRenderer = toGenerate;
+
+	return 1;
+}
+
+template <>
+void PBRRenderPass::Unsubscribe(SkyRenderer* toGenerate)
+{
+	if (m_skyRenderer == toGenerate)
+	{
+		m_skyRenderer = nullptr;
+	}
 }
 
 void PBRRenderPass::Generate(Material* toGenerate)
@@ -110,38 +160,6 @@ void PBRRenderPass::Generate(Material* toGenerate)
 
 	if (Texture* aoMap = toGenerate->m_textures[ETextureType::AO].get())
 		m_textureGenerator.Generate(aoMap);
-}
-
-template <>
-int PBRRenderPass::Subscribe(SkyRenderer* toGenerate)
-{
-	if (!toGenerate)
-		return -1;
-
-	m_skyRenderer = toGenerate;
-
-	return 1;
-}
-
-template <>
-void PBRRenderPass::Unsubscribe(SkyRenderer* toGenerate)
-{
-	if (m_skyRenderer == toGenerate)
-	{
-		m_skyRenderer = nullptr;
-	}
-}
-
-template <>
-void PBRRenderPass::Unsubscribe(ModelRenderer* toGenerate)
-{
-	m_modelRenderers.erase(toGenerate);
-}
-
-template <>
-void PBRRenderPass::Unsubscribe(Light* toGenerate)
-{
-	m_lights.erase(toGenerate);
 }
 
 void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, int id)
@@ -218,7 +236,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		lightIt = std::next(m_lights.begin(), lightID);
 	}
 
-	for (ModelRenderer* modelRdr : m_modelRenderers)
+	for (ModelRenderer* modelRdr : m_models)
 	{
 
 		if (!modelRdr->m_isVisible)
@@ -269,6 +287,71 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		}
 
 		Mesh* mesh = modelRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
+		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
+
+		if (!gpuMesh)
+			continue;
+
+		glBindVertexArray(gpuMesh->VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+	}
+
+	for (ShapeRenderer* shapeRdr : m_shapes)
+	{
+
+		if (!shapeRdr->m_isVisible)
+			continue;
+
+		CCMaths::Matrix4 modelMat = shapeRdr->m_transform->GetWorldMatrix();
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
+
+		if (Material* material = shapeRdr->m_material.get())
+		{
+			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
+			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), material->m_hasNormal);
+			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedo"), 1, material->m_diffuse.data);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specular"), material->m_specularFactor);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.metallic"), material->m_metallicFactor);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.roughness"), material->m_roughnessFactor);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.ao"), material->m_ao);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.clearCoat"), material->m_clearCoatFactor);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.clearCoatRoughness"), material->m_clearCoatRoughnessFactor);
+
+			BindTexture(material, ETextureType::ALBEDO, 0);
+			BindTexture(material, ETextureType::NORMAL_MAP, 1);
+			BindTexture(material, ETextureType::SPECULAR, 2);
+			BindTexture(material, ETextureType::METALLIC, 3);
+			BindTexture(material, ETextureType::ROUGHNESS, 4);
+			BindTexture(material, ETextureType::AO, 5);
+
+			if (m_skyRenderer)
+			{
+				if (Texture* spheremap = m_skyRenderer->m_texture.get())
+				{
+					if (auto gpuIrradianceMap = static_cast<IrradianceMapRenderPass::GPUIrradianceMapSphereMap*>(spheremap->m_gpuIrradiancemap.get()))
+					{
+						glBindTextureUnit(6, gpuIrradianceMap->ID);
+					}
+
+					if (auto gpuPrefilterMap = static_cast<PrefilterMapRenderPass::GPUPrefilterMapSphereMap*>(spheremap->m_gpuPrefilterMap.get()))
+					{
+						glBindTextureUnit(7, gpuPrefilterMap->ID);
+					}
+
+					if (auto gpuBRDF = static_cast<BRDFRenderPass::GPUBRDFSphereMap*>(m_skyRenderer->m_gpuBRDF.get()))
+					{
+						glBindTextureUnit(8, gpuBRDF->ID);
+					}
+				}
+			}
+		}
+
+		Mesh* mesh = shapeRdr->m_mesh.get();
 
 		if (!mesh)
 			continue;
