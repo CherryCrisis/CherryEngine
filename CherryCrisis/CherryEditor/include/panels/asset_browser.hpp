@@ -72,6 +72,8 @@ namespace CCScripting
 		std::string				m_filename; // filename without extension
 		std::string				m_extension; // extension
 
+		std::string			    m_fullFilename;
+		std::string				m_fullLoweredFilename;
 		bool					m_isHovered = false;
 		AssetBrowser*			m_assetBrowser = nullptr;
 

@@ -8,6 +8,7 @@ class Scene;
 class EditorManager;
 class Entity;
 class CellSystemDisplayer;
+class Transform;
 
 class HierarchyDisplayer : public Panel
 {
@@ -20,11 +21,13 @@ private:
 
 	bool m_renaming = false;
 
+	ImGuiIO* IO = nullptr;
+
 public:
 	void Render() override;
 	void ContextCallback() override;
 
-	bool RenderEntity(Entity* entity);
+	bool RenderEntity(Entity* entity, Transform* transform = nullptr);
 
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr);
 };

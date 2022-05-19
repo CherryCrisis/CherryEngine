@@ -131,7 +131,7 @@ void GuizmoRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_lightIcon->m_gpuTexture2D.get());
 	glBindTextureUnit(0, gpuTexture->ID);
-
+	// #1 : change components by transforms to get them only one time instead of each frame
 	for (LightComponent* lightComp : m_lightComponents)
 	{
 		if (Transform* t = lightComp->GetHostPtr()->GetBehaviour<Transform>())

@@ -184,6 +184,7 @@ void AssetBrowser::RenderNodes()
         int assetID = 0;
 
         std::vector<AssetNode*>& assetNodes = strlen(m_researchInput) > 0 ? m_allAssetNode : m_currentDirectoryNode->m_assetNodes;
+        std::string loweredResearh = String::ToLower(m_researchInput);
 
         for (const auto& assetNode : assetNodes)
         {
@@ -193,14 +194,10 @@ void AssetBrowser::RenderNodes()
                 return;
             }
 
-            std::string fullFilename(assetNode->m_filename + assetNode->m_extension);
             //-- Research input --//
-            if (strlen(m_researchInput) > 0)
-            {
-                std::string fullFilenameLower = String::ToLower(fullFilename);
-                if (fullFilenameLower.find(String::ToLower(m_researchInput)) == std::string::npos)
+            if (strlen(m_researchInput) > 0)         
+                if (assetNode->m_fullLoweredFilename.find(loweredResearh) == std::string::npos)
                     continue;
-            }
 
             ImGui::PushID(assetID);
 
@@ -291,10 +288,10 @@ void AssetBrowser::RenderNodes()
             //-- Drag and drop asset from asset_browser to other --//
             if (ImGui::BeginDragDropSource())
             {
-                std::string fullRelativePath = assetNode->m_relativePath.string() + fullFilename;
+                std::string fullRelativePath = assetNode->m_relativePath.string() + assetNode->m_fullLoweredFilename;
 
                 ImGui::SetDragDropPayload("NODE", fullRelativePath.c_str(), fullRelativePath.size() + 1, ImGuiCond_Once);
-                ImGui::Text(fullFilename.c_str());
+                ImGui::Text(assetNode->m_fullLoweredFilename.c_str());
                 ImGui::EndDragDropSource();
             }
 
@@ -727,6 +724,8 @@ void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode& as
     assetNode.m_extension = path.extension().string();
 
     assetNode.m_assetBrowser = this;
+    assetNode.m_fullFilename = assetNode.m_filename + assetNode.m_extension;
+    assetNode.m_fullLoweredFilename = String::ToLower(assetNode.m_fullFilename);
 }
 
 AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory)
@@ -743,7 +742,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true, true, ETextureFormat::RGBA);
 
         auto directory_iterator = std::filesystem::directory_iterator(m_path);
-
+        // LEAK: This possibly leads to leak
         auto pair = m_assetNodes.insert({ directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode)});
         AssetNode* assetNode = pair.first->second.get();
 
@@ -1017,6 +1016,7 @@ void AssetBrowser::QuerryBrowser()
 
     if (std::filesystem::exists(m_assetsDirectory))
     {
+       // LEAK: this possibly leads to leaks
        AssetNode* assetNode = RecursiveQuerryBrowser(m_assetsDirectory, nullptr);
        m_assetsDirectoryNode = dynamic_cast<DirectoryNode*>(assetNode);
        m_assetsDirectoryNode->m_filename = "Assets";

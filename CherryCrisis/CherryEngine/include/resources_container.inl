@@ -87,6 +87,7 @@ void ResourcesContainer<ResourceT>::RemoveAll()
 	auto resources = m_resources;
 	for (const auto [key, resource] : resources)
 	{
+		// LEAK: this possibly leads to leaks
 		resource->DeleteResource();
 	}
 
