@@ -23,7 +23,7 @@ public:
 	EditorManager* m_manager = nullptr;
 	Camera* m_camera = nullptr;
 	
-	CellSystemDisplayer();
+	CellSystemDisplayer(EditorManager* manager);
 
 	Cell* GetSelectedCell() { return m_selectedCell; }
 	

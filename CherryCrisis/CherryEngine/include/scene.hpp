@@ -70,4 +70,6 @@ public:
 	void Empty();
 	void EmptyUI();
 	void Delete() override;
+
+	Event<> m_onModifiedEntities;
 };

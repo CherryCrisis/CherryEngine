@@ -15,7 +15,7 @@
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
-CellSystemDisplayer::CellSystemDisplayer()
+CellSystemDisplayer::CellSystemDisplayer(EditorManager* manager): m_manager(manager)
 {
     SceneManager* sceneManager = SceneManager::GetInstance();
 
@@ -189,6 +189,7 @@ void CellSystemDisplayer::RenderCells()
                     {
                         SelectCell(&cell.second);
                         itemSelected = true;
+                        m_manager->RefreshHierarchy();
                     }
 
                     if (InputManager::GetInstance()->GetKeyDown(Keycode::RIGHT_CLICK))

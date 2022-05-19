@@ -153,13 +153,14 @@ int main(int argc, char** argv)
         icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
         glfwSetWindowIcon(window, 1, icon);
         stbi_image_free(icon[0].pixels);
-        ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
         //-----------------------------------
+        
+        ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
 
         int isSceneFocused = false;
         glfwSwapInterval(0);
 
-
+        SceneManager::GetInstance()->m_currentScene->m_onModifiedEntities.Bind(&HierarchyDisplayer::Refresh, editor.GetHierarchy());
         while (glfwWindowShouldClose(window) == false)
         {
             InputManager::UpdateKeys();

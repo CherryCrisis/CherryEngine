@@ -52,6 +52,7 @@ void Scene::Update()
 void Scene::AddEntity(Entity* toAdd)
 {
 	m_entities.push_back(toAdd);
+	m_onModifiedEntities.Invoke();
 }
 
 void Scene::RemoveEntity(Entity* toRemove) 
@@ -71,11 +72,13 @@ void Scene::RemoveEntity(Entity* toRemove)
 
 	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove), m_entities.end());
 	toRemove->Destroy();
+	m_onModifiedEntities.Invoke();
 }
 
 void Scene::RemoveEntity(const std::string& name)
 {
 	//TODO: Do this
+	m_onModifiedEntities.Invoke();
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)

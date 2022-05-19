@@ -60,7 +60,7 @@ private:
     Inspector                m_inspector             {true, this, &m_assetSettingsDisplayer};
     GameDisplayer            m_gameDisplayer         {this};
     SceneDisplayer           m_sceneDisplayer        {};
-    CellSystemDisplayer      m_cellSystemDisplayer   {};
+    CellSystemDisplayer      m_cellSystemDisplayer   {this};
     HierarchyDisplayer       m_hierarchyDisplayer    {true, this};
     PreferencesDisplayer     m_preferencesDisplayer  {false};
     ProjectSettingsDisplayer m_projSettingsDisplayer {false};
@@ -102,7 +102,8 @@ public:
 
     void FocusCallback(GLFWwindow* window, int focused);
     void FocusEntity(Entity* entity);
-
+    void RefreshHierarchy() { m_hierarchyDisplayer.Refresh(); }
+    HierarchyDisplayer* GetHierarchy() { return &m_hierarchyDisplayer; }
     InputManager* inputs;
     InputManager::InputContext* m_editorContext;
 

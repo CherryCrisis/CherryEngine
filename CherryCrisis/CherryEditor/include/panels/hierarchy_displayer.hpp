@@ -13,6 +13,17 @@ class Transform;
 class HierarchyDisplayer : public Panel
 {
 private:
+	class HierarchyNode 
+	{
+	public:
+		Entity* m_entity = nullptr;
+		Transform* m_entityTransform = nullptr;
+		bool m_isRoot = false;
+		std::string m_name = "";
+		
+		std::vector<HierarchyNode> m_childrens;
+	};
+
 	EditorManager* m_manager = nullptr;
 	CellSystemDisplayer* m_cellSystemDisplayer = nullptr;
 
@@ -23,11 +34,17 @@ private:
 
 	ImGuiIO* IO = nullptr;
 
+	std::vector<HierarchyNode> m_nodes;
 public:
 	void Render() override;
 	void ContextCallback() override;
 
+	void Refresh();
+
+	////!!Deprecated!!////////////////////////////////
 	bool RenderEntity(Entity* entity, Transform* transform = nullptr);
+	/// //////////////////////////////////////////////
+	bool RenderEntity(HierarchyNode node);
 
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr);
 };
