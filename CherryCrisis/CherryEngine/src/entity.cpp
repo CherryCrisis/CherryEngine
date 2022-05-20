@@ -67,27 +67,27 @@ void Entity::Update()
 
 void Entity::OnCollisionEnter(Entity* other)
 {
-	m_OnCollisionEnter.Invoke();
+	m_OnCollisionEnter.Invoke(std::forward<Entity*>(other));
 }
 
 void Entity::OnCollisionStay(Entity* other)
 {
-	m_OnCollisionStay.Invoke();
+	m_OnCollisionStay.Invoke(std::forward<Entity*>(other));
 }
 
 void Entity::OnCollisionExit(Entity* other)
 {
-	m_OnCollisionExit.Invoke();
+	m_OnCollisionExit.Invoke(std::forward<Entity*>(other));
 }
 
 void Entity::OnTriggerEnter(Entity* other)
 {
-	m_OnTriggerEnter.Invoke();
+	m_OnTriggerEnter.Invoke(std::forward<Entity*>(other));
 }
 
 void Entity::OnTriggerExit(Entity* other)
 {
-	m_OnTriggerExit.Invoke();
+	m_OnTriggerExit.Invoke(std::forward<Entity*>(other));
 }
 
 void Entity::Destroy()

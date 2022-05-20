@@ -38,5 +38,25 @@ namespace CCScripting
 			if (InputManager.GetKey(Keycode.R))
 				SceneManager.LoadScene("Assets/Empty.ccscene");
 		}
+
+		public void OnCollisionEnter(Entity other)
+        {
+			Debug.GetInstance().Info($"{other}, in");
+        }
+
+		public void OnCollisionStay(Entity other)
+		{
+			Debug.GetInstance().Info($"{other}, stay");
+		}
+
+		public void OnCollisionExit(Entity other)
+		{
+			Debug.GetInstance().Info($"{other}, out");
+		}
+
+		public void OnTriggerEnter(Entity other)
+		{
+			Debug.GetInstance().Info($"{other}, in");
+		}
 	}
 }

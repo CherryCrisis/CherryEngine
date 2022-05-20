@@ -76,7 +76,7 @@ void HierarchyDisplayer::Render()
 
         for (auto& node : m_nodes) 
         {
-            if (!node.m_isRoot)
+            if (!node.m_isRoot && node.m_entityTransform)
                 continue;
 
             if (RenderEntity(node))
@@ -582,6 +582,9 @@ void HierarchyDisplayer::Refresh()
 
     for (auto& node : m_nodes) 
     {
+        if (!node.m_entityTransform)
+            continue;
+
         auto children = node.m_entityTransform->GetChildren();
         for (const auto& child : *children)
         {

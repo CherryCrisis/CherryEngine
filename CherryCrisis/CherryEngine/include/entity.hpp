@@ -71,11 +71,11 @@ public:
 	Event<Cell*> m_OnCellAdded;
 	Event<Cell*> m_OnCellRemoved;
 
-	Event<> m_OnCollisionEnter;
-	Event<> m_OnCollisionStay;
-	Event<> m_OnCollisionExit;
-	Event<> m_OnTriggerEnter;
-	Event<> m_OnTriggerExit;
+	Event<Entity*> m_OnCollisionEnter;
+	Event<Entity*> m_OnCollisionStay;
+	Event<Entity*> m_OnCollisionExit;
+	Event<Entity*> m_OnTriggerEnter;
+	Event<Entity*> m_OnTriggerExit;
 
 	void Initialize();
 

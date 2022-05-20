@@ -19,9 +19,11 @@
 
 ScriptedBehaviour::ScriptedBehaviour()
 {
-	// TODO: Change path
 	m_scriptingAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
 	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", false, "InterfaceDomain", false);
+
+	m_behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
+	m_entityClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Entity");
 
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
@@ -34,9 +36,11 @@ ScriptedBehaviour::ScriptedBehaviour()
 
 ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 {
-	// TODO: Change path
 	m_scriptingAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", false, "ScriptingDomain", true);
 	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", false, "InterfaceDomain", false);
+
+	m_behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
+	m_entityClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Entity");
 
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
@@ -68,6 +72,12 @@ void ScriptedBehaviour::BindToSignals()
 	if (!m_managedInstance)
 		return;
 
+	if (m_linked)
+		SetSignals();
+}
+
+void ScriptedBehaviour::SetSignals()
+{
 	if (m_managedUpdate)
 		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
 
@@ -77,11 +87,20 @@ void ScriptedBehaviour::BindToSignals()
 	if (m_managedAwake)
 		GetHost().m_OnAwake.Bind(&ScriptedBehaviour::Awake, this);
 
-	GetHost().m_OnCollisionEnter.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
-	GetHost().m_OnCollisionStay.Bind(&ScriptedBehaviour::OnCollisionStay, this);
-	GetHost().m_OnCollisionExit.Bind(&ScriptedBehaviour::OnCollisionExit, this);
-	GetHost().m_OnTriggerEnter.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
-	GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
+	if (m_managedCollideIn)
+		GetHost().m_OnCollisionEnter.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
+
+	if (m_managedCollideStay)
+		GetHost().m_OnCollisionStay.Bind(&ScriptedBehaviour::OnCollisionStay, this);
+
+	if (m_managedCollideOut)
+		GetHost().m_OnCollisionExit.Bind(&ScriptedBehaviour::OnCollisionExit, this);
+
+	if (m_managedTriggerIn)
+		GetHost().m_OnTriggerEnter.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
+
+	if (m_managedTriggerOut)
+		GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
 }
 
 void ScriptedBehaviour::OnSetOwner(Entity* newOwner)
@@ -105,9 +124,27 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 		csStart = m_managedStart->GetMemberUnmanagedThunk<void>();
 
 	if (m_managedAwake = m_managedClass->FindMethod("Awake"))
-		csAwake= m_managedAwake->GetMemberUnmanagedThunk<void>();
+		csAwake = m_managedAwake->GetMemberUnmanagedThunk<void>();
+
+	if (m_managedCollideIn = m_managedClass->FindMethod("OnCollisionEnter"))
+		csCollideIn = m_managedCollideIn->GetMemberUnmanagedThunk<void, MonoObject*>();
+
+	if (m_managedCollideStay = m_managedClass->FindMethod("OnCollisionStay"))
+		csCollideStay = m_managedCollideStay->GetMemberUnmanagedThunk<void, MonoObject*>();
+
+	if (m_managedCollideOut = m_managedClass->FindMethod("OnCollisionExit"))
+		csCollideOut = m_managedCollideOut->GetMemberUnmanagedThunk<void, MonoObject*>();
+
+	if (m_managedTriggerIn = m_managedClass->FindMethod("OnTriggerEnter"))
+		csTriggerIn = m_managedTriggerIn->GetMemberUnmanagedThunk<void, MonoObject*>();
+
+	if (m_managedTriggerOut = m_managedClass->FindMethod("OnTriggerExit"))
+		csTriggerOut = m_managedTriggerOut->GetMemberUnmanagedThunk<void, MonoObject*>();
 
 	m_managedInstance = m_managedClass->CreateUnmanagedInstance(this, false);
+
+	if (GetHostPtr())
+		SetSignals();
 
 	PopulateMetadatas();
 
@@ -124,8 +161,6 @@ void ScriptedBehaviour::PopulateMetadatas()
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
 	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);
 
-	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
-
 	const auto& fields = m_managedClass->Fields();
 
 	for (const auto& [fieldName, fieldRef] : fields)
@@ -133,7 +168,6 @@ void ScriptedBehaviour::PopulateMetadatas()
 		mono::ManagedType* fieldType = fieldRef->Type();
 
 		std::shared_ptr<CCProperty::IClearProperty> currentProperty;
-		std::string identifier;
 
 		if (fieldType->Equals(mono::ManagedType::GetInt32()))
 		{
@@ -155,7 +189,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 			continue;
 		}
 
-		auto name = fieldType->Name();
+		const std::string& name = fieldType->Name();
 
 		const std::string& fullName = fieldType->Name();
 
@@ -177,6 +211,8 @@ void ScriptedBehaviour::PopulateMetadatas()
 			if (!res || excep)
 				return;
 
+			std::string identifier;
+
 			if (fieldType->Equals("CCEngine.Vector3"))
 			{
 				CCMaths::Vector3* valPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
@@ -184,13 +220,12 @@ void ScriptedBehaviour::PopulateMetadatas()
 				m_metadatas.SetFieldFromPtr(fieldName.c_str(), valPtr);
 				continue;
 			}
-
 			else if (fieldType->Equals("CCEngine.Entity"))
 			{
 				currentProperty = std::make_shared<ReflectedManagedObjectField<Entity*>>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod);
 				continue;
 			}
-			else if (fieldType->InheritOf(behaviourClass))
+			else if (fieldType->InheritOf(m_behaviourClass))
 			{
 				std::string compName = fieldType->Name().substr(fieldType->Name().find_last_of('.') + 1);
 
@@ -268,34 +303,60 @@ void ScriptedBehaviour::Update()
 	csUpdate->Invoke(m_managedInstance->RawObject(), &excep);
 }
 
-void ScriptedBehaviour::OnCollisionEnter()
+void ScriptedBehaviour::OnCollisionEnter(Entity* other)
 {
-	//MonoException* excep = nullptr;
-	//csCollideIn->Invoke(managedInstance->RawObject(), &excep);
+	mono::ManagedObject* entityInstance = m_physicEntities[other] = m_entityClass->CreateUnmanagedInstance(other, false);
+
+	MonoException* excep = nullptr;
+	csCollideIn->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
 }
 
-void ScriptedBehaviour::OnCollisionStay()
+void ScriptedBehaviour::OnCollisionStay(Entity* other)
 {
-	//MonoException* excep = nullptr;
-	//csCollideStay->Invoke(managedInstance->RawObject(), &excep);
+	auto entityIt = m_physicEntities.find(other);
+	if (entityIt == m_physicEntities.end())
+		return;
+
+	mono::ManagedObject* entityInstance = entityIt->second;
+
+	MonoException* excep = nullptr;
+	csCollideStay->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
 }
 
-void ScriptedBehaviour::OnCollisionExit()
+void ScriptedBehaviour::OnCollisionExit(Entity* other)
 {
-	//MonoException* excep = nullptr;
-	//csCollideOut->Invoke(managedInstance->RawObject(), &excep);
+	auto entityIt = m_physicEntities.find(other);
+	if (entityIt == m_physicEntities.end())
+		return;
+
+	mono::ManagedObject* entityInstance = entityIt->second;
+
+	MonoException* excep = nullptr;
+	csCollideOut->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
+
+	m_physicEntities.erase(entityIt);
 }
 
-void ScriptedBehaviour::OnTriggerEnter()
+void ScriptedBehaviour::OnTriggerEnter(Entity* other)
 {
-	//MonoException* excep = nullptr;
-	//csTriggerIn->Invoke(managedInstance->RawObject(), &excep);
+	mono::ManagedObject* entityInstance = m_physicEntities[other] = m_entityClass->CreateUnmanagedInstance(other, false);
+
+	MonoException* excep = nullptr;
+	csTriggerIn->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
 }
 
-void ScriptedBehaviour::OnTriggerExit()
+void ScriptedBehaviour::OnTriggerExit(Entity* other)
 {
-	//MonoException* excep = nullptr;
-	//csTriggerOut->Invoke(managedInstance->RawObject(), &excep);
+	auto entityIt = m_physicEntities.find(other);
+	if (entityIt == m_physicEntities.end())
+		return;
+
+	mono::ManagedObject* entityInstance = entityIt->second;
+
+	MonoException* excep = nullptr;
+	csTriggerOut->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
+
+	m_physicEntities.erase(entityIt);
 }
 
 void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
