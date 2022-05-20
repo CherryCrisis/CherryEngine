@@ -50,53 +50,53 @@ public class InputManager : global::System.IDisposable {
     return ret;
   }
 
-  public bool GetKey(Keycode key) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKey__SWIG_0(swigCPtr, (int)key);
+  public static bool GetKey(Keycode key) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKey__SWIG_0((int)key);
     return ret;
   }
 
-  public bool GetKeyDown(Keycode key) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown__SWIG_0(swigCPtr, (int)key);
+  public static bool GetKeyDown(Keycode key) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown__SWIG_0((int)key);
     return ret;
   }
 
-  public bool GetKeyUp(Keycode key) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp__SWIG_0(swigCPtr, (int)key);
+  public static bool GetKeyUp(Keycode key) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp__SWIG_0((int)key);
     return ret;
   }
 
-  public bool GetKey(string keyName) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKey__SWIG_1(swigCPtr, keyName);
+  public static bool GetKey(string keyName) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKey__SWIG_1(keyName);
     return ret;
   }
 
-  public bool GetKeyDown(string keyName) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown__SWIG_1(swigCPtr, keyName);
+  public static bool GetKeyDown(string keyName) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyDown__SWIG_1(keyName);
     return ret;
   }
 
-  public bool GetKeyUp(string keyName) {
-    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp__SWIG_1(swigCPtr, keyName);
+  public static bool GetKeyUp(string keyName) {
+    bool ret = CherryEnginePINVOKE.InputManager_GetKeyUp__SWIG_1(keyName);
     return ret;
   }
 
-  public float GetAxis(string axisName) {
-    float ret = CherryEnginePINVOKE.InputManager_GetAxis(swigCPtr, axisName);
+  public static float GetAxis(string axisName) {
+    float ret = CherryEnginePINVOKE.InputManager_GetAxis(axisName);
     return ret;
   }
 
-  public Vector2 GetMouseWheel() {
-    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMouseWheel(swigCPtr), true);
+  public static Vector2 GetMouseWheel() {
+    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMouseWheel(), true);
     return ret;
   }
 
-  public Vector2 GetMousePos() {
-    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMousePos(swigCPtr), true);
+  public static Vector2 GetMousePos() {
+    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMousePos(), true);
     return ret;
   }
 
-  public Vector2 GetMouseDelta() {
-    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMouseDelta(swigCPtr), true);
+  public static Vector2 GetMouseDelta() {
+    Vector2 ret = new Vector2(CherryEnginePINVOKE.InputManager_GetMouseDelta(), true);
     return ret;
   }
 

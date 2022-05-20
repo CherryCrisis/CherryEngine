@@ -49,6 +49,7 @@ ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 
 ScriptedBehaviour::~ScriptedBehaviour()
 {
+	GetHost().m_OnAwake.Unbind(&ScriptedBehaviour::Awake, this);
 	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
 

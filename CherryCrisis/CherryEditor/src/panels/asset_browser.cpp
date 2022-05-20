@@ -1040,5 +1040,4 @@ void AssetBrowser::ReloadScripts()
     std::string solutionPath = (m_assetsDirectory.parent_path() / "CherryScripting.sln").string();
     CsScriptingSystem::GetInstance()->InitializeHotReload(m_manager->GetCompilerPath().c_str(), solutionPath.c_str());
     m_manager->m_engine->m_OnStop.Unbind(&AssetBrowser::ReloadScripts, this);
-    QuerryBrowser();
 }

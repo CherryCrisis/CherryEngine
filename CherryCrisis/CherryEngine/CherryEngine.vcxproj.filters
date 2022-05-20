@@ -1483,6 +1483,9 @@
     <None Include="..\x64\Debug\Assets\Shaders\colliderShader.frag">
       <Filter>Fichiers de ressources</Filter>
     </None>
+    <None Include="interface\scene_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">

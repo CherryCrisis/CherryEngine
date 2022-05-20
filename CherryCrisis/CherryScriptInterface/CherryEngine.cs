@@ -89,6 +89,11 @@ public class CherryEngine {
     return ret;
   }
 
+  public static float Round(double value) {
+    float ret = CherryEnginePINVOKE.Round(value);
+    return ret;
+  }
+
 }
 
 }

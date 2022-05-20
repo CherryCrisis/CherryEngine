@@ -27,11 +27,11 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	std::shared_ptr<class CsAssembly>	m_scriptingAssembly;
 	std::shared_ptr<class CsAssembly>	m_interfaceAssembly;
-	mono::ManagedObject*				m_managedInstance;
-	mono::ManagedClass*					m_managedClass;
-	mono::ManagedMethod*				m_managedUpdate;
-	mono::ManagedMethod*				m_managedAwake;
-	mono::ManagedMethod*				m_managedStart;
+	mono::ManagedObject*				m_managedInstance = nullptr;
+	mono::ManagedClass*					m_managedClass = nullptr;
+	mono::ManagedMethod*				m_managedUpdate = nullptr;
+	mono::ManagedMethod*				m_managedAwake = nullptr;
+	mono::ManagedMethod*				m_managedStart = nullptr;
 
 	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
 	mono::ManagedThunk<void, struct _MonoObject*>* csAwake;

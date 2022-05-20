@@ -2,10 +2,14 @@
 
 #pragma warning( disable : 4251 )
 
-#ifdef CCENGINE_EXPORTS
-#define CCENGINE_API __declspec(dllexport)
+#ifdef SWIG
+	#define CCENGINE_API
 #else
-#define CCENGINE_API __declspec(dllimport)
+	#ifdef CCENGINE_EXPORTS
+		#define CCENGINE_API __declspec(dllexport)
+	#else
+		#define CCENGINE_API __declspec(dllimport)
+	#endif
 #endif
 
 #ifdef CCSCRIPT_EXPORTS
