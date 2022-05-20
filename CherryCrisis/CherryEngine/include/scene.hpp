@@ -48,6 +48,8 @@ public:
 
 	static void Load(std::shared_ptr<Scene> scene);
 	
+
+	void CopyEntity(Entity* toCopy);
 	void AddEntity(Entity* toAdd);
 	void RemoveEntity(Entity* toRemove);
 	void RemoveEntity(const std::string& name);

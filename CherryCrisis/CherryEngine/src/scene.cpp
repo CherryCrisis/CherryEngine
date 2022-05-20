@@ -342,3 +342,9 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 	toCell->AddEntity(entity);
 	entity->m_OnCellAdded.Invoke(&*toCell);
 }
+
+void Scene::CopyEntity(Entity* toCopy) 
+{
+	Entity* entity = new Entity(toCopy);
+	AddEntity(entity);
+}

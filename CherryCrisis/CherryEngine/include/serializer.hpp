@@ -9,9 +9,9 @@ class UIItem;
 class CCENGINE_API Serializer
 {
 private:
-	static Behaviour* CreateBehaviour(const std::string& type, uint32_t uuid);
 	static UIItem* CreateUIItem(const std::string& type, uint32_t uuid);
 public:	
+	static Behaviour* CreateBehaviour(const std::string& type, uint32_t uuid);
 	// Save scene
 	static bool SerializeScene(Scene* scene, const char* filepath ="");
 	// Load scene

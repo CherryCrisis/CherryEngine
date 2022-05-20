@@ -76,7 +76,7 @@ void HierarchyDisplayer::Render()
 
         for (auto& node : m_nodes) 
         {
-            if (!node.m_isRoot)
+            if (!node.m_isRoot && node.m_entityTransform)
                 continue;
 
             if (RenderEntity(node))
@@ -115,8 +115,8 @@ void HierarchyDisplayer::Render()
                     for (Entity* entity : m_manager->m_entitySelector.m_entities) 
                     {
                         SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-                        Refresh();
                     }
+                    Refresh();
 
                     m_manager->m_entitySelector.Clear();
 
@@ -545,13 +545,20 @@ void HierarchyDisplayer::ContextCallback()
                 for (auto& entity : m_manager->m_entitySelector.m_entities)
                 {
                     SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-                    Refresh();
                 }
+                Refresh();
                 //To Change
                 m_manager->m_entitySelector.Clear();
             }
 
-            if (ImGui::MenuItem("Copy")) {}
+            if (ImGui::MenuItem("Copy")) 
+            {
+                for (auto& entity : m_manager->m_entitySelector.m_entities)
+                {
+                    SceneManager::GetInstance()->m_currentScene->CopyEntity(entity);
+                }
+                Refresh();
+            }
 
             ImGui::Separator();
         }
@@ -582,6 +589,9 @@ void HierarchyDisplayer::Refresh()
 
     for (auto& node : m_nodes) 
     {
+        if (!node.m_entityTransform)
+            continue;
+        
         auto children = node.m_entityTransform->GetChildren();
         for (const auto& child : *children)
         {

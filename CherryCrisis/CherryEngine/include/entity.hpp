@@ -30,6 +30,7 @@ public:
 	Cell* m_cell = nullptr;
 
 	Entity(const std::string& name, Cell* cell, CCUUID uuid = {});
+	Entity(Entity* entity);
 	virtual ~Entity();
 
 	template <BehaviourT CompT>

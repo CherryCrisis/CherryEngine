@@ -19,6 +19,26 @@ Entity::Entity(const std::string& name, Cell* cell, CCUUID id)
 	cell->AddEntity(this);
 }
 
+Entity::Entity(Entity* entity) 
+{
+	m_name = entity->GetName();
+	entity->m_cell->AddEntity(this);
+	//Copy behaviours
+	std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
+	for (const auto& behaviour : behaviours) 
+	{
+		std::string name = String::ExtractLastValue(typeid(*behaviour).name(), ' ');
+		Behaviour* behaviourCopy = Serializer::CreateBehaviour(name, {});
+		
+		if (behaviourCopy) 
+		{
+			behaviourCopy->SetHostPtr(this);
+			behaviourCopy->Copy(behaviour);
+		}
+	}
+
+
+}
 Entity::~Entity()
 {
 	for (auto& [type, behaviour] : m_behaviours)

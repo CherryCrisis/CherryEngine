@@ -37,6 +37,8 @@ public:
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
+	
+	virtual void Copy(Behaviour* copy) {}
 
 	Entity& GetHost() { return *m_owner; }
 	const Entity& GetHost() const { return *m_owner; }
