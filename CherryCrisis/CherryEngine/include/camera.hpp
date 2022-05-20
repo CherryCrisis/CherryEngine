@@ -17,6 +17,10 @@ private:
 
 	EType m_type = EType::PERSPECTIVE;
 
+	float m_aspect = 4.f / 3.f;
+	float m_near = 0.01f;
+	float m_far = 1500.f;
+	float m_fovY = CCMaths::PI / 3.f;
 	float m_width = 1920.f;
 	float m_height = 1080.f;
 
@@ -28,16 +32,15 @@ private:
 
 	void UpdatePerspective();
 	void UpdateViewMatrix();
-public :
 
-	//Do not set manually ! just to serialize
-	float m_aspect = 4.f / 3.f;
-	//Do not set manually ! just to serialize
-	float m_near = 0.01f;
-	//Do not set manually ! just to serialize
-	float m_far = 1500.f;
-	//Do not set manually ! just to serialize
-	float m_fovY = CCMaths::PI / 3.f;
+public :
+	~Camera() {};
+
+	//To serialize
+	const float* GetAspectPtr() { return &m_aspect; }
+	const float* GetNearPtr() { return &m_near; }
+	const float* GetFarPtr() { return &m_far; }
+	const float* GetFovYPtr() { return &m_fovY; }
 
 	EType GetType() const { return m_type; }
 	void SetType(EType type);

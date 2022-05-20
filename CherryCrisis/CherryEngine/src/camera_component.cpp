@@ -64,11 +64,10 @@ void CameraComponent::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	//TODO: make metada in Camera !
-	m_metadatas.SetField("aspect", m_camera.m_aspect);
-	m_metadatas.SetField("near", m_camera.m_near);
-	m_metadatas.SetField("far", m_camera.m_far);
-	m_metadatas.SetField("fovY", m_camera.m_fovY);
+	m_metadatas.SetField("aspect", *const_cast<float*>(m_camera.GetAspectPtr()));
+	m_metadatas.SetField("near", *const_cast<float*>(m_camera.GetNearPtr()));
+	m_metadatas.SetField("far", *const_cast<float*>(m_camera.GetFarPtr()));
+	m_metadatas.SetField("fovY", *const_cast<float*>(m_camera.GetFovYPtr()));
 	m_metadatas.SetField<Object*>("transform", m_transform);
 }
 

@@ -5,11 +5,13 @@
 
 Framebuffer::~Framebuffer()
 {
-	glDeleteBuffers(1, &FBO);
-	glDeleteFramebuffers(1, &FBO);
-	glDeleteRenderbuffers(1, &RBO);
-	glDeleteBuffers(1, &colorTex.texID);
-	glDeleteBuffers(1, &brightnessTex.texID);
+    if (isInit)
+    {
+       glDeleteTextures(1, &colorTex.texID);
+       glDeleteTextures(1, &brightnessTex.texID);
+       glDeleteRenderbuffers(1, &RBO);
+       glDeleteFramebuffers(1, &FBO);
+    }
 }
 
 void Framebuffer::Init(float _width, float _height)
@@ -47,8 +49,8 @@ void Framebuffer::Init(float _width, float _height)
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RBO);
 
     glBindTexture(GL_TEXTURE_2D, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     isInit = true;
 }

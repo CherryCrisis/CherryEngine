@@ -87,12 +87,12 @@ void MixedPipeline::Execute(Viewer* viewer)
 	//	m_hdrPass->CallOnExecute(viewer->framebuffer);
 	
 	m_colliderPass->CallOnExecute(viewer);
-
+	
 	m_skyboxPass->CallOnExecute(viewer);
 	m_skydomePass->CallOnExecute(viewer);
 	
 	m_guizmoPass->CallOnExecute(viewer);
-
+	
 	m_uiPass->CallOnExecute(viewer);
 	m_uiTextPass->CallOnExecute(viewer);
 	//m_postprocessPass->CallOnExecute(viewer->framebuffer);

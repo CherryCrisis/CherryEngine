@@ -15,9 +15,6 @@ ShadowRenderPass::GPUShadowLight::~GPUShadowLight()
 {
 	if (depthTexID)
 		glDeleteTextures(1, &depthTexID);
-
-	if (framebuffer.FBO)
-		glDeleteFramebuffers(1, &framebuffer.FBO);
 }
 
 ShadowRenderPass::ShadowRenderPass(const char* name)

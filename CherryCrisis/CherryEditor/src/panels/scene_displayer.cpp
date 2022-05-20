@@ -152,6 +152,7 @@ void SceneDisplayer::Render()
 
         EntitySelector& selector = m_manager->m_entitySelector;
 
+
         if (InputManager::GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
             && !ImGuizmo::IsOver())
         {
@@ -162,6 +163,7 @@ void SceneDisplayer::Render()
             CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y) };
             Entity* pickedEntity = Pickinger::GetEntity(mousebufferPos);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
             if (pickedEntity)
             {
@@ -180,6 +182,7 @@ void SceneDisplayer::Render()
             else
                 selector.Clear();
         }
+
 
         m_isActive = !ImGui::IsWindowCollapsed();
 

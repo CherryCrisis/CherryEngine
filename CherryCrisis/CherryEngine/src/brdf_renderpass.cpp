@@ -94,7 +94,7 @@ void BRDFRenderPass::GenerateBRDF()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	//glDeleteFramebuffers(1, &FBO);
-	//glDeleteRenderbuffers(1, &RBO);
+	glDeleteRenderbuffers(1, &RBO);
+	glDeleteFramebuffers(1, &FBO);
 
 }

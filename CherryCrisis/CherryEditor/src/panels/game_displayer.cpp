@@ -60,18 +60,24 @@ void GameDisplayer::Render()
             }
         }
 
-        Camera* mainCamera = &CameraComponent::GetMainCamera()->m_camera;
-        uint64_t viewTex;
-
-        if (m_isActive && mainCamera)
+        CameraComponent* camComp = CameraComponent::GetMainCamera();
+        if (camComp)
         {
-            mainCamera->SetSize({ wsize.x, wsize.y });
-            mainCamera->Draw(1);
-            
-            viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
+            Camera* mainCamera = &camComp->m_camera;
+
+            uint64_t viewTex;
+
+            if (m_isActive && mainCamera)
+            {
+                mainCamera->SetSize({ wsize.x, wsize.y });
+                mainCamera->Draw(1);
+
+                viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
+            }
+
+            ImGui::Image((ImTextureID)viewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
         }
 
-        ImGui::Image((ImTextureID)viewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::EndChild();
     }
      

@@ -31,13 +31,16 @@ void UIEditor::Render()
 	{
         m_isActive = !ImGui::IsWindowCollapsed();
 
-        uint64_t viewTex;
-        Camera* mainCamera = &CameraComponent::GetMainCamera()->m_camera;
+        uint64_t viewTex = 0u;
 
-        if (mainCamera)
+        Camera* mainCamera = nullptr;
+        if (CameraComponent* cameraComp = CameraComponent::GetMainCamera())
         {
-            // Splits window into 3 panels : left is UI Items list, middle if main camera feedback with UI and right is item inspector
-            viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
+            if (mainCamera = &cameraComp->m_camera)
+            {
+                // Splits window into 3 panels : left is UI Items list, middle if main camera feedback with UI and right is item inspector
+                viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
+            }
         }
 
         UIContext& context = SceneManager::GetInstance()->m_currentScene->m_UIContext;
@@ -107,9 +110,10 @@ void UIEditor::Render()
             {
                 mainCamera->SetSize({ wsize.x, wsize.y });
                 mainCamera->Draw(1);
+
+                ImGui::Image((ImTextureID)viewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
             }
 
-            ImGui::Image((ImTextureID)viewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
             
             if (ImGui::BeginDragDropTarget())
             {

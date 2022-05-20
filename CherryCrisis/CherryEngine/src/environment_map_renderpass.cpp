@@ -146,8 +146,8 @@ void EnvironmentMapRenderPass::GenerateEnvironmentMap()
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		
-		glDeleteFramebuffers(1, &FBO);
 		glDeleteRenderbuffers(1, &RBO);
+		glDeleteFramebuffers(1, &FBO);
 	}
 }
 
