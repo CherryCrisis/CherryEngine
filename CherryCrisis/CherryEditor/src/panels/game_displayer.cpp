@@ -42,7 +42,8 @@ void GameDisplayer::Render()
             if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK)
                 && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
                 && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + m_framebuffer.colorTex.width
-                && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + m_framebuffer.colorTex.height)
+                && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + m_framebuffer.colorTex.height
+                && CameraComponent::GetMainCamera())
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
                 Pickinger::SetBuffer(&m_framebuffer, &CameraComponent::GetMainCamera()->m_camera);

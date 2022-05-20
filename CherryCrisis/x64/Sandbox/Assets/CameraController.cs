@@ -34,9 +34,6 @@ namespace CCScripting
 			angle = Math.Min(Math.Max(angle, -Math.PI * 0.4f), Math.PI * 0.4f);
 
 			transform.eulerAngles = new Vector3((float)angle, transform.eulerAngles.y, transform.eulerAngles.z);
-
-			if (InputManager.GetKey(Keycode.R))
-				SceneManager.ChangeScene("Empty2.ccscene");
 		}
 	}
 }

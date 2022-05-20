@@ -10,7 +10,7 @@ namespace CCScripting
 
         public void OnClick() 
         {
-            Debug.GetInstance().Log(ELogType.INFO, "Button Reacted from csharp !"); 
+            SceneManager.ChangeScene("Empty2.ccscene");
         }
     }
 }

@@ -83,5 +83,6 @@ _MonoObject* ButtonBehaviour::GetRawInstance()
 void ButtonBehaviour::OnClick() 
 {
 	MonoException* excep = nullptr;
-	csOnClick->Invoke(managedInstance->RawObject(), &excep);
+	if (csOnClick)
+		csOnClick->Invoke(managedInstance->RawObject(), &excep);
 }

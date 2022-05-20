@@ -207,6 +207,18 @@ void UIEditor::InspectSelectedItem()
             if (valPtr && ImGui::InputText(metaname.c_str(), &(*valPtr)[0], valPtr->size() + 1))
                 metadata->Set(valPtr);
 
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                {
+                    const char* data = (const char*)payload->Data;
+                    std::string strData = data;
+                    metadata->Set(&strData);
+                }
+
+                ImGui::EndDragDropTarget();
+            }
+
             continue;
         }
 
@@ -220,7 +232,7 @@ void UIEditor::InspectSelectedItem()
 
             if (ImGui::BeginDragDropTarget())
             {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
                 {
                     Entity* m_draggedObject = (Entity*)payload->Data;
                     metadata->Set(&m_draggedObject);
@@ -245,7 +257,7 @@ void UIEditor::InspectSelectedItem()
 
             if (ImGui::BeginDragDropTarget())
             {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DROP"))
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
                 {
                     Entity* draggedObject = (Entity*)payload->Data;
                     *valPtr = draggedObject->GetBehaviour(metadata->m_identifier);
