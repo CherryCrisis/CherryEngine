@@ -18,6 +18,10 @@ struct Portal : public Viewer, public ARenderer
 	CCMaths::Matrix4 m_modelMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_viewLinkedPortal = CCMaths::Matrix4::Identity;
 
+	float m_near = 0.01f;
+	float m_far = 1500.f;
+	float m_fovY = CCMaths::PI / 3.f;
+
 	void Link(Portal* toLinkTo);
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;

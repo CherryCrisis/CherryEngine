@@ -5,27 +5,30 @@
 
 using namespace CCMaths;
 
-FrustumPlanes FrustumPlanes::Create(const Camera& camera, float fovY, float aspect, float near, float far)
+FrustumPlanes FrustumPlanes::Create(const CCMaths::Matrix4& viewMatrix, float fovY, float aspect, float near, float far)
 {
-    FrustumPlanes frustumPlanes;
+    CCMaths::Matrix4 viewMatrixInverse = viewMatrix.Inverse();
+	return CreateFromInverse(viewMatrixInverse, fovY, aspect, near, far);
+}
 
-    Vector3 position = camera.GetPosition();
-    CCMaths::Matrix4 view = Matrix4::RotateYXZ(camera.GetRotation());
+FrustumPlanes FrustumPlanes::CreateFromInverse(const CCMaths::Matrix4& viewMatrixInverse, float fovY, float aspect, float near, float far)
+{
+	FrustumPlanes frustumPlanes;
 
-    Vector3 up = view.up;
-    Vector3 right = view.right;
-    Vector3 forward = -view.back;
+	Vector3 up = viewMatrixInverse.up;
+	Vector3 right = viewMatrixInverse.right;
+	Vector3 forward = -viewMatrixInverse.back;
 
-    const float halfVSide = far * CCMaths::Tan(fovY * 0.5f);
-    const float halfHSide = halfVSide * aspect;
-    const CCMaths::Vector3 frontMultFar = forward * far;
+	const float halfVSide = far * CCMaths::Tan(fovY * 0.5f);
+	const float halfHSide = halfVSide * aspect;
+	const CCMaths::Vector3 frontMultFar = forward * far;
 
-    frustumPlanes.nearFace = { position + forward * near, forward};
-    frustumPlanes.farFace = { position + frontMultFar, -forward };
-    frustumPlanes.rightFace = { position, Vector3::Cross(up, frontMultFar + right * halfHSide) };
-    frustumPlanes.leftFace = { position, Vector3::Cross(frontMultFar - right * halfHSide, up) };
-    frustumPlanes.topFace = { position, Vector3::Cross(right, frontMultFar - up * halfVSide) };
-    frustumPlanes.bottomFace = { position, Vector3::Cross(frontMultFar + up * halfVSide, right) };
+	frustumPlanes.nearFace = { viewMatrixInverse.position + forward * near, forward };
+	frustumPlanes.farFace = { viewMatrixInverse.position + frontMultFar, -forward };
+	frustumPlanes.rightFace = { viewMatrixInverse.position, Vector3::Cross(up, frontMultFar + right * halfHSide) };
+	frustumPlanes.leftFace = { viewMatrixInverse.position, Vector3::Cross(frontMultFar - right * halfHSide, up) };
+	frustumPlanes.topFace = { viewMatrixInverse.position, Vector3::Cross(right, frontMultFar - up * halfVSide) };
+	frustumPlanes.bottomFace = { viewMatrixInverse.position, Vector3::Cross(frontMultFar + up * halfVSide, right) };
 
 	return frustumPlanes;
 }

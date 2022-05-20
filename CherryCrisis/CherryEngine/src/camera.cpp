@@ -7,13 +7,13 @@ using namespace CCMaths;
 void Camera::UpdatePerspective()
 {
     m_projectionMatrix = Matrix4::Perspective(m_fovY, m_aspect, m_near, m_far);
-    m_frustumPlanes = FrustumPlanes::Create(*this, m_fovY, m_aspect, m_near, m_far);
+    m_frustumPlanes = FrustumPlanes::Create(m_viewMatrix, m_fovY, m_aspect, m_near, m_far);
 }
 
 void Camera::UpdateViewMatrix()
 {
     m_viewMatrix = Matrix4::RotateXYZ(-m_rotation) * Matrix4::Translate(-m_position);
-    m_frustumPlanes = FrustumPlanes::Create(*this, m_fovY, m_aspect, m_near, m_far);
+    m_frustumPlanes = FrustumPlanes::Create(m_viewMatrix, m_fovY, m_aspect, m_near, m_far);
 }
 
 void Camera::SetType(EType type)
