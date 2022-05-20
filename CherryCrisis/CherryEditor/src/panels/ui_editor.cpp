@@ -101,18 +101,21 @@ void UIEditor::Render()
                 }
             }
 
-            if (m_isActive && cam)
+            if (m_isActive && cam) 
+            {
                 UpdateFramebuffer(wsize.x, wsize.y, *cam);
 
-            ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
-            
-            if (ImGui::BeginDragDropTarget())
-            {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UI_EDITOR_ITEM_TEMPLATE"))
-                    context.AddItemByType(*((EItemUI*)payload->Data));
+                ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
 
-                ImGui::EndDragDropTarget();
+                if (ImGui::BeginDragDropTarget())
+                {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UI_EDITOR_ITEM_TEMPLATE"))
+                        context.AddItemByType(*((EItemUI*)payload->Data));
+
+                    ImGui::EndDragDropTarget();
+                }
             }
+           
             ImGui::TableSetColumnIndex(2);
 
             // loop on every fields of the selected UI

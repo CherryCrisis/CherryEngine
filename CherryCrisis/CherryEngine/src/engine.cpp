@@ -17,6 +17,8 @@
 #include "pickinger.hpp"
 
 void* Engine::window_handle = nullptr;
+bool Engine::isPaused       = false;
+bool Engine::isPlaying      = false;
 
 Engine::Engine() 
 {
@@ -66,7 +68,7 @@ void Engine::Tick()
 
 void Engine::Launch(bool flipScene) 
 {
-	m_isPlaying = true;
+	isPlaying = true;
 	
 	if (flipScene)
 		SceneManager::FlipScene();
@@ -76,8 +78,8 @@ void Engine::Launch(bool flipScene)
 
 void Engine::Stop()
 {
-	m_isPlaying = false;
-	m_isPaused = false;
+	isPlaying = false;
+	isPaused = false;
 	PhysicSystem::PhysicManager::GetInstance()->Stop();
 	SceneManager::ResetScene();
 	m_OnStop.Invoke();

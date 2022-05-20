@@ -298,7 +298,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
-		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+ 		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 
 	for (ShapeRenderer* shapeRdr : m_shapes)
@@ -361,7 +361,7 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!gpuMesh)
 			continue;
 
-		glBindVertexArray(gpuMesh->VAO);
+   		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 	}

@@ -30,7 +30,7 @@ void GameDisplayer::Render()
         ImGui::BeginChild("GameFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
 
-        if (m_manager->m_engine && m_manager->m_engine->m_isPlaying)
+        if (m_manager->m_engine && Engine::isPlaying)
         {
             CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
 
@@ -59,11 +59,14 @@ void GameDisplayer::Render()
 
         if (m_isActive && CameraComponent::GetMainCamera())
             if (Camera* cam = &CameraComponent::GetMainCamera()->m_camera)
+            {
                 UpdateFramebuffer(wsize.x, wsize.y, *cam);
 
-        uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
+                uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
 
-        ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+                ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+            }
+
         ImGui::EndChild();
     }
      

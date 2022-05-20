@@ -1,9 +1,11 @@
 #include "pch.hpp"
 
 #include "scene_manager.hpp"
-#include "resource_manager.hpp"
-#include "serializer.hpp"
 
+#include "resource_manager.hpp"
+#include "debug.hpp"
+
+#include "serializer.hpp"
 #include "utils.hpp"
 
 template <>
@@ -26,11 +28,21 @@ void SceneManager::Update()
 {
 	if (m_currentScene)
 		m_currentScene->Update();
+
+	if (m_lateChanged)
+		m_lateChanged->Invoke();
 }
 
 bool SceneManager::LoadScene(const char* filepath) 
 {
 	SceneManager* mng = GetInstance();
+	mng->hasSceneBeenChanged = true;
+	if (!std::filesystem::exists(filepath)) 
+	{
+		std::string errorMsg = filepath + std::string(" failed to load.");
+		Debug::GetInstance()->AddLog(ELogType::WARNING, errorMsg.c_str());
+		return LoadEmptyScene("Assets/EmptyScene.ccscene");
+	}	
 
 	mng->m_currentScene =  ResourceManager::GetInstance()->AddResource<Scene>(filepath, false);
 	mng->Initialize();
@@ -66,4 +78,29 @@ void SceneManager::FlipScene()
 {
 	SceneManager* mng = GetInstance();
 	mng->m_currentScene->SaveAs("Internal/temp");
+}
+
+// filepath starts at Assets/
+bool SceneManager::ChangeScene(const char* filepath) 
+{
+	std::string fullPath = "Assets/" + std::string(filepath);
+	// if engine is running bind to event else directly change scene
+
+	if (Engine::isPlaying || Engine::isPaused) 
+	{
+		currentInstance->m_lateChanged = CCFunction::BindFunction(&SceneManager::LateLoadScene, 
+			currentInstance, std::forward<std::string>(fullPath));
+
+		currentInstance->m_lateLoadString = fullPath;
+		return false;
+	}
+
+	return LoadScene(fullPath.c_str());
+}
+
+void SceneManager::LateLoadScene(std::string filepath) 
+{
+	LoadScene(filepath.c_str());
+	m_lateLoadString = "";
+	m_lateChanged.reset();
 }

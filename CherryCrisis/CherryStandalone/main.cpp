@@ -132,7 +132,7 @@ int main()
         }
 
         engine.TickEngine();
-        if (engine.m_isPlaying)
+        if (Engine::isPlaying)
             engine.Tick();
 
         glfwSwapBuffers(window);

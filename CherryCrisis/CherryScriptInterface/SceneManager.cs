@@ -44,8 +44,8 @@ public class SceneManager : global::System.IDisposable {
     }
   }
 
-  public static bool LoadScene(string filepath) {
-    bool ret = CherryEnginePINVOKE.SceneManager_LoadScene(filepath);
+  public static bool ChangeScene(string filepath) {
+    bool ret = CherryEnginePINVOKE.SceneManager_ChangeScene(filepath);
     return ret;
   }
 

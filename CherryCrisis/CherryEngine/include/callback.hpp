@@ -32,11 +32,18 @@ namespace CCCallback
 	class MemberCallback : public ACallback<Args...>
 	{
 	public:
+
+		std::unique_ptr<T> m_uniqueMember;
 		void (T::* m_func)(Args... type);
 		T* m_member;
 
 		MemberCallback(void (T::* func)(Args... type), T* c)
 			: m_func(func), m_member(c), ACallback<Args...>(typeid(func))
+		{
+		}
+
+		MemberCallback(void (T::* func)(Args... type), std::unique_ptr<T>& c)
+			: m_func(func), m_uniqueMember(std::move(c)), m_member(m_uniqueMember.get()), ACallback<Args...>(typeid(func))
 		{
 		}
 
@@ -100,6 +107,12 @@ namespace CCCallback
 
 	template<class T, class... Args>
 	std::shared_ptr<ACallback<Args...>> BindCallback(void (T::* func)(Args... type), T* member)
+	{
+		return std::make_shared<CCCallback::MemberCallback<T, Args...>>(func, member);
+	}
+
+	template<class T, class... Args>
+	std::shared_ptr<ACallback<Args...>> BindCallback(void (T::* func)(Args... type), std::unique_ptr<T>& member)
 	{
 		return std::make_shared<CCCallback::MemberCallback<T, Args...>>(func, member);
 	}

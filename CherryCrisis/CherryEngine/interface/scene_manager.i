@@ -10,5 +10,5 @@
 class SceneManager
 {
 public:
-	static bool LoadScene(const char* filepath);
+	static bool ChangeScene(const char* filepath);
 };

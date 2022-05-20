@@ -36,7 +36,7 @@ namespace CCScripting
 			transform.eulerAngles = new Vector3((float)angle, transform.eulerAngles.y, transform.eulerAngles.z);
 
 			if (InputManager.GetKey(Keycode.R))
-				SceneManager.LoadScene("Assets/Empty.ccscene");
+				SceneManager.ChangeScene("Empty2.ccscene");
 		}
 	}
 }

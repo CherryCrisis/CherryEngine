@@ -193,9 +193,6 @@ class CherryEnginePINVOKE {
   }
 
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetInstance")]
-  public static extern global::System.IntPtr InputManager_GetInstance();
-
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetKey__SWIG_0")]
   public static extern bool InputManager_GetKey__SWIG_0(int jarg1);
 
@@ -229,8 +226,8 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_InputManager")]
   public static extern void delete_InputManager(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_SceneManager_LoadScene")]
-  public static extern bool SceneManager_LoadScene(string jarg1);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_SceneManager_ChangeScene")]
+  public static extern bool SceneManager_ChangeScene(string jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_SceneManager")]
   public static extern void delete_SceneManager(global::System.Runtime.InteropServices.HandleRef jarg1);

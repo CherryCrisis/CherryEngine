@@ -1,0 +1,38 @@
+resources:
+  - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\nonEuclideanModel.obj
+cells:
+  1935981542:
+    name: Default
+    settings:
+      texturePath: Assets\skydome\Arches_3k.hdr
+    entities:
+      4018997700:
+        name: Camera
+components:
+  1718631394:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4018997700
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  2719313649:
+    type: AudioListener
+    IsActive: true
+    m_owner: 4018997700
+  3875403220:
+    type: CameraComponent
+    fovY: 1.04719758
+    near: 0.00999999978
+    IsActive: true
+    m_owner: 4018997700
+    aspect: 1.33333337
+    far: 1500
+    transform: 1718631394
+  1330188420:
+    type: ScriptedBehaviour
+    scriptName: CameraController
+    IsActive: true
+    m_owner: 4018997700

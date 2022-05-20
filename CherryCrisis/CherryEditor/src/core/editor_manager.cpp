@@ -50,8 +50,6 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_browser.SetPath(m_projectPath);
 
     Serializer::UnserializeEditor("editor.meta");
-
-    
 }
 
 void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
@@ -214,15 +212,14 @@ void EditorManager::HandleMenuBar()
         ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * .5f) - (size * .5f * 3.f));
 
         // Start or Stop game in editor
-        if (ImGui::ImageButton(m_engine->m_isPlaying ? (ImTextureID)m_gpuTextureIDs[3] : (ImTextureID)m_gpuTextureIDs[0], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
+        if (ImGui::ImageButton(Engine::isPlaying ? (ImTextureID)m_gpuTextureIDs[3] : (ImTextureID)m_gpuTextureIDs[0], ImVec2(size, size), { 0,0 }, { 1,1 }, -1))
         {
             // Stop game if playing
-            if (m_engine->m_isPlaying)
+            if (Engine::isPlaying)
             {
                 m_engine->Stop();
                 m_entitySelector.Clear();
-                m_gameDisplayer.Unfocus();
-                m_cellSystemDisplayer.InvalidatePointers();
+                 m_cellSystemDisplayer.InvalidatePointers();
 
             }
 
@@ -237,10 +234,10 @@ void EditorManager::HandleMenuBar()
         } ImGui::SameLine();
 
         // Pause game in editor
-        if (ImGui::ImageButton((ImTextureID)m_gpuTextureIDs[1], ImVec2(size, size), { 0,0 }, { 1,1 }, -1, m_engine->m_isPaused ? ImVec4(1.f, 1.f, 1.f, 0.3f) : ImVec4(0.f, 0.f, 0.f, 0.f)))
+        if (ImGui::ImageButton((ImTextureID)m_gpuTextureIDs[1], ImVec2(size, size), { 0,0 }, { 1,1 }, -1, Engine::isPaused ? ImVec4(1.f, 1.f, 1.f, 0.3f) : ImVec4(0.f, 0.f, 0.f, 0.f)))
         {
-            if (m_engine->m_isPlaying)
-                m_engine->m_isPaused = !m_engine->m_isPaused;
+            if (Engine::isPlaying)
+                Engine::isPaused = !Engine::isPaused;
 
         } ImGui::SameLine();
         
@@ -328,11 +325,11 @@ void EditorManager::UpdateFocusGame()
     if (!m_gameDisplayer.m_isFocused)
     {
         InputManager::PushContext("Editor Context");
-        if (m_gameDisplayer.m_isHovered && m_engine->m_isPlaying && InputManager::GetKeyDown(Keycode::LEFT_CLICK))
+        if (m_gameDisplayer.m_isHovered && Engine::isPlaying && InputManager::GetKeyDown(Keycode::LEFT_CLICK))
             m_gameDisplayer.Focus();
         InputManager::PopContext();
     }
-    else if (m_gameDisplayer.m_isFocused && m_engine->m_isPlaying)
+    else if (m_gameDisplayer.m_isFocused && Engine::isPlaying)
     {
         InputManager::PushContext("User Context");
 

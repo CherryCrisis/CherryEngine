@@ -809,16 +809,6 @@ void SwigDirector_Behaviour::swig_init_callbacks() {
 extern "C" {
 #endif
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetInstance() {
-  void * jresult ;
-  InputManager *result = 0 ;
-  
-  result = (InputManager *)InputManager::GetInstance();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
 SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_0(int jarg1) {
   unsigned int jresult ;
   Keycode arg1 ;
@@ -941,13 +931,13 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_InputManager(void * jarg1) {
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_SceneManager_LoadScene(char * jarg1) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_SceneManager_ChangeScene(char * jarg1) {
   unsigned int jresult ;
   char *arg1 = (char *) 0 ;
   bool result;
   
   arg1 = (char *)jarg1; 
-  result = (bool)SceneManager::LoadScene((char const *)arg1);
+  result = (bool)SceneManager::ChangeScene((char const *)arg1);
   jresult = result; 
   return jresult;
 }

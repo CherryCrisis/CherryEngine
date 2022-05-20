@@ -65,7 +65,13 @@ ScriptedBehaviour::~ScriptedBehaviour()
 
 void ScriptedBehaviour::BindToSignals() 
 {
-	if (!m_managedInstance)
+	GetHost().m_OnCollisionEnter.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
+	GetHost().m_OnCollisionStay.Bind(&ScriptedBehaviour::OnCollisionStay, this);
+	GetHost().m_OnCollisionExit.Bind(&ScriptedBehaviour::OnCollisionExit, this);
+	GetHost().m_OnTriggerEnter.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
+	GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
+
+	if (m_linked)
 		return;
 
 	if (m_managedUpdate)
@@ -76,12 +82,6 @@ void ScriptedBehaviour::BindToSignals()
 
 	if (m_managedAwake)
 		GetHost().m_OnAwake.Bind(&ScriptedBehaviour::Awake, this);
-
-	GetHost().m_OnCollisionEnter.Bind(&ScriptedBehaviour::OnCollisionEnter, this);
-	GetHost().m_OnCollisionStay.Bind(&ScriptedBehaviour::OnCollisionStay, this);
-	GetHost().m_OnCollisionExit.Bind(&ScriptedBehaviour::OnCollisionExit, this);
-	GetHost().m_OnTriggerEnter.Bind(&ScriptedBehaviour::OnTriggerEnter, this);
-	GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
 }
 
 void ScriptedBehaviour::OnSetOwner(Entity* newOwner)
@@ -109,7 +109,23 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 	m_managedInstance = m_managedClass->CreateUnmanagedInstance(this, false);
 
+	if (!m_managedInstance)
+		return;
+
 	PopulateMetadatas();
+	
+	if (!GetHostPtr())
+		return;
+
+	if (m_managedUpdate)
+		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
+
+	if (m_managedStart)
+		GetHost().m_OnStart.Bind(&ScriptedBehaviour::Start, this);
+
+	if (m_managedAwake)
+		GetHost().m_OnAwake.Bind(&ScriptedBehaviour::Awake, this);
+
 
 	m_linked = true;
 }

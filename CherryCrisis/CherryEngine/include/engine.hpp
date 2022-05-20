@@ -11,12 +11,11 @@ class CCENGINE_API Engine
 public:
 
 	static void* window_handle;
-
 	Engine();
 	~Engine();
 
-	bool m_isPlaying = false;
-	bool m_isPaused = false;
+	static bool isPlaying;
+	static bool isPaused;
 
 	void Launch(bool flipScene = true);
 

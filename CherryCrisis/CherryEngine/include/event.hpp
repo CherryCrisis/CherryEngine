@@ -8,6 +8,7 @@
 #include "callback.hpp"
 #include "function.hpp"
 
+
 template<class... Args>
 class Event
 {
@@ -16,7 +17,14 @@ private:
 
     struct ARequest
     {
-        bool m_toBind = false;
+        enum class ERequest
+        {
+            ADD,
+            REMOVE,
+            RESET,
+        };
+
+        ERequest m_requestType = ERequest::ADD;
         std::shared_ptr<CCCallback::ACallback<Args...>> m_callback;
     };
 
@@ -43,10 +51,9 @@ public:
     Event() = default;
     virtual ~Event() = default;
 
-
     void Bind(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
     {
-        m_queries.push_back(ARequest{ .m_toBind = true, .m_callback = callback });
+        m_queries.push_back(ARequest{ .m_requestType = ARequest::ERequest::ADD, .m_callback = callback });
     }
 
     template<typename T>
@@ -71,7 +78,7 @@ public:
             {
                 if (memberCallback->m_func == func && memberCallback->m_member == member)
                 {
-                    m_queries.push_back(ARequest{ .m_toBind = false, .m_callback = callback });
+                    m_queries.push_back(ARequest{ .m_requestType = ARequest::ERequest::REMOVE, .m_callback = callback });
 
                     return;
                 }
@@ -99,7 +106,7 @@ public:
             {
                 if (nonMemberCallback->m_func == func)
                 {
-                    m_queries.push_back(ARequest{ .m_toBind = false, .m_callback = callback });
+                    m_queries.push_back(ARequest{ .m_requestType = ARequest::ERequest::REMOVE, .m_callback = callback });
                     return;
                 }
             }
@@ -124,10 +131,18 @@ public:
         {
             auto& request = m_queries.front();
 
-            if (request.m_toBind)
-                AddToCallbacks(request.m_callback);
-            else
+            switch (request.m_requestType)
+            {
+            case ARequest::ERequest::REMOVE:
                 DeleteCallbacks(request.m_callback);
+                break;
+            case ARequest::ERequest::RESET:
+                m_callbacks.clear();
+                break;
+            default:
+                AddToCallbacks(request.m_callback);
+                break;
+            }
 
             m_queries.pop_front();
         }
@@ -141,6 +156,6 @@ public:
 
     void Reset()
     {
-        m_callbacks.clear();
+        m_queries.push_back(ARequest{ .m_requestType = ARequest::ERequest::RESET, .m_callback = nullptr });
     }
 };

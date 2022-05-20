@@ -6,6 +6,7 @@
 
 #include "resource_manager.hpp"
 #include "render_manager.hpp"
+#include "scene_manager.hpp"
 #include "debug.hpp"
 
 // TODO: Remove this
@@ -17,7 +18,6 @@
 #include "mesh.hpp"
 
 #include "serializer.hpp"
-
 std::string Scene::m_defaultCellName = "Default";
 
 Scene::Scene(const char* filePath)
@@ -45,8 +45,10 @@ void Scene::Initialize()
 
 void Scene::Update()
 {
- 	for (Entity* entity : m_entities)
+	for (Entity* entity : m_entities) 
+	{
 		entity->Update();
+	}
 }
 
 void Scene::AddEntity(Entity* toAdd)

@@ -44,12 +44,6 @@ public class InputManager : global::System.IDisposable {
     }
   }
 
-  public static InputManager GetInstance() {
-    global::System.IntPtr cPtr = CherryEnginePINVOKE.InputManager_GetInstance();
-    InputManager ret = (cPtr == global::System.IntPtr.Zero) ? null : new InputManager(cPtr, false);
-    return ret;
-  }
-
   public static bool GetKey(Keycode key) {
     bool ret = CherryEnginePINVOKE.InputManager_GetKey__SWIG_0((int)key);
     return ret;
