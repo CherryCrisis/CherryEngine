@@ -187,7 +187,16 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 		if (!modelRdr->m_isVisible)
 			continue;
 
+		Mesh* mesh = modelRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
+
+		if (!viewer->m_frustumPlanes.IsOnFrustum(modelMat, mesh->m_aabb))
+			continue;
+
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		if (Material* material = modelRdr->m_material.get())
@@ -202,10 +211,6 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 			BindTexture(material, ETextureType::NORMAL_MAP, 1);
 		}
 
-		Mesh* mesh = modelRdr->m_mesh.get();
-
-		if (!mesh)
-			continue;
 
 		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 

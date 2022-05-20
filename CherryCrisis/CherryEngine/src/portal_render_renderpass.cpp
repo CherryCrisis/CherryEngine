@@ -108,6 +108,10 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 		if (!gpuPortal)
 			continue;
+
+		if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
+			continue;
+
 		glBindTextureUnit(0, gpuPortal->framebuffer->colorTex.texID);
 
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, portal->m_modelMatrix.data);

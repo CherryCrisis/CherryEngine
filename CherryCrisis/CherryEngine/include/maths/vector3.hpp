@@ -484,9 +484,9 @@ namespace CCMaths
 		CCENGINE_API static const Vector3 XAxis;				//!< { x = 1, y = 0, z = 0 }
 		CCENGINE_API static const Vector3 YAxis;				//!< { x = 0, y = 1, z = 0 }
 		CCENGINE_API static const Vector3 ZAxis;				//!< { x = 0, y = 0, z = 1 }
-		CCENGINE_API static const Vector3 Forward;				//!< { x = 1, y = 0, z = 0 }
+		CCENGINE_API static const Vector3 Forward;				//!< { x = 0, y = 0, z = 1 }
 		CCENGINE_API static const Vector3 Up;					//!< { x = 0, y = 1, z = 0 }
-		CCENGINE_API static const Vector3 Right;				//!< { x = 0, y = 0, z = 1 }
+		CCENGINE_API static const Vector3 Right;				//!< { x = 1, y = 0, z = 0 }
 		CCENGINE_API static const Vector3 Zero;					//!< { x = 0, y = 0, z = 0 }
 		CCENGINE_API static const Vector3 One;					//!< { x = 1, y = 1, z = 1 }
 	};

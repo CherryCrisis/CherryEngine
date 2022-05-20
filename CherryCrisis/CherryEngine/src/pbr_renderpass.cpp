@@ -231,10 +231,11 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 		if (!mesh)
 			continue;
 
-		if (!viewer->m_frustumPlanes.IsOnFrustum(*modelRdr->m_transform, mesh->m_aabb))
+		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
+
+		if (!viewer->m_frustumPlanes.IsOnFrustum(modelMat, mesh->m_aabb))
 			continue;
 
-		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		if (Material* material = modelRdr->m_material.get())

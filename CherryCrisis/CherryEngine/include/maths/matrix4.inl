@@ -17,11 +17,12 @@ namespace CCMaths
 
 	inline Vector4 Matrix4::operator*(const Vector4& rhs) const
 	{
+		Matrix4 lhsT = Transpose(*this);
 		Vector4 out;
 
 		for (int i = 0; i < 4; ++i)
 		{
-			out.data[i] = Vector4::Dot(this->row[i], rhs);
+			out.data[i] = Vector4::Dot(lhsT.row[i], rhs);
 		}
 
 		return out;

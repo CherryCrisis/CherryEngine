@@ -45,5 +45,5 @@ struct FrustumPlanes
 	bool isOnOrForwardPlan(const Plane& plan, const AABB& aabb) const;
 
 	//AABB Only !
-	bool IsOnFrustum(Transform& transform, const AABB& aabb) const;
+	bool IsOnFrustum(const Matrix4& worldMatrix, const AABB& aabb) const;
 };

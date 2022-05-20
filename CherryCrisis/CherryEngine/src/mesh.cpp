@@ -206,6 +206,10 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
     std::vector<Vertex> vertices;
     vertices.reserve(4);
 
+    Vector3 min, max = 0;
+    min.z = -0.1f;
+    max.z = 0.1f;
+
     for (int i = 0; i < 4; i++)
     {
         int xPattern = !BoolPattern(i + 1, 2);
@@ -221,6 +225,12 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
         vertex.position.x = xSign * xHalfRes;
         vertex.position.y = ySign * yHalfRes;
 
+        min.x = CCMaths::Min(min.x, vertex.position.x);
+        min.y = CCMaths::Min(min.y, vertex.position.y);
+
+        max.x = CCMaths::Max(max.x, vertex.position.x);
+        max.y = CCMaths::Max(max.y, vertex.position.y);
+
         vertices.push_back(vertex);
     }
 
@@ -230,7 +240,7 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
     indices.push_back(0); indices.push_back(1); indices.push_back(2);
     indices.push_back(2); indices.push_back(3); indices.push_back(0);
 
-    Load(mesh, vertices, indices);
+    Load(mesh, vertices, indices, { min, max });
 }
 
 void Mesh::ClearData()

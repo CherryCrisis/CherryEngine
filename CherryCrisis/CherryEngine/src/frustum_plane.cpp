@@ -10,10 +10,9 @@ FrustumPlanes FrustumPlanes::Create(const Camera& camera, float fovY, float aspe
     FrustumPlanes frustumPlanes;
 
     Vector3 position = camera.GetPosition();
-    Vector3 rotation = camera.GetRotation();
-    CCMaths::Matrix4 view = Matrix4::RotateYXZ(rotation);
+    CCMaths::Matrix4 view = Matrix4::RotateYXZ(camera.GetRotation());
 
-    Vector3 up = Vector3::Up;
+    Vector3 up = view.up;
     Vector3 right = view.right;
     Vector3 forward = -view.back;
 
@@ -40,29 +39,27 @@ bool FrustumPlanes::isOnOrForwardPlan(const Plane& plan, const AABB& aabb) const
 	return -r <= plan.getSignedDistanceToPlan(aabb.m_center);
 }
 
-bool FrustumPlanes::IsOnFrustum(Transform& transform, const AABB& aabb) const
+bool FrustumPlanes::IsOnFrustum(const Matrix4& worldMatrix, const AABB& aabb) const
 {
-	Matrix4 worldMatrix = transform.GetWorldMatrix();
-
 	//Get global scale thanks to our transform
-	const Vector3 globalCenter((worldMatrix * Vector4(aabb.m_center, 1.f) ).xyz);
+	const Vector3 globalCenter((worldMatrix * Matrix4::Translate(aabb.m_center)).position);
 
 	// Scaled orientation
 	const Vector3 right = worldMatrix.right * aabb.m_extents.x;
 	const Vector3 up = worldMatrix.up * aabb.m_extents.y;
 	const Vector3 forward = (-worldMatrix.back) * aabb.m_extents.z;
 
-	const float newIi = Abs(Vector3::Dot(Vector3{ 1.f, 0.f, 0.f }, right)) +
-		Abs(Vector3::Dot(Vector3{ 1.f, 0.f, 0.f }, up)) +
-		Abs(Vector3::Dot(Vector3{ 1.f, 0.f, 0.f }, forward));
+	const float newIi = Abs(Vector3::Dot(Vector3::Right, right)) +
+		Abs(Vector3::Dot(Vector3::Right, up)) +
+		Abs(Vector3::Dot(Vector3::Right, forward));
 
-	const float newIj = Abs(Vector3::Dot(Vector3{ 0.f, 1.f, 0.f }, right)) +
-		Abs(Vector3::Dot(Vector3{ 0.f, 1.f, 0.f }, up)) +
-		Abs(Vector3::Dot(Vector3{ 0.f, 1.f, 0.f }, forward));
+	const float newIj = Abs(Vector3::Dot(Vector3::Up, right)) +
+		Abs(Vector3::Dot(Vector3::Up, up)) +
+		Abs(Vector3::Dot(Vector3::Up, forward));
 
-	const float newIk = Abs(Vector3::Dot(Vector3{ 0.f, 0.f, 1.f }, right)) +
-		Abs(Vector3::Dot(Vector3{ 0.f, 0.f, 1.f }, up)) +
-		Abs(Vector3::Dot(Vector3{ 0.f, 0.f, 1.f }, forward));
+	const float newIk = Abs(Vector3::Dot(Vector3::Forward, right)) +
+		Abs(Vector3::Dot(Vector3::Forward, up)) +
+		Abs(Vector3::Dot(Vector3::Forward, forward));
 
 	const AABB globalAABB(globalCenter, newIi, newIj, newIk);
 
