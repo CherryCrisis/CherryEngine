@@ -3,8 +3,11 @@
 #include <memory>
 
 #include "rendering_pipeline_interface.hpp"
-
 #include "maths.hpp"
+#include "framebuffer.hpp"
+#include "frustum_plane.hpp"
+
+#include <glad/gl.h>
 
 class Cell;
 
@@ -16,14 +19,28 @@ public:
 
 	CCMaths::Matrix4 m_viewMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_projectionMatrix = CCMaths::Matrix4::Identity;
-	CCMaths::Vector3 m_position;
+	
+	CCMaths::Vector3 m_position = CCMaths::Vector3::Zero;
+
+	FrustumPlanes m_frustumPlanes = {};
 
 	std::unique_ptr<ARenderingPipeline> m_pipeline;
 
-	void Draw(Framebuffer& fb, int iteration)
+	std::shared_ptr<Framebuffer> m_framebuffer;
+
+	Viewer()
+		: m_framebuffer(std::make_shared<Framebuffer>()) {}
+
+	void Draw(int iteration)
 	{
+		glViewport(0, 0, m_framebuffer->width, m_framebuffer->height);
+
+		// TODO: Make this parametrable
+		//camera.Draw(m_framebuffer, 1);
 		m_currentIteration = iteration;
-		m_pipeline->Execute(fb, this);
+		m_pipeline->Execute(this);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	virtual ~Viewer() = default;

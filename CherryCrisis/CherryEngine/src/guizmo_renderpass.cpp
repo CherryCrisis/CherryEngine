@@ -80,13 +80,14 @@ void GuizmoRenderPass::Unsubscribe(AudioEmitter* toGenerate)
 	m_audioEmitters.erase(toGenerate);
 }
 
-
-void GuizmoRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+void GuizmoRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
 
-	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
+
+	glViewport(0, 0, framebuffer.width, framebuffer.height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 

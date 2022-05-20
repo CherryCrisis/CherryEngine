@@ -1,14 +1,14 @@
 #pragma once
 
+#include <imgui.h>
+#include <ImGuizmo.h>
+
 #include "core/frame_displayer.hpp"
 #include "camera.hpp"
 #include "input_manager.hpp"
-#include "ImGuizmo.h"
-
 #include "maths.hpp"
 
 class EditorManager;
-
 
 class SceneDisplayer : public FrameDisplayer
 {

@@ -39,34 +39,43 @@ void GameDisplayer::Render()
             CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y) };
             CCMaths::Vector2 framebufferPos = { ImGui::GetWindowPos().x + bufferPos.x, ImGui::GetWindowPos().y + bufferPos.y };
 
-            if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK)
-                && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
-                && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + m_framebuffer.colorTex.width
-                && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + m_framebuffer.colorTex.height
-                && CameraComponent::GetMainCamera())
+            Camera* mainCamera = &CameraComponent::GetMainCamera()->m_camera;
+            if (mainCamera)
             {
-                glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-                Pickinger::SetBuffer(&m_framebuffer, &CameraComponent::GetMainCamera()->m_camera);
-                CCMaths::Vector2 mousebufferPos = { mousePos.x - framebufferPos.x, mousePos.y - framebufferPos.y };
+                if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK)
+                    && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
+                    && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + mainCamera->m_framebuffer->width
+                    && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + mainCamera->m_framebuffer->height)
+                {
+                    glBindFramebuffer(GL_FRAMEBUFFER, mainCamera->m_framebuffer->FBO);
+                    Pickinger::SetBuffer(mainCamera);
+                    CCMaths::Vector2 mousebufferPos = { mousePos.x - framebufferPos.x, mousePos.y - framebufferPos.y };
 
-                if (UIItem* item = Pickinger::GetUIItem(mousebufferPos))
-                    item->Interact();
+                    if (UIItem* item = Pickinger::GetUIItem(mousebufferPos))
+                        item->Interact();
 
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                }
             }
         }
-        
 
+        CameraComponent* camComp = CameraComponent::GetMainCamera();
+        if (camComp)
+        {
+            Camera* mainCamera = &camComp->m_camera;
 
-        if (m_isActive && CameraComponent::GetMainCamera())
-            if (Camera* cam = &CameraComponent::GetMainCamera()->m_camera)
+            uint64_t viewTex;
+
+            if (m_isActive && mainCamera)
             {
-                UpdateFramebuffer(wsize.x, wsize.y, *cam);
+                mainCamera->SetSize({ wsize.x, wsize.y });
+                mainCamera->Draw(1);
 
-                uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
-
-                ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+                viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
             }
+
+            ImGui::Image((ImTextureID)viewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+        }
 
         ImGui::EndChild();
     }

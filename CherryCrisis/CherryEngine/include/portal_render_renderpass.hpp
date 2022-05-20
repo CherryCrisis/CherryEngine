@@ -21,11 +21,6 @@ class Viewer;
 class PortalRenderPass : public ARenderingRenderPass
 {
 private:
-	struct GPUBasicPortal : public GPUPortal
-	{
-		Framebuffer framebuffer;
-	};
-
 	std::unordered_set<Portal*>	m_portals;
 
 	std::shared_ptr<Mesh> m_quadMesh;
@@ -56,5 +51,5 @@ public:
 	template <>
 	void Unsubscribe(Portal* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

@@ -17,7 +17,6 @@ void SceneManager::SetCurrentScene(std::shared_ptr<Scene> scene)
 	Initialize();
 }
 
-// TODO: Change this
 void SceneManager::Initialize()
 {
 	if (m_currentScene)
@@ -26,7 +25,7 @@ void SceneManager::Initialize()
 
 void SceneManager::Update()
 {
-	if (m_currentScene)
+	if (m_currentScene)	
 		m_currentScene->Update();
 
 	if (m_lateChanged)
@@ -36,13 +35,16 @@ void SceneManager::Update()
 bool SceneManager::LoadScene(const char* filepath) 
 {
 	SceneManager* mng = GetInstance();
-	mng->hasSceneBeenChanged = true;
+
 	if (!std::filesystem::exists(filepath)) 
 	{
 		std::string errorMsg = filepath + std::string(" failed to load.");
 		Debug::GetInstance()->AddLog(ELogType::WARNING, errorMsg.c_str());
 		return LoadEmptyScene("Assets/EmptyScene.ccscene");
 	}	
+
+	if (mng->m_currentScene)
+		mng->m_currentScene->Empty();
 
 	mng->m_currentScene =  ResourceManager::GetInstance()->AddResource<Scene>(filepath, false);
 	mng->Initialize();
@@ -67,8 +69,12 @@ bool SceneManager::SaveCurrentScene()
 void SceneManager::ResetScene() 
 {
 	SceneManager* mng = GetInstance();
-	Serializer::UnserializeScene(mng->m_currentScene, "Internal/temp");
+	
+	if (mng->m_currentScene)
+		mng->m_currentScene->Empty();
 
+	mng->m_currentScene = ResourceManager::GetInstance()->AddResource<Scene>(mng->m_baseScene.c_str(), true);
+	Serializer::UnserializeScene(mng->m_currentScene, "Internal/temp");
 	mng->Initialize();
 
 	ResourceManager::GetInstance()->Purge();
@@ -78,20 +84,19 @@ void SceneManager::FlipScene()
 {
 	SceneManager* mng = GetInstance();
 	mng->m_currentScene->SaveAs("Internal/temp");
+	mng->m_baseScene = mng->m_currentScene->GetFilepath();
 }
 
 // filepath starts at Assets/
-bool SceneManager::ChangeScene(const char* filepath) 
+bool SceneManager::ChangeScene(const char* sceneName)
 {
-	std::string fullPath = "Assets/" + std::string(filepath);
-	// if engine is running bind to event else directly change scene
+	std::string fullPath = "Assets/" + std::string(sceneName) + ".ccscene";
 
 	if (Engine::isPlaying || Engine::isPaused) 
 	{
 		currentInstance->m_lateChanged = CCFunction::BindFunction(&SceneManager::LateLoadScene, 
 			currentInstance, std::forward<std::string>(fullPath));
 
-		currentInstance->m_lateLoadString = fullPath;
 		return false;
 	}
 
@@ -101,6 +106,5 @@ bool SceneManager::ChangeScene(const char* filepath)
 void SceneManager::LateLoadScene(std::string filepath) 
 {
 	LoadScene(filepath.c_str());
-	m_lateLoadString = "";
 	m_lateChanged.reset();
 }

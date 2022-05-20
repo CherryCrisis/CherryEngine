@@ -4,24 +4,31 @@
 
 #include "cherry_macros.hpp"
 
+class Camera;
+
 struct CCENGINE_API TextureDisplayer
 {
 	GLuint texID = 0u;
-	GLsizei height = 1920u, width = 1080u;
 };
 
 struct CCENGINE_API Framebuffer
 {
+private:
+	void UpdateTextureSize(float width, float height);
+
+	bool isInit = false;
+public :
+	GLsizei height = 1920u, width = 1080u;
+
 	GLuint FBO = 0u, RBO = 0u;
 	TextureDisplayer colorTex;
 	TextureDisplayer brightnessTex;
 
-	~Framebuffer()
-	{
-		glDeleteBuffers(1, &FBO);
-		glDeleteFramebuffers(1, &FBO);
-		glDeleteRenderbuffers(1, &RBO);
-		glDeleteBuffers(1, &colorTex.texID);
-		glDeleteBuffers(1, &brightnessTex.texID);
-	}
+	Framebuffer() = default;
+	~Framebuffer();
+
+	void Init(float width = 1920, float height = 1080);
+
+	//Verif if width and height are changed
+	void UpdateFramebuffer(float width, float height);
 };

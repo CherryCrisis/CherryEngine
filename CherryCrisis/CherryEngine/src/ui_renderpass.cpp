@@ -34,12 +34,14 @@ void UIRenderPass::Unsubscribe(UIImage* toGenerate)
 	m_uiImages.erase(toGenerate);
 }
 
-void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+void UIRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
 
-	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
+
+	glViewport(0, 0, framebuffer.width, framebuffer.height);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);
@@ -51,8 +53,9 @@ void UIRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer.colorTex.width),
-														   0.0f, static_cast<const float>(framebuffer.colorTex.height), -1.f, 5.f);
+	//TODO: Optimize !
+	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer.width),
+														   0.0f, static_cast<const float>(framebuffer.height), -1.f, 5.f);
 
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "projection"), 1, GL_FALSE, proj.data);
 	for (UIImage* image : m_uiImages)

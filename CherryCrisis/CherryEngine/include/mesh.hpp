@@ -46,6 +46,10 @@ struct AABB
 	AABB(const Vector3& min, const Vector3& max)
 		: m_center((max+min) * 0.5f), 
 		m_extents(max.x - m_center.x, max.y - m_center.y, max.z - m_center.z) {}
+
+	AABB(const Vector3& inCenter, float iI, float iJ, float iK)
+		: m_center{ inCenter }, m_extents{ iI, iJ, iK }
+	{}
 };
 
 class CCENGINE_API Mesh : public Resource<Mesh>

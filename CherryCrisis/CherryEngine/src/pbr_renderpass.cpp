@@ -175,10 +175,12 @@ void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, in
 	glBindTextureUnit(id, gpuTexture->ID);
 }
 
-void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+void PBRRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
+
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -242,7 +244,16 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!modelRdr->m_isVisible)
 			continue;
 
+		Mesh* mesh = modelRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
+
+		if (!viewer->m_frustumPlanes.IsOnFrustum(modelMat, mesh->m_aabb))
+			continue;
+
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		if (Material* material = modelRdr->m_material.get())
@@ -285,11 +296,6 @@ void PBRRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 				}
 			}
 		}
-
-		Mesh* mesh = modelRdr->m_mesh.get();
-
-		if (!mesh)
-			continue;
 
 		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 

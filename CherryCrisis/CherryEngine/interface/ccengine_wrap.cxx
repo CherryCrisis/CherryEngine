@@ -2658,6 +2658,18 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Atan(float jarg1) {
 }
 
 
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Abs(float jarg1) {
+  float jresult ;
+  float arg1 ;
+  float result;
+  
+  arg1 = (float)jarg1; 
+  result = (float)CCMaths::Abs(arg1);
+  jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Sqrt(float jarg1) {
   float jresult ;
   float arg1 ;

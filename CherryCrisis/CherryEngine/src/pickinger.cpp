@@ -27,9 +27,9 @@ Entity* Pickinger::GetEntity(float x, float y)
 	Pickinger* instance = GetInstance();
 
 	// flip texture
-	y = (float)instance->m_fbo->colorTex.height - y;
+	y = (float)instance->m_viewer->m_framebuffer->height - y;
 
-	instance->m_renderpass->Execute(*instance->m_fbo, instance->m_viewer);
+	instance->m_renderpass->Execute(instance->m_viewer);
 
 	glFlush();
 	glFinish();
@@ -46,11 +46,11 @@ Entity* Pickinger::GetEntity(const CCMaths::Vector2& position)
 	return GetEntity(position.x, position.y);
 }
 
-void Pickinger::SetBuffer(Framebuffer* buffer, Viewer* camera) 
+void Pickinger::SetBuffer(Viewer* camera) 
 {
 	Pickinger* instance = GetInstance();
 	
-	instance->m_fbo = buffer; instance->m_viewer = camera;
+	instance->m_viewer = camera;
 	instance->m_renderpass = camera->m_pipeline->LoadSubpipeline<PickingRenderPass>();
 }
 
@@ -59,9 +59,9 @@ UIItem* Pickinger::GetUIItem(float x, float y)
 	Pickinger* instance = GetInstance();
 
 	// flip texture
-	y = (float)instance->m_fbo->colorTex.height - y;
+	y = (float)instance->m_viewer->m_framebuffer->height - y;
 
-	instance->m_renderpass->Execute(*instance->m_fbo, instance->m_viewer);
+	instance->m_renderpass->Execute(instance->m_viewer);
 
 	glFlush();
 	glFinish();

@@ -60,5 +60,5 @@ public:
 	template <>
 	void Unsubscribe(ShapeRenderer* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

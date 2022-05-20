@@ -69,5 +69,5 @@ public:
 
 	void Generate(Material* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

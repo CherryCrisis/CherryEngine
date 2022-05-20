@@ -44,5 +44,5 @@ public:
 	template <>
 	void Unsubscribe(UIText* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

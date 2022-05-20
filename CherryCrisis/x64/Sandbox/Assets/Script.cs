@@ -10,7 +10,7 @@ namespace CCScripting
 
         public void OnClick() 
         {
-            SceneManager.ChangeScene("Empty2.ccscene");
+            SceneManager.ChangeScene("Empty2");  
         }
     }
 }

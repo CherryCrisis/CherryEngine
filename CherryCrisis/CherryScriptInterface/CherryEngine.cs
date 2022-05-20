@@ -69,6 +69,11 @@ public class CherryEngine {
     return ret;
   }
 
+  public static float Abs(float value) {
+    float ret = CherryEnginePINVOKE.Abs(value);
+    return ret;
+  }
+
   public static float Sqrt(float value) {
     float ret = CherryEnginePINVOKE.Sqrt(value);
     return ret;

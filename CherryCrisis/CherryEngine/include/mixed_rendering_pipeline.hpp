@@ -60,5 +60,5 @@ public:
 	MixedPipeline();
 	~MixedPipeline();
 
-	void Execute(Framebuffer& framebuffer, Viewer* viewer) override;
+	void Execute(Viewer* viewer) override;
 };

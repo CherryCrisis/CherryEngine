@@ -17,42 +17,13 @@ BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 
 	m_meshGenerator.Generate(m_quadMesh.get());
 
-	m_framebuffer.colorTex.width = 1920; m_framebuffer.colorTex.height = 1080;
-
-	// TODO: Use DSA
-	// TODO: Optimize
-	glGenFramebuffers(1, &m_framebuffer.FBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-
-	glGenTextures(1, &m_framebuffer.colorTex.texID);
-	glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_framebuffer.colorTex.texID, 0);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	m_framebuffer.Init();
 }
 
 void BasicPostProcessRenderPass::Execute(Framebuffer& framebuffer)
 {
-	if (framebuffer.colorTex.width != m_framebuffer.colorTex.width ||
-		framebuffer.colorTex.height != m_framebuffer.colorTex.height)
-	{
-		m_framebuffer.colorTex.width = framebuffer.colorTex.width;
-		m_framebuffer.colorTex.height = framebuffer.colorTex.height;
-
-		glBindTexture(GL_TEXTURE_2D, m_framebuffer.colorTex.texID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	//UpdateFramebuffer verif if width and height are changed
+	m_framebuffer.UpdateFramebuffer(framebuffer.width, framebuffer.height);
 
 	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
 
@@ -65,7 +36,7 @@ void BasicPostProcessRenderPass::Execute(Framebuffer& framebuffer)
 	glCullFace(GL_BACK);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-	glViewport(0, 0, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height);
+	glViewport(0, 0, m_framebuffer.width, m_framebuffer.height);
 
 	glBindTexture(GL_TEXTURE_2D, framebuffer.colorTex.texID);
 
@@ -82,8 +53,8 @@ void BasicPostProcessRenderPass::Execute(Framebuffer& framebuffer)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glBlitNamedFramebuffer(m_framebuffer.FBO, framebuffer.FBO,
-						   0, 0, m_framebuffer.colorTex.width, m_framebuffer.colorTex.height,
-						   0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height,
+						   0, 0, m_framebuffer.width, m_framebuffer.height,
+						   0, 0, framebuffer.width, framebuffer.height,
 						   GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

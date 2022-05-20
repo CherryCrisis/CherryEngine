@@ -664,6 +664,9 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Atan")]
   public static extern float Atan(float jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Abs")]
+  public static extern float Abs(float jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Sqrt")]
   public static extern float Sqrt(float jarg1);
 

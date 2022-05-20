@@ -48,5 +48,5 @@ public:
 	template <>
 	void Unsubscribe(Collider* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

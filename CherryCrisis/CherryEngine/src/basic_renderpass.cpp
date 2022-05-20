@@ -62,12 +62,6 @@ int BasicRenderPass::Subscribe(Light* toGenerate)
 }
 
 template <>
-void BasicRenderPass::Unsubscribe(Light* toGenerate)
-{
-	m_lights.erase(toGenerate);
-}
-
-template <>
 int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 {
 	// Generate GPU mesh
@@ -84,12 +78,6 @@ int BasicRenderPass::Subscribe(ModelRenderer* toGenerate)
 	}
 
 	return 1;
-}
-
-template <>
-void BasicRenderPass::Unsubscribe(ModelRenderer* toGenerate)
-{
-	m_models.erase(toGenerate);
 }
 
 template <>
@@ -126,12 +114,26 @@ void BasicRenderPass::Generate(Material* toGenerate)
 		m_textureGenerator.Generate(normalMap);
 }
 
-void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+template <>
+void BasicRenderPass::Unsubscribe(ModelRenderer* toGenerate)
+{
+	m_models.erase(toGenerate);
+}
+
+template <>
+void BasicRenderPass::Unsubscribe(Light* toGenerate)
+{
+	m_lights.erase(toGenerate);
+}
+
+void BasicRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
 
-	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
+
+	glViewport(0, 0, framebuffer.width, framebuffer.height);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);
@@ -204,7 +206,16 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!modelRdr->m_isVisible)
 			continue;
 
+		Mesh* mesh = modelRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
 		CCMaths::Matrix4 modelMat = modelRdr->m_transform->GetWorldMatrix();
+
+		if (!viewer->m_frustumPlanes.IsOnFrustum(modelMat, mesh->m_aabb))
+			continue;
+
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		if (Material* material = modelRdr->m_material.get())
@@ -219,10 +230,6 @@ void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 			BindTexture(material, ETextureType::NORMAL_MAP, 1);
 		}
 
-		Mesh* mesh = modelRdr->m_mesh.get();
-
-		if (!mesh)
-			continue;
 
 		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 

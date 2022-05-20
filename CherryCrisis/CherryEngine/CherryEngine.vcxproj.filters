@@ -1311,6 +1311,9 @@
     <ClInclude Include="include\field.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="include\frustum_plane.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering</Filter>
+    </ClInclude>
     <ClInclude Include="include\shape_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
@@ -1756,6 +1759,15 @@
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
     <ClCompile Include="src\sky_renderer.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framebuffer.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera.cpp">
+      <Filter>Fichiers sources\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\frustum_plane.cpp">
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\shape_renderer.cpp">

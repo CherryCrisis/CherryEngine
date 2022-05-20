@@ -61,10 +61,12 @@ void SkyboxRenderPass::Unsubscribe(SkyRenderer* toGenerate)
 	}
 }
 
-void SkyboxRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+void SkyboxRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
+
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 	
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 	

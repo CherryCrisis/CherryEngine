@@ -29,11 +29,19 @@ void UIEditor::Render()
 
 	if (ImGui::Begin("UI Editor", &m_isOpened))
 	{
-
         m_isActive = !ImGui::IsWindowCollapsed();
 
-        // Splits window into 3 panels : left is UI Items list, middle if main camera feedback with UI and right is item inspector
-        uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
+        uint64_t viewTex = 0u;
+
+        Camera* mainCamera = nullptr;
+        if (CameraComponent* cameraComp = CameraComponent::GetMainCamera())
+        {
+            if (mainCamera = &cameraComp->m_camera)
+            {
+                // Splits window into 3 panels : left is UI Items list, middle if main camera feedback with UI and right is item inspector
+                viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
+            }
+        }
 
         UIContext& context = SceneManager::GetInstance()->m_currentScene->m_UIContext;
 
@@ -74,10 +82,7 @@ void UIEditor::Render()
             ImGui::TableSetColumnIndex(1);
             ImVec2 wsize = ImGui::GetContentRegionAvail();
 
-            Camera* cam = nullptr;
-            if (CameraComponent::GetMainCamera())
-                cam = &CameraComponent::GetMainCamera()->m_camera;
-            if (cam) 
+            if (mainCamera)
             {
                 CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
 
@@ -89,11 +94,11 @@ void UIEditor::Render()
 
                 if (InputManager::GetInstance()->GetKeyDown(Keycode::LEFT_CLICK)
                     && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
-                    && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + m_framebuffer.colorTex.width
-                    && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + m_framebuffer.colorTex.height)
+                    && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + mainCamera->m_framebuffer->width
+                    && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + mainCamera->m_framebuffer->height)
                 {
-                    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-                    Pickinger::SetBuffer(&m_framebuffer, cam);
+                    glBindFramebuffer(GL_FRAMEBUFFER, mainCamera->m_framebuffer->FBO);
+                    Pickinger::SetBuffer(mainCamera);
                     CCMaths::Vector2 mousebufferPos = { mousePos.x - framebufferPos.x, mousePos.y - framebufferPos.y };
                     UIItem* pickedUIItem = Pickinger::GetUIItem(mousebufferPos);
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -101,17 +106,20 @@ void UIEditor::Render()
                 }
             }
 
-            if (m_isActive && cam) 
+            if (m_isActive && mainCamera)
             {
-                UpdateFramebuffer(wsize.x, wsize.y, *cam);
+                mainCamera->SetSize({ wsize.x, wsize.y });
+                mainCamera->Draw(1);
 
-                ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+                ImGui::Image((ImTextureID)viewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
+            }
 
-                if (ImGui::BeginDragDropTarget())
+            
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UI_EDITOR_ITEM_TEMPLATE"))
                 {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("UI_EDITOR_ITEM_TEMPLATE"))
-                        context.AddItemByType(*((EItemUI*)payload->Data));
-
+                    context.AddItemByType(*((EItemUI*)payload->Data));
                     ImGui::EndDragDropTarget();
                 }
             }

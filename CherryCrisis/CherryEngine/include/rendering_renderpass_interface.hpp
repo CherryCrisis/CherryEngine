@@ -12,7 +12,7 @@ struct Framebuffer;
 class CCENGINE_API ARenderingRenderPass : public ARenderPass
 {
 protected:
-	std::shared_ptr<CCCallback::ACallback<Framebuffer&, Viewer*&>> m_callExecute = nullptr;
+	std::shared_ptr<CCCallback::ACallback<Viewer*&>> m_callExecute = nullptr;
 
 public:
 	virtual void InvalidatePass() { m_callExecute = nullptr; }
@@ -24,10 +24,10 @@ public:
 			m_program->m_OnDeleted.Bind(&ARenderingRenderPass::InvalidatePass, this);
 	}
 
-	void CallOnExecute(Framebuffer& framebuffer, Viewer* viewer)
+	void CallOnExecute(Viewer* viewer)
 	{
 		if (m_callExecute)
-			m_callExecute->Invoke(framebuffer, viewer);
+			m_callExecute->Invoke(viewer);
 	}
 
 	virtual ~ARenderingRenderPass()

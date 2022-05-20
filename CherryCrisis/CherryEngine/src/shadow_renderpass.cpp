@@ -14,9 +14,6 @@ ShadowRenderPass::GPUShadowLight::~GPUShadowLight()
 {
 	if (depthTexID)
 		glDeleteTextures(1, &depthTexID);
-
-	if (framebuffer.FBO)
-		glDeleteFramebuffers(1, &framebuffer.FBO);
 }
 
 ShadowRenderPass::ShadowRenderPass(const char* name)
@@ -49,32 +46,7 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 
 	auto gpuLight = std::make_unique<GPUShadowLight>();
 
-	gpuLight->framebuffer.colorTex.width = 1000;
-	gpuLight->framebuffer.colorTex.height = 1000;
-
-	// TODO: Use DSA
-
-	glGenFramebuffers(1, &gpuLight->framebuffer.FBO);
-	glGenTextures(1, &gpuLight->depthTexID);
-	glBindTexture(GL_TEXTURE_2D, gpuLight->depthTexID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, gpuLight->framebuffer.colorTex.width, gpuLight->framebuffer.colorTex.height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	// Clamp to border to deactivate frustum shadows
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-	float borderColor[] = { 1.f, 1.f, 1.f, 1.f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
-	// Attach texture to framebuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->framebuffer.FBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, gpuLight->depthTexID, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	gpuLight->framebuffer.Init(1000, 1000);
 
 	toGenerate->m_gpuLight = std::move(gpuLight);
 
@@ -129,7 +101,7 @@ void ShadowRenderPass::Unsubscribe(ShapeRenderer* toGenerate)
 	m_shapes.erase(toGenerate);
 }
 
-void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+void ShadowRenderPass::Execute(Viewer*& viewer)
 {
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);
@@ -145,7 +117,7 @@ void ShadowRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!gpuLight)
 			continue;
 
-		glViewport(0, 0, gpuLight->framebuffer.colorTex.width, gpuLight->framebuffer.colorTex.height);
+		glViewport(0, 0, gpuLight->framebuffer.width, gpuLight->framebuffer.height);
 		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->framebuffer.FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 

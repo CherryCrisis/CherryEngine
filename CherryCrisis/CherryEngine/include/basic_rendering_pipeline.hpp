@@ -32,5 +32,5 @@ public:
 	BasicRPipeline();
 	~BasicRPipeline();
 
-	void Execute(Framebuffer& framebuffer, Viewer* viewer) override;
+	void Execute(Viewer* viewer) override;
 };

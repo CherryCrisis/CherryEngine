@@ -23,6 +23,9 @@ public:
 	UIEditor();
 	void Render() override;
 
+	void Focus() override {}
+	void Unfocus() override {}
+
 	std::vector<std::string> m_items;
 
 };

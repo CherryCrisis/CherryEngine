@@ -19,7 +19,6 @@ class GuizmoRenderPass : public ARenderingRenderPass
 {
 private:
 
-
 	std::unordered_set<AudioEmitter*>	    m_audioEmitters;
 	std::unordered_set<CameraComponent*>	m_cameraComponents;
 	std::unordered_set<LightComponent*>	    m_lightComponents;
@@ -62,5 +61,5 @@ public:
 	template <>
 	void Unsubscribe(LightComponent* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

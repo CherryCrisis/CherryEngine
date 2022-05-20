@@ -10,10 +10,9 @@ class CCENGINE_API SceneManager : public Singleton<SceneManager>
 	friend class Singleton<SceneManager>;
 
 	void LateLoadScene(std::string filepath);
-	std::string m_lateLoadString = "";
+	std::string m_baseScene = "";
 
 public:
-	bool hasSceneBeenChanged = false;
 	void SetCurrentScene(std::shared_ptr<Scene> scene);
 
 	std::shared_ptr<Scene> m_currentScene;
@@ -28,8 +27,8 @@ public:
 	
 	static bool LoadEmptyScene(const char* filepath);
 
-	// C# interfacing function
-	static bool ChangeScene(const char* filepath);
+	// C# interfacing function : Only Name required 
+	static bool ChangeScene(const char* sceneName);
 
 
 	static void ResetScene();

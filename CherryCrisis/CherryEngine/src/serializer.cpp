@@ -477,7 +477,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	// Then unpack the YAML
 	std::string fileName = strlen(filepath) > 0 ? std::string(filepath) : scene->GetFilepath();
 	YAML::Node loader = YAML::LoadFile(fileName);
-	scene->SetFilepath(fileName.c_str());
+
 	// Iterates on Resources  entries
 	if (YAML::Node resources = loader["resources"])
 	{

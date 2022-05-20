@@ -291,7 +291,7 @@ void AssetBrowser::RenderNodes()
                 std::string fullRelativePath = assetNode->m_relativePath.string() + assetNode->m_fullFilename;
 
                 ImGui::SetDragDropPayload("NODE", fullRelativePath.c_str(), fullRelativePath.size() + 1, ImGuiCond_Once);
-                ImGui::Text(assetNode->m_fullLoweredFilename.c_str());
+                ImGui::Text(assetNode->m_fullFilename.c_str());
                 ImGui::EndDragDropSource();
             }
 
