@@ -14,7 +14,6 @@ class CCENGINE_API Pickinger : public Singleton<Pickinger>
 {
 	friend class Singleton<Pickinger>;
 
-	Framebuffer*		m_fbo = nullptr;
 	PickingRenderPass*	m_renderpass = nullptr;
 	Viewer*			    m_viewer = nullptr;
 public:
@@ -25,5 +24,5 @@ public:
 	static UIItem* GetUIItem(float x, float y);
 	static UIItem* GetUIItem(const CCMaths::Vector2& position);
 
-	static void SetBuffer(Framebuffer* buffer, Viewer* camera);
+	static void SetBuffer(Viewer* camera);
 };

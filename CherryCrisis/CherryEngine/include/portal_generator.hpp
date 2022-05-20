@@ -11,7 +11,13 @@ class CCENGINE_API PortalGenerator
 public:
 	struct GPUBasicPortal : GPUPortal
 	{
-		Framebuffer framebuffer;
+		std::shared_ptr<Framebuffer> framebuffer;
+
+		GPUBasicPortal()
+			: framebuffer(std::make_shared<Framebuffer>())
+		{
+			framebuffer->Init();
+		}
 	};
 
 	virtual bool Generate(Portal* toGenerate);

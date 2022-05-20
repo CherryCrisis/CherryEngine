@@ -24,49 +24,15 @@ BloomRenderPass::BloomRenderPass(const char* name)
 		m_meshGenerator.Generate(m_quadMesh.get());
 	}
 
-	for (int i = 0; i < 2; i++)
-	{
-		Framebuffer& framebuffer = m_pingpongFramebuffers[i];
-		// TODO: Use DSA
-		// TODO: Optimize
-		glGenFramebuffers(1, &framebuffer.FBO);
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
-
-		glGenTextures(1, &framebuffer.colorTex.texID);
-		glBindTexture(GL_TEXTURE_2D, framebuffer.colorTex.texID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, framebuffer.colorTex.width, framebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer.colorTex.texID, 0);
-	}
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	m_pingpongFramebuffers[0].Init();
+	m_pingpongFramebuffers[1].Init();
 }
 
 void BloomRenderPass::Execute(Framebuffer& framebuffer)
 {
-	for (int i = 0; i < 2; i++)
-	{
-		bool hasChanged = false;
-		Framebuffer& curFramebuffer = m_pingpongFramebuffers[i];
-		if (framebuffer.colorTex.width != curFramebuffer.colorTex.width || framebuffer.colorTex.height != curFramebuffer.colorTex.height)
-		{
-			curFramebuffer.colorTex.width = framebuffer.colorTex.width; curFramebuffer.colorTex.height = framebuffer.colorTex.height;
-
-			glBindTexture(GL_TEXTURE_2D, curFramebuffer.colorTex.texID);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, curFramebuffer.colorTex.width, curFramebuffer.colorTex.height, 0, GL_RGB, GL_FLOAT, NULL);
-
-			hasChanged = true;
-		}
-
-		if (hasChanged)
-			glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	//UpdateFramebuffer verif if width and height are changed
+	m_pingpongFramebuffers[0].UpdateFramebuffer(framebuffer.width, framebuffer.height);
+	m_pingpongFramebuffers[1].UpdateFramebuffer(framebuffer.width, framebuffer.height);
 
 	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
 

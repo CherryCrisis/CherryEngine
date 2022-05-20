@@ -55,5 +55,5 @@ public:
 	template <>
 	void Unsubscribe(UIItem* toGenerate);
 
-	void Execute(Framebuffer& fb, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

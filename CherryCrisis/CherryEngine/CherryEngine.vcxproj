@@ -318,6 +318,7 @@
     <ClInclude Include="include\camera_component.hpp" />
     <ClInclude Include="include\cherry_header.hpp" />
     <ClInclude Include="include\cherry_macros.hpp" />
+    <ClInclude Include="include\frustum_plane.hpp" />
     <ClInclude Include="include\guizmo_renderpass.hpp" />
     <ClInclude Include="include\irradiance_map_renderpass.hpp" />
     <ClInclude Include="include\mixed_rendering_pipeline.hpp" />
@@ -515,6 +516,7 @@
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\brdf_renderpass.cpp" />
     <ClCompile Include="src\builder.cpp" />
+    <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\capsule_collider.cpp" />
     <ClCompile Include="src\cell.cpp" />
     <ClCompile Include="src\character_controller.cpp" />
@@ -538,6 +540,8 @@
     <ClCompile Include="src\ebo_tbn_generator.cpp" />
     <ClCompile Include="src\environment_map_renderpass.cpp" />
     <ClCompile Include="src\font.cpp" />
+    <ClCompile Include="src\framebuffer.cpp" />
+    <ClCompile Include="src\frustum_plane.cpp" />
     <ClCompile Include="src\guizmo_renderpass.cpp" />
     <ClCompile Include="src\hdr_renderpass.cpp" />
     <ClCompile Include="src\irradiance_map_renderpass.cpp" />

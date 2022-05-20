@@ -69,5 +69,5 @@ public:
 	template <>
 	void Unsubscribe(Light* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

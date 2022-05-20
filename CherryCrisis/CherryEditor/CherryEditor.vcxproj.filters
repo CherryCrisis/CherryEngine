@@ -78,9 +78,6 @@
     <ClCompile Include="src\panels\game_displayer.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\frame_displayer.cpp">
-      <Filter>Fichiers sources\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\panels\hierarchy_displayer.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
@@ -143,9 +140,6 @@
     <ClInclude Include="include\panels\scene_displayer.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\frame_displayer.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="include\panels\hierarchy_displayer.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
     </ClInclude>
@@ -181,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="include\panels\ui_editor.hpp">
       <Filter>Fichiers d%27en-tête\Panels</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\frame_displayer.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

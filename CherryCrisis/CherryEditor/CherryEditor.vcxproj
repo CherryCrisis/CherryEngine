@@ -30,7 +30,6 @@
     <ClCompile Include="externals\src\imgui_widgets.cpp" />
     <ClCompile Include="externals\src\stb_image.cpp" />
     <ClCompile Include="src\core\editor_manager.cpp" />
-    <ClCompile Include="src\core\frame_displayer.cpp" />
     <ClCompile Include="src\core\imcherry.cpp" />
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\panel.cpp" />

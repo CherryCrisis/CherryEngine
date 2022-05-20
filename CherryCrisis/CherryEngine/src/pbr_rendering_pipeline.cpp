@@ -32,8 +32,8 @@ PBRRPipeline::~PBRRPipeline()
 	delete m_pickingRenderpass;
 }
 
-void PBRRPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
+void PBRRPipeline::Execute(Viewer* viewer)
 {
-	m_pbrPass->CallOnExecute(framebuffer, viewer);
-	m_skydomePass->CallOnExecute(framebuffer, viewer);
+	m_pbrPass->CallOnExecute(viewer);
+	m_skydomePass->CallOnExecute(viewer);
 }

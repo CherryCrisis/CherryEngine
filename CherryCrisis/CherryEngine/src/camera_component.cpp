@@ -64,10 +64,11 @@ void CameraComponent::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetField("aspect", m_camera.aspect);
-	m_metadatas.SetField("near", m_camera.near);
-	m_metadatas.SetField("far", m_camera.far);
-	m_metadatas.SetField("fovY", m_camera.fovY);
+	//TODO: make metada in Camera !
+	m_metadatas.SetField("aspect", m_camera.m_aspect);
+	m_metadatas.SetField("near", m_camera.m_near);
+	m_metadatas.SetField("far", m_camera.m_far);
+	m_metadatas.SetField("fovY", m_camera.m_fovY);
 	m_metadatas.SetField<Object*>("transform", m_transform);
 }
 
@@ -91,28 +92,20 @@ void CameraComponent::Initialize()
 
 	GetHost().m_OnAwake.Unbind(&CameraComponent::Initialize, this);
 
+	m_camera.m_framebuffer->Init();
+
 	ChangePosition(m_transform->GetPosition());
 	ChangeRotation(m_transform->GetRotation());
 }
 
 void CameraComponent::ChangePosition(const CCMaths::Vector3& position)
 {
-	m_camera.lastPosition = m_camera.m_position;
-	m_camera.m_position = m_transform->GetGlobalPosition();
-
-	UpdateCameraModel();
+	m_camera.SetPosition(m_transform->GetGlobalPosition());
 }
 
 void CameraComponent::ChangeRotation(const CCMaths::Vector3& rotation)
 {
-	m_camera.rotation = m_transform->GetGlobalRotation();
-
-	UpdateCameraModel();
-}
-
-void CameraComponent::UpdateCameraModel()
-{
-	m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.m_position);
+	m_camera.SetRotation(m_transform->GetGlobalRotation());
 }
 
 CameraComponent* CameraComponent::GetMainCamera()

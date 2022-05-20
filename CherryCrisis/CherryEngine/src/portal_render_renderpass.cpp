@@ -33,7 +33,7 @@ int PortalRenderPass::Subscribe(Portal* toGenerate)
 {
 	if (!m_portalGenerator.Generate(toGenerate))
 		return -1;
-	
+
 	m_portals.insert(toGenerate);
 	return 1;
 }
@@ -44,10 +44,12 @@ void PortalRenderPass::Unsubscribe(Portal* toGenerate)
 	m_portals.erase(toGenerate);
 }
 
-void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+void PortalRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
+
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
 	if (viewer->m_currentIteration > 0)
 	for (Portal* portal : m_portals)
@@ -55,19 +57,27 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 		if (!portal->m_linkedPortal)
 			continue;
 
-		if (GPUBasicPortal* gpuPortal = static_cast<GPUBasicPortal*>(portal->m_gpuPortal.get()))
+		if (PortalGenerator::GPUBasicPortal* gpuPortal = static_cast<PortalGenerator::GPUBasicPortal*>(portal->m_gpuPortal.get()))
 		{
+			if (!gpuPortal->framebuffer)
+				continue;
+
+			//UpdateFrameBuffer verif if width and heigth are changed
+			gpuPortal->framebuffer->UpdateFramebuffer(framebuffer.width, framebuffer.height);
+
+			portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
+
 			CCMaths::Matrix4 m = portal->m_linkedPortal->m_modelMatrix * portal->m_modelMatrix.Inverse() * viewer->m_viewMatrix.Inverse();
 			portal->m_linkedPortal->m_viewMatrix = m.Inverse();
 			
 			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader 
 			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
 			
-			portal->m_linkedPortal->Draw(gpuPortal->framebuffer, viewer->m_currentIteration - 1);
+			portal->m_linkedPortal->Draw(viewer->m_currentIteration - 1);
 		}
 	}
 
-	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+	glViewport(0, 0, framebuffer.width, framebuffer.height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
@@ -94,11 +104,11 @@ void PortalRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
 
 	for (Portal* portal : m_portals)
 	{
-		GPUBasicPortal* gpuPortal = static_cast<GPUBasicPortal*>(portal->m_gpuPortal.get());
+		PortalGenerator::GPUBasicPortal* gpuPortal = static_cast<PortalGenerator::GPUBasicPortal*>(portal->m_gpuPortal.get());
 
 		if (!gpuPortal)
 			continue;
-		glBindTextureUnit(0, gpuPortal->framebuffer.colorTex.texID);
+		glBindTextureUnit(0, gpuPortal->framebuffer->colorTex.texID);
 
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, portal->m_modelMatrix.data);
 		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);

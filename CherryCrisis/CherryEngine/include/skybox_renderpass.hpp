@@ -54,5 +54,5 @@ public:
 	template <>
 	void Unsubscribe(SkyRenderer* toGenerate);
 
-	void Execute(Framebuffer& framebuffer, Viewer*& viewer);
+	void Execute(Viewer*& viewer);
 };

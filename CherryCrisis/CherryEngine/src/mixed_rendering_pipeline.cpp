@@ -74,26 +74,26 @@ MixedPipeline::~MixedPipeline()
 	delete m_skydomePass;
 }
 
-void MixedPipeline::Execute(Framebuffer& framebuffer, Viewer* viewer)
+void MixedPipeline::Execute(Viewer* viewer)
 {
-	m_portalPass->CallOnExecute(framebuffer, viewer);
-	m_shadowPass->CallOnExecute(framebuffer, viewer);
+	m_portalPass->CallOnExecute(viewer);
+	m_shadowPass->CallOnExecute(viewer);
 
-	m_basicPass->CallOnExecute(framebuffer, viewer);
-	m_pbrPass->CallOnExecute(framebuffer, viewer);
+	m_basicPass->CallOnExecute(viewer);
+	m_pbrPass->CallOnExecute(viewer);
 
-	//m_bloomPass->CallOnExecute(framebuffer);
+	//m_bloomPass->CallOnExecute(viewer->framebuffer);
 	//if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
-	//	m_hdrPass->CallOnExecute(framebuffer);
+	//	m_hdrPass->CallOnExecute(viewer->framebuffer);
 	
-	m_colliderPass->CallOnExecute(framebuffer, viewer);
+	m_colliderPass->CallOnExecute(viewer);
 
-	m_skyboxPass->CallOnExecute(framebuffer, viewer);
-	m_skydomePass->CallOnExecute(framebuffer, viewer);
+	m_skyboxPass->CallOnExecute(viewer);
+	m_skydomePass->CallOnExecute(viewer);
 	
-	m_guizmoPass->CallOnExecute(framebuffer, viewer);
+	m_guizmoPass->CallOnExecute(viewer);
 
-	m_uiPass->CallOnExecute(framebuffer, viewer);
-	m_uiTextPass->CallOnExecute(framebuffer, viewer);
-	//m_postprocessPass->CallOnExecute(framebuffer);
+	m_uiPass->CallOnExecute(viewer);
+	m_uiTextPass->CallOnExecute(viewer);
+	//m_postprocessPass->CallOnExecute(viewer->framebuffer);
 }

@@ -2,31 +2,15 @@
 
 #include "core/panel.hpp"
 
-#include "framebuffer.hpp"
-
-class InputManager;
-struct Camera;
-class Scene;
-
 class FrameDisplayer : public Panel 
 {
-private:
-	bool m_isInit   = false;
-
-
-	void Init();
-	void UpdateTextureSize(float x, float y);
-
 protected:
-	Framebuffer m_framebuffer;
-
 	bool m_isActive = false;
 
-	void UpdateFramebuffer(float width, float height, Camera& camera);
-	void Render() override;
+	void Render() override {};
 public:
 	bool m_isFocused = false;
 	
-	virtual void Focus() {}
-	virtual void Unfocus() {}
+	virtual void Focus() = 0;
+	virtual void Unfocus() = 0;
 };

@@ -3,7 +3,6 @@
 
 #include "scene_manager.hpp"
 
-#include <imgui.h>
 #include <comdef.h>
 #include <algorithm>
 
@@ -62,6 +61,7 @@ SceneDisplayer::SceneDisplayer()
 
     m_camera.m_pipeline = std::make_unique<MixedPipeline>();
     CameraComponent::m_editorCamera = &m_camera;
+
     if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
     {
         scene->AddCell("Default")->AddViewer(&m_camera);
@@ -85,7 +85,8 @@ void SceneDisplayer::UpdateCamera()
 {
     CCMaths::Vector2 deltaMouse = InputManager::GetMouseDelta();
 
-    CCMaths::Matrix4 view = Matrix4::RotateYXZ(m_camera.rotation);
+    Vector3 rotation = m_camera.GetRotation();
+    CCMaths::Matrix4 view = Matrix4::RotateYXZ(rotation);
 
     Vector3 up = Vector3::Up;
     Vector3 right = view.right;
@@ -103,12 +104,10 @@ void SceneDisplayer::UpdateCamera()
     Vector3 rightwardMove = right * InputManager::GetAxis("RightLeft");
     Vector3 upwardMove = up * InputManager::GetAxis("UpDown");
 
-    m_camera.rotation.pitch += dt * deltaMouse.y;
-    m_camera.rotation.yaw += dt * deltaMouse.x;
+    m_camera.SetPitch(rotation.pitch + dt * deltaMouse.y);
+    m_camera.SetYaw(rotation.yaw + dt * deltaMouse.x);
     
-    m_camera.m_position += (forwardMove + rightwardMove + upwardMove) * speed;
-
-    m_camera.m_viewMatrix = Matrix4::RotateXYZ(-m_camera.rotation) * Matrix4::Translate(-m_camera.m_position);
+    m_camera.SetPosition(m_camera.GetPosition() + (forwardMove + rightwardMove + upwardMove) * speed);
 }
 
 void SceneDisplayer::Render() 
@@ -156,8 +155,8 @@ void SceneDisplayer::Render()
         if (InputManager::GetKeyDown("Pick") && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
             && !ImGuizmo::IsOver())
         {
-            glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer.FBO);
-            Pickinger::SetBuffer(&m_framebuffer, &m_camera);
+            glBindFramebuffer(GL_FRAMEBUFFER, m_camera.m_framebuffer->FBO);
+            Pickinger::SetBuffer(&m_camera);
             CCMaths::Vector2 mousePos = InputManager::GetMousePos();
             ImVec2 bufferPos = ImGui::GetWindowContentRegionMin();
             CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y) };
@@ -187,10 +186,10 @@ void SceneDisplayer::Render()
         ImGui::BeginChild("SceneFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
 
-        if (m_isActive)
-            UpdateFramebuffer(wsize.x, wsize.y, m_camera);
+        m_camera.SetSize({ wsize.x, wsize.y });
+        m_camera.Draw(1);
 
-        uint64_t ViewTex = (uint64_t)m_framebuffer.colorTex.texID;
+        uint64_t ViewTex = (uint64_t)m_camera.m_framebuffer->colorTex.texID;
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
 
         if (ImGui::BeginDragDropTarget())

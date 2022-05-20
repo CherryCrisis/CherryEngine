@@ -107,12 +107,14 @@ void BasicRenderPass::Unsubscribe(Light* toGenerate)
 	m_lights.erase(toGenerate);
 }
 
-void BasicRenderPass::Execute(Framebuffer& framebuffer, Viewer*& viewer)
+void BasicRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
 
-	glViewport(0, 0, framebuffer.colorTex.width, framebuffer.colorTex.height);
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
+
+	glViewport(0, 0, framebuffer.width, framebuffer.height);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);

@@ -103,9 +103,6 @@ int main()
     Engine::window_handle = window;
     Serializer::UnserializeGame("master");
     InputManager::SetCursorHidden();
-
-    Framebuffer framebuffer;
-
     engine.Launch(false);
 
     Serializer::UnserializeInputs();
@@ -118,17 +115,15 @@ int main()
         TimeManager::GetInstance()->Update((float)glfwGetTime());
         glfwPollEvents();
 
-        glfwGetWindowSize(window, &framebuffer.colorTex.width, &framebuffer.colorTex.height);
-
+        int width, height;
+        glfwGetWindowSize(window, &width, &height);
 
         if (CameraComponent* cameraComp = CameraComponent::GetMainCamera())
         {
             Camera* cam = &cameraComp->m_camera;
+            cam->SetSize({ static_cast<float>(width), static_cast<float>(height) });
 
-            float aspect = (float)framebuffer.colorTex.width / (float)framebuffer.colorTex.height;
-            cam->m_projectionMatrix = Matrix4::Perspective(cam->fovY, aspect, cam->near, cam->far);
-
-            cam->Draw(framebuffer, 1);
+            cam->Draw(1);
         }
 
         engine.TickEngine();

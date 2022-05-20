@@ -23,6 +23,7 @@ namespace CCMaths
     inline float Sin(float rad) { return std::sin(rad); }
     inline float Tan(float rad) { return std::tan(rad); }
     inline float Atan(float value) { return std::atan(value); }
+    inline float Abs(float value) { return std::abs(value); }
 
     inline float Sqrt(float value) { return std::sqrt(value); }
 

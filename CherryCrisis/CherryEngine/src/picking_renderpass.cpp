@@ -63,10 +63,12 @@ CCMaths::Vector3 RGB(uint32_t ID)
 	return Res;
 }
 
-void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
+void PickingRenderPass::Execute(Viewer*& viewer)
 {
 	if (!viewer)
 		return;
+
+	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -104,8 +106,8 @@ void PickingRenderPass::Execute(Framebuffer& fb, Viewer*& viewer)
 		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 
-	viewProjection = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(fb.colorTex.width),
-													0.0f, static_cast<const float>(fb.colorTex.height), -1.f, 5.f);
+	viewProjection = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer.width),
+													0.0f, static_cast<const float>(framebuffer.height), -1.f, 5.f);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
 	for (UIItem* uiRdr : m_uiRenderers)
