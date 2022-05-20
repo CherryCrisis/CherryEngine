@@ -375,6 +375,10 @@ namespace Swig {
 
 
 	#include "singleton.hpp"
+	#include "scene_manager.hpp"
+
+
+	#include "singleton.hpp"
 	#include "time_manager.hpp"
 
 
@@ -815,135 +819,115 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetInstance() {
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_0(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_0(int jarg1) {
   unsigned int jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
-  Keycode arg2 ;
+  Keycode arg1 ;
   bool result;
   
-  arg1 = (InputManager *)jarg1; 
-  arg2 = (Keycode)jarg2; 
-  result = (bool)(arg1)->GetKey(arg2);
+  arg1 = (Keycode)jarg1; 
+  result = (bool)InputManager::GetKey(arg1);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_0(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_0(int jarg1) {
   unsigned int jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
-  Keycode arg2 ;
+  Keycode arg1 ;
   bool result;
   
-  arg1 = (InputManager *)jarg1; 
-  arg2 = (Keycode)jarg2; 
-  result = (bool)(arg1)->GetKeyDown(arg2);
+  arg1 = (Keycode)jarg1; 
+  result = (bool)InputManager::GetKeyDown(arg1);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_0(void * jarg1, int jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_0(int jarg1) {
   unsigned int jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
-  Keycode arg2 ;
+  Keycode arg1 ;
   bool result;
   
-  arg1 = (InputManager *)jarg1; 
-  arg2 = (Keycode)jarg2; 
-  result = (bool)(arg1)->GetKeyUp(arg2);
+  arg1 = (Keycode)jarg1; 
+  result = (bool)InputManager::GetKeyUp(arg1);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_1(void * jarg1, char * jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKey__SWIG_1(char * jarg1) {
   unsigned int jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
-  char *arg2 = (char *) 0 ;
+  char *arg1 = (char *) 0 ;
   bool result;
   
-  arg1 = (InputManager *)jarg1; 
-  arg2 = (char *)jarg2; 
-  result = (bool)(arg1)->GetKey((char const *)arg2);
+  arg1 = (char *)jarg1; 
+  result = (bool)InputManager::GetKey((char const *)arg1);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_1(void * jarg1, char * jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyDown__SWIG_1(char * jarg1) {
   unsigned int jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
-  char *arg2 = (char *) 0 ;
+  char *arg1 = (char *) 0 ;
   bool result;
   
-  arg1 = (InputManager *)jarg1; 
-  arg2 = (char *)jarg2; 
-  result = (bool)(arg1)->GetKeyDown((char const *)arg2);
+  arg1 = (char *)jarg1; 
+  result = (bool)InputManager::GetKeyDown((char const *)arg1);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_1(void * jarg1, char * jarg2) {
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_GetKeyUp__SWIG_1(char * jarg1) {
   unsigned int jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
-  char *arg2 = (char *) 0 ;
+  char *arg1 = (char *) 0 ;
   bool result;
   
-  arg1 = (InputManager *)jarg1; 
-  arg2 = (char *)jarg2; 
-  result = (bool)(arg1)->GetKeyUp((char const *)arg2);
+  arg1 = (char *)jarg1; 
+  result = (bool)InputManager::GetKeyUp((char const *)arg1);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_InputManager_GetAxis(void * jarg1, char * jarg2) {
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_InputManager_GetAxis(char * jarg1) {
   float jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
-  char *arg2 = (char *) 0 ;
+  char *arg1 = (char *) 0 ;
   float result;
   
-  arg1 = (InputManager *)jarg1; 
-  arg2 = (char *)jarg2; 
-  result = (float)(arg1)->GetAxis((char const *)arg2);
+  arg1 = (char *)jarg1; 
+  result = (float)InputManager::GetAxis((char const *)arg1);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseWheel(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseWheel() {
   void * jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
   CCMaths::Vector2 result;
   
-  arg1 = (InputManager *)jarg1; 
-  result = (arg1)->GetMouseWheel();
+  result = InputManager::GetMouseWheel();
   jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMousePos(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMousePos() {
   void * jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
   CCMaths::Vector2 result;
   
-  arg1 = (InputManager *)jarg1; 
-  result = (arg1)->GetMousePos();
+  result = InputManager::GetMousePos();
   jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseDelta(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseDelta() {
   void * jresult ;
-  InputManager *arg1 = (InputManager *) 0 ;
   CCMaths::Vector2 result;
   
-  arg1 = (InputManager *)jarg1; 
-  result = (arg1)->GetMouseDelta();
+  result = InputManager::GetMouseDelta();
   jresult = new CCMaths::Vector2((const CCMaths::Vector2 &)result); 
   return jresult;
 }
@@ -953,6 +937,26 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_InputManager(void * jarg1) {
   InputManager *arg1 = (InputManager *) 0 ;
   
   arg1 = (InputManager *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_SceneManager_LoadScene(char * jarg1) {
+  unsigned int jresult ;
+  char *arg1 = (char *) 0 ;
+  bool result;
+  
+  arg1 = (char *)jarg1; 
+  result = (bool)SceneManager::LoadScene((char const *)arg1);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_SceneManager(void * jarg1) {
+  SceneManager *arg1 = (SceneManager *) 0 ;
+  
+  arg1 = (SceneManager *)jarg1; 
   delete arg1;
 }
 
@@ -2709,6 +2713,20 @@ SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_BoolSign(unsigned int jarg1) {
   
   arg1 = jarg1 ? true : false; 
   result = (int)CCMaths::BoolSign(arg1);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Round(double jarg1) {
+  float jresult ;
+  double *arg1 = 0 ;
+  double temp1 ;
+  float result;
+  
+  temp1 = (double)jarg1; 
+  arg1 = &temp1; 
+  result = (float)CCMaths::Round((double const &)*arg1);
   jresult = result; 
   return jresult;
 }

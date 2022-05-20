@@ -15,10 +15,10 @@ namespace CCScripting
 
 		public void Start()
 		{
+			transform = GetComponent<Transform>();
+
 			Debug.GetInstance().Log(ELogType.WARNING, "Coucou Paul mets nous 20/20 (stp)");
 			Debug.GetInstance().Log(ELogType.ERROR, "Failed to fail :)");
-
-			transform = GetComponent<Transform>();
 		}
 
 
@@ -27,13 +27,16 @@ namespace CCScripting
 			if (transform == null)
 				return;
 			
-			Vector2 deltaMouse = InputManager.GetInstance().GetMouseDelta();
+			Vector2 deltaMouse = InputManager.GetMouseDelta();
 			float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;
 
 			double angle = transform.eulerAngles.x + sensitityY;
 			angle = Math.Min(Math.Max(angle, -Math.PI * 0.4f), Math.PI * 0.4f);
 
 			transform.eulerAngles = new Vector3((float)angle, transform.eulerAngles.y, transform.eulerAngles.z);
+
+			if (InputManager.GetKey(Keycode.R))
+				SceneManager.LoadScene("Assets/Empty.ccscene");
 		}
 	}
 }

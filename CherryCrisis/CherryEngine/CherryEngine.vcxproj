@@ -439,6 +439,7 @@
     <None Include="interface\physic_actor.i" />
     <None Include="interface\physic_manager.i" />
     <None Include="interface\physic_scene.i" />
+    <None Include="interface\scene_manager.i" />
     <None Include="interface\sphere_collider.i" />
     <None Include="Scripting.cd" />
     <None Include="Rendering.cd" />
@@ -485,7 +486,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>

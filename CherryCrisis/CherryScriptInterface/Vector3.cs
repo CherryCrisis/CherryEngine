@@ -245,6 +245,70 @@ public class Vector3 : global::System.IDisposable {
     return ret;
   }
 
+  public static Vector3 XAxis {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_XAxis_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public static Vector3 YAxis {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_YAxis_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public static Vector3 ZAxis {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_ZAxis_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public static Vector3 Forward {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_Forward_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public static Vector3 Up {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_Up_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public static Vector3 Right {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_Right_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public static Vector3 Zero {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_Zero_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public static Vector3 One {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Vector3_One_get();
+      Vector3 ret = (cPtr == global::System.IntPtr.Zero) ? null : new Vector3(cPtr, false);
+      return ret;
+    } 
+  }
+
 		public override string ToString() => $"Vector3({x}, {y}, {z})";
 	
 }
