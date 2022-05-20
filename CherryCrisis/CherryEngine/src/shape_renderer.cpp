@@ -18,7 +18,7 @@
 #include "picking_renderpass.hpp"
 #include "shadow_renderpass.hpp"
 
-int ShapeRenderer::count = 1;
+int ShapeRenderer::count = 100;
 
 ShapeRenderer::ShapeRenderer()
 {

@@ -71,6 +71,9 @@ public:
 	Event<Cell*> m_OnCellAdded;
 	Event<Cell*> m_OnCellRemoved;
 
+	Event<> m_OnSelected;
+	Event<> m_OnUnselected;
+
 	Event<Entity*> m_OnCollisionEnter;
 	Event<Entity*> m_OnCollisionStay;
 	Event<Entity*> m_OnCollisionExit;

@@ -42,15 +42,17 @@ SphereCollider::~SphereCollider()
 {
 	Unregister();
 
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
+	if (Camera* cam = CameraComponent::m_editorCamera)
+		UnsubscribeToPipeline(cam->m_pipeline.get());
 
-	UnsubscribeToPipeline(cam->m_pipeline.get());
+	GetHost().m_OnSelected.Unbind(&SphereCollider::Visible, this);
+	GetHost().m_OnUnselected.Unbind(&SphereCollider::Unvisible, this);
 
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Unbind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Unbind(&SphereCollider::RecomputeMatrix, this);
+		m_transform->m_onRotationChange.Unbind(&SphereCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Unbind(&SphereCollider::InvalidateTransform, this);
 	}
 }
@@ -62,9 +64,9 @@ void SphereCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
-
 	GetHost().m_OnAwake.Bind(&SphereCollider::Initialize, this);
+	GetHost().m_OnSelected.Bind(&SphereCollider::Visible, this);
+	GetHost().m_OnUnselected.Bind(&SphereCollider::Unvisible, this);
 }
 
 void SphereCollider::Initialize()
@@ -74,6 +76,8 @@ void SphereCollider::Initialize()
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Bind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Bind(&SphereCollider::RecomputeMatrix, this);
+		m_transform->m_onRotationChange.Bind(&SphereCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&SphereCollider::InvalidateTransform, this);
 	}
 

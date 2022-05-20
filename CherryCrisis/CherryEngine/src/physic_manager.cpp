@@ -195,8 +195,6 @@ namespace PhysicSystem
 			{
 				if (&actor == m_physicActors[i])
 				{
-					actor.m_owner->m_cell->RemoveEntityFromPhysicScene(actor.m_owner);
-					actor.DestroyPxActor();
 					delete m_physicActors[i];
 					m_physicActors[i] = m_physicActors.back();
 					m_physicActors.pop_back();

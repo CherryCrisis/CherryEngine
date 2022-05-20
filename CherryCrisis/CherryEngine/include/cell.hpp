@@ -57,11 +57,6 @@ public:
 	void	LinkPortal(Portal* toLink);
 	void	LinkPortals(Portal* portal1, Portal* portal2);
 
-	// TODO: Add info of movement (direction, speed, ...)
-	// TODO: Choose if using pxCharacterController or personal one
-	void	MoveCharacter(float deltaTime);
-	void	SetControllerDesc(physx::PxCapsuleControllerDesc& desc);
-
 	void SetName(const std::string& name) { m_name = name; }
 	const std::string& GetName() { return m_name; }
 };

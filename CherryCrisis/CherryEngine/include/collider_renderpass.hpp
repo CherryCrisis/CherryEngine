@@ -24,6 +24,7 @@ class CCENGINE_API ColliderRenderPass : public ARenderingRenderPass
 	std::shared_ptr<Mesh> m_box = nullptr;
 	std::shared_ptr<Mesh> m_sphere = nullptr;
 	std::shared_ptr<Mesh> m_cylinder = nullptr;
+	CCMaths::Vector4 m_color = CCMaths::Vector4::Zero;
 
 public:
 	ColliderRenderPass(const char* name);

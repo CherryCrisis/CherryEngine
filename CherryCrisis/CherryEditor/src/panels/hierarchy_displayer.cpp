@@ -10,13 +10,16 @@
 
 #include "audio_emitter.hpp"
 #include "audio_listener.hpp"
+#include "box_collider.hpp"
 #include "callback.hpp"
 #include "camera_component.hpp"
+#include "capsule_collider.hpp"
 #include "cell.hpp"
 #include "core/editor_manager.hpp"
 #include "light_component.hpp"
 #include "scene.hpp"
 #include "shape_renderer.hpp"
+#include "sphere_collider.hpp"
 #include "transform.hpp"
 #include "portal_component.hpp"
 
@@ -114,11 +117,11 @@ void HierarchyDisplayer::Render()
                 {
                     for (Entity* entity : m_manager->m_entitySelector.m_entities) 
                     {
+                        entity->m_OnUnselected.Invoke();
                         SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
                         Refresh();
                     }
-
-                    m_manager->m_entitySelector.Clear();
+                    m_manager->m_entitySelector.Clear(false);
 
                     ImGui::End();
                     return;
@@ -383,7 +386,6 @@ void HierarchyDisplayer::ContextCallback()
 {
     if (ImGui::BeginPopupContextItem("context"))
     {
-
         ImGui::Text("Actions ...");
         ImGui::Separator();
         if (ImGui::BeginMenu("New"))
@@ -488,6 +490,7 @@ void HierarchyDisplayer::ContextCallback()
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
                         shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 1.f, 1.f, 1.f));
+                        newEntity->AddBehaviour<BoxCollider>();
                     }
 
                     if (ImGui::MenuItem("Sphere"))
@@ -497,6 +500,7 @@ void HierarchyDisplayer::ContextCallback()
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
                         shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 1.f, 9.f, 17.f));
+                        newEntity->AddBehaviour<SphereCollider>();
                     }
                     if (ImGui::MenuItem("Cylinder"))
                     {
@@ -505,19 +509,22 @@ void HierarchyDisplayer::ContextCallback()
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
                         shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 1.f, 1.f, 16.f));
+                        newEntity->AddBehaviour<CapsuleCollider>();
                     }
                     if (ImGui::MenuItem("Plane"))
                     {
                         newEntity = new Entity("Plane", cell);
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
-                        ShapeRenderer* shape = newEntity->AddBehaviour<ShapeRenderer>();
+                        shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
                         shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedPlane", true, EMeshShape::QUAD, 1.f, 1.f));
+                        newEntity->AddBehaviour<BoxCollider>();
                     }
 
                     if (newEntity)
                     {
-                        shape->SetMaterialFromPath(R"(Assets\Models\NonEuclidean\None.ccmat)");
+                        std::shared_ptr<Material> material = ResourceManager::GetInstance()->AddResourceRef<Material>("CC_Mat");
+                        shape->SetMaterial(material);
                         newEntity->Initialize();
                     }
                 }
@@ -544,11 +551,11 @@ void HierarchyDisplayer::ContextCallback()
             {
                 for (auto& entity : m_manager->m_entitySelector.m_entities)
                 {
+                    entity->m_OnUnselected.Invoke();
                     SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
                     Refresh();
                 }
-                //To Change
-                m_manager->m_entitySelector.Clear();
+                m_manager->m_entitySelector.Clear(false);
             }
 
             if (ImGui::MenuItem("Copy")) {}
