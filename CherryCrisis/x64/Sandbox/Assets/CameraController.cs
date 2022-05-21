@@ -35,5 +35,25 @@ namespace CCScripting
 
 			transform.eulerAngles = new Vector3((float)angle, transform.eulerAngles.y, transform.eulerAngles.z);
 		}
+
+		public void OnCollisionEnter(Entity other)
+        {
+			Debug.GetInstance().Info($"{other}, in");
+        }
+
+		public void OnCollisionStay(Entity other)
+		{
+			Debug.GetInstance().Info($"{other}, stay");
+		}
+
+		public void OnCollisionExit(Entity other)
+		{
+			Debug.GetInstance().Info($"{other}, out");
+		}
+
+		public void OnTriggerEnter(Entity other)
+		{
+			Debug.GetInstance().Info($"{other}, in");
+		}
 	}
 }

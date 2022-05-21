@@ -190,10 +190,16 @@ namespace PhysicSystem
 			PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairs[i].otherActor->userData);
 
 			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+			{
 				actor1->m_owner->OnTriggerEnter(actor2->m_owner);
+				actor2->m_owner->OnTriggerEnter(actor1->m_owner);
+			}
 
 			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+			{
 				actor1->m_owner->OnTriggerExit(actor2->m_owner);
+				actor2->m_owner->OnTriggerExit(actor1->m_owner);
+			}
 		}
 	}
 
