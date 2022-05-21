@@ -9,9 +9,9 @@ class Camera;
 
 struct Plane
 {
-	float m_distance = 0.f;
-
 	CCMaths::Vector3 m_normal = { 0.f, 1.f, 0.f };
+
+	float m_distance = 0.f;
 
 	Plane() = default;
 

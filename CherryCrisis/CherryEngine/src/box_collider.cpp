@@ -86,13 +86,12 @@ void BoxCollider::Initialize()
 	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);
 
 	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
-
 	if (modelRdr)
 	{
 		if (modelRdr->m_mesh)
 		{
-			m_editableScale = modelRdr->m_mesh->m_aabb.m_extents;
-			m_localPosition = modelRdr->m_mesh->m_aabb.m_center;
+			m_baseEntityScale	= modelRdr->m_mesh->m_aabb.m_extents;
+			m_localPosition		= modelRdr->m_mesh->m_aabb.m_center;
 		}
 	}
 

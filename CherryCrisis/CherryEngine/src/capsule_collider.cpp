@@ -12,6 +12,8 @@
 #include "entity.hpp"
 #include "transform.hpp"
 
+using namespace CCMaths;
+
 
 CapsuleCollider::CapsuleCollider()
 {
@@ -84,6 +86,19 @@ void CapsuleCollider::Initialize()
 	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&CapsuleCollider::Initialize, this);
+
+	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
+	if (modelRdr)
+	{
+		if (modelRdr->m_mesh)
+		{
+			Vector3& extents = modelRdr->m_mesh->m_aabb.m_extents;
+
+			m_baseEntityScale	= extents.y;
+			m_baseEntityRadius	= Max(extents.x, extents.z);
+			m_localPosition		= modelRdr->m_mesh->m_aabb.m_center;
+		}
+	}
 
 	SetEntityScale(m_transform->GetGlobalScale());
 }
@@ -203,7 +218,7 @@ void CapsuleCollider::SetScale(const float& scale)
 {
 	m_editableScale = scale;
 
-	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale) - m_totalRadius);
+	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale * m_baseEntityScale) - m_totalRadius);
 	ComputeModelMatrices();
 
 	ResetPxShape();
@@ -213,7 +228,7 @@ void CapsuleCollider::SetRadius(const float& radius)
 {
 	m_editableRadius = radius;
 
-	m_totalRadius = m_editableRadius * m_entityRadius;
+	m_totalRadius = m_editableRadius * m_entityRadius * m_baseEntityRadius;
 	ComputeModelMatrices();
 
 	ResetPxShape();

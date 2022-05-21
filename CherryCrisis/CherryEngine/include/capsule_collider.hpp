@@ -15,14 +15,14 @@ class CCENGINE_API CapsuleCollider : public Collider, public ARenderer
 private:
 	using floatProperty = CCProperty::ConstRefProperty<CapsuleCollider, float>;
 
-	float m_baseEntityScale =1.f;
-	float m_entityScale = 1.f;
-	float m_entityRadius = 1.f;
-	float m_editableScale = 1.f;
-	float m_editableRadius = 1.f;
-
-	float m_totalRadius = 1.f;
-	float m_totalScale = 1.f;
+	float m_baseEntityScale		= 1.f;
+	float m_baseEntityRadius	= 1.f;
+	float m_entityScale			= 1.f;
+	float m_entityRadius		= 1.f;
+	float m_editableScale		= 1.f;
+	float m_editableRadius		= 1.f;
+	float m_totalRadius			= 1.f;
+	float m_totalScale			= 1.f;
 
 	CCMaths::Matrix4 m_topModel	= CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_botModel	= CCMaths::Matrix4::Identity;

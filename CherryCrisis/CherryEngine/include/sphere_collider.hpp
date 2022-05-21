@@ -15,9 +15,9 @@ private:
 	using floatProperty = CCProperty::ConstRefProperty<SphereCollider, float>;
 
 	float m_baseEntityScale = 1.f;
-	float m_editableScale = 1.f;
-	float m_entityScale = 1.f;
-	float m_totalScale = 1.f;
+	float m_editableScale	= 1.f;
+	float m_entityScale		= 1.f;
+	float m_totalScale		= 1.f;
 
 	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;
 

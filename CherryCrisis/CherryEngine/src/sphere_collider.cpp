@@ -12,6 +12,8 @@
 #include "entity.hpp"
 #include "transform.hpp"
 
+using namespace CCMaths;
+
 
 SphereCollider::SphereCollider()
 {
@@ -84,6 +86,18 @@ void SphereCollider::Initialize()
 	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&SphereCollider::Initialize, this);
+
+	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
+	if (modelRdr)
+	{
+		if (modelRdr->m_mesh)
+		{
+			Vector3& extents = modelRdr->m_mesh->m_aabb.m_extents;
+
+			m_baseEntityScale	= Max(Max(extents.x, extents.y), extents.z);
+			m_localPosition		= modelRdr->m_mesh->m_aabb.m_center;
+		}
+	}
 
 	SetEntityScale(m_transform->GetGlobalScale());
 }
