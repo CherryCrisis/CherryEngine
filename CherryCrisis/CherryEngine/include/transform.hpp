@@ -102,4 +102,6 @@ public:
 	bool IsChildOf(Transform* parent, bool recursive=true);
 
 	Event<Transform*> m_onTransformEdited;
+
+	void Copy(Behaviour* copy) override;
 };

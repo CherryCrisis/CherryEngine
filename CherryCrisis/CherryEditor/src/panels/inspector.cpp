@@ -75,18 +75,20 @@ void Inspector::InspectComponents(Entity* entity, int id)
         bool opened = false;
         ScriptedBehaviour* b = (ScriptedBehaviour*)behaviour;
         if (bname == "ScriptedBehaviour")
-            opened = ImGui::TreeNode(b->GetScriptPath().c_str());
+            opened = ImGui::TreeNodeEx(b->GetScriptPath().c_str(), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen);
         else
-            opened = ImGui::TreeNode(bname.c_str());
+            opened = ImGui::TreeNodeEx(bname.c_str(), ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen);
         if (bname == "ModelRenderer")
             renderer = (ModelRenderer*)behaviour;
         if (bname == "AudioEmitter")
             emitter = (AudioEmitter*)behaviour;
+        ImGui::OpenPopupOnItemClick("context");
         // check if right clicked
-        if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
-        {
-            ImGui::OpenPopup("context");
-        }
+        if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK))
+            if(ImGui::IsItemHovered())
+            {
+                //ImGui::OpenPopup("context");
+            }
 
         ImVec4 color1 = { 100.f / 255.f, 10.f / 255.f, 10.f / 255.f, 1.f };
         ImVec4 color2 = { 18.f / 255.f, 120.f / 255.f, 4.f / 255.f, 1.f };
@@ -104,7 +106,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     CCMaths::Vector3 defaultVal;
                     CCMaths::Vector3* valPtr = &defaultVal;
                     metadata->Get((void**)&valPtr);
-                    if (valPtr && ImCherry::ColoredDragFloat3(metaname.c_str(), valPtr->data, color1, color2, color3, 0.5f))
+                    if (valPtr && ImCherry::ColoredDragFloat3(metaname, valPtr->data));//, color1, color2, color3, 0.5f))
                         metadata->Set(valPtr);
                     continue;
                 }

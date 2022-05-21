@@ -62,6 +62,7 @@ public:
 	//void OnReloadMaterial(std::shared_ptr<Material> material);
 	//void ReloadTexture(std::shared_ptr<Texture> newTex);
 
+	void Copy(Behaviour* copy) override;
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void OnCellAdded(Cell* newCell);

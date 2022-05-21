@@ -31,9 +31,21 @@ Entity::Entity(Entity* entity)
 		Behaviour* behaviourCopy = Serializer::CreateBehaviour(name, {});
 		
 		if (behaviourCopy) 
-		{
 			behaviourCopy->SetHostPtr(this);
-			behaviourCopy->Copy(behaviour);
+
+	}
+	// Link copied behaviours
+	for (const auto [type, behaviour] : m_behaviours)
+	{
+		std::string myName = String::ExtractLastValue(typeid(*behaviour).name(), ' ');
+		for (const auto& cbehaviour : behaviours)
+		{
+			std::string copiedName = String::ExtractLastValue(typeid(*cbehaviour).name(), ' ');
+			if (myName == copiedName) 
+			{
+				behaviour->Copy(cbehaviour);
+				break;
+			}
 		}
 	}
 

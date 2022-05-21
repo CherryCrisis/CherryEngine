@@ -171,7 +171,7 @@ void UIEditor::InspectSelectedItem()
             CCMaths::Vector3 defaultVal;
             CCMaths::Vector3* valPtr = &defaultVal;
             metadata->Get((void**)&valPtr);
-            if (valPtr && ImCherry::ColoredDragFloat3(metaname.c_str(), valPtr->data, color1, color2, color3, 0.5f))
+            if (valPtr && ImCherry::ColoredDragFloat3(metaname, valPtr->data))
                 metadata->Set(valPtr);
             continue;
         }

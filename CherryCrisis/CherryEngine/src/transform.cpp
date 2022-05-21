@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+#include "scene_manager.hpp"
+
 #include "entity.hpp"
 #include "event.hpp"
 #include "cell.hpp"
@@ -287,4 +289,18 @@ Vector3 Transform::GetGlobalScale()
 	m_isDirty &= ~((int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
 
 	return m_worldScale;
+}
+
+void Transform::Copy(Behaviour* copy)
+{
+	Transform* copiedTransform = dynamic_cast<Transform*>(copy);
+
+	SetPosition(copiedTransform->m_position);
+	SetRotation(copiedTransform->m_rotation);
+	SetScale(copiedTransform->m_scale);
+	
+	for (const auto& child : copiedTransform->m_children)
+	{
+		SceneManager::GetInstance()->m_currentScene->CopyEntity(child->GetHostPtr(), GetHostPtr());
+	}
 }

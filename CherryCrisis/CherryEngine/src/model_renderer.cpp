@@ -245,3 +245,15 @@ void ModelRenderer::OnCellRemoved(Cell* newCell)
 	if (m_mesh)
 		newCell->RemoveRenderer(this);
 }
+
+void ModelRenderer::Copy(Behaviour* copy) 
+{
+	ModelRenderer* rendererCopy = dynamic_cast<ModelRenderer*>(copy);
+
+	SetMesh(rendererCopy->m_mesh);
+	SetMaterial(rendererCopy->m_material);
+
+	m_transform = GetHost().GetBehaviour<Transform>();
+
+	Initialize();
+}
