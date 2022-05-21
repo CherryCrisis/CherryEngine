@@ -5,10 +5,11 @@
 
 #include "core/panel.hpp"
 
-class Engine;
-class EditorManager;
-class Entity;
 class AssetSettingsDisplayer;
+class EditorManager;
+class Engine;
+class Entity;
+class Material;
 
 class Inspector : public Panel 
 {
@@ -17,6 +18,8 @@ private:
 	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
 
 	void InspectComponents(Entity* entity, int id);
+
+	std::shared_ptr<Material> InspectMaterial(std::shared_ptr<Material> material);
 public:
 
 	Inspector(bool spawnOpened = true, EditorManager* manager = nullptr, AssetSettingsDisplayer* assetSettingsDisplayer = nullptr);

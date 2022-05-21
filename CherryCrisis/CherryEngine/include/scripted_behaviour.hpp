@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <functional>
+#include <unordered_map>
 
 #include <cherry_macros.hpp>
 
@@ -32,15 +33,21 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	mono::ManagedMethod*				m_managedUpdate = nullptr;
 	mono::ManagedMethod*				m_managedAwake = nullptr;
 	mono::ManagedMethod*				m_managedStart = nullptr;
+	mono::ManagedMethod*				m_managedCollideIn = nullptr;
+	mono::ManagedMethod*				m_managedCollideStay = nullptr;
+	mono::ManagedMethod*				m_managedCollideOut = nullptr;
+	mono::ManagedMethod*				m_managedTriggerIn = nullptr;
+	mono::ManagedMethod*				m_managedTriggerOut = nullptr;
 
 	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
 	mono::ManagedThunk<void, struct _MonoObject*>* csAwake;
 	mono::ManagedThunk<void, struct _MonoObject*>* csStart;
-	mono::ManagedThunk<void, struct _MonoObject*>* csCollideIn;
-	mono::ManagedThunk<void, struct _MonoObject*>* csCollideStay;
-	mono::ManagedThunk<void, struct _MonoObject*>* csCollideOut;
-	mono::ManagedThunk<void, struct _MonoObject*>* csTriggerIn;
-	mono::ManagedThunk<void, struct _MonoObject*>* csTriggerOut;
+
+	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csCollideIn;
+	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csCollideStay;
+	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csCollideOut;
+	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csTriggerIn;
+	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csTriggerOut;
 
 	void PopulateMetadatas() override;
 
@@ -48,6 +55,11 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	std::unordered_map<std::string, std::shared_ptr<class CCProperty::IClearProperty>> m_properties;
 	std::unordered_map<std::string, std::shared_ptr<class Field>> m_field;
+
+	mono::ManagedClass* m_behaviourClass = nullptr;
+	mono::ManagedClass* m_entityClass = nullptr;
+
+	std::unordered_map<Entity*, mono::ManagedObject*> m_physicEntities;
 
 public:
 	ScriptedBehaviour();
@@ -61,11 +73,13 @@ public:
 	void Start();
 	void Update();
 
-	void OnCollisionEnter();
-	void OnCollisionStay();
-	void OnCollisionExit();
-	void OnTriggerEnter();
-	void OnTriggerExit();
+	void SetSignals();
+
+	void OnCollisionEnter(Entity* other);
+	void OnCollisionStay(Entity* other);
+	void OnCollisionExit(Entity* other);
+	void OnTriggerEnter(Entity* other);
+	void OnTriggerExit(Entity* other);
 
 	void Reload(std::shared_ptr<CsAssembly> csAssembly);
 

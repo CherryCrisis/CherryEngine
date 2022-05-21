@@ -158,6 +158,9 @@ namespace PhysicSystem
 			PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(pairHeader.actors[0]->userData);
 			PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairHeader.actors[1]->userData);
 
+			if (!actor1 || !actor2)
+				return;
+
 			if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_PERSISTS)
 			{
 				actor1->m_owner->OnCollisionStay(actor2->m_owner);
@@ -189,17 +192,20 @@ namespace PhysicSystem
 			PhysicActor* actor1 = reinterpret_cast<PhysicActor*>(pairs[i].triggerActor->userData);
 			PhysicActor* actor2 = reinterpret_cast<PhysicActor*>(pairs[i].otherActor->userData);
 
+			if (!actor1 || !actor2)
+				return;
+
 			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
+			{
 				actor1->m_owner->OnTriggerEnter(actor2->m_owner);
+				actor2->m_owner->OnTriggerEnter(actor1->m_owner);
+			}
 
 			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
+			{
 				actor1->m_owner->OnTriggerExit(actor2->m_owner);
+				actor2->m_owner->OnTriggerExit(actor1->m_owner);
+			}
 		}
-	}
-
-
-	void PhysicScene::MoveCharacterController(float deltaTime)
-	{
-		m_playerPxController->move(physx::PxVec3(0.f, -9.81f, 0.f ), 1.f, deltaTime, physx::PxControllerFilters());
 	}
 }

@@ -59,7 +59,6 @@ namespace PhysicSystem
 		virtual void onWake(physx::PxActor**, physx::PxU32) {}
 		virtual void onSleep(physx::PxActor**, physx::PxU32) {}
 		virtual void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) {}
-		void	MoveCharacterController(float deltaTime);
 
 		void			Pause(bool value)	{ m_paused = value; }
 		bool			IsPaused()			{ return m_paused; }

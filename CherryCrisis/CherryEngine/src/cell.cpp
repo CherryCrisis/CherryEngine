@@ -188,24 +188,3 @@ void Cell::LinkPortals(Portal* portal1, Portal* portal2)
 {
 	portal1->Link(portal2);
 }
-
-void Cell::MoveCharacter(float deltaTime)
-{
-	m_physicCell->MoveCharacterController(deltaTime);
-}
-
-void Cell::SetControllerDesc(physx::PxCapsuleControllerDesc& desc)
-{
-	//CCMaths::Vector3& p = m_playerController.position;
-	//desc.position		= physx::PxExtendedVec3(p.x, p.y, p.z);
-	//desc.radius			= m_playerController.radius;
-	//desc.height			= m_playerController.height;
-	//desc.slopeLimit		= m_playerController.slopeLimit;
-	//desc.maxJumpHeight	= m_playerController.maxJumpHeight;
-	//desc.contactOffset	= m_playerController.contactOffset;
-	//desc.stepOffset		= m_playerController.stepOffset;
-	//desc.density		= m_playerController.density;
-
-	//desc.climbingMode = physx::PxCapsuleClimbingMode::Enum::eCONSTRAINED;
-	//desc.material = physics->GetMaterial();
-}

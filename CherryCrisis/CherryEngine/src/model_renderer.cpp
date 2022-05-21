@@ -7,17 +7,15 @@
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
 
-#include "entity.hpp"
 #include "cell.hpp"
-
-#include "shadow_renderpass.hpp"
-#include "basic_renderpass.hpp"
-#include "pbr_renderpass.hpp"
-#include "model.hpp"
-#include "picking_renderpass.hpp"
 #include "entity.hpp"
-#include "texture.hpp"
 #include "material.hpp"
+#include "model.hpp"
+#include "texture.hpp"
+#include "basic_renderpass.hpp"
+#include "picking_renderpass.hpp"
+#include "pbr_renderpass.hpp"
+#include "shadow_renderpass.hpp"
 
 int ModelRenderer::count = 1;
 

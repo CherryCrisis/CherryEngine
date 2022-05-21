@@ -49,6 +49,10 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
     float const S = 1.f / (longitude - 1.f);
     float add = 2 * PI / longitude;
 
+    Vector3 min, max = { 0 };
+    min.y = -halfHeight;
+    max.y = halfHeight;
+
     for (int s = 0; s < longitude; s++)
     {
         Vertex vertex;
@@ -58,18 +62,27 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
 
         vertex.uv = { s * S , 0 };
 
-        vertex.position = { x, 0.f, z };
-        vertex.position = vertex.position.Normalized() * radius;
+        Vector3 temp = CCMaths::Vector3(x, 0, z).Normalized();
+        vertex.position = temp * radius;
 
-        vertex.normal = CCMaths::Vector3(x, 0, z);
-        vertex.tangent = CCMaths::Vector3(x, 0, z);
-        vertex.bitangent = CCMaths::Vector3(x, 0, z);
+        CCMaths::Min(min.x, vertex.position.x);
+        CCMaths::Min(min.z, vertex.position.z);
+        CCMaths::Max(max.x, vertex.position.x);
+        CCMaths::Max(max.z, vertex.position.z);
+
+        vertex.normal = vertex.tangent = vertex.bitangent = temp;
 
         vertex.position.y = halfHeight;
+        vertex.normal.y = 1;
+        vertex.normal.Normalize();
         vertices.push_back(vertex);
 
         vertex.position.y = -halfHeight;
         vertex.uv.y = 1;
+
+        vertex.normal = temp;
+        vertex.normal.y = -1;
+        vertex.normal.Normalize();
         vertices.push_back(vertex);
     }
 
@@ -77,11 +90,13 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
     vertex.uv = { 0.5f, 0.5f };
     vertex.position = { 0.f, 0.f, 0.f };
 
-    vertex.normal = CCMaths::Vector3(0, 1, 0);
-    vertex.tangent = CCMaths::Vector3(0, 1, 0);
-    vertex.bitangent = CCMaths::Vector3(0, 1, 0);
+    vertex.normal = vertex.tangent = vertex.bitangent = CCMaths::Vector3(0, 1, 0);
     vertex.position.y = halfHeight;
     vertices.push_back(vertex);
+
+    vertex.normal = vertex.tangent = vertex.bitangent = CCMaths::Vector3(0, -1, 0);
+    CCMaths::Vector3(0, -1, 0);
+    vertex.bitangent = CCMaths::Vector3(0, -1, 0);
     vertex.position.y = -halfHeight;
     vertices.push_back(vertex);
 
@@ -120,6 +135,8 @@ void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude
 
 	float const R = 1.f / (latitude - 1.f);
 	float const S = 1.f / (longitude - 1.f);
+    
+    Vector3 min, max = { 0 };
 
     for (unsigned int r = 0; r < uint_lat; r++)
     {
@@ -137,9 +154,14 @@ void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude
             vertex.position = { x, y, z };
             vertex.position = vertex.position.Normalized() * radius;
 
-            vertex.normal = CCMaths::Vector3(x, y, z);
-            vertex.tangent = CCMaths::Vector3(x, y, z);
-            vertex.bitangent = CCMaths::Vector3(x, y, z);
+            CCMaths::Min(min.x, vertex.position.x);
+            CCMaths::Min(min.y, vertex.position.y);
+            CCMaths::Min(min.z, vertex.position.z);
+            CCMaths::Max(max.x, vertex.position.x);
+            CCMaths::Max(max.y, vertex.position.y);
+            CCMaths::Max(max.z, vertex.position.z);
+
+            vertex.normal = vertex.tangent = vertex.bitangent = CCMaths::Vector3(x, y, z);
 
             vertices.push_back(vertex);
         }
@@ -179,7 +201,7 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
         Vertex vertex;
 
         vertex.position.x = xSign * xHalfRes;
-        vertex.position.y = ySign *-yHalfRes;
+        vertex.position.y = ySign * yHalfRes;
         vertex.position.z = zSign * zHalfRes;
 
         vertex.normal = CCMaths::Vector3((float)xSign, (float)ySign, (float)zSign);
@@ -191,31 +213,31 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 
     std::vector<unsigned int> indices;
     indices.reserve(36);
+    
+    //Above ABC,BCD
+    indices.push_back(0); indices.push_back(2); indices.push_back(1);
+    indices.push_back(3); indices.push_back(1); indices.push_back(2);
 
-    /*Above ABC,BCD*/
-    indices.push_back(0); indices.push_back(1); indices.push_back(2);
-    indices.push_back(3); indices.push_back(2); indices.push_back(1);
+    //Following EFG,FGH
+    indices.push_back(6); indices.push_back(4); indices.push_back(5);
+    indices.push_back(5); indices.push_back(7); indices.push_back(6);
 
-    /*Following EFG,FGH*/
-    indices.push_back(6); indices.push_back(5); indices.push_back(4);
-    indices.push_back(5); indices.push_back(6); indices.push_back(7);
+    //Left ABF,AEF
+    indices.push_back(5); indices.push_back(0); indices.push_back(1);
+    indices.push_back(0); indices.push_back(5); indices.push_back(4);
 
-    /*Left ABF,AEF*/
-    indices.push_back(5); indices.push_back(1); indices.push_back(0);
-    indices.push_back(0); indices.push_back(4); indices.push_back(5);
+    //Right side CDH,CGH
+    indices.push_back(2); indices.push_back(7); indices.push_back(3);
+    indices.push_back(7); indices.push_back(2); indices.push_back(6);
 
-    /*Right side CDH,CGH*/
-    indices.push_back(2); indices.push_back(3); indices.push_back(7);
-    indices.push_back(7); indices.push_back(6); indices.push_back(2);
+    //ACG,AEG
+    indices.push_back(0); indices.push_back(6); indices.push_back(2);
+    indices.push_back(6); indices.push_back(0); indices.push_back(4);
 
-    /*ACG,AEG*/
-    indices.push_back(0); indices.push_back(2); indices.push_back(6);
-    indices.push_back(6); indices.push_back(4); indices.push_back(0);
-
-    /*Behind BFH,BDH*/
-    indices.push_back(1); indices.push_back(5); indices.push_back(7);
-    indices.push_back(7); indices.push_back(3); indices.push_back(1);
-
+    //Behind BFH,BDH
+    indices.push_back(1); indices.push_back(7); indices.push_back(5);
+    indices.push_back(7); indices.push_back(1); indices.push_back(3);
+    
     Load(mesh, vertices, indices);
 }
 

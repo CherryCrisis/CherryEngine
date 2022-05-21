@@ -8,25 +8,26 @@
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
 
-#include "utils.hpp"
-#include "entity.hpp"
-#include "transform.hpp"
-#include "light_component.hpp"
-#include "model_renderer.hpp"
-#include "camera_component.hpp"
-#include "scripted_behaviour.hpp"
-#include "rigidbody.hpp"
-#include "box_collider.hpp"
-#include "sphere_collider.hpp"
-#include "capsule_collider.hpp"
 #include "audio_emitter.hpp"
 #include "audio_listener.hpp"
+#include "box_collider.hpp"
+#include "camera_component.hpp"
+#include "capsule_collider.hpp"
 #include "character_controller.hpp"
-#include "portal_component.hpp"
-#include "model.hpp"
+#include "entity.hpp"
 #include "input_manager.hpp"
-#include "sky_renderer.hpp"
+#include "light_component.hpp"
+#include "model.hpp"
+#include "model_renderer.hpp"
 #include "object.hpp"
+#include "portal_component.hpp"
+#include "rigidbody.hpp"
+#include "scripted_behaviour.hpp"
+#include "sky_renderer.hpp"
+#include "shape_renderer.hpp"
+#include "sphere_collider.hpp"
+#include "transform.hpp"
+#include "utils.hpp"
 
 #include "ui_text.hpp"
 #include "ui_button.hpp"
@@ -438,6 +439,7 @@ Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
 	if      (type == "Transform")			b = new Transform(id);
 	else if (type == "LightComponent")		b = new LightComponent(id);
 	else if (type == "ModelRenderer")		b = new ModelRenderer(id);
+	else if (type == "ShapeRenderer")		b = new ShapeRenderer(id);
 	else if (type == "ScriptedBehaviour")	b = new ScriptedBehaviour(id);
 	else if (type == "CameraComponent")		b = new CameraComponent(id);
 	else if (type == "Rigidbody")			b = new Rigidbody(id); 

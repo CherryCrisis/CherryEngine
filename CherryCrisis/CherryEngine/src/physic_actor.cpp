@@ -18,6 +18,14 @@ namespace PhysicSystem
 {
 	PhysicActor::~PhysicActor()
 	{
+		m_owner->m_cell->RemoveEntityFromPhysicScene(m_owner);
+
+		if (m_pxActor)
+		{
+			m_pxActor->userData = nullptr;
+			DestroyPxActor();
+		}
+
 		if (m_transform)
 		{
 			m_transform->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
@@ -57,7 +65,6 @@ namespace PhysicSystem
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.y, pxT.q.x, pxT.q.z });
 
-			// TODO: Change with world tranform
 			Vector3 pos = t ? t->GetPosition() : Vector3::Zero;
 			pos.x = pxT.p.x != m_oldPos.x ? pxT.p.x : pos.x;
 			pos.y = pxT.p.y != m_oldPos.y ? pxT.p.y : pos.y;

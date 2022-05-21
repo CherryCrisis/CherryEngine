@@ -42,15 +42,17 @@ BoxCollider::~BoxCollider()
 {
 	Unregister();
 
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
+	if (Camera* cam = CameraComponent::m_editorCamera)
+		UnsubscribeToPipeline(cam->m_pipeline.get());
 
-	UnsubscribeToPipeline(cam->m_pipeline.get());
+	GetHost().m_OnSelected.Unbind(&BoxCollider::Visible, this);
+	GetHost().m_OnUnselected.Unbind(&BoxCollider::Unvisible, this);
 
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Unbind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Unbind(&BoxCollider::RecomputeMatrix, this);
+		m_transform->m_onRotationChange.Unbind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Unbind(&BoxCollider::InvalidateTransform, this);
 	}
 }
@@ -63,6 +65,8 @@ void BoxCollider::BindToSignals()
 	m_isRegistered = true;
 
 	GetHost().m_OnAwake.Bind(&BoxCollider::Initialize, this);
+	GetHost().m_OnSelected.Bind(&BoxCollider::Visible, this);
+	GetHost().m_OnUnselected.Bind(&BoxCollider::Unvisible, this);
 }
 
 void BoxCollider::Initialize()
@@ -72,6 +76,8 @@ void BoxCollider::Initialize()
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Bind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Bind(&BoxCollider::RecomputeMatrix, this);
+		m_transform->m_onRotationChange.Bind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
 	}
 

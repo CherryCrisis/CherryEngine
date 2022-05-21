@@ -9,8 +9,6 @@
 #include "cherry_header.hpp"
 #include "core/editor_manager.hpp"
 
-#include "entity.hpp"
-
 #include "audio_emitter.hpp"
 #include "audio_listener.hpp"
 #include "basic_renderpass.hpp"
@@ -21,11 +19,13 @@
 #include "character_controller.hpp"
 #include "core/imcherry.hpp"
 #include "csscripting_system.hpp"
+#include "entity.hpp"
 #include "light_component.hpp"
 #include "material.hpp"
 #include "panels/asset_settings.hpp"
 #include "portal_component.hpp"
 #include "rigidbody.hpp"
+#include "shape_renderer.hpp"
 #include "scripted_behaviour.hpp"
 #include "sphere_collider.hpp"
 #include "transform.hpp"
@@ -50,6 +50,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
     std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 
     ModelRenderer* renderer = nullptr;
+    ShapeRenderer* shape = nullptr;
     AudioEmitter* emitter = nullptr;
     for (Behaviour* behaviour : behaviours)
     {
@@ -82,6 +83,8 @@ void Inspector::InspectComponents(Entity* entity, int id)
             renderer = (ModelRenderer*)behaviour;
         if (bname == "AudioEmitter")
             emitter = (AudioEmitter*)behaviour;
+        if (bname == "ShapeRenderer")
+            shape = (ShapeRenderer*)behaviour;
         // check if right clicked
         if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
         {
@@ -235,38 +238,72 @@ void Inspector::InspectComponents(Entity* entity, int id)
     }
     
     //Inspect Material
-    if (renderer && renderer->m_mesh && renderer->m_material)
+    if (renderer && renderer->m_mesh)
     {
         std::shared_ptr<Material> mat = renderer->m_material;
-        if (ImGui::TreeNode("Material"))
+        std::shared_ptr<Material> newMat = InspectMaterial(mat);
+
+        if (newMat)
         {
-            if (ImGui::Button(mat->GetFilesystemPath()->filename().string().c_str()))
-            {
-                if (m_assetSettingsDisplayer)
-                    m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(mat));
-            }
-
-            if (ImGui::BeginDragDropTarget())
-            {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-                {
-                    const char* materialPath = (const char*)payload->Data;
-                    std::string extension = String::ExtractValue(materialPath, '.');
-
-                    if (!matExtensions.compare("." + extension))
-                    {
-                        std::shared_ptr<Material> newMaterial = ResourceManager::GetInstance()->GetResource<Material>(materialPath);
-
-                        if (newMaterial)
-                            renderer->SetMaterial(newMaterial);
-                    }
-                }
-                ImGui::EndDragDropTarget();
-            }
-
-            ImGui::TreePop();
+            renderer->SetMaterial(newMat);
         }
     }
+
+    //Inspect Material
+    if (shape && shape->m_mesh)
+    {
+        std::shared_ptr<Material> mat = shape->m_material;
+        std::shared_ptr<Material> newMat = InspectMaterial(mat);
+
+        if (newMat)
+        {
+            shape->SetMaterial(newMat);
+        }
+    }
+}
+
+std::shared_ptr<Material> Inspector::InspectMaterial(std::shared_ptr<Material> material)
+{
+    if (ImGui::TreeNode("Material"))
+    {
+        if (material)
+        {
+            if (ImGui::Button(material->GetFilesystemPath()->filename().string().c_str()))
+            {
+                if (m_assetSettingsDisplayer)
+                    m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(material));
+            }
+        }
+        else
+            ImGui::Button("Empty");
+
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+            {
+                const char* materialPath = (const char*)payload->Data;
+                std::string extension = String::ExtractValue(materialPath, '.');
+
+                if (!matExtensions.compare("." + extension))
+                {
+                    std::shared_ptr<Material> newMaterial = ResourceManager::GetInstance()->GetResource<Material>(materialPath);
+
+                    if (newMaterial)
+                    {
+                        ImGui::EndDragDropTarget();
+                        ImGui::TreePop();
+
+                        return newMaterial;
+                    }
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
+
+        ImGui::TreePop();
+    }
+
+    return nullptr;
 }
 
 void InspectMultiComponents(std::vector<Entity*> entities)

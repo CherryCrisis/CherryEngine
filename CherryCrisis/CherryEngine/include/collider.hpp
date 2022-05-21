@@ -42,7 +42,7 @@ protected:
 public:
 	PhysicSystem::PhysicActor* m_physicActor = nullptr;
 	EColliderType m_type = EColliderType::NONE;
-	float m_isVisible = true;
+	float m_isVisible = false;
 
 	virtual void BindToSignals() override {}
 	virtual void Initialize() {}
@@ -88,6 +88,9 @@ public:
 
 	void	SetPxLocalPos();
 
+	virtual void Visible()		{ m_isVisible = true; }
+	virtual void Unvisible()	{ m_isVisible = false; }
+
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled() { return m_isEnabled; }
 	void	SetTrigger(const bool& isTrigger);
@@ -98,6 +101,7 @@ public:
 	void				SetLocalPos(const CCMaths::Vector3& localPos);
 	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
 
+	virtual void RecomputeMatrix(const CCMaths::Vector3& ignored) = 0;
 	virtual void ComputeModelMatrices() = 0;
 	virtual CCMaths::Matrix4 GetModelMatrix() = 0;
 

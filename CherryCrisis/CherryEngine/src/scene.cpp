@@ -13,7 +13,7 @@
 #include "entity.hpp"
 #include "transform.hpp"
 #include "model_renderer.hpp"
-
+#include"shape_renderer.hpp"
 #include "model.hpp"
 #include "mesh.hpp"
 
@@ -192,6 +192,9 @@ Entity* Scene::FindModelEntity(uint32_t id)
 	for (Entity* entity : m_entities)
 	{
 		if (ModelRenderer* rdr = entity->GetBehaviour<ModelRenderer>(); rdr && rdr->m_id == id)
+			return entity;
+
+		else if (ShapeRenderer* rdr = entity->GetBehaviour<ShapeRenderer>(); rdr && rdr->m_id == id)
 			return entity;
 	}
 	return nullptr;

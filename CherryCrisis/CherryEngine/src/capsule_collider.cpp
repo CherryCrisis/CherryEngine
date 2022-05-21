@@ -42,15 +42,17 @@ CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
 
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
+	if (Camera* cam = CameraComponent::m_editorCamera)
+		UnsubscribeToPipeline(cam->m_pipeline.get());
 
-	UnsubscribeToPipeline(cam->m_pipeline.get());
+	GetHost().m_OnSelected.Unbind(&CapsuleCollider::Visible, this);
+	GetHost().m_OnUnselected.Unbind(&CapsuleCollider::Unvisible, this);
 
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Unbind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Unbind(&CapsuleCollider::RecomputeMatrix, this);
+		m_transform->m_onRotationChange.Unbind(&CapsuleCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Unbind(&CapsuleCollider::InvalidateTransform, this);
 	}
 }
@@ -62,9 +64,9 @@ void CapsuleCollider::BindToSignals()
 	physicManager->Register(this);
 	m_isRegistered = true;
 
-	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
-
 	GetHost().m_OnAwake.Bind(&CapsuleCollider::Initialize, this);
+	GetHost().m_OnSelected.Bind(&CapsuleCollider::Visible, this);
+	GetHost().m_OnUnselected.Bind(&CapsuleCollider::Unvisible, this);
 }
 
 void CapsuleCollider::Initialize()
@@ -74,6 +76,8 @@ void CapsuleCollider::Initialize()
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Bind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Bind(&CapsuleCollider::RecomputeMatrix, this);
+		m_transform->m_onRotationChange.Bind(&CapsuleCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&CapsuleCollider::InvalidateTransform, this);
 	}
 

@@ -62,7 +62,6 @@ void ColliderRenderPass::Execute(Viewer*& viewer)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glDepthFunc(GL_ALWAYS);
 
 	glCullFace(GL_BACK);
 	glPolygonMode(GL_FRONT, GL_LINE);
@@ -74,8 +73,16 @@ void ColliderRenderPass::Execute(Viewer*& viewer)
 
 	for (Collider* collider : m_colliders)
 	{
-		if (!collider->m_isVisible)
-			continue;
+		if (collider->m_isVisible)
+		{
+			glDepthFunc(GL_ALWAYS);
+			m_color = { 0.f, 1.f, 0.f, 1.f };
+		}
+		else
+		{
+			glDepthFunc(GL_LESS);
+			m_color = { 0.f, 0.7f, 0.f, 1.f };
+		}
 
 		CapsuleCollider* capsColl = nullptr;
 		switch (collider->m_type)
@@ -112,8 +119,7 @@ void ColliderRenderPass::DrawMesh(Mesh* mesh, const CCMaths::Matrix4& model)
 {
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, model.data);
 
-	CCMaths::Vector4 color = { 0.f, 1.f, 0.f, 1.f };
-	glUniform4fv(glGetUniformLocation(m_program->m_shaderProgram, "uColor"), 1, color.data);
+	glUniform4fv(glGetUniformLocation(m_program->m_shaderProgram, "uColor"), 1, m_color.data);
 
 	if (!mesh)
 		return;

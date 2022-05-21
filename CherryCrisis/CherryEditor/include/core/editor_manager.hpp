@@ -30,8 +30,8 @@ struct EntitySelector
     std::vector<Entity*> m_entities;
 
     bool Add(Entity* entity);
-    bool Remove(Entity* entity);
-    bool Clear();
+    bool Remove(Entity* entity, bool unselect = true);
+    bool Clear(bool unselect = true);
     bool IsEmpty() { return m_entities.size() <= 0; }
     bool Contains(Entity* entity);
 

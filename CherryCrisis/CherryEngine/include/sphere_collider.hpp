@@ -44,9 +44,13 @@ public:
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 
+	void Visible() override { this->Collider::Visible(); }
+	void Unvisible() override { this->Collider::Unvisible(); }
+
 	void SetScale(const float& scale);
 	float GetScale() { return m_editableScale; }
 
+	void RecomputeMatrix(const CCMaths::Vector3& ignored) override { ComputeModelMatrices(); }
 	void ComputeModelMatrices() override;
 	CCMaths::Matrix4 GetModelMatrix() override;
 

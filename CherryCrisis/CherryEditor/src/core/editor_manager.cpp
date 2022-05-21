@@ -407,16 +407,21 @@ bool EntitySelector::Add(Entity* entity)
         return false;
 
     m_entities.push_back(entity);
+    entity->m_OnSelected.Invoke();
     return true;
 }
 
-bool EntitySelector::Remove(Entity* entity) 
+bool EntitySelector::Remove(Entity* entity, bool unselect)
 {
     for (auto it = m_entities.begin(); it != m_entities.end(); it++)
     {
         if (*it == entity)
         {
             m_entities.erase(it);
+
+            if (unselect)
+                entity->m_OnUnselected.Invoke();
+            
             break;
         }
     }
@@ -424,8 +429,14 @@ bool EntitySelector::Remove(Entity* entity)
     return Contains(entity);
 }
 
-bool EntitySelector::Clear() 
+bool EntitySelector::Clear(bool unselect)
 {
+    if (unselect)
+    {
+        for (auto& entity : m_entities)
+            entity->m_OnUnselected.Invoke();
+    }
+
     m_entities.clear();
     return m_entities.size() <= 0;
 }
