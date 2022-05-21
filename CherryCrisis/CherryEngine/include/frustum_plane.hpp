@@ -39,7 +39,9 @@ struct FrustumPlanes
     Plane farFace;
     Plane nearFace;
 
-    static FrustumPlanes Create(const Camera& camera, float fovY, float aspect, float near, float far);
+	//static FrustumPlanes Create(const CCMaths::Vector3& position, const CCMaths::Vector3& rotation, float fovY, float aspect, float near, float far);
+	static FrustumPlanes Create(const CCMaths::Matrix4& viewMatrix, float fovY, float aspect, float near, float far);
+	static FrustumPlanes CreateFromInverse(const CCMaths::Matrix4& viewMatrixInverse, float fovY, float aspect, float near, float far);
 
 	//AABB Only !
 	bool isOnOrForwardPlan(const Plane& plan, const AABB& aabb) const;

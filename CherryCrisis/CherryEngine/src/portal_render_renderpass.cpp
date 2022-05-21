@@ -62,17 +62,26 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 			if (!gpuPortal->framebuffer)
 				continue;
 
+			if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
+				continue;
+
 			//UpdateFrameBuffer verif if width and heigth are changed
 			gpuPortal->framebuffer->UpdateFramebuffer(framebuffer.width, framebuffer.height);
 
 			portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
 
+			//TODO: Optimize !
 			CCMaths::Matrix4 m = portal->m_linkedPortal->m_modelMatrix * portal->m_modelMatrix.Inverse() * viewer->m_viewMatrix.Inverse();
-			portal->m_linkedPortal->m_viewMatrix = m.Inverse();
-			
+			CCMaths::Matrix4 mInverse = m.Inverse();
+
+			portal->m_linkedPortal->m_viewMatrix = mInverse;
+
 			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader 
 			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
-			
+
+			float aspect = (float)framebuffer.width / (float)framebuffer.height;
+			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(m, portal->m_fovY, aspect, portal->m_near, portal->m_far);
+
 			portal->m_linkedPortal->Draw(viewer->m_currentIteration - 1);
 		}
 	}
