@@ -102,6 +102,8 @@ namespace PhysicSystem
 		PhysicActor& actor = FindOrCreateActor(rigidbody->GetHost());
 		
 		rigidbody->m_physicActor = &actor;
+		rigidbody->SetGravity();
+
 		actor.AddRigidbody(rigidbody, m_isPlaying);
 	}
 

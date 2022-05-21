@@ -92,8 +92,16 @@ bool Rigidbody::Rigidbody::GetKinematic()
 	return m_physicActor->GetKinematic();
 }
 
+void Rigidbody::SetGravity()
+{
+	if (m_physicActor)
+		m_physicActor->SetGravity(m_useGravity);
+}
+
 void Rigidbody::SetGravity(const bool& useGravity)
 {
+	m_useGravity = useGravity;
+
 	if (m_physicActor)
 		m_physicActor->SetGravity(useGravity);
 }

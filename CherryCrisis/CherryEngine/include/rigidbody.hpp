@@ -22,6 +22,7 @@ private:
 	using floatProperty = CCProperty::ConstRefProperty<Rigidbody, float>;
 
 	bool m_isRegistered = false;
+	bool m_useGravity = true;
 
 	void PopulateMetadatas() override;
 
@@ -45,6 +46,7 @@ public:
 	bool	GetEnabled();
 	void	SetKinematic(const bool& isKinematic);
 	bool	GetKinematic();
+	void	SetGravity();
 	void	SetGravity(const bool& useGravity);
 	bool	GetGravity();
 	

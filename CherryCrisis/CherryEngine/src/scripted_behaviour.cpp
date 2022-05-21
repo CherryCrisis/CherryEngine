@@ -142,6 +142,9 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 	if (GetHostPtr())
 		SetSignals();
+		
+	if (!m_managedInstance)
+		return;
 
 	PopulateMetadatas();
 
