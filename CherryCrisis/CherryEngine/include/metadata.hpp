@@ -1,28 +1,29 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include <any>
-#include <unordered_map>
 #include <memory>
-#include <typeindex>
 #include <string>
+#include <typeindex>
+#include <unordered_map>
 
-#include "property.hpp"
+#include <cherry_macros.hpp>
+
 #include "field.hpp"
+#include "property.hpp"
+
 
 struct CCENGINE_API AMetadata
 {
-	virtual void Get(void** outValue) = 0;
-	virtual void Set(void* inValue) = 0;
-
-	virtual const std::type_index& GetType() = 0;
-
 	std::string m_identifier;
 	std::string m_name;
 
 	AMetadata(const char* name, const char* identifier)
 		: m_identifier(identifier) { }
+
+	virtual void Get(void** outValue) = 0;
+	virtual void Set(void* inValue) = 0;
+
+	virtual const std::type_index& GetType() = 0;
 };
 
 template <typename T>

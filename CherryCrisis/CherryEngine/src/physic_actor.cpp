@@ -1,18 +1,19 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "physic_actor.hpp"
 
 #include <PxPhysicsAPI.h>
 
+#include "debug.hpp"
 #include "physic_manager.hpp"
-#include "character_controller.hpp"
+
 #include "capsule_collider.hpp"
+#include "cell.hpp"
+#include "character_controller.hpp"
+#include "entity.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
-#include "cell.hpp"
 
-#include "debug.hpp"
-#include "entity.hpp"
 
 namespace PhysicSystem
 {
@@ -37,6 +38,9 @@ namespace PhysicSystem
 
 	void PhysicActor::Init()
 	{
+		if (m_transform)
+			return;
+
 		m_transform = m_owner->GetOrAddBehaviour<Transform>();
 
 		if (m_transform)

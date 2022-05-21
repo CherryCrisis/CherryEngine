@@ -1,14 +1,15 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "pbr_rendering_pipeline.hpp"
 
-#include "environment_map_renderpass.hpp"
-#include "skydome_renderpass.hpp"
-#include "irradiance_map_renderpass.hpp"
-#include "prefilter_map_renderpass.hpp"
 #include "brdf_renderpass.hpp"
+#include "environment_map_renderpass.hpp"
+#include "irradiance_map_renderpass.hpp"
 #include "pbr_renderpass.hpp"
 #include "picking_renderpass.hpp"
+#include "prefilter_map_renderpass.hpp"
+#include "skydome_renderpass.hpp"
+
 
 PBRRPipeline::PBRRPipeline()
 {

@@ -1,11 +1,12 @@
 #pragma once
 
-#include "ui_item.hpp"
+#include <cherry_macros.hpp>
 
 #include "texture.hpp"
-#include "cherry_macros.hpp"
+#include "ui_item.hpp"
 
 class ARenderingPipeline;
+
 
 class CCENGINE_API UIImage : public UIItem
 {
@@ -19,10 +20,11 @@ protected:
 	void PopulateMetadatas() override;
 
 public:
+	std::shared_ptr<Texture> m_texture = nullptr;
+
 	UIImage();
 	UIImage(CCUUID& id);
 	UIImage(const char* filepath);
-	std::shared_ptr<Texture> m_texture = nullptr;
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
@@ -31,5 +33,4 @@ public:
 	void Delete() override;
 
 	CCProperty::ConstRefProperty<UIImage, std::string> TexturePath{ this, &UIImage::SetTexture, &UIImage::GetTexturePath };
-
 };

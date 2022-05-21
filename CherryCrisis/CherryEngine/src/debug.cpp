@@ -1,5 +1,7 @@
-#include "pch.hpp"
+#include <pch.hpp>
+
 #include "debug.hpp"
+
 
 template <>
 Debug* Singleton<Debug>::currentInstance = nullptr;

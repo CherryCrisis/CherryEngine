@@ -1,17 +1,17 @@
 #pragma once
 
 #include "maths.hpp"
-#include "transform.hpp"
 #include "mesh.hpp"
+#include "transform.hpp"
 
 class Camera;
 
+
 struct Plane
 {
-	CCMaths::Vector3 m_normal = { 0.f, 1.f, 0.f };
-
-	// distance from origin to the nearest point in the plan
 	float m_distance = 0.f;
+
+	CCMaths::Vector3 m_normal = { 0.f, 1.f, 0.f };
 
 	Plane() = default;
 

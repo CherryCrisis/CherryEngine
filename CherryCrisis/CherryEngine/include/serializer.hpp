@@ -1,16 +1,19 @@
 #pragma once
 
 #include <cherry_macros.hpp>
+
 #include "scene.hpp"
 
 class Behaviour;
 class UIItem;
 
+
 class CCENGINE_API Serializer
 {
 private:
-	static Behaviour* CreateBehaviour(const std::string& type, uint32_t uuid);
-	static UIItem* CreateUIItem(const std::string& type, uint32_t uuid);
+	static Behaviour*	CreateBehaviour(const std::string& type, uint32_t uuid);
+	static UIItem*		CreateUIItem(const std::string& type, uint32_t uuid);
+
 public:	
 	// Save scene
 	static bool SerializeScene(Scene* scene, const char* filepath ="");

@@ -1,29 +1,28 @@
-
 #include "cherry_header.hpp"
-
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#include "tahoma.h"
-#include "ImGuizmo.h"
-#include <glad/gl.h>
-
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h> 
-
-#include "core/editor_manager.hpp"
-#include "core/imgui_style.hpp"
-
-#include "stb_image.h"
-#include "input_manager.hpp"
-#include "time_manager.hpp"
-#include "scene_manager.hpp"
 
 #include <iostream>
 #include <crtdbg.h>
 
-#include "utils.hpp"
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <ImGuizmo.h>
+#include <stb_image.h>
+#include <tahoma.h>
+
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h> 
+#include <glad/gl.h>
+
+#include "input_manager.hpp"
+#include "scene_manager.hpp"
+#include "time_manager.hpp"
+
+#include "core/editor_manager.hpp"
+#include "core/imgui_style.hpp"
 #include "command.hpp"
+#include "utils.hpp"
+
 
 void HideCursor(void* window) 
 {

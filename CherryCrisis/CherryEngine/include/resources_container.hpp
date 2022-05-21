@@ -1,19 +1,19 @@
 #pragma once
 
+#include <cassert>
+#include <iostream>
 #include <memory>
 #include <string>
-#include <cassert>
-#include <unordered_map>
 #include <type_traits>
-
-#include <iostream>
+#include <unordered_map>
 
 #include "function.hpp"
 #include "resource.hpp"
 
 template<class ResourceT>
 class ResourcesContainer;
- 
+
+
 class AResourcesContainer
 {
 public:

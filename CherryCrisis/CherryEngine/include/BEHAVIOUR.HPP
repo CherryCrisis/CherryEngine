@@ -2,12 +2,12 @@
 
 #include <cherry_macros.hpp>
 
-#include "object.hpp"
 #include "entity.hpp"
-
 #include "metadata.hpp"
+#include "object.hpp"
 #include "scene.hpp"
 #include "serializer.hpp"
+
 
 class CCENGINE_API Behaviour : public Object
 {
@@ -16,8 +16,8 @@ class CCENGINE_API Behaviour : public Object
 	friend class Serializer;
 private:
 	Entity* m_owner = nullptr;
-protected:
 
+protected:
 	virtual void PopulateMetadatas() override
 	{
 		Object::PopulateMetadatas();
@@ -38,10 +38,11 @@ public:
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
 
-	Entity& GetHost() { return *m_owner; }
-	const Entity& GetHost() const { return *m_owner; }
+	Entity&			GetHost() { return *m_owner; }
+	const Entity&	GetHost() const { return *m_owner; }
 
+	void	SetHostPtr(Entity* newOwner);
 	Entity* GetHostPtr() { return m_owner; }
-	void SetHostPtr(Entity* newOwner);
+
 	CCProperty::CopyProperty<Behaviour, Entity*> owner{ this, &Behaviour::SetHostPtr, &Behaviour::GetHostPtr};
 };

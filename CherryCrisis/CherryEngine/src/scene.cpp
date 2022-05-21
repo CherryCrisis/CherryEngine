@@ -1,23 +1,23 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "scene.hpp"
 
 #include <iostream>
 
-#include "resource_manager.hpp"
-#include "render_manager.hpp"
-#include "scene_manager.hpp"
 #include "debug.hpp"
+#include "render_manager.hpp"
+#include "resource_manager.hpp"
+#include "scene_manager.hpp"
 
-// TODO: Remove this
 #include "entity.hpp"
-#include "transform.hpp"
-#include "model_renderer.hpp"
-#include"shape_renderer.hpp"
-#include "model.hpp"
 #include "mesh.hpp"
-
+#include "model.hpp"
+#include "model_renderer.hpp"
 #include "serializer.hpp"
+#include "shape_renderer.hpp"
+#include "transform.hpp"
+
+
 std::string Scene::m_defaultCellName = "Default";
 
 Scene::Scene(const char* filePath)

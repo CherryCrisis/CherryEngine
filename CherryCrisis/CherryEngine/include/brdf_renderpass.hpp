@@ -2,15 +2,14 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
-
 #include "element_mesh_generator.hpp"
-
-#include "texture.hpp"
+#include "rendering_renderpass_interface.hpp"
 #include "sky_renderer.hpp"
+#include "texture.hpp"
 
 class SkyRenderer;
 class Viewer;
+
 
 class BRDFRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {

@@ -1,21 +1,21 @@
 #pragma once
 
+#include <condition_variable>
+#include <functional>
+#include <map>
 #include <memory>
+#include <mutex>
 #include <typeinfo>
 #include <typeindex>
-#include <functional>
-#include <condition_variable>
-#include <mutex>
-#include <map>
 
-#include "engine.hpp"
 #include "singleton.hpp"
-#include "threadpool.hpp"
 
-#include "resource.hpp"
 #include "callback.hpp"
+#include "engine.hpp"
 #include "function.hpp" 
+#include "resource.hpp"
 #include "resources_container.hpp"
+#include "threadpool.hpp"
 
 class CCENGINE_API ResourceManager : public Singleton<ResourceManager>
 {
@@ -34,7 +34,6 @@ private:
 	std::shared_ptr<T>& CreateResource(const char* filepath);
 
 public:
-
 	ResourceManager();
 	~ResourceManager();
 
@@ -72,6 +71,5 @@ public:
 	void Rename(const std::filesystem::path& filepath, const char* newFilepath);
 	void Rename(const std::type_index& typeID, const std::filesystem::path& filepath, const char* newFilepath);
 };
-
 
 #include "resource_manager.inl"

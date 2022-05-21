@@ -1,21 +1,19 @@
-
-#include "cherry_header.hpp"
-
-#include <glad/gl.h>
-
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h> 
-
-#include "input_manager.hpp"
-#include "time_manager.hpp"
-#include "render_manager.hpp"
+#include <cherry_header.hpp>
 
 #include <iostream>
 
-//#include <crtdbg.h>
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h> 
+#include <glad/gl.h>
+
+#include "input_manager.hpp"
+#include "render_manager.hpp"
 #include "scene_manager.hpp"
+#include "time_manager.hpp"
+
 #include "camera_component.hpp"
 #include "framebuffer.hpp"
+
 
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 

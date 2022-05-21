@@ -2,9 +2,10 @@
 
 #include <memory>
 
+#include <cherry_macros.hpp>
+
 #include "singleton.hpp"
 
-#include "cherry_macros.hpp"
 
 namespace std::chrono
 {
@@ -42,11 +43,10 @@ class CCENGINE_API TimeManager : public Singleton<TimeManager>
 {
 private:
 	float m_deltaTime = 0.f;
-	float m_timeScale = 1.f;
-	float m_fixedDeltaTime = 1.f/60.f;
 	float m_elapsedTime = 0.f;
-
+	float m_fixedDeltaTime = 1.f/60.f;
 	float m_lastTime = 0.f;
+	float m_timeScale = 1.f;
 
 	const std::chrono::time_zone* m_currentZone = nullptr;
 

@@ -1,9 +1,11 @@
 #pragma once
 
 #include <cherry_macros.hpp>
-#include "uuid.hpp"
+
 #include "metadata.hpp"
 #include "property.hpp"
+#include "uuid.hpp"
+
 
 // General Object used by the engine such as entity or behaviour
 class CCENGINE_API Object
@@ -11,17 +13,17 @@ class CCENGINE_API Object
 	friend class Serializer;
 
 private:
-	CCUUID m_uuid = {};
-	bool m_isActive = true;
+	bool	m_isActive = true;
+	CCUUID	m_uuid = {};
 
 protected:
 	virtual void PopulateMetadatas() { m_metadatas.SetProperty("IsActive", &Active); };
 
 public:
+	Metapack m_metadatas;
+
 	Object(CCUUID id = {}): m_uuid(id) {};
 	virtual ~Object() = default;
-
-	Metapack m_metadatas;
 
 	bool IsActive() { return m_isActive; }
 	void SetActive(bool value) { m_isActive = value; }

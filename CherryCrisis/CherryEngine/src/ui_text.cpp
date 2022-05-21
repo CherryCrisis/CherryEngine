@@ -3,8 +3,10 @@
 #include "ui_text.hpp"
 
 #include "resource_manager.hpp"
-#include "ui_text_renderpass.hpp"
+
 #include "camera_component.hpp"
+#include "ui_text_renderpass.hpp"
+
 
 UIText::UIText() 
 {

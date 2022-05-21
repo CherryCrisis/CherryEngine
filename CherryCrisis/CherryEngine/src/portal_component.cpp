@@ -1,17 +1,16 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "portal_component.hpp"
 
-#include "cell.hpp"
-#include "entity.hpp"
-
-#include "transform.hpp"
-
-#include "basic_renderpass.hpp"
-#include "skybox_renderpass.hpp"
 #include "render_manager.hpp"
 
+#include "cell.hpp"
+#include "entity.hpp"
 #include "mixed_rendering_pipeline.hpp"
+#include "transform.hpp"
+#include "basic_renderpass.hpp"
+#include "skybox_renderpass.hpp"
+
 
 PortalComponent::PortalComponent()
 {
@@ -121,6 +120,4 @@ void PortalComponent::OnCellRemoved(Cell* newCell)
 {
 	newCell->RemoveRenderer(&m_portal);
 	newCell->RemoveViewer(&m_portal);
-
-	test = true;
 }

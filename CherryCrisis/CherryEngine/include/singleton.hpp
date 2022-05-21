@@ -4,6 +4,7 @@
 
 #include <atomic>
 
+
 template <class T>
 class Singleton
 {

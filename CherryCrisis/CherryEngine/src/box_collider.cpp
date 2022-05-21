@@ -1,4 +1,4 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "box_collider.hpp"
 
@@ -7,10 +7,11 @@
 #include "resource_manager.hpp"
 #include "physic_manager.hpp"
 
-#include "collider_renderpass.hpp"
 #include "camera_component.hpp"
-#include "transform.hpp"
+#include "collider_renderpass.hpp"
 #include "entity.hpp"
+#include "transform.hpp"
+
 
 BoxCollider::BoxCollider()
 {
@@ -80,10 +81,11 @@ void BoxCollider::Initialize()
 		m_transform->m_onRotationChange.Bind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
 	}
+	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);
 
-	ModelRenderer* modelRdr = GetHost().GetOrAddBehaviour<ModelRenderer>();
+	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
 
 	if (modelRdr)
 	{

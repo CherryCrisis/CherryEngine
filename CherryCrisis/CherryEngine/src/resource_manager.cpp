@@ -1,6 +1,7 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "resource_manager.hpp"
+
 
 template<>
 ResourceManager* Singleton<ResourceManager>::currentInstance = nullptr;

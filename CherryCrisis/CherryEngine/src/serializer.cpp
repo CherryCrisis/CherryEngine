@@ -17,6 +17,7 @@
 #include "entity.hpp"
 #include "input_manager.hpp"
 #include "light_component.hpp"
+#include "maths/vector2.hpp"
 #include "model.hpp"
 #include "model_renderer.hpp"
 #include "object.hpp"
@@ -27,13 +28,11 @@
 #include "shape_renderer.hpp"
 #include "sphere_collider.hpp"
 #include "transform.hpp"
-#include "utils.hpp"
-
 #include "ui_text.hpp"
 #include "ui_button.hpp"
 #include "ui_image.hpp"
+#include "utils.hpp"
 
-#include "maths/vector2.hpp"
 
 namespace YAML {
 	template<>

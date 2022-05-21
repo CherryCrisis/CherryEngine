@@ -1,23 +1,20 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "guizmo_renderpass.hpp"
 
-#include "framebuffer.hpp"
-
+#include "audio_emitter.hpp"
 #include "camera.hpp"
-#include "model_renderer.hpp"
-#include "transform.hpp"
+#include "camera_component.hpp"
+#include "framebuffer.hpp"
+#include "light_component.hpp"
 #include "model.hpp"
-
-#include "shadow_renderpass.hpp"
+#include "model_renderer.hpp"
 #include "portal.hpp"
+#include "shadow_renderpass.hpp"
+#include "texture_generator.hpp"
+#include "transform.hpp"
 #include "viewer.hpp"
 
-#include "camera_component.hpp"
-#include "audio_emitter.hpp"
-#include "light_component.hpp"
-
-#include "texture_generator.hpp"
 
 GuizmoRenderPass::GuizmoRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/billboard.vert", "Assets/Shaders/billboard.frag")

@@ -1,14 +1,12 @@
 #pragma once
 
 #include "behaviour.hpp"
-
 #include "maths.hpp"
-
 #include "portal.hpp"
-
 #include "property.hpp"
 
 class Transform;
+
 
 class CCENGINE_API PortalComponent : public Behaviour
 {
@@ -16,12 +14,10 @@ protected:
 	void PopulateMetadatas() override;
 
 public:
-	Portal	   m_portal;
-	Transform* m_transform = nullptr;
+	Portal	m_portal;
 
-	bool test = false;
-
-	PortalComponent* m_linkedPortal = nullptr;
+	PortalComponent*	m_linkedPortal = nullptr;
+	Transform*			m_transform = nullptr;
 
 	PortalComponent();
 	PortalComponent(CCUUID& id);

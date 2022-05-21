@@ -1,11 +1,13 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "rigidbody.hpp"
 
 #include <PxPhysicsAPI.h>
 
 #include "physic_manager.hpp"
+
 #include "transform.hpp"
+
 
 Rigidbody::Rigidbody()
 {
@@ -28,6 +30,15 @@ void Rigidbody::BindToSignals()
 	
 	physicManager->Register(this);
 	m_isRegistered = true;
+
+	GetHost().m_OnAwake.Bind(&Rigidbody::Initialize, this);
+}
+
+void Rigidbody::Initialize()
+{
+	m_physicActor->Init();
+
+	GetHost().m_OnAwake.Unbind(&Rigidbody::Initialize, this);
 }
 
 void Rigidbody::Unregister()

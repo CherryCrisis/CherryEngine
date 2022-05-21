@@ -1,13 +1,12 @@
-
 #include "panels/inspector.hpp"
 
-#include <imgui.h>
+#include <algorithm>
 #include <string>
 #include <typeinfo>
-#include <algorithm>
+
+#include <imgui.h>
 
 #include "cherry_header.hpp"
-#include "core/editor_manager.hpp"
 
 #include "audio_emitter.hpp"
 #include "audio_listener.hpp"
@@ -17,6 +16,7 @@
 #include "camera_component.hpp"
 #include "capsule_collider.hpp"
 #include "character_controller.hpp"
+#include "core/editor_manager.hpp"
 #include "core/imcherry.hpp"
 #include "csscripting_system.hpp"
 #include "entity.hpp"
@@ -31,8 +31,8 @@
 #include "transform.hpp"
 #include "utils.hpp"
 
-#define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
+#define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
 Inspector::Inspector(bool spawnOpened, EditorManager* manager, AssetSettingsDisplayer* assetSettingsDisplayer) 
     : Panel(spawnOpened), m_manager(manager), m_assetSettingsDisplayer(assetSettingsDisplayer)

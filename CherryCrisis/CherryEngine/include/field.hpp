@@ -1,10 +1,11 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include <any>
-#include <typeindex>
 #include <string>
+#include <typeindex>
+
+#include <cherry_macros.hpp>
+
 
 struct CCENGINE_API Field
 {

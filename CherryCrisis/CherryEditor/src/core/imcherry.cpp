@@ -1,7 +1,7 @@
 #include "core/imcherry.hpp"
 
-#include <string>
 #include <imgui_internal.h>
+#include <string>
 
 
 namespace ImCherry 
@@ -61,7 +61,6 @@ namespace ImCherry
 			}
 			ImGui::EndTable();
 		}
-
 
 		return value;
 	}

@@ -1,12 +1,12 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "input_manager.hpp"
 
-#include <debug.hpp>
+#include "debug.hpp"
+
 
 template <>
 InputManager* Singleton<InputManager>::currentInstance = nullptr;
-
 
 InputManager::~InputManager()
 {

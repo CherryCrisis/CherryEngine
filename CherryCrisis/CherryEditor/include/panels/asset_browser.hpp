@@ -1,43 +1,42 @@
 #pragma once
 
-#include "core/panel.hpp"
-
 #include <filesystem>
-#include <unordered_map>
 #include <set>
-#include <typeinfo>
 #include <typeindex>
+#include <typeinfo>
+#include <unordered_map>
 #include <vector>
 
 #include <glad/gl.h>
 
 #include "resource_manager.hpp"
 
-//Can't forward declaration
-#include "texture.hpp"
-#include "sound.hpp"
-#include "shader.hpp"
-#include "material.hpp"
 #include "asset_settings.hpp"
 #include "cubemap.hpp"
-
+#include "core/panel.hpp"
+#include "material.hpp"
+#include "shader.hpp"
+#include "sound.hpp"
+#include "texture.hpp"
 
 class AResource;
-class Model;
 class EditorManager;
+class Model;
 
-const std::set<std::string> textureExtensions = { ".jpg", ".png", ".hdr"};
-const std::set<std::string> modelExtensions = { ".obj", ".fbx", ".glb", ".gltf" };
-const std::set<std::string> shaderExtensions = { ".frag", ".vert" };
-const std::set<std::string> soundExtensions = { ".wav" };
-const std::string scriptExtensions = ".cs";
-const std::string sceneExtensions = ".ccscene";
-const std::string matExtensions = ".ccmat";
+
+const std::set<std::string> textureExtensions	= { ".jpg", ".png", ".hdr"};
+const std::set<std::string> modelExtensions		= { ".obj", ".fbx", ".glb", ".gltf" };
+const std::set<std::string> shaderExtensions	= { ".frag", ".vert" };
+const std::set<std::string> soundExtensions		= { ".wav" };
+
+const std::string			scriptExtensions	= ".cs";
+const std::string			sceneExtensions		= ".ccscene";
+const std::string			matExtensions		= ".ccmat";
+
 
 class AssetBrowser : public Panel
 {
 private:
-
 	const std::string scriptTemplate =
 		R"CS(using CCEngine;
 
@@ -67,14 +66,15 @@ namespace CCScripting
 	{
 		std::shared_ptr<Texture> m_previewTexture;
 
-		std::filesystem::path	m_path; // full path from C:/
-		std::filesystem::path	m_relativePath; // path starting at Assets without filename
-		std::string				m_filename; // filename without extension
-		std::string				m_extension; // extension
-
+		std::filesystem::path	m_path;					// full path from C:/
+		std::filesystem::path	m_relativePath;			// path starting at Assets without filename
+		std::string				m_filename;				// filename without extension
+		std::string				m_extension;			// extension
 		std::string			    m_fullFilename;
 		std::string				m_fullLoweredFilename;
+
 		bool					m_isHovered = false;
+
 		AssetBrowser*			m_assetBrowser = nullptr;
 
 		virtual void Rename(const char* newFilepath) = 0;
@@ -86,7 +86,7 @@ namespace CCScripting
 	struct DirectoryNode : public AssetNode
 	{
 		std::vector<AssetNode*> m_assetNodes {};
-		DirectoryNode*		m_parentDirectory = nullptr;
+		DirectoryNode*			m_parentDirectory = nullptr;
 
 		void Rename(const char* newFilepath) override {};
 		void Reload() override {};
@@ -109,10 +109,10 @@ namespace CCScripting
 		void Delete() override {};
 		void Action() override {};
 
+		// TODO:
 		//last time edited info
 		//check if modified
 	};
-
 
 	template <class ResourceT>
 	struct ResourceAssetNode : public AssetNode
@@ -177,25 +177,24 @@ namespace CCScripting
 		CREATING,
 	};
 
-
-	std::filesystem::path m_assetsDirectory;
-
-	DirectoryNode* m_assetsDirectoryNode = nullptr;
-	DirectoryNode* m_currentDirectoryNode = nullptr;
-
-	std::map<std::string, std::unique_ptr<AssetNode>> m_assetNodes;
-	std::vector<AssetNode*> m_allAssetNode; //To research in all directories
-
 	const float m_padding = 55.f;
 	const float m_upPadding = 5.f;
-	float m_thumbnailSize = 40.f;
-	char m_researchInput[32] = "";
+	float		m_thumbnailSize = 40.f;
+	char		m_researchInput[32] = "";
 
-	AssetNode* m_focusedNode = nullptr;
-	EBrowserAction m_browserAction = EBrowserAction::NONE;
-	std::string m_popupAssetType;
+	std::map<std::string, std::unique_ptr<AssetNode>> m_assetNodes;
 
-	TextureGenerator m_textureGenerator;
+	std::filesystem::path	m_assetsDirectory;
+	std::vector<AssetNode*> m_allAssetNode;		//To search in all directories
+
+	EBrowserAction		m_browserAction = EBrowserAction::NONE;
+	std::string			m_popupAssetType;
+	TextureGenerator	m_textureGenerator;
+
+	DirectoryNode*	m_assetsDirectoryNode = nullptr;
+	DirectoryNode*	m_currentDirectoryNode = nullptr;
+	AssetNode*		m_focusedNode = nullptr;
+	EditorManager*	m_manager = nullptr;
 
 	void SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode);
 	AssetNode* RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory); //return m_assetsDirectoryNode 
@@ -212,12 +211,14 @@ namespace CCScripting
 
 	bool DragAndDropTarget(AssetNode* assetNode);
 
-	EditorManager* m_manager = nullptr;
 public :
-
 	std::unordered_map<std::string, time_t> m_timeModified;
+
+	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
+
 	AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer, EditorManager* manager = nullptr);
 	~AssetBrowser();
+
 	void SetCurrentDirectory(DirectoryNode* directoryNode) 
 	{ 
 		m_currentDirectoryNode = directoryNode; 
@@ -226,11 +227,11 @@ public :
 
 	void Render() override;
 	void ContextCallback() override;
-	
-	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
-	std::string GetCurrentDirectoryPath() { return m_currentDirectoryNode ? m_currentDirectoryNode->m_path.string() : ""; }
 
+	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
+	
 	void ReloadScripts();
 	void SetPath(const std::filesystem::path& path);
-	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
+	
+	std::string GetCurrentDirectoryPath() { return m_currentDirectoryNode ? m_currentDirectoryNode->m_path.string() : ""; }
 };

@@ -1,35 +1,42 @@
 #pragma once
 
+#include <memory>
 #include <string>
+
+#include <cherry_macros.hpp>
 
 #include "maths/vector3.hpp"
 #include "maths/matrix4.hpp"
 #include "object.hpp"
-#include "cherry_macros.hpp"
 #include "renderer.hpp"
-#include <memory>
 
 class Mesh;
 
+
 class CCENGINE_API UIItem : public Object, public ARenderer
 {
+private:
 	std::string m_name = " ";
 	CCMaths::Vector2 m_size = {50.f, 50.f};
 	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;
+	
 	static int count;
 
 protected:
 	virtual void PopulateMetadatas();
 	virtual void OnSetPos() {};
 	virtual void OnSetSize() {};
+
 public:
-	virtual bool CompareId(int id) { return id == m_id; };
-	CCMaths::Vector3 m_position;
-	std::shared_ptr<Mesh> m_mesh = nullptr;
-	UIItem();
-	UIItem(CCUUID& id);
 	int m_id = -1;
 
+	CCMaths::Vector3 m_position;
+	std::shared_ptr<Mesh> m_mesh = nullptr;
+	
+	UIItem();
+	UIItem(CCUUID& id);
+
+	virtual bool CompareId(int id) { return id == m_id; };
 	virtual void Delete();
 	virtual void Interact() {};
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
@@ -42,7 +49,6 @@ public:
 
 	CCMaths::Vector2 GetSize() { return m_size; }
 	void		SetSize(const CCMaths::Vector2& size) { m_size = size; OnSetSize(); }
-
 
 	// TODO: Add dirty flag
 	CCMaths::Matrix4 GetModel() { return CCMaths::Matrix4::Translate(m_position) * CCMaths::Matrix4::Scale({ m_size, 1.f }); }

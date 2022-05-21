@@ -6,17 +6,17 @@
 
 class Shader;
 
+
 class ShaderProgram : public Resource<ShaderProgram>
 {
 private:
 	void CreateProgram();
 
 public:
-	ShaderProgram(const char* programName) : Resource(programName) {}
-
 	std::vector<std::shared_ptr<Shader>> m_shaders;
 	unsigned int m_shaderProgram = 0u;
 
+	ShaderProgram(const char* programName) : Resource(programName) {}
 	~ShaderProgram() = default;
 
 	static void Load(std::shared_ptr<ShaderProgram> shaderProgram, const char* vxFilepath, const char* fgFilepath);

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "maths.hpp"
-
-#include "viewer.hpp"
-#include "framebuffer.hpp"
 #include "event.hpp"
+#include "framebuffer.hpp"
+#include "maths.hpp"
+#include "viewer.hpp"
+
 
 class CCENGINE_API Camera : public Viewer
 {

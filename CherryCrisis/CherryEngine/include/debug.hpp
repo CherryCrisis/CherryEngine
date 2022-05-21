@@ -1,18 +1,19 @@
 #pragma once
 
-#include "singleton.hpp"
-
-#include <string>
-#include <map>
-#include <vector>
 #include <array>
-#include <source_location>
+#include <map>
 #include <memory>
+#include <source_location>
+#include <string>
+#include <vector>
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
+
+#include "singleton.hpp"
 #include "time_manager.hpp"
 
 #undef ERROR
+
 
 enum class CCENGINE_API ELogType : int
 {
@@ -33,13 +34,15 @@ struct LogMessage
 class CCENGINE_API Log
 {
 public:
-	LogMessage*	m_logMessage;
-	FullDate	m_date;
-	bool		m_isSelected = false;
-
 	uint_least32_t line = 0u;
+
+	bool		m_isSelected = false;
+	FullDate	m_date;
+
 	std::string file = "";
 	std::string function = "";
+
+	LogMessage*	m_logMessage;
 
 public:
 	Log(LogMessage* logMessage, FullDate fullDate, std::source_location sourceLocation)
@@ -54,11 +57,11 @@ public:
 class CCENGINE_API Debug : public Singleton<Debug>
 {
 private:
-
 	//key size_t = hash of (string) message and (int) logType
+	bool							m_isLogAdded = false;
+
 	std::map<size_t, LogMessage>	m_logMessages;
 	std::vector<Log>				m_logs;
-	bool							m_isLogAdded = false;
 	
 	std::array<int, 3>				m_logTypeCounts{0,0,0};
 
@@ -67,7 +70,6 @@ private:
 	inline void GetKeyOfLog(std::size_t& key, const std::string& message, const ELogType& logType);
 
 public:
-
 	Debug();
 
 	std::vector<Log>* GetLogs() { return &m_logs; }

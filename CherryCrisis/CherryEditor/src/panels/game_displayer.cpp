@@ -1,14 +1,14 @@
-
 #include "panels/game_displayer.hpp"
 
 #include <imgui.h>
 
 #include "input_manager.hpp"
-
 #include "scene_manager.hpp"
+
 #include "camera_component.hpp"
-#include "pickinger.hpp"
 #include "core/editor_manager.hpp"
+#include "pickinger.hpp"
+
 
 void GameDisplayer::Render() 
 {

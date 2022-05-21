@@ -1,16 +1,15 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "csscripting_system.hpp"
 
-#include "monowrapper.hpp"
-#include "csassembly.hpp"
-#include "scripted_behaviour.hpp"
-#include "csassembly.hpp"
-
-#include "utils.hpp"
-#include "command.hpp"
-
 #include "resource_manager.hpp"
+
+#include "command.hpp"
+#include "csassembly.hpp"
+#include "monowrapper.hpp"
+#include "scripted_behaviour.hpp"
+#include "utils.hpp"
+
 
 template <>
 CsScriptingSystem* Singleton<CsScriptingSystem>::currentInstance = nullptr;

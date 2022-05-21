@@ -1,4 +1,5 @@
 #include <cmath>
+
 #include "matrix4.hpp"
 
 namespace CCMaths

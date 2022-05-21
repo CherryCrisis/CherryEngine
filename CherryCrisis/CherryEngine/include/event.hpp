@@ -1,9 +1,9 @@
 #pragma once
 
-#include <set>
-#include <memory>
-#include <typeindex>
 #include <deque>
+#include <memory>
+#include <set>
+#include <typeindex>
 
 #include "callback.hpp"
 #include "function.hpp"
@@ -13,8 +13,6 @@ template<class... Args>
 class Event
 {
 private:
-    std::set<std::shared_ptr<CCCallback::ACallback<Args...>>> m_callbacks;
-
     struct ARequest
     {
         enum class ERequest
@@ -29,6 +27,7 @@ private:
     };
 
     std::deque<ARequest> m_queries;
+    std::set<std::shared_ptr<CCCallback::ACallback<Args...>>> m_callbacks;
 
     void AddToCallbacks(std::shared_ptr<CCCallback::ACallback<Args...>> callback)
     {

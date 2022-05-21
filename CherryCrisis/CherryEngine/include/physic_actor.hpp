@@ -1,14 +1,14 @@
 #pragma once
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
 #include "behaviour.hpp"
 #include "bool3.hpp"
 
 class CharacterController;
-class Transform;
-class Rigidbody;
 class Collider;
+class Rigidbody;
+class Transform;
 
 namespace PhysicSystem
 {
@@ -18,28 +18,27 @@ namespace PhysicSystem
 
 namespace physx
 {
-	class PxRigidActor;
 	class PxGeometry;
+	class PxRigidActor;
 	class PxShape;
 }
+
 
 namespace PhysicSystem
 {
 	class PhysicActor
 	{
 	protected:
-		physx::PxRigidActor* m_pxActor = nullptr;
-
-		Transform* m_transform = nullptr;
-		Rigidbody* m_rigidbody = nullptr;
-		CharacterController* m_controller = nullptr;
-		std::vector<Collider*> m_colliders;
-
 		bool	m_isDynamic		= false;
-		bool	m_isStatic		= false;
 		bool	m_isEnabled		= true;
 		bool	m_isKinematic	= false;
+		bool	m_isStatic		= false;
 		bool	m_useGravity	= false;
+
+		float	m_density = 10.0f;
+		float	m_maxLinearVelocity = (float)1.00000003e+16;
+		float	m_maxAngularVelocity = 100.0f;
+		float	m_maxDepenetrationVelocity = (float)1.00000003e+32;
 
 		Bool3	m_positionConstraints;
 		Bool3	m_rotationConstraints;
@@ -47,14 +46,15 @@ namespace PhysicSystem
 		CCMaths::Vector3 m_velocity			= CCMaths::Vector3::Zero;
 		CCMaths::Vector3 m_angularVelocity	= CCMaths::Vector3::Zero;
 		CCMaths::Vector3 m_InertiaTensor	= CCMaths::Vector3::Zero;
-
-		float	m_density = 10.0f;
-		float	m_maxLinearVelocity = (float)1.00000003e+16;
-		float	m_maxAngularVelocity = 100.0f;
-		float	m_maxDepenetrationVelocity = (float)1.00000003e+32;
-
 		CCMaths::Vector3 m_oldPos;
 		CCMaths::Vector3 m_oldRot;
+		
+		std::vector<Collider*> m_colliders;
+
+		CharacterController*	m_controller = nullptr;
+		physx::PxRigidActor*	m_pxActor = nullptr;
+		Rigidbody*				m_rigidbody = nullptr;
+		Transform*				m_transform = nullptr;
 
 	public:
 		Entity* m_owner = nullptr;

@@ -1,11 +1,12 @@
 #pragma once
 
-#include <memory>
 #include <functional>
+#include <memory>
 
 #include <cherry_macros.hpp>
 
 #include "behaviour.hpp"
+
 
 namespace mono
 {

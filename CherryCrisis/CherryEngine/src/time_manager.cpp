@@ -4,6 +4,7 @@
 
 #include <chrono>
 
+
 template <>
 TimeManager* Singleton<TimeManager>::currentInstance = nullptr;
 
@@ -21,6 +22,8 @@ void TimeManager::Update(const float time)
 
 FullDate TimeManager::GetCurrentTime()
 {
+    // TODO: See if we put it or not and how we handle leaks
+
     return {};
     /*
     auto tp = std::chrono::zoned_time{ m_currentZone, std::chrono::system_clock::now() }.get_local_time();

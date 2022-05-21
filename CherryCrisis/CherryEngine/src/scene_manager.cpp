@@ -1,12 +1,13 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "scene_manager.hpp"
 
-#include "resource_manager.hpp"
 #include "debug.hpp"
+#include "resource_manager.hpp"
 
 #include "serializer.hpp"
 #include "utils.hpp"
+
 
 template <>
 SceneManager* Singleton<SceneManager>::currentInstance = nullptr;

@@ -1,17 +1,15 @@
 #pragma once
 
-#include "resource.hpp"
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
 #include "maths/vector3.hpp"
+#include "resource.hpp"
 
 class CCENGINE_API Sound : public Resource<Sound>
 {
 private:
 	unsigned int m_buffer = 0u;
 	unsigned int m_source = 0u;
-
-protected:
 
 public:
 	Sound(const char* filepath) : Resource(filepath) {}

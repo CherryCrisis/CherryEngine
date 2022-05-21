@@ -2,11 +2,13 @@
 
 #include <array>
 
+#include <cherry_macros.hpp>
+
 #include "resource.hpp"
-#include "cherry_macros.hpp"
 
 struct GPUCubemap { };
 class Texture;
+
 
 class CCENGINE_API Cubemap : public Resource<Cubemap>
 {

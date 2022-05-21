@@ -1,7 +1,7 @@
+#include <imgui.h>
 
 #include "core/panel.hpp"
 
-#include <imgui.h>
 
 bool PanelCategory::DisplayLabel()
 {

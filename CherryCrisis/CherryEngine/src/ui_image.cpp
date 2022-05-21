@@ -4,10 +4,11 @@
 
 #include "resource_manager.hpp"
 
+#include "camera_component.hpp"
 #include "element_mesh_generator.hpp"
 #include "rendering_pipeline_interface.hpp"
 #include "ui_renderpass.hpp"
-#include "camera_component.hpp"
+
 
 UIImage::UIImage(const char* filepath)
 {

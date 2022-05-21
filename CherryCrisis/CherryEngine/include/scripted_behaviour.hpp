@@ -1,7 +1,7 @@
 #pragma once
 
-#include <memory>
 #include <functional>
+#include <memory>
 #include <unordered_map>
 
 #include <cherry_macros.hpp>
@@ -10,28 +10,34 @@
 
 namespace mono
 {
-	class ManagedScriptSystem;
 	class ManagedClass;
-	class ManagedObject;
 	class ManagedMethod;
+	class ManagedObject;
+	class ManagedScriptSystem;
 	template <typename RetT, typename ...Args>
 	class ManagedThunk;
 }
 
 struct _MonoException;
 
+
 class CCENGINE_API ScriptedBehaviour : public Behaviour
 {
-	std::string m_scriptName;
-
 	bool m_linked = false;
 
-	std::shared_ptr<class CsAssembly>	m_scriptingAssembly;
+	std::string m_scriptName;
+
+	std::unordered_map<std::string, std::shared_ptr<struct CCProperty::IClearProperty>> m_properties;
+	std::unordered_map<std::string, std::shared_ptr<struct Field>>						m_field;
+	std::unordered_map<Entity*, mono::ManagedObject*>									m_physicEntities;
+
 	std::shared_ptr<class CsAssembly>	m_interfaceAssembly;
+	std::shared_ptr<class CsAssembly>	m_scriptingAssembly;
+
 	mono::ManagedObject*				m_managedInstance = nullptr;
+	mono::ManagedMethod*				m_managedAwake = nullptr;
 	mono::ManagedClass*					m_managedClass = nullptr;
 	mono::ManagedMethod*				m_managedUpdate = nullptr;
-	mono::ManagedMethod*				m_managedAwake = nullptr;
 	mono::ManagedMethod*				m_managedStart = nullptr;
 	mono::ManagedMethod*				m_managedCollideIn = nullptr;
 	mono::ManagedMethod*				m_managedCollideStay = nullptr;
@@ -39,9 +45,9 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	mono::ManagedMethod*				m_managedTriggerIn = nullptr;
 	mono::ManagedMethod*				m_managedTriggerOut = nullptr;
 
-	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
 	mono::ManagedThunk<void, struct _MonoObject*>* csAwake;
 	mono::ManagedThunk<void, struct _MonoObject*>* csStart;
+	mono::ManagedThunk<void, struct _MonoObject*>* csUpdate;
 
 	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csCollideIn;
 	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csCollideStay;
@@ -49,17 +55,12 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csTriggerIn;
 	mono::ManagedThunk<void, struct _MonoObject*, struct _MonoObject*>* csTriggerOut;
 
-	void PopulateMetadatas() override;
-
-	void InvalidateAssembly() { m_scriptingAssembly = nullptr; }
-
-	std::unordered_map<std::string, std::shared_ptr<class CCProperty::IClearProperty>> m_properties;
-	std::unordered_map<std::string, std::shared_ptr<class Field>> m_field;
-
 	mono::ManagedClass* m_behaviourClass = nullptr;
 	mono::ManagedClass* m_entityClass = nullptr;
 
-	std::unordered_map<Entity*, mono::ManagedObject*> m_physicEntities;
+	void PopulateMetadatas() override;
+
+	void InvalidateAssembly() { m_scriptingAssembly = nullptr; }
 
 public:
 	ScriptedBehaviour();

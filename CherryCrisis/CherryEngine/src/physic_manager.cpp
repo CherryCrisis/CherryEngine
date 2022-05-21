@@ -1,18 +1,18 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "physic_manager.hpp"
 
 #include <vector>
 #include <PxPhysicsAPI.h>
 
-#include "character_controller.hpp"
+#include "cell.hpp"
 #include "collider.hpp"
+#include "character_controller.hpp"
+#include "debug.hpp"
+#include "entity.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
-#include "cell.hpp"
-#include "debug.hpp"
 
-#include "entity.hpp"
 
 PhysicSystem::PhysicManager* Singleton<PhysicSystem::PhysicManager>::currentInstance = nullptr;
 
@@ -165,8 +165,6 @@ namespace PhysicSystem
 		m_physicActors.push_back(new PhysicActor());
 		PhysicActor& newActor = *m_physicActors.back();
 		newActor.m_owner = &owningEntity;
-
-		newActor.Init();
 
 		if (m_isPlaying)
 			newActor.CreatePxActor();

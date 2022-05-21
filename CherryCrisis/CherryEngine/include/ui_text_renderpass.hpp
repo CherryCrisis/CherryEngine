@@ -1,21 +1,20 @@
 #pragma once
 
-#include <unordered_set>
 #include <map>
+#include <unordered_set>
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
-
-#include "ebo_tbn_generator.hpp"
-#include "texture_generator.hpp"
-
-#include "texture.hpp"
-#include "light.hpp"
-
 #include <cherry_macros.hpp>
 
+#include "ebo_tbn_generator.hpp"
+#include "light.hpp"
+#include "rendering_renderpass_interface.hpp"
+#include "texture.hpp"
+#include "texture_generator.hpp"
+
 class UIText;
+
 
 class CCENGINE_API TextRenderPass : public ARenderingRenderPass
 {

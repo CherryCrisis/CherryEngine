@@ -1,8 +1,9 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "mesh.hpp"
 
 #include <assimp/mesh.h>
+
 
 void Mesh::Delete()
 {
@@ -113,11 +114,11 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
         indices.push_back(2 * s + 1);
         indices.push_back((2 * s + 2) % ((int)longitude * 2));
 
-        indices.push_back(vertices.size() - 2);
+        indices.push_back((int)vertices.size() - 2);
         indices.push_back((2 * s + 2) % ((int)longitude * 2));
         indices.push_back(2 * s);
 
-        indices.push_back(vertices.size() - 1);
+        indices.push_back((int)vertices.size() - 1);
         indices.push_back(2 * s + 1);
         indices.push_back((2 * s + 3) % ((int)longitude * 2));
     }

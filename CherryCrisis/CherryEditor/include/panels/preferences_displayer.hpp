@@ -1,17 +1,14 @@
+#pragma once
 
-#include "core/panel.hpp"
 #include <array>
 #include <string>
+
+#include "core/panel.hpp"
+
 
 class PreferencesDisplayer : public Panel
 {
 private:
-	std::array<PanelCategory*, 2> m_categories;
-
-	int m_selectedCategory = 0;
-
-	//-------------Nested Classes
-
 	class Cutstomization : public PanelCategory
 	{
 	public:
@@ -22,19 +19,20 @@ private:
 	class ThirdParty : public PanelCategory
 	{
 	public:
+		char m_compilerPath[256] = "C:\\Program Files(x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv";
+		
 		ThirdParty(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
-
-		char m_compilerPath[256] = "C:\\Program Files(x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv";
 	};
 
+	int m_selectedCategory = 0;
+
+	std::array<PanelCategory*, 2> m_categories;
+
 public:
-	
-	PreferencesDisplayer(bool spawnOpened);// : Panel(spawnOpened) {}
+	PreferencesDisplayer(bool spawnOpened);
 
 	void Render() override;
 
 	std::string   GetCompilerPath();
-
-	// All the things + will have to serialize of all this shit
 };

@@ -1,9 +1,10 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "bloom_renderpass.hpp"
 
 #include "mesh.hpp"
 #include "resource_manager.hpp"
+
 
 BloomRenderPass::BloomRenderPass(const char* name)
 	: APostProcessRenderPass(name, "Assets/Shaders/bloomShader.vert", "Assets/Shaders/bloomShader.frag")
@@ -31,8 +32,8 @@ BloomRenderPass::BloomRenderPass(const char* name)
 void BloomRenderPass::Execute(Framebuffer& framebuffer)
 {
 	//UpdateFramebuffer verif if width and height are changed
-	m_pingpongFramebuffers[0].UpdateFramebuffer(framebuffer.width, framebuffer.height);
-	m_pingpongFramebuffers[1].UpdateFramebuffer(framebuffer.width, framebuffer.height);
+	m_pingpongFramebuffers[0].UpdateFramebuffer(static_cast<float>(framebuffer.width), static_cast<float>(framebuffer.height));
+	m_pingpongFramebuffers[1].UpdateFramebuffer(static_cast<float>(framebuffer.width), static_cast<float>(framebuffer.height));
 
 	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
 

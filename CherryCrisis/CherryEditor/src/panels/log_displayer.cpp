@@ -3,9 +3,8 @@
 #include <imgui.h>
 #include <glad/gl.h>
 
-#include "resource_manager.hpp"
-
 #include "debug.hpp"
+#include "resource_manager.hpp"
 
 
 LogDisplayer::LogDisplayer()

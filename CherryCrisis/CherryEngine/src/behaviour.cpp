@@ -3,6 +3,7 @@
 #include "behaviour.hpp"
 #include "entity.hpp"
 
+
 void Behaviour::OnSetOwner(Entity* newOwner)
 {
 	newOwner->SubscribeComponent(this);

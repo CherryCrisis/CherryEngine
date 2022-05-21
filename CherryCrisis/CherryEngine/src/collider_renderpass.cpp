@@ -1,19 +1,17 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "collider_renderpass.hpp"
 
-#include "framebuffer.hpp"
-
-#include "camera.hpp"
-#include "model_renderer.hpp"
-#include "transform.hpp"
-#include "mesh.hpp"
-
 #include "box_collider.hpp"
-#include "sphere_collider.hpp"
+#include "camera.hpp"
 #include "capsule_collider.hpp"
-
+#include "framebuffer.hpp"
+#include "mesh.hpp"
+#include "model_renderer.hpp"
+#include "sphere_collider.hpp"
+#include "transform.hpp"
 #include "viewer.hpp"
+
 
 ColliderRenderPass::ColliderRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/colliderShader.vert", "Assets/Shaders/colliderShader.frag")

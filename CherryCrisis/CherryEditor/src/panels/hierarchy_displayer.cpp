@@ -1,9 +1,9 @@
-
 #include "panels/hierarchy_displayer.hpp"
+
+#include <algorithm>
 
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <algorithm>
 
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
@@ -22,6 +22,7 @@
 #include "sphere_collider.hpp"
 #include "transform.hpp"
 #include "portal_component.hpp"
+
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -111,7 +112,7 @@ void HierarchyDisplayer::Render()
             if (!m_manager->m_entitySelector.IsEmpty())
             {
                 if (InputManager::GetKeyDown(Keycode::F2))
-                    m_renaming = true;
+                    m_isRenaming = true;
 
                 if (InputManager::GetKeyDown(Keycode::DEL))
                 {
@@ -135,7 +136,7 @@ void HierarchyDisplayer::Render()
     ImGui::End();
 
 
-    if (m_renaming)
+    if (m_isRenaming)
         ImGui::OpenPopup("Rename");
 
     //TODO: Replace this with per entity for multi selection
@@ -158,12 +159,12 @@ void HierarchyDisplayer::Render()
             ImGui::CloseCurrentPopup();
             m_manager->m_entitySelector.m_entities[0]->SetName(newName);
             memset(newName, 0, sizeof(char) * strlen(newName));
-            m_renaming = false;
+            m_isRenaming = false;
             Refresh();
         }
         ImGui::SetItemDefaultFocus();
         ImGui::SameLine();
-        if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_renaming = false;  ImGui::CloseCurrentPopup(); }
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) { m_isRenaming = false;  ImGui::CloseCurrentPopup(); }
         ImGui::EndPopup();
     }
 
@@ -546,7 +547,7 @@ void HierarchyDisplayer::ContextCallback()
         {
             ImGui::Separator();
 
-            if (ImGui::MenuItem("Rename")) { m_renaming = true; }
+            if (ImGui::MenuItem("Rename")) { m_isRenaming = true; }
             if (ImGui::MenuItem("Delete"))
             {
                 for (auto& entity : m_manager->m_entitySelector.m_entities)

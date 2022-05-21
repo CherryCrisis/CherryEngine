@@ -1,7 +1,7 @@
 #pragma once
 
-#include "resource.hpp"
 #include "model_loader.hpp"
+#include "resource.hpp"
 
 struct CCENGINE_API GPUTexture2D
 {

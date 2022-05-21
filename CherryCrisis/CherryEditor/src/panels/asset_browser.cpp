@@ -7,19 +7,19 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include "core/editor_manager.hpp"
 #include "resource_manager.hpp"
 #include "input_manager.hpp"
 
-#include "utils.hpp"
-#include "resource.hpp"
-#include "model.hpp"
-#include "csassembly.hpp"
+#include "core/editor_manager.hpp"
 #include "command.hpp"
-#include "model_loader.hpp"
-
+#include "csassembly.hpp"
 #include "csscripting_system.hpp"
 #include "engine.hpp"
+#include "model.hpp"
+#include "model_loader.hpp"
+#include "resource.hpp"
+#include "utils.hpp"
+
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 

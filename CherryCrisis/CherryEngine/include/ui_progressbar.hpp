@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cherry_macros.hpp>
+
 #include "ui_item.hpp"
-#include "cherry_macros.hpp"
+
 
 class CCENGINE_API UIProgressBar : public UIItem
 {

@@ -1,5 +1,6 @@
 #include <cmath>
 
+
 namespace CCMaths
 {
 	inline Vector2 Vector2::operator+(const Vector2& rhs) const

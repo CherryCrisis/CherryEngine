@@ -1,10 +1,11 @@
 #pragma once
 
 #include "behaviour.hpp"
-#include "maths.hpp"
 #include "bool3.hpp"
+#include "maths.hpp"
 
 class Transform;
+
 namespace PhysicSystem
 {
 	class PhysicActor;
@@ -12,14 +13,15 @@ namespace PhysicSystem
 
 using namespace CCMaths;
 
+
 class CCENGINE_API Rigidbody : public Behaviour
 {
 private:
 	using bool3Property = CCProperty::ConstRefProperty<Rigidbody, Bool3>;
-	using boolProperty = CCProperty::ConstRefProperty<Rigidbody, bool>;
+	using boolProperty	= CCProperty::ConstRefProperty<Rigidbody, bool>;
 	using floatProperty = CCProperty::ConstRefProperty<Rigidbody, float>;
 
-	bool	m_isRegistered = false;
+	bool m_isRegistered = false;
 
 	void PopulateMetadatas() override;
 
@@ -31,6 +33,7 @@ public:
 	~Rigidbody();
 
 	void	BindToSignals() override;
+	void	Initialize();
 
 	//! Unregister the rigidbody from the Physic Manager
 	/*!
@@ -63,11 +66,11 @@ public:
 	boolProperty	isKinematic	{ this, &Rigidbody::SetKinematic, &Rigidbody::GetKinematic };
 	boolProperty	useGravity	{ this, &Rigidbody::SetGravity,   &Rigidbody::GetGravity   };
 	
-	bool3Property positionConstraints{ this, &Rigidbody::SetPosContraints, &Rigidbody::GetPosConstraints };
-	bool3Property rotationConstraints{ this, &Rigidbody::SetRotContraints, &Rigidbody::GetRotConstraints };
+	bool3Property	positionConstraints{ this, &Rigidbody::SetPosContraints, &Rigidbody::GetPosConstraints };
+	bool3Property	rotationConstraints{ this, &Rigidbody::SetRotContraints, &Rigidbody::GetRotConstraints };
 
 	floatProperty	density						{ this, &Rigidbody::SetDensity,		&Rigidbody::GetDensity	 };
-	floatProperty	maxLinearVelocity			{ this, &Rigidbody::SetMaxVel,		&Rigidbody::GetMaxVel	 };
 	floatProperty	maxAngularVelocity			{ this, &Rigidbody::SetMaxAngVel,	&Rigidbody::GetMaxAngVel };
 	floatProperty	maxDepenetrationVelocity	{ this, &Rigidbody::SetMaxDepVel,	&Rigidbody::GetMaxDepVel };
+	floatProperty	maxLinearVelocity			{ this, &Rigidbody::SetMaxVel,		&Rigidbody::GetMaxVel	 };
 };

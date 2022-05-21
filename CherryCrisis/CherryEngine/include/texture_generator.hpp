@@ -4,6 +4,7 @@
 
 #include "texture.hpp"
 
+
 class CCENGINE_API TextureGenerator
 {
 public:

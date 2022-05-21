@@ -1,19 +1,20 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "texture.hpp"
 
-#include <stb_image.h>
 #include <assimp/scene.h>
 #include <assimp/texture.h>
+#include <condition_variable>
 #include <format>
 #include <fstream>
 #include <glad/gl.h>
-#include <condition_variable>
+#include <stb_image.h>
 
-#include "render_manager.hpp"
 #include "debug.hpp"
+#include "render_manager.hpp"
 
 #include "model_loader.hpp"
+
 
 Texture::Texture(const char* texturePath)
     : Resource(texturePath)

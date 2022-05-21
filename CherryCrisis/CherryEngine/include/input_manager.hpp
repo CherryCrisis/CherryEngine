@@ -1,13 +1,14 @@
 #pragma once
 
-#include "singleton.hpp"
-
-#include <unordered_map>
 #include <stack>
+#include <unordered_map>
 #include <vector>
 
+#include <cherry_header.hpp>
+
+#include "singleton.hpp"
+
 #include "event.hpp"
-#include "cherry_header.hpp"
 #include "keycode.hpp"
 
 #pragma warning(push, 3)
@@ -16,6 +17,7 @@
 class InputContext;
 
 struct GLFWwindow {};
+
 
 //! enum of Keycodes that can be use as prior keys for Action of type button
 enum class EPriorKey
@@ -484,10 +486,10 @@ private:
 	};
 
 public:
-	
 	~InputManager();
 
 	void Init();
+
 	//Errors
 	void ErrorButtons(const char* Name);
 	void ErrorAxes(const char* Name);

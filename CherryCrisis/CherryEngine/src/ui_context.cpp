@@ -2,17 +2,17 @@
 
 #include "ui_context.hpp"
 
+#include "camera_component.hpp"
 #include "ui_button.hpp"
+#include "ui_horizontal_layout.hpp"
 #include "ui_image.hpp"
+#include "ui_input_text.hpp"
+#include "ui_progressbar.hpp"
+#include "ui_slider.hpp"
 #include "ui_text.hpp"
 #include "ui_toggle.hpp"
-#include "ui_slider.hpp"
-#include "ui_progressbar.hpp"
-#include "ui_input_text.hpp"
-#include "ui_horizontal_layout.hpp"
 #include "ui_vertical_layout.hpp"
 
-#include "camera_component.hpp"
 
 void UIContext::RemoveItem(UIItem* item)
 {

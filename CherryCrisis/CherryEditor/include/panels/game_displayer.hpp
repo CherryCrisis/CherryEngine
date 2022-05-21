@@ -4,13 +4,15 @@
 
 class EditorManager;
 
+
 class GameDisplayer : public FrameDisplayer
 {
 public:
-	GameDisplayer(EditorManager* manager) : m_manager(manager) {}
+	bool m_isHovered = false;
+	
 	EditorManager* m_manager = nullptr;
 
-	bool m_isHovered = false;
+	GameDisplayer(EditorManager* manager) : m_manager(manager) {}
 
 	void Render() override;
 

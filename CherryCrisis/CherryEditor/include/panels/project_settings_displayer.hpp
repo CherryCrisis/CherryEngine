@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <array>
@@ -7,27 +6,23 @@
 #include "core/panel.hpp"
 #include "input_manager.hpp"
 
+
 struct BuildSettings
 {
 	std::string m_gameName;
 };
 
+
 class ProjectSettingsDisplayer : public Panel
 {
 private:
-	std::array<PanelCategory*, 7> m_categories;
-
-	int m_selectedCategory = 0;
-
-//-------------Nested Classes
-
 	class General : public PanelCategory 
 	{
 	public:
+		char name[32] = "MyCherryGame";
+
 		General(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
-
-		char name[32] = "MyCherryGame";
 	};
 
 	class Input : public PanelCategory
@@ -38,34 +33,35 @@ private:
 		std::vector<int> m_inputsIndex;
 
 	public:
+		InputManager::InputContext* userContext = nullptr;
+
 		Input(std::string name = "default");
+
 		void Fill() override;
 		void CreateAction(int& type);
 		void CreateButtons(const char* name);
 		void CreateAxes(const char* name);
 		void SetButtons();
 		void SetAxes();
-
-		InputManager::InputContext* userContext = nullptr;
 	};
 
 	class Audio : public PanelCategory
 	{
 	public:
+		bool	m_isUsingSpatialization = true;
+		float	m_globalVolume = 100.f;
+
 		Audio(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
-
-		bool m_isUsingSpatialization = true;
-		float m_globalVolume = 100.f;
 	};
 
 	class Physics : public PanelCategory
 	{
 	public:
+		float m_gravity = 9.81f;
+
 		Physics(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
-
-		float m_gravity = 9.81f;
 	};
 
 	class TagLayer : public PanelCategory
@@ -89,6 +85,10 @@ private:
 		void Fill() override;
 	};
 
+	int m_selectedCategory = 0;
+
+	std::array<PanelCategory*, 7> m_categories;
+
 public:
 	ProjectSettingsDisplayer(bool spawnOpened);
 	~ProjectSettingsDisplayer();
@@ -96,7 +96,6 @@ public:
 	BuildSettings GetBuildSettings();
 
 	void Render() override;
-
-	// All the things + will have to serialize of all this shit
 };
+
 

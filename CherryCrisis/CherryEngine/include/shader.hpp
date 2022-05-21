@@ -2,8 +2,9 @@
 
 #include <string>
 
+#include <cherry_macros.hpp>
+
 #include "resource.hpp"
-#include "cherry_macros.hpp"
 
 
 enum class EShader
@@ -17,7 +18,6 @@ enum class EShader
 class CCENGINE_API Shader : public Resource<Shader>
 {
 private:
-
 	unsigned int	m_shaderID;
 	EShader			m_shaderType;
 
@@ -26,7 +26,6 @@ private:
 
 public:
 	Shader(const char* filepath) : Resource(filepath), m_shaderID(0), m_shaderType(EShader::NOTHING) {}
-
 	~Shader() = default;
 
 	static void Load(std::shared_ptr<Shader> shader);

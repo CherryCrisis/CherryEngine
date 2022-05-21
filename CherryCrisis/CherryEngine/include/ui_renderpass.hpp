@@ -1,24 +1,24 @@
 #pragma once
 
-#include <unordered_set>
 #include <map>
+#include <unordered_set>
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
+#include <cherry_macros.hpp>
 
 #include "ebo_tbn_generator.hpp"
-#include "texture_generator.hpp"
-
-#include "texture.hpp"
 #include "light.hpp"
-
-#include <cherry_macros.hpp>
+#include "rendering_renderpass_interface.hpp"
+#include "texture.hpp"
+#include "texture_generator.hpp"
 
 class UIImage;
 
+
 class CCENGINE_API UIRenderPass : public ARenderingRenderPass
 {
+private:
 	std::unordered_set<UIImage*>	m_uiImages;
 
 public:

@@ -11,6 +11,7 @@ using namespace CCMaths;
 
 class Cell;
 
+
 class CCENGINE_API Transform : public Behaviour
 {
 	enum class EDirtyFlag
@@ -22,6 +23,13 @@ class CCENGINE_API Transform : public Behaviour
 	};
 
 private:
+	using Vector3Property = CCProperty::ConstRefProperty<Transform, Vector3>;
+
+	unsigned char m_isDirty = (int)EDirtyFlag::WORLD_MATRIX |
+							  (int)EDirtyFlag::WORLD_POSITION |
+						      (int)EDirtyFlag::WORLD_ROTATION |
+							  (int)EDirtyFlag::WORLD_SCALE;
+
 	Vector3 m_position = CCMaths::Vector3::Zero;
 	Vector3 m_rotation = CCMaths::Vector3::Zero;
 	Vector3 m_scale	   = CCMaths::Vector3::One;
@@ -29,24 +37,23 @@ private:
 	Vector3 m_worldPosition = Vector3(0.f, 0.f, 0.f);
 	Vector3 m_worldRotation = Vector3(0.f, 0.f, 0.f);
 	Vector3 m_worldScale = Vector3(1.f, 1.f, 1.f);
-
-	Transform* m_parent = nullptr;
-	std::vector<Transform*> m_children;
-
+	
 	Matrix4 m_worldMatrix = Matrix4::Identity;
 
-	unsigned char m_isDirty = (int)EDirtyFlag::WORLD_MATRIX |
-							  (int)EDirtyFlag::WORLD_POSITION |
-						      (int)EDirtyFlag::WORLD_ROTATION |
-							  (int)EDirtyFlag::WORLD_SCALE;
+	std::vector<Transform*> m_children;
+	
+	Transform* m_parent = nullptr;
 
 	void SetDirty(int dirtyFlag);
 
 	void PopulateMetadatas() override;
 
-	using Vector3Property = CCProperty::ConstRefProperty<Transform, Vector3>;
-
 public:
+	Event<const Vector3&>	m_onPositionChange;
+	Event<const Vector3&>	m_onRotationChange;
+	Event<const Vector3&>	m_onScaleChange;
+	Event<Transform*>		m_onTransformEdited;
+
 	Transform();
 	Transform(CCUUID& owner);
 	~Transform();
@@ -78,18 +85,8 @@ public:
 	void ReapplyRotation();
 	void ReapplyScale();
 
-	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
-	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };
-	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
-
-	CCProperty::CopyProperty<Transform, Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
-
-	Event<const Vector3&> m_onPositionChange;
-	Event<const Vector3&> m_onRotationChange;
-	Event<const Vector3&> m_onScaleChange;
-
-	std::vector<Transform*>* GetChildren() { return &m_children; }
 	void AddChildren(Transform* transform);
+	std::vector<Transform*>* GetChildren() { return &m_children; }
 
 	void BindToSignals() override;
 
@@ -101,5 +98,9 @@ public:
 
 	bool IsChildOf(Transform* parent, bool recursive=true);
 
-	Event<Transform*> m_onTransformEdited;
+	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
+	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };
+	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
+
+	CCProperty::CopyProperty<Transform, Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 };

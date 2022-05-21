@@ -1,16 +1,17 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "sphere_collider.hpp"
 
 #include <PxPhysicsAPI.h>
 
-#include "resource_manager.hpp"
 #include "physic_manager.hpp"
+#include "resource_manager.hpp"
 
-#include "collider_renderpass.hpp"
 #include "camera_component.hpp"
-#include "transform.hpp"
+#include "collider_renderpass.hpp"
 #include "entity.hpp"
+#include "transform.hpp"
+
 
 SphereCollider::SphereCollider()
 {
@@ -80,6 +81,7 @@ void SphereCollider::Initialize()
 		m_transform->m_onRotationChange.Bind(&SphereCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&SphereCollider::InvalidateTransform, this);
 	}
+	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&SphereCollider::Initialize, this);
 

@@ -2,8 +2,9 @@
 
 #include "builder.hpp"
 #include "command.hpp"
-#include "utils.hpp"
 #include "serializer.hpp"
+#include "utils.hpp"
+
 
 bool Builder::BuildGame(const char* outDir,const char* gameName, bool runGame) 
 {

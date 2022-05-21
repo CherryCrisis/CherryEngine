@@ -126,9 +126,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\maths\matrix3.hpp">
-      <Filter>Fichiers d%27en-tête\Maths</Filter>
-    </ClInclude>
     <ClInclude Include="include\maths\matrix4.hpp">
       <Filter>Fichiers d%27en-tête\Maths</Filter>
     </ClInclude>
@@ -163,9 +160,6 @@
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
     <ClInclude Include="include\model.hpp">
-      <Filter>Fichiers d%27en-tête\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="include\model_base.hpp">
       <Filter>Fichiers d%27en-tête\Resource</Filter>
     </ClInclude>
     <ClInclude Include="include\model_loader.hpp">
@@ -457,9 +451,6 @@
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="include\keycode.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\keyboard_context.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="externals\include\GLFW\glfw3native.h">
@@ -1092,12 +1083,6 @@
     <ClInclude Include="include\physic_scene.hpp">
       <Filter>Fichiers d%27en-tête\PhysX</Filter>
     </ClInclude>
-    <ClInclude Include="src\physic_utils.cpp">
-      <Filter>Fichiers sources\PhysX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\physic_utils.hpp">
-      <Filter>Fichiers d%27en-tête\PhysX</Filter>
-    </ClInclude>
     <ClInclude Include="include\csreflection.hpp">
       <Filter>Fichiers d%27en-tête\Scripting</Filter>
     </ClInclude>
@@ -1111,9 +1096,6 @@
       <Filter>Fichiers d%27en-tête\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="include\cell.hpp">
-      <Filter>Fichiers d%27en-tête\Cells</Filter>
-    </ClInclude>
-    <ClInclude Include="include\cell_system.hpp">
       <Filter>Fichiers d%27en-tête\Cells</Filter>
     </ClInclude>
     <ClInclude Include="include\serializer.hpp">
@@ -1319,9 +1301,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\maths\matrix3.inl">
-      <Filter>Fichiers d%27en-tête\Maths</Filter>
-    </None>
     <None Include="include\maths\matrix4.inl">
       <Filter>Fichiers d%27en-tête\Maths</Filter>
     </None>

@@ -1,13 +1,14 @@
 #pragma once
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
-#include "maths.hpp"
 #include "collider.hpp"
+#include "maths.hpp"
 #include "renderer.hpp"
 
-class Transform;
 class Mesh;
+class Transform;
+
 
 class CCENGINE_API BoxCollider : public Collider, public ARenderer
 {
@@ -15,8 +16,8 @@ private:
 	using Vector3Property = CCProperty::ConstRefProperty<BoxCollider, CCMaths::Vector3>;
 
 	CCMaths::Vector3 m_baseEntityScale = CCMaths::Vector3::One;
-	CCMaths::Vector3 m_entityScale = CCMaths::Vector3::One;
 	CCMaths::Vector3 m_editableScale = CCMaths::Vector3::One;
+	CCMaths::Vector3 m_entityScale = CCMaths::Vector3::One;
 	CCMaths::Vector3 m_totalScale = CCMaths::Vector3::One;
 
 	void PopulateMetadatas() override;

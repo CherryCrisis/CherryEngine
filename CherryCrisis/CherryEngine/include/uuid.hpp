@@ -1,6 +1,7 @@
 #pragma once
 
 #include <xhash>
+
 #include <cherry_macros.hpp>
 
 
@@ -8,6 +9,7 @@ class CCENGINE_API CCUUID
 {
 private:
 	uint32_t m_uuid;
+
 public:
 	CCUUID();
 	CCUUID(uint32_t uuid): m_uuid(uuid) {}

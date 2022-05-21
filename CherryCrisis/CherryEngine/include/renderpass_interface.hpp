@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "shader_program.hpp"
 #include "resource_manager.hpp"
+#include "shader_program.hpp"
 
 class CCENGINE_API ARenderPass
 {

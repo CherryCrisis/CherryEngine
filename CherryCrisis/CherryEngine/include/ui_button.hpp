@@ -1,10 +1,12 @@
 #pragma once
 
-#include "ui_item.hpp"
-#include "cherry_macros.hpp"
-#include "ui_image.hpp"
-#include "ui_text.hpp"
+#include <cherry_macros.hpp>
+
 #include "ui_button_behaviour.hpp"
+#include "ui_image.hpp"
+#include "ui_item.hpp"
+#include "ui_text.hpp"
+
 
 class CCENGINE_API UIButton : public UIItem
 {
@@ -16,17 +18,22 @@ private:
 
 	ButtonBehaviour behaviour;
 	std::string behaviourPath = " ";
-protected:
 
+protected:
 	void PopulateMetadatas() override;
 	void OnSetPos() override;
 	void OnSetSize() override;
+
 public:
+	Event<> m_onClicked;
+	Event<> m_onReleased;
+	Event<> m_onHovered;
+	
+	UIButton(CCUUID& id);
+	UIButton();
 
 	bool CompareId(int id) override;
 	void Interact() override;
-	UIButton(CCUUID& id);
-	UIButton();
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 
@@ -34,9 +41,5 @@ public:
 
 	std::string GetBehaviourName() {return behaviourPath;}
 
-	Event<> m_onClicked;
-	Event<> m_onReleased;
-	Event<> m_onHovered;
-
-	CCProperty::ConstRefProperty < UIButton, std::string > Behaviour{ this, &UIButton::SetBehaviourName, &UIButton::GetBehaviourName };
+	CCProperty::ConstRefProperty<UIButton, std::string> Behaviour{ this, &UIButton::SetBehaviourName, &UIButton::GetBehaviourName };
 };

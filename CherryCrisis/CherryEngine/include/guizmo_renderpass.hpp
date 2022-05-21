@@ -4,16 +4,16 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
 #include "ebo_tbn_generator.hpp"
-
 #include "framebuffer.hpp"
+#include "rendering_renderpass_interface.hpp"
 #include "texture.hpp"
 
-class Viewer;
 class AudioEmitter;
 class CameraComponent;
 class LightComponent;
+class Viewer;
+
 
 class GuizmoRenderPass : public ARenderingRenderPass
 {
@@ -28,6 +28,7 @@ private:
 	std::shared_ptr<Texture> m_cameraIcon;
 	std::shared_ptr<Texture> m_audioIcon;
 	std::shared_ptr<Texture> m_lightIcon;
+
 protected:
 	ElementMeshGenerator m_meshGenerator;
 

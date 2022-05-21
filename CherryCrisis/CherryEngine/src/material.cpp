@@ -1,11 +1,12 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "material.hpp"
 
 #include "resource_manager.hpp"
 
-#include "texture.hpp"
 #include "model_loader.hpp"
+#include "texture.hpp"
+
 
 void Material::Delete()
 {

@@ -1,8 +1,6 @@
-
-#include <glad/gl.h>
-
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
+#include <glad/gl.h>
 #include <iostream>
 
 #include <imgui.h>
@@ -10,11 +8,11 @@
 #include <imgui_impl_opengl3.h>
 
 #include "launcher.hpp"
-
 #include "portable-file-dialogs.hpp"
 #undef far
 #undef near
 #undef ERROR
+
 
 void window_size_callback(GLFWwindow* window, int width, int height)
 {

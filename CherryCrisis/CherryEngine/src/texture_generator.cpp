@@ -1,6 +1,7 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "texture_generator.hpp"
+
 
 void TextureGenerator::GPUTextureBasic::Generate(Texture* texture)
 {

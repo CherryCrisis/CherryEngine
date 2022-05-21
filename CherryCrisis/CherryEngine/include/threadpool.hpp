@@ -1,18 +1,21 @@
 #pragma once
 
-#include <thread>
-#include <queue>
 #include <condition_variable>
-#include <mutex>
-
-#include <vector>
 #include <memory>
+#include <mutex>
+#include <queue>
+#include <thread>
+#include <vector>
 
-#include "cherry_macros.hpp"
-#include "function.hpp"
-#include "callback.hpp"
-#include "event.hpp"
+#include <cherry_macros.hpp>
+
 #include "singleton.hpp"
+
+#include "callback.hpp"
+
+#include "event.hpp"
+#include "function.hpp"
+
 
 enum class EChannelTask
 {
@@ -36,11 +39,12 @@ class CCENGINE_API ThreadPool : public Singleton<ThreadPool>
 private:
 	friend class Singleton<ThreadPool>;
 
-	std::queue<std::unique_ptr<Task>>	m_multiThreadsTasks;
+	bool								m_stopThreads = false;
+
 	std::vector<std::thread>			m_threads;
 	std::condition_variable				m_condition;
 	std::mutex							m_multiThreadsQueueLock;
-	bool								m_stopThreads = false;
+	std::queue<std::unique_ptr<Task>>	m_multiThreadsTasks;
 
 	std::mutex							m_mainThreadQueueLock;
 	std::queue<std::unique_ptr<Task>>	m_mainThreadTasks;
@@ -48,7 +52,6 @@ private:
 	std::thread::id m_mainThreadID;
 
 public:
-
 	ThreadPool();
 	virtual ~ThreadPool();
 

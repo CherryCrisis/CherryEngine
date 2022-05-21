@@ -1,11 +1,12 @@
-
 #include "panels/project_settings_displayer.hpp"
 
 #include <imgui.h>
 
-#include "core/editor_manager.hpp"
 #include "resource_manager.hpp"
+
+#include "core/editor_manager.hpp"
 #include "serializer.hpp"
+
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 

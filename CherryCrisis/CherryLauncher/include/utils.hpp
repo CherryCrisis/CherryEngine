@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <string>
 
+
 namespace String
 {
 	//return the string chunk after the separator

@@ -3,22 +3,21 @@
 #include <map>
 #include <memory>
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
-#include "resource.hpp"
-#include "maths.hpp"
 #include "event.hpp"
+#include "maths.hpp"
+#include "resource.hpp"
 
-
-//Forward declaration
 class Texture;
+
 namespace CCImporter
 {
 	struct MaterialArgs;
 }
-//class CCImporter::MaterialArgs;
 
 using namespace CCMaths;
+
 
 enum class ETextureType : unsigned int
 {
@@ -65,7 +64,7 @@ public:
 	~Material() = default;
 
 	static void Load(std::shared_ptr<Material> material);
-	static bool LoadFromCache(std::shared_ptr<Material> material, CCImporter::MaterialArgs& materialArgs);
+	static bool LoadFromCache(std::shared_ptr<Material> material, CCImporter::MaterialArgs& materialArgs); // TODO: remove or define
 
 	void Delete() override;
 	void Reload(bool saveOnly = false);

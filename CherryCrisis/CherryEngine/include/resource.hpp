@@ -1,11 +1,12 @@
 #pragma once
 
-#include <string>
-#include <memory>
 #include <atomic>
 #include <filesystem>
+#include <memory>
+#include <string>
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
+
 #include "event.hpp"
 #include "threadpool.hpp"
 

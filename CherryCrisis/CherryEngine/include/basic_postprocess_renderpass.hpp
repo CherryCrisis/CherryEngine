@@ -1,18 +1,14 @@
 #pragma once
 
-#include "postprocess_renderpass_interface.hpp"
 #include "element_mesh_generator.hpp"
-
 #include "framebuffer.hpp"
+#include "postprocess_renderpass_interface.hpp"
 
 class Mesh;
 
+
 class BasicPostProcessRenderPass : public APostProcessRenderPass 
 {
-    ElementMeshGenerator m_meshGenerator;
-
-	Framebuffer m_framebuffer;
-
     enum class EColorTransform : GLuint
     {
         IDENTITY = 0u,
@@ -21,6 +17,10 @@ class BasicPostProcessRenderPass : public APostProcessRenderPass
         EDGEDETECTION = 3u,
         SEPIA = 4u,
     } transformType = EColorTransform::SEPIA;
+
+    ElementMeshGenerator m_meshGenerator;
+
+	Framebuffer m_framebuffer;
 
     std::shared_ptr<Mesh> m_quadMesh;
 

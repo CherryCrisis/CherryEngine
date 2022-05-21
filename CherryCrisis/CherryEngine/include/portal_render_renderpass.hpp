@@ -4,19 +4,18 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
-
 #include "ebo_tbn_generator.hpp"
-#include "texture_generator.hpp"
-#include "portal_generator.hpp"
-
 #include "framebuffer.hpp"
-#include "texture.hpp"
-#include "portal.hpp"
 #include "light.hpp"
 #include "mesh.hpp"
+#include "portal.hpp"
+#include "portal_generator.hpp"
+#include "rendering_renderpass_interface.hpp"
+#include "texture.hpp"
+#include "texture_generator.hpp"
 
 class Viewer;
+
 
 class PortalRenderPass : public ARenderingRenderPass
 {

@@ -3,8 +3,8 @@
 #include <glad/gl.h>
 
 #include "framebuffer.hpp"
-
 #include "portal.hpp"
+
 
 class CCENGINE_API PortalGenerator
 {

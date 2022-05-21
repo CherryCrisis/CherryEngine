@@ -5,20 +5,20 @@
 #include <glad/gl.h>
 
 #include "element_mesh_generator.hpp"
-#include "rendering_renderpass_interface.hpp"
-
-#include "texture.hpp"
 #include "light.hpp"
 #include "mesh.hpp"
+#include "rendering_renderpass_interface.hpp"
+#include "texture.hpp"
 
 class ModelRenderer;
 class ShapeRenderer;
 class UIItem;
-
 class Viewer;
+
 
 class PickingRenderPass : public ARenderingRenderPass
 {
+private:
 	std::unordered_set<ModelRenderer*> m_models;
 	std::unordered_set<ShapeRenderer*> m_shapes;
 	std::unordered_set<UIItem*>	m_uiRenderers;

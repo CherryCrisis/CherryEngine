@@ -2,6 +2,7 @@
 
 #include "utils.hpp"
 
+
 template <BehaviourT CompT>
 CompT* Entity::AddBehaviour()
 {

@@ -1,13 +1,14 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include <unordered_set>
+
+#include <cherry_macros.hpp>
+
 #include "object.hpp"
 
-class Entity;
-class Debug;
-struct Portal;
+class	Debug;
+class	Entity;
+struct	Portal;
 
 namespace physx
 {
@@ -20,22 +21,23 @@ namespace PhysicSystem
 	class PhysicScene;
 }
 
+
 class CCENGINE_API Cell : public Object
 {
 private:
 	std::string m_name;
 
-	Debug* m_debug = nullptr;
-	PhysicSystem::PhysicManager* m_pxManager = nullptr;
+	std::vector<Entity*>					m_entities;
+	std::vector<Portal*>					m_portals;
+	std::unordered_set<class ARenderer*>	m_renderers;
+	std::unordered_set<class Viewer*>		m_viewers;
 
-	std::vector<Entity*> m_entities;
-	std::unordered_set<class Viewer*> m_viewers;
-	std::unordered_set<class ARenderer*> m_renderers;
-	std::vector<Portal*> m_portals;
+	Debug*							m_debug = nullptr;
+	PhysicSystem::PhysicManager*	m_pxManager = nullptr;
 
 public:
-	class SkyRenderer* m_skyRenderer = nullptr;
-	PhysicSystem::PhysicScene* m_physicCell = nullptr;
+	class SkyRenderer*			m_skyRenderer = nullptr;
+	PhysicSystem::PhysicScene*	m_physicCell = nullptr;
 
 	Cell(CCUUID id = {});
 	~Cell();
@@ -52,10 +54,10 @@ public:
 	void	RemoveViewer(Viewer* viewer);
 	int		PossessEntity(Entity* entity);
 
-	const std::vector<Entity*>& GetEntities() { return m_entities; }
-
 	void	LinkPortal(Portal* toLink);
 	void	LinkPortals(Portal* portal1, Portal* portal2);
+
+	const std::vector<Entity*>& GetEntities() { return m_entities; }
 
 	void SetName(const std::string& name) { m_name = name; }
 	const std::string& GetName() { return m_name; }

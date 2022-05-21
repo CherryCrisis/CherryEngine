@@ -1,27 +1,24 @@
-
 #include "panels/scene_displayer.hpp"
-
-#include "scene_manager.hpp"
 
 #include <comdef.h>
 #include <algorithm>
 
-#include "time_manager.hpp"
-#include "core/editor_manager.hpp"
-#include "transform.hpp"
-#include "maths.hpp"
 #include "resource_manager.hpp"
+#include "scene_manager.hpp"
+#include "time_manager.hpp"
 
-#include "pickinger.hpp"
-
-#include "mixed_rendering_pipeline.hpp"
-
-#include "utils.hpp"
 #include "camera_component.hpp"
+#include "core/editor_manager.hpp"
+#include "maths.hpp"
+#include "mixed_rendering_pipeline.hpp"
 #include "model.hpp"
+#include "pickinger.hpp"
+#include "transform.hpp"
+#include "utils.hpp"
 
 #undef near
 #undef far
+
 
 SceneDisplayer::SceneDisplayer() 
 {

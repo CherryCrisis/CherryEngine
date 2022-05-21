@@ -5,10 +5,11 @@
 
 #include "resource_manager.hpp"
 
-#include "texture.hpp"
 #include "material.hpp"
-#include "utils.hpp"
 #include "Panels/asset_browser.hpp"
+#include "texture.hpp"
+#include "utils.hpp"
+
 
 void AssetSettingsDisplayer::Render()
 {
@@ -78,7 +79,7 @@ void TextureSettings::Render()
                 if (ImGui::Selectable(listSurface[n], is_selected))
                 {
                     m_currentSurfaceId = n;
-                    m_settingsChanged = true;
+                    m_hasSettingsChanged = true;
                 }
 
                 if (is_selected)
@@ -98,7 +99,7 @@ void TextureSettings::Render()
                 if (ImGui::Selectable(listType[n], is_selected))
                 {
                     m_currentTypeId = n;
-                    m_settingsChanged = true;
+                    m_hasSettingsChanged = true;
                 }
 
                 if (is_selected)
@@ -108,9 +109,9 @@ void TextureSettings::Render()
         }
 
         if (ImGui::Checkbox("Flip", &m_isFlipped))
-            m_settingsChanged = true;
+            m_hasSettingsChanged = true;
 
-        if (m_settingsChanged)
+        if (m_hasSettingsChanged)
         {
             if (ImGui::Button("Apply"))
             {
@@ -118,7 +119,7 @@ void TextureSettings::Render()
                 m_texture->SetSurface(static_cast<ETextureSurface>(m_currentSurfaceId));
 
                 Resource<Texture>::ReloadResource(m_texture, m_isFlipped);
-                m_settingsChanged = false;
+                m_hasSettingsChanged = false;
 
                 //Reaply texture surface during reload because it can be changed if the texture doesn't support cubemap settings
                 m_currentSurfaceId = static_cast<int>(m_texture->GetSurface());
@@ -187,7 +188,7 @@ void MaterialSettings::Render()
             const bool is_selected = (currentPipeline == n);
             if (ImGui::Selectable(list[n], is_selected))
             {
-                m_settingsChanged = true;
+                m_hasSettingsChanged = true;
                 m_material->m_pipelineType = static_cast<EPipelineType>(n);
             }
 
@@ -202,7 +203,7 @@ void MaterialSettings::Render()
 #pragma warning(disable : 4804)
     if (EPipelineType::LIT == static_cast<EPipelineType>(currentPipeline))
     {
-        m_settingsChanged += ImGui::DragFloat3("Ambient", m_material->m_ambient.data, 0.1f, 0.f) +
+        m_hasSettingsChanged += ImGui::DragFloat3("Ambient", m_material->m_ambient.data, 0.1f, 0.f) +
             ImGui::DragFloat3("Diffuse", m_material->m_diffuse.data, 0.1f, 0.f) +
             ImGui::DragFloat3("Specular", m_material->m_specular.data, 0.1f, 0.f) +
             ImGui::DragFloat3("Emissive", m_material->m_emissive.data, 0.1f, 0.f) +
@@ -210,7 +211,7 @@ void MaterialSettings::Render()
     }
     else if (EPipelineType::PBR == static_cast<EPipelineType>(currentPipeline))
     {
-        m_settingsChanged += ImGui::DragFloat3("Albedo", m_material->m_diffuse.data, 0.1f, 0.f) +
+        m_hasSettingsChanged += ImGui::DragFloat3("Albedo", m_material->m_diffuse.data, 0.1f, 0.f) +
             ImGui::DragFloat("Specular factor", &m_material->m_specularFactor, 0.1f, 0.f, 1.f) +
             ImGui::DragFloat("Metallic factor", &m_material->m_metallicFactor, 0.1f, 0.f, 1.f) +
             ImGui::DragFloat("Roughness factor", &m_material->m_roughnessFactor, 0.1f, 0.f, 1.f) +
@@ -284,7 +285,7 @@ void MaterialSettings::Render()
                                 textureIt->second = texture;
 
                                 m_material->m_textures = m_textures;
-                                m_settingsChanged = true;
+                                m_hasSettingsChanged = true;
                             }
                         }
                     }
@@ -295,12 +296,12 @@ void MaterialSettings::Render()
         ImGui::EndTable();
     }
 
-    if (m_settingsChanged)
+    if (m_hasSettingsChanged)
     {
         //true for save only
         Resource<Material>::ReloadResource(m_material, true);
         GenerateTextureList();
-        m_settingsChanged = false;
+        m_hasSettingsChanged = false;
     }
 
     ContextCallback();
@@ -327,7 +328,7 @@ void MaterialSettings::ContextCallback()
                 textureIt->second = nullptr;
 
                 m_material->m_textures = m_textures;
-                m_settingsChanged = true;
+                m_hasSettingsChanged = true;
             }
         }
 

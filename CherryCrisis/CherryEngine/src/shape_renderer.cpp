@@ -1,4 +1,4 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "shape_renderer.hpp"
 
@@ -18,6 +18,8 @@
 #include "picking_renderpass.hpp"
 #include "shadow_renderpass.hpp"
 
+
+// TODO: change with something working
 int ShapeRenderer::count = 100;
 
 ShapeRenderer::ShapeRenderer()

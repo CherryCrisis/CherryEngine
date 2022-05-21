@@ -1,17 +1,16 @@
 #include "pch.hpp"
 
 #include "portal_render_renderpass.hpp"
-#include "mixed_rendering_pipeline.hpp"
-
-#include "framebuffer.hpp"
 
 #include "camera.hpp"
+#include "framebuffer.hpp"
+#include "mixed_rendering_pipeline.hpp"
 #include "model_renderer.hpp"
-#include "transform.hpp"
-
-#include "shadow_renderpass.hpp"
 #include "portal.hpp"
+#include "shadow_renderpass.hpp"
+#include "transform.hpp"
 #include "viewer.hpp"
+
 
 PortalRenderPass::PortalRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/portalShader.vert", "Assets/Shaders/portalShader.frag")
@@ -66,7 +65,7 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 				continue;
 
 			//UpdateFrameBuffer verif if width and heigth are changed
-			gpuPortal->framebuffer->UpdateFramebuffer(framebuffer.width, framebuffer.height);
+			gpuPortal->framebuffer->UpdateFramebuffer(static_cast<float>(framebuffer.width), static_cast<float>(framebuffer.height));
 
 			portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
 

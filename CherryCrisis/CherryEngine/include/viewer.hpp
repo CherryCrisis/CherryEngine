@@ -2,20 +2,20 @@
 
 #include <memory>
 
-#include "rendering_pipeline_interface.hpp"
-#include "maths.hpp"
-#include "framebuffer.hpp"
-#include "frustum_plane.hpp"
-
 #include <glad/gl.h>
 
+#include "framebuffer.hpp"
+#include "frustum_plane.hpp"
+#include "rendering_pipeline_interface.hpp"
+#include "maths.hpp"
+
 class Cell;
+
 
 class CCENGINE_API Viewer
 {
 public:
 	int m_currentIteration = 5;
-	Cell* m_ownerCell = nullptr;
 
 	CCMaths::Matrix4 m_viewMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_projectionMatrix = CCMaths::Matrix4::Identity;
@@ -27,6 +27,8 @@ public:
 	std::unique_ptr<ARenderingPipeline> m_pipeline;
 
 	std::shared_ptr<Framebuffer> m_framebuffer;
+	
+	Cell* m_ownerCell = nullptr;
 
 	Viewer()
 		: m_framebuffer(std::make_shared<Framebuffer>()) {}

@@ -1,22 +1,23 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "pbr_renderpass.hpp"
 
 #include "resource_manager.hpp"
 
+#include "brdf_renderpass.hpp"
 #include "camera.hpp"
 #include "framebuffer.hpp"
+#include "irradiance_map_renderpass.hpp"
 #include "material.hpp"
 #include "model_renderer.hpp"
+#include "prefilter_map_renderpass.hpp"
+#include "shadow_renderpass.hpp"
 #include "shape_renderer.hpp"
 #include "sky_renderer.hpp"
 #include "texture.hpp"
 #include "transform.hpp"
 #include "viewer.hpp"
-#include "brdf_renderpass.hpp"
-#include "irradiance_map_renderpass.hpp"
-#include "prefilter_map_renderpass.hpp"
-#include "shadow_renderpass.hpp"
+
 
 PBRRenderPass::PBRRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/PBR/pbrShader.vert", "Assets/Shaders/PBR/pbrShader.frag")

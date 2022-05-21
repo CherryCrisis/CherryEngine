@@ -1,9 +1,9 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include <vector>
 #include <string>
+
+#include <cherry_macros.hpp>
 
 #include "singleton.hpp"
 
@@ -11,18 +11,18 @@
 #include "physic_scene.hpp"
 
 #define PX_RELEASE(x)	if(x)	{ x->release(); x = nullptr; }
-#define CCPhysicManager PhysicSystem::PhysicManager
+
+class Cell;
+class CharacterController;
+class Collider;
+class Entity;
+class Rigidbody;
 
 namespace CCMaths
 {
 	struct Vector3;
 }
 
-class CharacterController;
-class Rigidbody;
-class Collider;
-class Cell;
-class Entity;
 
 namespace PhysicSystem
 {
@@ -46,17 +46,14 @@ namespace PhysicSystem
 	class CCENGINE_API PhysicManager : public Singleton<PhysicManager>
 	{
 	private:
-		// TODO: Get physicManager Instance, replace functions by static
-		PhysicManager* m_instance = nullptr;
-
-		physx::PxFoundation* m_foundation = nullptr;
-		physx::PxPvd* m_pvd = nullptr;
-		physx::PxPhysics* m_physics = nullptr;
-
-		std::vector<PhysicActor*> m_physicActors;
-		std::vector<PhysicScene*> m_scenes;
-
 		bool m_isPlaying = false;
+
+		std::vector<PhysicScene*> m_scenes;
+		std::vector<PhysicActor*> m_physicActors;
+
+		physx::PxFoundation*	m_foundation = nullptr;
+		physx::PxPhysics*		m_physics = nullptr;
+		physx::PxPvd*			m_pvd = nullptr;
 
 	public:
 		PhysicManager();

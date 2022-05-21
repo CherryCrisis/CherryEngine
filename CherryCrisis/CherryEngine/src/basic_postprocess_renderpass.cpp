@@ -1,9 +1,10 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "basic_postprocess_renderpass.hpp"
 
 #include "mesh.hpp"
 #include "resource_manager.hpp"
+
 
 BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 	: APostProcessRenderPass(name, "Assets/Shaders/basicPostProcess.vert", "Assets/Shaders/basicPostProcess.frag")
@@ -23,7 +24,7 @@ BasicPostProcessRenderPass::BasicPostProcessRenderPass(const char* name)
 void BasicPostProcessRenderPass::Execute(Framebuffer& framebuffer)
 {
 	//UpdateFramebuffer verif if width and height are changed
-	m_framebuffer.UpdateFramebuffer(framebuffer.width, framebuffer.height);
+	m_framebuffer.UpdateFramebuffer(static_cast<float>(framebuffer.width), static_cast<float>(framebuffer.height));
 
 	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
 

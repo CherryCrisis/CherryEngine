@@ -1,14 +1,15 @@
 #pragma once
 
-#include "core/panel.hpp"
-
 #include <unordered_map>
 
-class Scene;
+#include "core/panel.hpp"
+
+class CellSystemDisplayer;
 class EditorManager;
 class Entity;
-class CellSystemDisplayer;
+class Scene;
 class Transform;
+
 
 class HierarchyDisplayer : public Panel
 {
@@ -16,26 +17,29 @@ private:
 	class HierarchyNode 
 	{
 	public:
-		Entity* m_entity = nullptr;
-		Transform* m_entityTransform = nullptr;
-		bool m_isRoot = false;
-		std::string m_name = "";
+		Entity*		m_entity = nullptr;
+		Transform*	m_entityTransform = nullptr;
 		
+		bool		m_isRoot = false;
+		std::string m_name = "";
+
 		std::vector<HierarchyNode> m_childrens;
 	};
 
-	EditorManager* m_manager = nullptr;
-	CellSystemDisplayer* m_cellSystemDisplayer = nullptr;
-
-	Entity* m_draggedEntity = nullptr;
 	bool	m_isEntityDragged = false;
-
-	bool m_renaming = false;
-
-	ImGuiIO* IO = nullptr;
+	bool	m_isRenaming = false;
 
 	std::vector<HierarchyNode> m_nodes;
+
+	CellSystemDisplayer*	m_cellSystemDisplayer = nullptr;
+	Entity*					m_draggedEntity = nullptr;
+	EditorManager*			m_manager = nullptr;
+
+	ImGuiIO*	IO = nullptr;
+
 public:
+	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr);
+
 	void Render() override;
 	void ContextCallback() override;
 
@@ -45,6 +49,4 @@ public:
 	bool RenderEntity(Entity* entity, Transform* transform = nullptr);
 	/// //////////////////////////////////////////////
 	bool RenderEntity(HierarchyNode node);
-
-	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr);
 };

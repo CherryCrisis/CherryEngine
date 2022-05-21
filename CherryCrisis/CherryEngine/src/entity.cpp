@@ -1,15 +1,16 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "entity.hpp"
+
+#include <typeinfo>
 
 #include "debug.hpp"
 
 #include "behaviour.hpp"
-#include "transform.hpp"
-#include "scene.hpp"
 #include "cell.hpp"
+#include "scene.hpp"
+#include "transform.hpp"
 
-#include <typeinfo>
 
 std::string Entity::m_defaultName = "Entity";
 

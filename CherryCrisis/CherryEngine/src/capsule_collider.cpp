@@ -1,4 +1,4 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "capsule_collider.hpp"
 
@@ -7,10 +7,11 @@
 #include "resource_manager.hpp"
 #include "physic_manager.hpp"
 
-#include "collider_renderpass.hpp"
 #include "camera_component.hpp"
-#include "transform.hpp"
+#include "collider_renderpass.hpp"
 #include "entity.hpp"
+#include "transform.hpp"
+
 
 CapsuleCollider::CapsuleCollider()
 {
@@ -80,6 +81,7 @@ void CapsuleCollider::Initialize()
 		m_transform->m_onRotationChange.Bind(&CapsuleCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&CapsuleCollider::InvalidateTransform, this);
 	}
+	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&CapsuleCollider::Initialize, this);
 

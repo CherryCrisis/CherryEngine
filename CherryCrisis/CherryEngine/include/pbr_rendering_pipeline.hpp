@@ -2,13 +2,13 @@
 
 #include "rendering_pipeline_interface.hpp"
 
-class EnvironmentMapRenderPass;
-class SkydomeRenderPass;
-class IrradianceMapRenderPass;
-class PrefilterMapRenderPass;
 class BRDFRenderPass;
+class EnvironmentMapRenderPass;
+class IrradianceMapRenderPass;
 class PBRRenderPass;
 class PickingRenderPass;
+class PrefilterMapRenderPass;
+class SkydomeRenderPass;
 
 //PBR Rendering Pipeline
 class CCENGINE_API PBRRPipeline : public ARenderingPipeline

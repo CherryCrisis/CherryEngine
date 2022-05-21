@@ -1,17 +1,16 @@
 #include "panels/cell_system_displayer.hpp"
 
-#include "scene_manager.hpp"
-
 #include <imgui.h>
 
-#include "entity.hpp"
+#include "scene_manager.hpp"
 
-#include "core/editor_manager.hpp"
-#include "transform.hpp"
 #include "camera.hpp"
+#include "core/editor_manager.hpp"
+#include "entity.hpp"
+#include "transform.hpp"
 #include "sky_renderer.hpp"
 #include "utils.hpp"
-#include "scene_manager.hpp"
+
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 

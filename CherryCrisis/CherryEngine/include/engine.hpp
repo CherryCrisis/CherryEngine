@@ -1,21 +1,24 @@
 #pragma once
 
-#include <cherry_macros.hpp>
-
 #include <vector>
 
+#include <cherry_macros.hpp>
+
 #include "event.hpp"
+
 
 class CCENGINE_API Engine
 {
 public:
-
 	static void* window_handle;
-	Engine();
-	~Engine();
 
 	static bool isPlaying;
 	static bool isPaused;
+	
+	Event<> m_OnStop;
+	
+	Engine();
+	~Engine();
 
 	void Launch(bool flipScene = true);
 
@@ -23,6 +26,4 @@ public:
 
 	void Tick();
 	void TickEngine();
-
-	Event<> m_OnStop;
 };

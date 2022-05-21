@@ -1,6 +1,7 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "portal_generator.hpp"
+
 
 bool PortalGenerator::Generate(Portal * toGenerate)
 {

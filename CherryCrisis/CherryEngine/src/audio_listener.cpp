@@ -1,11 +1,10 @@
 #include <pch.hpp>
 
-#include "audio_listener.hpp"
-
 #include "al.h"
-
+#include "audio_listener.hpp"
 #include "entity.hpp"
 #include "transform.hpp"
+
 
 AudioListener::AudioListener()
 {
@@ -19,7 +18,6 @@ AudioListener::AudioListener(CCUUID& id) : Behaviour(id)
 
 AudioListener::~AudioListener()
 {
-
 }
 
 void AudioListener::Initialize()

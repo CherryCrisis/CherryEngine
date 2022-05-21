@@ -2,14 +2,13 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
-
 #include "element_mesh_generator.hpp"
-
+#include "rendering_renderpass_interface.hpp"
 #include "texture.hpp"
 
 class SkyRenderer;
 class Viewer;
+
 
 class PrefilterMapRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
@@ -18,6 +17,7 @@ private:
 
 	void SetupPrefilterMap();
 	void GeneratePrefilterMap();
+
 public:
 	struct GPUPrefilterMapSphereMap : GPUPrefilterMap
 	{

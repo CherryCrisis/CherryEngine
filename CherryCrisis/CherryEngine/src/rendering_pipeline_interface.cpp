@@ -1,9 +1,13 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "rendering_pipeline_interface.hpp"
 
+
 ARenderingPipeline::~ARenderingPipeline() 
-{/*
+{
+	// TODO: See to delete
+
+	/*
 	//Delete entries
 	for (auto [name, rawPtr] : m_existingRenderpasses)
 	{

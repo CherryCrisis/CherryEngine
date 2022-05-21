@@ -1,12 +1,13 @@
 #pragma once
 
+#include <cherry_macros.hpp>
+
 #include "behaviour.hpp"
-
 #include "light.hpp"
-#include "cherry_macros.hpp"
 
-class Transform;
 class Cell;
+class Transform;
+
 
 class CCENGINE_API LightComponent : public Behaviour, public ARenderer
 {
@@ -15,6 +16,7 @@ protected:
 
 public:
 	Light		m_light;
+
 	Transform*	m_transform = nullptr;
 
 	LightComponent();

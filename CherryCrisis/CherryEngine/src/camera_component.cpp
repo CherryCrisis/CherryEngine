@@ -1,19 +1,17 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "camera_component.hpp"
-
-#include "cell.hpp"
-
-#include "transform.hpp"
 
 #include "basic_renderpass.hpp"
-#include "skybox_renderpass.hpp"
-#include "guizmo_renderpass.hpp"
-#include "render_manager.hpp"
 #include "camera_component.hpp"
-
-#include "mixed_rendering_pipeline.hpp"
+#include "cell.hpp"
 #include "entity.hpp"
+#include "guizmo_renderpass.hpp"
+#include "mixed_rendering_pipeline.hpp"
+#include "render_manager.hpp"
+#include "skybox_renderpass.hpp"
+#include "transform.hpp"
+
 
 unsigned int	 CameraComponent::m_count	    = 0;
 CameraComponent* CameraComponent::m_mainCamera      = nullptr;

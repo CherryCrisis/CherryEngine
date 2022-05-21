@@ -1,4 +1,3 @@
-
 #include "panels/build_displayer.hpp"
 
 #include <imgui.h>
@@ -10,6 +9,7 @@
 #undef ERROR
 #include "core/editor_manager.hpp"
 #include "panels/project_settings_displayer.hpp"
+
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 

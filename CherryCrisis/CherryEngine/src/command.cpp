@@ -1,6 +1,6 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
-#include <command.hpp>
+#include "command.hpp"
 
 #include <cstdio>
 #include <iostream>
@@ -12,6 +12,7 @@
 
 #include <ShellAPI.h>
 #include <tchar.h>
+
 
 void call(const char* type, const char* command, const char* arg) 
 {

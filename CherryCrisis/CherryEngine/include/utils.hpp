@@ -2,13 +2,16 @@
 
 #include <filesystem>
 #include <string>
-#include <maths/vector3.hpp>
-#include <cherry_macros.hpp>
 #include <typeindex>
+
+#include <cherry_macros.hpp>
+
+#include "maths/vector3.hpp"
 
 std::filesystem::path CopyTemporaryFile(const char* path);
 
 struct Bool3;
+
 
 namespace String
 {

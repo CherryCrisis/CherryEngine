@@ -4,30 +4,29 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
-
 #include "ebo_tbn_generator.hpp"
-#include "texture_generator.hpp"
 #include "element_mesh_generator.hpp"
-
-#include "texture.hpp"
 #include "light.hpp"
+#include "rendering_renderpass_interface.hpp"
+#include "texture.hpp"
+#include "texture_generator.hpp"
 
 enum class ETextureType : unsigned int;
+class Material;
 class ModelRenderer;
 class ShapeRenderer;
-class Material;
-class Viewer;
 class SkyRenderer;
+class Viewer;
+
 
 class PBRRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 	ElementTBNGenerator m_meshGenerator;
 	TextureGenerator m_textureGenerator;
 
-	std::unordered_set<ModelRenderer*> m_models;
-	std::unordered_set<ShapeRenderer*> m_shapes;
-	std::unordered_set<Light*> m_lights;
+	std::unordered_set<ModelRenderer*>	m_models;
+	std::unordered_set<ShapeRenderer*>	m_shapes;
+	std::unordered_set<Light*>			m_lights;
 
 	std::map<ETextureType, std::shared_ptr<Texture>> m_defaultTextures;
 

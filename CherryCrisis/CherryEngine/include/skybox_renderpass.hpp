@@ -2,20 +2,17 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
-
 #include "element_mesh_generator.hpp"
-
+#include "rendering_renderpass_interface.hpp"
 #include "sky_renderer.hpp"
 
 class Texture;
 class Viewer;
 
+
 class SkyboxRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 private:
-	//ElementMeshGenerator m_meshGenerator;
-
 	SkyRenderer* m_skyRenderer = nullptr;
 
 	struct GPUSkyboxCubemap : public SkyRenderer::GPUSkybox

@@ -19,6 +19,7 @@ concept BehaviourT = std::is_base_of_v<Behaviour, CompT>;
 
 class Cell;
 
+
 class CCENGINE_API Entity : public Object
 {
 protected:
@@ -27,7 +28,24 @@ protected:
 
 public:
 	static std::string m_defaultName;
+
 	Cell* m_cell = nullptr;
+
+	Event<> m_OnAwake;
+	Event<> m_OnStart;
+	Event<> m_OnTick;
+	Event<> m_OnDestroyed;
+	Event<Cell*> m_OnCellAdded;
+	Event<Cell*> m_OnCellRemoved;
+
+	Event<> m_OnSelected;
+	Event<> m_OnUnselected;
+
+	Event<Entity*> m_OnCollisionEnter;
+	Event<Entity*> m_OnCollisionStay;
+	Event<Entity*> m_OnCollisionExit;
+	Event<Entity*> m_OnTriggerEnter;
+	Event<Entity*> m_OnTriggerExit;
 
 	Entity(const std::string& name, Cell* cell, CCUUID uuid = {});
 	virtual ~Entity();
@@ -63,22 +81,6 @@ public:
 
 	template <BehaviourT CompT>
 	CompT* GetOrAddBehaviour();
-
-	Event<> m_OnAwake;
-	Event<> m_OnStart;
-	Event<> m_OnTick;
-	Event<> m_OnDestroyed;
-	Event<Cell*> m_OnCellAdded;
-	Event<Cell*> m_OnCellRemoved;
-
-	Event<> m_OnSelected;
-	Event<> m_OnUnselected;
-
-	Event<Entity*> m_OnCollisionEnter;
-	Event<Entity*> m_OnCollisionStay;
-	Event<Entity*> m_OnCollisionExit;
-	Event<Entity*> m_OnTriggerEnter;
-	Event<Entity*> m_OnTriggerExit;
 
 	void Initialize();
 

@@ -1,9 +1,12 @@
 #include <pch.hpp>
 
-#include <sound.hpp>
+#include "sound.hpp"
+
 #include "resource_manager.hpp"
-#include "al.h"
 #include "sound_manager.hpp"
+
+#include "al.h"
+
 
 static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigned int* size, int* bps, short** output)
 {

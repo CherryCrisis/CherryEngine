@@ -2,13 +2,12 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
-
 #include "element_mesh_generator.hpp"
-
+#include "rendering_renderpass_interface.hpp"
 #include "sky_renderer.hpp"
 
 class Viewer;
+
 
 class SkydomeRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
@@ -16,6 +15,7 @@ private:
 	SkyRenderer* m_skyRenderer = nullptr;
 
 	void SetupSkydome();
+
 public:
 
 	struct GPUSkydomeCubemap : public SkyRenderer::GPUSkybox

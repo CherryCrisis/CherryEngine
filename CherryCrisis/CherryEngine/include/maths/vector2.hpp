@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
 namespace CCMaths
 {

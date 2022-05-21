@@ -1,9 +1,10 @@
 #include <pch.hpp>
 
-#include <sound_manager.hpp>
+#include "sound_manager.hpp"
 
 #include "al.h"
 #include "alc.h"
+
 
 template <>
 SoundManager* Singleton<SoundManager>::currentInstance = nullptr;

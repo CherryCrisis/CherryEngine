@@ -6,10 +6,12 @@ namespace physx
 {
 	class PxShape;
 }
+
 namespace PhysicSystem
 {
 	class PhysicActor;
 }
+
 
 enum class EColliderType
 {
@@ -22,12 +24,9 @@ enum class EColliderType
 class CCENGINE_API Collider : public Behaviour
 {
 protected:
-	using boolProperty = CCProperty::ConstRefProperty<Collider, bool>;
-	using floatProperty = CCProperty::ConstRefProperty<Collider, float>;
-	using Vector3Property = CCProperty::ConstRefProperty<Collider, CCMaths::Vector3>;
-
-	physx::PxShape* m_pxShape = nullptr;
-	class Transform* m_transform = nullptr;
+	using boolProperty		= CCProperty::ConstRefProperty<Collider, bool>;
+	using floatProperty		= CCProperty::ConstRefProperty<Collider, float>;
+	using Vector3Property	= CCProperty::ConstRefProperty<Collider, CCMaths::Vector3>;
 
 	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;
@@ -37,12 +36,20 @@ protected:
 	CCMaths::Vector3 m_localPosition = CCMaths::Vector3::Zero;
 	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;
 
+	physx::PxShape*		m_pxShape = nullptr;
+	class Transform*	m_transform = nullptr;
+
 	virtual void PopulateMetadatas() override {}
 
 public:
-	PhysicSystem::PhysicActor* m_physicActor = nullptr;
-	EColliderType m_type = EColliderType::NONE;
 	float m_isVisible = false;
+
+	EColliderType m_type = EColliderType::NONE;
+	
+	PhysicSystem::PhysicActor* m_physicActor = nullptr;
+
+	Collider() = default;
+	Collider(CCUUID& id) : Behaviour(id) {}
 
 	virtual void BindToSignals() override {}
 	virtual void Initialize() {}
@@ -109,7 +116,4 @@ public:
 	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };
 	floatProperty contactOffset{ this, &Collider::SetContact, &Collider::GetContact };
 	Vector3Property localPosition{ this, &Collider::SetLocalPos, &Collider::GetLocalPos };
-
-	Collider() = default;
-	Collider(CCUUID& id) : Behaviour(id) {}
 };

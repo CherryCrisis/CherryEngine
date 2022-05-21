@@ -1,4 +1,3 @@
-
 #include "launcher.hpp"
 
 #include "portable-file-dialogs.hpp"
@@ -6,16 +5,17 @@
 #undef near
 #undef ERROR
 #undef CopyFile()
-#define GLFW_INCLUDE_NONE
 
-
-#include <GLFW/glfw3.h> 
-#include <fstream>
-#include <yaml-cpp/yaml.h>
 #include <algorithm>
+#include <fstream>
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h> 
+#include <yaml-cpp/yaml.h>
 
 #include "command.hpp"
 #include "utils.hpp"
+
+
 void Launcher::AddProjectPath()
 {
 	Project project{};

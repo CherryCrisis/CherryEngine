@@ -2,35 +2,37 @@
 
 #include <memory>
 
-#include "renderer.hpp"
-
 #include "mesh.hpp"
-#include "texture.hpp"
 #include "metadata.hpp"
+#include "renderer.hpp"
+#include "texture.hpp"
 
 struct CCENGINE_API GPUBRDF { };
+
 
 class CCENGINE_API SkyRenderer : public ARenderer
 {
 private:
-	class Cell* m_cell;
 	ETextureSurface m_currentTextureSurface;
+	
+	class Cell* m_cell;
 
 	void PopulateMetadatas();
+	
 public:
-	Metapack m_metadatas;
-
-	std::shared_ptr<Mesh>		m_cube = nullptr;
-	std::shared_ptr<Mesh>		m_quad = nullptr;
-	std::shared_ptr<Texture>	m_texture = nullptr;
-	std::unique_ptr<GPUBRDF>	m_gpuBRDF = nullptr;
-
 	struct GPUSkybox : GPUTextureCubemap
 	{
 		unsigned int ID = 0u;
 
 		virtual ~GPUSkybox() = default;
 	};
+
+	Metapack m_metadatas;
+
+	std::shared_ptr<Mesh>		m_cube = nullptr;
+	std::shared_ptr<Mesh>		m_quad = nullptr;
+	std::shared_ptr<Texture>	m_texture = nullptr;
+	std::unique_ptr<GPUBRDF>	m_gpuBRDF = nullptr;
 
 	SkyRenderer(Cell* cell);
 	~SkyRenderer();

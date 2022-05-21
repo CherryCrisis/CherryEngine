@@ -1,16 +1,17 @@
-
 #include "panels/ui_editor.hpp"
 
-#include <imgui.h>
-#include "camera_component.hpp"
 #include <iostream>
-#include "scene_manager.hpp"
-#include "ui_context.hpp"
+
+#include <imgui.h>
+
+#include "camera_component.hpp"
+#include "core/editor_manager.hpp"
 #include "core/imcherry.hpp"
 #include "pickinger.hpp"
-#include "core/editor_manager.hpp"
-
+#include "scene_manager.hpp"
+#include "ui_context.hpp"
 #include "ui_item.hpp"
+
 
 UIEditor::UIEditor() 
 {

@@ -5,6 +5,7 @@
 
 struct GLFWwindow;
 
+
 enum class ELauncherState
 {
 	MAIN,

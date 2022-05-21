@@ -1,23 +1,26 @@
 #pragma once
 
-#include "singleton.hpp"
-#include "maths/vector2.hpp"
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
-struct Framebuffer;
-class Entity;
-class UIItem;
-class PickingRenderPass;
-class Viewer;
+#include "singleton.hpp"
+
+#include "maths/vector2.hpp"
+
+struct	Framebuffer;
+class	Entity;
+class	PickingRenderPass;
+class	UIItem;
+class	Viewer;
 
 class CCENGINE_API Pickinger : public Singleton<Pickinger>
 {
 	friend class Singleton<Pickinger>;
 
+private:
 	PickingRenderPass*	m_renderpass = nullptr;
 	Viewer*			    m_viewer = nullptr;
-public:
 
+public:
 	static Entity* GetEntity(float x, float y);
 	static Entity* GetEntity(const CCMaths::Vector2& position);
 

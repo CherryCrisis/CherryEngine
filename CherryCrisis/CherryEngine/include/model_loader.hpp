@@ -1,17 +1,18 @@
 #pragma once
 
-#include <vector>
 #include <memory>
 #include <string>
+#include <vector>
 
-#include "model.hpp"
-#include "mesh.hpp"
 #include "cherry_macros.hpp"
+#include "mesh.hpp"
+#include "model.hpp"
 
 enum class ETextureFormat;
 enum class ETextureSurface;
-class Spheremap;
 class Cubemap;
+class Spheremap;
+
 
 namespace CCImporter
 {
@@ -62,13 +63,13 @@ namespace CCImporter
         float           m_shininess = 0.f;
 
         //-- PBR --//
-        bool m_hasNormal = true;
-        float m_specularFactor = 1.f;
-        float m_metallicFactor = 1.f;
-        float m_roughnessFactor = 1.f;
-        float m_ao = 1.f;
-        float m_clearCoatFactor = 0.f;
-        float m_clearCoatRoughnessFactor = 0.f;
+        bool    m_hasNormal = true;
+        float   m_specularFactor = 1.f;
+        float   m_metallicFactor = 1.f;
+        float   m_roughnessFactor = 1.f;
+        float   m_ao = 1.f;
+        float   m_clearCoatFactor = 0.f;
+        float   m_clearCoatRoughnessFactor = 0.f;
 
         unsigned int    m_texturesCount = 0;
         unsigned int    m_pipeline = 0;

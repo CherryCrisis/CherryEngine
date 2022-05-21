@@ -1,4 +1,4 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "shader_program.hpp"
 
@@ -7,6 +7,7 @@
 #include "resource_manager.hpp"
 
 #include "shader.hpp"
+
 
 void ShaderProgram::Delete()
 {

@@ -1,19 +1,19 @@
 #include <pch.hpp>
 
 #include "audio_emitter.hpp"
-
-#include "resource_manager.hpp"
-
-#include "entity.hpp"
-#include "transform.hpp"
-#include "guizmo_renderpass.hpp"
 #include "camera_component.hpp"
+#include "entity.hpp"
+#include "guizmo_renderpass.hpp"
+#include "resource_manager.hpp"
+#include "transform.hpp"
+
 
 void AudioEmitter::Play()
 {
 	if (!m_sound) return;
 	m_sound->Play();
 }
+
 void AudioEmitter::Pause() 
 {
 	if (!m_sound) return;
@@ -32,6 +32,7 @@ void AudioEmitter::SetLooping(const bool& loop)
 	m_isLooping = loop;
 	m_sound->SetLooping(m_isLooping);
 }
+
 void AudioEmitter::SetPitch(const float& value) 
 {
 	if (!m_sound) return;
@@ -52,6 +53,7 @@ void AudioEmitter::SetReferenceDistance(const float& value)
 	m_referenceDistance = value;
 	m_sound->SetReferenceDistance(m_referenceDistance);
 }
+
 void AudioEmitter::SetSpatialized(const bool& value)
 {
 	if (!m_sound) return;

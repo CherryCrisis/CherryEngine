@@ -1,33 +1,36 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
+#include "cell.hpp"
 #include "resource.hpp"
 #include "ui_context.hpp"
-#include "cell.hpp"
 
-class Model;
-class Entity;
-class Debug;
 struct ModelNode;
+class Debug;
+class Entity;
+class Model;
+
 
 class CCENGINE_API Scene : public Resource<Scene>
 { 
 private:
 	Debug* m_debug = nullptr;
+
 	static std::string m_defaultCellName;
 
 public:
+	UIContext m_UIContext;
+
+	std::vector<Entity*> m_entities;
+	std::map<std::string, Cell> m_cells;
+
+	Event<> m_onModifiedEntities;
 	
 	Scene(const char* filePath);
-
 	virtual ~Scene();
-	
-	std::vector<Entity*> m_entities;
-
-	std::map<std::string, Cell> m_cells;
 
 	Cell*	AddCell(const std::string& name, CCUUID uuid = {});
 	Cell*	GetCell(const std::string& name);
@@ -39,7 +42,7 @@ public:
 	void	MoveEntityFromCellToCell(const std::string& fromCell, const std::string& toCell, Entity* entity);
 	void	MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entity);
 
-	UIContext m_UIContext;
+
 	//Call entities Initialize 
 	void Initialize();
 	
@@ -70,6 +73,4 @@ public:
 	void Empty();
 	void EmptyUI();
 	void Delete() override;
-
-	Event<> m_onModifiedEntities;
 };

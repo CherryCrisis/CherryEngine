@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 
+
 void SetDarkStyle(ImGuiStyle* dst = 0)
 {
     ImGuiStyle* style = dst ? dst : &ImGui::GetStyle();

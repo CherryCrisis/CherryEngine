@@ -1,20 +1,21 @@
 #pragma once
 
-#include "behaviour.hpp"
+#include <cherry_macros.hpp>
 
-#include "cherry_macros.hpp"
+#include "behaviour.hpp"
 #include "maths/vector3.hpp"
 
 class Transform;
 
+
 class CCENGINE_API AudioListener : public Behaviour
 {
 public:
+	Transform* m_transform = nullptr; 
+
 	AudioListener();
 	AudioListener(CCUUID& id);
 	~AudioListener();
-
-	Transform* m_transform = nullptr; 
 
 	void Initialize();
 	void BindToSignals() override;

@@ -1,26 +1,25 @@
 #pragma once
 
-#include "imgui_notify.h"
+#include <imgui_notify.h>
 #include <filesystem>
-
 #include <memory>
-#include "cherry_header.hpp"
-#include "scene.hpp"
 
+#include "cherry_header.hpp"
+#include "maths.hpp"
+#include "scene.hpp"
 #include "panels/asset_browser.hpp"
-#include "panels/log_displayer.hpp"
-#include "panels/inspector.hpp"
-#include "panels/game_displayer.hpp"
-#include "panels/scene_displayer.hpp"
-#include "panels/hierarchy_displayer.hpp"
-#include "panels/preferences_displayer.hpp"
-#include "panels/cell_system_displayer.hpp"
-#include "panels/project_settings_displayer.hpp"
-#include "panels/build_displayer.hpp"
 #include "panels/asset_settings.hpp"
+#include "panels/build_displayer.hpp"
+#include "panels/cell_system_displayer.hpp"
+#include "panels/game_displayer.hpp"
+#include "panels/hierarchy_displayer.hpp"
+#include "panels/inspector.hpp"
+#include "panels/log_displayer.hpp"
+#include "panels/preferences_displayer.hpp"
+#include "panels/project_settings_displayer.hpp"
+#include "panels/scene_displayer.hpp"
 #include "panels/ui_editor.hpp"
 
-#include "maths.hpp"
  
 struct GLFWwindow;
 class Entity;
@@ -28,6 +27,9 @@ class Entity;
 struct EntitySelector
 {
     std::vector<Entity*> m_entities;
+
+    Entity* m_startRange = nullptr;
+    Entity* m_endRange = nullptr;
 
     bool Add(Entity* entity);
     bool Remove(Entity* entity, bool unselect = true);
@@ -44,73 +46,67 @@ struct EntitySelector
     void ApplyRange();
 
     Entity* First() { return IsEmpty() ? nullptr : m_entities[0]; }
-
-    Entity* m_startRange = nullptr;
-    Entity* m_endRange = nullptr;
 };
 
 class EditorManager 
 {
 private:
-
     //Panel's Classes
     AssetSettingsDisplayer   m_assetSettingsDisplayer{};
     AssetBrowser             m_browser               {&m_assetSettingsDisplayer, this};
-    LogDisplayer             m_logDisplayer          {};
-    Inspector                m_inspector             {true, this, &m_assetSettingsDisplayer};
-    GameDisplayer            m_gameDisplayer         {this};
-    SceneDisplayer           m_sceneDisplayer        {};
+    BuildDisplayer           m_buildDisplayer        { false };
     CellSystemDisplayer      m_cellSystemDisplayer   {this};
+    GameDisplayer            m_gameDisplayer         {this};
     HierarchyDisplayer       m_hierarchyDisplayer    {true, this};
+    Inspector                m_inspector             {true, this, &m_assetSettingsDisplayer};
+    LogDisplayer             m_logDisplayer          {};
     PreferencesDisplayer     m_preferencesDisplayer  {false};
     ProjectSettingsDisplayer m_projSettingsDisplayer {false};
-    BuildDisplayer           m_buildDisplayer        { false };
+    SceneDisplayer           m_sceneDisplayer        {};
     UIEditor                 m_uiEditor              {};
     //--------------
 
+    bool    m_isDemoOpened     = false;
+    bool    m_isFeaturerOpened = false;
+    void*   m_gpuTextureIDs[4];
+
+    std::shared_ptr<Texture> m_menuBarTextures[4];
 
     void HandleDocking();
     void HandleFeaturerWindow(GLFWwindow* window);
     void HandleNotifications();
-    
     void HandleMenuBar();
 
     void UpdateFocusGame();
 
-    bool m_isDemoOpened     = false;
-    bool m_isFeaturerOpened = false;
-
-    std::shared_ptr<Texture> m_menuBarTextures[4];
-    void* m_gpuTextureIDs[4];
-
     void GenerateGPUTexture(std::shared_ptr<Texture> texture);
+
 public:
+    float       m_menubarSize = 0.f;
+    std::string m_projectPath = "";
 
-    Engine* m_engine = nullptr;
-    EntitySelector m_entitySelector;
+    EntitySelector  m_entitySelector;
 
-    static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
-    
+    Engine*                     m_engine = nullptr;
+    InputManager::InputContext* m_editorContext = nullptr;
+
     EditorManager(const std::string& projectPath="");
     
-    AssetBrowser* GetAssetBrowser() { return &m_browser; }
-    CellSystemDisplayer* GetCellSystemDisplayer() { return &m_cellSystemDisplayer; }
+    void LinkEngine(Engine* engine);
 
     void DisplayEditorUI(GLFWwindow* window);
 
-    void LinkEngine(Engine* engine);
-
     void FocusCallback(GLFWwindow* window, int focused);
     void FocusEntity(Entity* entity);
+
     void RefreshHierarchy() { m_hierarchyDisplayer.Refresh(); }
-    HierarchyDisplayer* GetHierarchy() { return &m_hierarchyDisplayer; }
-    InputManager* inputs;
-    InputManager::InputContext* m_editorContext;
+    
+    HierarchyDisplayer*     GetHierarchy() { return &m_hierarchyDisplayer; }
+    std::string             GetCompilerPath() { return m_preferencesDisplayer.GetCompilerPath(); }
+    AssetBrowser*           GetAssetBrowser() { return &m_browser; }
+    CellSystemDisplayer*    GetCellSystemDisplayer() { return &m_cellSystemDisplayer; }
 
-    std::string m_projectPath = "";
-    float m_menubarSize = 0.f;
-
-    std::string GetCompilerPath() { return m_preferencesDisplayer.GetCompilerPath(); }
+    static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
 };
 
 // Wrapper for generic notifications

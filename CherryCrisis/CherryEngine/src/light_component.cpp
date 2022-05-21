@@ -1,21 +1,19 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "light_component.hpp"
 
 #include "render_manager.hpp"
 
-#include "basic_renderpass.hpp"
-#include "shadow_renderpass.hpp"
-#include "pbr_renderpass.hpp"
-#include "guizmo_renderpass.hpp"
-
-#include "maths.hpp"
-#include "transform.hpp"
-
+#include "camera_component.hpp"
 #include "cell.hpp"
 #include "entity.hpp"
+#include "maths.hpp"
+#include "transform.hpp"
+#include "basic_renderpass.hpp"
+#include "guizmo_renderpass.hpp"
+#include "pbr_renderpass.hpp"
+#include "shadow_renderpass.hpp"
 
-#include "camera_component.hpp"
 
 LightComponent::LightComponent()
 {

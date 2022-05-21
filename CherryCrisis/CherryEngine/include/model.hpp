@@ -1,15 +1,14 @@
 #pragma once
 
-#include <vector>
-#include <memory>
 #include <map>
+#include <memory>
+#include <vector>
 
-#include "resource.hpp"
+#include <cherry_macros.hpp>
+
 #include "maths.hpp"
-
 #include "renderer.hpp"
-
-#include "cherry_macros.hpp"
+#include "resource.hpp"
 
 class Mesh;
 class Material;
@@ -18,6 +17,7 @@ class Scene;
 
 using namespace CCMaths;
 
+
 namespace CCImporter
 {
 	struct ImportModelUtils;
@@ -25,19 +25,22 @@ namespace CCImporter
 
 struct ModelNode
 {
+	Vector3						m_baseTRS[3];
+	
 	std::string					m_nodeName;
-	ModelNode*					m_parentNode;
 	std::vector<ModelNode*>		m_childrenNode;
 	std::shared_ptr<Mesh>		m_mesh;
 	std::shared_ptr<Material>	m_material;
-	Vector3						m_baseTRS[3];
+
+	ModelNode*					m_parentNode;
 };
 
 class CCENGINE_API Model : public Resource<Model>
 {
 private:
-	ModelNode*		m_rootNode = nullptr;
 	unsigned int	m_meshCount = 0;
+
+	ModelNode*		m_rootNode = nullptr;
 
 	void DeleteModelNode(ModelNode* modelNode);
 

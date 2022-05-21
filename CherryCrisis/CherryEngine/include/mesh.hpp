@@ -2,17 +2,16 @@
 
 #include <vector>
 
-#include "resource.hpp"
+#include <cherry_macros.hpp>
+
 #include "maths.hpp"
-
 #include "renderer.hpp"
+#include "resource.hpp"
 
-#include "cherry_macros.hpp"
-
-//Assimp
 struct aiMesh;
 
 using namespace CCMaths;
+
 
 struct Vertex
 {
@@ -38,8 +37,8 @@ struct GPUMesh
 
 struct AABB
 {
-	Vector3 m_center = Vector3::Zero;
-	Vector3 m_extents = Vector3::Zero;
+	Vector3 m_center	= Vector3::Zero;
+	Vector3 m_extents	= Vector3::Zero;
 
 	AABB() = default;
 

@@ -1,13 +1,14 @@
 #pragma once
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
-#include "maths.hpp"
 #include "collider.hpp"
+#include "maths.hpp"
 #include "renderer.hpp"
 
-class Transform;
 class Mesh;
+class Transform;
+
 
 class CCENGINE_API CapsuleCollider : public Collider, public ARenderer
 {

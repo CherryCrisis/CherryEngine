@@ -1,9 +1,10 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "hdr_renderpass.hpp"
 
 #include "mesh.hpp"
 #include "resource_manager.hpp"
+
 
 HDRRenderPass::HDRRenderPass(const char* name)
 	: APostProcessRenderPass(name, "Assets/Shaders/LIT/hdrShader.vert", "Assets/Shaders/LIT/hdrShader.frag")
@@ -31,7 +32,7 @@ HDRRenderPass::HDRRenderPass(const char* name)
 void HDRRenderPass::Execute(Framebuffer& framebuffer)
 {
 	//UpdateFramebuffer verif if width and height are changed
-	m_framebuffer.UpdateFramebuffer(framebuffer.width, framebuffer.height);
+	m_framebuffer.UpdateFramebuffer(static_cast<float>(framebuffer.width), static_cast<float>(framebuffer.height));
 
 	auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get());
 

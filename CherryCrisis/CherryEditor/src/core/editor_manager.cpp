@@ -1,30 +1,26 @@
-
 #include "core/editor_manager.hpp"
 
-//#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
+#include <filesystem>
+#include <iostream>
 #include <iostream>
 #include <string>
-#include <iostream>
-#include <filesystem>
+#include <tchar.h>
 
 #include <imgui_impl_opengl3.h>
-#include "ImGuizmo.h"
-
-#include <glad/gl.h>
-#include <tchar.h>
+#include <ImGuizmo.h>
+#include <stb_image.h>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
-
-#include "resource_manager.hpp"
-#include "scene_manager.hpp"
-#include "render_manager.hpp"
-#include "csscripting_system.hpp"
+#include <glad/gl.h>
 
 #include "builder.hpp"
 #include "command.hpp"
+#include "csscripting_system.hpp"
+#include "render_manager.hpp"
+#include "resource_manager.hpp"
+#include "scene_manager.hpp"
+
 
 EditorManager::EditorManager(const std::string& projectPath) 
 {
@@ -218,7 +214,7 @@ void EditorManager::HandleMenuBar()
             if (Engine::isPlaying)
             {
                 m_engine->Stop();
-                m_entitySelector.Clear();
+                m_entitySelector.Clear(false);
                  m_cellSystemDisplayer.InvalidatePointers();
 
             }

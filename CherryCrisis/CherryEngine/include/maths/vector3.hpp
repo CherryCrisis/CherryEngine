@@ -2,7 +2,6 @@
 
 #include "vector2.hpp"
 
-#include "cherry_macros.hpp"
 
 namespace CCMaths
 {

@@ -3,11 +3,13 @@
 #include "ui_button.hpp"
 
 #include "resource_manager.hpp"
+
+#include "camera_component.hpp"
+#include "picking_renderpass.hpp"
 #include "ui_renderpass.hpp"
 #include "ui_text_renderpass.hpp"
-#include "picking_renderpass.hpp"
-#include "camera_component.hpp"
 #include "utils.hpp"
+
 
 UIButton::UIButton()
 {

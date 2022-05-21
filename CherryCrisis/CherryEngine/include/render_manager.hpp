@@ -1,14 +1,15 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include <set>
 #include <memory>
 
+#include <cherry_macros.hpp>
+
 #include "singleton.hpp"
 
-struct Framebuffer;
-class Viewer;
+struct	Framebuffer;
+class	Viewer;
+
 
 class CCENGINE_API RenderManager : public Singleton<RenderManager>
 {

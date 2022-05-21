@@ -1,15 +1,14 @@
 #pragma once
 
-#include "cherry_macros.hpp"
-
 #include <PxPhysicsAPI.h>
+#include <set>
+
+#include <cherry_macros.hpp>
 
 #include "behaviour.hpp"
 
-#include <set>
-
-
 class Cell;
+
 
 struct FilterGroup
 {
@@ -26,13 +25,13 @@ namespace PhysicSystem
 	class PhysicScene : public physx::PxSimulationEventCallback
 	{
 	private:
-		physx::PxScene* m_pxScene = nullptr;
-		physx::PxController* m_playerPxController = nullptr;
-
 		bool	m_paused = false;
 		float	m_gravity = 9.81f;
 
 		std::vector<PhysicActor*> m_actors;
+
+		physx::PxController*	m_playerPxController = nullptr;
+		physx::PxScene*			m_pxScene = nullptr;
 
 	public:
 		Cell*	m_cell = nullptr;

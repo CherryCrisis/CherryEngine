@@ -2,6 +2,7 @@
 
 #include "vector3.hpp"
 
+
 namespace CCMaths
 {
 	struct Vector4

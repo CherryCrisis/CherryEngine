@@ -1,4 +1,4 @@
-#include "pch.hpp"
+#include <pch.hpp>
 
 #include "character_controller.hpp"
 
@@ -6,10 +6,11 @@
 
 #include "input_manager.hpp"
 #include "physic_manager.hpp"
+
+#include "capsule_collider.hpp"
 #include "physic_actor.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
-#include "capsule_collider.hpp"
 
 CharacterController::CharacterController()
 {

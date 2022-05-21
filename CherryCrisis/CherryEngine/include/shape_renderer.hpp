@@ -1,38 +1,37 @@
 #pragma once
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
 #include "behaviour.hpp"
-
+#include "model.hpp"
+#include "property.hpp"
 #include "renderer.hpp"
 
-#include "model.hpp"
-
-#include "property.hpp"
-
-class Transform;
+class Cell;
 class Material;
 class Mesh;
 class Texture;
-class Cell;
+class Transform;
+
 
 class CCENGINE_API ShapeRenderer : public Behaviour, public ARenderer
 {
 private:
-	void PopulateMetadatas() override;
 	static int count;
+
+	void PopulateMetadatas() override;
+
 public:
+	bool m_initialized = false;
 	int m_id = -1;
 
-	// TODO: Remove this
-	bool m_initialized = false;
+	std::string					m_materialPath;
+	std::string					m_meshPath;
+
+	std::shared_ptr<Material>	m_material = nullptr;
+	std::shared_ptr<Mesh>		m_mesh = nullptr;
 
 	Transform*					m_transform = nullptr;
-	std::shared_ptr<Mesh>		m_mesh = nullptr;
-	std::shared_ptr<Material>	m_material = nullptr;
-
-	std::string					m_meshPath;
-	std::string					m_materialPath;
 
 	ShapeRenderer();
 	ShapeRenderer(CCUUID& id);

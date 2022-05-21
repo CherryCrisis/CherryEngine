@@ -2,9 +2,10 @@
 
 #include <glad/gl.h>
 
-#include "cherry_macros.hpp"
+#include <cherry_macros.hpp>
 
 class Camera;
+
 
 struct CCENGINE_API TextureDisplayer
 {
@@ -14,9 +15,10 @@ struct CCENGINE_API TextureDisplayer
 struct CCENGINE_API Framebuffer
 {
 private:
+	bool isInit = false;
+
 	void UpdateTextureSize(float width, float height);
 
-	bool isInit = false;
 public :
 	GLsizei height = 1920u, width = 1080u;
 
