@@ -614,6 +614,11 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						bool str = value.as<bool>();
 						metadata->Set(&str);
 					}
+					else if (type == typeid(int))
+					{
+						int str = value.as<int>();
+						metadata->Set(&str);
+					}
 					else if (type == typeid(const char*))
 					{
 						std::string str = value.as<std::string>();

@@ -15,8 +15,7 @@
 
 enum class ETextureType : unsigned int;
 class Material;
-class ModelRenderer;
-class ShapeRenderer;
+class MeshRenderer;
 class Viewer;
 
 
@@ -25,8 +24,7 @@ class CCENGINE_API BasicRenderPass : public ARenderingRenderPass
 	ElementTBNGenerator m_meshGenerator;
 	TextureGenerator	m_textureGenerator;
 
-	std::unordered_set<ModelRenderer*>	m_models;
-	std::unordered_set<ShapeRenderer*>	m_shapes;
+	std::unordered_set<MeshRenderer*>	m_models;
 	std::unordered_set<Light*>			m_lights;
 
 	std::map<ETextureType, std::shared_ptr<Texture>> m_defaultTextures;
@@ -55,16 +53,10 @@ public:
 	void Unsubscribe(Light* toGenerate);
 
 	template <>
-	int Subscribe(ModelRenderer* toGenerate);
+	int Subscribe(MeshRenderer* toGenerate);
 
 	template <>
-	void Unsubscribe(ModelRenderer* toGenerate);
-
-	template <>
-	int Subscribe(ShapeRenderer* toGenerate);
-
-	template <>
-	void Unsubscribe(ShapeRenderer* toGenerate);
+	void Unsubscribe(MeshRenderer* toGenerate);
 
 	void Generate(Material* toGenerate);
 

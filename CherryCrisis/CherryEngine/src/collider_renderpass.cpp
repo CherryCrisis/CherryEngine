@@ -25,9 +25,9 @@ ColliderRenderPass::ColliderRenderPass(const char* name)
 		glUseProgram(0);
 	}
 
-	m_box		= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 1.f, 1.f, 1.f);
-	m_sphere	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 1.f, 9.f, 17.f);
-	m_cylinder	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 1.f, 1.f, 16.f);
+	m_box		= ResourceManager::GetInstance()->AddResource<Mesh>("CC_ColliderCube", true, EMeshShape::CUBE, 1.f, 1.f, 1.f);
+	m_sphere	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_ColliderSphere", true, EMeshShape::SPHERE, 1.f, 9.f, 17.f);
+	m_cylinder	= ResourceManager::GetInstance()->AddResource<Mesh>("CC_ColliderCylinder", true, EMeshShape::CYLINDER, 1.f, 1.f, 16.f);
 
 	m_meshGenerator.Generate(m_box.get());
 	m_meshGenerator.Generate(m_sphere.get());

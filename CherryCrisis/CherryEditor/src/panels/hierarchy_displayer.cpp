@@ -17,6 +17,7 @@
 #include "cell.hpp"
 #include "core/editor_manager.hpp"
 #include "light_component.hpp"
+#include "mesh.hpp"
 #include "scene.hpp"
 #include "shape_renderer.hpp"
 #include "sphere_collider.hpp"
@@ -490,7 +491,7 @@ void HierarchyDisplayer::ContextCallback()
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
-                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 1.f, 1.f, 1.f));
+                        shape->SetType((int)EMeshShape::CUBE);
                         newEntity->AddBehaviour<BoxCollider>();
                     }
 
@@ -500,7 +501,7 @@ void HierarchyDisplayer::ContextCallback()
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
-                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 1.f, 9.f, 17.f));
+                        shape->SetType((int)EMeshShape::SPHERE);
                         newEntity->AddBehaviour<SphereCollider>();
                     }
                     if (ImGui::MenuItem("Cylinder"))
@@ -509,7 +510,7 @@ void HierarchyDisplayer::ContextCallback()
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
-                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 1.f, 1.f, 16.f));
+                        shape->SetType((int)EMeshShape::CYLINDER);
                         newEntity->AddBehaviour<CapsuleCollider>();
                     }
                     if (ImGui::MenuItem("Plane"))
@@ -518,7 +519,7 @@ void HierarchyDisplayer::ContextCallback()
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
-                        shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedPlane", true, EMeshShape::QUAD, 1.f, 1.f));
+                        shape->SetType((int)EMeshShape::QUAD);
                         newEntity->AddBehaviour<BoxCollider>();
                     }
 
