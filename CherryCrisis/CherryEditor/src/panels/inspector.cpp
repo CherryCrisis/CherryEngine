@@ -14,6 +14,7 @@
 #include "bool3.hpp"
 #include "box_collider.hpp"
 #include "camera_component.hpp"
+#include "portal_teleporter_component.hpp"
 #include "capsule_collider.hpp"
 #include "character_controller.hpp"
 #include "core/editor_manager.hpp"
@@ -467,6 +468,11 @@ void Inspector::Render()
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities)
                     addBehaviours.push_back(entity->AddBehaviour<PortalComponent>());
+            }
+            if (ImGui::MenuItem("Portal Teleporter Component"))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                    addBehaviours.push_back(entity->AddBehaviour<PortalTeleporterComponent>());
             }
             for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
             {

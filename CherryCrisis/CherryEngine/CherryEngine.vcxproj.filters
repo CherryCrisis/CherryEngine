@@ -1299,6 +1299,9 @@
     <ClInclude Include="include\shape_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\portal_teleporter_component.hpp">
+      <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix4.inl">
@@ -1750,6 +1753,9 @@
       <Filter>Fichiers sources\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\shape_renderer.cpp">
+      <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\portal_teleporter_component.cpp">
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
   </ItemGroup>

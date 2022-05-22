@@ -18,12 +18,6 @@ BoxCollider::BoxCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::BOX;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
@@ -31,20 +25,11 @@ BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
 	PopulateMetadatas();
 
 	m_type = EColliderType::BOX;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 BoxCollider::~BoxCollider()
 {
 	Unregister();
-
-	if (Camera* cam = CameraComponent::m_editorCamera)
-		UnsubscribeToPipeline(cam->m_pipeline.get());
 
 	GetHost().m_OnSelected.Unbind(&BoxCollider::Visible, this);
 	GetHost().m_OnUnselected.Unbind(&BoxCollider::Unvisible, this);
@@ -56,6 +41,11 @@ BoxCollider::~BoxCollider()
 		m_transform->m_onRotationChange.Unbind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Unbind(&BoxCollider::InvalidateTransform, this);
 	}
+
+	GetHost().m_cell->RemoveRenderer(this);
+
+	GetHost().m_OnCellAdded.Unbind(&BoxCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Unbind(&BoxCollider::OnCellRemoved, this);
 }
 
 void BoxCollider::BindToSignals()
@@ -68,6 +58,22 @@ void BoxCollider::BindToSignals()
 	GetHost().m_OnAwake.Bind(&BoxCollider::Initialize, this);
 	GetHost().m_OnSelected.Bind(&BoxCollider::Visible, this);
 	GetHost().m_OnUnselected.Bind(&BoxCollider::Unvisible, this);
+
+	GetHost().m_cell->AddRenderer(this);
+
+	GetHost().m_OnCellAdded.Bind(&BoxCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&BoxCollider::OnCellRemoved, this);
+
+}
+
+void BoxCollider::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(this);
+}
+
+void BoxCollider::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(this);
 }
 
 void BoxCollider::Initialize()
@@ -86,6 +92,7 @@ void BoxCollider::Initialize()
 	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);
 
 	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
+
 	if (modelRdr)
 	{
 		if (modelRdr->m_mesh)
@@ -194,12 +201,22 @@ void BoxCollider::SetPxData()
 
 void BoxCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->SubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void BoxCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void BoxCollider::SetScale(const CCMaths::Vector3& scale)

@@ -20,12 +20,6 @@ SphereCollider::SphereCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::SPHERE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
@@ -33,20 +27,11 @@ SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
 	PopulateMetadatas();
 
 	m_type = EColliderType::SPHERE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 SphereCollider::~SphereCollider()
 {
 	Unregister();
-
-	if (Camera* cam = CameraComponent::m_editorCamera)
-		UnsubscribeToPipeline(cam->m_pipeline.get());
 
 	GetHost().m_OnSelected.Unbind(&SphereCollider::Visible, this);
 	GetHost().m_OnUnselected.Unbind(&SphereCollider::Unvisible, this);
@@ -58,6 +43,11 @@ SphereCollider::~SphereCollider()
 		m_transform->m_onRotationChange.Unbind(&SphereCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Unbind(&SphereCollider::InvalidateTransform, this);
 	}
+
+	GetHost().m_cell->RemoveRenderer(this);
+
+	GetHost().m_OnCellAdded.Unbind(&SphereCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Unbind(&SphereCollider::OnCellRemoved, this);
 }
 
 void SphereCollider::BindToSignals()
@@ -70,6 +60,21 @@ void SphereCollider::BindToSignals()
 	GetHost().m_OnAwake.Bind(&SphereCollider::Initialize, this);
 	GetHost().m_OnSelected.Bind(&SphereCollider::Visible, this);
 	GetHost().m_OnUnselected.Bind(&SphereCollider::Unvisible, this);
+
+	GetHost().m_cell->AddRenderer(this);
+
+	GetHost().m_OnCellAdded.Bind(&SphereCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&SphereCollider::OnCellRemoved, this);
+}
+
+void SphereCollider::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(this);
+}
+
+void SphereCollider::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(this);
 }
 
 void SphereCollider::Initialize()
@@ -101,6 +106,8 @@ void SphereCollider::Initialize()
 
 	SetEntityScale(m_transform->GetGlobalScale());
 }
+
+
 
 void SphereCollider::InvalidateTransform()
 {

@@ -64,6 +64,9 @@ public:
 	CCMaths::Matrix4 GetTopMatrix();
 	CCMaths::Matrix4 GetBotMatrix();
 
+	void OnCellAdded(Cell* newCell);
+	void OnCellRemoved(Cell* newCell);
+
 	floatProperty editableScale{ this, &CapsuleCollider::SetScale, &CapsuleCollider::GetScale };
 	floatProperty radius{ this, &CapsuleCollider::SetRadius, &CapsuleCollider::GetRadius };
 };

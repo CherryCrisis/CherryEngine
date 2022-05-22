@@ -20,12 +20,6 @@ CapsuleCollider::CapsuleCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::CAPSULE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
@@ -33,21 +27,11 @@ CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
 	PopulateMetadatas();
 
 	m_type = EColliderType::CAPSULE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
-
-	if (Camera* cam = CameraComponent::m_editorCamera)
-		UnsubscribeToPipeline(cam->m_pipeline.get());
-
 	GetHost().m_OnSelected.Unbind(&CapsuleCollider::Visible, this);
 	GetHost().m_OnUnselected.Unbind(&CapsuleCollider::Unvisible, this);
 
@@ -58,6 +42,11 @@ CapsuleCollider::~CapsuleCollider()
 		m_transform->m_onRotationChange.Unbind(&CapsuleCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Unbind(&CapsuleCollider::InvalidateTransform, this);
 	}
+
+	GetHost().m_cell->RemoveRenderer(this);
+
+	GetHost().m_OnCellAdded.Unbind(&CapsuleCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Unbind(&CapsuleCollider::OnCellRemoved, this);
 }
 
 void CapsuleCollider::BindToSignals()
@@ -70,6 +59,21 @@ void CapsuleCollider::BindToSignals()
 	GetHost().m_OnAwake.Bind(&CapsuleCollider::Initialize, this);
 	GetHost().m_OnSelected.Bind(&CapsuleCollider::Visible, this);
 	GetHost().m_OnUnselected.Bind(&CapsuleCollider::Unvisible, this);
+
+	GetHost().m_cell->AddRenderer(this);
+
+	GetHost().m_OnCellAdded.Bind(&CapsuleCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&CapsuleCollider::OnCellRemoved, this);
+}
+
+void CapsuleCollider::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(this);
+}
+
+void CapsuleCollider::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(this);
 }
 
 void CapsuleCollider::Initialize()
@@ -206,12 +210,22 @@ void CapsuleCollider::SetPxData()
 
 void CapsuleCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->SubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void CapsuleCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void CapsuleCollider::SetScale(const float& scale)

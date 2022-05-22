@@ -134,6 +134,11 @@ Matrix4 Transform::GetWorldMatrix()
 	return m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 }
 
+void Transform::SetWorldMatrix(const CCMaths::Matrix4& worldMatrix)
+{
+	m_worldMatrix = worldMatrix;
+}
+
 Matrix4 Transform::GetLocalMatrix()
 {
 	if (!m_parent)

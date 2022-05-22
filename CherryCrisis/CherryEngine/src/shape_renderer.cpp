@@ -27,6 +27,8 @@ ShapeRenderer::ShapeRenderer()
 	PopulateMetadatas();
 	m_id = count;
 	count++;
+
+	m_material = nullptr;
 }
 
 ShapeRenderer::ShapeRenderer(CCUUID& id) : Behaviour(id)
@@ -34,6 +36,8 @@ ShapeRenderer::ShapeRenderer(CCUUID& id) : Behaviour(id)
 	PopulateMetadatas();
 	m_id = count;
 	count++;
+
+	m_material = nullptr;
 }
 
 ShapeRenderer::~ShapeRenderer()

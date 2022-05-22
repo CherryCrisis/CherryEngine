@@ -40,7 +40,8 @@ namespace CCMaths
     inline float Round(const double& value) { return (float)floor(value + 0.5); }
     
     template <typename T>
-    int Sign(const T& value) { return (T(0) < value) - (value < T(0)); }
+    int Sign(const T& value) { return value < T(0) ? -1 : 1; }
+    //int Sign(const T& value) { return (T(0) < value) - (value < T(0)); }
 
     template<typename T>
     T Min(const T& lhs, const T& rhs) { return lhs < rhs ? lhs : rhs; }
