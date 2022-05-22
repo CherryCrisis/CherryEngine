@@ -313,7 +313,16 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 		if (!shapeRdr->m_isVisible)
 			continue;
 
+		Mesh* mesh = shapeRdr->m_mesh.get();
+
+		if (!mesh)
+			continue;
+
 		CCMaths::Matrix4 modelMat = shapeRdr->m_transform->GetWorldMatrix();
+
+		if (!viewer->m_frustumPlanes.IsOnFrustum(modelMat, mesh->m_aabb))
+			continue;
+
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
 		if (Material* material = shapeRdr->m_material.get())
@@ -356,11 +365,6 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 				}
 			}
 		}
-
-		Mesh* mesh = shapeRdr->m_mesh.get();
-
-		if (!mesh)
-			continue;
 
 		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 

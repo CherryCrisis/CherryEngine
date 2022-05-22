@@ -17,12 +17,6 @@ SphereCollider::SphereCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::SPHERE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
@@ -30,29 +24,24 @@ SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
 	PopulateMetadatas();
 
 	m_type = EColliderType::SPHERE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 SphereCollider::~SphereCollider()
 {
 	Unregister();
 
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	UnsubscribeToPipeline(cam->m_pipeline.get());
-
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Unbind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Unbind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_onRotationChange.Unbind(&SphereCollider::SetEntityScale, this);
 		m_transform->m_OnDestroy.Unbind(&SphereCollider::InvalidateTransform, this);
 	}
+
+	GetHost().m_cell->RemoveRenderer(this);
+
+	GetHost().m_OnCellAdded.Unbind(&SphereCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Unbind(&SphereCollider::OnCellRemoved, this);
 }
 
 void SphereCollider::BindToSignals()
@@ -65,6 +54,21 @@ void SphereCollider::BindToSignals()
 	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
 
 	GetHost().m_OnAwake.Bind(&SphereCollider::Initialize, this);
+
+	GetHost().m_cell->AddRenderer(this);
+
+	GetHost().m_OnCellAdded.Bind(&SphereCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&SphereCollider::OnCellRemoved, this);
+}
+
+void SphereCollider::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(this);
+}
+
+void SphereCollider::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(this);
 }
 
 void SphereCollider::Initialize()
@@ -74,6 +78,8 @@ void SphereCollider::Initialize()
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Bind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Bind(&SphereCollider::SetEntityScale, this);
+		m_transform->m_onRotationChange.Bind(&SphereCollider::SetEntityScale, this);
 		m_transform->m_OnDestroy.Bind(&SphereCollider::InvalidateTransform, this);
 	}
 
@@ -81,6 +87,8 @@ void SphereCollider::Initialize()
 
 	SetEntityScale(m_transform->GetGlobalScale());
 }
+
+
 
 void SphereCollider::InvalidateTransform()
 {

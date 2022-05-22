@@ -80,7 +80,7 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
 
 			float aspect = (float)framebuffer.width / (float)framebuffer.height;
-			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(m, portal->m_fovY, aspect, portal->m_near, portal->m_far);
+			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(portal->m_linkedPortal->m_modelMatrix, portal->m_fovY, aspect, portal->m_near, portal->m_far);
 
 			portal->m_linkedPortal->Draw(viewer->m_currentIteration - 1);
 		}

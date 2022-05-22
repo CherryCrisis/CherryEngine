@@ -17,12 +17,6 @@ BoxCollider::BoxCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::BOX;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
@@ -30,29 +24,24 @@ BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
 	PopulateMetadatas();
 
 	m_type = EColliderType::BOX;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 BoxCollider::~BoxCollider()
 {
 	Unregister();
 
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	UnsubscribeToPipeline(cam->m_pipeline.get());
-
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Unbind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Unbind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_onRotationChange.Unbind(&BoxCollider::SetEntityScale, this);
 		m_transform->m_OnDestroy.Unbind(&BoxCollider::InvalidateTransform, this);
 	}
+
+	GetHost().m_cell->RemoveRenderer(this);
+
+	GetHost().m_OnCellAdded.Unbind(&BoxCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Unbind(&BoxCollider::OnCellRemoved, this);
 }
 
 void BoxCollider::BindToSignals()
@@ -63,6 +52,22 @@ void BoxCollider::BindToSignals()
 	m_isRegistered = true;
 
 	GetHost().m_OnAwake.Bind(&BoxCollider::Initialize, this);
+
+	GetHost().m_cell->AddRenderer(this);
+
+	GetHost().m_OnCellAdded.Bind(&BoxCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&BoxCollider::OnCellRemoved, this);
+
+}
+
+void BoxCollider::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(this);
+}
+
+void BoxCollider::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(this);
 }
 
 void BoxCollider::Initialize()
@@ -72,12 +77,14 @@ void BoxCollider::Initialize()
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Bind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Bind(&BoxCollider::SetEntityScale, this);
+		m_transform->m_onRotationChange.Bind(&BoxCollider::SetEntityScale, this);
 		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
 	}
 
 	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);
 
-	ModelRenderer* modelRdr = GetHost().GetOrAddBehaviour<ModelRenderer>();
+	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
 
 	if (modelRdr)
 	{
@@ -187,12 +194,22 @@ void BoxCollider::SetPxData()
 
 void BoxCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->SubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void BoxCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void BoxCollider::SetScale(const CCMaths::Vector3& scale)

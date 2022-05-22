@@ -510,7 +510,7 @@ void HierarchyDisplayer::ContextCallback()
                     {
                         newEntity = new Entity("Plane", cell);
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
-                        ShapeRenderer* shape = newEntity->AddBehaviour<ShapeRenderer>();
+                        shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
                         shape->SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedPlane", true, EMeshShape::QUAD, 1.f, 1.f));
                     }

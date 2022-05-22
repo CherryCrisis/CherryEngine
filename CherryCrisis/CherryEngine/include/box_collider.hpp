@@ -47,5 +47,8 @@ public:
 	void ComputeModelMatrices() override;
 	CCMaths::Matrix4 GetModelMatrix() override;
 
+	void OnCellAdded(Cell* newCell);
+	void OnCellRemoved(Cell* newCell);
+
 	Vector3Property editableScale{ this, &BoxCollider::SetScale, &BoxCollider::GetScale };
 };

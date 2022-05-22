@@ -50,5 +50,8 @@ public:
 	void ComputeModelMatrices() override;
 	CCMaths::Matrix4 GetModelMatrix() override;
 
+	void OnCellAdded(Cell* newCell);
+	void OnCellRemoved(Cell* newCell);
+
 	floatProperty editableScale{ this, &SphereCollider::SetScale, &SphereCollider::GetScale };
 };

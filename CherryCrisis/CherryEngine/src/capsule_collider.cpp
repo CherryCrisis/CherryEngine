@@ -17,12 +17,6 @@ CapsuleCollider::CapsuleCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::CAPSULE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
@@ -30,29 +24,24 @@ CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
 	PopulateMetadatas();
 
 	m_type = EColliderType::CAPSULE;
-
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_pipeline.get());
 }
 
 CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
 
-	Camera* cam = CameraComponent::m_editorCamera;
-	if (!cam)
-		return;
-
-	UnsubscribeToPipeline(cam->m_pipeline.get());
-
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Unbind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Unbind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_onRotationChange.Unbind(&CapsuleCollider::SetEntityScale, this);
 		m_transform->m_OnDestroy.Unbind(&CapsuleCollider::InvalidateTransform, this);
 	}
+
+	GetHost().m_cell->RemoveRenderer(this);
+
+	GetHost().m_OnCellAdded.Unbind(&CapsuleCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Unbind(&CapsuleCollider::OnCellRemoved, this);
 }
 
 void CapsuleCollider::BindToSignals()
@@ -65,6 +54,21 @@ void CapsuleCollider::BindToSignals()
 	m_transform = m_physicActor->m_owner->GetOrAddBehaviour<Transform>();
 
 	GetHost().m_OnAwake.Bind(&CapsuleCollider::Initialize, this);
+
+	GetHost().m_cell->AddRenderer(this);
+
+	GetHost().m_OnCellAdded.Bind(&CapsuleCollider::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&CapsuleCollider::OnCellRemoved, this);
+}
+
+void CapsuleCollider::OnCellAdded(Cell* newCell)
+{
+	newCell->AddRenderer(this);
+}
+
+void CapsuleCollider::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveRenderer(this);
 }
 
 void CapsuleCollider::Initialize()
@@ -74,6 +78,8 @@ void CapsuleCollider::Initialize()
 	if (m_transform)
 	{
 		m_transform->m_onScaleChange.Bind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_onPositionChange.Bind(&CapsuleCollider::SetEntityScale, this);
+		m_transform->m_onRotationChange.Bind(&CapsuleCollider::SetEntityScale, this);
 		m_transform->m_OnDestroy.Bind(&CapsuleCollider::InvalidateTransform, this);
 	}
 
@@ -185,12 +191,22 @@ void CapsuleCollider::SetPxData()
 
 void CapsuleCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->SubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void CapsuleCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
-	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
+	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(static_cast<Collider*>(this));
 }
 
 void CapsuleCollider::SetScale(const float& scale)

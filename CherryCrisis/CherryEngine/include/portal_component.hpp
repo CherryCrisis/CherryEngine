@@ -9,6 +9,7 @@
 #include "property.hpp"
 
 class Transform;
+class PortalTeleporterComponent;
 
 class CCENGINE_API PortalComponent : public Behaviour
 {
@@ -19,9 +20,9 @@ public:
 	Portal	   m_portal;
 	Transform* m_transform = nullptr;
 
-	bool test = false;
-
 	PortalComponent* m_linkedPortal = nullptr;
+
+	std::set<PortalTeleporterComponent*> m_portalTeleporters;
 
 	PortalComponent();
 	PortalComponent(CCUUID& id);
@@ -29,6 +30,7 @@ public:
 
 	void Initialize();
 	void BindToSignals() override;
+	void LateUpdate() override;
 
 	void UpdatePortalMatrices(const CCMaths::Vector3& v);
 	void OnCellAdded(Cell* newCell);
@@ -38,6 +40,11 @@ public:
 
 	void SetLinkedPortal(Behaviour* linkedObject);
 	Behaviour* GetLinkedPortal();
+
+	void OnTriggerEnter(Entity* other);
+	void OnTriggerExit(Entity* other);
+
+	void OnEntityEnter(PortalTeleporterComponent* portalTeleporter);
 
 	CCProperty::CopyProperty<PortalComponent, Behaviour*> m_LinkedPortalProp { this, &PortalComponent::SetLinkedPortal, &PortalComponent::GetLinkedPortal };
 };
