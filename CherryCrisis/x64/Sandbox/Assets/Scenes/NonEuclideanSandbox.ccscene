@@ -1,0 +1,328 @@
+resources:
+  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\nonEuclideanModel.obj
+cells:
+  3027871809:
+    name: Cell_1
+    settings:
+      texturePath: Assets\Skybox\Kiss_Skybox.png
+    entities:
+      595046179:
+        name: Portal_1
+      1438581166:
+        name: nonEuclideanRoom.obj
+      3603362193:
+        name: Cube.003_Cube.005
+      1776476995:
+        name: Cube_Cube.001
+      3291926702:
+        name: Cube.001_Cube.003
+      3955370939:
+        name: Cube.003_Cube.005
+      3614000074:
+        name: Cube.004_Cube.006
+      2388102800:
+        name: Cube.005_Cube.007
+  1511374334:
+    name: Default
+    settings:
+      texturePath: Assets\skydome\Arches_3k.hdr
+    entities:
+      2083061685:
+        name: Cube.004_Cube.006
+      624228656:
+        name: Portal_0
+      985506127:
+        name: Cube.005_Cube.007
+      877229226:
+        name: nonEuclideanRoom.obj
+      3042501752:
+        name: Cube.003_Cube.005
+      3294696948:
+        name: Cube_Cube.001
+      3883697639:
+        name: Cube.001_Cube.003
+      1216582285:
+        name: Cube.003_Cube.005
+      1606613161:
+        name: Camera
+      1933171933:
+        name: Cube
+components:
+  3800127297:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 595046179
+    position: 0.000000/1.000000/-4.000000
+    scale: 2.000000/2.000000/1.000000
+    parent: ~
+  4185768902:
+    type: PortalComponent
+    linkedPortalProp: 3903748157
+    IsActive: true
+    m_owner: 595046179
+  3450698150:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1438581166
+    position: 0.000000/0.000000/0.000000
+    scale: 5.000000/5.000000/5.000000
+    parent: ~
+  3598800440:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3603362193
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3450698150
+  3490607968:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3603362193
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 3598800440
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.003_Cube.005`
+  1273440632:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1776476995
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3450698150
+  2221819522:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1776476995
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 1273440632
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube_Cube.001
+  3616918841:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3291926702
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3450698150
+  1612811777:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3291926702
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 3616918841
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.001_Cube.003
+  4020649132:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3955370939
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3450698150
+  687272440:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3955370939
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 4020649132
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.003_Cube.005
+  3081213514:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3614000074
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3450698150
+  761044824:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3614000074
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 3081213514
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.004_Cube.006
+  2830302522:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2388102800
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3450698150
+  1788548920:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2388102800
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 2830302522
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.005_Cube.007
+  604349250:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2083061685
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 213124553
+  1315182027:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2083061685
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 604349250
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.004_Cube.006
+  3903748157:
+    type: PortalComponent
+    linkedPortalProp: 4185768902
+    IsActive: true
+    m_owner: 624228656
+  367204104:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 624228656
+    position: 0.000000/1.000000/-4.000000
+    scale: 2.000000/2.000000/1.000000
+    parent: ~
+  4076917466:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 624228656
+    Contact Offset: 0.0199999996
+    Enabled: true
+    Scale: 2.000000/2.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  2101246319:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 985506127
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 1071194025
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.005_Cube.007
+  1071194025:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 985506127
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 213124553
+  213124553:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 877229226
+    position: 0.000000/0.000000/0.000000
+    scale: 5.000000/5.000000/5.000000
+    parent: ~
+  2548987164:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3042501752
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 213124553
+  3595475799:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3042501752
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 2548987164
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.003_Cube.005`
+  64950523:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3294696948
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 213124553
+  2364848144:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3294696948
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 64950523
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube_Cube.001
+  1879747917:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3883697639
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 213124553
+  2073072318:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3883697639
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 1879747917
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.001_Cube.003
+  2811159145:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1216582285
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 136095275
+    meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.003_Cube.005
+  136095275:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1216582285
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 213124553
+  1892631895:
+    type: CameraComponent
+    fovY: 1.04719758
+    near: 0.00999999978
+    IsActive: true
+    m_owner: 1606613161
+    aspect: 0.428258479
+    far: 1500
+    transform: 3974300767
+  1380734154:
+    type: AudioListener
+    IsActive: true
+    m_owner: 1606613161
+  3974300767:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1606613161
+    position: 0.000000/1.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  1359136077:
+    type: ShapeRenderer
+    IsActive: true
+    m_owner: 1933171933
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 1858273233
+    meshFile: CC_NormalizedCube
+  1858273233:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1933171933
+    position: 0.000000/1.000000/-0.571000
+    scale: 1.000000/1.000000/2.000000
+    parent: ~
+  1549567243:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1933171933
+    Contact Offset: 0.0199999996
+    Enabled: true
+    Scale: 1.000000/1.000000/1.000000
+    Is Trigger: false
+    Local Position: 0.000000/0.000000/0.000000

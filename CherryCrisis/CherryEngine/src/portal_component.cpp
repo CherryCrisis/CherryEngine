@@ -93,6 +93,7 @@ void PortalComponent::LateUpdate()
 			portalTeleporter->Teleport(m_linkedPortal, worldMatrix.position);
 
 			//m_linkedPortal->OnEntityEnter(portalTeleporter);
+			portalTeleporter->ExitPortal();
 			m_portalTeleporters.erase(portalTeleporter);
 			return;
 		}
@@ -100,7 +101,26 @@ void PortalComponent::LateUpdate()
 		{
 			portalTeleporter->m_previousOffsetFromPortal = offsetFromPortal;
 		}
+
+		UpdateSliceParamaters(portalTeleporter);
 	}
+}
+
+void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTeleporter)
+{
+	Transform* transform = portalTeleporter->m_transform;
+	Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
+	int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
+	portalTeleporter->m_sliceNormal = -m_transform->GetWorldMatrix().back.Normalized() * -portalSide;
+	Vector3 cloneSliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * portalSide;
+
+	portalTeleporter->m_sliceCentre = m_transform->GetPosition();
+	Vector3 cloneSlicePos = m_linkedPortal->m_transform->GetPosition();
+
+	CCMaths::Matrix4 test = m_portal.m_linkedPortal->m_modelMatrix * CCMaths::Matrix4::RotateY(CCMaths::PI);
+
+	Matrix4 worldMatrix = test * m_portal.m_modelMatrix.Inverse() * portalTeleporter->m_transform->GetWorldMatrix();
+	portalTeleporter->UpdateEntityClone(worldMatrix.position);
 }
 
 void PortalComponent::UpdatePortalMatrices(const CCMaths::Vector3& v)
@@ -167,8 +187,8 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	if (m_portalTeleporters.end() != m_portalTeleporters.find(portalTeleporter))
 		return;
 
-	portalTeleporter->EnterPortal();
-	portalTeleporter->m_previousOffsetFromPortal = portalTeleporter->m_transform->GetGlobalPosition() - m_transform->GetGlobalPosition();
+	portalTeleporter->EnterPortal(m_linkedPortal);
+	portalTeleporter->m_previousOffsetFromPortal = portalTeleporter->m_transform->GetPosition() - m_transform->GetPosition();
 	m_portalTeleporters.insert(portalTeleporter);
 }
 

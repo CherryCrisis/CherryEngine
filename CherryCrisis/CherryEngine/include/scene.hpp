@@ -21,6 +21,8 @@ private:
 
 	static std::string m_defaultCellName;
 
+	std::queue<Entity*> m_toRemoveEntities;
+
 public:
 	UIContext m_UIContext;
 

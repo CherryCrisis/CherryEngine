@@ -43,6 +43,7 @@ public:
 	void OnTriggerExit(Entity* other);
 
 	void OnEntityEnter(PortalTeleporterComponent* portalTeleporter);
+	void UpdateSliceParamaters(PortalTeleporterComponent* portalTeleporter);
 
 	CCProperty::CopyProperty<PortalComponent, Behaviour*> m_LinkedPortalProp { this, &PortalComponent::SetLinkedPortal, &PortalComponent::GetLinkedPortal };
 };
