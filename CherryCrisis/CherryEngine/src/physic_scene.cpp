@@ -107,9 +107,8 @@ namespace PhysicSystem
 	void PhysicScene::AddPxActor(PhysicActor* actor)
 	{
 		if (m_pxScene)
-		{
-			m_pxScene->addActor(*actor->Get());
-		}
+			if (actor->Get())
+				m_pxScene->addActor(*actor->Get());
 	}
 
 	bool PhysicScene::RemoveActor(PhysicActor* actor)

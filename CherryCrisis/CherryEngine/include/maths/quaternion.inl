@@ -171,8 +171,8 @@ namespace CCMaths
 	{
 		return
 		{
-			std::asinf(2.f * (in.w * in.y - in.z * in.x)),
 			std::atan2f(2.f * (in.w * in.x + in.y * in.z), 1.f - 2.f * (in.x * in.x + in.y * in.y)),
+			std::asinf(2.f * (in.w * in.y - in.z * in.x)),
 			std::atan2f(2.f * (in.w * in.z + in.x * in.y), 1.f - 2.f * (in.y * in.y + in.z * in.z))
 		};
 	}
@@ -249,8 +249,8 @@ namespace CCMaths
 		return
 		{
 			yawCos * pitchCos * rollCos + yawSin * pitchSin * rollSin,
-			yawSin * pitchCos * rollCos - yawCos * pitchSin * rollSin,
-			yawCos * pitchSin * rollCos + yawSin * pitchCos * rollSin,
+			yawCos * pitchSin * rollCos - yawSin * pitchCos * rollSin,
+			yawSin * pitchCos * rollCos + yawCos * pitchSin * rollSin,
 			yawCos * pitchCos * rollSin - yawSin * pitchSin * rollCos
 		};
 	}

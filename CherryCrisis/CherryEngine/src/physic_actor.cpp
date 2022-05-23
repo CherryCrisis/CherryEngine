@@ -70,7 +70,7 @@ namespace PhysicSystem
 			
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
-			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.y, pxT.q.x, pxT.q.z });
+			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
 
 			Vector3 pos = t ? t->GetPosition() : Vector3::Zero;
 			pos.x = pxT.p.x != m_oldPos.x ? pxT.p.x : pos.x;
@@ -109,14 +109,15 @@ namespace PhysicSystem
 	{
 		m_oldRot = rotation;
 
-		Quaternion pxRotQ = Quaternion::FromEuler(rotation);
 
 
 		if (m_pxActor)
 		{
+			Quaternion pxRotQ = Quaternion::FromEuler(rotation);
+			
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
-				physx::PxQuat(pxRotQ.y, pxRotQ.x, pxRotQ.z, pxRotQ.w)));
+				physx::PxQuat(pxRotQ.x, pxRotQ.y, pxRotQ.z, pxRotQ.w)));
 		}
 	}
 
@@ -137,7 +138,7 @@ namespace PhysicSystem
 		Vector3 pos = m_transform->GetPosition();
 		Quaternion rot = Quaternion::FromEuler(m_transform->GetRotation());
 
-		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.y, rot.x, rot.z, rot.w));
+		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.x, rot.y, rot.z, rot.w));
 
 		physx::PxPhysics* physics = PhysicSystem::PhysicManager::GetInstance()->Get();
 
