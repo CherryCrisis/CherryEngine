@@ -27,6 +27,8 @@ namespace PhysicSystem
 			DestroyPxActor();
 		}
 
+		m_owner->m_OnDestroyed.Unbind(&PhysicActor::UnlockDelete, this);
+
 		if (m_transform)
 		{
 			m_transform->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
@@ -42,6 +44,7 @@ namespace PhysicSystem
 			return;
 
 		m_transform = m_owner->GetOrAddBehaviour<Transform>();
+		m_owner->m_OnDestroyed.Bind(&PhysicActor::UnlockDelete, this);
 
 		if (m_transform)
 		{
@@ -172,6 +175,8 @@ namespace PhysicSystem
 		}
 
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
+
+		m_isRemoveLocked++;
 	}
 
 	void PhysicActor::DestroyPxActor()
@@ -182,6 +187,11 @@ namespace PhysicSystem
 
 			PX_RELEASE(m_pxActor);
 		}
+	}
+
+	void PhysicActor::UnlockDelete()
+	{
+		m_isRemoveLocked = 0;
 	}
 
 	physx::PxShape* PhysicActor::CreateShape(const physx::PxGeometry& geometry)
@@ -230,12 +240,13 @@ namespace PhysicSystem
 		if (!m_controller)
 		{
 			m_controller = controller;
+			m_isRemoveLocked++;
 		}
 	}
 
 	void PhysicActor::RemoveRigidbody(Rigidbody* rigidbody)
 	{
-		if (m_controller && m_pxActor)
+		if (m_isRemoveLocked > 0)
 			return;
 
 		if (m_rigidbody == rigidbody)
@@ -252,7 +263,7 @@ namespace PhysicSystem
 
 	void PhysicActor::RemoveCollider(Collider* collider)
 	{
-		if (m_controller && m_pxActor)
+		if (m_isRemoveLocked > 0)
 			return;
 
 		for (size_t i = 0; i < m_colliders.size(); ++i)
@@ -271,15 +282,12 @@ namespace PhysicSystem
 	void PhysicActor::RemoveController(CharacterController* controller)
 	{
 		if (m_pxActor)
-		{
-			// TODO: Fix crash
-			// Debug::GetInstance()->AddLog(ELogType::WARNING, "Can't remove character controller while playing");
-			// return;
-		}
+			return;
 		
 		if (m_controller == controller)
 		{
 			m_controller = nullptr;
+			m_isRemoveLocked = false;
 		}
 	}
 

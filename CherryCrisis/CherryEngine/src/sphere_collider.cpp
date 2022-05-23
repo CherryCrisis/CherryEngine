@@ -133,7 +133,6 @@ void SphereCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
 	m_metadatas.SetProperty("Local Position", &localPosition);
 	m_metadatas.SetProperty("Scale", &editableScale);
-	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
 void SphereCollider::SetEntityScale(const CCMaths::Vector3& s)
@@ -178,8 +177,6 @@ void SphereCollider::SetPxData()
 {
 	if (m_pxShape)
 	{
-		m_pxShape->setContactOffset(m_contactOffset);
-
 		if (!m_isEnabled)
 		{
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, false);

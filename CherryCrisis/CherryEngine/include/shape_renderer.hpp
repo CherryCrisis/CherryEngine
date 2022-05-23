@@ -20,12 +20,12 @@ public:
 	void Initialize() override;
 	void BindToSignals() override;
 
-	void SetType(int type);
+	void SetType(const int& type);
 	int  GetType();
 
 	void OnMeshLoaded(std::shared_ptr<Mesh> newMesh);
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 
-	CCProperty::CopyProperty<ShapeRenderer, int> m_MeshType{ this, &ShapeRenderer::SetType, &ShapeRenderer::GetType };
+	CCProperty::ConstRefProperty<ShapeRenderer, int> m_MeshType{ this, &ShapeRenderer::SetType, &ShapeRenderer::GetType };
 };

@@ -22,6 +22,8 @@ Entity::Entity(const std::string& name, Cell* cell, CCUUID id)
 
 Entity::~Entity()
 {
+	m_OnDestroyed.Invoke();
+
 	for (auto& [type, behaviour] : m_behaviours)
 		delete behaviour;
 

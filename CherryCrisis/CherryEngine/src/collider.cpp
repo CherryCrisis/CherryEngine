@@ -24,12 +24,6 @@ void Collider::SetTrigger(const bool& isTrigger)
 	SetPxData();
 }
 
-void Collider::SetContact(const float& contactOffset)
-{
-	m_contactOffset = contactOffset;
-	SetPxData();
-}
-
 void Collider::SetLocalPos(const CCMaths::Vector3& localPos)
 {
 	m_localPosition = localPos;
