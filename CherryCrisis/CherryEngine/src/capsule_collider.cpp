@@ -132,7 +132,6 @@ void CapsuleCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Local Position", &localPosition);
 	m_metadatas.SetProperty("Half height", &editableScale);
 	m_metadatas.SetProperty("Radius", &radius);
-	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
 void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& s)
@@ -185,8 +184,6 @@ void CapsuleCollider::SetPxData()
 {
 	if (m_pxShape)
 	{
-		m_pxShape->setContactOffset(m_contactOffset);
-
 		if (!m_isEnabled)
 		{
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, false);

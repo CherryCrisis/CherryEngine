@@ -41,7 +41,7 @@ void ShapeRenderer::PopulateMetadatas()
 	m_metadatas.SetProperty("Type", &m_MeshType);
 }
 
-void ShapeRenderer::SetType(int type)
+void ShapeRenderer::SetType(const int& type)
 {
 	m_meshType = static_cast<EMeshShape>(type);
 }
@@ -78,7 +78,6 @@ void ShapeRenderer::Initialize()
 	default:
 		break;
 	}
-	
 	
 	if (m_mesh)
 		GetHost().m_cell->AddRenderer(this);

@@ -81,8 +81,7 @@ void CharacterController::Initialize()
 		}
 	}
 	else
-		// change with physicActor rigidbody to be sure if there are multiple on the entity
-		m_rigidbody = owner.GetBehaviour<Rigidbody>();
+		m_rigidbody = m_physicActor->GetRigidbody();
 
 	GetHost().m_OnStart.Unbind(&CharacterController::Initialize, this);
 }
@@ -147,7 +146,7 @@ void CharacterController::Update()
 
 	CCMaths::Vector3 goalVelocity = move * m_moveSpeed;
 
-	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) / m_timeManager->GetDeltaTime(), -150.f, 150.f);
+	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) * 60.f, -150.f, 150.f);
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * actor->getMass(), { 1, 0, 1 });
 
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);

@@ -129,7 +129,6 @@ void BoxCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
 	m_metadatas.SetProperty("Local Position", &localPosition);
 	m_metadatas.SetProperty("Scale", &editableScale);
-	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
 void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
@@ -176,8 +175,6 @@ void BoxCollider::SetPxData()
 {
 	if (m_pxShape)
 	{
-		m_pxShape->setContactOffset(m_contactOffset);
-
 		if (!m_isEnabled)
 		{
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, false);

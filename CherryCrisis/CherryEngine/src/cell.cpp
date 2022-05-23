@@ -143,16 +143,10 @@ void Cell::RemoveEntity(Entity* newEntity)
 	if (index == -1)
 		return;
 
-	for (size_t i = 0; i < m_entities.size(); ++i)
-	{
-		if (newEntity == m_entities[i])
-		{
-			RemoveEntityFromPhysicScene(newEntity);
-			newEntity->m_cell = nullptr;
-			m_entities[i] = m_entities.back();
-			m_entities.pop_back();
-		}
-	}
+	RemoveEntityFromPhysicScene(newEntity);
+	newEntity->m_cell = nullptr;
+	m_entities[index] = m_entities.back();
+	m_entities.pop_back();
 }
 
 void Cell::RemoveEntityFromPhysicScene(Entity* newEntity)

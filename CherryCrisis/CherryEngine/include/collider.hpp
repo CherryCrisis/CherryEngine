@@ -31,7 +31,6 @@ protected:
 	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;
 	bool	m_isTrigger = false;
-	float	m_contactOffset = 0.02f;
 
 	CCMaths::Vector3 m_localPosition = CCMaths::Vector3::Zero;
 	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;
@@ -102,8 +101,6 @@ public:
 	bool	GetEnabled() { return m_isEnabled; }
 	void	SetTrigger(const bool& isTrigger);
 	bool	GetTrigger() { return m_isTrigger; }
-	void	SetContact(const float& contactOffset);
-	float	GetContact() { return m_contactOffset; }
 
 	void				SetLocalPos(const CCMaths::Vector3& localPos);
 	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
@@ -114,6 +111,5 @@ public:
 
 	boolProperty isEnabled{ this, &Collider::SetEnabled, &Collider::GetEnabled };
 	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };
-	floatProperty contactOffset{ this, &Collider::SetContact, &Collider::GetContact };
 	Vector3Property localPosition{ this, &Collider::SetLocalPos, &Collider::GetLocalPos };
 };
