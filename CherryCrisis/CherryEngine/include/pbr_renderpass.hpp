@@ -10,6 +10,7 @@
 #include "rendering_renderpass_interface.hpp"
 #include "texture.hpp"
 #include "texture_generator.hpp"
+#include "light_generator.hpp"
 
 enum class ETextureType : unsigned int;
 class Material;
@@ -21,10 +22,11 @@ class Viewer;
 class PBRRenderPass : public ARenderingRenderPass, ElementMeshGenerator
 {
 	ElementTBNGenerator m_meshGenerator;
-	TextureGenerator m_textureGenerator;
+	TextureGenerator	m_textureGenerator;
+	LightGenerator		m_lightGenerator;
 
 	std::unordered_set<MeshRenderer*>	m_models;
-	std::unordered_set<Light*>			m_lights;
+	std::vector<Light*>			m_lights;
 
 	std::map<ETextureType, std::shared_ptr<Texture>> m_defaultTextures;
 

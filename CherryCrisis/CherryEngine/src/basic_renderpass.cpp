@@ -57,7 +57,7 @@ int BasicRenderPass::Subscribe(Light* toGenerate)
 	if (!toGenerate || !m_program)
 		return -1;
 
-	m_lights.insert(toGenerate);
+	m_lights.push_back(toGenerate);
 
 	return 1;
 }
@@ -104,7 +104,10 @@ void BasicRenderPass::Generate(Material* toGenerate)
 template <>
 void BasicRenderPass::Unsubscribe(Light* toGenerate)
 {
-	m_lights.erase(toGenerate);
+	auto lightIt = std::find(m_lights.begin(), m_lights.end(), toGenerate);
+
+	if (lightIt != m_lights.end())
+		m_lights.erase(lightIt);
 }
 
 void BasicRenderPass::Execute(Viewer*& viewer)
@@ -131,7 +134,6 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
 
 	const char* lightFormat = "uLights[{}]";
-	std::unordered_set<Light*>::iterator lightIt = m_lights.begin();
 
 	// TODO: Set shader define as upper bound
 	for (size_t lightID = 0u; lightID < 8; lightID++)
@@ -141,10 +143,10 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
 		glUniform1i(enableLoc, false);
 		
-		if (lightIt == m_lights.end())
+		if (lightID == m_lights.size())
 			break;
 
-		Light* light = *lightIt;
+		Light* light = m_lights[lightID];
 		glUniform1i(enableLoc, light->m_enabled);
 
 		auto* gpuLight = static_cast<ShadowRenderPass::GPUShadowLight*>(light->m_gpuLight.get());
@@ -176,10 +178,6 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 
 		GLuint specularLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "specular").c_str());
 		glUniform3fv(specularLoc, 1, light->m_specular.data);
-
-		lightID++;
-
-		lightIt = std::next(m_lights.begin(), lightID);
 	}
 
 	for (MeshRenderer* modelRdr : m_models)

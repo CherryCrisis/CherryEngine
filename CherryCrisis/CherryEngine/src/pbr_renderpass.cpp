@@ -62,7 +62,7 @@ int PBRRenderPass::Subscribe(Light* toGenerate)
 	if (!toGenerate || !m_program)
 		return -1;
 
-	m_lights.insert(toGenerate);
+	m_lights.push_back(toGenerate);
 
 	return 1;
 }
@@ -70,7 +70,10 @@ int PBRRenderPass::Subscribe(Light* toGenerate)
 template <>
 void PBRRenderPass::Unsubscribe(Light* toGenerate)
 {
-	m_lights.erase(toGenerate);
+	auto lightIt = std::find(m_lights.begin(), m_lights.end(), toGenerate);
+
+	if (lightIt != m_lights.end())
+		m_lights.erase(lightIt);
 }
 
 template <>
@@ -179,7 +182,8 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, viewer->m_position.data);
 
 	const char* lightFormat = "uLights[{}]";
-	std::unordered_set<Light*>::iterator lightIt = m_lights.begin();
+
+	// TODO: Set shader define as upper bound
 	for (size_t lightID = 0u; lightID < 8; lightID++)
 	{
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
@@ -187,10 +191,10 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightType").c_str());
 		glUniform1i(enableLoc, 0);
 
-		if (lightIt == m_lights.end())
+		if (lightID == m_lights.size())
 			break;
 
-		Light* light = *lightIt;
+		Light* light = m_lights[lightID];
 
 		if (!light->m_enabled)
 			glUniform1i(enableLoc, 0);
@@ -214,10 +218,6 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 		Vector3 test = { 0.0f, 0.0f, 1.0f };
 		GLuint IntensityLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "params").c_str()); //Intensity
 		glUniform3fv(IntensityLoc, 1, test.data);
-
-		lightID++;
-
-		lightIt = std::next(m_lights.begin(), lightID);
 	}
 
 	for (MeshRenderer* modelRdr : m_models)
