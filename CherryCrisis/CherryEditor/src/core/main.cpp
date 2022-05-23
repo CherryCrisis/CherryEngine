@@ -160,7 +160,7 @@ int main(int argc, char** argv)
         int isSceneFocused = false;
         glfwSwapInterval(0);
 
-        SceneManager::GetInstance()->m_currentScene->m_onModifiedEntities.Bind(&HierarchyDisplayer::Refresh, editor.GetHierarchy());
+        SceneManager::GetInstance()->m_lateHierarchyRefresh.Bind(&HierarchyDisplayer::Refresh, editor.GetHierarchy());
         while (glfwWindowShouldClose(window) == false)
         {
             InputManager::UpdateKeys();
@@ -193,6 +193,8 @@ int main(int argc, char** argv)
                 ImGui::SetWindowFocus("Scene");
                 isSceneFocused = true;
             }
+
+            editor.CheckForHierarchyRefresh();
         }
         //Save editor file
         Serializer::SerializeEditor();

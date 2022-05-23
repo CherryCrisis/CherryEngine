@@ -111,6 +111,8 @@ public:
     float m_menubarSize = 0.f;
 
     std::string GetCompilerPath() { return m_preferencesDisplayer.GetCompilerPath(); }
+
+    void CheckForHierarchyRefresh();
 };
 
 // Wrapper for generic notifications

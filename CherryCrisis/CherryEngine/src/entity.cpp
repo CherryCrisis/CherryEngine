@@ -32,8 +32,8 @@ Entity::Entity(Entity* entity)
 		
 		if (behaviourCopy) 
 			behaviourCopy->SetHostPtr(this);
-
 	}
+
 	// Link copied behaviours
 	for (const auto& [type, behaviour] : m_behaviours)
 	{
@@ -48,9 +48,8 @@ Entity::Entity(Entity* entity)
 			}
 		}
 	}
-
-
 }
+
 // something is wrong here 
 Entity::~Entity()
 {
@@ -78,7 +77,6 @@ bool Entity::RemoveBehaviour(Behaviour* behaviour)
 			return true;
 		}
 	}
-	
 	return false;
 }
 
@@ -136,7 +134,6 @@ Behaviour* Entity::GetBehaviour(const std::string& componentTypeName)
 		if (componentTypeName == behaviourTypeName)
 			return findIt->second;
 	}
-
 	return nullptr;
 }
 

@@ -92,6 +92,7 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 	if (reapplyScale)    ReapplyScale();
 
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
+	SceneManager::SetHierarchyDirty();
 }
 
 void Transform::SetParent(Transform* transform)

@@ -46,8 +46,8 @@ class CCENGINE_API ScriptedBehaviour : public Behaviour
 
 	void InvalidateAssembly() { m_scriptingAssembly = nullptr; }
 
-	std::unordered_map<std::string, std::shared_ptr<class CCProperty::IClearProperty>> m_properties;
-	std::unordered_map<std::string, std::shared_ptr<class Field>> m_field;
+	std::unordered_map<std::string, std::shared_ptr<struct CCProperty::IClearProperty>> m_properties;
+	std::unordered_map<std::string, std::shared_ptr<struct Field>> m_field;
 
 public:
 	ScriptedBehaviour();

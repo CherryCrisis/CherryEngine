@@ -58,7 +58,6 @@ public:
 	Transform* GetRootParent();
 	bool IsEqualToParent(Transform* transform);
 	void ClearChildParenting();
-	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
 	bool IsDirty() { return m_isDirty; }
 

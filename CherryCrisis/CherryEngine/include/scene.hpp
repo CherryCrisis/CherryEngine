@@ -73,5 +73,6 @@ public:
 	void EmptyUI();
 	void Delete() override;
 
-	Event<> m_onModifiedEntities;
+	// find a way to clean this
+	bool m_isHierarchyDirty = false;
 };

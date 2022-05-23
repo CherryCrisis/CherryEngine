@@ -54,7 +54,7 @@ void Scene::Update()
 void Scene::AddEntity(Entity* toAdd)
 {
 	m_entities.push_back(toAdd);
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::RemoveEntity(Entity* toRemove) 
@@ -74,13 +74,13 @@ void Scene::RemoveEntity(Entity* toRemove)
 
 	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove));
 	toRemove->Destroy();
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::RemoveEntity(const std::string& name)
 {
 	//TODO: Do this
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)
@@ -301,6 +301,7 @@ bool Scene::RemoveCell(const std::string& name, bool forceRemove)
 void Scene::AddEntityToDefault(Entity* entity)
 {
 	m_cells[m_defaultCellName].AddEntity(entity);
+	m_isHierarchyDirty = true;
 }
 
 void Scene::AddEntityToCell(Entity* entity, const std::string& cellName)
@@ -308,6 +309,7 @@ void Scene::AddEntityToCell(Entity* entity, const std::string& cellName)
 	assert(m_cells.contains(cellName));
 
 	m_cells[cellName].AddEntity(entity);
+	m_isHierarchyDirty = true;
 }
 
 
@@ -341,6 +343,8 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 
 	toCell->AddEntity(entity);
 	entity->m_OnCellAdded.Invoke(&*toCell);
+
+	m_isHierarchyDirty = true;
 }
 
 void Scene::CopyEntity(Entity* toCopy, Entity* parent) 

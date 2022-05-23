@@ -28,23 +28,23 @@ private:
 	CellSystemDisplayer* m_cellSystemDisplayer = nullptr;
 
 	Entity* m_draggedEntity = nullptr;
-	bool	m_isEntityDragged = false;
+	bool	m_isDragging  = false;
 
 	bool m_renaming = false;
 
 	ImGuiIO* IO = nullptr;
 
 	std::vector<HierarchyNode> m_nodes;
+
+	void HandleShortcuts();
 public:
 	void Render() override;
 	void ContextCallback() override;
 
 	void Refresh();
 
-	////!!Deprecated!!////////////////////////////////
-	bool RenderEntity(Entity* entity, Transform* transform = nullptr);
-	/// //////////////////////////////////////////////
-	bool RenderEntity(HierarchyNode node);
+	bool RenderEntity(const HierarchyNode& node);
 
+	void EmptyDrop();
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr);
 };
