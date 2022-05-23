@@ -86,11 +86,18 @@ void PortalComponent::LateUpdate()
 		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
 		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
 
+		Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
+		Matrix4 worldMatrix = worldMatrixLinkedPortal *
+			m_portal.m_modelMatrix.Inverse() * 
+			portalTeleporter->m_transform->GetWorldMatrix();
+
+		CCMaths::Vector3 TRS[3] = {};
+		Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
+
 		//Teleport entity if it has crossed from one side of portal to the other
 		if (portalSide != previousPortalSide)
 		{
-			Matrix4 worldMatrix = m_portal.m_linkedPortal->m_modelMatrix * m_portal.m_modelMatrix.Inverse() * portalTeleporter->m_transform->GetWorldMatrix();
-			portalTeleporter->Teleport(m_linkedPortal, worldMatrix.position);
+			portalTeleporter->Teleport(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
 
 			//m_linkedPortal->OnEntityEnter(portalTeleporter);
 			portalTeleporter->ExitPortal();
@@ -103,6 +110,7 @@ void PortalComponent::LateUpdate()
 		}
 
 		UpdateSliceParamaters(portalTeleporter);
+		portalTeleporter->UpdateEntityClone(TRS[0], TRS[1], TRS[2]);
 	}
 }
 
@@ -115,12 +123,7 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 	Vector3 cloneSliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * portalSide;
 
 	portalTeleporter->m_sliceCentre = m_transform->GetPosition();
-	Vector3 cloneSlicePos = m_linkedPortal->m_transform->GetPosition();
-
-	CCMaths::Matrix4 test = m_portal.m_linkedPortal->m_modelMatrix * CCMaths::Matrix4::RotateY(CCMaths::PI);
-
-	Matrix4 worldMatrix = test * m_portal.m_modelMatrix.Inverse() * portalTeleporter->m_transform->GetWorldMatrix();
-	portalTeleporter->UpdateEntityClone(worldMatrix.position);
+	//portalTeleporter->m_cloneEntity-> = m_linkedPortal->m_transform->GetPosition();
 }
 
 void PortalComponent::UpdatePortalMatrices(const CCMaths::Vector3& v)
@@ -187,7 +190,15 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	if (m_portalTeleporters.end() != m_portalTeleporters.find(portalTeleporter))
 		return;
 
-	portalTeleporter->EnterPortal(m_linkedPortal);
+	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
+	Matrix4 worldMatrix = worldMatrixLinkedPortal *
+		m_portal.m_modelMatrix.Inverse() *
+		portalTeleporter->m_transform->GetWorldMatrix();
+
+	CCMaths::Vector3 TRS[3] = {};
+	Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
+
+	portalTeleporter->EnterPortal(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
 	portalTeleporter->m_previousOffsetFromPortal = portalTeleporter->m_transform->GetPosition() - m_transform->GetPosition();
 	m_portalTeleporters.insert(portalTeleporter);
 }

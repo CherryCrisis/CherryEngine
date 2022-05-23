@@ -47,7 +47,7 @@ cells:
         name: Cube.003_Cube.005
       1606613161:
         name: Camera
-      1933171933:
+      3211295394:
         name: Cube
 components:
   3800127297:
@@ -287,7 +287,7 @@ components:
     near: 0.00999999978
     IsActive: true
     m_owner: 1606613161
-    aspect: 0.428258479
+    aspect: 0.492443323
     far: 1500
     transform: 3974300767
   1380734154:
@@ -302,27 +302,31 @@ components:
     position: 0.000000/1.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
-  1359136077:
-    type: ShapeRenderer
-    IsActive: true
-    m_owner: 1933171933
-    matFile: Assets\Models\NonEuclidean\None.ccmat
-    transform: 1858273233
-    meshFile: CC_NormalizedCube
-  1858273233:
+  3519719440:
     type: Transform
-    rotation: 0.000000/-0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 1933171933
-    position: 0.000000/1.000000/-0.571000
+    m_owner: 3211295394
+    position: 0.000000/1.000000/0.000000
     scale: 1.000000/1.000000/2.000000
     parent: ~
-  1549567243:
+  4149510614:
+    type: ShapeRenderer
+    IsActive: true
+    m_owner: 3211295394
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 3519719440
+    Type: 1
+  2993063474:
     type: BoxCollider
     IsActive: true
-    m_owner: 1933171933
+    m_owner: 3211295394
     Contact Offset: 0.0199999996
     Enabled: true
     Scale: 1.000000/1.000000/1.000000
     Is Trigger: false
     Local Position: 0.000000/0.000000/0.000000
+  77015777:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 3211295394

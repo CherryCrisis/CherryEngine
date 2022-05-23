@@ -12,6 +12,7 @@
 #include "skybox_renderpass.hpp"
 #include "mixed_rendering_pipeline.hpp"
 #include "shape_renderer.hpp"
+#include "model_renderer.hpp"
 
 PortalTeleporterComponent::PortalTeleporterComponent()
 {
@@ -47,17 +48,19 @@ void PortalTeleporterComponent::Initialize()
 	GetHost().m_OnAwake.Unbind(&PortalTeleporterComponent::Initialize, this);
 }
 
-void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos)
+void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
 {
 	if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
 	{
 		Entity* entity = destPortal->GetHostPtr();
 		scene->MoveEntityFromCellToCell(GetHost().m_cell, entity->m_cell, GetHostPtr());
 		m_transform->SetPosition(newPos);
+		m_transform->SetRotation(newRot);
+		m_transform->SetScale(newScale);
 	}
 }
 
-void PortalTeleporterComponent::UpdateEntityClone(const CCMaths::Vector3& newPos)
+void PortalTeleporterComponent::UpdateEntityClone(const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
 {
 	if (m_cloneEntity)
 	{
@@ -65,38 +68,73 @@ void PortalTeleporterComponent::UpdateEntityClone(const CCMaths::Vector3& newPos
 		if (Transform* cloneTransform = m_cloneEntity->GetBehaviour<Transform>())
 		{
 			cloneTransform->SetPosition(newPos);
-			//cloneTransform->SetRotation(m_transform->GetRotation() + CCMaths::PI);
-			//cloneTransform->SetScale(m_transform->GetScale());
+			cloneTransform->SetRotation(newRot);
+			cloneTransform->SetScale(newScale);
 		}
 	}
 }
 
-void PortalTeleporterComponent::EnterPortal(const PortalComponent* linkedPortal)
+void PortalTeleporterComponent::EnterPortal(const PortalComponent* linkedPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
 {
 	if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
 	{
 		m_isSlice = 1;
-		Entity* cloneEntity = new Entity(std::format("clone_{}", GetHost().GetName()).c_str(), linkedPortal->GetHost().m_cell);
+		m_cloneEntity = new Entity(std::format("clone_{}", GetHost().GetName()).c_str(), linkedPortal->GetHost().m_cell);
 
-		//TODO: Optimize !
-		if (ShapeRenderer* shapeRdr = GetHost().GetBehaviour<ShapeRenderer>())
+		enum class ERendererType
 		{
-			Transform* cloneTransform = cloneEntity->AddBehaviour<Transform>();
+			MODEL,
+			SHAPE,
+		};
 
-			cloneTransform->SetPosition(m_transform->GetPosition());
-			cloneTransform->SetRotation(m_transform->GetRotation());
-			cloneTransform->SetScale(m_transform->GetScale());
+		MeshRenderer* meshRdr = nullptr;
 
-			ShapeRenderer* cloneShapeRdr = cloneEntity->AddBehaviour<ShapeRenderer>();
-			cloneShapeRdr->m_transform = cloneTransform;
-			cloneShapeRdr->SetMesh(shapeRdr->m_mesh);
-			cloneShapeRdr->SetMaterial(shapeRdr->m_material);
+		ERendererType rendererType = ERendererType::MODEL;
+		meshRdr = GetHost().GetBehaviour<ModelRenderer>();
+
+		if (!meshRdr)
+		{
+			meshRdr = GetHost().GetBehaviour<ShapeRenderer>();
+			rendererType = ERendererType::SHAPE;
 		}
 
-		cloneEntity->Initialize();
-		scene->AddEntity(cloneEntity);
+		if (meshRdr)
+		{
+			Transform* cloneTransform = m_cloneEntity->AddBehaviour<Transform>();
+			UpdateEntityClone(newPos, newRot, newScale);
 
-		m_cloneEntity = cloneEntity;
+			MeshRenderer* cloneMeshRdr = nullptr;
+
+			if (rendererType == ERendererType::MODEL)
+				cloneMeshRdr = m_cloneEntity->AddBehaviour<ModelRenderer>();
+			else
+				cloneMeshRdr = m_cloneEntity->AddBehaviour<ShapeRenderer>();
+
+			if (cloneMeshRdr)
+			{
+				cloneMeshRdr->m_transform = cloneTransform;
+
+				if (rendererType == ERendererType::SHAPE)
+				{
+					ShapeRenderer* cloneShapeRdr = dynamic_cast<ShapeRenderer*>(cloneMeshRdr);
+					ShapeRenderer* shapeRdr = dynamic_cast<ShapeRenderer*>(meshRdr);
+					
+					assert(cloneShapeRdr != nullptr || shapeRdr != nullptr);
+
+					cloneShapeRdr->SetType(shapeRdr->GetType());
+				}
+				else
+				{
+					cloneMeshRdr->SetMesh(meshRdr->m_mesh);
+				}
+
+				cloneMeshRdr->SetMaterial(meshRdr->m_material);
+			}
+		}
+
+		m_cloneEntity->Initialize();
+		scene->AddEntity(m_cloneEntity);
+
 	}
 }
 

@@ -240,7 +240,16 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 
 		if (Material* material = modelRdr->m_material.get())
 		{
-			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uIsTraveller"), 0);
+			if (PortalTeleporterComponent* portalTeleporter = modelRdr->GetHost().GetBehaviour<PortalTeleporterComponent>())
+			{
+				glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uIsTraveller"), portalTeleporter->m_isSlice);
+				glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceCentre"), 1, portalTeleporter->m_sliceCentre.data);
+				glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceNormal"), 1, portalTeleporter->m_sliceNormal.data);
+			}
+			else
+			{
+				glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uIsTraveller"), 0);
+			}
 
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), material->m_hasNormal);

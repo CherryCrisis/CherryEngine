@@ -31,11 +31,11 @@ public:
 	void Initialize();
 	void BindToSignals() override;
 
-	void EnterPortal(const PortalComponent* linkedPortal);
-	void UpdateEntityClone(const CCMaths::Vector3& newPos);
+	void EnterPortal(const PortalComponent* linkedPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);
+	void UpdateEntityClone(const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);
 	void ExitPortal();
 
-	void Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos);
+	void Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);
 
 	//CCProperty::CopyProperty<PortalComponent, Behaviour*> m_LinkedPortalProp{ this, &PortalComponent::SetLinkedPortal, &PortalComponent::GetLinkedPortal };
 };
