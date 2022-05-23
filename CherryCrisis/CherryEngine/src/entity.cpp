@@ -51,10 +51,11 @@ Entity::Entity(Entity* entity)
 
 
 }
+// something is wrong here 
 Entity::~Entity()
 {
-	for (auto& [type, behaviour] : m_behaviours)
-		delete behaviour;
+	for (const auto& [type, behaviour] : m_behaviours)
+		RemoveBehaviour(behaviour);
 
 	m_cell->RemoveEntity(this);
 }
@@ -66,28 +67,19 @@ void Entity::Initialize()
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {
-	auto compIt = m_behaviours.find(behaviour->TypeName());
-
-	if (compIt == m_behaviours.end())
+	auto itPair = m_behaviours.equal_range(behaviour->TypeName());
+	
+	for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
 	{
-		auto itPair = m_behaviours.equal_range("Behaviour");
-
-		for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
+		if (findIt->second == behaviour)
 		{
-			if (findIt->second == behaviour)
-			{
-				compIt = findIt;
-				break;
-			}
+			m_behaviours.erase(findIt);
+			delete behaviour;
+			return true;
 		}
-
-		if (compIt == m_behaviours.end())
-			return false;
 	}
-
-	m_behaviours.erase(compIt);
-	delete behaviour;
-	return true;
+	
+	return false;
 }
 
 void Entity::Update()
