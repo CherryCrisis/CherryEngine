@@ -77,7 +77,6 @@ void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
 void EditorManager::LinkEngine(Engine* engine) 
 {
     m_engine = engine;
-    m_inspector.m_engine = engine;
     m_sceneDisplayer.m_manager = this;
 }
 

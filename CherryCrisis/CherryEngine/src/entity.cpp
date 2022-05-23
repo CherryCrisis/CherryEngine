@@ -28,19 +28,19 @@ Entity::Entity(Entity* entity)
 	for (const auto& behaviour : behaviours) 
 	{
 		std::string name = String::ExtractLastValue(typeid(*behaviour).name(), ' ');
-		Behaviour* behaviourCopy = Serializer::CreateBehaviour(name, {});
+		Behaviour* behaviourCopy = Serializer::CreateBehaviour(name, {}, false);
 		
 		if (behaviourCopy) 
 			behaviourCopy->SetHostPtr(this);
 
 	}
 	// Link copied behaviours
-	for (const auto [type, behaviour] : m_behaviours)
+	for (const auto& [type, behaviour] : m_behaviours)
 	{
-		std::string myName = String::ExtractLastValue(typeid(*behaviour).name(), ' ');
+		std::string myName = String::ExtractTypeIndexName(typeid(*behaviour));
 		for (const auto& cbehaviour : behaviours)
 		{
-			std::string copiedName = String::ExtractLastValue(typeid(*cbehaviour).name(), ' ');
+			std::string copiedName = String::ExtractTypeIndexName(typeid(*cbehaviour));
 			if (myName == copiedName) 
 			{
 				behaviour->Copy(cbehaviour);
@@ -66,7 +66,7 @@ void Entity::Initialize()
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {
-	auto compIt = m_behaviours.find(String::ExtractTypeIndexName(typeid(*behaviour)));
+	auto compIt = m_behaviours.find(behaviour->TypeName());
 
 	if (compIt == m_behaviours.end())
 	{

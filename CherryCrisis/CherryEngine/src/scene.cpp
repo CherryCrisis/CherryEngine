@@ -72,7 +72,7 @@ void Scene::RemoveEntity(Entity* toRemove)
 			RemoveEntity(&(*children)[i]->GetHost());
 	}
 
-	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove), m_entities.end());
+	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove));
 	toRemove->Destroy();
 	m_onModifiedEntities.Invoke();
 }

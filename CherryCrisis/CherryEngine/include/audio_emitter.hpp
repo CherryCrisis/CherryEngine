@@ -66,7 +66,6 @@ public:
 	boolProperty	Spatialized{ this, &AudioEmitter::SetSpatialized,   &AudioEmitter::GetSpatialized };
 	floatProperty	Pitch{ this, &AudioEmitter::SetPitch,   &AudioEmitter::GetPitch };
 
-	//float data[10240];
 	floatProperty	RollOff{ this, &AudioEmitter::SetRollOff,   &AudioEmitter::GetRollOff};
 	floatProperty	ReferenceDistance{ this, &AudioEmitter::SetReferenceDistance,   &AudioEmitter::GetReferenceDistance};
 	
@@ -74,4 +73,6 @@ public:
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
+
+	void Copy(Behaviour* copy) override;
 };

@@ -430,9 +430,12 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 	return opened;
 }
 
-Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
+Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid, bool hasUUID)
 {
-	CCUUID id(uuid);
+	CCUUID id{};
+	if (hasUUID)
+		id = CCUUID(uuid);
+
 	Behaviour* b = nullptr;
 
 	if      (type == "Transform")			b = new Transform(id);

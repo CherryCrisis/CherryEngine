@@ -8,12 +8,12 @@ void SetDarkStyle(ImGuiStyle* dst = 0)
     ImVec4* colors = style->Colors;
 
     style->WindowPadding = ImVec2(5, 5);
-    style->FramePadding = ImVec2(5, 5);
+    style->FramePadding = ImVec2(4, 3);
     style->FrameRounding = 1.0f;
     style->ItemSpacing = ImVec2(12, 8);
     style->ItemInnerSpacing = ImVec2(6, 4);
-    style->IndentSpacing = 25.0f;
-    style->ScrollbarSize = 10.0f;
+    style->IndentSpacing = 5.0f;
+    style->ScrollbarSize = 9.0f;
     style->GrabMinSize = 5.0f;
     
     style->GrabRounding = 0.0f;

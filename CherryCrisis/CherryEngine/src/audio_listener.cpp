@@ -19,7 +19,9 @@ AudioListener::AudioListener(CCUUID& id) : Behaviour(id)
 
 AudioListener::~AudioListener()
 {
-
+	// invalidate transform impl
+	m_transform->m_onPositionChange.Unbind(&AudioListener::ChangePosition, this);
+	m_transform->m_onRotationChange.Unbind(&AudioListener::ChangeRotation, this);
 }
 
 void AudioListener::Initialize()

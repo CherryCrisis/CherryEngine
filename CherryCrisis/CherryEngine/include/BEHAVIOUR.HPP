@@ -21,13 +21,13 @@ protected:
 	virtual void PopulateMetadatas() override
 	{
 		Object::PopulateMetadatas();
-		m_metadatas.SetProperty("m_owner", &owner);
+		m_metadatas.SetProperty("m_owner", &owner, "0", false);
 	}
 
 public:
 	Event<> m_OnDestroy;
 
-	Behaviour() = default;
+	Behaviour() : Object() {}
 	Behaviour(CCUUID& id) : Object(id) {}
 	virtual ~Behaviour() { m_OnDestroy.Invoke(); }
 
@@ -37,6 +37,8 @@ public:
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
+
+	virtual const std::string TypeName();
 	
 	virtual void Copy(Behaviour* copy) {}
 

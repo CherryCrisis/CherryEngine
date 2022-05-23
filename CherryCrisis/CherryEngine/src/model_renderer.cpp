@@ -52,9 +52,9 @@ void ModelRenderer::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetField<Behaviour*>("transform", m_transform);
-	m_metadatas.SetProperty("meshFile", &m_MeshPath);
-	m_metadatas.SetProperty("matFile", &m_MaterialPath);
+	m_metadatas.SetField<Behaviour*>("transform", m_transform, false);
+	m_metadatas.SetProperty("meshFile", &m_MeshPath, "dropzone off");
+	m_metadatas.SetProperty("matFile", &m_MaterialPath, "dropzone");
 }
 
 void ModelRenderer::LoadModelFromPath(std::string modelPath)

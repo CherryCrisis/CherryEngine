@@ -67,6 +67,8 @@ public:
 	void OnTriggerEnter();
 	void OnTriggerExit();
 
+	const std::string TypeName() override { return m_scriptName; }
+
 	void Reload(std::shared_ptr<CsAssembly> csAssembly);
 
 	std::string GetScriptPath() { return m_scriptName; }

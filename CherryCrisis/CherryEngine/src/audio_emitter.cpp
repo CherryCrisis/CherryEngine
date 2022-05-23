@@ -96,6 +96,9 @@ AudioEmitter::~AudioEmitter()
 {
 	if (CameraComponent::m_editorCamera)
 		UnsubscribeToPipeline(CameraComponent::m_editorCamera->m_pipeline.get());
+
+	m_transform->m_onPositionChange.Unbind(&AudioEmitter::ChangePosition, this);
+	m_transform->m_onRotationChange.Unbind(&AudioEmitter::ChangeRotation, this);
 }
 
 void AudioEmitter::Initialize()
@@ -140,7 +143,7 @@ void AudioEmitter::PopulateMetadatas()
 	Behaviour::PopulateMetadatas();
 
 	// change all of this to properties
-	m_metadatas.SetProperty("Sound", &SoundPath);
+	m_metadatas.SetProperty("Sound", &SoundPath, "dropzone");
 	m_metadatas.SetField("AutoPlay", m_isAutoplaying);
 	m_metadatas.SetProperty("Looping", &Looping);
 	m_metadatas.SetProperty("Spatialized", &Spatialized);
@@ -165,4 +168,22 @@ void AudioEmitter::SubscribeToPipeline(ARenderingPipeline* pipeline)
 void AudioEmitter::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
 	pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
+}
+
+void AudioEmitter::Copy(Behaviour* copy) 
+{
+	AudioEmitter* emitterCopy = dynamic_cast<AudioEmitter*>(copy);
+	
+	AddSound(emitterCopy->GetSoundPath());
+	
+	m_isAutoplaying = emitterCopy->m_isAutoplaying;
+	m_isLooping = emitterCopy->m_isLooping;
+	m_isSpatial = emitterCopy->m_isSpatial;
+	m_pitch = emitterCopy->m_pitch;
+	m_rollOff = emitterCopy->m_rollOff;
+	m_referenceDistance = emitterCopy->m_referenceDistance;
+
+	m_transform = GetHost().GetBehaviour<Transform>();
+
+	Initialize();
 }
