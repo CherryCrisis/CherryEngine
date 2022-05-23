@@ -87,8 +87,8 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_browser.Render();
     m_assetSettingsDisplayer.Render();
     m_logDisplayer.Render();
-    m_sceneDisplayer.Render();
     m_inspector.Render();
+    m_sceneDisplayer.Render();
     m_gameDisplayer.Render();
     m_cellSystemDisplayer.Render();
     m_hierarchyDisplayer.Render();

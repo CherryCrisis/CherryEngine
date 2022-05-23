@@ -17,6 +17,7 @@
 #include "resources_container.hpp"
 #include "threadpool.hpp"
 
+
 class CCENGINE_API ResourceManager : public Singleton<ResourceManager>
 {
 private:

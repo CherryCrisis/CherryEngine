@@ -106,7 +106,6 @@ int main(int argc, char** argv)
 #endif
 
     Engine engine{};
-    std::cout << "engine created " << std::endl;
     {
         EditorManager editor{ projectPath };
 

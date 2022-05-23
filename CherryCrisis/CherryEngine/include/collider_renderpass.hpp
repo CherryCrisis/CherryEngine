@@ -5,16 +5,15 @@
 
 #include <glad/gl.h>
 
-#include "rendering_renderpass_interface.hpp"
+#include <cherry_macros.hpp>
 
 #include "ebo_tbn_generator.hpp"
+#include "rendering_renderpass_interface.hpp"
 #include "texture_generator.hpp"
-
-
-#include <cherry_macros.hpp>
 
 class Viewer;
 class Collider;
+
 
 class CCENGINE_API ColliderRenderPass : public ARenderingRenderPass
 {

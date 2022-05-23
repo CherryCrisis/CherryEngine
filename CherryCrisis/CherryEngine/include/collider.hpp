@@ -31,6 +31,7 @@ protected:
 	bool	m_isRegistered = false;
 	bool	m_isEnabled = true;
 	bool	m_isTrigger = false;
+	bool	m_isAddedFromInspector = false;
 
 	CCMaths::Vector3 m_localPosition = CCMaths::Vector3::Zero;
 	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;

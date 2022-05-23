@@ -15,8 +15,6 @@ class CCENGINE_API CapsuleCollider : public Collider, public ARenderer
 private:
 	using floatProperty = CCProperty::ConstRefProperty<CapsuleCollider, float>;
 
-	float m_baseEntityScale		= 1.f;
-	float m_baseEntityRadius	= 1.f;
 	float m_entityScale			= 1.f;
 	float m_entityRadius		= 1.f;
 	float m_editableScale		= 1.f;
