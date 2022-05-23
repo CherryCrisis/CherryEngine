@@ -81,7 +81,7 @@ void PortalComponent::LateUpdate()
 {
 	for (PortalTeleporterComponent* portalTeleporter : m_portalTeleporters)
 	{
-		Transform* transform = portalTeleporter->m_transform;
+		Transform* transform = portalTeleporter->m_entityNode->m_transform;
 
 		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
 		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
@@ -90,7 +90,7 @@ void PortalComponent::LateUpdate()
 		Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
 		Matrix4 worldMatrix = worldMatrixLinkedPortal *
 			m_portal.m_modelMatrix.Inverse() * 
-			portalTeleporter->m_transform->GetWorldMatrix();
+			transform->GetWorldMatrix();
 
 		CCMaths::Vector3 TRS[3] = {};
 		Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
@@ -110,32 +110,28 @@ void PortalComponent::LateUpdate()
 			portalTeleporter->m_previousOffsetFromPortal = offsetFromPortal;
 		}
 
+		portalTeleporter->UpdateEntityMatrix(portalTeleporter->m_cloneEntityNode->m_transform, TRS[0], TRS[1], TRS[2]);
 		UpdateSliceParamaters(portalTeleporter);
-		portalTeleporter->UpdateEntityClone(TRS[0], TRS[1], TRS[2]);
 	}
 }
 
 void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTeleporter)
 {
-	if (portalTeleporter->m_meshRenderer)
-	{
-		MeshRenderer* meshRenderer = portalTeleporter->m_meshRenderer;
-		Transform* transform = portalTeleporter->m_transform;
+	Transform* transform = portalTeleporter->m_entityNode->m_transform;
 
-		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
-		
-		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
+	Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
+	int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
 
-		meshRenderer->m_sliceNormal = m_transform->GetWorldMatrix().back.Normalized() * -portalSide;
-		meshRenderer->m_sliceCentre = m_transform->GetPosition();
+	Vector3 sliceNormal = m_transform->GetWorldMatrix().back.Normalized() * -portalSide;
+	Vector3 sliceCentre = m_transform->GetPosition();
 
-		if (MeshRenderer* cloneMeshRenderer = portalTeleporter->m_cloneMeshRenderer)
-		{
-			cloneMeshRenderer->m_sliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * portalSide;
-			cloneMeshRenderer->m_sliceCentre = m_linkedPortal->m_transform->GetPosition();
-		}
-	}
+	Vector3 cloneSliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * portalSide;
+	Vector3 cloneSliceCentre = m_linkedPortal->m_transform->GetPosition();
+
+	portalTeleporter->SetSliceParams(portalTeleporter->m_entityNode.get(), true, sliceCentre, sliceNormal);
+	portalTeleporter->SetSliceParams(portalTeleporter->m_cloneEntityNode.get(), true, cloneSliceCentre, cloneSliceNormal);
 }
+
 
 void PortalComponent::UpdatePortalMatrices(const CCMaths::Vector3& v)
 {
@@ -204,14 +200,16 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
 	Matrix4 worldMatrix = worldMatrixLinkedPortal *
 		m_portal.m_modelMatrix.Inverse() *
-		portalTeleporter->m_transform->GetWorldMatrix();
+		portalTeleporter->m_entityNode->m_transform->GetWorldMatrix();
 
 	CCMaths::Vector3 TRS[3] = {};
 	Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
 
 	portalTeleporter->EnterPortal(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
-	portalTeleporter->m_previousOffsetFromPortal = portalTeleporter->m_transform->GetPosition() - m_transform->GetPosition();
+	portalTeleporter->m_previousOffsetFromPortal = portalTeleporter->m_entityNode->m_transform->GetPosition() - m_transform->GetPosition();
 	m_portalTeleporters.insert(portalTeleporter);
+
+	UpdateSliceParamaters(portalTeleporter);
 }
 
 void PortalComponent::OnTriggerEnter(Entity* other)
