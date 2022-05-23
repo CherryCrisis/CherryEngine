@@ -238,18 +238,12 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 
+		glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uIsSlice"), modelRdr->m_isSlice);
+		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceCentre"), 1, modelRdr->m_sliceCentre.data);
+		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceNormal"), 1, modelRdr->m_sliceNormal.data);
+
 		if (Material* material = modelRdr->m_material.get())
 		{
-			if (PortalTeleporterComponent* portalTeleporter = modelRdr->GetHost().GetBehaviour<PortalTeleporterComponent>())
-			{
-				glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uIsTraveller"), portalTeleporter->m_isSlice);
-				glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceCentre"), 1, portalTeleporter->m_sliceCentre.data);
-				glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceNormal"), 1, portalTeleporter->m_sliceNormal.data);
-			}
-			else
-			{
-				glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uIsTraveller"), 0);
-			}
 
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), material->m_hasNormal);
@@ -297,7 +291,7 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 
 		glBindVertexArray(gpuMesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
- 		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 
 	glUseProgram(0);

@@ -20,14 +20,16 @@
 
 int MeshRenderer::count = 1;
 
-MeshRenderer::MeshRenderer()
+MeshRenderer::MeshRenderer(ERendererType rendererType)
+	: m_rendererType(rendererType)
 {
 	PopulateMetadatas();
 	m_id = count;
 	count++;
 }
 
-MeshRenderer::MeshRenderer(CCUUID& id) : Behaviour(id)
+MeshRenderer::MeshRenderer(ERendererType rendererType, CCUUID& id) 
+	: Behaviour(id), m_rendererType(rendererType)
 {
 	PopulateMetadatas();
 	m_id = count;

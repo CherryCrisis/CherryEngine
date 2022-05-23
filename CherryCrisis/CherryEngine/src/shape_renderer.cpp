@@ -15,12 +15,14 @@
 #include "transform.hpp"
 
 
-ShapeRenderer::ShapeRenderer() : MeshRenderer()
+ShapeRenderer::ShapeRenderer() 
+	: MeshRenderer(ERendererType::SHAPE)
 {
 	PopulateMetadatas();
 }
 
-ShapeRenderer::ShapeRenderer(CCUUID& id) : MeshRenderer(id)
+ShapeRenderer::ShapeRenderer(CCUUID& id) 
+	: MeshRenderer(ERendererType::SHAPE, id)
 {
 	PopulateMetadatas();
 }

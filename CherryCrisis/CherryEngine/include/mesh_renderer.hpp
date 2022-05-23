@@ -15,6 +15,12 @@ class Mesh;
 class Texture;
 class Transform;
 
+enum class ERendererType : int
+{
+	MODEL,
+	SHAPE,
+};
+
 
 class CCENGINE_API MeshRenderer : public Behaviour, public ARenderer
 {
@@ -32,10 +38,16 @@ public:
 	std::shared_ptr<Material>	m_material = nullptr;
 	std::shared_ptr<Mesh>		m_mesh = nullptr;
 
+	ERendererType				m_rendererType;
+
 	Transform* m_transform = nullptr;
 
-	MeshRenderer();
-	MeshRenderer(CCUUID& id);
+	CCMaths::Vector3	m_sliceCentre = CCMaths::Vector3::Zero;
+	CCMaths::Vector3	m_sliceNormal = CCMaths::Vector3::Zero;
+	bool				m_isSlice = false;
+
+	MeshRenderer(ERendererType rendererType);
+	MeshRenderer(ERendererType rendererType, CCUUID& id);
 
 	virtual void Initialize() {}
 	virtual void BindToSignals() override {}

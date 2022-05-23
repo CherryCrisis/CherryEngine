@@ -14,12 +14,14 @@
 #include "texture.hpp"
 
 
-ModelRenderer::ModelRenderer() : MeshRenderer()
+ModelRenderer::ModelRenderer() 
+	: MeshRenderer(ERendererType::MODEL)
 {
 	PopulateMetadatas();
 }
 
-ModelRenderer::ModelRenderer(CCUUID& id) : MeshRenderer(id)
+ModelRenderer::ModelRenderer(CCUUID& id) 
+	: MeshRenderer(ERendererType::MODEL, id)
 {
 	PopulateMetadatas();
 }

@@ -1,6 +1,7 @@
 resources:
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
 cells:
   3027871809:
@@ -31,8 +32,8 @@ cells:
     entities:
       2083061685:
         name: Cube.004_Cube.006
-      624228656:
-        name: Portal_0
+      1419496675:
+        name: CapsuleTemporelleDeL'espace
       985506127:
         name: Cube.005_Cube.007
       877229226:
@@ -47,9 +48,19 @@ cells:
         name: Cube.003_Cube.005
       1606613161:
         name: Camera
-      3211295394:
-        name: Cube
+      824311215:
+        name: Portal_0
+      505428997:
+        name: Portal_1
 components:
+  536349434:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 595046179
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: false
+    Local Position: 0.000000/0.000000/0.000000
   3800127297:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -60,7 +71,7 @@ components:
     parent: ~
   4185768902:
     type: PortalComponent
-    linkedPortalProp: 3903748157
+    linkedPortalProp: ~
     IsActive: true
     m_owner: 595046179
   3450698150:
@@ -176,28 +187,29 @@ components:
     matFile: Assets\Models\NonEuclidean\None.ccmat
     transform: 604349250
     meshFile: Assets\Models\NonEuclidean\nonEuclideanRoom.obj/Cube.004_Cube.006
-  3903748157:
-    type: PortalComponent
-    linkedPortalProp: 4185768902
-    IsActive: true
-    m_owner: 624228656
-  367204104:
+  3227062129:
     type: Transform
-    rotation: 0.000000/0.000000/0.000000
+    rotation: -1.570796/0.000000/1.570796
     IsActive: true
-    m_owner: 624228656
-    position: 0.000000/1.000000/-4.000000
-    scale: 2.000000/2.000000/1.000000
+    m_owner: 1419496675
+    position: 0.000000/3.000000/0.000000
+    scale: 0.250000/0.250000/0.250000
     parent: ~
-  4076917466:
+  1410310775:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1419496675
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 3227062129
+    meshFile: Assets\Models\NonEuclidean\capsuleTemporel.obj/Cylinder
+  3781431369:
     type: BoxCollider
     IsActive: true
-    m_owner: 624228656
-    Contact Offset: 0.0199999996
+    m_owner: 1419496675
     Enabled: true
-    Scale: 2.000000/2.000000/0.025000
-    Is Trigger: true
-    Local Position: 0.000000/0.000000/0.000000
+    Scale: 2.549697/1.250000/1.250000
+    Is Trigger: false
+    Local Position: -0.045000/0.000000/0.000000
   2101246319:
     type: ModelRenderer
     IsActive: true
@@ -302,31 +314,45 @@ components:
     position: 0.000000/1.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
-  3519719440:
+  402957448:
     type: Transform
-    rotation: 0.000000/0.000000/0.000000
+    rotation: 1.570796/0.000000/0.000000
     IsActive: true
-    m_owner: 3211295394
-    position: 0.000000/1.000000/0.000000
-    scale: 1.000000/1.000000/2.000000
+    m_owner: 824311215
+    position: 0.000000/4.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
     parent: ~
-  4149510614:
-    type: ShapeRenderer
-    IsActive: true
-    m_owner: 3211295394
-    matFile: Assets\Models\NonEuclidean\None.ccmat
-    transform: 3519719440
-    Type: 1
-  2993063474:
+  4102637141:
     type: BoxCollider
     IsActive: true
-    m_owner: 3211295394
-    Contact Offset: 0.0199999996
+    m_owner: 824311215
     Enabled: true
-    Scale: 1.000000/1.000000/1.000000
-    Is Trigger: false
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-  77015777:
-    type: PortalTeleporterComponent
+  2094094280:
+    type: PortalComponent
+    linkedPortalProp: 2312194880
     IsActive: true
-    m_owner: 3211295394
+    m_owner: 824311215
+  313307560:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 505428997
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  2312194880:
+    type: PortalComponent
+    linkedPortalProp: 2094094280
+    IsActive: true
+    m_owner: 505428997
+  47316224:
+    type: Transform
+    rotation: -1.570796/0.000000/0.000000
+    IsActive: true
+    m_owner: 505428997
+    position: 0.000000/2.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~

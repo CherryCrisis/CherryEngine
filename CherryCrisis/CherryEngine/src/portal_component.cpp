@@ -12,6 +12,7 @@
 #include "transform.hpp"
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
+#include "mesh_renderer.hpp"
 
 
 PortalComponent::PortalComponent()
@@ -83,8 +84,8 @@ void PortalComponent::LateUpdate()
 		Transform* transform = portalTeleporter->m_transform;
 
 		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
-		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
-		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
+		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
+		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
 
 		Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
 		Matrix4 worldMatrix = worldMatrixLinkedPortal *
@@ -99,8 +100,8 @@ void PortalComponent::LateUpdate()
 		{
 			portalTeleporter->Teleport(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
 
-			//m_linkedPortal->OnEntityEnter(portalTeleporter);
 			portalTeleporter->ExitPortal();
+			m_linkedPortal->OnEntityEnter(portalTeleporter);
 			m_portalTeleporters.erase(portalTeleporter);
 			return;
 		}
@@ -116,14 +117,24 @@ void PortalComponent::LateUpdate()
 
 void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTeleporter)
 {
-	Transform* transform = portalTeleporter->m_transform;
-	Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
-	int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
-	portalTeleporter->m_sliceNormal = -m_transform->GetWorldMatrix().back.Normalized() * -portalSide;
-	Vector3 cloneSliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * portalSide;
+	if (portalTeleporter->m_meshRenderer)
+	{
+		MeshRenderer* meshRenderer = portalTeleporter->m_meshRenderer;
+		Transform* transform = portalTeleporter->m_transform;
 
-	portalTeleporter->m_sliceCentre = m_transform->GetPosition();
-	//portalTeleporter->m_cloneEntity-> = m_linkedPortal->m_transform->GetPosition();
+		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
+		
+		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
+
+		meshRenderer->m_sliceNormal = m_transform->GetWorldMatrix().back.Normalized() * -portalSide;
+		meshRenderer->m_sliceCentre = m_transform->GetPosition();
+
+		if (MeshRenderer* cloneMeshRenderer = portalTeleporter->m_cloneMeshRenderer)
+		{
+			cloneMeshRenderer->m_sliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * portalSide;
+			cloneMeshRenderer->m_sliceCentre = m_linkedPortal->m_transform->GetPosition();
+		}
+	}
 }
 
 void PortalComponent::UpdatePortalMatrices(const CCMaths::Vector3& v)
@@ -211,7 +222,6 @@ void PortalComponent::OnTriggerEnter(Entity* other)
 
 void PortalComponent::OnTriggerExit(Entity* other)
 {
-	return;
 	if (PortalTeleporterComponent* portalTeleporter = other->GetBehaviour<PortalTeleporterComponent>())
 	{
 		auto it = m_portalTeleporters.find(portalTeleporter);

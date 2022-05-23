@@ -46,6 +46,14 @@ void PortalTeleporterComponent::Initialize()
 {
 	m_transform = GetHost().GetOrAddBehaviour<Transform>();
 	GetHost().m_OnAwake.Unbind(&PortalTeleporterComponent::Initialize, this);
+
+	if (m_meshRenderer = GetHost().GetBehaviour<ModelRenderer>())
+	{
+		if (!m_meshRenderer)
+		{
+			m_meshRenderer = GetHost().GetBehaviour<ShapeRenderer>();
+		}
+	}
 }
 
 void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
@@ -53,7 +61,10 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 	if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
 	{
 		Entity* entity = destPortal->GetHostPtr();
-		scene->MoveEntityFromCellToCell(GetHost().m_cell, entity->m_cell, GetHostPtr());
+
+		if (GetHost().m_cell != entity->m_cell)
+			scene->MoveEntityFromCellToCell(GetHost().m_cell, entity->m_cell, GetHostPtr());
+
 		m_transform->SetPosition(newPos);
 		m_transform->SetRotation(newRot);
 		m_transform->SetScale(newScale);
@@ -62,15 +73,11 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 
 void PortalTeleporterComponent::UpdateEntityClone(const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
 {
-	if (m_cloneEntity)
+	if (m_cloneTransform)
 	{
-		//TODO: Optimize ! GetBehaviour<Transform>()
-		if (Transform* cloneTransform = m_cloneEntity->GetBehaviour<Transform>())
-		{
-			cloneTransform->SetPosition(newPos);
-			cloneTransform->SetRotation(newRot);
-			cloneTransform->SetScale(newScale);
-		}
+		m_cloneTransform->SetPosition(newPos);
+		m_cloneTransform->SetRotation(newRot);
+		m_cloneTransform->SetScale(newScale);
 	}
 }
 
@@ -78,46 +85,30 @@ void PortalTeleporterComponent::EnterPortal(const PortalComponent* linkedPortal,
 {
 	if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
 	{
-		m_isSlice = 1;
-		m_cloneEntity = new Entity(std::format("clone_{}", GetHost().GetName()).c_str(), linkedPortal->GetHost().m_cell);
+		m_meshRenderer->m_isSlice = 1;
 
-		enum class ERendererType
+		Entity* cloneEntity = new Entity(std::format("clone_{}", GetHost().GetName()).c_str(), linkedPortal->GetHost().m_cell);
+
+		if (m_meshRenderer)
 		{
-			MODEL,
-			SHAPE,
-		};
-
-		MeshRenderer* meshRdr = nullptr;
-
-		ERendererType rendererType = ERendererType::MODEL;
-		meshRdr = GetHost().GetBehaviour<ModelRenderer>();
-
-		if (!meshRdr)
-		{
-			meshRdr = GetHost().GetBehaviour<ShapeRenderer>();
-			rendererType = ERendererType::SHAPE;
-		}
-
-		if (meshRdr)
-		{
-			Transform* cloneTransform = m_cloneEntity->AddBehaviour<Transform>();
+			m_cloneTransform = cloneEntity->AddBehaviour<Transform>();
 			UpdateEntityClone(newPos, newRot, newScale);
 
-			MeshRenderer* cloneMeshRdr = nullptr;
+			m_cloneMeshRenderer = nullptr;
 
-			if (rendererType == ERendererType::MODEL)
-				cloneMeshRdr = m_cloneEntity->AddBehaviour<ModelRenderer>();
+			if (m_meshRenderer->m_rendererType == ERendererType::MODEL)
+				m_cloneMeshRenderer = cloneEntity->AddBehaviour<ModelRenderer>();
 			else
-				cloneMeshRdr = m_cloneEntity->AddBehaviour<ShapeRenderer>();
+				m_cloneMeshRenderer = cloneEntity->AddBehaviour<ShapeRenderer>();
 
-			if (cloneMeshRdr)
+			if (m_cloneMeshRenderer)
 			{
-				cloneMeshRdr->m_transform = cloneTransform;
+				m_cloneMeshRenderer->m_transform = m_cloneTransform;
 
-				if (rendererType == ERendererType::SHAPE)
+				if (m_meshRenderer->m_rendererType == ERendererType::SHAPE)
 				{
-					ShapeRenderer* cloneShapeRdr = dynamic_cast<ShapeRenderer*>(cloneMeshRdr);
-					ShapeRenderer* shapeRdr = dynamic_cast<ShapeRenderer*>(meshRdr);
+					ShapeRenderer* cloneShapeRdr = dynamic_cast<ShapeRenderer*>(m_cloneMeshRenderer);
+					ShapeRenderer* shapeRdr = dynamic_cast<ShapeRenderer*>(m_meshRenderer);
 					
 					assert(cloneShapeRdr != nullptr || shapeRdr != nullptr);
 
@@ -125,31 +116,32 @@ void PortalTeleporterComponent::EnterPortal(const PortalComponent* linkedPortal,
 				}
 				else
 				{
-					cloneMeshRdr->SetMesh(meshRdr->m_mesh);
+					m_cloneMeshRenderer->SetMesh(m_meshRenderer->m_mesh);
 				}
 
-				cloneMeshRdr->SetMaterial(meshRdr->m_material);
+				m_cloneMeshRenderer->SetMaterial(m_meshRenderer->m_material);
 			}
 		}
 
-		m_cloneEntity->Initialize();
-		scene->AddEntity(m_cloneEntity);
-
+		m_cloneMeshRenderer->m_isSlice = 1;
+		m_cloneTransform->GetHost().Initialize();
+		scene->AddEntity(m_cloneTransform->GetHostPtr());
 	}
 }
 
 void PortalTeleporterComponent::ExitPortal()
 {
-	if (m_cloneEntity)
+	if (m_cloneTransform)
 	{
 		if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
 		{
-			m_cloneEntity->m_OnUnselected.Invoke();
-			scene->RemoveEntity(m_cloneEntity);
-			m_cloneEntity = nullptr;
+			m_cloneTransform->GetHost().m_OnUnselected.Invoke();
+			scene->RemoveEntity(m_cloneTransform->GetHostPtr());
+			m_cloneTransform = nullptr;
+			m_cloneMeshRenderer = nullptr;
 		}
 	}
 
-	m_isSlice = 0;
+	m_meshRenderer->m_isSlice = 0;
 }
 

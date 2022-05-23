@@ -90,6 +90,7 @@ void BoxCollider::Initialize()
 		m_transform->m_onRotationChange.Bind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
 	}
+
 	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);

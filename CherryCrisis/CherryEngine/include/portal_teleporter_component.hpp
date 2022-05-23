@@ -8,6 +8,7 @@
 
 #include "property.hpp"
 
+class MeshRenderer;
 class Transform;
 
 class CCENGINE_API PortalTeleporterComponent : public Behaviour
@@ -17,12 +18,12 @@ protected:
 
 public:
 	CCMaths::Vector3 m_previousOffsetFromPortal = Vector3::Zero;
-	Transform* m_transform = nullptr;
-	CCMaths::Vector3 m_sliceCentre = 0.f;
-	CCMaths::Vector3 m_sliceNormal = 0.f;
-	bool  m_isSlice = false;
 
-	Entity* m_cloneEntity = nullptr;
+	Transform* m_transform = nullptr;
+	MeshRenderer* m_meshRenderer = nullptr;
+
+	Transform* m_cloneTransform = nullptr;
+	MeshRenderer* m_cloneMeshRenderer = nullptr;
 
 	PortalTeleporterComponent();
 	PortalTeleporterComponent(CCUUID& id);
