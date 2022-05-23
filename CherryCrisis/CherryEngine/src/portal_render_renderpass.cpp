@@ -69,8 +69,13 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 			portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
 
+			CCMaths::Matrix4 modelMat = portal->m_linkedPortal->m_modelMatrix;
+			modelMat *= Matrix4::RotateY(CCMaths::PI);
+			modelMat *= portal->m_modelMatrix.Inverse();
+			
 			//TODO: Optimize !
-			CCMaths::Matrix4 m = portal->m_linkedPortal->m_modelMatrix * portal->m_modelMatrix.Inverse() * viewer->m_viewMatrix.Inverse();
+			CCMaths::Matrix4 m = modelMat * viewer->m_viewMatrix.Inverse();
+
 			CCMaths::Matrix4 mInverse = m.Inverse();
 
 			portal->m_linkedPortal->m_viewMatrix = mInverse;
@@ -79,7 +84,7 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
 
 			float aspect = (float)framebuffer.width / (float)framebuffer.height;
-			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(portal->m_linkedPortal->m_modelMatrix, portal->m_fovY, aspect, portal->m_near, portal->m_far);
+			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(m, portal->m_fovY, aspect, portal->m_near, portal->m_far);
 
 			portal->m_linkedPortal->Draw(viewer->m_currentIteration - 1);
 		}
@@ -90,10 +95,9 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	glDisable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
 
-	glCullFace(GL_BACK);
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -124,6 +124,12 @@
     <Filter Include="Fichiers sources\UI">
       <UniqueIdentifier>{3322e815-47c3-45c9-bd2c-3e3ed060c9fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers de ressources\PBR">
+      <UniqueIdentifier>{8dcaac80-83c6-4789-99ba-975163eb4e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources\LIT">
+      <UniqueIdentifier>{8e218db2-3aa4-41f5-82c3-08e62947cdc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\maths\matrix4.hpp">
@@ -1400,53 +1406,11 @@
     <None Include="interface\scripted_behaviour.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
-    <None Include="..\x64\Debug\Assets\shadowShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\shadowShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\basicShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\basicShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\basicPostProcess.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\basicPostProcess.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\bloomShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\bloomShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\hdrShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\hdrShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\skyboxShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\skyboxShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
     <None Include="include\entity.inl">
       <Filter>Fichiers d%27en-tête\Entity</Filter>
     </None>
     <None Include="Scripting.cd" />
     <None Include="Rendering.cd" />
-    <None Include="..\x64\Debug\Assets\portalShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\portalShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
     <None Include="interface\physic_manager.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
@@ -1468,14 +1432,116 @@
     <None Include="interface\physic_scene.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
-    <None Include="..\x64\Debug\Assets\Shaders\colliderShader.vert">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
-    <None Include="..\x64\Debug\Assets\Shaders\colliderShader.frag">
-      <Filter>Fichiers de ressources</Filter>
-    </None>
     <None Include="interface\scene_manager.i">
       <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\basicPostProcess.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\basicPostProcess.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\billboard.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\billboard.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\bloomShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\bloomShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\colliderShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\colliderShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\picking.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\picking.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\portalShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\portalShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\shadowShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\shadowShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\textShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\textShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\uiShader.frag">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\uiShader.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\brdfShader.frag">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\brdfShader.vert">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\environmentMapShader.frag">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\environmentMapShader.vert">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\irradianceMapShader.frag">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\pbrShader.frag">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\pbrShader.vert">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\prefilterMapShader.frag">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\skydomeShader.frag">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\skydomeShader.vert">
+      <Filter>Fichiers de ressources\PBR</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\basicShader.frag">
+      <Filter>Fichiers de ressources\LIT</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\basicShader.vert">
+      <Filter>Fichiers de ressources\LIT</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\hdrShader.frag">
+      <Filter>Fichiers de ressources\LIT</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\hdrShader.vert">
+      <Filter>Fichiers de ressources\LIT</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\skyboxShader.frag">
+      <Filter>Fichiers de ressources\LIT</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\skyboxShader.vert">
+      <Filter>Fichiers de ressources\LIT</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\slice.vert">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="..\x64\Sandbox\Assets\Shaders\slice.frag">
+      <Filter>Fichiers de ressources</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

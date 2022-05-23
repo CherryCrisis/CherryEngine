@@ -17,6 +17,7 @@
 #include "texture.hpp"
 #include "transform.hpp"
 #include "viewer.hpp"
+#include "portal_teleporter_component.hpp"
 
 
 PBRRenderPass::PBRRenderPass(const char* name)
@@ -239,6 +240,8 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 
 		if (Material* material = modelRdr->m_material.get())
 		{
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uIsTraveller"), 0);
+
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "hasIrradianceMap"), 1);
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasNormalMap"), material->m_hasNormal);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedo"), 1, material->m_diffuse.data);

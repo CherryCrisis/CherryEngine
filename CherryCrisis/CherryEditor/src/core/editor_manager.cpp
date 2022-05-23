@@ -402,6 +402,8 @@ bool EntitySelector::Add(Entity* entity)
     if (std::count(m_entities.begin(), m_entities.end(), entity))
         return false;
 
+    assert(entity != nullptr);
+
     m_entities.push_back(entity);
     entity->m_OnSelected.Invoke();
     return true;

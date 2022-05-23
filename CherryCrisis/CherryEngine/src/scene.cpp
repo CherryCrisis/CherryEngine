@@ -45,19 +45,29 @@ void Scene::Initialize()
 
 void Scene::Update()
 {
-	for (Entity* entity : m_entities) 
+	size_t entitiesCount = m_entities.size();
+	for (size_t id = 0; id < entitiesCount; id++)
 	{
-		entity->Update();
+		//To prevent if an entity is deleted in scene->Update() !
+		if (entitiesCount != m_entities.size())
+			break;
+
+		m_entities[id]->Update();
 	}
 }
 
 void Scene::AddEntity(Entity* toAdd)
 {
-	m_entities.push_back(toAdd);
+	assert(toAdd != nullptr);
+
+	m_entities.resize(m_entities.size() + 1);
+	m_entities[m_entities.size() - 1] = toAdd;
+
+	//m_entities.push_back(toAdd);
 	m_onModifiedEntities.Invoke();
 }
 
-void Scene::RemoveEntity(Entity* toRemove) 
+void Scene::RemoveEntity(Entity* toRemove)
 {
 	if (!toRemove)
 		return;
@@ -65,14 +75,20 @@ void Scene::RemoveEntity(Entity* toRemove)
 	Transform* transform;
 	toRemove->TryGetBehaviour(transform);
 
-	auto children = transform->GetChildren();
-	if (transform && children->size() > 0 )
+	if (transform)
 	{
-		for (int i = 0; i < children->size(); i++)
-			RemoveEntity(&(*children)[i]->GetHost());
+		auto children = transform->GetChildren();
+		if (transform && children->size() > 0)
+		{
+			for (int i = 0; i < children->size(); i++)
+				RemoveEntity(&(*children)[i]->GetHost());
+		}
 	}
 
-	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove), m_entities.end());
+	auto itPos = std::remove(m_entities.begin(), m_entities.end(), toRemove);
+	assert(itPos != m_entities.end());
+	
+	m_entities.erase(itPos);
 	toRemove->Destroy();
 	m_onModifiedEntities.Invoke();
 }

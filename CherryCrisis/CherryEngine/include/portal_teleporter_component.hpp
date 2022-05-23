@@ -18,6 +18,11 @@ protected:
 public:
 	CCMaths::Vector3 m_previousOffsetFromPortal = Vector3::Zero;
 	Transform* m_transform = nullptr;
+	CCMaths::Vector3 m_sliceCentre = 0.f;
+	CCMaths::Vector3 m_sliceNormal = 0.f;
+	bool  m_isSlice = false;
+
+	Entity* m_cloneEntity = nullptr;
 
 	PortalTeleporterComponent();
 	PortalTeleporterComponent(CCUUID& id);
@@ -26,7 +31,8 @@ public:
 	void Initialize();
 	void BindToSignals() override;
 
-	void EnterPortal();
+	void EnterPortal(const PortalComponent* linkedPortal);
+	void UpdateEntityClone(const CCMaths::Vector3& newPos);
 	void ExitPortal();
 
 	void Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos);
