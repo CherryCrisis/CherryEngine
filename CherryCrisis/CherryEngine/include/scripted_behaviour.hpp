@@ -24,6 +24,7 @@ struct _MonoException;
 class CCENGINE_API ScriptedBehaviour : public Behaviour
 {
 	bool m_linked = false;
+	bool m_subscribed = false;
 
 	std::string m_scriptName;
 
@@ -67,14 +68,15 @@ public:
 	ScriptedBehaviour(CCUUID& id);
 	virtual ~ScriptedBehaviour();
 
+	const std::string TypeName() override { return m_scriptName; }
 	void SetScriptClass(const std::string& scriptName);
-	void BindToSignals() override;
-	void OnSetOwner(Entity* newOwner)  override;
+	void OnSetOwner(Entity* newOwner) override;
 	void Awake();
 	void Start();
 	void Update();
 
 	void SetSignals();
+	void UnsetSignals();
 
 	void OnCollisionEnter(Entity* other);
 	void OnCollisionStay(Entity* other);

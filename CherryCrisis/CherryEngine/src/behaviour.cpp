@@ -3,13 +3,18 @@
 #include "behaviour.hpp"
 #include "entity.hpp"
 
+const std::string Behaviour::TypeName()
+{
+	return String::ExtractTypeIndexName(typeid(*this));
+}
 
 void Behaviour::OnSetOwner(Entity* newOwner)
 {
-	newOwner->SubscribeComponent(this);
+	newOwner->SubscribeComponent(this, TypeName());
 }
 
 void Behaviour::SetHostPtr(Entity* newOwner)
 {
+	m_owner = newOwner;
 	OnSetOwner(newOwner);
 }

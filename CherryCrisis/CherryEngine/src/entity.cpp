@@ -35,7 +35,7 @@ void Entity::Initialize()
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {
-	auto compIt = m_behaviours.find(String::ExtractTypeIndexName(typeid(*behaviour)));
+	auto compIt = m_behaviours.find(behaviour->TypeName());
 
 	if (compIt == m_behaviours.end())
 	{

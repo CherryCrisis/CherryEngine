@@ -1070,11 +1070,16 @@ namespace mono
 
 	void ManagedObject::Dispose()
 	{
-		auto csDispose = (void(*)(MonoObject*, bool, MonoException**))mono_method_get_unmanaged_thunk(m_class->FindMethod("Dispose")->RawMethod());
+		mono::ManagedMethod* disposeFunc = m_class->FindMethod("Dispose");
 
-		// TODO: Add real excep
-		MonoException* excep = nullptr;
-		csDispose(RawObject(), true, &excep);
+		if (!disposeFunc)
+			return;
+
+		bool memoryOwn = true;
+		void* args[] = { &memoryOwn };
+
+		MonoObject* excep = nullptr;
+		disposeFunc->Invoke(this, args, &excep);
 	}
 
 	void ManagedObject::Reload()
