@@ -174,6 +174,7 @@ namespace PhysicSystem
 
 			if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 			{
+				std::cout << "Collision Enter" << std::endl;
 				actor1->m_owner->OnCollisionEnter(actor2->m_owner);
 				actor2->m_owner->OnCollisionEnter(actor1->m_owner);
 				continue;
@@ -181,6 +182,7 @@ namespace PhysicSystem
 			
 			if (cp.events & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
 			{
+				std::cout << "Collision Exit" << std::endl;
 				actor1->m_owner->OnCollisionExit(actor2->m_owner);
 				actor2->m_owner->OnCollisionExit(actor1->m_owner);
 			}
@@ -201,12 +203,14 @@ namespace PhysicSystem
 
 			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 			{
+				std::cout << "Trigger Enter" << std::endl;
 				actor1->m_owner->OnTriggerEnter(actor2->m_owner);
 				actor2->m_owner->OnTriggerEnter(actor1->m_owner);
 			}
 
 			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_LOST)
 			{
+				std::cout << "Trigger Exit" << std::endl;
 				actor1->m_owner->OnTriggerExit(actor2->m_owner);
 				actor2->m_owner->OnTriggerExit(actor1->m_owner);
 			}

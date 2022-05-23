@@ -177,6 +177,8 @@ void SphereCollider::SetPxData()
 {
 	if (m_pxShape)
 	{
+		m_pxShape->setContactOffset(0.02f);
+
 		if (!m_isEnabled)
 		{
 			m_pxShape->setFlag(physx::PxShapeFlag::Enum::eSIMULATION_SHAPE, false);
