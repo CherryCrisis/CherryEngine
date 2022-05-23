@@ -10,6 +10,7 @@
 #include "camera_component.hpp"
 #include "collider_renderpass.hpp"
 #include "entity.hpp"
+#include "shape_renderer.hpp"
 #include "transform.hpp"
 
 using namespace CCMaths;
@@ -20,6 +21,8 @@ CapsuleCollider::CapsuleCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::CAPSULE;
+	
+	m_isAddedFromInspector = true;
 }
 
 CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
@@ -91,16 +94,24 @@ void CapsuleCollider::Initialize()
 
 	GetHost().m_OnAwake.Unbind(&CapsuleCollider::Initialize, this);
 
-	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
-	if (modelRdr)
+	if (m_isAddedFromInspector)
 	{
-		if (modelRdr->m_mesh)
-		{
-			Vector3& extents = modelRdr->m_mesh->m_aabb.m_extents;
+		MeshRenderer* renderer = nullptr;
+		renderer = GetHost().GetBehaviour<ModelRenderer>();
 
-			m_baseEntityScale	= extents.y;
-			m_baseEntityRadius	= Max(extents.x, extents.z);
-			m_localPosition		= modelRdr->m_mesh->m_aabb.m_center;
+		if (!renderer)
+			renderer = GetHost().GetBehaviour<ShapeRenderer>();
+
+		if (renderer)
+		{
+			if (renderer->m_mesh)
+			{
+				Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
+
+				m_editableScale = extents.y;
+				m_editableRadius = Max(extents.x, extents.z);
+				m_localPosition = renderer->m_mesh->m_aabb.m_center;
+			}
 		}
 	}
 
@@ -231,7 +242,7 @@ void CapsuleCollider::SetScale(const float& scale)
 {
 	m_editableScale = scale;
 
-	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale * m_baseEntityScale) - m_totalRadius);
+	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale) - m_totalRadius);
 	ComputeModelMatrices();
 
 	ResetPxShape();
@@ -241,7 +252,7 @@ void CapsuleCollider::SetRadius(const float& radius)
 {
 	m_editableRadius = radius;
 
-	m_totalRadius = m_editableRadius * m_entityRadius * m_baseEntityRadius;
+	m_totalRadius = m_editableRadius * m_entityRadius;
 	ComputeModelMatrices();
 
 	ResetPxShape();
