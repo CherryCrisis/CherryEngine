@@ -50,13 +50,13 @@ struct Material
 };
 
 #define NBR_LIGHTS 8
-uniform Light uLights[NBR_LIGHTS];
+//uniform Light uLights[NBR_LIGHTS];
 
 // Uniform blocks
-/*layout(std140) uniform uLightsBlock
+layout(std140) uniform uLightsBlock
 {
 	Light uLights[NBR_LIGHTS];
-};*/
+};
 
 uniform Material uMaterial;
 

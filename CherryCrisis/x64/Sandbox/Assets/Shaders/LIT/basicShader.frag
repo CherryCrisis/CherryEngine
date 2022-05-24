@@ -48,7 +48,13 @@ struct Light
 
 #define NBR_LIGHTS 8
 uniform sampler2D uShadowMaps[NBR_LIGHTS];
-uniform Light uLights[NBR_LIGHTS];
+//uniform Light uLights[NBR_LIGHTS];
+
+// Uniform blocks
+layout(std140) uniform uLightsBlock
+{
+	Light uLights[NBR_LIGHTS];
+};
 
 uniform vec3 uViewPosition;
 

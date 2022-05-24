@@ -25,6 +25,8 @@ BasicRenderPass::BasicRenderPass(const char* name)
 
 		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
 
+		glUniformBlockBinding(m_program->m_shaderProgram, glGetUniformBlockIndex(m_program->m_shaderProgram, "uLightsBlock"), LightGenerator::UBOBindingPoint);
+
 		glUseProgram(0);
 
 		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
@@ -55,6 +57,9 @@ template <>
 int BasicRenderPass::Subscribe(Light* toGenerate)
 {
 	if (!toGenerate || !m_program)
+		return -1;
+
+	if (!m_lightGenerator.Generate(toGenerate))
 		return -1;
 
 	m_lights.push_back(toGenerate);
@@ -132,50 +137,6 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
-
-	const char* lightFormat = "uLights[{}]";
-
-	// TODO: Set shader define as upper bound
-	for (size_t lightID = 0u; lightID < 8; lightID++)
-	{
-		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
-
-		GLuint typeLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightType").c_str());
-		glUniform1i(typeLoc, false);
-		
-		if (lightID == m_lights.size())
-			break;
-
-		Light* light = m_lights[lightID];
-		glUniform1i(typeLoc, (GLuint)light->m_type);
-
-		auto* gpuLight = static_cast<ShadowRenderPass::GPUShadowLight*>(light->m_gpuLight.get());
-
-		if (!gpuLight)
-		{
-			lightID++;
-			continue;
-		}
-
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)lightID, 3 + (GLsizei)lightID);
-		glBindTextureUnit(3 + (GLsizei)lightID, gpuLight->depthTexID);
-
-		// TODO: Use string view
-		GLuint lightSpaceLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightSpace").c_str());
-		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, light->m_lightSpace.data);
-
-		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "position").c_str());
-		glUniform3fv(posLoc, 1, light->m_position.data);
-
-		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "diffuse").c_str());
-		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
-
-		GLuint ambientLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "ambient").c_str());
-		glUniform3fv(ambientLoc, 1, light->m_ambient.data);
-
-		GLuint specularLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "specular").c_str());
-		glUniform3fv(specularLoc, 1, light->m_specular.data);
-	}
 
 	for (MeshRenderer* modelRdr : m_models)
 	{

@@ -275,7 +275,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 						node[metaName] = *valPtr;
 						continue;
 					}
-					if (type == typeid(int))
+					if (type == typeid(int) || type == typeid(ELightType))
 					{
 						int defaultVal;
 						int* valPtr = &defaultVal;
@@ -614,7 +614,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						bool str = value.as<bool>();
 						metadata->Set(&str);
 					}
-					else if (type == typeid(int))
+					else if (type == typeid(int) || type == typeid(ELightType))
 					{
 						int str = value.as<int>();
 						metadata->Set(&str);
