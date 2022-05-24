@@ -18,7 +18,7 @@ PortalRenderPass::PortalRenderPass(const char* name)
 	if (m_program)
 		m_callExecute = CCCallback::BindCallback(&PortalRenderPass::Execute, this);
 
-	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
+	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_EuclideanPortal", true);
 
 	if (!m_quadMesh->m_gpuMesh)
 	{
@@ -108,8 +108,8 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
+	//glDisable(GL_CULL_FACE);
 
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);

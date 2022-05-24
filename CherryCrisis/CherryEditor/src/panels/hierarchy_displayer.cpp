@@ -432,7 +432,7 @@ void HierarchyDisplayer::ContextCallback()
             if (ImGui::MenuItem("Rename")) { m_isRenaming = true; }
             if (ImGui::MenuItem("Delete"))
             {
-                for (int i = m_manager->m_entitySelector.m_entities.size() - 1; i >= 0; i--)
+                for (int i = static_cast<int>(m_manager->m_entitySelector.m_entities.size()) - 1; i >= 0; i--)
                 {
                     Entity* entity = m_manager->m_entitySelector.m_entities[i];
                      

@@ -27,6 +27,7 @@ void Collider::SetTrigger(const bool& isTrigger)
 void Collider::SetLocalPos(const CCMaths::Vector3& localPos)
 {
 	m_localPosition = localPos;
+	ComputeModelMatrices();
 
 	if (m_pxShape)
 		SetPxLocalPos();

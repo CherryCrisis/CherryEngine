@@ -35,6 +35,7 @@ PortalTeleporterComponent::~PortalTeleporterComponent()
 		}
 	}
 
+	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
 	//InvalidateLinkedPortal();
 }
 
@@ -60,8 +61,8 @@ void PortalTeleporterComponent::Initialize()
 void PortalTeleporterComponent::Start()
 {
 	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
-	
-	Transform* transform = GetHost().GetOrAddBehaviour<Transform>();
+
+	Transform* transform = GetHost().GetBehaviour<Transform>();
 
 	EntityNode entityNode;
 	GenerateEntityNodesFromTransform(&entityNode, transform);

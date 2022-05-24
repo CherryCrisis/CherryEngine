@@ -99,12 +99,15 @@ void CameraComponent::Initialize()
 
 void CameraComponent::OnCellAdded(Cell* newCell)
 {
-	GetHost().m_cell->AddViewer(&m_camera);
+	newCell->AddViewer(&m_camera);
+
+	ChangePosition(m_transform->GetPosition());
+	ChangeRotation(m_transform->GetRotation());
 }
 
 void CameraComponent::OnCellRemoved(Cell* newCell)
 {
-	GetHost().m_cell->RemoveViewer(&m_camera);
+	newCell->RemoveViewer(&m_camera);
 }
 
 void CameraComponent::ChangePosition(const CCMaths::Vector3& position)

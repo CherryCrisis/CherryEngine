@@ -243,13 +243,65 @@ namespace CCMaths
 		*	\param object : Vector2 on the left side of the operator
 		*	\param rhs : Vector2 on the right side of the operator
 		*
-		*	Check equality of \b object and \b rhs member to member
+		*	Check inequality of \b object and \b rhs member to member
 		*
 		*	\return \b True if at least one check is false
 		*
 		*	\sa operator==(const Vector2&) const
 		*/
 		inline bool operator!=(const Vector2& rhs) const;
+
+		//! Compare the two Vector2s
+		/*!
+		*	\param object : Vector2 on the left side of the operator
+		*	\param rhs : Vector2 on the right side of the operator
+		*
+		*	Check inferiority of \b object to \b rhs member to member
+		*
+		*	\return \b True if at least one check is false
+		*
+		*	\sa operator<(const Vector2&) const
+		*/
+		inline bool operator<=(const Vector2& rhs) const;
+
+		//! Compare the two Vector2s
+		/*!
+		*	\param object : Vector2 on the left side of the operator
+		*	\param rhs : Vector2 on the right side of the operator
+		*
+		*	Check strict inferiority of \b object to \b rhs member to member
+		*
+		*	\return \b True if at least one check is false
+		*
+		*	\sa operator<=(const Vector2&) const
+		*/
+		inline bool operator<(const Vector2& rhs) const;
+
+		//! Compare the two Vector2s
+		/*!
+		*	\param object : Vector2 on the left side of the operator
+		*	\param rhs : Vector2 on the right side of the operator
+		*
+		*	Check superiority of \b object to \b rhs member to member
+		*
+		*	\return \b True if at least one check is false
+		*
+		*	\sa operator>(const Vector2&) const
+		*/
+		inline bool operator>=(const Vector2& rhs) const;
+
+		//! Compare the two Vector2s
+		/*!
+		*	\param object : Vector2 on the left side of the operator
+		*	\param rhs : Vector2 on the right side of the operator
+		*
+		*	Check strict superiority of \b object to \b rhs member to member
+		*
+		*	\return \b True if at least one check is false
+		*
+		*	\sa operator>=(const Vector2&) const
+		*/
+		inline bool operator>(const Vector2& rhs) const;
 
 		//! The dot product between two Vector2s
 		/*!

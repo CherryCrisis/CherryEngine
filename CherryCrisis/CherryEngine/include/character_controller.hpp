@@ -29,7 +29,6 @@ private:
 	class CapsuleCollider*	m_collider = nullptr;
 	class Rigidbody*		m_rigidbody = nullptr;
 	class Transform*		m_transform = nullptr;
-	class TimeManager*		m_timeManager	= nullptr;
 
 	void PopulateMetadatas() override;
 	

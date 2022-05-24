@@ -1373,9 +1373,6 @@
     <None Include="interface\vector4.i">
       <Filter>Fichiers sources\Interface\Maths</Filter>
     </None>
-    <None Include="interface\matrix3.i">
-      <Filter>Fichiers sources\Interface\Maths</Filter>
-    </None>
     <None Include="interface\vector.i">
       <Filter>Fichiers sources\Interface\Maths</Filter>
     </None>
