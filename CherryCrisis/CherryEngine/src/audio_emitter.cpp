@@ -98,9 +98,13 @@ AudioEmitter::~AudioEmitter()
 {
 	if (CameraComponent::m_editorCamera)
 		UnsubscribeToPipeline(CameraComponent::m_editorCamera->m_pipeline.get());
-
-	m_transform->m_onPositionChange.Unbind(&AudioEmitter::ChangePosition, this);
-	m_transform->m_onRotationChange.Unbind(&AudioEmitter::ChangeRotation, this);
+	
+	if (m_transform) 
+	{
+		m_transform->m_onPositionChange.Unbind(&AudioEmitter::ChangePosition, this);
+		m_transform->m_onRotationChange.Unbind(&AudioEmitter::ChangeRotation, this);
+		m_transform->m_OnDestroy.Unbind(&AudioEmitter::InvalidateTransform, this);
+	}
 }
 
 void AudioEmitter::Initialize()
@@ -111,6 +115,7 @@ void AudioEmitter::Initialize()
 	{
 		m_transform->m_onPositionChange.Bind(&AudioEmitter::ChangePosition, this);
 		m_transform->m_onRotationChange.Bind(&AudioEmitter::ChangeRotation, this);
+		m_transform->m_OnDestroy.Bind(&AudioEmitter::InvalidateTransform, this);
 	}
 
 	ChangePosition(m_transform->GetPosition());
@@ -127,6 +132,10 @@ void AudioEmitter::BindToSignals()
 	
 }
 
+void AudioEmitter::InvalidateTransform()
+{
+	m_transform = nullptr;
+}
 void AudioEmitter::ChangePosition(const CCMaths::Vector3& position)
 {
 	if (!m_sound || !m_isSpatial) return;

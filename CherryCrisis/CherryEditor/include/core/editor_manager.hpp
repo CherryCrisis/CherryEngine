@@ -34,6 +34,7 @@ struct EntitySelector
     bool Add(Entity* entity);
     bool Remove(Entity* entity, bool unselect = true);
     bool Clear(bool unselect = true);
+    void ClearEx(); // Do not use
     bool IsEmpty() { return m_entities.size() <= 0; }
     bool Contains(Entity* entity);
 

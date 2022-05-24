@@ -159,6 +159,7 @@ int main(int argc, char** argv)
         glfwSwapInterval(0);
 
         SceneManager::GetInstance()->m_lateHierarchyRefresh.Bind(&HierarchyDisplayer::Refresh, editor.GetHierarchy());
+        SceneManager::GetInstance()->m_sceneChanged.Bind(&EntitySelector::ClearEx, &editor.m_entitySelector);
         while (glfwWindowShouldClose(window) == false)
         {
             InputManager::UpdateKeys();

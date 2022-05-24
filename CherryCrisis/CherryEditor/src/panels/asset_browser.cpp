@@ -9,6 +9,7 @@
 
 #include "resource_manager.hpp"
 #include "input_manager.hpp"
+#include "scene_manager.hpp"
 
 #include "core/editor_manager.hpp"
 #include "command.hpp"
@@ -942,12 +943,12 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         //-- Scene --//
         if (!sceneExtensions.compare(extension))
         {
-            EmptyNode emptyNode;
-            SetAssetNode(m_path, emptyNode);
+            SceneNode scnNode;
+            SetAssetNode(m_path, scnNode);
 
-            emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
+            scnNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
 
-            auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode) });
+            auto pair = m_assetNodes.insert({ scnNode.m_path.string(), std::make_unique<SceneNode>(scnNode) });
             return pair.first->second.get();
         }
 
@@ -1045,4 +1046,17 @@ void AssetBrowser::ReloadScripts()
     std::string solutionPath = (m_assetsDirectory.parent_path() / "CherryScripting.sln").string();
     CsScriptingSystem::GetInstance()->InitializeHotReload(m_manager->GetCompilerPath().c_str(), solutionPath.c_str());
     m_manager->m_engine->m_OnStop.Unbind(&AssetBrowser::ReloadScripts, this);
+}
+
+void AssetBrowser::ScriptNode::Action() 
+{
+    std::string solutionPath = (m_assetBrowser->m_assetsDirectory.parent_path() / "CherryScripting.sln").string();
+    std::string args = solutionPath;//+ std::string(" /Edit ") + m_relativePath.string()+m_fullFilename;
+    call("open", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv", args.c_str());
+}
+
+void AssetBrowser::SceneNode::Action()
+{
+    if (!Engine::isPlaying && !Engine::isPaused)
+        SceneManager::GetInstance()->LoadScene((m_relativePath.string()+m_fullFilename).c_str());
 }

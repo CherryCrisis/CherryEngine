@@ -23,7 +23,7 @@ public:
 	std::unique_ptr<CCFunction::AFunction> m_lateChanged;
 
 	Event<> m_lateHierarchyRefresh;
-
+	Event<> m_sceneChanged; // Useful for editor callbacks
 	void SetCurrentScene(std::shared_ptr<Scene> scene);
 
 	void Initialize();

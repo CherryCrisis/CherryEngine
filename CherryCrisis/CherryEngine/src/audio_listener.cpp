@@ -18,9 +18,12 @@ AudioListener::AudioListener(CCUUID& id) : Behaviour(id)
 
 AudioListener::~AudioListener()
 {
-	// invalidate transform impl
-	m_transform->m_onPositionChange.Unbind(&AudioListener::ChangePosition, this);
-	m_transform->m_onRotationChange.Unbind(&AudioListener::ChangeRotation, this);
+	if (m_transform)
+	{
+		m_transform->m_onPositionChange.Unbind(&AudioListener::ChangePosition, this);
+		m_transform->m_onRotationChange.Unbind(&AudioListener::ChangeRotation, this);
+		m_transform->m_OnDestroy.Unbind(&AudioListener::InvalidateTransform, this);
+	}
 }
 
 void AudioListener::Initialize()
@@ -31,10 +34,12 @@ void AudioListener::Initialize()
 	{
 		m_transform->m_onPositionChange.Bind(&AudioListener::ChangePosition, this);
 		m_transform->m_onRotationChange.Bind(&AudioListener::ChangeRotation, this);
+
+		m_transform->m_OnDestroy.Bind(&AudioListener::InvalidateTransform, this);
 	}
 
-	ChangePosition(m_transform->GetPosition());
-	ChangeRotation(m_transform->GetRotation());
+	ChangePosition(m_transform->GetGlobalPosition());
+	ChangeRotation(m_transform->GetGlobalRotation());
 
 	GetHost().m_OnAwake.Unbind(&AudioListener::Initialize, this);
 }
@@ -42,6 +47,11 @@ void AudioListener::Initialize()
 void AudioListener::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&AudioListener::Initialize, this);
+}
+
+void AudioListener::UnbindSignals() 
+{
+
 }
 
 void AudioListener::ChangePosition(const CCMaths::Vector3& position)
@@ -62,4 +72,9 @@ void AudioListener::ChangeRotation(const CCMaths::Vector3& rotation)
 	};
 
 	alListenerfv(AL_ORIENTATION, listenerOri);
+}
+
+void AudioListener::InvalidateTransform() 
+{
+	m_transform = nullptr;
 }

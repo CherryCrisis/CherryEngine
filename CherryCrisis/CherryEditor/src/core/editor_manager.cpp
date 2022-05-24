@@ -407,6 +407,11 @@ bool EntitySelector::Clear(bool unselect)
     return m_entities.size() <= 0;
 }
 
+void EntitySelector::ClearEx() 
+{
+    m_entities.clear();
+}
+
 bool EntitySelector::Contains(Entity* entity) 
 {
     return std::count(m_entities.begin(), m_entities.end(), entity);

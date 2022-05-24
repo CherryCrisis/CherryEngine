@@ -554,6 +554,17 @@ components:
     Use gravity: true
     Max velocity: 1.00000003e+16
     Max depenetration velocity: 1.00000003e+32
+  2574857763:
+    type: AudioEmitter
+    IsActive: true
+    m_owner: 324378655
+    Sound: Assets\Sounds\scream.wav
+    AutoPlay: true
+    Spatialized: true
+    Looping: true
+    Pitch: 1
+    RollOff: 1
+    ReferenceDistance: 1
   1267802322:
     type: Transform
     rotation: 0.000000/-0.000000/0.000000
@@ -1749,20 +1760,12 @@ components:
     Local Position: 0.000000/0.000000/0.000000
   109337918:
     type: Transform
-    rotation: 0.000000/-0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
     IsActive: true
     m_owner: 565041422
-    position: 0.000000/0.886051/-3.000000
+    position: 0.000000/7.000000/3.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
-  110543000:
-    type: ScriptedBehaviour
-    scriptName: CameraController
-    step: 0
-    IsActive: true
-    m_owner: 565041422
-    maxPosition: 0.000000/0.000000/0.000000
-    speed: 0.5
   765047841:
     type: PortalTeleporterComponent
     IsActive: true
@@ -1785,7 +1788,7 @@ components:
     rotation: -1.570796/0.000000/3.141593
     IsActive: true
     m_owner: 2224957768
-    position: 0.000000/4.000000/0.000000
+    position: 0.000000/14.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
   3680243489:

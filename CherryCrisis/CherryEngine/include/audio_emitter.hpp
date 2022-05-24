@@ -53,6 +53,8 @@ public:
 	void Start();
 	void BindToSignals()	 override;
 
+	void InvalidateTransform();
+
 	void ChangePosition(const CCMaths::Vector3& position);
 	void ChangeRotation(const CCMaths::Vector3& position);
 	

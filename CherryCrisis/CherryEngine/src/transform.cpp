@@ -149,7 +149,7 @@ void Transform::SetPosition(const Vector3& position)
 	m_onPositionChange.Invoke(position);
 
 	for (Transform* child : m_children)
-		child->m_onPositionChange.Invoke(child->GetPosition());
+		child->m_onPositionChange.Invoke(child->GetGlobalPosition());
 }
 
 void Transform::SetRotation(const Vector3& rotation)
@@ -160,7 +160,7 @@ void Transform::SetRotation(const Vector3& rotation)
 	m_onRotationChange.Invoke(rotation);
 
 	for (Transform* child : m_children)
-		child->m_onRotationChange.Invoke(child->GetRotation());
+		child->m_onRotationChange.Invoke(child->GetGlobalRotation());
 }
 
 void Transform::SetScale(const Vector3& scale)

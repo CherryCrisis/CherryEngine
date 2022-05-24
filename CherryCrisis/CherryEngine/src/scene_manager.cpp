@@ -42,7 +42,8 @@ void SceneManager::SetHierarchyDirty(bool value)
 bool SceneManager::LoadScene(const char* filepath) 
 {
 	SceneManager* mng = GetInstance();
-
+	mng->m_sceneChanged.Invoke();
+	
 	if (!std::filesystem::exists(filepath)) 
 	{
 		std::string errorMsg = filepath + std::string(" failed to load.");
