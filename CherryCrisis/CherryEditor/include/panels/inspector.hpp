@@ -34,7 +34,6 @@ private:
 	void DropzoneCallback(const std::string& path);
 	void RenderAddComponentList();
 
-	void PopulateComponentList();
 
 	std::vector<ComponentInfos> m_componentsNames;
 	
@@ -43,6 +42,7 @@ public:
 
 	Engine* m_engine = nullptr;
 
+	void PopulateComponentList();
 	Inspector(bool spawnOpened = true, EditorManager* manager = nullptr, AssetSettingsDisplayer* assetSettingsDisplayer = nullptr);
 
 	void Render() override;

@@ -308,6 +308,7 @@ void EditorManager::SendNotification(const char* title, ENotifType type, float d
 void EditorManager::FocusCallback(GLFWwindow* window, int focused)
 {
     m_browser.QuerryBrowser();
+    m_inspector.PopulateComponentList();
 }
 
 void EditorManager::FocusEntity(Entity* entity)

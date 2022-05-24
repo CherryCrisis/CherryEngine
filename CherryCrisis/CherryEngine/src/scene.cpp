@@ -217,11 +217,7 @@ Entity* Scene::FindModelEntity(uint32_t id)
 
 void Scene::Empty() 
 {
-	while(m_entities.size() > 0)
-	{
-		m_entities[0]->Destroy();
-		m_entities.erase(m_entities.begin());
-	}
+	Delete();
 
 	while (m_cells.size() > 0)
 	{

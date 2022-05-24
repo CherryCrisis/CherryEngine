@@ -1,6 +1,7 @@
 #pragma once
 
 #include "matrix4.hpp"
+#include "maths_utils.hpp"
 
 namespace CCMaths
 {
