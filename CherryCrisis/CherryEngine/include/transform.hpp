@@ -98,6 +98,8 @@ public:
 
 	Matrix4 GetLocalMatrix();
 
+	void SetIsActiveWithChildren(bool isActive);
+
 
 	bool IsChildOf(Transform* parent, bool recursive=true);
 

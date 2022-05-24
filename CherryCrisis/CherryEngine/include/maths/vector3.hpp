@@ -1,7 +1,7 @@
 #pragma once
 
 #include "vector2.hpp"
-
+#include "maths_utils.hpp"
 
 namespace CCMaths
 {

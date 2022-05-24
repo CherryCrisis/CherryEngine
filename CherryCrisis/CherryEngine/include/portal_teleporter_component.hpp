@@ -28,6 +28,7 @@ protected:
 
 	//Return root transform
 	void CloneEntities(EntityNode* cloneMeshRendererNode, const EntityNode* meshRenderderNode, Cell* destCell, Scene* scene);
+	void SetIsVisibleEntityNode(EntityNode* entityNode, bool isVisible);
 public:
 	CCMaths::Vector3 m_previousOffsetFromPortal = Vector3::Zero;
 
@@ -40,9 +41,10 @@ public:
 
 	void Initialize();
 	void BindToSignals() override;
+	void Start();
 
 	void SetSliceParams(EntityNode* meshRendererNode, bool isSlice, const CCMaths::Vector3& sliceCentre, const CCMaths::Vector3& sliceNormal);
-
+	
 	void EnterPortal(const PortalComponent* linkedPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);
 	void UpdateEntityMatrix(Transform* transform, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);
 	void ExitPortal();

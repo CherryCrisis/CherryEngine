@@ -26,6 +26,15 @@ PortalTeleporterComponent::PortalTeleporterComponent(CCUUID& id) : Behaviour(id)
 
 PortalTeleporterComponent::~PortalTeleporterComponent()
 {
+	if (m_cloneEntityNode)
+	{
+		if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
+		{
+			scene->RemoveEntity(m_cloneEntityNode->m_transform->GetHostPtr());
+			m_cloneEntityNode.reset();
+		}
+	}
+
 	//InvalidateLinkedPortal();
 }
 
@@ -44,13 +53,28 @@ void PortalTeleporterComponent::BindToSignals()
 
 void PortalTeleporterComponent::Initialize()
 {
-	Transform* transform = GetHost().GetOrAddBehaviour<Transform>();
 	GetHost().m_OnAwake.Unbind(&PortalTeleporterComponent::Initialize, this);
+	GetHost().m_OnStart.Bind(&PortalTeleporterComponent::Start, this);
+}
+
+void PortalTeleporterComponent::Start()
+{
+	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
+	
+	Transform* transform = GetHost().GetOrAddBehaviour<Transform>();
 
 	EntityNode entityNode;
 	GenerateEntityNodesFromTransform(&entityNode, transform);
 	m_entityNode = std::make_unique<EntityNode>(entityNode);
+
+	if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
+	{
+		m_cloneEntityNode = std::make_unique<EntityNode>();
+		CloneEntities(m_cloneEntityNode.get(), m_entityNode.get(), GetHost().m_cell, scene.get());
+		SetIsVisibleEntityNode(m_cloneEntityNode.get(), false);
+	}
 }
+
 
 void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
 {
@@ -165,42 +189,34 @@ void PortalTeleporterComponent::CloneEntities(EntityNode* cloneEntityNode, const
 		cloneEntityNode->m_meshRendererChildren.push_back(cloneMeshRendererNodeChild);
 
 	}
-}
-
-void Test(PortalTeleporterComponent::EntityNode* cloneEntityNode, Scene* scene)
-{
+	
 	cloneEntityNode->m_transform->GetHost().Initialize();
 	scene->AddEntity(cloneEntityNode->m_transform->GetHostPtr());
+}
 
-	for (PortalTeleporterComponent::EntityNode& entityNodeChild : cloneEntityNode->m_meshRendererChildren)
-		Test(&entityNodeChild, scene);
+void PortalTeleporterComponent::SetIsVisibleEntityNode(EntityNode* entityNode, bool isVisible)
+{
+	if (entityNode->m_meshRenderer)
+		entityNode->m_meshRenderer->m_isVisible = isVisible;
+
+	for (EntityNode& entityNodeChild : entityNode->m_meshRendererChildren)
+	{
+		SetIsVisibleEntityNode(&entityNodeChild, isVisible);
+	}
 }
 
 
 void PortalTeleporterComponent::EnterPortal(const PortalComponent* linkedPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
 {
-	if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
-	{
-		m_cloneEntityNode = std::make_unique<EntityNode>();
-		CloneEntities(m_cloneEntityNode.get(), m_entityNode.get(), linkedPortal->GetHost().m_cell, scene.get());
-		Test(m_cloneEntityNode.get(), scene.get());
-	}
+	SetIsVisibleEntityNode(m_cloneEntityNode.get(), true);
+	if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
+		scene->MoveEntityFromCellToCell(m_cloneEntityNode->m_transform->GetHost().m_cell, linkedPortal->GetHost().m_cell, m_cloneEntityNode->m_transform->GetHostPtr());
 }
 
 void PortalTeleporterComponent::ExitPortal()
 {
 	if (m_cloneEntityNode)
-	{
-		if (m_cloneEntityNode->m_transform)
-		{
-			if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
-			{
-				m_cloneEntityNode->m_transform->GetHost().m_OnUnselected.Invoke();
-				scene->RemoveEntity(m_cloneEntityNode->m_transform->GetHostPtr());
-				m_cloneEntityNode.reset();
-			}
-		}
-	}
+		SetIsVisibleEntityNode(m_cloneEntityNode.get(), false);
 
 	SetSliceParams(m_entityNode.get(), false, {}, {});
 }

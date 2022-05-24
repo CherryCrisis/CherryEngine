@@ -294,3 +294,13 @@ Vector3 Transform::GetGlobalScale()
 
 	return m_worldScale;
 }
+
+void Transform::SetIsActiveWithChildren(bool isActive)
+{
+	GetHost().SetActive(isActive);
+
+	for (Transform* transformChild : m_children)
+	{
+		SetIsActiveWithChildren(isActive);
+	}
+}

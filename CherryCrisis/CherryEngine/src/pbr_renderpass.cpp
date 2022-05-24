@@ -222,7 +222,6 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 
 	for (MeshRenderer* modelRdr : m_models)
 	{
-
 		if (!modelRdr->m_isVisible)
 			continue;
 

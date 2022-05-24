@@ -80,8 +80,21 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 			portal->m_linkedPortal->m_viewMatrix = mInverse;
 
-			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader 
-			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
+			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader
+
+			CCMaths::Matrix4 clipPlaneWorldMatrix = portal->m_linkedPortal->m_modelMatrix;
+
+			int dot = CCMaths::Sign(Vector3::Dot(clipPlaneWorldMatrix.back, clipPlaneWorldMatrix.position - m.position));
+
+			Matrix4 test = mInverse;
+			test.position = Vector3::Zero;
+
+			Vector3 viewSpacePos = (mInverse * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
+			Vector3 viewSpaceNormal = (test * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * dot;
+			float viewSpaceDist = -Vector3::Dot(viewSpacePos, viewSpaceNormal);
+			Vector4 clipPlaneViewSpace = Vector4(viewSpaceNormal.x, viewSpaceNormal.y, viewSpaceNormal.z, viewSpaceDist);
+
+			portal->m_linkedPortal->m_projectionMatrix = Matrix4::ObliqueProjection(clipPlaneViewSpace, viewer->m_projectionMatrix);
 
 			float aspect = (float)framebuffer.width / (float)framebuffer.height;
 			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(m, portal->m_fovY, aspect, portal->m_near, portal->m_far);
