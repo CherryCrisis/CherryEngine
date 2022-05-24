@@ -35,13 +35,15 @@ uniform Material uMaterial;
 
 struct Light
 {
-	bool isEnabled;
-	bool isPoint;
 	vec3 position;
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+	vec3 attenuation;
 	mat4 lightSpace;
+	int lightType;
+	float cutoff;
+	float outerCutoff;
 };
 
 #define NBR_LIGHTS 8
@@ -104,7 +106,7 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 	{
 		Light light = uLights[i];
 
-		if (!light.isEnabled)
+		if (light.lightType == 0)
 			continue;
 
 	    float shadow = 1.0 - getDirectionalShadow(i);
@@ -112,8 +114,10 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 		// Compute ambient
 		ambient += light.ambient;
 
+		bool isPoint = light.lightType == 1;
+
 		// Get light direction, if the light is a point light or a directionnal light
-		vec3 lightDir = light.position - float(light.isPoint) * fs_in.vFragPosition;
+		vec3 lightDir = light.position - float(isPoint) * fs_in.vFragPosition;
 	
 		// Compute the light direction and the distance between the fragment and the light
 		// Normalize it manually

@@ -12,5 +12,12 @@ public:
 		unsigned int index = 0u;
 	};
 
-	GLuint UBO = 0u;
+	unsigned int m_lastIndex = 0;
+
+	LightGenerator();
+
+	virtual bool Generate(Light* toGenerate);
+
+	static GLuint UBO;
+	static GLuint UBOBindingPoint;
 };

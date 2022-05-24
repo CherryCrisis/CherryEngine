@@ -1284,9 +1284,6 @@
     <ClInclude Include="include\ui_button_behaviour.hpp">
       <Filter>Fichiers d%27en-tête\UI</Filter>
     </ClInclude>
-    <ClInclude Include="include\texture_generator.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="include\sky_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Rendering</Filter>
     </ClInclude>
@@ -1310,6 +1307,12 @@
     </ClInclude>
     <ClInclude Include="include\mesh_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\light_generator.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\texture_generator.hpp">
+      <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1829,6 +1832,9 @@
     </ClCompile>
     <ClCompile Include="src\mesh_renderer.cpp">
       <Filter>Fichiers sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light_generator.cpp">
+      <Filter>Fichiers sources\Rendering\Generator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

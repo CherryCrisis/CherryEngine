@@ -71,11 +71,13 @@ void LightComponent::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
+	m_metadatas.SetField("type", m_light.m_type);
 	m_metadatas.SetField("ambient", m_light.m_ambient);
 	m_metadatas.SetField("diffuse", m_light.m_diffuse);
 	m_metadatas.SetField("specular", m_light.m_specular);
 	m_metadatas.SetField("attenuation", m_light.m_attenuation);
-	m_metadatas.SetField("isPoint", m_light.m_isPoint);
+	m_metadatas.SetField("outer cutoff", m_light.m_cutoff);
+	m_metadatas.SetField("cutoff", m_light.m_outerCutoff);
 }
 
 void LightComponent::ChangePosition(const CCMaths::Vector3& position)

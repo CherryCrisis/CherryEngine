@@ -38,6 +38,9 @@ PBRRenderPass::PBRRenderPass(const char* name)
 
 		m_callExecute = CCCallback::BindCallback(&PBRRenderPass::Execute, this);
 
+
+		//glUniformBlockBinding(m_program->m_shaderProgram, glGetUniformBlockIndex(m_program->m_shaderProgram, "uLights"), LightGenerator::UBOBindingPoint);
+
 		glUseProgram(0);
 
 		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
@@ -188,26 +191,18 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 	{
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 
-		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightType").c_str());
-		glUniform1i(enableLoc, 0);
+
+		GLuint typeLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightType").c_str());
+		glUniform1i(typeLoc, false);
 
 		if (lightID == m_lights.size())
 			break;
 
 		Light* light = m_lights[lightID];
+		glUniform1i(typeLoc, (GLuint)light->m_type);
 
-		if (!light->m_enabled)
-			glUniform1i(enableLoc, 0);
-		else if (light->m_isPoint)
-			glUniform1i(enableLoc, 2);
-		else
-			glUniform1i(enableLoc, 1);
-
-		// TODO: Use string view
-
-		Vector4 lightPos = Vector4(light->m_position, 1);
 		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "position").c_str());
-		glUniform4fv(posLoc, 1, lightPos.data);
+		glUniform3fv(posLoc, 1, light->m_position.data);
 
 		GLuint dirLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "direction").c_str());
 		glUniform3fv(dirLoc, 1, light->m_position.data);
@@ -215,9 +210,14 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "diffuse").c_str());
 		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
 
-		Vector3 test = { 0.0f, 0.0f, 1.0f };
-		GLuint IntensityLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "params").c_str()); //Intensity
-		glUniform3fv(IntensityLoc, 1, test.data);
+		GLuint cutoffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "cutoff").c_str());
+		glUniform1f(cutoffLoc, cosf(light->m_cutoff));
+
+		GLuint outerCutoffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "outerCutoff").c_str());
+		glUniform1f(outerCutoffLoc, cosf(light->m_outerCutoff));
+
+		GLuint attenuationLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "attenuation").c_str());
+		glUniform3fv(attenuationLoc, 1, light->m_attenuation.data);
 	}
 
 	for (MeshRenderer* modelRdr : m_models)

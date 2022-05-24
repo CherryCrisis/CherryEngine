@@ -140,14 +140,14 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 	{
 		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
 
-		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isEnabled").c_str());
-		glUniform1i(enableLoc, false);
+		GLuint typeLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightType").c_str());
+		glUniform1i(typeLoc, false);
 		
 		if (lightID == m_lights.size())
 			break;
 
 		Light* light = m_lights[lightID];
-		glUniform1i(enableLoc, light->m_enabled);
+		glUniform1i(typeLoc, (GLuint)light->m_type);
 
 		auto* gpuLight = static_cast<ShadowRenderPass::GPUShadowLight*>(light->m_gpuLight.get());
 
@@ -163,9 +163,6 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 		// TODO: Use string view
 		GLuint lightSpaceLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightSpace").c_str());
 		glUniformMatrix4fv(lightSpaceLoc, 1, GL_FALSE, light->m_lightSpace.data);
-
-		GLuint pointLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "isPoint").c_str());
-		glUniform1i(pointLoc, light->m_isPoint);
 
 		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "position").c_str());
 		glUniform3fv(posLoc, 1, light->m_position.data);
