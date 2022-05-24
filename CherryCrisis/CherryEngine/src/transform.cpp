@@ -118,10 +118,14 @@ Matrix4 Transform::GetWorldMatrix()
 
 	m_worldMatrix = Matrix4::Translate(m_position) * Matrix4::RotateZYX(m_rotation) * Matrix4::Scale(m_scale);
 
-	if (!m_parent)
-		return m_worldMatrix;
+	if (m_parent)
+		m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 
-	return m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
+	m_up		= m_worldMatrix.up;
+	m_right		= m_worldMatrix.right;
+	m_forward	= -m_worldMatrix.back;
+
+	return m_worldMatrix;
 }
 
 void Transform::SetWorldMatrix(const CCMaths::Matrix4& worldMatrix)

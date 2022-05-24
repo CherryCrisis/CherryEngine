@@ -91,6 +91,16 @@ void Entity::Update()
 	m_OnTick.Invoke();
 }
 
+void Entity::FixedUpdate()
+{
+	m_OnFixedTick.Invoke();
+}
+
+void Entity::LateUpdate()
+{
+	m_OnLateTick.Invoke();
+}
+
 void Entity::OnCollisionEnter(Entity* other)
 {
 	m_OnCollisionEnter.Invoke(std::forward<Entity*>(other));

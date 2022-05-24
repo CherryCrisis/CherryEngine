@@ -514,7 +514,6 @@
     <None Include="interface\entity.i" />
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
-    <None Include="interface\matrix3.i" />
     <None Include="interface\scripted_behaviour.i" />
     <None Include="interface\singleton.i" />
     <None Include="interface\time_manager.i" />

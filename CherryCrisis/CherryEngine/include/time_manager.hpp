@@ -44,9 +44,10 @@ class CCENGINE_API TimeManager : public Singleton<TimeManager>
 private:
 	float m_deltaTime = 0.f;
 	float m_elapsedTime = 0.f;
-	float m_fixedDeltaTime = 1.f/60.f;
+	float m_fixedDeltaTime = 0.016f;
 	float m_lastTime = 0.f;
 	float m_timeScale = 1.f;
+	int	  m_fixedLoopCount = 0;
 
 	const std::chrono::time_zone* m_currentZone = nullptr;
 
@@ -54,14 +55,15 @@ public:
 	TimeManager();
 
 	//GETTER AND SETTERS
-	FullDate GetCurrentTime();
-	float GetDeltaTime()	  { return m_deltaTime; }
-	float GetTimeScale()	  { return m_timeScale; }
-	float GetFixedDeltaTime() { return m_fixedDeltaTime; }
-	double GetElapsedTime()	  { return m_elapsedTime; }
+	static FullDate GetCurrentTime();
+	static float	GetDeltaTime()	  { return currentInstance->m_deltaTime; }
+	static float	GetTimeScale()	  { return currentInstance->m_timeScale; }
+	static float	GetFixedDeltaTime() { return currentInstance->m_fixedDeltaTime; }
+	static int		GetFixedLoopCount() { return currentInstance->m_fixedLoopCount; }
+	static double	GetElapsedTime()	 { return currentInstance->m_elapsedTime; }
 
-	void  SetTimeScale(float newTime)      { m_timeScale = newTime; }
-	void  SetFixedDeltaTime(float newTime) { m_fixedDeltaTime = newTime; }
-
+	static void  SetTimeScale(float newTime)      { currentInstance->m_timeScale = newTime; }
+	static void  SetFixedDeltaTime(float newTime) { currentInstance->m_fixedDeltaTime = newTime; }
+	
 	void  Update(const float time);
 };

@@ -99,6 +99,26 @@ namespace CCMaths
 		return !(*this == rhs);
 	}
 
+	inline bool Vector3::operator<=(const Vector3& rhs) const
+	{
+		return (x <= rhs.x && y <= rhs.y && z <= rhs.z);
+	}
+
+	inline bool Vector3::operator<(const Vector3& rhs) const
+	{
+		return (x < rhs.x && y < rhs.y && z < rhs.z);
+	}
+
+	inline bool Vector3::operator>=(const Vector3& rhs) const
+	{
+		return (x >= rhs.x && y >= rhs.y && z >= rhs.z);
+	}
+
+	inline bool Vector3::operator>(const Vector3& rhs) const
+	{
+		return (x > rhs.x && y > rhs.y && z > rhs.z);
+	}
+
 	inline float Vector3::Dot(const Vector3& rhs) const
 	{
 		return Vector3::Dot(*this, rhs);
