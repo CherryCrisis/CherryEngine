@@ -1,7 +1,5 @@
 #include <cmath>
 
-#include "matrix4.hpp"
-
 namespace CCMaths
 {
 	inline Matrix4 Matrix4::operator*(const float rhs) const
@@ -307,6 +305,28 @@ namespace CCMaths
 			-(right + left) * OneOverRightMinusLeft,	-(top + bottom) * OneOverTopMinusBottom,	-(far + near) * OneOverFarMinusNear,	1.f
 		};
 	}
+
+	inline Matrix4 Matrix4::ObliqueProjection(const Vector4& clipPlane, const Matrix4& projection)
+	{
+		Matrix4 obliqueMatrix = projection;
+
+		Vector4 quat{};
+
+		quat.x = (Sign(clipPlane.x) + projection.data[8]) / projection.data[0];
+		quat.y = (Sign(clipPlane.y) + projection.data[9]) / projection.data[5];
+		quat.z = -1.f;
+		quat.w = (1.f + projection.data[10]) / projection.data[14];
+
+		Vector4 c = clipPlane * (2.0F / Vector4::Dot(clipPlane, quat));
+
+		obliqueMatrix.data[2] = c.x;
+		obliqueMatrix.data[6] = c.y;
+		obliqueMatrix.data[10] = c.z + 1.f;
+		obliqueMatrix.data[14] = c.w;
+
+		return obliqueMatrix;
+	}
+
 
 	inline Matrix4 Matrix4::LookAt(const Vector3& Eye, const Vector3& At, const Vector3& Up)
 	{

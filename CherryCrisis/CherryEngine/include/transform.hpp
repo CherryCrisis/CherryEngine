@@ -97,7 +97,6 @@ public:
 
 	Matrix4 GetLocalMatrix();
 
-
 	bool IsChildOf(Transform* parent, bool recursive=true);
 	void Copy(Behaviour* copy) override;
 

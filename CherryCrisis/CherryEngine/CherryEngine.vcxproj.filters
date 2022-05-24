@@ -1311,6 +1311,9 @@
     <ClInclude Include="include\mesh_renderer.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
+    <ClInclude Include="include\maths\maths_utils.hpp">
+      <Filter>Fichiers d%27en-tête\Maths</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix4.inl">
