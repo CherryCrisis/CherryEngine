@@ -22,11 +22,14 @@ public:
 
 	std::unique_ptr<CCFunction::AFunction> m_lateChanged;
 
+	Event<> m_lateHierarchyRefresh;
+
 	void SetCurrentScene(std::shared_ptr<Scene> scene);
 
 	void Initialize();
 	void Update();
 
+	static void SetHierarchyDirty(bool value = true);
 	// Load a scene and set is as the current scene
 	static bool LoadScene(const char* filepath);
 	// Save the current scene into its file

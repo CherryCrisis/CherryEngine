@@ -27,8 +27,8 @@ Scene::Scene(const char* filePath)
 
 void Scene::Delete()
 {
-	for (const Entity* entity : m_entities)
-		delete entity;
+	while (!m_entities.empty())
+		RemoveEntity(m_entities[0]);
 }
 
 Scene::~Scene()
@@ -63,15 +63,14 @@ void Scene::AddEntity(Entity* toAdd)
 	m_entities.resize(m_entities.size() + 1);
 	m_entities[m_entities.size() - 1] = toAdd;
 
-	//m_entities.push_back(toAdd);
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::RemoveEntity(Entity* toRemove)
 {
 	if (!toRemove)
 		return;
-
+	
 	Transform* transform;
 	toRemove->TryGetBehaviour(transform);
 
@@ -80,7 +79,7 @@ void Scene::RemoveEntity(Entity* toRemove)
 		auto children = transform->GetChildren();
 		if (transform && children->size() > 0)
 		{
-			for (int i = 0; i < children->size(); i++)
+			for (int i = children->size() - 1; i >= 0; i--)
 				RemoveEntity(&(*children)[i]->GetHost());
 		}
 	}
@@ -90,13 +89,13 @@ void Scene::RemoveEntity(Entity* toRemove)
 	
 	m_entities.erase(itPos);
 	toRemove->Destroy();
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::RemoveEntity(const std::string& name)
 {
 	//TODO: Do this
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)
@@ -320,6 +319,7 @@ bool Scene::RemoveCell(const std::string& name, bool forceRemove)
 void Scene::AddEntityToDefault(Entity* entity)
 {
 	m_cells[m_defaultCellName].AddEntity(entity);
+	m_isHierarchyDirty = true;
 }
 
 void Scene::AddEntityToCell(Entity* entity, const std::string& cellName)
@@ -327,6 +327,7 @@ void Scene::AddEntityToCell(Entity* entity, const std::string& cellName)
 	assert(m_cells.contains(cellName));
 
 	m_cells[cellName].AddEntity(entity);
+	m_isHierarchyDirty = true;
 }
 
 
@@ -360,4 +361,16 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 
 	toCell->AddEntity(entity);
 	entity->m_OnCellAdded.Invoke(&*toCell);
+
+	m_isHierarchyDirty = true;
+}
+
+void Scene::CopyEntity(Entity* toCopy, Entity* parent) 
+{
+	Entity* entity = new Entity(toCopy);
+	
+	if (parent)
+		entity->GetBehaviour<Transform>()->SetParent(parent->GetBehaviour<Transform>());
+
+	AddEntity(entity);
 }

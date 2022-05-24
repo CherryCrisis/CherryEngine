@@ -73,7 +73,6 @@ void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
 void EditorManager::LinkEngine(Engine* engine) 
 {
     m_engine = engine;
-    m_inspector.m_engine = engine;
     m_sceneDisplayer.m_manager = this;
 }
 
@@ -264,45 +263,8 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
     if (ImGui::Begin("Featurer", &m_isFeaturerOpened))
     {
-        if (ImGui::Button("Close.."))
-            ImGui::OpenPopup("Close?");
-
-        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-        if (ImGui::BeginPopupModal("Close?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::Text("Files are unsaved!\n\n");
-            ImGui::Separator();
-
-            if (ImGui::Button("Close Anyway", ImVec2(120, 0))) {
-                ImGui::CloseCurrentPopup(); glfwSetWindowShouldClose(window, true);
-            }
-            ImGui::SetItemDefaultFocus();
-            ImGui::SameLine();
-            if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndPopup();
-        }
-
-        if (ImGui::Button("Success"))
-            SendNotification("I am the Title ! %s", ENotifType::Success, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("Warning"))
-            SendNotification("I am the Title ! %s", ENotifType::Warning, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("Error"))
-            SendNotification("I am the Title ! %s", ENotifType::Error, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("Info"))
-            SendNotification("I am the Title ! %s", ENotifType::Info, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("None"))
-            SendNotification("I am the Title ! %s", ENotifType::None, 3.f);
-        ImGui::SameLine();
-
         if (ImGui::Button("Show Demo"))
             m_isDemoOpened = true;
-        
     }
     ImGui::End();
 }
@@ -352,6 +314,12 @@ void EditorManager::FocusEntity(Entity* entity)
 {
     m_entitySelector.Clear();
     m_entitySelector.Add(entity);
+}
+
+void EditorManager::CheckForHierarchyRefresh() 
+{
+    if (SceneManager::GetInstance()->m_currentScene && SceneManager::GetInstance()->m_currentScene->m_isHierarchyDirty) 
+        SceneManager::GetInstance()->m_lateHierarchyRefresh.Invoke();
 }
 
 namespace EditorNotifications

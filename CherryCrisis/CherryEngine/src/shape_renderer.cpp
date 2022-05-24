@@ -32,8 +32,6 @@ ShapeRenderer::~ShapeRenderer()
 	RemoveMesh();
 	RemoveMaterial();
 
-	GetHost().m_cell->RemoveRenderer(this);
-
 	GetHost().m_OnCellAdded.Unbind(&ShapeRenderer::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Unbind(&ShapeRenderer::OnCellRemoved, this);
 }

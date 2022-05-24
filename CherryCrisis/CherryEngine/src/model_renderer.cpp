@@ -31,15 +31,13 @@ ModelRenderer::~ModelRenderer()
 	RemoveMesh();
 	RemoveMaterial();
 
-	GetHost().m_cell->RemoveRenderer(this);
-
 	GetHost().m_OnCellAdded.Unbind(&ModelRenderer::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Unbind(&ModelRenderer::OnCellRemoved, this);
 }
 
 void ModelRenderer::PopulateMetadatas()
 {
-	m_metadatas.SetProperty("meshFile", &m_MeshPath);
+	m_metadatas.SetProperty("meshFile", &m_MeshPath, "dropzone off");
 }
 
 void ModelRenderer::SetMeshFromPath(std::string meshPath)

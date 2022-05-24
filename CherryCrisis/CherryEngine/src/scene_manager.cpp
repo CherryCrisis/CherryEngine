@@ -33,6 +33,12 @@ void SceneManager::Update()
 		m_lateChanged->Invoke();
 }
 
+void SceneManager::SetHierarchyDirty(bool value) 
+{
+	if (GetInstance()->m_currentScene)
+		currentInstance->m_currentScene->m_isHierarchyDirty = value;
+}
+
 bool SceneManager::LoadScene(const char* filepath) 
 {
 	SceneManager* mng = GetInstance();

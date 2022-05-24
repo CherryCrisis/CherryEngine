@@ -40,8 +40,8 @@ void MeshRenderer::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetField<Behaviour*>("transform", m_transform);
-	m_metadatas.SetProperty("matFile", &m_MaterialPath);
+	m_metadatas.SetField<Behaviour*>("transform", m_transform, false);
+	m_metadatas.SetProperty("matFile", &m_MaterialPath, "dropzone");
 }
 
 void MeshRenderer::SetMaterialFromPath(std::string materialPath)
@@ -179,4 +179,16 @@ void MeshRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PickingRenderPass>(this);
+}
+
+void MeshRenderer::Copy(Behaviour* copy)
+{
+	MeshRenderer* rendererCopy = dynamic_cast<MeshRenderer*>(copy);
+
+	SetMesh(rendererCopy->m_mesh);
+	SetMaterial(rendererCopy->m_material);
+
+	m_transform = GetHost().GetBehaviour<Transform>();
+
+	Initialize();
 }

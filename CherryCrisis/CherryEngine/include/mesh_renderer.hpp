@@ -64,6 +64,8 @@ public:
 	virtual void SetMaterial(std::shared_ptr<Material> newMat);
 	virtual void RemoveMaterial();
 
+	virtual void Copy(Behaviour* copy) override;
+
 	virtual void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	virtual void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	virtual void OnCellAdded(Cell* newCell) {}

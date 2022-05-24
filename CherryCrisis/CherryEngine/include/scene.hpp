@@ -53,6 +53,8 @@ public:
 
 	static void Load(std::shared_ptr<Scene> scene);
 	
+
+	void CopyEntity(Entity* toCopy, Entity* parent=nullptr);
 	void AddEntity(Entity* toAdd);
 	void RemoveEntity(Entity* toRemove);
 	void RemoveEntity(const std::string& name);
@@ -75,4 +77,7 @@ public:
 	void Empty();
 	void EmptyUI();
 	void Delete() override;
+
+	// find a way to clean this
+	bool m_isHierarchyDirty = false;
 };

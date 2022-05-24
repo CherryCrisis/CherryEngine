@@ -21,13 +21,13 @@ protected:
 	virtual void PopulateMetadatas() override
 	{
 		Object::PopulateMetadatas();
-		m_metadatas.SetProperty("m_owner", &owner);
+		m_metadatas.SetProperty("m_owner", &owner, "0", false);
 	}
 
 public:
 	Event<> m_OnDestroy;
 
-	Behaviour() = default;
+	Behaviour() : Object() {}
 	Behaviour(CCUUID& id) : Object(id) {}
 	virtual ~Behaviour() { m_OnDestroy.Invoke(); }
 
@@ -38,8 +38,12 @@ public:
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
 
-	Entity&			GetHost() { return *m_owner; }
-	const Entity&	GetHost() const { return *m_owner; }
+	virtual const std::string TypeName();
+	
+	virtual void Copy(Behaviour* copy) {}
+
+	Entity& GetHost() { return *m_owner; }
+	const Entity& GetHost() const { return *m_owner; }
 
 	void	SetHostPtr(Entity* newOwner);
 	Entity* GetHostPtr() { return m_owner; }

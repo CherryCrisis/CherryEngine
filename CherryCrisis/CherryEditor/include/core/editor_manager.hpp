@@ -107,6 +107,8 @@ public:
     CellSystemDisplayer*    GetCellSystemDisplayer() { return &m_cellSystemDisplayer; }
 
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
+
+    void CheckForHierarchyRefresh();
 };
 
 // Wrapper for generic notifications

@@ -22,6 +22,7 @@
 #include "model_renderer.hpp"
 #include "object.hpp"
 #include "portal_component.hpp"
+#include "portal_teleporter_component.hpp"
 #include "rigidbody.hpp"
 #include "scripted_behaviour.hpp"
 #include "sky_renderer.hpp"
@@ -430,25 +431,29 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 	return opened;
 }
 
-Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid)
+Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid, bool hasUUID)
 {
-	CCUUID id(uuid);
+	CCUUID id{};
+	if (hasUUID)
+		id = CCUUID(uuid);
+
 	Behaviour* b = nullptr;
 
-	if      (type == "Transform")			b = new Transform(id);
-	else if (type == "LightComponent")		b = new LightComponent(id);
-	else if (type == "ModelRenderer")		b = new ModelRenderer(id);
-	else if (type == "ShapeRenderer")		b = new ShapeRenderer(id);
-	else if (type == "ScriptedBehaviour")	b = new ScriptedBehaviour(id);
-	else if (type == "CameraComponent")		b = new CameraComponent(id);
-	else if (type == "Rigidbody")			b = new Rigidbody(id); 
-	else if (type == "BoxCollider")			b = new BoxCollider(id);
-	else if (type == "SphereCollider")		b = new SphereCollider(id);
-	else if (type == "CapsuleCollider")		b = new CapsuleCollider(id);
-	else if (type == "AudioEmitter")		b = new AudioEmitter(id);
-	else if (type == "AudioListener")		b = new AudioListener(id);
-	else if (type == "CharacterController")	b = new CharacterController(id);
-	else if (type == "PortalComponent")		b = new PortalComponent(id);
+	if      (type == "Transform")					b = new Transform(id);
+	else if (type == "LightComponent")				b = new LightComponent(id);
+	else if (type == "ModelRenderer")				b = new ModelRenderer(id);
+	else if (type == "ShapeRenderer")				b = new ShapeRenderer(id);
+	else if (type == "ScriptedBehaviour")			b = new ScriptedBehaviour(id);
+	else if (type == "CameraComponent")				b = new CameraComponent(id);
+	else if (type == "Rigidbody")					b = new Rigidbody(id); 
+	else if (type == "BoxCollider")					b = new BoxCollider(id);
+	else if (type == "SphereCollider")				b = new SphereCollider(id);
+	else if (type == "CapsuleCollider")				b = new CapsuleCollider(id);
+	else if (type == "AudioEmitter")				b = new AudioEmitter(id);
+	else if (type == "AudioListener")				b = new AudioListener(id);
+	else if (type == "CharacterController")			b = new CharacterController(id);
+	else if (type == "PortalComponent")				b = new PortalComponent(id);
+	else if (type == "PortalTeleporterComponent")	b = new PortalTeleporterComponent(id);
 	
 	return b;
 }

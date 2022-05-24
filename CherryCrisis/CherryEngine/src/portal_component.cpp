@@ -122,10 +122,10 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 	Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
 	int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
 
-	Vector3 sliceNormal = m_transform->GetWorldMatrix().back.Normalized() * -portalSide;
+	Vector3 sliceNormal = m_transform->GetWorldMatrix().back.Normalized() * -static_cast<float>(portalSide);
 	Vector3 sliceCentre = m_transform->GetPosition();
 
-	Vector3 cloneSliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * portalSide;
+	Vector3 cloneSliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * static_cast<float>(portalSide);
 	Vector3 cloneSliceCentre = m_linkedPortal->m_transform->GetPosition();
 
 	portalTeleporter->SetSliceParams(portalTeleporter->m_entityNode.get(), true, sliceCentre, sliceNormal);

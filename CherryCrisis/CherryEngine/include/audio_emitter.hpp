@@ -74,4 +74,5 @@ public:
 	floatProperty	RollOff{ this, &AudioEmitter::SetRollOff,   &AudioEmitter::GetRollOff};
 
 	CCProperty::ConstRefProperty<AudioEmitter, std::string> SoundPath{ this, &AudioEmitter::AddSound, &AudioEmitter::GetSoundPath };
+	void Copy(Behaviour* copy) override;
 };

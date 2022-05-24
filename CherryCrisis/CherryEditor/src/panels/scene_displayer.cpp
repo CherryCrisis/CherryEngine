@@ -202,9 +202,7 @@ void SceneDisplayer::Render()
                 if (sceneExtensions.compare('.' + extension) == 0)
                 {
                     m_manager->m_entitySelector.Clear();
-                    SceneManager::GetInstance()->m_currentScene->m_onModifiedEntities.Unbind(&HierarchyDisplayer::Refresh, m_manager->GetHierarchy());
                     EditorNotifications::SceneLoading(SceneManager::LoadScene(data));
-                    SceneManager::GetInstance()->m_currentScene->m_onModifiedEntities.Bind(&HierarchyDisplayer::Refresh, m_manager->GetHierarchy());
                 }
                 else if (modelExtensions.end() != modelExtensions.find("." + extension))
                 {

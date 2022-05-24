@@ -65,7 +65,6 @@ public:
 	Transform* GetRootParent();
 	bool IsEqualToParent(Transform* transform);
 	void ClearChildParenting();
-	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
 	bool IsDirty() { return m_isDirty; }
 
@@ -100,6 +99,7 @@ public:
 
 
 	bool IsChildOf(Transform* parent, bool recursive=true);
+	void Copy(Behaviour* copy) override;
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };

@@ -48,6 +48,7 @@ public:
 	Event<Entity*> m_OnTriggerExit;
 
 	Entity(const std::string& name, Cell* cell, CCUUID uuid = {});
+	Entity(Entity* entity);
 	virtual ~Entity();
 
 	template <BehaviourT CompT>

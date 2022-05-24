@@ -38,69 +38,165 @@
 Inspector::Inspector(bool spawnOpened, EditorManager* manager, AssetSettingsDisplayer* assetSettingsDisplayer) 
     : Panel(spawnOpened), m_manager(manager), m_assetSettingsDisplayer(assetSettingsDisplayer)
 {
-    
+    PopulateComponentList();
 }
 
-std::string ExtractValue(std::string str, const char key = ':')
+void Inspector::PopulateComponentList() 
 {
-    return str.substr(str.find_first_of(key) + 1);
+    m_componentsNames.clear();
+
+    //                            Reflection Type           |       Display Name
+    m_componentsNames.push_back({ "Transform",                      "Transform"});
+    m_componentsNames.push_back({ "CameraComponent",                "Camera Component" });
+    m_componentsNames.push_back({ "LightComponent",                 "Light Component" });
+    m_componentsNames.push_back({ "Rigidbody",                      "Rigidbody" });
+    m_componentsNames.push_back({ "AudioEmitter",                   "Audio Emitter" });
+    m_componentsNames.push_back({ "AudioListener",                  "Audio Listener" });
+    m_componentsNames.push_back({ "SphereCollider",                 "Sphere Collider" });
+    m_componentsNames.push_back({ "BoxCollider",                    "Box Collider" });
+    m_componentsNames.push_back({ "CapsuleCollider",                "Capsule Collider" });
+    m_componentsNames.push_back({ "CharacterController",            "Character Controller" });
+    m_componentsNames.push_back({ "PortalComponent",                "Portal Component" });
+    m_componentsNames.push_back({ "PortalTeleporterComponent",      "Portal Teleporter" });
+
+    for (const std::string& name : CsScriptingSystem::GetInstance()->classesName)
+    {
+        m_componentsNames.push_back({"ScriptedBehaviour", name});
+    }
+}
+
+void Inspector::DropzoneCallback(const std::string& path) 
+{
+    if (path.find(".ccmat") != std::string::npos) 
+    {
+        std::shared_ptr<Material> mat = ResourceManager::GetInstance()->GetResource<Material>(path.c_str());
+        if (m_assetSettingsDisplayer)
+            m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(mat));
+    }
+}
+
+void Inspector::RenderAddComponentList()
+{
+    ImVec2 center = { InputManager::GetMousePos().x, InputManager::GetMousePos().y };
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing);
+    ImGuiWindowFlags flags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize;
+
+    if (ImGui::BeginPopupModal("Add Component", NULL, flags))
+    {
+        static char search[32] = "";
+
+        ImCherry::SetKeyboardFocus();
+        ImGui::InputText("##", search, IM_ARRAYSIZE(search));
+
+        std::vector<Behaviour*> addedBehaviours;
+        ImGui::BeginChild("CompList", { ImGui::GetContentRegionAvail().x, 150.f }, false);
+
+        for (const auto& comp : m_componentsNames) 
+        { 
+            if (strlen(search) > 0)
+                if (String::ToLower(comp.displayName).find(String::ToLower(search)) == std::string::npos)
+                    continue;
+            
+            if (ImGui::MenuItem(comp.displayName.c_str()))
+            {
+                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
+                {
+                    Behaviour* behaviour = Serializer::CreateBehaviour(comp.type, {}, false);
+                    addedBehaviours.push_back(behaviour);
+
+                    if (comp.type == "ScriptedBehaviour")
+                        static_cast<ScriptedBehaviour*>(behaviour)->SetScriptClass(comp.displayName);
+                    
+                    behaviour->SetHostPtr(entity);
+                }
+
+                ImGui::CloseCurrentPopup();
+            }
+        }
+
+        if (addedBehaviours.size() > 0)
+        {
+            for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                entity->Initialize();
+        }
+        ImGui::EndChild();
+
+        if (ImGui::Button("Cancel", ImVec2(ImGui::GetContentRegionAvail().x, 0))) { ImGui::CloseCurrentPopup(); }
+        ImGui::EndPopup();
+    }
 }
 
 void Inspector::InspectComponents(Entity* entity, int id)
 {
     std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 
-    ModelRenderer* renderer = nullptr;
-    ShapeRenderer* shape = nullptr;
-    AudioEmitter* emitter = nullptr;
     for (Behaviour* behaviour : behaviours)
     {
         ImGui::PushID(static_cast<int>(behaviour->GetUUID()));
-        std::string bname = typeid(*behaviour).name();
-        bname = ExtractValue(bname, ' ');
 
-        if (ImGui::BeginPopupContextItem("context"))
+        ImCherryInternal::BeginCherryHeader();
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen;
+
+        bool opened = ImGui::TreeNodeEx(behaviour->TypeName().c_str(), flags);
+        ImCherryInternal::EndCherryHeader();
+        
+        if (ImGui::BeginPopupContextItem())
         {
-            if (ImGui::MenuItem("Delete")) 
+            if (ImGui::MenuItem("Delete"))
             {
-                if (entity->RemoveBehaviour(behaviour)) 
+                if (entity->RemoveBehaviour(behaviour))
                 {
-                    ImGui::EndPopup(); ImGui::PopID();
-                    break;
+                    ImGui::EndPopup(); 
+                    if (opened)
+                        ImGui::TreePop();
+                    ImGui::PopID();
+                    return;
                 }
-
             }
-            if (ImGui::MenuItem("Copy")) {}
-            if (ImGui::MenuItem("Paste")) {}
+            if (ImGui::MenuItem("Copy state"))
+            {
+                m_copiedBehaviour = behaviour;
+            }
+            if (!m_copiedBehaviour) ImGui::BeginDisabled();
+            if (ImGui::MenuItem("Paste state"))
+            {
+                if (m_copiedBehaviour) 
+                {
+                    if (!behaviour->TypeName().compare(m_copiedBehaviour->TypeName())) 
+                    {
+                        behaviour->Copy(m_copiedBehaviour);
+                    }
+                }
+            }
+            if (!m_copiedBehaviour) ImGui::EndDisabled();
+
+            if (!m_copiedBehaviour) ImGui::BeginDisabled();
+            if (ImGui::MenuItem("Paste as new"))
+            {
+                if (m_copiedBehaviour)
+                {
+                    std::string name = String::ExtractLastValue(typeid(*m_copiedBehaviour).name(), ' ');
+                    Behaviour* behaviourCopy = Serializer::CreateBehaviour(name, {},false);
+
+                    if (behaviourCopy)
+                        behaviourCopy->SetHostPtr(entity);
+
+                    behaviourCopy->Copy(behaviour);
+                }
+            }
+            if (!m_copiedBehaviour) ImGui::EndDisabled();
+
             ImGui::EndPopup();
         }
-        bool opened = false;
-        ScriptedBehaviour* b = (ScriptedBehaviour*)behaviour;
-        if (bname == "ScriptedBehaviour")
-            opened = ImGui::TreeNode(b->GetScriptPath().c_str());
-        else
-            opened = ImGui::TreeNode(bname.c_str());
-        if (bname == "ModelRenderer")
-            renderer = (ModelRenderer*)behaviour;
-        if (bname == "AudioEmitter")
-            emitter = (AudioEmitter*)behaviour;
-        if (bname == "ShapeRenderer")
-            shape = (ShapeRenderer*)behaviour;
-        // check if right clicked
-        if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsItemHovered())
-        {
-            ImGui::OpenPopup("context");
-        }
-
-        ImVec4 color1 = { 100.f / 255.f, 10.f / 255.f, 10.f / 255.f, 1.f };
-        ImVec4 color2 = { 18.f / 255.f, 120.f / 255.f, 4.f / 255.f, 1.f };
-        ImVec4 color3 = { 12.f / 255.f, 50.f / 255.f, 170.f / 255.f, 1.f };
 
         if (opened)
         {
             auto& metapack = behaviour->GetMetapack();
             for (auto& [metaname, metadata] : metapack)
             {
+                if (!metadata->m_isShownOnInspector)
+                    continue;
+
                 const std::type_index& type = metadata->GetType();
 
                 if (type == typeid(CCMaths::Vector3))
@@ -108,7 +204,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     CCMaths::Vector3 defaultVal;
                     CCMaths::Vector3* valPtr = &defaultVal;
                     metadata->Get((void**)&valPtr);
-                    if (valPtr && ImCherry::ColoredDragFloat3(metaname.c_str(), valPtr->data, color1, color2, color3, 0.01f))
+                    if (valPtr && ImCherry::ColoredDragFloat3(metaname, valPtr->data))
                         metadata->Set(valPtr);
                     continue;
                 }
@@ -121,15 +217,9 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
                     if (valPtr)
                     {
-                        bool hasChecked = false;
-                        hasChecked |= ImGui::Checkbox(metaname.c_str(), &valPtr->x); ImGui::SameLine();
-                        hasChecked |= ImGui::Checkbox(metaname.c_str(), &valPtr->y); ImGui::SameLine();
-                        hasChecked |= ImGui::Checkbox(metaname.c_str(), &valPtr->z);
-
-                        if (hasChecked)
+                        if (ImCherry::CheckboxBool3(metaname, valPtr->data))
                             metadata->Set(valPtr);
-                    }
-                    
+                    }                   
                     continue;
                 }
 
@@ -138,11 +228,12 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     bool defaultVal;
                     bool* valPtr = &defaultVal;
                     metadata->Get((void**)&valPtr);
-                    if (valPtr && ImGui::Checkbox(metaname.c_str(), valPtr))
+                    if (valPtr && ImCherry::Checkbox(metaname, valPtr))
                         metadata->Set(valPtr);
 
                     continue;
                 }
+
                 if (type == typeid(int))
                 {
                     int defaultVal;
@@ -153,12 +244,13 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
                     continue;
                 }
+
                 if (type == typeid(float))
                 {
                     float defaultVal;
                     float* valPtr = &defaultVal;
                     metadata->Get((void**)&valPtr);
-                    if (valPtr && ImGui::DragFloat(metaname.c_str(), valPtr, 0.5f, 0.0f, 0.0f, *valPtr >= 1.0e+5 ? "%e" : "%.3f"))
+                    if (valPtr && ImCherry::DragFloat(metaname, valPtr, 0.5f, 0.0f, 0.0f, *valPtr >= 1.0e+5 ? "%e" : "%.3f"))
                         metadata->Set(valPtr);
 
                     continue;
@@ -169,8 +261,31 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     std::string defaultVal;
                     std::string* valPtr = &defaultVal;
                     metadata->Get((void**)&valPtr);
-                    if(valPtr && ImGui::InputText(metaname.c_str(), &(*valPtr)[0], valPtr->size() + 1))
-                        metadata->Set(valPtr);
+
+                    if (metadata->m_identifier.find("dropzone") != std::string::npos)
+                    {
+                        bool disabled = metadata->m_identifier.find("off") != std::string::npos;
+                        std::string name = std::filesystem::path(defaultVal).filename().string();
+                        
+                        if (ImCherry::DropzoneMenu(metaname, name, disabled)) 
+                            DropzoneCallback(defaultVal);
+
+                        if (ImGui::BeginDragDropTarget() && !disabled)
+                        {
+                            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                            {
+                                const char* data = (const char*)payload->Data;
+                                std::string strData = data;
+                                metadata->Set(&strData);
+                            }
+                            ImGui::EndDragDropTarget();
+                        }
+                    }
+                    else 
+                    {
+                        if (valPtr && ImGui::InputText(metaname.c_str(), &(*valPtr)[0], valPtr->size() + 1))
+                            metadata->Set(valPtr);
+                    }
 
                     continue;
                 }
@@ -204,9 +319,8 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     metadata->Get((void**)&valPtr);
 
                     std::string fieldContent = metadata->m_identifier + " (" + (*valPtr ? (*valPtr)->GetHost().GetName() : "null") + ')';
-                    ImGui::BeginDisabled();
-                    ImGui::InputText(metaname.c_str(), (char*)fieldContent.c_str(), fieldContent.size());
-                    ImGui::EndDisabled();
+                    
+                    ImCherry::Dropzone(metaname, fieldContent);
 
                     if (ImGui::BeginDragDropTarget())
                     {
@@ -220,91 +334,18 @@ void Inspector::InspectComponents(Entity* entity, int id)
                                 std::string dragError = draggedObject->GetName() + " does not have any " + metadata->m_identifier + " component!";
                                 EditorManager::SendNotification(dragError.c_str(), ENotifType::Error, 2.f);
                             }
-
                             metadata->Set(valPtr);
                         }
-
                         ImGui::EndDragDropTarget();
                     }
-
                     continue;
                 }
-
             }
-
             ImGui::TreePop();
         }
         ImGui::Separator();
         ImGui::PopID();
-    }
-    
-    //Inspect Material
-    if (renderer && renderer->m_mesh)
-    {
-        std::shared_ptr<Material> mat = renderer->m_material;
-        std::shared_ptr<Material> newMat = InspectMaterial(mat);
-
-        if (newMat)
-        {
-            renderer->SetMaterial(newMat);
-        }
-    }
-
-    //Inspect Material
-    if (shape && shape->m_mesh)
-    {
-        std::shared_ptr<Material> mat = shape->m_material;
-        std::shared_ptr<Material> newMat = InspectMaterial(mat);
-
-        if (newMat)
-        {
-            shape->SetMaterial(newMat);
-        }
-    }
-}
-
-std::shared_ptr<Material> Inspector::InspectMaterial(std::shared_ptr<Material> material)
-{
-    if (ImGui::TreeNode("Material"))
-    {
-        if (material)
-        {
-            if (ImGui::Button(material->GetFilesystemPath()->filename().string().c_str()))
-            {
-                if (m_assetSettingsDisplayer)
-                    m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(material));
-            }
-        }
-        else
-            ImGui::Button("Empty");
-
-        if (ImGui::BeginDragDropTarget())
-        {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-            {
-                const char* materialPath = (const char*)payload->Data;
-                std::string extension = String::ExtractValue(materialPath, '.');
-
-                if (!matExtensions.compare("." + extension))
-                {
-                    std::shared_ptr<Material> newMaterial = ResourceManager::GetInstance()->GetResource<Material>(materialPath);
-
-                    if (newMaterial)
-                    {
-                        ImGui::EndDragDropTarget();
-                        ImGui::TreePop();
-
-                        return newMaterial;
-                    }
-                }
-            }
-            ImGui::EndDragDropTarget();
-        }
-
-        ImGui::TreePop();
-    }
-
-    return nullptr;
+    }  
 }
 
 void InspectMultiComponents(std::vector<Entity*> entities)
@@ -394,109 +435,12 @@ void Inspector::Render()
             else
                 InspectMultiComponents(selector.m_entities);
 
-            if (ImGui::Button("Add Component", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
-                ImGui::OpenPopup("Add Component");
+            ImVec2 buttonSize = { ImGui::GetContentRegionAvail().x, 0 };
+            if (ImCherry::ColoredButton("Add Component", {0.284f, 0.112f, 0.112f, 1.000f}, buttonSize))
+                ImGui::OpenPopup("Add Component");       
         }
 
-        ImVec2 center = { InputManager::GetMousePos().x, InputManager::GetMousePos().y };
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing);
-        if (ImGui::BeginPopupModal("Add Component", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            static char search[32] = "";
-            ImGui::InputText("##", search, IM_ARRAYSIZE(search));
-
-            std::vector<Behaviour*> addBehaviours;
-
-            // TODO: Replace with list of available components
-            if (ImGui::MenuItem("Transform")) 
-            { 
-                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
-                    addBehaviours.push_back(entity->AddBehaviour<Transform>());
-            }
-            if (ImGui::MenuItem("Camera"))      
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<CameraComponent>());
-            }
-            if (ImGui::MenuItem("Light"))
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<LightComponent>());
-            }
-            if (ImGui::MenuItem("Rigidbody"))     
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<Rigidbody>());
-            }
-            if (ImGui::MenuItem("Audio Listener"))
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
-                {
-                    AudioListener* listener =  entity->AddBehaviour<AudioListener>();
-                    listener->Initialize();
-                }
-            }
-            if (ImGui::MenuItem("Audio Emitter"))
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities) 
-                {
-                    AudioEmitter* emitter = entity->AddBehaviour<AudioEmitter>();
-                    emitter->Initialize();
-                }
-            }
-            if (ImGui::MenuItem("Box Collider"))      
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<BoxCollider>());
-            }
-            if (ImGui::MenuItem("Sphere Collider"))
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<SphereCollider>());
-            }
-            if (ImGui::MenuItem("Capsule Collider")) 
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<CapsuleCollider>());
-            }
-            if (ImGui::MenuItem("Character Controller"))
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<CharacterController>());
-            }
-            if (ImGui::MenuItem("Portal Component"))
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<PortalComponent>());
-            }
-            if (ImGui::MenuItem("Portal Teleporter Component"))
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    addBehaviours.push_back(entity->AddBehaviour<PortalTeleporterComponent>());
-            }
-            for (const std::string& name : CsScriptingSystem::GetInstance()->classesName) 
-            {
-                if (ImGui::MenuItem(name.c_str()))
-                {
-                    for (Entity* entity : m_manager->m_entitySelector.m_entities) 
-                    {
-                        ScriptedBehaviour* behaviour = entity->AddBehaviour<ScriptedBehaviour>(name);
-                        behaviour->SetScriptClass(name);
-                    }
-                }
-            }  
-
-            if (addBehaviours.size() > 0)
-            {
-                for (Entity* entity : m_manager->m_entitySelector.m_entities)
-                    entity->Initialize();
-            }
-
-            //---------------------------------------------------
-            ImGui::SetItemDefaultFocus();
-            if (ImGui::Button("Cancel", ImVec2(ImGui::GetContentRegionAvail().x, 0))) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndPopup();
-        }
+        RenderAddComponentList();
     }
     ImGui::End();
 }

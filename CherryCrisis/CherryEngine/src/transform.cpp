@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+#include "scene_manager.hpp"
+
 #include "cell.hpp"
 #include "entity.hpp"
 #include "event.hpp"
@@ -23,9 +25,6 @@ Transform::Transform(CCUUID& id)
 Transform::~Transform()
 {
 	SetParent(nullptr);
-	
-	while (!m_children.empty())
-		ClearChildParenting();
 }
 
 
@@ -91,21 +90,12 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 	if (reapplyScale)    ReapplyScale();
 
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
+	SceneManager::SetHierarchyDirty();
 }
 
 void Transform::SetParent(Transform* transform)
 {
 	SetParent(transform, false, false, false);
-}
-
-void Transform::ClearChildParenting()
-{
-	size_t childrenSize = m_children.size();
-	for (size_t i = 0; i < childrenSize; ++i)
-	{
-		m_children[i]->SetParent(nullptr);
-		break;
-	}
 }
 
 Transform* Transform::GetRootParent() 
@@ -293,4 +283,18 @@ Vector3 Transform::GetGlobalScale()
 	m_isDirty &= ~((int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
 
 	return m_worldScale;
+}
+
+void Transform::Copy(Behaviour* copy)
+{
+	Transform* copiedTransform = dynamic_cast<Transform*>(copy);
+
+	SetPosition(copiedTransform->m_position);
+	SetRotation(copiedTransform->m_rotation);
+	SetScale(copiedTransform->m_scale);
+	
+	for (const auto& child : copiedTransform->m_children)
+	{
+		SceneManager::GetInstance()->m_currentScene->CopyEntity(child->GetHostPtr(), GetHostPtr());
+	}
 }
