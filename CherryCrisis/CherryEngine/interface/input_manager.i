@@ -15,7 +15,6 @@
 class InputManager
 {
 public:
-
 	static bool GetKey(Keycode key);
 	static bool GetKeyDown(Keycode key);
 	static bool GetKeyUp(Keycode key);

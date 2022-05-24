@@ -28,7 +28,7 @@ namespace CCScripting
 				return;
 			
 			Vector2 deltaMouse = InputManager.GetMouseDelta();
-			float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;
+			float sensitityY = Time.GetDeltaTime() * deltaMouse.y;
 
 			double angle = transform.eulerAngles.x + sensitityY;
 			angle = Math.Min(Math.Max(angle, -Math.PI * 0.4f), Math.PI * 0.4f);

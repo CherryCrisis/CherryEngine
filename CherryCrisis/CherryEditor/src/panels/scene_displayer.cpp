@@ -246,13 +246,22 @@ void SceneDisplayer::Render()
 
                 if (m_isSnapping)
                 {
-                    p.x = CCMaths::Round(p.x / m_posSnap) * m_posSnap;
-                    p.y = CCMaths::Round(p.y / m_posSnap) * m_posSnap;
-                    p.z = CCMaths::Round(p.z / m_posSnap) * m_posSnap;
+                    Vector3 pos = t->GetPosition();
+                    Vector3 rot = t->GetRotation();
 
-                    r.x = CCMaths::Round(r.x / m_rotSnap) * m_rotSnap;
-                    r.y = CCMaths::Round(r.y / m_rotSnap) * m_rotSnap;
-                    r.z = CCMaths::Round(r.z / m_rotSnap) * m_rotSnap;
+                    if (p != pos)
+                    {
+                        p.x = CCMaths::Round(p.x / m_posSnap) * m_posSnap;
+                        p.y = CCMaths::Round(p.y / m_posSnap) * m_posSnap;
+                        p.z = CCMaths::Round(p.z / m_posSnap) * m_posSnap;
+                    }
+
+                    if (r != rot)
+                    {
+                        r.x = CCMaths::Round(r.x / m_rotSnap) * m_rotSnap;
+                        r.y = CCMaths::Round(r.y / m_rotSnap) * m_rotSnap;
+                        r.z = CCMaths::Round(r.z / m_rotSnap) * m_rotSnap;
+                    }
                 }
 
                 t->SetPosition(p);
