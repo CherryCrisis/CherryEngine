@@ -9,8 +9,8 @@ layout (location = 3) in vec3 aTangent;
 layout (location = 4) in vec3 aBitangent;
 
 uniform mat4 uModel;
-uniform mat4 uViewProjection;
-
+uniform mat4 uView;
+uniform mat4 uProjection;
 out VS_OUT
 {
     vec2 vUV;
@@ -18,6 +18,8 @@ out VS_OUT
     vec3 vFragPosition;
 	mat3 vTBN;
 } vs_out;
+
+out vec3 vCameraFWD;
 
 void main()
 {
@@ -44,5 +46,6 @@ void main()
 
     vs_out.vFragPosition = vec3(fragPos4);
 
-    gl_Position = uViewProjection * fragPos4;
+    vCameraFWD = vec3(uView[0][2], uView[1][2], uView[2][2]);
+    gl_Position = uProjection * uView * fragPos4;
 }

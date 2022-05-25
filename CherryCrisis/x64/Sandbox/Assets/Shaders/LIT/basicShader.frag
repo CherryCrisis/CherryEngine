@@ -19,6 +19,8 @@ in VS_OUT
 	mat3 vTBN;
 } fs_in;
 
+in vec3 vCameraFWD;
+
 struct Material
 {
 	vec3	ambientCol;
@@ -50,6 +52,7 @@ uniform Light uLights[NBR_LIGHTS];
 
 uniform vec3 uViewPosition;
 
+uniform int uIsSelected;
 
 float getDirectionalShadow(int index)
 {
@@ -182,6 +185,13 @@ void main()
     else
         oBrightColor = vec4(0.0, 0.0, 0.0, 1.0);
 
+	float dotEyeNorm = dot(normalize(vCameraFWD), normalize(fs_in.vNormal));
+	dotEyeNorm = max(0.0, dotEyeNorm);
+
+	if (dotEyeNorm <= 0.35 && uIsSelected > 0)
+	{
+		shadedColor = vec3(1.0, 0.0, 0.0);
+	}
 
     oColor = vec4(shadedColor, 1.0);
 }

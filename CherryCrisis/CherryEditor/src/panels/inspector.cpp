@@ -204,7 +204,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     CCMaths::Vector3 defaultVal;
                     CCMaths::Vector3* valPtr = &defaultVal;
                     metadata->Get((void**)&valPtr);
-                    if (valPtr && ImCherry::ColoredDragFloat3(metaname, valPtr->data))
+                    if (valPtr && ImCherry::ColoredDragFloat3(metaname, valPtr->data, metadata->m_identifier == "toDegree"))
                         metadata->Set(valPtr);
                     continue;
                 }

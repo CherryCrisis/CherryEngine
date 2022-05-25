@@ -125,8 +125,11 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
-	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
+	CCMaths::Matrix4 view = viewer->m_viewMatrix;
+	CCMaths::Matrix4 projection = viewer->m_projectionMatrix;
+
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, view.data);
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, projection.data);
 
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
 
@@ -198,6 +201,7 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 			continue;
 
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uIsSelected"), 1);
 
 		if (Material* material = modelRdr->m_material.get())
 		{

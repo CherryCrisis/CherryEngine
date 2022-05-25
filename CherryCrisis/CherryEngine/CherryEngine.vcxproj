@@ -350,6 +350,7 @@
     <ClInclude Include="include\model_loader.hpp" />
     <ClInclude Include="include\model_renderer.hpp" />
     <ClInclude Include="include\monowrapper.hpp" />
+    <ClInclude Include="include\outline_renderpass.hpp" />
     <ClInclude Include="include\pbr_rendering_pipeline.hpp" />
     <ClInclude Include="include\pbr_renderpass.hpp" />
     <ClInclude Include="include\pch.hpp" />
@@ -429,6 +430,8 @@
     <None Include="..\x64\Sandbox\Assets\Shaders\LIT\hdrShader.vert" />
     <None Include="..\x64\Sandbox\Assets\Shaders\LIT\skyboxShader.frag" />
     <None Include="..\x64\Sandbox\Assets\Shaders\LIT\skyboxShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\outline.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\outline.vert" />
     <None Include="..\x64\Sandbox\Assets\Shaders\PBR\brdfShader.frag" />
     <None Include="..\x64\Sandbox\Assets\Shaders\PBR\brdfShader.vert" />
     <None Include="..\x64\Sandbox\Assets\Shaders\PBR\environmentMapShader.frag" />
@@ -564,6 +567,7 @@
     <ClCompile Include="src\irradiance_map_renderpass.cpp" />
     <ClCompile Include="src\mesh_renderer.cpp" />
     <ClCompile Include="src\mixed_rendering_pipeline.cpp" />
+    <ClCompile Include="src\outline_renderpass.cpp" />
     <ClCompile Include="src\pbr_rendering_pipeline.cpp" />
     <ClCompile Include="src\pbr_renderpass.cpp" />
     <ClCompile Include="src\physic_actor.cpp" />

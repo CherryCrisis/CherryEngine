@@ -4,15 +4,18 @@
 
 #include <imgui_internal.h>
 
+#include "maths.hpp"
 
 namespace ImCherry
 {
 	// Code borrowed to THECHERNO on his engine serie
-	bool ColoredDragFloat3(const std::string& label, float v[3], float columnWidth)
+	bool ColoredDragFloat3(const std::string& label, float v[3], bool convert, float columnWidth)
 	{
+		CCMaths::Vector3 toDeg = { CCMaths::ToDegrees(v[0]), CCMaths::ToDegrees(v[1]), CCMaths::ToDegrees(v[2]) };
+
 		ImGui::PushID(label.c_str());
 		bool value = false;
-
+		
 		ImCherryInternal::BeginCherryComponent(label);
 
 		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
@@ -24,24 +27,40 @@ namespace ImCherry
 		ColoredButton("X", { .8f, .15f, .15f, 1.f }, buttonSize, true);
 
 		ImGui::SameLine();
-		value |= ImGui::DragFloat("##X", &v[0], 0.1f);
+		if (convert)
+			value |= ImGui::DragFloat("##X", &toDeg.x, 0.1f);
+		else
+			value |= ImGui::DragFloat("##X", &v[0], 0.1f);
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
 		ColoredButton("Y", { .15f, .8f, .15f, 1.f }, buttonSize, true);
 
 		ImGui::SameLine();
-		value |= ImGui::DragFloat("##Y", &v[1], 0.1f);
+		if (convert)
+			value |= ImGui::DragFloat("##Y", &toDeg.y, 0.1f);
+		else
+			value |= ImGui::DragFloat("##Y", &v[1], 0.1f);
 		ImGui::PopItemWidth();
 		ImGui::SameLine();
 
 		ColoredButton("Z", { .15f, .15f, .8f, 1.f }, buttonSize, true);
 
 		ImGui::SameLine();
-		value |= ImGui::DragFloat("##Z", &v[2], 0.1f);
+		if (convert)
+			value |= ImGui::DragFloat("##Z", &toDeg.z, 0.1f);
+		else
+			value |= ImGui::DragFloat("##Z", &v[2], 0.1f);
 		ImGui::PopItemWidth();
 
 		ImCherryInternal::EndCherryComponent(1);
+
+		if (convert) 
+		{
+			v[0] = CCMaths::ToRadians(toDeg.x);
+			v[1] = CCMaths::ToRadians(toDeg.y);
+			v[2] = CCMaths::ToRadians(toDeg.z);
+		}
 
 		return value;
 	}

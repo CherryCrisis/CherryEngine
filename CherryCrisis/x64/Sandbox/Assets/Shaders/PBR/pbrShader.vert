@@ -18,6 +18,8 @@ out vec3 vPos;    // Vertex position in view-space
 out vec3 vNormal; // Vertex normal in view-space
 out mat3 vTBN;
 
+out vec3 vCameraFWD;
+
 void main()
 {
    vec3 T = normalize(mat3(uModel) * aTangent);
@@ -31,6 +33,8 @@ void main()
    vec4 pos4 = (uModel * vec4(aPosition, 1.0));
    vPos = pos4.xyz;
    vNormal = N;
+
+   vCameraFWD = vec3(uView[0][2], uView[1][2], uView[2][2]);
 
    gl_Position = uProjection * uView * pos4;
 }

@@ -16,6 +16,7 @@
 #include "picking_renderpass.hpp"
 #include "pbr_renderpass.hpp"
 #include "shadow_renderpass.hpp"
+#include "outline_renderpass.hpp"
 
 
 int MeshRenderer::count = 1;
@@ -153,6 +154,7 @@ void MeshRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
 
 	pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
 	pipeline->SubscribeToPipeline<PickingRenderPass>(this);
+	pipeline->SubscribeToPipeline<OutlineRenderPass>(this);
 
 	if (m_material)
 	{
@@ -179,6 +181,8 @@ void MeshRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->UnsubscribeToPipeline<PBRRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<BasicRenderPass>(this);
 	pipeline->UnsubscribeToPipeline<PickingRenderPass>(this);
+	pipeline->UnsubscribeToPipeline<OutlineRenderPass>(this);
+
 }
 
 void MeshRenderer::Copy(Behaviour* copy)

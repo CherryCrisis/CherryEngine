@@ -6,6 +6,8 @@ in vec3 vPos;
 in vec3 vNormal;
 in mat3 vTBN;
 
+in vec3 vCameraFWD;
+
 // Uniforms
 uniform mat4 uProjection;
 uniform vec3 uViewPosition;
@@ -67,6 +69,8 @@ const float PI = 3.14159265359;
 uniform vec3 uSliceCentre;
 uniform vec3 uSliceNormal;
 uniform float  uIsSlice;
+
+uniform int uIsSelected;
 
 // Shader outputs
 out vec4 oColor;
@@ -354,6 +358,14 @@ void main()
     color = pow(color, vec3(1.0/2.2));  //Gamma correction
 
     color = color * (1.0 - uMaterial.clearCoat * clearCoatFresnel) + clearCoat;
+
+    float dotEyeNorm = dot(normalize(vCameraFWD), normalize(vNormal));
+	dotEyeNorm = max(0.0, dotEyeNorm);
+
+	if (dotEyeNorm <= 0.35 && uIsSelected > 0)
+	{
+		color = vec3(1.0, 0.0, 0.0);
+	}
 
     oColor = vec4(color.xyz, 1.0);
 }

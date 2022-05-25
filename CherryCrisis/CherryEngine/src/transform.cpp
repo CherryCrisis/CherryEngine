@@ -33,7 +33,7 @@ void Transform::PopulateMetadatas()
 	Behaviour::PopulateMetadatas();
 
 	m_metadatas.SetProperty("position", &position);
-	m_metadatas.SetProperty("rotation", &rotation);
+	m_metadatas.SetProperty("rotation", &rotation, "toDegree");
 	m_metadatas.SetProperty("scale", &scale);
 	m_metadatas.SetProperty("parent", &parent);
 }
