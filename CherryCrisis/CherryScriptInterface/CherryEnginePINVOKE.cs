@@ -232,26 +232,23 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_SceneManager")]
   public static extern void delete_SceneManager(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Time_GetInstance")]
-  public static extern global::System.IntPtr Time_GetInstance();
-
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Time_GetDeltaTime")]
-  public static extern float Time_GetDeltaTime(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern float Time_GetDeltaTime();
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Time_GetTimeScale")]
-  public static extern float Time_GetTimeScale(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern float Time_GetTimeScale();
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Time_GetFixedDeltaTime")]
-  public static extern float Time_GetFixedDeltaTime(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern float Time_GetFixedDeltaTime();
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Time_GetElapsedTime")]
-  public static extern double Time_GetElapsedTime(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern double Time_GetElapsedTime();
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Time_SetTimeScale")]
-  public static extern void Time_SetTimeScale(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+  public static extern void Time_SetTimeScale(float jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Time_SetFixedDeltaTime")]
-  public static extern void Time_SetFixedDeltaTime(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+  public static extern void Time_SetFixedDeltaTime(float jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Time")]
   public static extern void delete_Time(global::System.Runtime.InteropServices.HandleRef jarg1);

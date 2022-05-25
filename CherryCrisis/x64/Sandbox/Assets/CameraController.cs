@@ -29,7 +29,7 @@ namespace CCScripting
 			if (transform == null)
 				return;
 
-			float dt = Time.GetInstance().GetDeltaTime();
+			float dt = Time.GetDeltaTime();
 
 			float sign = 1;
 

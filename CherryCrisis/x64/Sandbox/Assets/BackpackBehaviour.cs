@@ -44,11 +44,11 @@ namespace CCScripting
 		public void Update()
 		{
 			i++;
-			time += Time.GetInstance().GetDeltaTime();
+			time += Time.GetDeltaTime();
 
 			SetRotation();
 
-			float timeScaledSpeed = Time.GetInstance().GetDeltaTime() * 2f;
+			float timeScaledSpeed = Time.GetDeltaTime() * 2f;
 
 			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + InputManager.GetAxis("Horizontal") * timeScaledSpeed);
 		}

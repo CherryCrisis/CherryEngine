@@ -951,81 +951,59 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_SceneManager(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Time_GetInstance() {
-  void * jresult ;
-  TimeManager *result = 0 ;
-  
-  result = (TimeManager *)TimeManager::GetInstance();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetDeltaTime(void * jarg1) {
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetDeltaTime() {
   float jresult ;
-  TimeManager *arg1 = (TimeManager *) 0 ;
   float result;
   
-  arg1 = (TimeManager *)jarg1; 
-  result = (float)(arg1)->GetDeltaTime();
+  result = (float)TimeManager::GetDeltaTime();
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetTimeScale(void * jarg1) {
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetTimeScale() {
   float jresult ;
-  TimeManager *arg1 = (TimeManager *) 0 ;
   float result;
   
-  arg1 = (TimeManager *)jarg1; 
-  result = (float)(arg1)->GetTimeScale();
+  result = (float)TimeManager::GetTimeScale();
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetFixedDeltaTime(void * jarg1) {
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Time_GetFixedDeltaTime() {
   float jresult ;
-  TimeManager *arg1 = (TimeManager *) 0 ;
   float result;
   
-  arg1 = (TimeManager *)jarg1; 
-  result = (float)(arg1)->GetFixedDeltaTime();
+  result = (float)TimeManager::GetFixedDeltaTime();
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT double SWIGSTDCALL CSharp_CCEngine_Time_GetElapsedTime(void * jarg1) {
+SWIGEXPORT double SWIGSTDCALL CSharp_CCEngine_Time_GetElapsedTime() {
   double jresult ;
-  TimeManager *arg1 = (TimeManager *) 0 ;
   double result;
   
-  arg1 = (TimeManager *)jarg1; 
-  result = (double)(arg1)->GetElapsedTime();
+  result = (double)TimeManager::GetElapsedTime();
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Time_SetTimeScale(void * jarg1, float jarg2) {
-  TimeManager *arg1 = (TimeManager *) 0 ;
-  float arg2 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Time_SetTimeScale(float jarg1) {
+  float arg1 ;
   
-  arg1 = (TimeManager *)jarg1; 
-  arg2 = (float)jarg2; 
-  (arg1)->SetTimeScale(arg2);
+  arg1 = (float)jarg1; 
+  TimeManager::SetTimeScale(arg1);
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Time_SetFixedDeltaTime(void * jarg1, float jarg2) {
-  TimeManager *arg1 = (TimeManager *) 0 ;
-  float arg2 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Time_SetFixedDeltaTime(float jarg1) {
+  float arg1 ;
   
-  arg1 = (TimeManager *)jarg1; 
-  arg2 = (float)jarg2; 
-  (arg1)->SetFixedDeltaTime(arg2);
+  arg1 = (float)jarg1; 
+  TimeManager::SetFixedDeltaTime(arg1);
 }
 
 
