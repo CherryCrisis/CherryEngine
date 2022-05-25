@@ -61,7 +61,7 @@ namespace PhysicSystem
 		void CreatePhysX();
 		void DestroyPhysX();
 
-		physx::PxMaterial* CreateMaterial(float sf = 0.0f, float df = 0.0f, float cr = 0.0f);
+		physx::PxMaterial* CreateMaterial(float sf = 0.5f, float df = 0.5f, float cr = 0.1f);
 
 		void Register(Rigidbody* rigidbody);
 		void Register(Collider* collider);

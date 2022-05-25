@@ -57,6 +57,14 @@ bool Transform::IsEqualToParent(Transform* transform)
 	return m_parent->IsEqualToParent(transform);
 }
 
+bool Transform::CanDelete()
+{
+	if (m_children.empty())
+		return true;
+
+	return false;
+}
+
 void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyRotation, bool reapplyScale)
 {
 	if (IsEqualToParent(parent)) // Guard to prevent parent re-set

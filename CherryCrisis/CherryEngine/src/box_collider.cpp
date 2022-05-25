@@ -66,7 +66,6 @@ void BoxCollider::BindToSignals()
 
 	GetHost().m_OnCellAdded.Bind(&BoxCollider::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Bind(&BoxCollider::OnCellRemoved, this);
-
 }
 
 void BoxCollider::OnCellAdded(Cell* newCell)

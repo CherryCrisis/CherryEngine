@@ -25,7 +25,10 @@ CharacterController::CharacterController(CCUUID& id) : Behaviour(id)
 CharacterController::~CharacterController()
 {
 	Unregister();
-	
+
+	if (!m_isStarted)
+		GetHost().m_OnStart.Unbind(&CharacterController::Initialize, this);
+
 	if (m_transform)
 	{
 		m_transform->m_OnDestroy.Unbind(&CharacterController::InvalidateTransform, this);
@@ -39,6 +42,7 @@ void CharacterController::PopulateMetadatas()
 	m_metadatas.SetProperty("Move Speed", &moveSpeed);
 	m_metadatas.SetProperty("Spring Dampling", &springDampling);
 	m_metadatas.SetProperty("String Strength", &springStrength);
+
 }
 
 void CharacterController::BindToSignals()
@@ -79,6 +83,10 @@ void CharacterController::Initialize()
 	else
 		m_rigidbody = m_physicActor->GetRigidbody();
 
+	if (m_physicActor->Get())
+		m_dynamicActor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
+
+	m_isStarted = true;
 	GetHost().m_OnStart.Unbind(&CharacterController::Initialize, this);
 }
 
@@ -93,8 +101,6 @@ void CharacterController::Unregister()
 	}
 }
 
-// TODO: Verify if Entity has collider and rigidbody on launch else create them
-
 void CharacterController::Update()
 {
 	if (!m_transform || !m_collider || !m_rigidbody)
@@ -104,8 +110,7 @@ void CharacterController::Update()
 
 	PhysicSystem::RaycastHit hit = m_physicActor->Raycast(m_transform->GetPosition(), {0, -1, 0}, raycastDist);
 
-	physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
-	physx::PxVec3 pxVel = actor->getLinearVelocity();
+	physx::PxVec3 pxVel = m_dynamicActor->getLinearVelocity();
 	CCMaths::Vector3 vel = { pxVel.x, pxVel.y, pxVel.z };
 
 	if (hit.actor)
@@ -143,7 +148,7 @@ void CharacterController::Update()
 	CCMaths::Vector3 goalVelocity = move * m_moveSpeed;
 
 	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) * TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
-	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * actor->getMass(), { 1, 0, 1 });
+	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * m_dynamicActor->getMass(), { 1, 0, 1 });
 
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);
 	m_transform->SetRotation(m_transform->GetRotation() + rot);

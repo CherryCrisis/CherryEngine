@@ -12,6 +12,11 @@ namespace CCMaths
 	struct Vector3;
 }
 
+namespace physx
+{
+	class PxRigidDynamic;
+}
+
 
 class CCENGINE_API CharacterController : public Behaviour
 {
@@ -19,6 +24,7 @@ private:
 	using boolProperty	= CCProperty::ConstRefProperty<CharacterController, bool>;
 	using floatProperty	= CCProperty::ConstRefProperty<CharacterController, float>;
 
+	bool	m_isStarted = false;
 	bool	m_isGrounded = false;
 	bool	m_isRegistered = false;
 	float	m_contactOffset = 0.2f;
@@ -29,6 +35,7 @@ private:
 	class CapsuleCollider*	m_collider = nullptr;
 	class Rigidbody*		m_rigidbody = nullptr;
 	class Transform*		m_transform = nullptr;
+	physx::PxRigidDynamic*	m_dynamicActor = nullptr;
 
 	void PopulateMetadatas() override;
 	

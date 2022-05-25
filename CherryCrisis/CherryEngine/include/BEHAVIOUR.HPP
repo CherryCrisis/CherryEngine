@@ -37,6 +37,7 @@ public:
 	virtual void OnEnable() {}
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
+	virtual bool CanDelete() { return true; }
 
 	virtual const std::string TypeName();
 	

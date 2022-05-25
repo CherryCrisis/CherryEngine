@@ -351,14 +351,10 @@ namespace PhysicSystem
 	void PhysicActor::SetPxActor()
 	{
 		SetActorEnabled();
-	
-		if (!m_isDynamic)
-			return;
-
+		SetActorDensity();
 		SetActorConstraints();
 		SetActorKinematic();
 		SetActorGravity();
-		SetActorDensity();
 		SetActorMaxVelocities();
 	}
 
@@ -407,10 +403,17 @@ namespace PhysicSystem
 
 	void PhysicActor::SetActorKinematic()
 	{
-		if (!m_isDynamic)
+		if (m_isStatic)
 			return;
 
 		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+		
+		if (!m_isDynamic)
+		{
+			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eKINEMATIC, true);
+			actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES, true);
+			return;
+		}
 
 		if (actor)
 		{

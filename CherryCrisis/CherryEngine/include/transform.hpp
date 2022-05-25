@@ -63,6 +63,7 @@ public:
 	~Transform();
 	bool IsRoot() { return !m_parent; }
 
+	bool CanDelete() override;
 	void SetParent(Transform* parent, bool reapplyPosition, bool reapplyRot = false, bool reapplyScale = false);
 	void SetParent(Transform* parent);
 	Transform* GetParent() { return m_parent; }
