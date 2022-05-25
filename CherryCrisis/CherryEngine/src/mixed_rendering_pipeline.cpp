@@ -9,7 +9,6 @@
 #include "collider_renderpass.hpp"
 #include "guizmo_renderpass.hpp"
 #include "hdr_renderpass.hpp"
-#include "outline_renderpass.hpp"
 #include "portal_render_renderpass.hpp"
 #include "shadow_renderpass.hpp"
 #include "skybox_renderpass.hpp"
@@ -40,7 +39,6 @@ MixedPipeline::MixedPipeline()
 	m_postprocessPass = LoadSubpipeline<BasicPostProcessRenderPass>();
 	m_uiPass = LoadSubpipeline<UIRenderPass>();
 	m_uiTextPass = LoadSubpipeline<TextRenderPass>();
-	m_outlinePass = LoadSubpipeline<OutlineRenderPass>();
 	m_pickingRenderpass = LoadSubpipeline<PickingRenderPass>();
 
 	//-- PBR --//
@@ -67,7 +65,6 @@ MixedPipeline::~MixedPipeline()
 	delete m_uiPass;
 	delete m_uiTextPass;
 	delete m_pickingRenderpass;
-	delete m_outlinePass;
 	
 	//-- PBR --//
 	delete m_environmentMapPass;
@@ -100,6 +97,5 @@ void MixedPipeline::Execute(Viewer* viewer)
 	m_uiPass->CallOnExecute(viewer);
 	m_uiTextPass->CallOnExecute(viewer);
 	
-	//m_outlinePass->CallOnExecute(viewer);
 	//m_postprocessPass->CallOnExecute(viewer->framebuffer);
 }

@@ -1314,9 +1314,6 @@
     <ClInclude Include="include\maths\maths_utils.hpp">
       <Filter>Fichiers d%27en-tête\Maths</Filter>
     </ClInclude>
-    <ClInclude Include="include\outline_renderpass.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\maths\matrix4.inl">
@@ -1838,9 +1835,6 @@
     </ClCompile>
     <ClCompile Include="src\mesh_renderer.cpp">
       <Filter>Fichiers sources\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="src\outline_renderpass.cpp">
-      <Filter>Fichiers sources\Rendering\Renderpass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

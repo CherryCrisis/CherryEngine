@@ -101,6 +101,12 @@ void Inspector::RenderAddComponentList()
             {
                 for (Entity* entity : m_manager->m_entitySelector.m_entities) 
                 {
+                    if (comp.type == "Transform" && entity->GetBehaviour<Transform>())
+                    {
+                        EditorManager::SendNotification("There is already a Transform !", ENotifType::Warning);
+                        continue;
+                    }
+
                     Behaviour* behaviour = Serializer::CreateBehaviour(comp.type, {}, false);
                     addedBehaviours.push_back(behaviour);
 
@@ -137,7 +143,21 @@ void Inspector::InspectComponents(Entity* entity, int id)
         ImCherryInternal::BeginCherryHeader();
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_DefaultOpen;
 
+        ////------- Calculate values to dislpay metadata background -------
+        auto dl = ImGui::GetWindowDrawList();
+        dl->AddRectFilled({ 1,1 }, { 1,1 }, IM_COL32(21, 21, 26, 255));
+
+        ImDrawVert& vert =  dl->VtxBuffer[dl->VtxBuffer.size() - 1];
+        ImDrawVert& vert1 = dl->VtxBuffer[dl->VtxBuffer.size() - 2];
+        ImDrawVert& vert2 = dl->VtxBuffer[dl->VtxBuffer.size() - 3];
+        ImDrawVert& vert3 = dl->VtxBuffer[dl->VtxBuffer.size() - 4];
+
+        ImGui::BeginGroup();
         bool opened = ImGui::TreeNodeEx(behaviour->TypeName().c_str(), flags);
+        float xmin = ImGui::GetItemRectMin().x; float xmax = ImGui::GetItemRectMax().x;
+        ImVec2 headerSize = ImGui::GetItemRectSize();
+        ////---------------------------------------------------------------
+ 
         ImCherryInternal::EndCherryHeader();
         
         if (ImGui::BeginPopupContextItem())
@@ -341,9 +361,22 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     continue;
                 }
             }
+
             ImGui::TreePop();
         }
-        ImGui::Separator();
+        ImGui::EndGroup();
+
+        if (opened) // If opened calculate and draw component background
+        {
+            float ymin = ImGui::GetItemRectMin().y; float ymax = ImGui::GetItemRectMax().y;
+            ymin += headerSize.y / 2.f;
+            ymax += ImGui::GetStyle().FramePadding.y;
+            vert.pos = { xmin, ymin };
+            vert1.pos = { xmax, ymin };
+            vert2.pos = { xmax, ymax };
+            vert3.pos = { xmin, ymax };
+        }
+
         ImGui::PopID();
     }  
 }
@@ -436,7 +469,7 @@ void Inspector::Render()
                 InspectMultiComponents(selector.m_entities);
 
             ImVec2 buttonSize = { ImGui::GetContentRegionAvail().x, 0 };
-            if (ImCherry::ColoredButton("Add Component", {0.284f, 0.112f, 0.112f, 1.000f}, buttonSize))
+            if (ImCherry::ColoredButton("Add Component", { 0.166f, 0.166f, 0.221f, 1.000f }, buttonSize))
                 ImGui::OpenPopup("Add Component");       
         }
 

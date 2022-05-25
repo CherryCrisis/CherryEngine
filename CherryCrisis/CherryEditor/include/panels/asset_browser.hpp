@@ -27,11 +27,12 @@ class Model;
 const std::set<std::string> textureExtensions	= { ".jpg", ".png", ".hdr"};
 const std::set<std::string> modelExtensions		= { ".obj", ".fbx", ".glb", ".gltf" };
 const std::set<std::string> shaderExtensions	= { ".frag", ".vert" };
-const std::set<std::string> soundExtensions		= { ".wav" };
+const std::set<std::string> soundExtensions     = { ".wav" };
+const std::set<std::string> fontExtensions		= { ".ttf" };
 
 const std::string			scriptExtensions	= ".cs";
 const std::string			sceneExtensions		= ".ccscene";
-const std::string			matExtensions		= ".ccmat";
+const std::string			matExtensions       = ".ccmat";
 
 
 class AssetBrowser : public Panel
@@ -205,7 +206,6 @@ namespace CCScripting
 
 	void RenderMenuBar();
 	void ResizeCell();
-	void RenderDirectoryBar();
 	void RenderNodes();
 
 	void BrowserActionCreate();

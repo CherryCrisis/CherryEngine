@@ -292,6 +292,8 @@ void SceneDisplayer::Unfocus()
 
 void SceneDisplayer::RenderMenuBar() 
 {
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, { 0,0 });
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 8,8 });
     if (ImGui::BeginMenuBar())
     {
         bool m_isWorld = m_mode == ImGuizmo::MODE::WORLD;
@@ -300,26 +302,32 @@ void SceneDisplayer::RenderMenuBar()
         bool m_isRotate    = m_operation == ImGuizmo::ROTATE;
         bool m_isScale     = m_operation == ImGuizmo::SCALE;
 
-        if (ImGui::Selectable("Translate", &m_isTranslate, 0, ImGui::CalcTextSize("Clear on play")))
+        float takenSpace = ImGui::CalcTextSize("Translate").x + ImGui::CalcTextSize("Rotate").x +
+            ImGui::CalcTextSize("Scale").x + ImGui::CalcTextSize("Global").x + ImGui::CalcTextSize("Local").x +
+            ImGui::CalcTextSize("Snap").x + 325.f;
+
+        float emptySpace = ImGui::GetContentRegionAvail().x - takenSpace;
+
+        if (ImGui::Selectable("Translate", &m_isTranslate, 0, ImGui::CalcTextSize("Translate")))
             m_operation = ImGuizmo::TRANSLATE;
 
         ImGui::Spacing();
-        if (ImGui::Selectable("Rotate", &m_isRotate, 0, ImGui::CalcTextSize("AutoScroll")))
+        if (ImGui::Selectable("Rotate", &m_isRotate, 0, ImGui::CalcTextSize("Rotate")))
             m_operation = ImGuizmo::ROTATE;
 
         ImGui::Spacing();
-        if (ImGui::Selectable("Scale", &m_isScale, 0, ImGui::CalcTextSize("Collapse")))
+        if (ImGui::Selectable("Scale", &m_isScale, 0, ImGui::CalcTextSize("Scale")))
             m_operation = ImGuizmo::SCALE;
 
-        ImGui::Spacing();
-        if (ImGui::Selectable("Global", &m_isWorld, 0, ImGui::CalcTextSize("Collapse")))
+        ImGui::Dummy({ emptySpace*(1.f / 10.f),0.f});
+        if (ImGui::Selectable("Global", &m_isWorld, 0, ImGui::CalcTextSize("Global")))
             m_mode = ImGuizmo::MODE::WORLD;
 
         ImGui::Spacing();
-        if (ImGui::Selectable("Local", &m_isLocal, 0, ImGui::CalcTextSize("Collapse")))
+        if (ImGui::Selectable("Local", &m_isLocal, 0, ImGui::CalcTextSize("Local")))
             m_mode = ImGuizmo::MODE::LOCAL;
 
-        ImGui::Spacing();
+        ImGui::Dummy({ emptySpace *(9.f/10.f),0.f });
         ImGui::Selectable("Snap", &m_isSnapping, 0, ImGui::CalcTextSize("Snap"));
 
         ImGui::Spacing();
@@ -335,4 +343,6 @@ void SceneDisplayer::RenderMenuBar()
     }
 
     ImGui::EndMenuBar();
+
+    ImGui::PopStyleVar(2);
 }

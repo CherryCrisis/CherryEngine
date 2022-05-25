@@ -110,8 +110,8 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
 void EditorManager::HandleDocking() 
 {
     static bool opt_fullscreen_persistant = true;
-    bool opt_fullscreen = opt_fullscreen_persistant;
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+    bool opt_fullscreen = opt_fullscreen_persistant; 
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton;
 
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoBringToFrontOnFocus;
     if (opt_fullscreen)
@@ -142,6 +142,9 @@ void EditorManager::HandleDocking()
     {
         ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
         ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+        ImGuiDockNode* Node = ImGui::DockBuilderGetNode(dockspace_id);
+        Node->LocalFlags |= ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton;
     }
 
     ImGui::End();
@@ -156,14 +159,7 @@ void EditorManager::HandleMenuBar()
             if (ImGui::MenuItem("Save", "Ctrl+S")) 
                 EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
 
-            if (ImGui::MenuItem("Save As..")) {}
-
-
-            if (ImGui::MenuItem("Launch"))
-            {
-                call("open","CherryStandalone.exe");
-            }
-
+            //if (ImGui::MenuItem("Save As..")) {}
 
             ImGui::EndMenu();
         }

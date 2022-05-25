@@ -145,11 +145,13 @@ namespace ImCherry
 		ImGui::PushID(label.c_str());
 		ImCherryInternal::BeginCherryComponent(label);
 
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.f);
+		ImGui::PushStyleColor(ImGuiCol_Border, { .75f, .75f, .75f, 1.000f });
 		ImGui::BeginDisabled();
 		ImGui::InputText("###value", (char*)value.c_str(), value.size());
 		ImGui::EndDisabled();
 
-		ImCherryInternal::EndCherryComponent();
+		ImCherryInternal::EndCherryComponent(1, 1);
 	}
 
 	bool DropzoneMenu(const std::string& label, const std::string& value, bool disabled)
@@ -159,7 +161,11 @@ namespace ImCherry
 		ImGui::PushID(label.c_str());
 		ImCherryInternal::BeginCherryComponent(label);
 
-		ImGui::PushStyleColor(ImGuiCol_Button, { 0.211f, 0.211f, 0.226f, 1.000f });
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.f);
+		ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
+		ImGui::PushStyleColor(ImGuiCol_Border, {   .75f,   .75f,   .75f, 1.000f });
 		if (disabled) ImGui::BeginDisabled();
 
 		val = ImGui::Button(value.c_str());
@@ -177,7 +183,7 @@ namespace ImCherry
 
 		if (disabled) ImGui::EndDisabled();
 
-		ImCherryInternal::EndCherryComponent(0, 1);
+		ImCherryInternal::EndCherryComponent(1, 4);
 		return val;
 	}
 
@@ -214,13 +220,15 @@ namespace ImCherryInternal
 
 	void BeginCherryHeader()
 	{
-		ImGui::PushStyleColor(ImGuiCol_Header, { 0.284f, 0.112f, 0.112f, 1.000f });
-		ImGui::PushStyleColor(ImGuiCol_HeaderHovered, { 0.410f, 0.212f, 0.195f, 1.000f });
-		ImGui::PushStyleColor(ImGuiCol_HeaderActive, { 0.699f, 0.333f, 0.333f, 1.000f });
+		ImGui::PushStyleColor(ImGuiCol_Header, { 0.166f, 0.166f, 0.221f, 1.000f });
+		ImGui::PushStyleColor(ImGuiCol_HeaderHovered, { 0.427f, 0.427f, 0.456f, 1.000f });
+		ImGui::PushStyleColor(ImGuiCol_HeaderActive, { 0.220f, 0.205f, 0.235f, 1.000f });
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.f);
 	}
 
 	void EndCherryHeader()
 	{
+		ImGui::PopStyleVar(1);
 		ImGui::PopStyleColor(3);
 	}
 }

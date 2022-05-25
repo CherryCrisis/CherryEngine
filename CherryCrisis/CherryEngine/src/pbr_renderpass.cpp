@@ -241,7 +241,7 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceCentre"), 1, modelRdr->m_sliceCentre.data);
 		glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uSliceNormal"), 1, modelRdr->m_sliceNormal.data);
 
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uIsSelected"), 1);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uIsSelected"), 0);
 
 		if (Material* material = modelRdr->m_material.get())
 		{

@@ -39,6 +39,7 @@ void AssetBrowser::Render()
 {
     if (!m_isOpened) return;
 
+    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, { 0.166f, 0.166f, 0.221f, 1.000f });
     if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_MenuBar))
     {
         //This order is very important !
@@ -46,20 +47,69 @@ void AssetBrowser::Render()
 
         RenderMenuBar();
         ResizeCell();
-        RenderDirectoryBar();
         RenderNodes();
 
         BrowserAction();
 
     }
     ImGui::End();
+    ImGui::PopStyleColor();
 }
 
 void AssetBrowser::RenderMenuBar()
 {
     if (ImGui::BeginMenuBar())
     {
-        ImGui::InputText("Search", m_researchInput, IM_ARRAYSIZE(m_researchInput));
+        std::deque<DirectoryNode*> directoryOrderNode;
+
+        DirectoryNode* directory = m_currentDirectoryNode;
+        while (directory)
+        {
+            if (directory)
+                directoryOrderNode.push_front(directory);
+
+            directory = directory->m_parentDirectory;
+        }
+
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 4,2 });
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 2,3 });
+        ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg]);
+
+        ImGui::Columns(2);
+        bool isRoot = true;
+        while (!directoryOrderNode.empty())
+        {
+            if (!isRoot) 
+            {
+                ImGui::Text("/");
+                ImGui::SameLine();
+            }
+            else
+                isRoot = false;
+
+            directory = directoryOrderNode.front();
+
+            if (ImGui::Button(directory->m_filename.c_str()))
+            {
+                m_currentDirectoryNode = directory;
+            }
+
+            if (DragAndDropTarget(directory))
+                return;
+
+            directoryOrderNode.pop_front();
+
+            if (!directoryOrderNode.empty())
+                ImGui::SameLine();
+        }
+
+        ImGui::NextColumn(); 
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1);
+        ImGui::PushStyleColor(ImGuiCol_Border, {0,0,0,1});
+        ImGui::InputText("###Search", m_researchInput, IM_ARRAYSIZE(m_researchInput));
+        ImGui::Columns(1);
+        ImGui::PopStyleVar(3);
+        ImGui::PopStyleColor(2);
     }
     ImGui::EndMenuBar();
 }
@@ -72,45 +122,6 @@ void AssetBrowser::ResizeCell()
     {
         m_thumbnailSize += InputManager::GetInstance()->GetMouseWheel().y * 2;
     }
-}
-
-void AssetBrowser::RenderDirectoryBar()
-{
-    if (strlen(m_researchInput) > 0)
-        return;
-
-    std::deque<DirectoryNode*> directoryOrderNode;
-
-    DirectoryNode* directory = m_currentDirectoryNode;
-    while (directory)
-    {
-        if (directory)
-            directoryOrderNode.push_front(directory);
-
-        directory = directory->m_parentDirectory;
-    }
-
-    while (!directoryOrderNode.empty())
-    {
-        ImGui::Text("/");
-        ImGui::SameLine();
-
-        directory = directoryOrderNode.front();
-
-        if (ImGui::Button(directory->m_filename.c_str()))
-        {
-            m_currentDirectoryNode = directory;
-        }
-
-        if (DragAndDropTarget(directory))
-            return;
-
-        directoryOrderNode.pop_front();
-
-        if (!directoryOrderNode.empty())
-            ImGui::SameLine();
-    }
-
 }
 
 bool AssetBrowser::DragAndDropTarget(AssetNode* assetNode)
@@ -949,6 +960,18 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
             scnNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
 
             auto pair = m_assetNodes.insert({ scnNode.m_path.string(), std::make_unique<SceneNode>(scnNode) });
+            return pair.first->second.get();
+        }
+
+        //-- Font --//
+        if (fontExtensions.end() != fontExtensions.find(extension))
+        {
+            EmptyNode ttfNode;
+            SetAssetNode(m_path, ttfNode);
+
+            ttfNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/font_icon.png", true, true, ETextureFormat::RGBA);
+
+            auto pair = m_assetNodes.insert({ ttfNode.m_path.string(), std::make_unique<EmptyNode>(ttfNode) });
             return pair.first->second.get();
         }
 

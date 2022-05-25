@@ -201,7 +201,7 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 			continue;
 
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uIsSelected"), 1);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uIsSelected"), 0);
 
 		if (Material* material = modelRdr->m_material.get())
 		{

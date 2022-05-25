@@ -71,6 +71,9 @@ bool SceneManager::LoadEmptyScene(const char* filepath)
 
 bool SceneManager::SaveCurrentScene() 
 {
+	if (Engine::isPlaying || Engine::isPaused)
+		return false;
+
 	return GetInstance()->m_currentScene->Save();
 }
 
