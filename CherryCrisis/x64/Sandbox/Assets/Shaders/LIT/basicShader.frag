@@ -45,6 +45,7 @@ struct Light
 	int lightType;
 	float cutoff;
 	float outerCutoff;
+	int alignement;
 };
 
 #define NBR_LIGHTS 8

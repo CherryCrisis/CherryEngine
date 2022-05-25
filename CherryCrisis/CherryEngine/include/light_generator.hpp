@@ -12,7 +12,7 @@ public:
 	{
 		Light* m_owner = nullptr;
 
-		unsigned int index = 0u;
+		size_t index = 0u;
 
 		GLuint FBO = 0u;
 		GLuint TexID = 0u;
@@ -22,6 +22,7 @@ public:
 		GPULightBasic(Light* owner);
 		~GPULightBasic();
 
+		void Update();
 		void Update(unsigned int offset, size_t size, void* data);
 
 		static GLsizei ownerSize;

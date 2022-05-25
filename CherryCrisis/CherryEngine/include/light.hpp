@@ -7,7 +7,7 @@
 
 #include "event.hpp"
 
-struct GPULight { };
+struct GPULight { virtual ~GPULight() = default; };
 
 enum class ELightType : unsigned int
 {
@@ -30,8 +30,11 @@ struct Light
     alignas(4) ELightType m_type = ELightType::POINT;
     alignas(4) float m_cutoff = cosf(CCMaths::PI);
     alignas(4) float m_outerCutoff = cosf(CCMaths::PI);
+    alignas(4) int alignement;
 
-    alignas(16) CCMaths::Matrix4 m_lookAtMatrix = CCMaths::Matrix4::Identity;
+    //virtual ~Light() { m_gpuLight.reset(); }
+
+    CCMaths::Matrix4 m_lookAtMatrix = CCMaths::Matrix4::Identity;
 
     std::unique_ptr<GPULight> m_gpuLight = nullptr;
 

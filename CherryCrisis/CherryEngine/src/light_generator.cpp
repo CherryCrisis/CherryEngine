@@ -5,7 +5,7 @@
 GLuint LightGenerator::UBO = 0u;
 GLuint LightGenerator::UBOBindingPoint = 0u;
 
-GLsizei LightGenerator::GPULightBasic::ownerSize = offsetof(Light, m_outerCutoff) - offsetof(Light, m_position) + sizeof(Light::m_outerCutoff);
+GLsizei LightGenerator::GPULightBasic::ownerSize = offsetof(Light, alignement) - offsetof(Light, m_position) + sizeof(Light::alignement);
 
 LightGenerator::GPULightBasic::GPULightBasic(Light* owner)
 	: m_owner(owner)
@@ -25,25 +25,30 @@ LightGenerator::GPULightBasic::GPULightBasic(Light* owner)
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	Update(0, ownerSize, m_owner->m_position.data);
-
 	m_owner->m_OnParamsChanged.Bind(&GPULightBasic::Update, this);
 }
 
 LightGenerator::GPULightBasic::~GPULightBasic()
 {
-	m_owner->m_OnParamsChanged.Unbind(&GPULightBasic::Update, this);
+	//m_owner->m_OnParamsChanged.Unbind(&GPULightBasic::Update, this);
 
 	if (FBO)
 		glDeleteFramebuffers(1, &FBO);
 
 	if (TexID)
 		glDeleteTextures(1, &TexID);
+
+	glNamedBufferSubData(UBO, ownerSize * index, ownerSize, nullptr);
+}
+
+void LightGenerator::GPULightBasic::Update()
+{
+	Update(0, ownerSize, m_owner->m_position.data);
 }
 
 void LightGenerator::GPULightBasic::Update(unsigned int offset, size_t size, void* data)
 {
-	glNamedBufferSubData(UBO, ownerSize * size_t(index) + offset, size, data);
+	glNamedBufferSubData(UBO, ownerSize * index + offset, size, data);
 }
 
 LightGenerator::LightGenerator()
@@ -62,7 +67,10 @@ LightGenerator::LightGenerator()
 LightGenerator::~LightGenerator()
 {
 	if (UBO)
+	{
 		glDeleteBuffers(1, &UBO);
+		UBO = 0;
+	}
 }
 
 bool LightGenerator::Generate(Light* toGenerate)
@@ -75,7 +83,9 @@ bool LightGenerator::Generate(Light* toGenerate)
 
 	toGenerate->m_gpuLight = std::make_unique<GPULightBasic>(toGenerate);
 	auto gpuLight = static_cast<GPULightBasic*>(toGenerate->m_gpuLight.get());
+
 	gpuLight->index = m_lastIndex++;
+	gpuLight->Update();
 
 	return true;
 }
