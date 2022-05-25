@@ -54,20 +54,24 @@ void Scene::Update()
 
 		m_entities[id]->Update();
 	}
+}
 
-	int fixedUpdates = TimeManager::GetFixedLoopCount();
-	for (int i = 0; i < fixedUpdates; i++)
+void Scene::FixedUpdate()
+{
+	size_t entitiesCount = m_entities.size();
+	for (size_t id = 0; id < entitiesCount; id++)
 	{
-		for (size_t id = 0; id < entitiesCount; id++)
-		{
-			//To prevent if an entity is deleted in scene->Update() !
-			if (entitiesCount != m_entities.size())
-				break;
+		//To prevent if an entity is deleted in scene->Update() !
+		if (entitiesCount != m_entities.size())
+			break;
 
-			m_entities[id]->FixedUpdate();
-		}
+		m_entities[id]->FixedUpdate();
 	}
+}
 
+void Scene::LateUpdate()
+{
+	size_t entitiesCount = m_entities.size();
 	for (size_t id = 0; id < entitiesCount; id++)
 	{
 		//To prevent if an entity is deleted in scene->Update() !

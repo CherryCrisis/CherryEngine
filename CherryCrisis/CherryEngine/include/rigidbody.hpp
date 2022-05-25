@@ -21,8 +21,18 @@ private:
 	using boolProperty	= CCProperty::ConstRefProperty<Rigidbody, bool>;
 	using floatProperty = CCProperty::ConstRefProperty<Rigidbody, float>;
 
-	bool m_isRegistered = false;
-	bool m_useGravity = true;
+	bool	m_isRegistered = false;
+	bool	m_isEnabled = true;
+	bool	m_useGravity = true;
+	bool	m_isKinematic = false;
+
+	float	m_density = 10.0f;
+	float	m_maxLinearVelocity = 100.f;
+	float	m_maxAngularVelocity = 100.0f;
+	float	m_maxDepenetrationVelocity = 100.f;
+
+	Bool3	m_positionConstraints = {};
+	Bool3	m_rotationConstraints = {};
 
 	void PopulateMetadatas() override;
 
@@ -42,11 +52,13 @@ public:
 	*/
 	void	Unregister();
 
+	void	SetEnabled();
+
+	// Set in Rigidbody
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled();
 	void	SetKinematic(const bool& isKinematic);
 	bool	GetKinematic();
-	void	SetGravity();
 	void	SetGravity(const bool& useGravity);
 	bool	GetGravity();
 	

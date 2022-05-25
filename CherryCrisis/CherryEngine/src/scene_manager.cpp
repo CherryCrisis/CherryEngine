@@ -26,7 +26,19 @@ void SceneManager::Initialize()
 
 void SceneManager::Update()
 {
-	if (m_currentScene)	
+	if (m_currentScene)
+		m_currentScene->Update();
+}
+
+void SceneManager::FixedUpdate()
+{
+	if (m_currentScene)
+		m_currentScene->Update();
+}
+
+void SceneManager::LateUpdate()
+{
+	if (m_currentScene)
 		m_currentScene->Update();
 
 	if (m_lateChanged)

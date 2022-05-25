@@ -20,10 +20,6 @@ using namespace physx;
 
 namespace PhysicSystem
 {
-	PhysicManager::PhysicManager()
-	{
-	}
-
 	PhysicManager::~PhysicManager()
 	{
 		if (m_physics)
@@ -102,7 +98,6 @@ namespace PhysicSystem
 		PhysicActor& actor = FindOrCreateActor(rigidbody->GetHost());
 		
 		rigidbody->m_physicActor = &actor;
-		rigidbody->SetGravity();
 
 		actor.AddRigidbody(rigidbody, m_isPlaying);
 	}
@@ -364,10 +359,10 @@ namespace PhysicSystem
 		to->AddActor(actor);
 	}
 
-	void PhysicManager::Simulate(float deltaTime)
+	void PhysicManager::Simulate()
 	{
 		for (auto& scene : m_scenes)
-			scene->Update(deltaTime);
+			scene->Update(TimeManager::GetFixedDeltaTime());
 	}
 
 	PxMaterial* PhysicManager::GetMaterial(const uint32_t& index)

@@ -28,6 +28,8 @@ public:
 
 	void Initialize();
 	void Update();
+	void FixedUpdate();
+	void LateUpdate();
 
 	static void SetHierarchyDirty(bool value = true);
 	// Load a scene and set is as the current scene

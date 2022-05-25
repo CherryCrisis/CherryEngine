@@ -70,32 +70,33 @@ void Rigidbody::PopulateMetadatas()
 }
 
 #pragma region Set&Get
+void Rigidbody::Rigidbody::SetEnabled()
+{
+	if (m_physicActor)
+		m_physicActor->SetEnabled(m_isEnabled);
+}
+
 void Rigidbody::SetEnabled(const bool& isEnabled)
 {
+	m_isEnabled = isEnabled;
+
 	if (m_physicActor)
 		m_physicActor->SetEnabled(isEnabled);
 }
 
 bool Rigidbody::GetEnabled()
 {
-	return m_physicActor->GetEnabled();
+	return m_isEnabled;
 }
 
 void Rigidbody::Rigidbody::SetKinematic(const bool& isKinematic)
 {
-	if (m_physicActor)
-		m_physicActor->SetKinematic(isKinematic);
+	m_isKinematic = isKinematic;
 }
 
 bool Rigidbody::Rigidbody::GetKinematic()
 {
-	return m_physicActor->GetKinematic();
-}
-
-void Rigidbody::SetGravity()
-{
-	if (m_physicActor)
-		m_physicActor->SetGravity(m_useGravity);
+	return m_isKinematic;
 }
 
 void Rigidbody::SetGravity(const bool& useGravity)
@@ -103,77 +104,89 @@ void Rigidbody::SetGravity(const bool& useGravity)
 	m_useGravity = useGravity;
 
 	if (m_physicActor)
-		m_physicActor->SetGravity(useGravity);
+		m_physicActor->SetActorGravity();
 }
 
 bool Rigidbody::GetGravity()
 {
-	return m_physicActor->GetGravity();
+	return m_useGravity;
 }
 	 
 void Rigidbody::SetPosContraints(const Bool3& constraints)
 {
+	m_positionConstraints = constraints;
+
 	if (m_physicActor)
-		m_physicActor->SetPosContraints(constraints);
+		m_physicActor->SetActorConstraints();
 }
 
 Bool3 Rigidbody::GetPosConstraints()
 {
-	return m_physicActor->GetPosConstraints();
+	return m_positionConstraints;
 }
 
 void Rigidbody::SetRotContraints(const Bool3& constraints)
 {
+	m_rotationConstraints = constraints;
+
 	if (m_physicActor)
-		m_physicActor->SetRotContraints(constraints);
+		m_physicActor->SetActorConstraints();
 }
 
 Bool3 Rigidbody::GetRotConstraints()
 {
-	return m_physicActor->GetRotConstraints();
+	return m_rotationConstraints;
 }
 
 void Rigidbody::SetDensity(const float& density)
 {
+	m_density = density;
+
 	if (m_physicActor)
-		m_physicActor->SetDensity(density);
+		m_physicActor->SetActorDensity();
 }
 
 float Rigidbody::GetDensity()
 {
-	return m_physicActor->GetDensity();
+	return m_density;
 }
 
 void Rigidbody::SetMaxVel(const float& velocity)
 {
+	m_maxLinearVelocity = velocity;
+
 	if (m_physicActor)
-		m_physicActor->SetMaxVel(velocity);
+		m_physicActor->SetActorMaxVelocities();
 }
 
 float Rigidbody::GetMaxVel()
 {
-	return m_physicActor->GetMaxVel();
+	return m_maxLinearVelocity;
 }
 
 void Rigidbody::SetMaxAngVel(const float& velocity)
 {
+	m_maxAngularVelocity = velocity;
+
 	if (m_physicActor)
-		m_physicActor->SetMaxAngVel(velocity);
+		m_physicActor->SetActorMaxVelocities();
 }
 
 float Rigidbody::GetMaxAngVel()
 {
-	return m_physicActor->GetMaxAngVel();
+	return m_maxAngularVelocity;
 }
 
 void Rigidbody::SetMaxDepVel(const float& velocity)
 {
+	m_maxDepenetrationVelocity = velocity;
+
 	if (m_physicActor)
-		m_physicActor->SetMaxDepVel(velocity);
+		m_physicActor->SetActorMaxVelocities();
 }
 
 float Rigidbody::GetMaxDepVel()
 {
-	return m_physicActor->GetMaxDepVel();
+	return m_maxDepenetrationVelocity;
 }
 #pragma endregion

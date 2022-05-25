@@ -65,7 +65,7 @@ namespace PhysicSystem
 		if (m_isDynamic)
 		{
 			if (!m_rigidbody->GetEnabled() ||
-				GetKinematic())
+				m_rigidbody->GetKinematic())
 				return;
 			
 			Transform* t = m_owner->GetBehaviour<Transform>();
@@ -108,8 +108,6 @@ namespace PhysicSystem
 	void PhysicActor::SetActorRotation(const CCMaths::Vector3& rotation)
 	{
 		m_oldRot = rotation;
-
-
 
 		if (m_pxActor)
 		{
@@ -154,18 +152,13 @@ namespace PhysicSystem
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
 			SetPxActor();
-
-			physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidDynamic*>(m_pxActor), m_density);
 		}
 		else if (!m_pxActor || m_isDynamic)
 		{
 			m_isDynamic = false;
-			m_isKinematic = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
 			SetPxActor();
-
-			physx::PxRigidBodyExt::updateMassAndInertia(*static_cast<physx::PxRigidDynamic*>(m_pxActor), m_density);
 		}
 
 		m_pxActor->userData = this;
@@ -357,33 +350,47 @@ namespace PhysicSystem
 
 	void PhysicActor::SetPxActor()
 	{
-		SetActorConstraints();
 		SetActorEnabled();
+	
+		if (!m_isDynamic)
+			return;
+
+		SetActorConstraints();
 		SetActorKinematic();
 		SetActorGravity();
+		SetActorDensity();
 		SetActorMaxVelocities();
 	}
 
 	void PhysicActor::SetActorConstraints()
 	{
+		if (!m_isDynamic)
+			return;
+
 		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
 
 		if (actor)
 		{
-			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_X, m_positionConstraints.x);
-			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Y, m_positionConstraints.y);
-			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Z, m_positionConstraints.z);
-			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_X, m_rotationConstraints.x);
-			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Y, m_rotationConstraints.y);
-			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Z, m_rotationConstraints.z);
+			Bool3 posCons = m_rigidbody->GetPosConstraints();
+			Bool3 rotCons = m_rigidbody->GetRotConstraints();
 
-			if (actor->getScene() && !GetKinematic())
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_X, posCons.x);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Y, posCons.y);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_LINEAR_Z, posCons.z);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_X, rotCons.x);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Y, rotCons.y);
+			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Z, rotCons.z);
+
+			if (actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}
 
 	void PhysicActor::SetActorEnabled()
 	{
+		if (!m_isDynamic)
+			return;
+
 		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
 
 		if (actor)
@@ -393,18 +400,21 @@ namespace PhysicSystem
 			else
 				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_SIMULATION, false);
 
-			if (actor->getScene() && !GetKinematic())
+			if (actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}
 
 	void PhysicActor::SetActorKinematic()
 	{
+		if (!m_isDynamic)
+			return;
+
 		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
 
 		if (actor)
 		{
-			if (GetKinematic())
+			if (m_rigidbody->GetKinematic())
 			{
 				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eKINEMATIC, true);
 				actor->setRigidBodyFlag(physx::PxRigidBodyFlag::Enum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES, true);
@@ -416,39 +426,56 @@ namespace PhysicSystem
 			}
 
 
-			if (actor->getScene() && !GetKinematic())
+			if (actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}
 
 	void PhysicActor::SetActorGravity()
 	{
+		if (!m_isDynamic)
+			return;
+
 		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
 
 		if (actor)
 		{
-			if (!m_useGravity)
-				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, true);
-			else
+			if (m_rigidbody->GetGravity())
 				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, false);
+			else
+				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, true);
 
 
-			if (actor->getScene() && !GetKinematic())
+			if (actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}
 
+	void PhysicActor::SetActorDensity()
+	{
+		if (!m_isDynamic)
+			return;
+
+		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+
+		if (actor)
+			physx::PxRigidBodyExt::updateMassAndInertia(*actor, m_rigidbody->GetDensity());
+	}
+
 	void PhysicActor::SetActorMaxVelocities()
 	{
+		if (!m_isDynamic)
+			return;
+
 		physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
 
 		if (actor)
 		{
-			actor->setMaxLinearVelocity(m_maxLinearVelocity);
+			actor->setMaxLinearVelocity(m_rigidbody->GetMaxVel());
 
-			actor->setMaxAngularVelocity(m_maxAngularVelocity);
+			actor->setMaxAngularVelocity(m_rigidbody->GetMaxAngVel());
 
-			actor->setMaxDepenetrationVelocity(m_maxDepenetrationVelocity);
+			actor->setMaxDepenetrationVelocity(m_rigidbody->GetMaxDepVel());
 		}
 	}
 }

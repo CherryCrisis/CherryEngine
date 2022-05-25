@@ -56,7 +56,6 @@ namespace PhysicSystem
 		physx::PxPvd*			m_pvd = nullptr;
 
 	public:
-		PhysicManager();
 		~PhysicManager();
 
 		void CreatePhysX();
@@ -90,7 +89,7 @@ namespace PhysicSystem
 		void Stop();
 
 		// Call scenes updates
-		void Simulate(float deltaTime);
+		void Simulate();
 
 		static RaycastHit Raycast(Cell& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 		static RaycastHit Raycast(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);

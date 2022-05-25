@@ -59,11 +59,18 @@ void Engine::TickEngine()
 	ThreadPool::GetInstance()->Update(EChannelTask::MAINTHREAD);
 }
 
-void Engine::Tick() 
+void Engine::Tick()
 {
 	SceneManager::GetInstance()->Update();
 
-	PhysicSystem::PhysicManager::GetInstance()->Simulate(1/60.f);
+	int fixedUpdates = TimeManager::GetFixedLoopCount();
+	for (int i = 0; i < fixedUpdates; i++)
+	{
+		SceneManager::GetInstance()->FixedUpdate();
+		PhysicSystem::PhysicManager::GetInstance()->Simulate();
+	}
+
+	SceneManager::GetInstance()->LateUpdate();
 }
 
 void Engine::Launch(bool flipScene) 
