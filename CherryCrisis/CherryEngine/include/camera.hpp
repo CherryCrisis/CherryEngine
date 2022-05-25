@@ -5,7 +5,6 @@
 #include "maths.hpp"
 #include "viewer.hpp"
 
-
 class CCENGINE_API Camera : public Viewer
 {
 private:
@@ -37,24 +36,24 @@ public :
 	~Camera() {};
 
 	//To serialize
-	const float* GetAspectPtr() { return &m_aspect; }
-	const float* GetNearPtr() { return &m_near; }
-	const float* GetFarPtr() { return &m_far; }
-	const float* GetFovYPtr() { return &m_fovY; }
+	float* GetAspectPtr() { return &m_aspect; }
+	float* GetNearPtr() { return &m_near; }
+	float* GetFarPtr() { return &m_far; }
+	float* GetFovYPtr() { return &m_fovY; }
 
 	EType GetType() const { return m_type; }
 	void SetType(EType type);
 
-	float GetAspect() const { return m_aspect; }
+	float GetAspect() { return m_aspect; }
 	void SetAspect(float apsect);
 
-	float GetNear() const { return m_near; }
+	float GetNear() { return m_near; }
 	void SetNear(float near);
 
-	float GetFar() const { return m_far; }
+	float GetFar() { return m_far; }
 	void SetFar(float far);
 
-	float GetFovY() const { return m_fovY; }
+	float GetFovY() { return m_fovY; }
 	void SetFovY(float fovY);
 
 	float GetWidth() const { return m_width; }
@@ -84,4 +83,9 @@ public :
 
 	bool GetUseFustrumCulling() const { return m_useFustrumCulling; }
 	void SetUseFustrumCulling(bool useFrustrumCulling);
+
+	CCProperty::CopyProperty<Camera, float> m_nearProperty{ this, &Camera::SetNear, &Camera::GetNear };
+	CCProperty::CopyProperty<Camera, float> m_aspectProperty{ this, &Camera::SetAspect, &Camera::GetAspect };
+	CCProperty::CopyProperty<Camera, float> m_farProperty{ this, &Camera::SetFar, &Camera::GetFar };
+	CCProperty::CopyProperty<Camera, float> m_fovYProperty{ this, &Camera::SetFovY, &Camera::GetFovY };
 };

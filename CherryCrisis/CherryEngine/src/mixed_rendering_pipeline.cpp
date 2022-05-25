@@ -89,8 +89,8 @@ void MixedPipeline::Execute(Viewer* viewer)
 	
 	m_colliderPass->CallOnExecute(viewer);
 	
-	m_skyboxPass->CallOnExecute(viewer);
-	m_skydomePass->CallOnExecute(viewer);
+	//m_skyboxPass->CallOnExecute(viewer);
+	//m_skydomePass->CallOnExecute(viewer);
 	
 	m_guizmoPass->CallOnExecute(viewer);
 	
