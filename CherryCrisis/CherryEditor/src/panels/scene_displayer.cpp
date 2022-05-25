@@ -91,8 +91,8 @@ void SceneDisplayer::UpdateCamera()
 
     float dt = TimeManager::GetDeltaTime();
 
-    m_cameraSpeed += dt * InputManager::GetMouseWheel().y * 10.f;
-    m_cameraSpeed = CCMaths::Clamp(m_cameraSpeed, 0.5f, 100.f);
+    m_cameraSpeed += InputManager::GetMouseWheel().y * 0.5f;
+    m_cameraSpeed = CCMaths::Clamp(m_cameraSpeed, 0.5f, 500.f);
 
     float speed = dt * m_cameraSpeed;
 
@@ -249,19 +249,24 @@ void SceneDisplayer::Render()
                     Vector3 pos = t->GetPosition();
                     Vector3 rot = t->GetRotation();
 
-                    if (p != pos)
-                    {
+                    if (p.x != pos.x)
                         p.x = CCMaths::Round(p.x / m_posSnap) * m_posSnap;
+                    
+                    if (p.y != pos.y)
                         p.y = CCMaths::Round(p.y / m_posSnap) * m_posSnap;
+                    
+                    if (p.z != pos.z)
                         p.z = CCMaths::Round(p.z / m_posSnap) * m_posSnap;
-                    }
 
-                    if (r != rot)
-                    {
+                    
+                    if (r.x != rot.x)
                         r.x = CCMaths::Round(r.x / m_rotSnap) * m_rotSnap;
+                    
+                    if (r.y != rot.y)
                         r.y = CCMaths::Round(r.y / m_rotSnap) * m_rotSnap;
+                    
+                    if (r.z != rot.z)
                         r.z = CCMaths::Round(r.z / m_rotSnap) * m_rotSnap;
-                    }
                 }
 
                 t->SetPosition(p);
