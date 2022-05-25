@@ -87,8 +87,8 @@ void ShadowRenderPass::Execute(Viewer*& viewer)
 		if (!gpuLight)
 			continue;
 
-		glViewport(0, 0, gpuLight->framebuffer.width, gpuLight->framebuffer.height);
-		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->framebuffer.FBO);
+		glViewport(0, 0, gpuLight->width, gpuLight->height);
+		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		for (MeshRenderer* modelRdr : m_models)

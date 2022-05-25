@@ -138,6 +138,16 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
 
+	// TODO: Set shader define as upper bound
+	for (size_t lightID = 0u; lightID < std::min<size_t>(m_lights.size(), 8u); lightID++)
+	{
+		if (auto gpuLight = static_cast<LightGenerator::GPULightBasic*>(m_lights[lightID]->m_gpuLight.get()))
+		{
+			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)lightID, 3 + (GLsizei)lightID);
+			glBindTextureUnit(3 + (GLsizei)lightID, gpuLight->TexID);
+		}
+	}
+
 	for (MeshRenderer* modelRdr : m_models)
 	{
 		if (!modelRdr->m_isVisible)
@@ -166,7 +176,6 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 			BindTexture(material, ETextureType::ALBEDO, 0);
 			BindTexture(material, ETextureType::NORMAL_MAP, 1);
 		}
-
 
 		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());
 

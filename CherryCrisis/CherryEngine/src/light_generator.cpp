@@ -10,7 +10,20 @@ GLsizei LightGenerator::GPULightBasic::ownerSize = offsetof(Light, m_outerCutoff
 LightGenerator::GPULightBasic::GPULightBasic(Light* owner)
 	: m_owner(owner)
 {
-	framebuffer.Init(1000, 1000);
+	glGenTextures(1, &TexID);
+	glBindTexture(GL_TEXTURE_2D, TexID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glGenFramebuffers(1, &FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, TexID, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	Update(0, ownerSize, m_owner->m_position.data);
 
@@ -20,6 +33,12 @@ LightGenerator::GPULightBasic::GPULightBasic(Light* owner)
 LightGenerator::GPULightBasic::~GPULightBasic()
 {
 	m_owner->m_OnParamsChanged.Unbind(&GPULightBasic::Update, this);
+
+	if (FBO)
+		glDeleteFramebuffers(1, &FBO);
+
+	if (TexID)
+		glDeleteTextures(1, &TexID);
 }
 
 void LightGenerator::GPULightBasic::Update(unsigned int offset, size_t size, void* data)

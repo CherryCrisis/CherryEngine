@@ -14,7 +14,10 @@ public:
 
 		unsigned int index = 0u;
 
-		Framebuffer framebuffer;
+		GLuint FBO = 0u;
+		GLuint TexID = 0u;
+		GLuint width = 1000u;
+		GLuint height = 1000u;
 
 		GPULightBasic(Light* owner);
 		~GPULightBasic();

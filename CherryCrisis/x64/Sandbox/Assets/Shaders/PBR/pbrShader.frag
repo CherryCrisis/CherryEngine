@@ -169,11 +169,11 @@ vec3 getIBLRadianceLambertian(float NdotV, vec3 N, float roughness, vec3 albedo,
 
 float getLightAttenuation(int lightType, vec3 lightDirection, vec3 spotDirection, float cutOff, float outerCutOff)
 {
+    if (lightType == 2)
+		return 1.0;
+
     float distance = length(lightDirection);
     float attenuation = 1.0 / (distance * distance);
-
-    if (lightType == 2)
-        return attenuation;
 
     float theta = -dot(normalize(lightDirection), normalize(spotDirection));
     float epsilon = cutOff - outerCutOff;
@@ -199,7 +199,6 @@ vec3 getBDRFResult(vec3 V, vec3 N, vec3 albedo, float roughness, float metallic,
         if (uLights[i].lightType == 1)
             lightDirection -= Pos;
             
-        float lightIntensity = 1.0 / uLights[i].attenuation.x;
 
         // calculate per-light radiance
         vec3 L = normalize(lightDirection);
@@ -208,6 +207,8 @@ vec3 getBDRFResult(vec3 V, vec3 N, vec3 albedo, float roughness, float metallic,
         float NdotL = max(dot(N, L), 0.0);
         float HdotV = max(dot(H, V), 0.0);
         float NdotV = max(dot(N, V), 0.0);
+
+        float lightIntensity = 1.0 / uLights[i].attenuation.x;
 
         float attenuation = getLightAttenuation(uLights[i].lightType, lightDirection, 
         uLights[i].direction, uLights[i].cutoff, uLights[i].outerCutoff);

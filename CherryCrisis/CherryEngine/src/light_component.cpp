@@ -92,6 +92,7 @@ void LightComponent::ChangePosition(const CCMaths::Vector3& position)
 	m_light.m_lightSpace = CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f) * m_light.m_lookAtMatrix;
 
 	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_position), sizeof(Light::m_position), &m_light.m_position);
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_lightSpace), sizeof(Light::m_lightSpace), &m_light.m_lightSpace);
 }
 
 void LightComponent::ChangeRotation(const CCMaths::Vector3& rotation)
