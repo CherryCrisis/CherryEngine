@@ -433,31 +433,49 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 
 Behaviour* Serializer::CreateBehaviour(const std::string& type, uint32_t uuid, bool hasUUID)
 {
-	CCUUID id{};
-	if (hasUUID)
-		id = CCUUID(uuid);
-
 	Behaviour* b = nullptr;
 
-	if      (type == "Transform")					b = new Transform(id);
-	else if (type == "LightComponent")				b = new LightComponent(id);
-	else if (type == "ModelRenderer")				b = new ModelRenderer(id);
-	else if (type == "ShapeRenderer")				b = new ShapeRenderer(id);
-	else if (type == "ScriptedBehaviour")			b = new ScriptedBehaviour(id);
-	else if (type == "CameraComponent")				b = new CameraComponent(id);
-	else if (type == "Rigidbody")					b = new Rigidbody(id); 
-	else if (type == "BoxCollider")					b = new BoxCollider(id);
-	else if (type == "SphereCollider")				b = new SphereCollider(id);
-	else if (type == "CapsuleCollider")				b = new CapsuleCollider(id);
-	else if (type == "AudioEmitter")				b = new AudioEmitter(id);
-	else if (type == "AudioListener")				b = new AudioListener(id);
-	else if (type == "CharacterController")			b = new CharacterController(id);
-	else if (type == "PortalComponent")				b = new PortalComponent(id);
-	else if (type == "PortalTeleporterComponent")	b = new PortalTeleporterComponent(id);
-	
+	if (hasUUID)
+	{
+		CCUUID id = CCUUID(uuid);
+
+		if		(type == "Transform")					b = new Transform(id);
+		else if (type == "LightComponent")				b = new LightComponent(id);
+		else if (type == "ModelRenderer")				b = new ModelRenderer(id);
+		else if (type == "ShapeRenderer")				b = new ShapeRenderer(id);
+		else if (type == "ScriptedBehaviour")			b = new ScriptedBehaviour(id);
+		else if (type == "CameraComponent")				b = new CameraComponent(id);
+		else if (type == "Rigidbody")					b = new Rigidbody(id);
+		else if (type == "BoxCollider")					b = new BoxCollider(id);
+		else if (type == "SphereCollider")				b = new SphereCollider(id);
+		else if (type == "CapsuleCollider")				b = new CapsuleCollider(id);
+		else if (type == "AudioEmitter")				b = new AudioEmitter(id);
+		else if (type == "AudioListener")				b = new AudioListener(id);
+		else if (type == "CharacterController")			b = new CharacterController(id);
+		else if (type == "PortalComponent")				b = new PortalComponent(id);
+		else if (type == "PortalTeleporterComponent")	b = new PortalTeleporterComponent(id);
+	}
+	else
+	{
+		if		(type == "Transform")					b = new Transform();
+		else if (type == "LightComponent")				b = new LightComponent();
+		else if (type == "ModelRenderer")				b = new ModelRenderer();
+		else if (type == "ShapeRenderer")				b = new ShapeRenderer();
+		else if (type == "ScriptedBehaviour")			b = new ScriptedBehaviour();
+		else if (type == "CameraComponent")				b = new CameraComponent();
+		else if (type == "Rigidbody")					b = new Rigidbody();
+		else if (type == "BoxCollider")					b = new BoxCollider();
+		else if (type == "SphereCollider")				b = new SphereCollider();
+		else if (type == "CapsuleCollider")				b = new CapsuleCollider();
+		else if (type == "AudioEmitter")				b = new AudioEmitter();
+		else if (type == "AudioListener")				b = new AudioListener();
+		else if (type == "CharacterController")			b = new CharacterController();
+		else if (type == "PortalComponent")				b = new PortalComponent();
+		else if (type == "PortalTeleporterComponent")	b = new PortalTeleporterComponent();
+	}
+
 	return b;
 }
-
 
 UIItem* Serializer::CreateUIItem(const std::string& type, uint32_t uuid)
 {

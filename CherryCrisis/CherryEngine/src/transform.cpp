@@ -73,6 +73,8 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 	if (parent && parent->IsEqualToParent(this))
 		return;
 
+	Matrix4 current = GetWorldMatrix();
+
 	if (m_parent) // Remove the transform from the last parent
 	{
 		size_t childrenSize = m_parent->m_children.size();
@@ -93,9 +95,17 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 
 	m_parent = parent;
 
-	if (reapplyPosition) ReapplyPosition();
-	if (reapplyRotation) ReapplyRotation();
-	if (reapplyScale)    ReapplyScale();
+	if (m_parent)
+		current = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * m_worldMatrix;
+	
+	CCMaths::Vector3 tempPos;
+	CCMaths::Vector3 tempRot;
+	CCMaths::Vector3 tempScale;
+	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, tempScale);
+	
+	if (reapplyPosition) SetPosition(tempPos);
+	if (reapplyRotation) SetRotation(tempRot);
+	if (reapplyScale)    SetScale(tempScale);
 
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
 	SceneManager::SetHierarchyDirty();
@@ -180,39 +190,6 @@ void Transform::SetScale(const Vector3& scale)
 
 	for (Transform* child : m_children)
 		child->m_onScaleChange.Invoke(child->GetScale());
-}
-
-void Transform::ReapplyPosition()
-{
-	CCMaths::Vector3 tempRot;
-	CCMaths::Vector3 tempScale;
-
-	CCMaths::Matrix4::Decompose(GetLocalMatrix(), m_position, tempRot, tempScale);
-	
-	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION);
-	m_onPositionChange.Invoke(m_position);
-}
-
-void Transform::ReapplyRotation()
-{
-	CCMaths::Vector3 tempPos;
-	CCMaths::Vector3 tempScale;
-
-	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, m_rotation, tempScale);
-
-	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_ROTATION);
-	m_onRotationChange.Invoke(m_rotation);
-}
-
-void Transform::ReapplyScale()
-{
-	CCMaths::Vector3 tempPos;
-	CCMaths::Vector3 tempRot;
-
-	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, m_scale);
-
-	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_SCALE);
-	m_onScaleChange.Invoke(m_scale);
 }
 
 void Transform::AddChildren(Transform* transform)

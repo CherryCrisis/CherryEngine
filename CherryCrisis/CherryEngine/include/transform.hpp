@@ -84,10 +84,6 @@ public:
 	Vector3 GetScale() { return m_scale; }
 	Vector3 GetGlobalScale();
 
-	void ReapplyPosition();
-	void ReapplyRotation();
-	void ReapplyScale();
-
 	void AddChildren(Transform* transform);
 	std::vector<Transform*>* GetChildren() { return &m_children; }
 
