@@ -107,11 +107,15 @@ namespace CCScripting
 		void Rename(const char* newFilepath) override {};
 		void Reload() override {};
 		void Delete() override {};
-		void Action() override {};
+		void Action() override;
+	};
 
-		// TODO:
-		//last time edited info
-		//check if modified
+	struct SceneNode : public AssetNode
+	{
+		void Rename(const char* newFilepath) override {};
+		void Reload() override {};
+		void Delete() override {};
+		void Action() override;
 	};
 
 	template <class ResourceT>

@@ -33,10 +33,16 @@ void SceneManager::Update()
 		m_lateChanged->Invoke();
 }
 
+void SceneManager::SetHierarchyDirty(bool value) 
+{
+	if (GetInstance()->m_currentScene)
+		currentInstance->m_currentScene->m_isHierarchyDirty = value;
+}
+
 bool SceneManager::LoadScene(const char* filepath) 
 {
 	SceneManager* mng = GetInstance();
-
+	
 	if (!std::filesystem::exists(filepath)) 
 	{
 		std::string errorMsg = filepath + std::string(" failed to load.");
@@ -51,6 +57,8 @@ bool SceneManager::LoadScene(const char* filepath)
 	mng->Initialize();
 
 	ResourceManager::GetInstance()->Purge();
+
+	mng->m_sceneChanged.Invoke();
 
 	return mng->m_currentScene != nullptr;
 }
@@ -79,6 +87,8 @@ void SceneManager::ResetScene()
 	mng->Initialize();
 
 	ResourceManager::GetInstance()->Purge();
+
+	mng->m_sceneChanged.Invoke();
 }
 
 void SceneManager::FlipScene() 

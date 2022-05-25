@@ -10,6 +10,7 @@
 #include "camera_component.hpp"
 #include "collider_renderpass.hpp"
 #include "entity.hpp"
+#include "shape_renderer.hpp"
 #include "transform.hpp"
 
 
@@ -18,6 +19,8 @@ BoxCollider::BoxCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::BOX;
+
+	m_isAddedFromInspector = true;
 }
 
 BoxCollider::BoxCollider(CCUUID& id) : Collider(id)
@@ -87,18 +90,26 @@ void BoxCollider::Initialize()
 		m_transform->m_onRotationChange.Bind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
 	}
+
 	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&BoxCollider::Initialize, this);
 
-	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
-
-	if (modelRdr)
+	if (m_isAddedFromInspector)
 	{
-		if (modelRdr->m_mesh)
+		MeshRenderer* renderer = nullptr;
+		renderer = GetHost().GetBehaviour<ModelRenderer>();
+
+		if (!renderer)
+			renderer = GetHost().GetBehaviour<ShapeRenderer>();
+
+		if (renderer)
 		{
-			m_baseEntityScale	= modelRdr->m_mesh->m_aabb.m_extents;
-			m_localPosition		= modelRdr->m_mesh->m_aabb.m_center;
+			if (renderer->m_mesh)
+			{
+				m_editableScale = renderer->m_mesh->m_aabb.m_extents;
+				m_localPosition = renderer->m_mesh->m_aabb.m_center;
+			}
 		}
 	}
 
@@ -129,15 +140,13 @@ void BoxCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
 	m_metadatas.SetProperty("Local Position", &localPosition);
 	m_metadatas.SetProperty("Scale", &editableScale);
-	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
 void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
 {
 	m_entityScale = m_transform->GetGlobalScale();
 
-	m_totalScale = m_baseEntityScale;
-	m_totalScale *= m_editableScale;
+	m_totalScale = m_editableScale;
 	m_totalScale *= m_entityScale;
 
 	ComputeModelMatrices();
@@ -176,7 +185,7 @@ void BoxCollider::SetPxData()
 {
 	if (m_pxShape)
 	{
-		m_pxShape->setContactOffset(m_contactOffset);
+		m_pxShape->setContactOffset(0.02f);
 
 		if (!m_isEnabled)
 		{
@@ -223,8 +232,7 @@ void BoxCollider::SetScale(const CCMaths::Vector3& scale)
 {
 	m_editableScale = scale;
 
-	m_totalScale = m_baseEntityScale;
-	m_totalScale *= m_editableScale;
+	m_totalScale = m_editableScale;
 	m_totalScale *= m_entityScale;
 
 	ComputeModelMatrices();

@@ -66,10 +66,10 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
         Vector3 temp = CCMaths::Vector3(x, 0, z).Normalized();
         vertex.position = temp * radius;
 
-        CCMaths::Min(min.x, vertex.position.x);
-        CCMaths::Min(min.z, vertex.position.z);
-        CCMaths::Max(max.x, vertex.position.x);
-        CCMaths::Max(max.z, vertex.position.z);
+        min.x = CCMaths::Min(min.x, vertex.position.x);
+        min.z = CCMaths::Min(min.z, vertex.position.z);
+        max.x = CCMaths::Max(max.x, vertex.position.x);
+        max.z = CCMaths::Max(max.z, vertex.position.z);
 
         vertex.normal = vertex.tangent = vertex.bitangent = temp;
 
@@ -123,7 +123,7 @@ void Mesh::CreateCylinder(std::shared_ptr<Mesh> mesh, float radius, float halfHe
         indices.push_back((2 * s + 3) % ((int)longitude * 2));
     }
 
-    Load(mesh, vertices, indices);
+    Load(mesh, vertices, indices, { min, max });
 }
 
 void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude, float longitude)
@@ -155,12 +155,12 @@ void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude
             vertex.position = { x, y, z };
             vertex.position = vertex.position.Normalized() * radius;
 
-            CCMaths::Min(min.x, vertex.position.x);
-            CCMaths::Min(min.y, vertex.position.y);
-            CCMaths::Min(min.z, vertex.position.z);
-            CCMaths::Max(max.x, vertex.position.x);
-            CCMaths::Max(max.y, vertex.position.y);
-            CCMaths::Max(max.z, vertex.position.z);
+            min.x = CCMaths::Min(min.x, vertex.position.x);
+            min.y = CCMaths::Min(min.y, vertex.position.y);
+            min.z = CCMaths::Min(min.z, vertex.position.z);
+            max.x = CCMaths::Max(max.x, vertex.position.x);
+            max.y = CCMaths::Max(max.y, vertex.position.y);
+            max.z = CCMaths::Max(max.z, vertex.position.z);
 
             vertex.normal = vertex.tangent = vertex.bitangent = CCMaths::Vector3(x, y, z);
 
@@ -185,13 +185,16 @@ void Mesh::CreateSphere(std::shared_ptr<Mesh> mesh, float radius, float latitude
 	    }
     }
 
-    Load(mesh, vertices, indices);
+    Load(mesh, vertices, indices, { min, max });
 }
 
 void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes, float zHalfRes)
 {
     std::vector<Vertex> vertices;
     vertices.reserve(8);
+
+    Vector3 max = { xHalfRes, yHalfRes, zHalfRes };
+    Vector3 min = -max;
 
     for (int i = 0; i < 8; i++)
     {
@@ -239,7 +242,7 @@ void Mesh::CreateCube(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
     indices.push_back(1); indices.push_back(7); indices.push_back(5);
     indices.push_back(7); indices.push_back(1); indices.push_back(3);
     
-    Load(mesh, vertices, indices);
+    Load(mesh, vertices, indices, { min, max });
 }
 
 void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes)
@@ -265,6 +268,10 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
 
         vertex.position.x = xSign * xHalfRes;
         vertex.position.y = ySign * yHalfRes;
+
+        vertex.normal = Vector3(-xSign * xHalfRes, -ySign * yHalfRes, 0).Normalized();
+        vertex.normal.z = -1;
+        vertex.normal.Normalize();
 
         min.x = CCMaths::Min(min.x, vertex.position.x);
         min.y = CCMaths::Min(min.y, vertex.position.y);

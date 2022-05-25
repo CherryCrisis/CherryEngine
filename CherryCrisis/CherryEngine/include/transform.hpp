@@ -34,6 +34,10 @@ private:
 	Vector3 m_rotation = CCMaths::Vector3::Zero;
 	Vector3 m_scale	   = CCMaths::Vector3::One;
 
+	Vector3 m_up		= CCMaths::Vector3::Zero;
+	Vector3 m_right		= CCMaths::Vector3::Zero;
+	Vector3 m_forward	= CCMaths::Vector3::Zero;
+
 	Vector3 m_worldPosition = Vector3(0.f, 0.f, 0.f);
 	Vector3 m_worldRotation = Vector3(0.f, 0.f, 0.f);
 	Vector3 m_worldScale = Vector3(1.f, 1.f, 1.f);
@@ -64,8 +68,6 @@ public:
 	Transform* GetParent() { return m_parent; }
 	Transform* GetRootParent();
 	bool IsEqualToParent(Transform* transform);
-	void ClearChildParenting();
-	//TransformProperty<Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
 
 	bool IsDirty() { return m_isDirty; }
 
@@ -93,13 +95,17 @@ public:
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 
+	bool IsChildOf(Transform* parent, bool recursive=true);
+	void Copy(Behaviour* copy) override;
+
 	Matrix4 GetWorldMatrix();
 	void SetWorldMatrix(const CCMaths::Matrix4& worldMatrix);
 
 	Matrix4 GetLocalMatrix();
 
-
-	bool IsChildOf(Transform* parent, bool recursive=true);
+	Vector3 Forward()	{ return m_forward; }
+	Vector3 Right()		{ return m_right; }
+	Vector3 Up()		{ return m_up; }
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };

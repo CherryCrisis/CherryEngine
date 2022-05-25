@@ -29,11 +29,12 @@ namespace PhysicSystem
 	class PhysicActor
 	{
 	protected:
-		bool	m_isDynamic		= false;
-		bool	m_isEnabled		= true;
-		bool	m_isKinematic	= false;
-		bool	m_isStatic		= false;
-		bool	m_useGravity	= false;
+		bool	m_isDynamic			= false;
+		bool	m_isEnabled			= true;
+		bool	m_isKinematic		= false;
+		bool	m_isStatic			= false;
+		bool	m_useGravity		= false;
+		int		m_isRemoveLocked	= 0;
 
 		float	m_density = 10.0f;
 		float	m_maxLinearVelocity = (float)1.00000003e+16;
@@ -71,7 +72,8 @@ namespace PhysicSystem
 		
 		void CreatePxActor();
 		void DestroyPxActor();
-		
+		void UnlockDelete();
+
 		physx::PxShape* CreateShape(const physx::PxGeometry& geometry);
 		void			RemoveShape(physx::PxShape* shape);
 
@@ -118,6 +120,7 @@ namespace PhysicSystem
 		void	SetMaxDepVel(const float& velocity) { m_maxDepenetrationVelocity = velocity; SetActorMaxVelocities(); }
 		float	GetMaxDepVel() { return m_maxDepenetrationVelocity; }
 
+		Rigidbody* GetRigidbody() { return m_rigidbody; }
 		bool HasRigidbody();
 		bool HasColliders();
 	};

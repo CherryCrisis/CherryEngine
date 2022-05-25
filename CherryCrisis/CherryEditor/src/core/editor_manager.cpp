@@ -73,7 +73,6 @@ void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
 void EditorManager::LinkEngine(Engine* engine) 
 {
     m_engine = engine;
-    m_inspector.m_engine = engine;
     m_sceneDisplayer.m_manager = this;
 }
 
@@ -87,8 +86,8 @@ void EditorManager::DisplayEditorUI(GLFWwindow* window)
     m_browser.Render();
     m_assetSettingsDisplayer.Render();
     m_logDisplayer.Render();
-    m_sceneDisplayer.Render();
     m_inspector.Render();
+    m_sceneDisplayer.Render();
     m_gameDisplayer.Render();
     m_cellSystemDisplayer.Render();
     m_hierarchyDisplayer.Render();
@@ -215,8 +214,6 @@ void EditorManager::HandleMenuBar()
             {
                 m_engine->Stop();
                 m_entitySelector.Clear(false);
-                 m_cellSystemDisplayer.InvalidatePointers();
-
             }
 
             // Start game if not playing
@@ -242,8 +239,7 @@ void EditorManager::HandleMenuBar()
         {
             // Stop game
             m_engine->Stop();
-            m_entitySelector.Clear();
-            m_cellSystemDisplayer.InvalidatePointers();
+            m_entitySelector.Clear(false);
 
             // Launch game
             m_logDisplayer.TryClearOnPlay();
@@ -264,45 +260,8 @@ void EditorManager::HandleFeaturerWindow(GLFWwindow* window)
 
     if (ImGui::Begin("Featurer", &m_isFeaturerOpened))
     {
-        if (ImGui::Button("Close.."))
-            ImGui::OpenPopup("Close?");
-
-        ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-        ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-        if (ImGui::BeginPopupModal("Close?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-        {
-            ImGui::Text("Files are unsaved!\n\n");
-            ImGui::Separator();
-
-            if (ImGui::Button("Close Anyway", ImVec2(120, 0))) {
-                ImGui::CloseCurrentPopup(); glfwSetWindowShouldClose(window, true);
-            }
-            ImGui::SetItemDefaultFocus();
-            ImGui::SameLine();
-            if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
-            ImGui::EndPopup();
-        }
-
-        if (ImGui::Button("Success"))
-            SendNotification("I am the Title ! %s", ENotifType::Success, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("Warning"))
-            SendNotification("I am the Title ! %s", ENotifType::Warning, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("Error"))
-            SendNotification("I am the Title ! %s", ENotifType::Error, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("Info"))
-            SendNotification("I am the Title ! %s", ENotifType::Info, 3.f);
-        ImGui::SameLine();
-        if (ImGui::Button("None"))
-            SendNotification("I am the Title ! %s", ENotifType::None, 3.f);
-        ImGui::SameLine();
-
         if (ImGui::Button("Show Demo"))
             m_isDemoOpened = true;
-        
     }
     ImGui::End();
 }
@@ -346,12 +305,19 @@ void EditorManager::SendNotification(const char* title, ENotifType type, float d
 void EditorManager::FocusCallback(GLFWwindow* window, int focused)
 {
     m_browser.QuerryBrowser();
+    m_inspector.PopulateComponentList();
 }
 
 void EditorManager::FocusEntity(Entity* entity)
 {
     m_entitySelector.Clear();
     m_entitySelector.Add(entity);
+}
+
+void EditorManager::CheckForHierarchyRefresh() 
+{
+    if (SceneManager::GetInstance()->m_currentScene && SceneManager::GetInstance()->m_currentScene->m_isHierarchyDirty) 
+        SceneManager::GetInstance()->m_lateHierarchyRefresh.Invoke();
 }
 
 namespace EditorNotifications
@@ -402,6 +368,8 @@ bool EntitySelector::Add(Entity* entity)
     if (std::count(m_entities.begin(), m_entities.end(), entity))
         return false;
 
+    assert(entity != nullptr);
+
     m_entities.push_back(entity);
     entity->m_OnSelected.Invoke();
     return true;
@@ -435,6 +403,11 @@ bool EntitySelector::Clear(bool unselect)
 
     m_entities.clear();
     return m_entities.size() <= 0;
+}
+
+void EntitySelector::ClearEx() 
+{
+    m_entities.clear();
 }
 
 bool EntitySelector::Contains(Entity* entity) 

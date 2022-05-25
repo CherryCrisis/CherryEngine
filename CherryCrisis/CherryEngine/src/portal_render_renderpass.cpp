@@ -18,7 +18,7 @@ PortalRenderPass::PortalRenderPass(const char* name)
 	if (m_program)
 		m_callExecute = CCCallback::BindCallback(&PortalRenderPass::Execute, this);
 
-	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
+	m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_EuclideanPortal", true);
 
 	if (!m_quadMesh->m_gpuMesh)
 	{
@@ -69,17 +69,35 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 			portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
 
+			CCMaths::Matrix4 modelMat = portal->m_linkedPortal->m_modelMatrix;
+			modelMat *= Matrix4::RotateY(CCMaths::PI);
+			modelMat *= portal->m_modelMatrix.Inverse();
+			
 			//TODO: Optimize !
-			CCMaths::Matrix4 m = portal->m_linkedPortal->m_modelMatrix * portal->m_modelMatrix.Inverse() * viewer->m_viewMatrix.Inverse();
+			CCMaths::Matrix4 m = modelMat * viewer->m_viewMatrix.Inverse();
+
 			CCMaths::Matrix4 mInverse = m.Inverse();
 
 			portal->m_linkedPortal->m_viewMatrix = mInverse;
 
-			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader 
-			portal->m_linkedPortal->m_projectionMatrix = viewer->m_projectionMatrix;
+			portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader
+
+			CCMaths::Matrix4 clipPlaneWorldMatrix = portal->m_linkedPortal->m_modelMatrix;
+
+			int dot = CCMaths::Sign(Vector3::Dot(clipPlaneWorldMatrix.back, clipPlaneWorldMatrix.position - m.position));
+
+			Matrix4 test = mInverse;
+			test.position = Vector3::Zero;
+
+			Vector3 viewSpacePos = (mInverse * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
+			Vector3 viewSpaceNormal = (test * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * dot;
+			float viewSpaceDist = -Vector3::Dot(viewSpacePos, viewSpaceNormal);
+			Vector4 clipPlaneViewSpace = Vector4(viewSpaceNormal.x, viewSpaceNormal.y, viewSpaceNormal.z, viewSpaceDist);
+
+			portal->m_linkedPortal->m_projectionMatrix = Matrix4::ObliqueProjection(clipPlaneViewSpace, viewer->m_projectionMatrix);
 
 			float aspect = (float)framebuffer.width / (float)framebuffer.height;
-			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(portal->m_linkedPortal->m_modelMatrix, portal->m_fovY, aspect, portal->m_near, portal->m_far);
+			portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(m, portal->m_fovY, aspect, portal->m_near, portal->m_far);
 
 			portal->m_linkedPortal->Draw(viewer->m_currentIteration - 1);
 		}
@@ -90,10 +108,9 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LESS);
+	//glDisable(GL_CULL_FACE);
 
-	glCullFace(GL_BACK);
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -64,6 +64,21 @@ public class Transform : Behaviour {
     return ret;
   }
 
+  public Vector3 Up() {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Transform_Up(swigCPtr), true);
+    return ret;
+  }
+
+  public Vector3 Right() {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Transform_Right(swigCPtr), true);
+    return ret;
+  }
+
+  public Vector3 Forward() {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Transform_Forward(swigCPtr), true);
+    return ret;
+  }
+
 		public Vector3 position { get => GetPosition(); set => SetPosition(value); }
 		public Vector3 eulerAngles { get => GetRotation(); set => SetRotation(value); }
 		public Vector3 scale { get => GetScale(); set => SetScale(value); }

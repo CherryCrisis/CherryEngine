@@ -1,5 +1,5 @@
 %{
-	#include "maths.hpp"
+	#include "maths/maths_utils.hpp"
 
 	using namespace CCMaths;
 %}
@@ -9,4 +9,4 @@
 // TODO: Add matrix3
 //%include matrix3.i
 
-%include maths.hpp
+%include maths/maths_utils.hpp

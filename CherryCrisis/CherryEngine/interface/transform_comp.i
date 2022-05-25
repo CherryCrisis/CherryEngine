@@ -22,6 +22,10 @@ public:
 	void SetScale(CCMaths::Vector3& scale);
 	CCMaths::Vector3 GetScale();
 
+	CCMaths::Vector3 Up();
+	CCMaths::Vector3 Right();
+	CCMaths::Vector3 Forward();
+
 	%ignore Transform();
 
 	%proxycode

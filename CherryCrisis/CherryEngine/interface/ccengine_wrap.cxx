@@ -411,7 +411,7 @@ namespace Swig {
 	#include "maths.hpp"
 
 
-	#include "maths.hpp"
+	#include "maths/maths_utils.hpp"
 
 	using namespace CCMaths;
 
@@ -2807,6 +2807,42 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetScale(void * jarg1) {
   
   arg1 = (Transform *)jarg1; 
   result = (arg1)->GetScale();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_Up(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->Up();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_Right(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->Right();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_Forward(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->Forward();
   jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
   return jresult;
 }

@@ -8,6 +8,7 @@
 #include "csassembly.hpp"
 #include "monowrapper.hpp"
 #include "scripted_behaviour.hpp"
+#include "scene_manager.hpp"
 #include "utils.hpp"
 
 
@@ -34,8 +35,11 @@ void CsScriptingSystem::Init()
 	mono_add_internal_call("CCEngine.ScriptedBehaviour::GetStaticInstance", GetStaticInstance);
 
 	m_scriptAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain", true);
+	m_scriptAssembly->m_OnPreReloaded.Bind(&CsScriptingSystem::OnPreReload, this);
+	m_scriptAssembly->m_OnReloaded.Bind(&CsScriptingSystem::OnReload, this);
+
 	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", true, "InterfaceDomain", false);
-	
+
 	mono::ManagedAssembly* scriptAssembly = m_scriptAssembly->m_context->FindAssembly("CherryScripting.copy.dll");
 	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
 
@@ -83,6 +87,16 @@ void CsScriptingSystem::InitializeAssembly(std::shared_ptr<CsAssembly> assembly,
 void CsScriptingSystem::ReloadContextes()
 {
 	Resource<CsAssembly>::ReloadResource(m_scriptAssembly);
+}
+
+void CsScriptingSystem::OnPreReload(std::shared_ptr<CsAssembly> assembly)
+{
+	SceneManager::GetInstance()->FlipScene();
+}
+
+void CsScriptingSystem::OnReload(std::shared_ptr<CsAssembly> assembly)
+{
+	SceneManager::GetInstance()->ResetScene();
 }
 
 void CsScriptingSystem::InitializeHotReload(const char* compilerPath, const char* solutionPath) 

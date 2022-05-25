@@ -22,12 +22,12 @@ struct Vertex
 	Vector3 bitangent;
 };
 
-enum class EMeshShape
+enum class EMeshShape : int
 {
-	QUAD,
-	CUBE,
-	SPHERE,
-	CYLINDER,
+	QUAD		= 0,
+	CUBE		= 1,
+	SPHERE		= 2,
+	CYLINDER	= 3,
 };
 
 struct GPUMesh

@@ -27,10 +27,7 @@ ScriptedBehaviour::ScriptedBehaviour()
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
 	if (m_scriptingAssembly)
-	{
-		m_scriptingAssembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
 		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
-	}
 }
 
 ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
@@ -45,10 +42,7 @@ ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
 	if (m_scriptingAssembly)
-	{
-		m_scriptingAssembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
 		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
-	}
 }
 
 ScriptedBehaviour::~ScriptedBehaviour()
@@ -60,10 +54,7 @@ ScriptedBehaviour::~ScriptedBehaviour()
 	UnsetSignals();
 
 	if (m_scriptingAssembly)
-	{
-		m_scriptingAssembly->m_OnReloaded.Unbind(&ScriptedBehaviour::Reload, this);
 		m_scriptingAssembly->m_OnDeleted.Unbind(&ScriptedBehaviour::InvalidateAssembly, this);
-	}
 
 	if (m_managedInstance)
 		m_managedInstance->Dispose();
@@ -187,7 +178,7 @@ void ScriptedBehaviour::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetProperty("scriptName", &scriptPath);
+	m_metadatas.SetProperty("scriptName", &scriptPath, "0", false);
 
 	auto handleRefClass = m_scriptingAssembly->m_context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
@@ -384,12 +375,6 @@ void ScriptedBehaviour::OnTriggerExit(Entity* other)
 	csTriggerOut->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
 
 	m_physicEntities.erase(entityIt);
-}
-
-void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
-{
-	m_metadatas.m_metadatas.clear();
-	PopulateMetadatas();
 }
 
 _MonoObject* ScriptedBehaviour::GetRawInstance()

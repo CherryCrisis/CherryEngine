@@ -21,6 +21,8 @@ private:
 
 	static std::string m_defaultCellName;
 
+	std::queue<Entity*> m_toRemoveEntities;
+
 public:
 	UIContext m_UIContext;
 
@@ -51,6 +53,8 @@ public:
 
 	static void Load(std::shared_ptr<Scene> scene);
 	
+
+	void CopyEntity(Entity* toCopy, Entity* parent=nullptr);
 	void AddEntity(Entity* toAdd);
 	void RemoveEntity(Entity* toRemove);
 	void RemoveEntity(const std::string& name);
@@ -73,4 +77,7 @@ public:
 	void Empty();
 	void EmptyUI();
 	void Delete() override;
+
+	// find a way to clean this
+	bool m_isHierarchyDirty = false;
 };

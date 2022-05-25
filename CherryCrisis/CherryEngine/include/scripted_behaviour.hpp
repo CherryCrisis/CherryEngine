@@ -84,8 +84,6 @@ public:
 	void OnTriggerEnter(Entity* other);
 	void OnTriggerExit(Entity* other);
 
-	void Reload(std::shared_ptr<CsAssembly> csAssembly);
-
 	std::string GetScriptPath() { return m_scriptName; }
 
 	_MonoObject* GetRawInstance();

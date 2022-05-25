@@ -46,7 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Assets\*.cs" />
+    <Compile Include="Assets\BackpackBehaviour.cs" />
+    <Compile Include="Assets\CameraController.cs" />
+    <Compile Include="Assets\DebugTest.cs" />
+    <Compile Include="Assets\Script.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

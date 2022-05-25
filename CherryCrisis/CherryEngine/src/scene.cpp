@@ -27,8 +27,8 @@ Scene::Scene(const char* filePath)
 
 void Scene::Delete()
 {
-	for (const Entity* entity : m_entities)
-		delete entity;
+	while (!m_entities.empty())
+		RemoveEntity(m_entities[0]);
 }
 
 Scene::~Scene()
@@ -45,42 +45,79 @@ void Scene::Initialize()
 
 void Scene::Update()
 {
-	for (Entity* entity : m_entities) 
+	size_t entitiesCount = m_entities.size();
+	for (size_t id = 0; id < entitiesCount; id++)
 	{
-		entity->Update();
+		//To prevent if an entity is deleted in scene->Update() !
+		if (entitiesCount != m_entities.size())
+			break;
+
+		m_entities[id]->Update();
+	}
+
+	int fixedUpdates = TimeManager::GetFixedLoopCount();
+	for (int i = 0; i < fixedUpdates; i++)
+	{
+		for (size_t id = 0; id < entitiesCount; id++)
+		{
+			//To prevent if an entity is deleted in scene->Update() !
+			if (entitiesCount != m_entities.size())
+				break;
+
+			m_entities[id]->FixedUpdate();
+		}
+	}
+
+	for (size_t id = 0; id < entitiesCount; id++)
+	{
+		//To prevent if an entity is deleted in scene->Update() !
+		if (entitiesCount != m_entities.size())
+			break;
+
+		m_entities[id]->LateUpdate();
 	}
 }
 
 void Scene::AddEntity(Entity* toAdd)
 {
-	m_entities.push_back(toAdd);
-	m_onModifiedEntities.Invoke();
+	assert(toAdd != nullptr);
+
+	m_entities.resize(m_entities.size() + 1);
+	m_entities[m_entities.size() - 1] = toAdd;
+
+	m_isHierarchyDirty = true;
 }
 
-void Scene::RemoveEntity(Entity* toRemove) 
+void Scene::RemoveEntity(Entity* toRemove)
 {
 	if (!toRemove)
 		return;
-
+	
 	Transform* transform;
 	toRemove->TryGetBehaviour(transform);
 
-	auto children = transform->GetChildren();
-	if (transform && children->size() > 0 )
+	if (transform)
 	{
-		for (int i = 0; i < children->size(); i++)
-			RemoveEntity(&(*children)[i]->GetHost());
+		auto children = transform->GetChildren();
+		if (transform && children->size() > 0)
+		{
+			for (int i = static_cast<int>(children->size()) - 1; i >= 0; i--)
+				RemoveEntity(&(*children)[i]->GetHost());
+		}
 	}
 
-	m_entities.erase(std::remove(m_entities.begin(), m_entities.end(), toRemove), m_entities.end());
+	auto itPos = std::remove(m_entities.begin(), m_entities.end(), toRemove);
+	assert(itPos != m_entities.end());
+	
+	m_entities.erase(itPos);
 	toRemove->Destroy();
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::RemoveEntity(const std::string& name)
 {
 	//TODO: Do this
-	m_onModifiedEntities.Invoke();
+	m_isHierarchyDirty = true;
 }
 
 void Scene::Load(std::shared_ptr<Scene> scene)
@@ -202,11 +239,7 @@ Entity* Scene::FindModelEntity(uint32_t id)
 
 void Scene::Empty() 
 {
-	while(m_entities.size() > 0)
-	{
-		m_entities[0]->Destroy();
-		m_entities.erase(m_entities.begin());
-	}
+	Delete();
 
 	while (m_cells.size() > 0)
 	{
@@ -304,6 +337,7 @@ bool Scene::RemoveCell(const std::string& name, bool forceRemove)
 void Scene::AddEntityToDefault(Entity* entity)
 {
 	m_cells[m_defaultCellName].AddEntity(entity);
+	m_isHierarchyDirty = true;
 }
 
 void Scene::AddEntityToCell(Entity* entity, const std::string& cellName)
@@ -311,6 +345,7 @@ void Scene::AddEntityToCell(Entity* entity, const std::string& cellName)
 	assert(m_cells.contains(cellName));
 
 	m_cells[cellName].AddEntity(entity);
+	m_isHierarchyDirty = true;
 }
 
 
@@ -344,4 +379,16 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 
 	toCell->AddEntity(entity);
 	entity->m_OnCellAdded.Invoke(&*toCell);
+
+	m_isHierarchyDirty = true;
+}
+
+void Scene::CopyEntity(Entity* toCopy, Entity* parent) 
+{
+	Entity* entity = new Entity(toCopy);
+	
+	if (parent)
+		entity->GetBehaviour<Transform>()->SetParent(parent->GetBehaviour<Transform>());
+
+	AddEntity(entity);
 }

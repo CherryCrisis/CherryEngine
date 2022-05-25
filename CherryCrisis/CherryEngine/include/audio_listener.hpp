@@ -17,9 +17,12 @@ public:
 	AudioListener(CCUUID& id);
 	~AudioListener();
 
+	void InvalidateTransform();
+
 	void Initialize();
 	void BindToSignals() override;
-	
+	void UnbindSignals();
+
 	void ChangePosition(const CCMaths::Vector3& position);
 	void ChangeRotation(const CCMaths::Vector3& position);
 };

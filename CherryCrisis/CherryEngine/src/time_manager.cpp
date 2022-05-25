@@ -15,9 +15,17 @@ TimeManager::TimeManager()
 
 void TimeManager::Update(const float time) 
 {
-	m_lastTime = m_elapsedTime;
+    m_lastTime = m_elapsedTime;
 	m_elapsedTime = time;
 	m_deltaTime = (m_elapsedTime - m_lastTime) * m_timeScale;
+
+    m_fixedLoopCount = 0;
+    float updateTime = m_deltaTime;
+    while (updateTime >= m_fixedDeltaTime)
+    {
+        m_fixedLoopCount++;
+        updateTime -= m_fixedDeltaTime;
+    }
 }
 
 FullDate TimeManager::GetCurrentTime()
@@ -47,7 +55,7 @@ FullDate TimeManager::GetCurrentTime()
 unsigned int Chrono::GetCurrentTimeInMs()
 {
     return {};
-    FullDate date = TimeManager::GetInstance()->GetCurrentTime();
+    FullDate date = TimeManager::GetCurrentTime();
     return date.milliseconds + date.seconds * 1000 + date.minutes * 60000;
 }
 

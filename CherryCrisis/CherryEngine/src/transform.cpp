@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+#include "scene_manager.hpp"
+
 #include "cell.hpp"
 #include "entity.hpp"
 #include "event.hpp"
@@ -23,9 +25,6 @@ Transform::Transform(CCUUID& id)
 Transform::~Transform()
 {
 	SetParent(nullptr);
-	
-	while (!m_children.empty())
-		ClearChildParenting();
 }
 
 
@@ -91,21 +90,12 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 	if (reapplyScale)    ReapplyScale();
 
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
+	SceneManager::SetHierarchyDirty();
 }
 
 void Transform::SetParent(Transform* transform)
 {
 	SetParent(transform, false, false, false);
-}
-
-void Transform::ClearChildParenting()
-{
-	size_t childrenSize = m_children.size();
-	for (size_t i = 0; i < childrenSize; ++i)
-	{
-		m_children[i]->SetParent(nullptr);
-		break;
-	}
 }
 
 Transform* Transform::GetRootParent() 
@@ -128,10 +118,14 @@ Matrix4 Transform::GetWorldMatrix()
 
 	m_worldMatrix = Matrix4::Translate(m_position) * Matrix4::RotateZYX(m_rotation) * Matrix4::Scale(m_scale);
 
-	if (!m_parent)
-		return m_worldMatrix;
+	if (m_parent)
+		m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 
-	return m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
+	m_up		= m_worldMatrix.up;
+	m_right		= m_worldMatrix.right;
+	m_forward	= -m_worldMatrix.back;
+
+	return m_worldMatrix;
 }
 
 void Transform::SetWorldMatrix(const CCMaths::Matrix4& worldMatrix)
@@ -155,7 +149,7 @@ void Transform::SetPosition(const Vector3& position)
 	m_onPositionChange.Invoke(position);
 
 	for (Transform* child : m_children)
-		child->m_onPositionChange.Invoke(child->GetPosition());
+		child->m_onPositionChange.Invoke(child->GetGlobalPosition());
 }
 
 void Transform::SetRotation(const Vector3& rotation)
@@ -166,7 +160,7 @@ void Transform::SetRotation(const Vector3& rotation)
 	m_onRotationChange.Invoke(rotation);
 
 	for (Transform* child : m_children)
-		child->m_onRotationChange.Invoke(child->GetRotation());
+		child->m_onRotationChange.Invoke(child->GetGlobalRotation());
 }
 
 void Transform::SetScale(const Vector3& scale)
@@ -293,4 +287,18 @@ Vector3 Transform::GetGlobalScale()
 	m_isDirty &= ~((int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
 
 	return m_worldScale;
+}
+
+void Transform::Copy(Behaviour* copy)
+{
+	Transform* copiedTransform = dynamic_cast<Transform*>(copy);
+
+	SetPosition(copiedTransform->m_position);
+	SetRotation(copiedTransform->m_rotation);
+	SetScale(copiedTransform->m_scale);
+	
+	for (const auto& child : copiedTransform->m_children)
+	{
+		SceneManager::GetInstance()->m_currentScene->CopyEntity(child->GetHostPtr(), GetHostPtr());
+	}
 }

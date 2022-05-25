@@ -13,7 +13,7 @@
 #include "transform.hpp"
 
 
-unsigned int	 CameraComponent::m_count	    = 0;
+unsigned int	 CameraComponent::m_count			= 0;
 CameraComponent* CameraComponent::m_mainCamera      = nullptr;
 Camera*          CameraComponent::m_editorCamera	= nullptr;
 
@@ -53,6 +53,9 @@ CameraComponent::~CameraComponent()
 		m_transform->m_onRotationChange.Unbind(&CameraComponent::ChangeRotation, this);
 		m_transform->m_OnDestroy.Unbind(&CameraComponent::InvalidateTransform, this);
 	}
+
+	GetHost().m_OnCellAdded.Unbind(&CameraComponent::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Unbind(&CameraComponent::OnCellRemoved, this);
 }
 
 void CameraComponent::PopulateMetadatas()
@@ -71,6 +74,8 @@ void CameraComponent::BindToSignals()
 	GetHost().m_OnAwake.Bind(&CameraComponent::Initialize, this);
 
 	GetHost().m_cell->AddViewer(&m_camera);
+	GetHost().m_OnCellAdded.Bind(&CameraComponent::OnCellAdded, this);
+	GetHost().m_OnCellRemoved.Bind(&CameraComponent::OnCellRemoved, this);
 }
 
 void CameraComponent::Initialize() 
@@ -90,6 +95,19 @@ void CameraComponent::Initialize()
 
 	ChangePosition(m_transform->GetPosition());
 	ChangeRotation(m_transform->GetRotation());
+}
+
+void CameraComponent::OnCellAdded(Cell* newCell)
+{
+	newCell->AddViewer(&m_camera);
+
+	ChangePosition(m_transform->GetPosition());
+	ChangeRotation(m_transform->GetRotation());
+}
+
+void CameraComponent::OnCellRemoved(Cell* newCell)
+{
+	newCell->RemoveViewer(&m_camera);
 }
 
 void CameraComponent::ChangePosition(const CCMaths::Vector3& position)

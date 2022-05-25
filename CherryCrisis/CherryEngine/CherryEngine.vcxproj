@@ -320,6 +320,8 @@
     <ClInclude Include="include\frustum_plane.hpp" />
     <ClInclude Include="include\guizmo_renderpass.hpp" />
     <ClInclude Include="include\irradiance_map_renderpass.hpp" />
+    <ClInclude Include="include\maths\maths_utils.hpp" />
+    <ClInclude Include="include\mesh_renderer.hpp" />
     <ClInclude Include="include\mixed_rendering_pipeline.hpp" />
     <ClInclude Include="include\object.hpp" />
     <ClInclude Include="include\cubemap.hpp" />
@@ -413,22 +415,42 @@
     <ClInclude Include="include\bloom_renderpass.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\x64\Debug\Assets\basicPostProcess.frag" />
-    <None Include="..\x64\Debug\Assets\basicPostProcess.vert" />
-    <None Include="..\x64\Debug\Assets\basicShader.frag" />
-    <None Include="..\x64\Debug\Assets\basicShader.vert" />
-    <None Include="..\x64\Debug\Assets\bloomShader.frag" />
-    <None Include="..\x64\Debug\Assets\bloomShader.vert" />
-    <None Include="..\x64\Debug\Assets\hdrShader.frag" />
-    <None Include="..\x64\Debug\Assets\hdrShader.vert" />
-    <None Include="..\x64\Debug\Assets\portalShader.frag" />
-    <None Include="..\x64\Debug\Assets\portalShader.vert" />
-    <None Include="..\x64\Debug\Assets\Shaders\colliderShader.frag" />
-    <None Include="..\x64\Debug\Assets\Shaders\colliderShader.vert" />
-    <None Include="..\x64\Debug\Assets\shadowShader.frag" />
-    <None Include="..\x64\Debug\Assets\shadowShader.vert" />
-    <None Include="..\x64\Debug\Assets\skyboxShader.frag" />
-    <None Include="..\x64\Debug\Assets\skyboxShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\basicPostProcess.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\basicPostProcess.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\billboard.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\billboard.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\bloomShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\bloomShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\colliderShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\colliderShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\basicShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\basicShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\hdrShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\hdrShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\skyboxShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\LIT\skyboxShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\brdfShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\brdfShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\environmentMapShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\environmentMapShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\irradianceMapShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\pbrShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\pbrShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\prefilterMapShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\skydomeShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\PBR\skydomeShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\picking.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\picking.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\portalShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\portalShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\shadowShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\shadowShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\slice.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\slice.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\textShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\textShader.vert" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\uiShader.frag" />
+    <None Include="..\x64\Sandbox\Assets\Shaders\uiShader.vert" />
     <None Include="interface\box_collider.i" />
     <None Include="interface\capsule_collider.i" />
     <None Include="interface\collider.i" />
@@ -492,7 +514,6 @@
     <None Include="interface\entity.i" />
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
-    <None Include="interface\matrix3.i" />
     <None Include="interface\scripted_behaviour.i" />
     <None Include="interface\singleton.i" />
     <None Include="interface\time_manager.i" />
@@ -541,6 +562,7 @@
     <ClCompile Include="src\guizmo_renderpass.cpp" />
     <ClCompile Include="src\hdr_renderpass.cpp" />
     <ClCompile Include="src\irradiance_map_renderpass.cpp" />
+    <ClCompile Include="src\mesh_renderer.cpp" />
     <ClCompile Include="src\mixed_rendering_pipeline.cpp" />
     <ClCompile Include="src\pbr_rendering_pipeline.cpp" />
     <ClCompile Include="src\pbr_renderpass.cpp" />
@@ -755,6 +777,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)externals\include;$(ProjectDir)externals\include\PhysX</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>26182;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

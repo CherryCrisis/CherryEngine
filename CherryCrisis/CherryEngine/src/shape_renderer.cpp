@@ -13,31 +13,18 @@
 #include "model.hpp"
 #include "texture.hpp"
 #include "transform.hpp"
-#include "basic_renderpass.hpp"
-#include "pbr_renderpass.hpp"
-#include "picking_renderpass.hpp"
-#include "shadow_renderpass.hpp"
 
 
-// TODO: change with something working
-int ShapeRenderer::count = 100;
-
-ShapeRenderer::ShapeRenderer()
+ShapeRenderer::ShapeRenderer() 
+	: MeshRenderer(ERendererType::SHAPE)
 {
 	PopulateMetadatas();
-	m_id = count;
-	count++;
-
-	m_material = nullptr;
 }
 
-ShapeRenderer::ShapeRenderer(CCUUID& id) : Behaviour(id)
+ShapeRenderer::ShapeRenderer(CCUUID& id) 
+	: MeshRenderer(ERendererType::SHAPE, id)
 {
 	PopulateMetadatas();
-	m_id = count;
-	count++;
-
-	m_material = nullptr;
 }
 
 ShapeRenderer::~ShapeRenderer()
@@ -45,41 +32,23 @@ ShapeRenderer::~ShapeRenderer()
 	RemoveMesh();
 	RemoveMaterial();
 
-	GetHost().m_cell->RemoveRenderer(this);
-
 	GetHost().m_OnCellAdded.Unbind(&ShapeRenderer::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Unbind(&ShapeRenderer::OnCellRemoved, this);
 }
 
 void ShapeRenderer::PopulateMetadatas()
 {
-	Behaviour::PopulateMetadatas();
-
-	m_metadatas.SetField<Behaviour*>("transform", m_transform);
-	m_metadatas.SetProperty("meshFile", &m_MeshPath);
-	m_metadatas.SetProperty("matFile", &m_MaterialPath);
+	m_metadatas.SetProperty("Type", &m_MeshType);
 }
 
-void ShapeRenderer::SetMeshFromPath(std::string meshPath)
+void ShapeRenderer::SetType(const int& type)
 {
-	if (!meshPath.empty())
-		SetMesh(ResourceManager::GetInstance()->AddResourceRef<Mesh>(meshPath.c_str()));
+	m_meshType = static_cast<EMeshShape>(type);
 }
 
-std::string ShapeRenderer::GetMeshPath()
+int ShapeRenderer::GetType()
 {
-	return m_mesh ? m_mesh->GetFilepath() : "";
-}
-
-void ShapeRenderer::SetMaterialFromPath(std::string materialPath)
-{
-	if (!materialPath.empty())
-		SetMaterial(ResourceManager::GetInstance()->AddResourceRef<Material>(materialPath.c_str()));
-}
-
-std::string ShapeRenderer::GetMaterialPath()
-{
-	return m_material ? m_material->GetFilepath() : "";
+	return static_cast<int>(m_meshType);
 }
 
 void ShapeRenderer::OnMeshLoaded(std::shared_ptr<Mesh> mesh)
@@ -88,130 +57,28 @@ void ShapeRenderer::OnMeshLoaded(std::shared_ptr<Mesh> mesh)
 	SetMesh(mesh);
 }
 
-void ShapeRenderer::SetMesh(std::shared_ptr<Mesh> newMesh)
-{
-	if (!newMesh)
-	{
-		RemoveMesh();
-		return;
-	}
-
-	EResourceState resourceState = newMesh->GetResourceState();
-	if (resourceState != EResourceState::LOADED)
-	{
-		newMesh->m_OnLoaded.Bind(&ShapeRenderer::OnMeshLoaded, this);
-		return;
-	}
-
-	m_mesh = newMesh;
-	m_mesh->m_OnDeleted.Bind(&ShapeRenderer::RemoveMesh, this);
-
-	if (m_initialized)
-	{
-		GetHost().m_cell->RemoveRenderer(this);
-		GetHost().m_cell->AddRenderer(this);
-	}
-}
-
-void ShapeRenderer::RemoveMesh()
-{
-	if (!m_mesh)
-		return;
-
-	m_mesh->m_OnDeleted.Unbind(&ShapeRenderer::RemoveMesh, this);
-
-	GetHost().m_cell->RemoveRenderer(this);
-
-	m_mesh = nullptr;
-}
-
-void ShapeRenderer::OnMaterialReloaded(std::shared_ptr<Material> material)
-{
-	GetHost().m_cell->RemoveRenderer(this);
-	GetHost().m_cell->AddRenderer(this);
-}
-
-void ShapeRenderer::OnMaterialLoaded(std::shared_ptr<Material> newMat)
-{
-	newMat->m_OnLoaded.Unbind(&ShapeRenderer::OnMaterialLoaded, this);
-	SetMaterial(newMat);
-}
-
-void ShapeRenderer::SetMaterial(std::shared_ptr<Material> newMat)
-{
-	if (!newMat)
-	{
-		RemoveMaterial();
-		return;
-	}
-
-	EResourceState resourceState = newMat->GetResourceState();
-	if (resourceState != EResourceState::LOADED)
-	{
-		newMat->m_OnLoaded.Bind(&ShapeRenderer::OnMaterialLoaded, this);
-		return;
-	}
-
-	m_material = newMat;
-	m_material->m_OnDeleted.Bind(&ShapeRenderer::RemoveMaterial, this);
-	m_material->m_OnReloaded.Bind(&ShapeRenderer::OnMaterialReloaded, this);
-
-	if (m_initialized)
-	{
-		GetHost().m_cell->RemoveRenderer(this);
-		GetHost().m_cell->AddRenderer(this);
-	}
-}
-
-void ShapeRenderer::RemoveMaterial()
-{
-	if (!m_material)
-		return;
-
-	m_material->m_OnDeleted.Unbind(&ShapeRenderer::RemoveMaterial, this);
-	m_material->m_OnReloaded.Unbind(&ShapeRenderer::OnMaterialReloaded, this);
-	m_material = nullptr;
-}
-
-void ShapeRenderer::SubscribeToPipeline(ARenderingPipeline* pipeline)
-{
-	if (!m_mesh)
-		return;
-
-	pipeline->SubscribeToPipeline<ShadowRenderPass>(this);
-	pipeline->SubscribeToPipeline<PickingRenderPass>(this);
-
-	if (m_material)
-	{
-		switch (m_material->m_pipelineType)
-		{
-		default:
-		case EPipelineType::LIT:
-			pipeline->SubscribeToPipeline<BasicRenderPass>(this);
-			break;
-
-		case EPipelineType::PBR:
-			pipeline->SubscribeToPipeline<PBRRenderPass>(this);
-			break;
-		}
-	}
-	else
-		pipeline->SubscribeToPipeline<BasicRenderPass>(this);
-
-}
-
-void ShapeRenderer::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
-{
-	pipeline->UnsubscribeToPipeline<ShadowRenderPass>(this);
-	pipeline->UnsubscribeToPipeline<PBRRenderPass>(this);
-	pipeline->UnsubscribeToPipeline<BasicRenderPass>(this);
-	pipeline->UnsubscribeToPipeline<PickingRenderPass>(this);
-}
-
 void ShapeRenderer::Initialize()
 {
 	m_initialized = true;
 
+	switch (m_meshType)
+	{
+	case EMeshShape::QUAD:
+		SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedPlane", true, EMeshShape::QUAD, 1.f, 1.f));
+		break;
+	case EMeshShape::CUBE:
+		SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCube", true, EMeshShape::CUBE, 1.f, 1.f, 1.f));
+		break;
+	case EMeshShape::SPHERE:
+		SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedSphere", true, EMeshShape::SPHERE, 1.f, 17.f, 33.f));
+		break;
+	case EMeshShape::CYLINDER:
+		SetMesh(ResourceManager::GetInstance()->AddResource<Mesh>("CC_NormalizedCylinder", true, EMeshShape::CYLINDER, 1.f, 1.f, 32.f));
+		break;
+	default:
+		break;
+	}
+	
 	if (m_mesh)
 		GetHost().m_cell->AddRenderer(this);
 

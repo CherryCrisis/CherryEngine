@@ -63,6 +63,11 @@ uniform bool hasIrradianceMap;
 
 const float PI = 3.14159265359;
 
+//-- Slice (Non-Euclidean) --//
+uniform vec3 uSliceCentre;
+uniform vec3 uSliceNormal;
+uniform float  uIsSlice;
+
 // Shader outputs
 out vec4 oColor;
 
@@ -268,9 +273,18 @@ vec3 getClearCoatBDRF(vec3 V, vec3 N, float clearCoatRoughness, vec3 F0)
     return clearCoat;
 }
 
+void Slice()
+{
+    float sliceSide = dot(uSliceNormal, vPos.xyz - uSliceCentre) * uIsSlice;
+    if (-sliceSide < 0.0)
+        discard;
+}
 
 void main()
 {
+    //-- Slice for Non-Euclidean --//
+    Slice();
+
     TBN = uMaterial.hasNormalMap ? vTBN : mat3(1.0);
 
     Pos = vPos;

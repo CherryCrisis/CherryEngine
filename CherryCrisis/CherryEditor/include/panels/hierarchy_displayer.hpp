@@ -26,7 +26,7 @@ private:
 		std::vector<HierarchyNode> m_childrens;
 	};
 
-	bool	m_isEntityDragged = false;
+	bool	m_isDragging = false;
 	bool	m_isRenaming = false;
 
 	std::vector<HierarchyNode> m_nodes;
@@ -37,6 +37,7 @@ private:
 
 	ImGuiIO*	IO = nullptr;
 
+	void HandleShortcuts();
 public:
 	HierarchyDisplayer(bool spawnOpened = false, EditorManager* manager = nullptr);
 
@@ -45,8 +46,7 @@ public:
 
 	void Refresh();
 
-	////!!Deprecated!!////////////////////////////////
-	bool RenderEntity(Entity* entity, Transform* transform = nullptr);
-	/// //////////////////////////////////////////////
-	bool RenderEntity(HierarchyNode node);
+	bool RenderEntity(HierarchyNode& node);
+
+	void EmptyDrop();
 };

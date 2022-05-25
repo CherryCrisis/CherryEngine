@@ -27,6 +27,8 @@ namespace PhysicSystem
 			DestroyPxActor();
 		}
 
+		m_owner->m_OnDestroyed.Unbind(&PhysicActor::UnlockDelete, this);
+
 		if (m_transform)
 		{
 			m_transform->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
@@ -42,6 +44,7 @@ namespace PhysicSystem
 			return;
 
 		m_transform = m_owner->GetOrAddBehaviour<Transform>();
+		m_owner->m_OnDestroyed.Bind(&PhysicActor::UnlockDelete, this);
 
 		if (m_transform)
 		{
@@ -67,7 +70,7 @@ namespace PhysicSystem
 			
 			Transform* t = m_owner->GetBehaviour<Transform>();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
-			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.y, pxT.q.x, pxT.q.z });
+			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
 
 			Vector3 pos = t ? t->GetPosition() : Vector3::Zero;
 			pos.x = pxT.p.x != m_oldPos.x ? pxT.p.x : pos.x;
@@ -106,14 +109,15 @@ namespace PhysicSystem
 	{
 		m_oldRot = rotation;
 
-		Quaternion pxRotQ = Quaternion::FromEuler(rotation);
 
 
 		if (m_pxActor)
 		{
+			Quaternion pxRotQ = Quaternion::FromEuler(rotation);
+			
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
-				physx::PxQuat(pxRotQ.y, pxRotQ.x, pxRotQ.z, pxRotQ.w)));
+				physx::PxQuat(pxRotQ.x, pxRotQ.y, pxRotQ.z, pxRotQ.w)));
 		}
 	}
 
@@ -134,7 +138,7 @@ namespace PhysicSystem
 		Vector3 pos = m_transform->GetPosition();
 		Quaternion rot = Quaternion::FromEuler(m_transform->GetRotation());
 
-		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.y, rot.x, rot.z, rot.w));
+		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.x, rot.y, rot.z, rot.w));
 
 		physx::PxPhysics* physics = PhysicSystem::PhysicManager::GetInstance()->Get();
 
@@ -172,6 +176,8 @@ namespace PhysicSystem
 		}
 
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
+
+		m_isRemoveLocked++;
 	}
 
 	void PhysicActor::DestroyPxActor()
@@ -182,6 +188,11 @@ namespace PhysicSystem
 
 			PX_RELEASE(m_pxActor);
 		}
+	}
+
+	void PhysicActor::UnlockDelete()
+	{
+		m_isRemoveLocked = 0;
 	}
 
 	physx::PxShape* PhysicActor::CreateShape(const physx::PxGeometry& geometry)
@@ -230,12 +241,13 @@ namespace PhysicSystem
 		if (!m_controller)
 		{
 			m_controller = controller;
+			m_isRemoveLocked++;
 		}
 	}
 
 	void PhysicActor::RemoveRigidbody(Rigidbody* rigidbody)
 	{
-		if (m_controller && m_pxActor)
+		if (m_isRemoveLocked > 0)
 			return;
 
 		if (m_rigidbody == rigidbody)
@@ -252,7 +264,7 @@ namespace PhysicSystem
 
 	void PhysicActor::RemoveCollider(Collider* collider)
 	{
-		if (m_controller && m_pxActor)
+		if (m_isRemoveLocked > 0)
 			return;
 
 		for (size_t i = 0; i < m_colliders.size(); ++i)
@@ -271,15 +283,12 @@ namespace PhysicSystem
 	void PhysicActor::RemoveController(CharacterController* controller)
 	{
 		if (m_pxActor)
-		{
-			// TODO: Fix crash
-			// Debug::GetInstance()->AddLog(ELogType::WARNING, "Can't remove character controller while playing");
-			// return;
-		}
+			return;
 		
 		if (m_controller == controller)
 		{
 			m_controller = nullptr;
+			m_isRemoveLocked = false;
 		}
 	}
 

@@ -34,6 +34,7 @@ struct EntitySelector
     bool Add(Entity* entity);
     bool Remove(Entity* entity, bool unselect = true);
     bool Clear(bool unselect = true);
+    void ClearEx(); // Do not use
     bool IsEmpty() { return m_entities.size() <= 0; }
     bool Contains(Entity* entity);
 
@@ -100,13 +101,15 @@ public:
     void FocusEntity(Entity* entity);
 
     void RefreshHierarchy() { m_hierarchyDisplayer.Refresh(); }
+    void InvalidateCellDisplayer() { m_cellSystemDisplayer.InvalidatePointers(); }
     
-    HierarchyDisplayer*     GetHierarchy() { return &m_hierarchyDisplayer; }
     std::string             GetCompilerPath() { return m_preferencesDisplayer.GetCompilerPath(); }
     AssetBrowser*           GetAssetBrowser() { return &m_browser; }
     CellSystemDisplayer*    GetCellSystemDisplayer() { return &m_cellSystemDisplayer; }
 
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
+
+    void CheckForHierarchyRefresh();
 };
 
 // Wrapper for generic notifications

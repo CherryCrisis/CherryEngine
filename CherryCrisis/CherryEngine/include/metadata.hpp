@@ -16,10 +16,11 @@ struct CCENGINE_API AMetadata
 {
 	std::string m_identifier;
 	std::string m_name;
+	bool m_isShownOnInspector = true;
 
-	AMetadata(const char* name, const char* identifier)
-		: m_identifier(identifier) { }
-
+	AMetadata(const char* name, const char* identifier, bool shownOnInspector = true)
+		: m_identifier(identifier), m_isShownOnInspector(shownOnInspector) { }
+		
 	virtual void Get(void** outValue) = 0;
 	virtual void Set(void* inValue) = 0;
 
@@ -46,14 +47,14 @@ struct CCENGINE_API MetaField : public AMetadata
 		return m_field.m_type;
 	}
 
-	MetaField(const char* name, const Field& field, const char* identifier)
-		: AMetadata(name, identifier), m_field(field)
+	MetaField(const char* name, const Field& field, const char* identifier, bool shown)
+		: AMetadata(name, identifier, shown), m_field(field)
 	{
 
 	}
 
-	MetaField(const char* name, std::any value, const std::type_index& type, const char* identifier)
-		: AMetadata(name, identifier), m_field(value, type)
+	MetaField(const char* name, std::any value, const std::type_index& type, const char* identifier, bool shown)
+		: AMetadata(name, identifier, shown), m_field(value, type)
 	{
 
 	}
@@ -78,8 +79,8 @@ struct CCENGINE_API MetaProperty : public AMetadata
 		return m_property->GetGetType();
 	}
 
-	MetaProperty(const char* name, CCProperty::IClearProperty* prop, const char* identifier)
-		: AMetadata(name, identifier), m_property(prop)
+	MetaProperty(const char* name, CCProperty::IClearProperty* prop, const char* identifier, bool shown=true)
+		: AMetadata(name, identifier, shown), m_property(prop)
 	{
 
 	}
@@ -90,48 +91,48 @@ struct CCENGINE_API Metapack
 	std::unordered_map<std::string, std::shared_ptr<AMetadata>> m_metadatas;
 
 	template <typename T>
-	void SetField(const char* fieldName, Field& fieldToSet, const char* identifier = "0")
+	void SetField(const char* fieldName, Field& fieldToSet, bool shown = true, const char* identifier = "0")
 	{
 		// todo use unique ptr
-		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, fieldToSet, identifier);
+		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, fieldToSet, identifier, shown);
 	}
 
 	template <typename T>
-	void SetField(const char* fieldName, std::any value, const std::type_index& fieldType, const char* identifier = "0")
+	void SetField(const char* fieldName, std::any value, const std::type_index& fieldType, bool shown = true, const char* identifier = "0")
 	{
 		// todo use unique ptr
 
-		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, value, fieldType, identifier);
+		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, value, fieldType, identifier, shown);
 	}
 
 	template <typename CastT, typename RefT>
-	void SetFieldFromPtr(const char* fieldName, RefT* ref)
+	void SetFieldFromPtr(const char* fieldName, RefT* ref, bool shown = true)
 	{
-		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT>, reinterpret_cast<CastT>(ref)), typeid(std::remove_pointer<CastT>));
+		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT>, reinterpret_cast<CastT>(ref)), typeid(std::remove_pointer<CastT>), shown);
 	}
 
 	template <typename RefT>
-	void SetFieldFromPtr(const char* fieldName, RefT* ref)
+	void SetFieldFromPtr(const char* fieldName, RefT* ref, bool shown = true)
 	{
-		SetField<RefT*>(fieldName, std::any(ref), typeid(RefT));
+		SetField<RefT*>(fieldName, std::any(ref), typeid(RefT), shown);
 	}
 
 	template <typename RefT>
-	void SetField(const char* fieldName, RefT& ref)
+	void SetField(const char* fieldName, RefT& ref, bool shown = true)
 	{
-		SetFieldFromPtr(fieldName, &ref);
+		SetFieldFromPtr(fieldName, &ref, shown);
 	}
 
 	template <typename CastT, typename RefT>
-	void SetField(const char* fieldName, RefT& ref)
+	void SetField(const char* fieldName, RefT& ref, bool shown = true)
 	{
-		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref)), typeid(CastT));
+		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref)), typeid(CastT), shown);
 	}
 
-	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop, const char* identifier = "0")
+	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop, const char* identifier = "0", bool shown = true)
 	{
 		// todo use unique ptr
 
-		m_metadatas[fieldName] = std::make_shared<MetaProperty>(fieldName, prop, identifier);
+		m_metadatas[fieldName] = std::make_shared<MetaProperty>(fieldName, prop, identifier, shown);
 	}
 };

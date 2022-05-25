@@ -20,11 +20,46 @@ Entity::Entity(const std::string& name, Cell* cell, CCUUID id)
 	cell->AddEntity(this);
 }
 
+Entity::Entity(Entity* entity) 
+{
+	m_name = entity->GetName();
+	entity->m_cell->AddEntity(this);
+	//Copy behaviours
+	std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
+	for (const auto& behaviour : behaviours) 
+	{
+		std::string name = String::ExtractLastValue(typeid(*behaviour).name(), ' ');
+		Behaviour* behaviourCopy = Serializer::CreateBehaviour(name, {}, false);
+		
+		if (behaviourCopy) 
+			behaviourCopy->SetHostPtr(this);
+	}
+
+	// Link copied behaviours
+	for (const auto& [type, behaviour] : m_behaviours)
+	{
+		std::string myName = String::ExtractTypeIndexName(typeid(*behaviour));
+		for (const auto& cbehaviour : behaviours)
+		{
+			std::string copiedName = String::ExtractTypeIndexName(typeid(*cbehaviour));
+			if (myName == copiedName) 
+			{
+				behaviour->Copy(cbehaviour);
+				break;
+			}
+		}
+	}
+}
+
+// something is wrong here 
 Entity::~Entity()
 {
+	m_OnDestroyed.Invoke();
+
 	for (auto& [type, behaviour] : m_behaviours)
 		delete behaviour;
 
+	m_behaviours.clear();
 	m_cell->RemoveEntity(this);
 }
 
@@ -35,28 +70,18 @@ void Entity::Initialize()
 
 bool Entity::RemoveBehaviour(Behaviour* behaviour)
 {
-	auto compIt = m_behaviours.find(behaviour->TypeName());
-
-	if (compIt == m_behaviours.end())
+	auto itPair = m_behaviours.equal_range(behaviour->TypeName());
+	
+	for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
 	{
-		auto itPair = m_behaviours.equal_range("Behaviour");
-
-		for (auto findIt = itPair.first; findIt != itPair.second; findIt++)
+		if (findIt->second == behaviour)
 		{
-			if (findIt->second == behaviour)
-			{
-				compIt = findIt;
-				break;
-			}
+			m_behaviours.erase(findIt);
+			delete behaviour;
+			return true;
 		}
-
-		if (compIt == m_behaviours.end())
-			return false;
 	}
-
-	m_behaviours.erase(compIt);
-	delete behaviour;
-	return true;
+	return false;
 }
 
 void Entity::Update()
@@ -64,6 +89,16 @@ void Entity::Update()
 	m_OnAwake.Invoke();
 	m_OnStart.Invoke();
 	m_OnTick.Invoke();
+}
+
+void Entity::FixedUpdate()
+{
+	m_OnFixedTick.Invoke();
+}
+
+void Entity::LateUpdate()
+{
+	m_OnLateTick.Invoke();
 }
 
 void Entity::OnCollisionEnter(Entity* other)
@@ -93,7 +128,6 @@ void Entity::OnTriggerExit(Entity* other)
 
 void Entity::Destroy()
 {
-	m_OnDestroyed.Invoke();
 	delete this;
 }
 
@@ -113,7 +147,6 @@ Behaviour* Entity::GetBehaviour(const std::string& componentTypeName)
 		if (componentTypeName == behaviourTypeName)
 			return findIt->second;
 	}
-
 	return nullptr;
 }
 

@@ -100,15 +100,15 @@ namespace PhysicSystem
 		if (index != -1)
 			return;
 
+		AddPxActor(actor);
 		m_actors.push_back(actor);
 	}
 
 	void PhysicScene::AddPxActor(PhysicActor* actor)
 	{
 		if (m_pxScene)
-		{
-			m_pxScene->addActor(*actor->Get());
-		}
+			if (actor->Get())
+				m_pxScene->addActor(*actor->Get());
 	}
 
 	bool PhysicScene::RemoveActor(PhysicActor* actor)
@@ -118,6 +118,7 @@ namespace PhysicSystem
 		if (index == -1)
 			return false;
 
+		RemovePxActor(m_actors[index]);
 		m_actors[index] = m_actors.back();
 		m_actors.pop_back();
 
@@ -127,7 +128,8 @@ namespace PhysicSystem
 	void PhysicScene::RemovePxActor(PhysicActor* actor)
 	{
 		if (m_pxScene)
-			m_pxScene->removeActor(*actor->Get());
+			if (actor->Get())
+				m_pxScene->removeActor(*actor->Get());
 	}
 
 	int PhysicScene::PossessActor(PhysicActor* actor)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector4.hpp"
+#include "maths_utils.hpp"
 
 namespace CCMaths
 {
@@ -458,6 +459,9 @@ namespace CCMaths
 
 		//! \hiderefs
 		inline static Matrix4 Orthographic(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);
+		
+		//! \hiderefs
+		inline static Matrix4 ObliqueProjection(const Vector4& clipPlane, const Matrix4& projection);
 
 		//! Look at Matrix4
 		/*!

@@ -15,15 +15,11 @@
 CharacterController::CharacterController()
 {
 	PopulateMetadatas();
-
-	m_timeManager = TimeManager::GetInstance();
 }
 
 CharacterController::CharacterController(CCUUID& id) : Behaviour(id)
 {
 	PopulateMetadatas();
-
-	m_timeManager = TimeManager::GetInstance();
 }
 
 CharacterController::~CharacterController()
@@ -81,8 +77,7 @@ void CharacterController::Initialize()
 		}
 	}
 	else
-		// change with physicActor rigidbody to be sure if there are multiple on the entity
-		m_rigidbody = owner.GetBehaviour<Rigidbody>();
+		m_rigidbody = m_physicActor->GetRigidbody();
 
 	GetHost().m_OnStart.Unbind(&CharacterController::Initialize, this);
 }
@@ -136,10 +131,10 @@ void CharacterController::Update()
 	float forward = InputManager::GetAxis(Keycode::W, Keycode::S);
 	float side = InputManager::GetAxis(Keycode::D, Keycode::A);
 
-	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * InputManager::GetMouseDelta().x * m_timeManager->GetDeltaTime();
+	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * InputManager::GetMouseDelta().x * TimeManager::GetDeltaTime();
 
 	if (InputManager::GetKey(Keycode::SPACE) && m_isGrounded)
-		m_physicActor->AddForce({0, 10.f, 0}, PhysicSystem::EForceMode::eIMPULSE);
+		m_physicActor->AddForce({ 0, 10.f, 0 }, PhysicSystem::EForceMode::eIMPULSE);
 
 	InputManager::PopContext();
 
@@ -147,7 +142,7 @@ void CharacterController::Update()
 
 	CCMaths::Vector3 goalVelocity = move * m_moveSpeed;
 
-	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) / m_timeManager->GetDeltaTime(), -150.f, 150.f);
+	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) * TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * actor->getMass(), { 1, 0, 1 });
 
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);

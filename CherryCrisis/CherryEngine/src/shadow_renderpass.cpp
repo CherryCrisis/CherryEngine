@@ -62,7 +62,7 @@ void ShadowRenderPass::Unsubscribe(Light* toGenerate)
 }
 
 template <>
-int ShadowRenderPass::Subscribe(ModelRenderer* toGenerate)
+int ShadowRenderPass::Subscribe(MeshRenderer* toGenerate)
 {
 	if (!toGenerate->m_mesh)
 		return -1;
@@ -76,29 +76,9 @@ int ShadowRenderPass::Subscribe(ModelRenderer* toGenerate)
 }
 
 template <>
-void ShadowRenderPass::Unsubscribe(ModelRenderer* toGenerate)
+void ShadowRenderPass::Unsubscribe(MeshRenderer* toGenerate)
 {
 	m_models.erase(toGenerate);
-}
-
-template <>
-int ShadowRenderPass::Subscribe(ShapeRenderer* toGenerate)
-{
-	if (!toGenerate->m_mesh)
-		return -1;
-
-	if (!m_meshGenerator.Generate(toGenerate->m_mesh.get()))
-		return -1;
-
-	m_shapes.insert(toGenerate);
-
-	return 1;
-}
-
-template <>
-void ShadowRenderPass::Unsubscribe(ShapeRenderer* toGenerate)
-{
-	m_shapes.erase(toGenerate);
 }
 
 void ShadowRenderPass::Execute(Viewer*& viewer)
@@ -121,7 +101,7 @@ void ShadowRenderPass::Execute(Viewer*& viewer)
 		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->framebuffer.FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		for (ModelRenderer* modelRdr : m_models)
+		for (MeshRenderer* modelRdr : m_models)
 		{
 			if (!modelRdr->m_isVisible)
 				continue;

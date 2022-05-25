@@ -40,6 +40,9 @@ public:
 	void SetAsMain();
 	void InvalidateTransform();
 
+	void OnCellAdded(Cell* newCell);
+	void OnCellRemoved(Cell* newCell);
+
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	

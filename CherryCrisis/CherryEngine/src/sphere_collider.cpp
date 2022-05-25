@@ -10,6 +10,7 @@
 #include "camera_component.hpp"
 #include "collider_renderpass.hpp"
 #include "entity.hpp"
+#include "shape_renderer.hpp"
 #include "transform.hpp"
 
 using namespace CCMaths;
@@ -20,6 +21,8 @@ SphereCollider::SphereCollider()
 	PopulateMetadatas();
 
 	m_type = EColliderType::SPHERE;
+
+	m_isAddedFromInspector = true;
 }
 
 SphereCollider::SphereCollider(CCUUID& id) : Collider(id)
@@ -92,15 +95,23 @@ void SphereCollider::Initialize()
 
 	GetHost().m_OnAwake.Unbind(&SphereCollider::Initialize, this);
 
-	ModelRenderer* modelRdr = GetHost().GetBehaviour<ModelRenderer>();
-	if (modelRdr)
+	if (m_isAddedFromInspector)
 	{
-		if (modelRdr->m_mesh)
-		{
-			Vector3& extents = modelRdr->m_mesh->m_aabb.m_extents;
+		MeshRenderer* renderer = nullptr;
+		renderer = GetHost().GetBehaviour<ModelRenderer>();
 
-			m_baseEntityScale	= Max(Max(extents.x, extents.y), extents.z);
-			m_localPosition		= modelRdr->m_mesh->m_aabb.m_center;
+		if (!renderer)
+			renderer = GetHost().GetBehaviour<ShapeRenderer>();
+
+		if (renderer)
+		{
+			if (renderer->m_mesh)
+			{
+				Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
+
+				m_editableScale = Max(Max(extents.x, extents.y), extents.z);
+				m_localPosition = renderer->m_mesh->m_aabb.m_center;
+			}
 		}
 	}
 
@@ -133,7 +144,6 @@ void SphereCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Is Trigger", &isTrigger);
 	m_metadatas.SetProperty("Local Position", &localPosition);
 	m_metadatas.SetProperty("Scale", &editableScale);
-	m_metadatas.SetProperty("Contact Offset", &contactOffset);
 }
 
 void SphereCollider::SetEntityScale(const CCMaths::Vector3& s)
@@ -141,7 +151,7 @@ void SphereCollider::SetEntityScale(const CCMaths::Vector3& s)
 	CCMaths::Vector3 scale = m_transform->GetGlobalScale();
 	m_entityScale = CCMaths::Max(CCMaths::Max(scale.x, scale.y), scale.z);
 
-	m_totalScale = m_baseEntityScale * m_editableScale * m_entityScale;
+	m_totalScale = m_editableScale * m_entityScale;
 	
 	ComputeModelMatrices();
 }
@@ -178,7 +188,7 @@ void SphereCollider::SetPxData()
 {
 	if (m_pxShape)
 	{
-		m_pxShape->setContactOffset(m_contactOffset);
+		m_pxShape->setContactOffset(0.02f);
 
 		if (!m_isEnabled)
 		{
@@ -215,7 +225,7 @@ void SphereCollider::SetScale(const float& scale)
 {
 	m_editableScale = scale;
 
-	m_totalScale = m_baseEntityScale * m_editableScale * m_entityScale;
+	m_totalScale = m_editableScale * m_entityScale;
 	ComputeModelMatrices();
 
 	ResetPxShape();

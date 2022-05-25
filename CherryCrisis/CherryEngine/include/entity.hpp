@@ -34,6 +34,8 @@ public:
 	Event<> m_OnAwake;
 	Event<> m_OnStart;
 	Event<> m_OnTick;
+	Event<> m_OnFixedTick;
+	Event<> m_OnLateTick;
 	Event<> m_OnDestroyed;
 	Event<Cell*> m_OnCellAdded;
 	Event<Cell*> m_OnCellRemoved;
@@ -48,6 +50,7 @@ public:
 	Event<Entity*> m_OnTriggerExit;
 
 	Entity(const std::string& name, Cell* cell, CCUUID uuid = {});
+	Entity(Entity* entity);
 	virtual ~Entity();
 
 	template <BehaviourT CompT>
@@ -85,6 +88,8 @@ public:
 	void Initialize();
 
 	void Update();
+	void FixedUpdate();
+	void LateUpdate();
 
 	void OnCollisionEnter(Entity* other);
 	void OnCollisionStay(Entity* other);

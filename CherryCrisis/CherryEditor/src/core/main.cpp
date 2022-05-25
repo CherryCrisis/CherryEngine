@@ -106,7 +106,6 @@ int main(int argc, char** argv)
 #endif
 
     Engine engine{};
-    std::cout << "engine created " << std::endl;
     {
         EditorManager editor{ projectPath };
 
@@ -159,7 +158,10 @@ int main(int argc, char** argv)
         int isSceneFocused = false;
         glfwSwapInterval(0);
 
-        SceneManager::GetInstance()->m_currentScene->m_onModifiedEntities.Bind(&HierarchyDisplayer::Refresh, editor.GetHierarchy());
+        SceneManager::GetInstance()->m_lateHierarchyRefresh.Bind(&EditorManager::RefreshHierarchy, &editor);
+        SceneManager::GetInstance()->m_sceneChanged.Bind(&EntitySelector::ClearEx, &editor.m_entitySelector);
+        SceneManager::GetInstance()->m_sceneChanged.Bind(&EditorManager::InvalidateCellDisplayer, &editor);
+
         while (glfwWindowShouldClose(window) == false)
         {
             InputManager::UpdateKeys();
@@ -192,6 +194,8 @@ int main(int argc, char** argv)
                 ImGui::SetWindowFocus("Scene");
                 isSceneFocused = true;
             }
+
+            editor.CheckForHierarchyRefresh();
         }
         //Save editor file
         Serializer::SerializeEditor();

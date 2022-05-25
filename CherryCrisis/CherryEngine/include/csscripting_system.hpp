@@ -20,22 +20,25 @@ class CCENGINE_API CsScriptingSystem : public Singleton<CsScriptingSystem>
 
 private:
 	std::unique_ptr<mono::ManagedScriptSystem> m_scriptSystem;
-	std::vector<std::shared_ptr<class CsAssembly>> m_assemblies;
+	std::vector<std::shared_ptr<CsAssembly>> m_assemblies;
 
-	std::shared_ptr<class CsAssembly> m_interfaceAssembly;
-	std::shared_ptr<class CsAssembly> m_scriptAssembly;
+	std::shared_ptr<CsAssembly> m_interfaceAssembly;
+	std::shared_ptr<CsAssembly> m_scriptAssembly;
 
 public:
 	std::vector<std::string> classesName;
 
 	mono::ManagedScriptContext* CreateContext(char* domainName, const char* contextPath, bool makeCopy);
-	void InitializeAssembly(std::shared_ptr<class CsAssembly> assembly, const char* domainName, bool makeCopy);
+	void InitializeAssembly(std::shared_ptr<CsAssembly> assembly, const char* domainName, bool makeCopy);
 
 	CsScriptingSystem();
 	virtual ~CsScriptingSystem();
 
 	void Init();
 	void ReloadContextes();
+
+	void OnPreReload(std::shared_ptr<CsAssembly> assembly);
+	void OnReload(std::shared_ptr<CsAssembly> assembly);
 	
 	void InitializeHotReload(const char* compilerPath, const char* solutionPath);
 
