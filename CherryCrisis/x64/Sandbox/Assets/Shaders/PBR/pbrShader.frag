@@ -178,7 +178,9 @@ float getLightAttenuation(int lightType, vec3 lightDirection, vec3 spotDirection
     float theta = -dot(normalize(lightDirection), normalize(spotDirection));
     float epsilon = cutOff - outerCutOff;
 
-    return attenuation *  clamp((theta - outerCutOff) / epsilon, 0.0, 1.0);
+    float spotIntensity =  clamp((theta - outerCutOff) / epsilon, 0.0, 1.0);
+
+    return attenuation * spotIntensity;
 }
 
 vec3 getBDRFResult(vec3 V, vec3 N, vec3 albedo, float roughness, float metallic, vec3 F0, float specularWeight)

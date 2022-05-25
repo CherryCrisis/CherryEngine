@@ -52,6 +52,7 @@ void LightComponent::BindToSignals()
 
 void LightComponent::Initialize()
 {
+
 	m_transform = GetHost().GetOrAddBehaviour<Transform>();
 
 	if (m_transform)
@@ -72,12 +73,13 @@ void LightComponent::PopulateMetadatas()
 	Behaviour::PopulateMetadatas();
 
 	m_metadatas.SetProperty("light type", &lightType);
+	m_metadatas.SetProperty("directon", &direction);
 	m_metadatas.SetProperty("ambient", &ambient);
 	m_metadatas.SetProperty("diffuse", &diffuse);
 	m_metadatas.SetProperty("specular", &specular);
 	m_metadatas.SetProperty("attenuation", &attenuation);
-	m_metadatas.SetProperty("outer cutoff", &cutoff);
-	m_metadatas.SetProperty("cutoff", &outerCutoff);
+	m_metadatas.SetProperty("cutoff", &cutoff);
+	m_metadatas.SetProperty("outer cutoff", &outerCutoff);
 }
 
 void LightComponent::ChangePosition(const CCMaths::Vector3& position)
@@ -89,7 +91,7 @@ void LightComponent::ChangePosition(const CCMaths::Vector3& position)
 	// TODO: Add real ortho values
 	m_light.m_lightSpace = CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f) * m_light.m_lookAtMatrix;
 
-	m_light.m_OnParamsChanged.Invoke();
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_position), sizeof(Light::m_position), &m_light.m_position);
 }
 
 void LightComponent::ChangeRotation(const CCMaths::Vector3& rotation)
@@ -130,44 +132,51 @@ void LightComponent::InvalidateTransform()
 void LightComponent::SetPosition(const CCMaths::Vector3& newPosition)
 {
 	m_light.m_position = newPosition;
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_position), sizeof(Light::m_position), &m_light.m_position);
 }
 
 void LightComponent::SetRotation(const CCMaths::Vector3& newDirection)
 {
 	m_light.m_direction = newDirection;
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_direction), sizeof(Light::m_direction), &m_light.m_direction);
 }
 
 void LightComponent::SetAmbient(const CCMaths::Vector3& newAmbient)
 {
 	m_light.m_ambient = newAmbient;
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_ambient), sizeof(Light::m_ambient), &m_light.m_ambient);
 }
 
 void LightComponent::SetDiffuse(const CCMaths::Vector3& newDiffuse)
 {
 	m_light.m_diffuse = newDiffuse;
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_diffuse), sizeof(Light::m_diffuse), &m_light.m_diffuse);
 }
 
 void LightComponent::SetSpecular(const CCMaths::Vector3& newSpecular)
 {
 	m_light.m_specular = newSpecular;
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_specular), sizeof(Light::m_specular), &m_light.m_specular);
 }
 
 void LightComponent::SetAttenuation(const CCMaths::Vector3& newAttenuation)
 {
 	m_light.m_attenuation = newAttenuation;
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_attenuation), sizeof(Light::m_attenuation), &m_light.m_attenuation);
 }
 
 void LightComponent::SetCutoff(float newCutoff)
 {
 	m_cutoff = newCutoff;
 	m_light.m_cutoff = cosf(newCutoff);
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_cutoff), sizeof(Light::m_cutoff), &m_light.m_cutoff);
 }
 
 void LightComponent::SetOuterCutoff(float newOuterCutoff)
@@ -175,13 +184,15 @@ void LightComponent::SetOuterCutoff(float newOuterCutoff)
 	m_outerCutoff = newOuterCutoff;
 
 	m_light.m_outerCutoff = cosf(newOuterCutoff);
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_outerCutoff), sizeof(Light::m_outerCutoff), &m_light.m_outerCutoff);
 }
 
 void LightComponent::SetLightType(ELightType newType)
 {
 	m_light.m_type = newType;
-	m_light.m_OnParamsChanged.Invoke();
+
+	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_type), sizeof(Light::m_type), &m_light.m_type);
 }
 
 void LightComponent::SubscribeGuizmo()

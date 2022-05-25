@@ -19,7 +19,7 @@ public:
 		GPULightBasic(Light* owner);
 		~GPULightBasic();
 
-		void Update();
+		void Update(unsigned int offset, size_t size, void* data);
 
 		static GLsizei ownerSize;
 	};

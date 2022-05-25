@@ -12,7 +12,7 @@ LightGenerator::GPULightBasic::GPULightBasic(Light* owner)
 {
 	framebuffer.Init(1000, 1000);
 
-	Update();
+	Update(0, ownerSize, m_owner->m_position.data);
 
 	m_owner->m_OnParamsChanged.Bind(&GPULightBasic::Update, this);
 }
@@ -22,26 +22,21 @@ LightGenerator::GPULightBasic::~GPULightBasic()
 	m_owner->m_OnParamsChanged.Unbind(&GPULightBasic::Update, this);
 }
 
-void LightGenerator::GPULightBasic::Update()
+void LightGenerator::GPULightBasic::Update(unsigned int offset, size_t size, void* data)
 {
-	glBindBuffer(GL_UNIFORM_BUFFER, UBO);
-	glBufferSubData(GL_UNIFORM_BUFFER, size_t(ownerSize) * size_t(index), ownerSize, m_owner->m_position.data);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glNamedBufferSubData(UBO, ownerSize * size_t(index) + offset, size, data);
 }
 
 LightGenerator::LightGenerator()
 {
 	if (!UBO)
 	{
-		unsigned int lightCount = 8u;
+		size_t lightCount = 8u;
 
-		glGenBuffers(1, &UBO);
-		glBindBuffer(GL_UNIFORM_BUFFER, UBO);
-		glBufferData(GL_UNIFORM_BUFFER, size_t(lightCount) * size_t(LightGenerator::GPULightBasic::ownerSize), NULL, GL_STATIC_DRAW);
+		glCreateBuffers(1, &UBO);
+		glNamedBufferData(UBO, lightCount * size_t(LightGenerator::GPULightBasic::ownerSize), nullptr, GL_STATIC_DRAW);
 
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-		glBindBufferRange(GL_UNIFORM_BUFFER, UBOBindingPoint, UBO, 0, size_t(lightCount) * size_t(LightGenerator::GPULightBasic::ownerSize));
+		glBindBufferRange(GL_UNIFORM_BUFFER, UBOBindingPoint, UBO, 0, lightCount * size_t(LightGenerator::GPULightBasic::ownerSize));
 	}
  }
 
