@@ -24,11 +24,11 @@ public:
 
 		void Update();
 		void Update(unsigned int offset, size_t size, void* data);
+		void GetCorrectIndex();
 
 		static GLsizei ownerSize;
+		static std::set<unsigned int> indices;
 	};
-
-	unsigned int m_lastIndex = 0;
 
 	LightGenerator();
 	~LightGenerator();

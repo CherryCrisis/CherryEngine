@@ -29,6 +29,8 @@ LightComponent::LightComponent(CCUUID& id) : Behaviour(id)
 
 LightComponent::~LightComponent()
 {
+	SetLightType(ELightType::OFF);
+
 	GetHost().m_cell->RemoveRenderer(this);
 
 	if (m_transform)

@@ -32,8 +32,6 @@ struct Light
     alignas(4) float m_outerCutoff = cosf(CCMaths::PI);
     alignas(4) int alignement;
 
-    //virtual ~Light() { m_gpuLight.reset(); }
-
     CCMaths::Matrix4 m_lookAtMatrix = CCMaths::Matrix4::Identity;
 
     std::unique_ptr<GPULight> m_gpuLight = nullptr;

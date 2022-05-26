@@ -6,6 +6,7 @@ GLuint LightGenerator::UBO = 0u;
 GLuint LightGenerator::UBOBindingPoint = 0u;
 
 GLsizei LightGenerator::GPULightBasic::ownerSize = offsetof(Light, alignement) - offsetof(Light, m_position) + sizeof(Light::alignement);
+std::set<unsigned int> LightGenerator::GPULightBasic::indices;
 
 LightGenerator::GPULightBasic::GPULightBasic(Light* owner)
 	: m_owner(owner)
@@ -25,20 +26,35 @@ LightGenerator::GPULightBasic::GPULightBasic(Light* owner)
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	GetCorrectIndex();
+
 	m_owner->m_OnParamsChanged.Bind(&GPULightBasic::Update, this);
 }
 
 LightGenerator::GPULightBasic::~GPULightBasic()
 {
-	//m_owner->m_OnParamsChanged.Unbind(&GPULightBasic::Update, this);
-
 	if (FBO)
 		glDeleteFramebuffers(1, &FBO);
 
 	if (TexID)
 		glDeleteTextures(1, &TexID);
 
-	glNamedBufferSubData(UBO, ownerSize * index, ownerSize, nullptr);
+	indices.erase(index);
+}
+
+void LightGenerator::GPULightBasic::GetCorrectIndex()
+{
+	// TODO: set NBR_LIGHT shader define as value
+	for (unsigned int i = 0u; i < 8u; i++)
+	{
+		if (indices.find(i) == indices.end())
+		{
+			index = i;
+			break;
+		}
+	}
+
+	indices.insert(index);
 }
 
 void LightGenerator::GPULightBasic::Update()
@@ -83,8 +99,6 @@ bool LightGenerator::Generate(Light* toGenerate)
 
 	toGenerate->m_gpuLight = std::make_unique<GPULightBasic>(toGenerate);
 	auto gpuLight = static_cast<GPULightBasic*>(toGenerate->m_gpuLight.get());
-
-	gpuLight->index = m_lastIndex++;
 	gpuLight->Update();
 
 	return true;

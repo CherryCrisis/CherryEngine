@@ -141,10 +141,12 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 	// TODO: Set shader define as upper bound
 	for (size_t lightID = 0u; lightID < std::min<size_t>(m_lights.size(), 8u); lightID++)
 	{
-		if (auto gpuLight = static_cast<LightGenerator::GPULightBasic*>(m_lights[lightID]->m_gpuLight.get()))
+		Light* light = m_lights[lightID];
+		if (auto gpuLight = static_cast<LightGenerator::GPULightBasic*>(light->m_gpuLight.get()))
 		{
-			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)lightID, 3 + (GLsizei)lightID);
-			glBindTextureUnit(3 + (GLsizei)lightID, gpuLight->TexID);
+			GLuint textureNum = 3 + (GLsizei)gpuLight->index;
+			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)gpuLight->index, textureNum);
+			glBindTextureUnit(textureNum, gpuLight->TexID);
 		}
 	}
 
