@@ -14,11 +14,10 @@ CompT* Entity::AddBehaviour(const std::string& componentTypeName)
 {
 	CompT* rawPtr = new CompT();
 
-	SubscribeComponent(rawPtr, componentTypeName);
+	rawPtr->OnSetOwner(this);
 
 	return rawPtr;
 }
-
 
 template <BehaviourT CompT>
 CompT* Entity::GetBehaviour()

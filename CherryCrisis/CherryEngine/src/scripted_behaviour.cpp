@@ -22,13 +22,12 @@ ScriptedBehaviour::ScriptedBehaviour()
 	m_behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
 	m_entityClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Entity");
 
+
+	Behaviour::PopulateMetadatas();
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
 	if (m_scriptingAssembly)
-	{
-		m_scriptingAssembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
 		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
-	}
 }
 
 ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
@@ -39,13 +38,11 @@ ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 	m_behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
 	m_entityClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Entity");
 
+	Behaviour::PopulateMetadatas();
 	m_metadatas.SetProperty("scriptName", &scriptPath);
 
 	if (m_scriptingAssembly)
-	{
-		m_scriptingAssembly->m_OnReloaded.Bind(&ScriptedBehaviour::Reload, this);
 		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
-	}
 }
 
 ScriptedBehaviour::~ScriptedBehaviour()
@@ -54,23 +51,23 @@ ScriptedBehaviour::~ScriptedBehaviour()
 	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
 	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
 
+	UnsetSignals();
+
 	if (m_scriptingAssembly)
-	{
-		m_scriptingAssembly->m_OnReloaded.Unbind(&ScriptedBehaviour::Reload, this);
 		m_scriptingAssembly->m_OnDeleted.Unbind(&ScriptedBehaviour::InvalidateAssembly, this);
-	}
 
 	if (m_managedInstance)
 		m_managedInstance->Dispose();
 }
 
-void ScriptedBehaviour::BindToSignals() 
+void ScriptedBehaviour::OnSetOwner(Entity* newOwner)
 {
-	if (!m_managedInstance)
-		return;
-
-	if (m_linked)
+	if (m_linked && !m_subscribed && m_managedInstance)
+	{
+		m_subscribed = true;
+		GetHost().SubscribeComponent(this, m_scriptName);
 		SetSignals();
+	}
 }
 
 void ScriptedBehaviour::SetSignals()
@@ -100,9 +97,31 @@ void ScriptedBehaviour::SetSignals()
 		GetHost().m_OnTriggerExit.Bind(&ScriptedBehaviour::OnTriggerExit, this);
 }
 
-void ScriptedBehaviour::OnSetOwner(Entity* newOwner)
+void ScriptedBehaviour::UnsetSignals()
 {
-	newOwner->SubscribeComponent(this, m_scriptName);
+	if (m_managedUpdate)
+		GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
+
+	if (m_managedStart)
+		GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
+
+	if (m_managedAwake)
+		GetHost().m_OnAwake.Unbind(&ScriptedBehaviour::Awake, this);
+
+	if (m_managedCollideIn)
+		GetHost().m_OnCollisionEnter.Unbind(&ScriptedBehaviour::OnCollisionEnter, this);
+
+	if (m_managedCollideStay)
+		GetHost().m_OnCollisionStay.Unbind(&ScriptedBehaviour::OnCollisionStay, this);
+
+	if (m_managedCollideOut)
+		GetHost().m_OnCollisionExit.Unbind(&ScriptedBehaviour::OnCollisionExit, this);
+
+	if (m_managedTriggerIn)
+		GetHost().m_OnTriggerEnter.Unbind(&ScriptedBehaviour::OnTriggerEnter, this);
+
+	if (m_managedTriggerOut)
+		GetHost().m_OnTriggerExit.Unbind(&ScriptedBehaviour::OnTriggerExit, this);
 }
 
 void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
@@ -140,8 +159,12 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 	m_managedInstance = m_managedClass->CreateUnmanagedInstance(this, false);
 
-	if (GetHostPtr())
+	if (Entity* host = GetHostPtr(); host && !m_subscribed)
+	{
+		m_subscribed = true;
+		host->SubscribeComponent(this, m_scriptName);
 		SetSignals();
+	}
 		
 	if (!m_managedInstance)
 		return;
@@ -218,12 +241,10 @@ void ScriptedBehaviour::PopulateMetadatas()
 				CCMaths::Vector3* valPtr = *(CCMaths::Vector3**)mono_object_unbox(res);
 
 				m_metadatas.SetFieldFromPtr(fieldName.c_str(), valPtr);
-				continue;
 			}
 			else if (fieldType->Equals("CCEngine.Entity"))
 			{
 				currentProperty = std::make_shared<ReflectedManagedObjectField<Entity*>>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod);
-				continue;
 			}
 			else if (fieldType->InheritOf(m_behaviourClass))
 			{
@@ -232,16 +253,13 @@ void ScriptedBehaviour::PopulateMetadatas()
 				identifier = compName;
 
 				currentProperty = std::make_shared<ReflectedManagedObjectField<Behaviour*>>(m_managedInstance, fieldRef.get(), managedClass, getHandleMethod);
-				continue;
 			}
 
 			if (currentProperty)
 			{
 				m_properties[fieldName] = currentProperty;
 				m_metadatas.SetProperty(fieldName.c_str(), currentProperty.get(), identifier.c_str());
-				continue;
 			}
-			continue;
 		}
 	}
 
@@ -357,12 +375,6 @@ void ScriptedBehaviour::OnTriggerExit(Entity* other)
 	csTriggerOut->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
 
 	m_physicEntities.erase(entityIt);
-}
-
-void ScriptedBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
-{
-	m_metadatas.m_metadatas.clear();
-	PopulateMetadatas();
 }
 
 _MonoObject* ScriptedBehaviour::GetRawInstance()

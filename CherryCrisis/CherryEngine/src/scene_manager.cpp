@@ -54,7 +54,6 @@ void SceneManager::SetHierarchyDirty(bool value)
 bool SceneManager::LoadScene(const char* filepath) 
 {
 	SceneManager* mng = GetInstance();
-	mng->m_sceneChanged.Invoke();
 	
 	if (!std::filesystem::exists(filepath)) 
 	{
@@ -70,6 +69,8 @@ bool SceneManager::LoadScene(const char* filepath)
 	mng->Initialize();
 
 	ResourceManager::GetInstance()->Purge();
+
+	mng->m_sceneChanged.Invoke();
 
 	return mng->m_currentScene != nullptr;
 }
@@ -101,6 +102,8 @@ void SceneManager::ResetScene()
 	mng->Initialize();
 
 	ResourceManager::GetInstance()->Purge();
+
+	mng->m_sceneChanged.Invoke();
 }
 
 void SceneManager::FlipScene() 

@@ -101,8 +101,8 @@ public:
     void FocusEntity(Entity* entity);
 
     void RefreshHierarchy() { m_hierarchyDisplayer.Refresh(); }
+    void InvalidateCellDisplayer() { m_cellSystemDisplayer.InvalidatePointers(); }
     
-    HierarchyDisplayer*     GetHierarchy() { return &m_hierarchyDisplayer; }
     std::string             GetCompilerPath() { return m_preferencesDisplayer.GetCompilerPath(); }
     AssetBrowser*           GetAssetBrowser() { return &m_browser; }
     CellSystemDisplayer*    GetCellSystemDisplayer() { return &m_cellSystemDisplayer; }

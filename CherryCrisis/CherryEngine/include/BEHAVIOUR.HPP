@@ -31,6 +31,7 @@ public:
 	Behaviour(CCUUID& id) : Object(id) {}
 	virtual ~Behaviour() { m_OnDestroy.Invoke(); }
 
+	virtual const std::string TypeName();
 	virtual void OnSetOwner(Entity* newOwner);
 	virtual void LateUpdate() {}
 	virtual void FixedUpdate() {}
@@ -38,8 +39,6 @@ public:
 	virtual void OnDisable() {}
 	virtual void BindToSignals() {}
 	virtual bool CanDelete() { return true; }
-
-	virtual const std::string TypeName();
 	
 	virtual void Copy(Behaviour* copy) {}
 

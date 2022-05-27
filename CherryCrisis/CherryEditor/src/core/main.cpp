@@ -161,8 +161,10 @@ int main(int argc, char** argv)
         int isSceneFocused = false;
         glfwSwapInterval(0);
 
-        SceneManager::GetInstance()->m_lateHierarchyRefresh.Bind(&HierarchyDisplayer::Refresh, editor.GetHierarchy());
+        SceneManager::GetInstance()->m_lateHierarchyRefresh.Bind(&EditorManager::RefreshHierarchy, &editor);
         SceneManager::GetInstance()->m_sceneChanged.Bind(&EntitySelector::ClearEx, &editor.m_entitySelector);
+        SceneManager::GetInstance()->m_sceneChanged.Bind(&EditorManager::InvalidateCellDisplayer, &editor);
+
         while (glfwWindowShouldClose(window) == false)
         {
             InputManager::UpdateKeys();

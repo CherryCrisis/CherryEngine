@@ -15,5 +15,6 @@ void Behaviour::OnSetOwner(Entity* newOwner)
 
 void Behaviour::SetHostPtr(Entity* newOwner)
 {
+	m_owner = newOwner;
 	OnSetOwner(newOwner);
 }
