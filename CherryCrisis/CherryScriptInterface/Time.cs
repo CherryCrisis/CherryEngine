@@ -44,38 +44,32 @@ public class Time : global::System.IDisposable {
     }
   }
 
-  public static Time GetInstance() {
-    global::System.IntPtr cPtr = CherryEnginePINVOKE.Time_GetInstance();
-    Time ret = (cPtr == global::System.IntPtr.Zero) ? null : new Time(cPtr, false);
+  public static float GetDeltaTime() {
+    float ret = CherryEnginePINVOKE.Time_GetDeltaTime();
     return ret;
   }
 
-  public float GetDeltaTime() {
-    float ret = CherryEnginePINVOKE.Time_GetDeltaTime(swigCPtr);
+  public static float GetTimeScale() {
+    float ret = CherryEnginePINVOKE.Time_GetTimeScale();
     return ret;
   }
 
-  public float GetTimeScale() {
-    float ret = CherryEnginePINVOKE.Time_GetTimeScale(swigCPtr);
+  public static float GetFixedDeltaTime() {
+    float ret = CherryEnginePINVOKE.Time_GetFixedDeltaTime();
     return ret;
   }
 
-  public float GetFixedDeltaTime() {
-    float ret = CherryEnginePINVOKE.Time_GetFixedDeltaTime(swigCPtr);
+  public static double GetElapsedTime() {
+    double ret = CherryEnginePINVOKE.Time_GetElapsedTime();
     return ret;
   }
 
-  public double GetElapsedTime() {
-    double ret = CherryEnginePINVOKE.Time_GetElapsedTime(swigCPtr);
-    return ret;
+  public static void SetTimeScale(float newTime) {
+    CherryEnginePINVOKE.Time_SetTimeScale(newTime);
   }
 
-  public void SetTimeScale(float newTime) {
-    CherryEnginePINVOKE.Time_SetTimeScale(swigCPtr, newTime);
-  }
-
-  public void SetFixedDeltaTime(float newTime) {
-    CherryEnginePINVOKE.Time_SetFixedDeltaTime(swigCPtr, newTime);
+  public static void SetFixedDeltaTime(float newTime) {
+    CherryEnginePINVOKE.Time_SetFixedDeltaTime(newTime);
   }
 
 }

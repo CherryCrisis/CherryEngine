@@ -70,6 +70,9 @@ void PickingRenderPass::Execute(Viewer*& viewer)
 
 	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
+	glViewport(0, 0, framebuffer.width, framebuffer.height);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 

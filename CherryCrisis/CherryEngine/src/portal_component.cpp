@@ -74,7 +74,7 @@ void PortalComponent::Initialize()
 
 	GetHost().m_OnAwake.Unbind(&PortalComponent::Initialize, this);
 	
-	UpdatePortalMatrices({});
+	UpdatePortalMatrices(m_transform);
 }
 
 void PortalComponent::LateUpdate()
@@ -84,10 +84,10 @@ void PortalComponent::LateUpdate()
 		Transform* transform = portalTeleporter->m_entityNode->m_transform;
 
 		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
-		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
-		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
+		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
+		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
 
-		Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
+		Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix/* * Matrix4::RotateY(CCMaths::PI)*/;
 		Matrix4 worldMatrix = worldMatrixLinkedPortal *
 			m_portal.m_modelMatrix.Inverse() * 
 			transform->GetWorldMatrix();
@@ -112,6 +112,21 @@ void PortalComponent::LateUpdate()
 
 		portalTeleporter->UpdateEntityMatrix(portalTeleporter->m_cloneEntityNode->m_transform, TRS[0], TRS[1], TRS[2]);
 		UpdateSliceParamaters(portalTeleporter);
+
+		//TODO: portal clipping with portal and linkedPortal 
+		/*
+		float ProtectScreenFromClipping (Vector3 viewPoint)
+		{
+		float halfHeight = playerCam.nearClipPlane * Mathf.Tan (playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        float halfWidth = halfHeight * playerCam.aspect;
+        float dstToNearClipPlaneCorner = new Vector3 (halfWidth, halfHeight, playerCam.nearClipPlane).magnitude;
+        float screenThickness = dstToNearClipPlaneCorner;
+
+        Transform screenT = screen.transform;
+        bool camFacingSameDirAsPortal = Vector3.Dot (transform.forward, transform.position - viewPoint) > 0;
+        screenT.localScale = new Vector3 (screenT.localScale.x, screenT.localScale.y, screenThickness);
+        screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f);
+		}*/
 	}
 }
 
@@ -120,12 +135,12 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 	Transform* transform = portalTeleporter->m_entityNode->m_transform;
 
 	Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
-	int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, m_transform->GetWorldMatrix().back.Normalized()));
+	int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
 
-	Vector3 sliceNormal = m_transform->GetWorldMatrix().back.Normalized() * -static_cast<float>(portalSide);
+	Vector3 sliceNormal = (-m_transform->GetWorldMatrix().back.Normalized()) * (-static_cast<float>(portalSide));
 	Vector3 sliceCentre = m_transform->GetPosition();
 
-	Vector3 cloneSliceNormal = -m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized() * static_cast<float>(portalSide);
+	Vector3 cloneSliceNormal = (-m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized()) * static_cast<float>(portalSide);
 	Vector3 cloneSliceCentre = m_linkedPortal->m_transform->GetPosition();
 
 	portalTeleporter->SetSliceParams(portalTeleporter->m_entityNode.get(), true, sliceCentre, sliceNormal);
@@ -133,7 +148,7 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 }
 
 
-void PortalComponent::UpdatePortalMatrices(const CCMaths::Vector3& v)
+void PortalComponent::UpdatePortalMatrices(Transform* tranform)
 {
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 
@@ -197,7 +212,7 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	if (m_portalTeleporters.end() != m_portalTeleporters.find(portalTeleporter))
 		return;
 
-	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
+	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix/* * Matrix4::RotateY(CCMaths::PI)*/;
 	Matrix4 worldMatrix = worldMatrixLinkedPortal *
 		m_portal.m_modelMatrix.Inverse() *
 		portalTeleporter->m_entityNode->m_transform->GetWorldMatrix();

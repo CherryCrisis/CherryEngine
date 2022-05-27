@@ -19,12 +19,12 @@ void TimeManager::Update(const float time)
 	m_elapsedTime = time;
 	m_deltaTime = (m_elapsedTime - m_lastTime) * m_timeScale;
 
+    m_fixedElapsedTime += m_deltaTime;
     m_fixedLoopCount = 0;
-    float updateTime = m_deltaTime;
-    while (updateTime >= m_fixedDeltaTime)
+    while (m_fixedElapsedTime >= m_fixedDeltaTime)
     {
         m_fixedLoopCount++;
-        updateTime -= m_fixedDeltaTime;
+        m_fixedElapsedTime -= m_fixedDeltaTime;
     }
 }
 

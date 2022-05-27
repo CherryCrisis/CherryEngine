@@ -44,6 +44,7 @@ class CCENGINE_API TimeManager : public Singleton<TimeManager>
 private:
 	float m_deltaTime = 0.f;
 	float m_elapsedTime = 0.f;
+	float m_fixedElapsedTime = 0.f;
 	float m_fixedDeltaTime = 0.016f;
 	float m_lastTime = 0.f;
 	float m_timeScale = 1.f;

@@ -50,6 +50,8 @@ public:
 	
 	//Call entities Update
 	void Update();
+	void FixedUpdate();
+	void LateUpdate();
 
 	static void Load(std::shared_ptr<Scene> scene);
 	

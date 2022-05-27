@@ -22,7 +22,7 @@ PortalRenderPass::PortalRenderPass(const char* name)
 
 	if (!m_quadMesh->m_gpuMesh)
 	{
-		Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
+		Mesh::CreateCube(m_quadMesh, 1.f, 1.f, 0.025f);
 		m_meshGenerator.Generate(m_quadMesh.get());
 	}
 }
@@ -61,8 +61,8 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 			if (!gpuPortal->framebuffer)
 				continue;
 
-			if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
-				continue;
+			//if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
+			//	continue;
 
 			//UpdateFrameBuffer verif if width and heigth are changed
 			gpuPortal->framebuffer->UpdateFramebuffer(static_cast<float>(framebuffer.width), static_cast<float>(framebuffer.height));
@@ -70,7 +70,7 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 			portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
 
 			CCMaths::Matrix4 modelMat = portal->m_linkedPortal->m_modelMatrix;
-			modelMat *= Matrix4::RotateY(CCMaths::PI);
+			//modelMat *= Matrix4::RotateY(CCMaths::PI);
 			modelMat *= portal->m_modelMatrix.Inverse();
 			
 			//TODO: Optimize !
@@ -86,11 +86,10 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 			int dot = CCMaths::Sign(Vector3::Dot(clipPlaneWorldMatrix.back, clipPlaneWorldMatrix.position - m.position));
 
-			Matrix4 test = mInverse;
-			test.position = Vector3::Zero;
-
 			Vector3 viewSpacePos = (mInverse * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
-			Vector3 viewSpaceNormal = (test * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * dot;
+
+			mInverse.position = Vector3::Zero;
+			Vector3 viewSpaceNormal = (mInverse * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * (float)dot;
 			float viewSpaceDist = -Vector3::Dot(viewSpacePos, viewSpaceNormal);
 			Vector4 clipPlaneViewSpace = Vector4(viewSpaceNormal.x, viewSpaceNormal.y, viewSpaceNormal.z, viewSpaceDist);
 
@@ -109,8 +108,7 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	//glDisable(GL_CULL_FACE);
-
+	glDisable(GL_CULL_FACE);
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -134,8 +132,8 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 		if (!gpuPortal)
 			continue;
 
-		if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
-			continue;
+		//if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
+		//	continue;
 
 		glBindTextureUnit(0, gpuPortal->framebuffer->colorTex.texID);
 

@@ -76,9 +76,14 @@ bool Entity::RemoveBehaviour(Behaviour* behaviour)
 	{
 		if (findIt->second == behaviour)
 		{
-			m_behaviours.erase(findIt);
-			delete behaviour;
-			return true;
+			if (behaviour->CanDelete())
+			{
+				m_behaviours.erase(findIt);
+				delete behaviour;
+				return true;
+			}
+			else
+				return false;
 		}
 	}
 	return false;

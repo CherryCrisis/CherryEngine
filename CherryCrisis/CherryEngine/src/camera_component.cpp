@@ -62,10 +62,10 @@ void CameraComponent::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetField("aspect", *const_cast<float*>(m_camera.GetAspectPtr()));
-	m_metadatas.SetField("near", *const_cast<float*>(m_camera.GetNearPtr()));
-	m_metadatas.SetField("far", *const_cast<float*>(m_camera.GetFarPtr()));
-	m_metadatas.SetField("fovY", *const_cast<float*>(m_camera.GetFovYPtr()));
+	m_metadatas.SetProperty("aspect", &m_camera.m_aspectProperty);
+	m_metadatas.SetProperty("near", &m_camera.m_nearProperty);
+	m_metadatas.SetProperty("far", &m_camera.m_farProperty);
+	m_metadatas.SetProperty("fovY", &m_camera.m_fovYProperty);
 	m_metadatas.SetField<Object*>("transform", m_transform);
 }
 
@@ -93,16 +93,16 @@ void CameraComponent::Initialize()
 
 	m_camera.m_framebuffer->Init();
 
-	ChangePosition(m_transform->GetPosition());
-	ChangeRotation(m_transform->GetRotation());
+	ChangePosition(m_transform);
+	ChangeRotation(m_transform);
 }
 
 void CameraComponent::OnCellAdded(Cell* newCell)
 {
 	newCell->AddViewer(&m_camera);
 
-	ChangePosition(m_transform->GetPosition());
-	ChangeRotation(m_transform->GetRotation());
+	ChangePosition(m_transform);
+	ChangeRotation(m_transform);
 }
 
 void CameraComponent::OnCellRemoved(Cell* newCell)
@@ -110,14 +110,14 @@ void CameraComponent::OnCellRemoved(Cell* newCell)
 	newCell->RemoveViewer(&m_camera);
 }
 
-void CameraComponent::ChangePosition(const CCMaths::Vector3& position)
+void CameraComponent::ChangePosition(Transform* transform)
 {
-	m_camera.SetPosition(m_transform->GetGlobalPosition());
+	m_camera.SetPosition(transform->GetGlobalPosition());
 }
 
-void CameraComponent::ChangeRotation(const CCMaths::Vector3& rotation)
+void CameraComponent::ChangeRotation(Transform* transform)
 {
-	m_camera.SetRotation(m_transform->GetGlobalRotation());
+	m_camera.SetRotation(transform->GetGlobalRotation());
 }
 
 CameraComponent* CameraComponent::GetMainCamera()

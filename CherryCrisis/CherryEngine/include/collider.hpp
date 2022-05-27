@@ -67,7 +67,7 @@ public:
 	* 
 	*	Apply the scale of the entity as base scale of the collider
 	*/
-	virtual void SetEntityScale(const CCMaths::Vector3& scale) {}
+	virtual void SetEntityScale(Transform* transform) {}
 
 	//! Create a pxShape
 	/*!
@@ -106,7 +106,7 @@ public:
 	void				SetLocalPos(const CCMaths::Vector3& localPos);
 	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
 
-	virtual void RecomputeMatrix(const CCMaths::Vector3& ignored) = 0;
+	virtual void RecomputeMatrix(Transform* transform) = 0;
 	virtual void ComputeModelMatrices() = 0;
 	virtual CCMaths::Matrix4 GetModelMatrix() = 0;
 

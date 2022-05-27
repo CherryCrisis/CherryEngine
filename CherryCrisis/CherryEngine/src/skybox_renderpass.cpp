@@ -118,7 +118,7 @@ void SkyboxRenderPass::GPUSkyboxCubemap::Generate(Texture* texture)
 
 	for (int faceID = 0; faceID < 6; faceID++)
 	{
-		glTextureSubImage3D(ID, 0, 0, 0, faceID, faceSize, faceSize, 1, GL_BGR, GL_UNSIGNED_BYTE, data + faceDataSize * faceID);
+		glTextureSubImage3D(ID, 0, 0, 0, faceID, faceSize, faceSize, 1, GL_BGR, GL_UNSIGNED_BYTE, data + static_cast<int64_t>(faceDataSize) * static_cast<int64_t>(faceID));
 	}
 
 	if (m_OnGpuReloaded)

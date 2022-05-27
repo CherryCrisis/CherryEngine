@@ -66,7 +66,6 @@ void BoxCollider::BindToSignals()
 
 	GetHost().m_OnCellAdded.Bind(&BoxCollider::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Bind(&BoxCollider::OnCellRemoved, this);
-
 }
 
 void BoxCollider::OnCellAdded(Cell* newCell)
@@ -113,7 +112,7 @@ void BoxCollider::Initialize()
 		}
 	}
 
-	SetEntityScale(m_transform->GetGlobalScale());
+	SetEntityScale(m_transform);
 }
 
 void BoxCollider::InvalidateTransform()
@@ -142,14 +141,16 @@ void BoxCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Scale", &editableScale);
 }
 
-void BoxCollider::SetEntityScale(const CCMaths::Vector3& scale)
+void BoxCollider::SetEntityScale(Transform* transform)
 {
-	m_entityScale = m_transform->GetGlobalScale();
+	m_entityScale = transform->GetGlobalScale();
 
 	m_totalScale = m_editableScale;
 	m_totalScale *= m_entityScale;
 
 	ComputeModelMatrices();
+
+	ResetPxShape();
 }
 
 void BoxCollider::SetPxShape()

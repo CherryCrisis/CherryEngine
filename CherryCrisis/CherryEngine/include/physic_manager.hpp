@@ -56,13 +56,12 @@ namespace PhysicSystem
 		physx::PxPvd*			m_pvd = nullptr;
 
 	public:
-		PhysicManager();
 		~PhysicManager();
 
 		void CreatePhysX();
 		void DestroyPhysX();
 
-		physx::PxMaterial* CreateMaterial(float sf = 0.0f, float df = 0.0f, float cr = 0.0f);
+		physx::PxMaterial* CreateMaterial(float sf = 0.5f, float df = 0.5f, float cr = 0.1f);
 
 		void Register(Rigidbody* rigidbody);
 		void Register(Collider* collider);
@@ -90,7 +89,7 @@ namespace PhysicSystem
 		void Stop();
 
 		// Call scenes updates
-		void Simulate(float deltaTime);
+		void Simulate();
 
 		static RaycastHit Raycast(Cell& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 		static RaycastHit Raycast(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);

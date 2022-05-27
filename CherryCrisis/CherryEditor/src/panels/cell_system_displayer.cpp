@@ -276,22 +276,27 @@ bool CellSystemDisplayer::Context()
 		{
             if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
             {
+                bool selected = m_rightClickedCell == m_displayedCell;
+
+                if (selected)
+                    m_rightClickedCell->RemoveViewer(m_camera);
+
                 if (scene->RemoveCell(m_rightClickedCell->GetName()))
                 {
+                    if (selected)
+                        m_displayedCell = nullptr;
+
                     ImGui::EndPopup();
                     return false;
                 }
+                else if (selected)
+                    m_rightClickedCell->AddViewer(m_camera);
             }
 		}
 
 		if (ImGui::MenuItem("Rename"))
 		{
             m_renameCell = true;
-		}
-
-		if (ImGui::MenuItem("Add Portal To Cell"))
-		{
-			//m_rightClickedCell->AddPortal();
 		}
 
         ImGui::EndPopup();

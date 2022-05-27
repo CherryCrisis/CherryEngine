@@ -198,15 +198,13 @@ namespace CCMaths
 		float wz = 2 * in.w * in.z;
 
 		result.data[0] = 1 - y2 - z2;
-		result.data[1] = xy + wz;
-		result.data[2] = xz - wy;
-
-		result.data[4] = xy - wz;
+		result.data[1] = xy - wz;
+		result.data[2] = xz + wy;
+		result.data[4] = xy + wz;
 		result.data[5] = 1 - x2 - z2;
-		result.data[6] = yz + wx;
-
-		result.data[8] = xz + wy;
-		result.data[9] = yz - wx;
+		result.data[6] = yz - wx;
+		result.data[8] = xz - wy;
+		result.data[9] = yz + wx;
 		result.data[10] = 1 - x2 - y2;
 
 		return result;

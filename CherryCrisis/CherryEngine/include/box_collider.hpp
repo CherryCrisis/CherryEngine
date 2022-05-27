@@ -31,7 +31,7 @@ public:
 	void InvalidateTransform() override;
 	void Unregister() override;
 
-	void SetEntityScale(const CCMaths::Vector3& scale) override;
+	void SetEntityScale(Transform* transform) override;
 	void SetPxShape() override;
 	void ClearPxShape() override;
 	void ResetPxShape() override;
@@ -47,7 +47,7 @@ public:
 	void SetScale(const CCMaths::Vector3& scale);
 	CCMaths::Vector3 GetScale() { return m_editableScale; }
 
-	void RecomputeMatrix(const CCMaths::Vector3& ignored) override { ComputeModelMatrices(); }
+	void RecomputeMatrix(Transform* transform) override { ComputeModelMatrices(); }
 	void ComputeModelMatrices() override;
 	CCMaths::Matrix4 GetModelMatrix() override;
 

@@ -18,7 +18,7 @@ namespace CCMaths
 
 			float data[4];		//!< Pointer on the Quaternion's data
 
-			Vector3 xyz;		//!< Quaternion complex components as a Vector3
+			Vector3 xyz;		//!< Quaternion complex components as a Vector3 
 		};
 
 		CCENGINE_API const static Quaternion Identity;		//!< { w = 1, x = 0, y = 0, z = 0 }

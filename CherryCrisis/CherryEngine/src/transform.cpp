@@ -57,6 +57,14 @@ bool Transform::IsEqualToParent(Transform* transform)
 	return m_parent->IsEqualToParent(transform);
 }
 
+bool Transform::CanDelete()
+{
+	if (m_children.empty())
+		return true;
+
+	return false;
+}
+
 void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyRotation, bool reapplyScale)
 {
 	if (IsEqualToParent(parent)) // Guard to prevent parent re-set
@@ -64,6 +72,8 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 
 	if (parent && parent->IsEqualToParent(this))
 		return;
+
+	Matrix4 current = GetWorldMatrix();
 
 	if (m_parent) // Remove the transform from the last parent
 	{
@@ -85,9 +95,17 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 
 	m_parent = parent;
 
-	if (reapplyPosition) ReapplyPosition();
-	if (reapplyRotation) ReapplyRotation();
-	if (reapplyScale)    ReapplyScale();
+	if (m_parent)
+		current = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * m_worldMatrix;
+	
+	CCMaths::Vector3 tempPos;
+	CCMaths::Vector3 tempRot;
+	CCMaths::Vector3 tempScale;
+	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, tempScale);
+	
+	if (reapplyPosition) SetPosition(tempPos);
+	if (reapplyRotation) SetRotation(tempRot);
+	if (reapplyScale)    SetScale(tempScale);
 
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
 	SceneManager::SetHierarchyDirty();
@@ -125,6 +143,8 @@ Matrix4 Transform::GetWorldMatrix()
 	m_right		= m_worldMatrix.right;
 	m_forward	= -m_worldMatrix.back;
 
+	CCMaths::Matrix4::Decompose(m_worldMatrix, m_worldPosition, m_worldRotation, m_worldScale);
+
 	return m_worldMatrix;
 }
 
@@ -146,10 +166,20 @@ void Transform::SetPosition(const Vector3& position)
 	m_onTransformEdited.Invoke(this);
 	m_position = position;
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION);
-	m_onPositionChange.Invoke(position);
+	m_onPositionChange.Invoke(this);
 
 	for (Transform* child : m_children)
-		child->m_onPositionChange.Invoke(child->GetGlobalPosition());
+		child->m_onPositionChange.Invoke(&*child);
+}
+
+void Transform::SetGlobalPosition(const Vector3& position)
+{
+	Matrix4 world = Matrix4::Translate(position) * Matrix4::RotateZYX(GetGlobalRotation()) * Matrix4::Scale(GetGlobalScale());
+
+	if (m_parent)
+		world = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * world;
+
+	SetPosition(world.position);
 }
 
 void Transform::SetRotation(const Vector3& rotation)
@@ -157,10 +187,25 @@ void Transform::SetRotation(const Vector3& rotation)
 	m_onTransformEdited.Invoke(this);
 	m_rotation = rotation;
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_ROTATION);
-	m_onRotationChange.Invoke(rotation);
+	m_onRotationChange.Invoke(this);
 
 	for (Transform* child : m_children)
-		child->m_onRotationChange.Invoke(child->GetGlobalRotation());
+		child->m_onRotationChange.Invoke(&*child);
+}
+
+void Transform::SetGlobalRotation(const Vector3& rotation)
+{
+	Matrix4 world = Matrix4::Translate(GetGlobalPosition()) * Matrix4::RotateZYX(rotation) * Matrix4::Scale(GetGlobalScale());
+
+	if (m_parent)
+		world = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * world;
+
+	CCMaths::Vector3 tempPos;
+	CCMaths::Vector3 tempRot;
+	CCMaths::Vector3 tempScale;
+	CCMaths::Matrix4::Decompose(world, tempPos, tempRot, tempScale);
+
+	SetRotation(tempRot);
 }
 
 void Transform::SetScale(const Vector3& scale)
@@ -168,43 +213,25 @@ void Transform::SetScale(const Vector3& scale)
 	m_onTransformEdited.Invoke(this);
 	m_scale = scale;
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_SCALE);
-	m_onScaleChange.Invoke(scale);
+	m_onScaleChange.Invoke(this);
 
 	for (Transform* child : m_children)
-		child->m_onScaleChange.Invoke(child->GetScale());
+		child->m_onScaleChange.Invoke(&*child);
 }
 
-void Transform::ReapplyPosition()
+void Transform::SetGlobalScale(const Vector3& scale)
 {
-	CCMaths::Vector3 tempRot;
-	CCMaths::Vector3 tempScale;
+	Matrix4 world = Matrix4::Translate(GetGlobalPosition()) * Matrix4::RotateZYX(GetGlobalRotation()) * Matrix4::Scale(scale);
 
-	CCMaths::Matrix4::Decompose(GetLocalMatrix(), m_position, tempRot, tempScale);
-	
-	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION);
-	m_onPositionChange.Invoke(m_position);
-}
+	if (m_parent)
+		world = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * world;
 
-void Transform::ReapplyRotation()
-{
-	CCMaths::Vector3 tempPos;
-	CCMaths::Vector3 tempScale;
-
-	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, m_rotation, tempScale);
-
-	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_ROTATION);
-	m_onRotationChange.Invoke(m_rotation);
-}
-
-void Transform::ReapplyScale()
-{
 	CCMaths::Vector3 tempPos;
 	CCMaths::Vector3 tempRot;
+	CCMaths::Vector3 tempScale;
+	CCMaths::Matrix4::Decompose(world, tempPos, tempRot, tempScale);
 
-	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, m_scale);
-
-	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_SCALE);
-	m_onScaleChange.Invoke(m_scale);
+	SetScale(tempScale);
 }
 
 void Transform::AddChildren(Transform* transform)
@@ -255,37 +282,22 @@ void Transform::OnCellRemoved(Cell* newCell)
 
 Vector3 Transform::GetGlobalPosition()
 {
-	if (!m_isDirty)
-		return m_worldPosition;
-
-	CCMaths::Matrix4::Decompose(GetWorldMatrix(), m_worldPosition, m_worldRotation, m_worldScale);
-
-	m_isDirty &= ~((int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
+	GetWorldMatrix();
 
 	return m_worldPosition;
 }
 
 Vector3 Transform::GetGlobalRotation()
 {
-	if (!m_isDirty)
-		return m_worldRotation;
-
-	CCMaths::Matrix4::Decompose(GetWorldMatrix(), m_worldPosition, m_worldRotation, m_worldScale);
-
-	m_isDirty &= ~((int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
-
+	GetWorldMatrix();
+	
 	return m_worldRotation;
 }
 
 Vector3 Transform::GetGlobalScale()
 {
-	if (!m_isDirty)
-		return m_worldScale;
-
-	CCMaths::Matrix4::Decompose(GetWorldMatrix(), m_worldPosition, m_worldRotation, m_worldScale);
-
-	m_isDirty &= ~((int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
-
+	GetWorldMatrix();
+	
 	return m_worldScale;
 }
 

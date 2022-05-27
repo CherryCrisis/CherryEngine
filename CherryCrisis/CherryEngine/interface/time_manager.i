@@ -10,13 +10,11 @@
 class TimeManager
 {
 public:
-	static TimeManager* GetInstance();
+	static float GetDeltaTime();
+	static float GetTimeScale();
+	static float GetFixedDeltaTime();
+	static double GetElapsedTime();
 
-	float GetDeltaTime();
-	float GetTimeScale();
-	float GetFixedDeltaTime();
-	double GetElapsedTime();
-
-	void  SetTimeScale(float newTime);
-	void  SetFixedDeltaTime(float newTime);
+	static void  SetTimeScale(float newTime);
+	static void  SetFixedDeltaTime(float newTime);
 };
