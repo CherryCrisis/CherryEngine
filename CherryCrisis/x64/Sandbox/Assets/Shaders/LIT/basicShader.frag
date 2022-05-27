@@ -37,23 +37,30 @@ uniform Material uMaterial;
 
 struct Light
 {
-	bool isEnabled;
-	bool isPoint;
 	vec3 position;
+    vec3 direction;
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
+	vec3 attenuation;
 	mat4 lightSpace;
+	int lightType;
+	float cutoff;
+	float outerCutoff;
+	int alignement;
 };
 
 #define NBR_LIGHTS 8
 uniform sampler2D uShadowMaps[NBR_LIGHTS];
-uniform Light uLights[NBR_LIGHTS];
+
+// Uniform blocks
+layout(std140) uniform uLightsBlock
+{
+	Light uLights[NBR_LIGHTS];
+};
 
 uniform vec3 uViewPosition;
-
 uniform int uIsSelected;
-
 float getDirectionalShadow(int index)
 {
     // Perspcetive divide
@@ -71,6 +78,7 @@ float getDirectionalShadow(int index)
 
     float slopeFactor = 1.0 - dot(fs_in.vNormal, lightDir);
 
+	// TODO: Add bias as uniforms / defines
     float minBias = 0.00005;
     float maxBias = 0.0005;
     float bias = max(minBias * slopeFactor, maxBias);
@@ -97,6 +105,22 @@ float getDirectionalShadow(int index)
     return shadow * PCFFactor;
 }
 
+float getLightAttenuation(int lightType, vec3 lightDirection, vec3 spotDirection, float cutOff, float outerCutOff)
+{
+    if (lightType == 2)
+		return 1.0;
+
+    float distance = length(lightDirection);
+    float attenuation = 1.0 / (distance * distance);
+
+    float theta = -dot(normalize(lightDirection), normalize(spotDirection));
+    float epsilon = cutOff - outerCutOff;
+
+    float spotIntensity =  clamp((theta - outerCutOff) / epsilon, 0.0, 1.0);
+
+    return attenuation * spotIntensity;
+}
+
 void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 specular)
 {
 	ambient = diffuse = specular = vec3(0.0);
@@ -107,23 +131,28 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 	{
 		Light light = uLights[i];
 
-		if (!light.isEnabled)
+		if (light.lightType == 0)
 			continue;
 
-	    float shadow = 1.0 - getDirectionalShadow(i);
+		bool isPoint = light.lightType == 1;
+
+	    float shadow = 1.0;
+
+		if (!isPoint)
+			shadow -= getDirectionalShadow(i);
 
 		// Compute ambient
 		ambient += light.ambient;
 
 		// Get light direction, if the light is a point light or a directionnal light
-		vec3 lightDir = light.position - float(light.isPoint) * fs_in.vFragPosition;
+		vec3 lightDir = light.position - float(isPoint) * fs_in.vFragPosition;
 	
 		// Compute the light direction and the distance between the fragment and the light
 		// Normalize it manually
 		float lightDist = length(lightDir);
 		lightDir /= lightDist;
 
-		// Pre-compute normal ÅlightDir
+		// Pre-compute normal ÔøΩlightDir
 		float NdotL = dot(normal, lightDir);
 
 		float diffuseVal = max(NdotL, 0.0);
@@ -131,8 +160,12 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 		if (diffuseVal <= 0)
 			continue;
 
+        float lightIntensity = 1.0 / uLights[i].attenuation.x;
+
+        float attenuation = getLightAttenuation(uLights[i].lightType, lightDir, uLights[i].direction, uLights[i].cutoff, uLights[i].outerCutoff);
+
 		// Compute diffuse
-		diffuse += diffuseVal * light.diffuse * shadow;
+		diffuse += diffuseVal * light.diffuse * shadow * attenuation;
 
 		// Compute specular
 		#ifdef BLINN_PHONG
@@ -145,7 +178,7 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 			float dotValue = dot(viewDir, reflectDir);
 		#endif
 
-		specular += pow(clamp(dotValue, 0.0, 1.0), uMaterial.shininess) * light.specular * shadow;
+		specular += pow(clamp(dotValue, 0.0, 1.0), uMaterial.shininess) * light.specular * shadow * attenuation;
 	}
 }
 

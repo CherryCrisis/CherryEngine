@@ -30,6 +30,7 @@
 #include "scripted_behaviour.hpp"
 #include "sphere_collider.hpp"
 #include "transform.hpp"
+#include "light.hpp"
 #include "utils.hpp"
 
 
@@ -264,7 +265,34 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
                     continue;
                 }
+                if (type == typeid(ELightType))
+                {
+                    ELightType defaultVal = ELightType::OFF;
+                    ELightType* valPtr = &defaultVal;
+                    metadata->Get((void**)&valPtr);
+                    if (!valPtr)
+                        continue;
 
+                    const char* items[] = { "Off", "Point", "Directional" };
+                    const char* currentItem = items[(unsigned int)*valPtr];
+
+                    if (ImGui::BeginCombo(metaname.c_str(), currentItem))
+                    {
+                        for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+                        {
+                            bool is_selected = currentItem == items[n];
+                            if (ImGui::Selectable(items[n], is_selected))
+                            {
+                                *valPtr = (ELightType)n;
+                                metadata->Set(valPtr);
+                            }
+                        }
+
+                        ImGui::EndCombo();
+                    }
+
+                    continue;
+                }
                 if (type == typeid(float))
                 {
                     float defaultVal;

@@ -38,6 +38,9 @@ PBRRenderPass::PBRRenderPass(const char* name)
 
 		m_callExecute = CCCallback::BindCallback(&PBRRenderPass::Execute, this);
 
+		GLuint lightBlock = glGetUniformBlockIndex(m_program->m_shaderProgram, "uLightsBlock");
+		glUniformBlockBinding(m_program->m_shaderProgram, lightBlock, LightGenerator::UBOBindingPoint);
+
 		glUseProgram(0);
 
 		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
@@ -62,7 +65,10 @@ int PBRRenderPass::Subscribe(Light* toGenerate)
 	if (!toGenerate || !m_program)
 		return -1;
 
-	m_lights.insert(toGenerate);
+	if (!m_lightGenerator.Generate(toGenerate))
+		return -1;
+
+	m_lights.push_back(toGenerate);
 
 	return 1;
 }
@@ -70,7 +76,10 @@ int PBRRenderPass::Subscribe(Light* toGenerate)
 template <>
 void PBRRenderPass::Unsubscribe(Light* toGenerate)
 {
-	m_lights.erase(toGenerate);
+	auto lightIt = std::find(m_lights.begin(), m_lights.end(), toGenerate);
+
+	if (lightIt != m_lights.end())
+		m_lights.erase(lightIt);
 }
 
 template <>
@@ -177,48 +186,6 @@ void PBRRenderPass::Execute(Viewer*& viewer)
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uProjection"), 1, GL_FALSE, viewer->m_projectionMatrix.data);
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uView"), 1, GL_FALSE, viewer->m_viewMatrix.data);
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, viewer->m_position.data);
-
-	const char* lightFormat = "uLights[{}]";
-	std::unordered_set<Light*>::iterator lightIt = m_lights.begin();
-	for (size_t lightID = 0u; lightID < 8; lightID++)
-	{
-		std::string iLightFormat = std::format(lightFormat, lightID) + ".{}";
-
-		GLuint enableLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "lightType").c_str());
-		glUniform1i(enableLoc, 0);
-
-		if (lightIt == m_lights.end())
-			break;
-
-		Light* light = *lightIt;
-
-		if (!light->m_enabled)
-			glUniform1i(enableLoc, 0);
-		else if (light->m_isPoint)
-			glUniform1i(enableLoc, 2);
-		else
-			glUniform1i(enableLoc, 1);
-
-		// TODO: Use string view
-
-		Vector4 lightPos = Vector4(light->m_position, 1);
-		GLuint posLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "position").c_str());
-		glUniform4fv(posLoc, 1, lightPos.data);
-
-		GLuint dirLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "direction").c_str());
-		glUniform3fv(dirLoc, 1, light->m_position.data);
-
-		GLuint diffLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "diffuse").c_str());
-		glUniform3fv(diffLoc, 1, light->m_diffuse.data);
-
-		Vector3 test = { 0.0f, 0.0f, 1.0f };
-		GLuint IntensityLoc = glGetUniformLocation(m_program->m_shaderProgram, std::format(iLightFormat, "params").c_str()); //Intensity
-		glUniform3fv(IntensityLoc, 1, test.data);
-
-		lightID++;
-
-		lightIt = std::next(m_lights.begin(), lightID);
-	}
 
 	for (MeshRenderer* modelRdr : m_models)
 	{

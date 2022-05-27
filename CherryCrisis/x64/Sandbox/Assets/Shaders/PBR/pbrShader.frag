@@ -18,12 +18,16 @@ vec3 Pos;
 // Light structure
 struct Light
 {
-	int lightType; //off/dir/point/spot
-    vec4 position;
+	vec3 position;
     vec3 direction;
-    vec3 diffuse;
-    vec3 params; //cutOff/outerCutOff/intensity
-
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	vec3 attenuation;
+	mat4 lightSpace;
+	int lightType;
+	float cutoff;
+	float outerCutoff;
 };
 
 struct Material
@@ -48,12 +52,12 @@ struct Material
 };
 
 #define NBR_LIGHTS 8
-uniform Light uLights[NBR_LIGHTS];
+
 // Uniform blocks
-//layout(std140) uniform uLightsBlock
-//{
-//	light uLights[NBR_LIGHTS];
-//};
+layout(std140) uniform uLightsBlock
+{
+	Light uLights[NBR_LIGHTS];
+};
 
 uniform Material uMaterial;
 
@@ -167,25 +171,18 @@ vec3 getIBLRadianceLambertian(float NdotV, vec3 N, float roughness, vec3 albedo,
 
 float getLightAttenuation(int lightType, vec3 lightDirection, vec3 spotDirection, float cutOff, float outerCutOff)
 {
-    float attenuation = 1.0;
+    if (lightType == 2)
+		return 1.0;
 
-    if (lightType == 2) //point light
-    {
-        float distance = length(lightDirection);
-        attenuation = 1.0 / (distance * distance);
-    }
-    else if (lightType == 3) //spotLight
-    {
-        float distance = length(lightDirection);
-        attenuation = 1.0 / (distance * distance);
+    float distance = length(lightDirection);
+    float attenuation = 1.0 / (distance * distance);
 
-        float theta = -dot(normalize(lightDirection), normalize(spotDirection));
-        float epsilon = cutOff - outerCutOff;
+    float theta = -dot(normalize(lightDirection), normalize(spotDirection));
+    float epsilon = cutOff - outerCutOff;
 
-        attenuation = attenuation *  clamp((theta - outerCutOff) / epsilon, 0.0, 1.0);
-    }
+    float spotIntensity =  clamp((theta - outerCutOff) / epsilon, 0.0, 1.0);
 
-    return attenuation;
+    return attenuation * spotIntensity;
 }
 
 vec3 getBDRFResult(vec3 V, vec3 N, vec3 albedo, float roughness, float metallic, vec3 F0, float specularWeight)
@@ -197,14 +194,13 @@ vec3 getBDRFResult(vec3 V, vec3 N, vec3 albedo, float roughness, float metallic,
         if (uLights[i].lightType == 0)
             continue;
 
-        vec3 lightPos = uLights[i].position.xyz;
+        vec3 lightPos = uLights[i].position;
         
         vec3 lightDirection = lightPos;
 
-        if (uLights[i].lightType != 1)
+        if (uLights[i].lightType == 1)
             lightDirection -= Pos;
             
-        float lightIntensity = uLights[i].params.z;
 
         // calculate per-light radiance
         vec3 L = normalize(lightDirection);
@@ -214,8 +210,10 @@ vec3 getBDRFResult(vec3 V, vec3 N, vec3 albedo, float roughness, float metallic,
         float HdotV = max(dot(H, V), 0.0);
         float NdotV = max(dot(N, V), 0.0);
 
+        float lightIntensity = 1.0 / uLights[i].attenuation.x;
+
         float attenuation = getLightAttenuation(uLights[i].lightType, lightDirection, 
-        uLights[i].direction, uLights[i].params.x, uLights[i].params.y);
+        uLights[i].direction, uLights[i].cutoff, uLights[i].outerCutoff);
 
         vec3 radiance = (lightIntensity * uLights[i].diffuse) * attenuation;        
         
@@ -247,21 +245,21 @@ vec3 getClearCoatBDRF(vec3 V, vec3 N, float clearCoatRoughness, vec3 F0)
         if (uLights[i].lightType == 0)
             continue;
 
-        vec3 lightPos = uLights[i].position.xyz;
+        vec3 lightPos = uLights[i].position;
 
         vec3 lightDirection = lightPos;
 
-        if (uLights[i].lightType != 1)
+        if (uLights[i].lightType == 1)
             lightDirection -= Pos;
             
-        float lightIntensity = uLights[i].params.z;
+        float lightIntensity = 1.0 / uLights[i].attenuation.x;
 
         // calculate per-light radiance
         vec3 L = normalize(lightDirection);
         vec3 H = normalize(V + L);
 
         float attenuation = getLightAttenuation(uLights[i].lightType, lightDirection, 
-        uLights[i].direction, uLights[i].params.x, uLights[i].params.y);
+        uLights[i].direction, uLights[i].cutoff, uLights[i].outerCutoff);
 
         float Dc = DistributionGGX(N, H, clearCoatRoughness);        
         float Vc = V_Kelemen(clearCoatRoughness, max(dot(L,H), 0.0));      

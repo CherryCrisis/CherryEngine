@@ -3,12 +3,11 @@
 #include <unordered_set>
 
 #include "element_mesh_generator.hpp"
-#include "framebuffer.hpp"
 #include "light.hpp"
 #include "rendering_renderpass_interface.hpp"
+#include "light_generator.hpp"
 
 class MeshRenderer;
-
 
 class ShadowRenderPass : public ARenderingRenderPass
 {
@@ -16,16 +15,9 @@ class ShadowRenderPass : public ARenderingRenderPass
 	std::unordered_set<MeshRenderer*> m_models;
 
 	ElementMeshGenerator m_meshGenerator;
+	LightGenerator		 m_lightGenerator;
 
 public:
-	struct GPUShadowLight : GPULight
-	{
-		Framebuffer framebuffer;
-		GLuint depthTexID;
-
-		~GPUShadowLight();
-	};
-
 	ShadowRenderPass(const char* name);
 
 	template <typename RendererT>

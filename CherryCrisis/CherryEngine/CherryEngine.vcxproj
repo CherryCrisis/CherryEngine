@@ -320,6 +320,7 @@
     <ClInclude Include="include\frustum_plane.hpp" />
     <ClInclude Include="include\guizmo_renderpass.hpp" />
     <ClInclude Include="include\irradiance_map_renderpass.hpp" />
+    <ClInclude Include="include\light_generator.hpp" />
     <ClInclude Include="include\maths\maths_utils.hpp" />
     <ClInclude Include="include\mesh_renderer.hpp" />
     <ClInclude Include="include\mixed_rendering_pipeline.hpp" />
@@ -564,6 +565,7 @@
     <ClCompile Include="src\guizmo_renderpass.cpp" />
     <ClCompile Include="src\hdr_renderpass.cpp" />
     <ClCompile Include="src\irradiance_map_renderpass.cpp" />
+    <ClCompile Include="src\light_generator.cpp" />
     <ClCompile Include="src\mesh_renderer.cpp" />
     <ClCompile Include="src\mixed_rendering_pipeline.cpp" />
     <ClCompile Include="src\pbr_rendering_pipeline.cpp" />

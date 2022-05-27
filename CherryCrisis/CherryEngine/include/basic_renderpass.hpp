@@ -11,6 +11,7 @@
 #include "light.hpp"
 #include "rendering_renderpass_interface.hpp"
 #include "texture_generator.hpp"
+#include "light_generator.hpp"
 #include "texture.hpp"
 
 enum class ETextureType : unsigned int;
@@ -23,9 +24,10 @@ class CCENGINE_API BasicRenderPass : public ARenderingRenderPass
 {
 	ElementTBNGenerator m_meshGenerator;
 	TextureGenerator	m_textureGenerator;
+	LightGenerator		m_lightGenerator;
 
 	std::unordered_set<MeshRenderer*>	m_models;
-	std::unordered_set<Light*>			m_lights;
+	std::vector<Light*>			m_lights;
 
 	std::map<ETextureType, std::shared_ptr<Texture>> m_defaultTextures;
 

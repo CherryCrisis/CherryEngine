@@ -9,13 +9,6 @@
 #include "transform.hpp"
 #include "viewer.hpp"
 
-
-ShadowRenderPass::GPUShadowLight::~GPUShadowLight()
-{
-	if (depthTexID)
-		glDeleteTextures(1, &depthTexID);
-}
-
 ShadowRenderPass::ShadowRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/shadowShader.vert", "Assets/Shaders/shadowShader.frag")
 {
@@ -44,11 +37,8 @@ int ShadowRenderPass::Subscribe(Light* toGenerate)
 		return true;
 	}
 
-	auto gpuLight = std::make_unique<GPUShadowLight>();
-
-	gpuLight->framebuffer.Init(1000, 1000);
-
-	toGenerate->m_gpuLight = std::move(gpuLight);
+	if (!m_lightGenerator.Generate(toGenerate))
+		return -1;
 
 	m_lights.insert(toGenerate);
 
@@ -92,13 +82,13 @@ void ShadowRenderPass::Execute(Viewer*& viewer)
 
 	for (Light* light : m_lights)
 	{
-		auto* gpuLight = static_cast<GPUShadowLight*>(light->m_gpuLight.get());
+		auto* gpuLight = static_cast<LightGenerator::GPULightBasic*>(light->m_gpuLight.get());
 
 		if (!gpuLight)
 			continue;
 
-		glViewport(0, 0, gpuLight->framebuffer.width, gpuLight->framebuffer.height);
-		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->framebuffer.FBO);
+		glViewport(0, 0, gpuLight->width, gpuLight->height);
+		glBindFramebuffer(GL_FRAMEBUFFER, gpuLight->FBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		for (MeshRenderer* modelRdr : m_models)

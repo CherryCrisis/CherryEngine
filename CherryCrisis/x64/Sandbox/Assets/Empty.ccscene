@@ -83,7 +83,7 @@ components:
     transform: 850061273
   850061273:
     type: Transform
-    rotation: 0.000000/0.000000/0.000000
+    rotation: 0.000000/-0.000000/0.000000
     IsActive: true
     m_owner: 1881693993
     position: 0.000000/0.000000/0.000000
@@ -94,4 +94,5 @@ components:
     scriptName: CameraController
     IsActive: true
     m_owner: 1881693993
+    transform: ~
     transform: ~
