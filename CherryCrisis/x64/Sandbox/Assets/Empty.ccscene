@@ -1,6 +1,7 @@
 resources:
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
 cells:
   1935981542:
@@ -14,6 +15,170 @@ cells:
         name: Cube
       1881693993:
         name: Main Camera
+      2756866736:
+        name: Portal_0
+      2343303618:
+        name: Portal_1
+      841241713:
+        name: backpack.obj
+      3754964297:
+        name: Cube.028__0
+      4157542804:
+        name: Plane.008__0
+      3746983912:
+        name: Cube.029__0
+      2938113361:
+        name: Plane.009__0
+      239237565:
+        name: Plane.010__0
+      666197732:
+        name: Plane.011__0
+      130450551:
+        name: Cylinder.029__0
+      1941690100:
+        name: Cube.030__0
+      933425876:
+        name: Plane.012__0
+      930291061:
+        name: Plane.013__0
+      919993962:
+        name: Cylinder.030__0
+      1549893384:
+        name: Plane.014__0
+      197585848:
+        name: Cube.031__0
+      3596972277:
+        name: Cylinder.031__0
+      2397815360:
+        name: Cube.032__0
+      4161873984:
+        name: Cylinder.032__0
+      3139454107:
+        name: Cube.033__0
+      4246343657:
+        name: Cube.034__0
+      1653200716:
+        name: Cube.035__0
+      4036154005:
+        name: Cube.036__0
+      174861293:
+        name: Cylinder.033__0
+      3112497284:
+        name: Cube.037__0
+      500082344:
+        name: Cylinder.034__0
+      2135172744:
+        name: Cylinder.035__0
+      4206115713:
+        name: Cube.038__0
+      1195909225:
+        name: Cube.039__0
+      2988844332:
+        name: Cylinder.036__0
+      195090807:
+        name: Cylinder.037__0
+      388047381:
+        name: Cylinder.038__0
+      682790100:
+        name: Cylinder.039__0
+      2202229767:
+        name: Cylinder.040__0
+      853313939:
+        name: Cylinder.041__0
+      3646462479:
+        name: Cylinder.042__0
+      4041486753:
+        name: Cylinder.043__0
+      2762793875:
+        name: Cylinder.044__0
+      2709627705:
+        name: Cylinder.045__0
+      1302404253:
+        name: Cylinder.046__0
+      2857767582:
+        name: Cylinder.047__0
+      1516183565:
+        name: Cylinder.048__0
+      2319548658:
+        name: Cylinder.049__0
+      2513249409:
+        name: Cube.040__0
+      3535385827:
+        name: Cube.041__0
+      496607726:
+        name: Cube.042__0
+      1409437550:
+        name: Cube.043__0
+      3741909421:
+        name: Cube.044__0
+      420216293:
+        name: Cube.045__0
+      50620511:
+        name: Plane.015__0
+      1604762541:
+        name: Cube.046__0
+      167971744:
+        name: Cube.047__0
+      1879932418:
+        name: Cylinder.050__0
+      571646897:
+        name: Cube.048__0
+      488834357:
+        name: Cylinder.051__0
+      1739796678:
+        name: Cylinder.052__0
+      1926482110:
+        name: Cylinder.053__0
+      4289675895:
+        name: Cylinder.054__0
+      3442650069:
+        name: BezierCurve.003__0
+      3279143057:
+        name: Cube.049__0
+      1317456479:
+        name: Cylinder.055__0
+      2018044065:
+        name: Cylinder.056__0
+      3351681150:
+        name: Cube.050__0
+      2968049872:
+        name: Sphere.014__0
+      829456486:
+        name: Sphere.015__0
+      1223668609:
+        name: Sphere.016__0
+      2276789288:
+        name: Sphere.017__0
+      2137985574:
+        name: Cube.051__0
+      4094555759:
+        name: Sphere.018__0
+      1129984139:
+        name: Sphere.019__0
+      2412823785:
+        name: Sphere.020__0
+      1655462221:
+        name: Sphere.021__0
+      1106519134:
+        name: Cube.052__0
+      11610768:
+        name: Cube.053__0
+      3570501165:
+        name: Cube.054__0
+      487415271:
+        name: Sphere.022__0
+      1546046919:
+        name: Sphere.023__0
+      2340074895:
+        name: Sphere.024__0
+      1740516949:
+        name: Sphere.025__0
+      1636463524:
+        name: Sphere.026__0
+      421821016:
+        name: Sphere.027__0
+      554727527:
+        name: Cube.055__0
   581163782:
     name: Egypt
     settings:
@@ -21,10 +186,9 @@ cells:
 components:
   3836157161:
     type: CapsuleCollider
-    Half height: 1
+    Half height: 9.99999975e-05
     IsActive: true
     m_owner: 1579208843
-    Contact Offset: 0.0199999996
     Enabled: true
     Is Trigger: false
     Radius: 1
@@ -44,6 +208,13 @@ components:
     position: 0.000000/1.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
+  785232062:
+    type: ShapeRenderer
+    IsActive: true
+    m_owner: 2891703955
+    matFile: Assets\Models\NonEuclidean\None.ccmat
+    transform: 3585067767
+    Type: 1
   3585067767:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -52,18 +223,10 @@ components:
     position: -1.000000/-6.000000/0.000000
     scale: 50.000000/1.000000/50.000000
     parent: ~
-  785232062:
-    type: ShapeRenderer
-    IsActive: true
-    m_owner: 2891703955
-    matFile: Assets\Models\NonEuclidean\None.ccmat
-    transform: 3585067767
-    Type: 1
   741129744:
     type: BoxCollider
     IsActive: true
     m_owner: 2891703955
-    Contact Offset: 0.0199999996
     Enabled: true
     Scale: 1.000000/1.000000/1.000000
     Is Trigger: false
@@ -78,7 +241,7 @@ components:
     near: 0.00999999978
     IsActive: true
     m_owner: 1881693993
-    aspect: 1.39670932
+    aspect: 1.99159658
     far: 1500
     transform: 850061273
   850061273:
@@ -91,8 +254,1272 @@ components:
     parent: 907603244
   3996188819:
     type: ScriptedBehaviour
-    scriptName: CameraController
+    step: 0
     IsActive: true
     m_owner: 1881693993
+    scriptName: CameraController
     transform: ~
-    transform: ~
+    maxPosition: 0.000000/0.000000/0.000000
+    speed: 0.00999999978
+  2630400418:
+    type: PortalComponent
+    linkedPortalProp: 1672545755
+    IsActive: true
+    m_owner: 2756866736
+    Test: 0
+  2135170310:
+    type: Transform
+    rotation: 1.570796/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2756866736
+    position: 0.000000/18.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  3245217296:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2756866736
+    Enabled: true
+    Scale: 1.000000/1.000000/0.050000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  1729078271:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2343303618
+    Enabled: true
+    Scale: 1.000000/1.000000/0.050000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  1672545755:
+    type: PortalComponent
+    linkedPortalProp: 2630400418
+    IsActive: true
+    m_owner: 2343303618
+    Test: 1
+  3941698025:
+    type: Transform
+    rotation: 1.570796/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2343303618
+    position: 0.000000/3.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  1265702417:
+    type: Rigidbody
+    IsActive: true
+    m_owner: 841241713
+    Rotation constraints: 0/0/0
+    Density: 10
+    Kinematic: false
+    Enabled: true
+    Max angular velocity: 100
+    Position constraints: 0/0/0
+    Use gravity: true
+    Max velocity: 100
+    Max depenetration velocity: 100
+  3926012154:
+    type: Transform
+    rotation: 3.141593/0.000000/3.141593
+    IsActive: true
+    m_owner: 841241713
+    position: 0.000000/11.000000/0.000000
+    scale: 0.999999/1.000000/0.999999
+    parent: ~
+  1064994973:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 841241713
+  2125877648:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 841241713
+    Enabled: true
+    Scale: 1.000000/1.000000/1.000000
+    Is Trigger: false
+    Local Position: 0.000000/0.000000/0.000000
+  304927499:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3754964297
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2609424552:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3754964297
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 304927499
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.028__0
+  1347712593:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4157542804
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2932586647:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4157542804
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1347712593
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.008__0
+  1490743805:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3746983912
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1696721790:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3746983912
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1490743805
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.029__0
+  4255002789:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2938113361
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  421491158:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2938113361
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 4255002789
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.009__0
+  3634561834:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 239237565
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2063273217:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 239237565
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3634561834
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.010__0
+  3941910093:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 666197732
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  541837872:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 666197732
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3941910093
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.011__0
+  1439541942:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 130450551
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3850232600:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 130450551
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1439541942
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.029__0
+  1054131409:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1941690100
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2643693133:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1941690100
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1054131409
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.030__0
+  2716985591:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 933425876
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2294495025:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 933425876
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2716985591
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.012__0
+  618686522:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 930291061
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  4203836584:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 930291061
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 618686522
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.013__0
+  3570659491:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 919993962
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3331866229
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.030__0
+  3331866229:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 919993962
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3739074735:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1549893384
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2832062099:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1549893384
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3739074735
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.014__0
+  3224033107:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 197585848
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3372224004
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.031__0
+  3372224004:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 197585848
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2307585646:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3596972277
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2183326614:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3596972277
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2307585646
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.031__0
+  3054109331:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2397815360
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2474251627:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2397815360
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3054109331
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.032__0
+  1458694292:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4161873984
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  4057911282:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4161873984
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1458694292
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.032__0
+  3203583483:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3139454107
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2219628136:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3139454107
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3203583483
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.033__0
+  650698899:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4246343657
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3923136536
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.034__0
+  3923136536:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4246343657
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3324382431:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1653200716
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3160139239
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.035__0
+  3160139239:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1653200716
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3416956709:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4036154005
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  930749840:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4036154005
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3416956709
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.036__0
+  1009258029:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 174861293
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1942370582:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 174861293
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1009258029
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.033__0
+  2397836847:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3112497284
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3356375249:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3112497284
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2397836847
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.037__0
+  2785282026:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 500082344
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  4145652349:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 500082344
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2785282026
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.034__0
+  261955922:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2135172744
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3562017360:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2135172744
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 261955922
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.035__0
+  744799135:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4206115713
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  100132943:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4206115713
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 744799135
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.038__0
+  487450403:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1195909225
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3267036855:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1195909225
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 487450403
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.039__0
+  858479915:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2988844332
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3754265230:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2988844332
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 858479915
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.036__0
+  1068326200:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 195090807
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1992564113:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 195090807
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1068326200
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.037__0
+  1110212469:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 388047381
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3777200769:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 388047381
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1110212469
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.038__0
+  2145367459:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 682790100
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  597578157:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 682790100
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2145367459
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.039__0
+  382877461:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2202229767
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2242338197:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2202229767
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 382877461
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.040__0
+  3899733819:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 853313939
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2210678856:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 853313939
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3899733819
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.041__0
+  1579900180:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3646462479
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 407655082
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.042__0
+  407655082:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3646462479
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2889403749:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4041486753
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  371001218:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4041486753
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2889403749
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.043__0
+  2295641175:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2762793875
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2417523993:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2762793875
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2295641175
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.044__0
+  4264225354:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2709627705
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  429152086:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2709627705
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 4264225354
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.045__0
+  507309171:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1302404253
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3958431286:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1302404253
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 507309171
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.046__0
+  1320767132:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2857767582
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  281055839:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2857767582
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1320767132
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.047__0
+  849580233:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1516183565
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2268666681
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.048__0
+  2268666681:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1516183565
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2548344617:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2319548658
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1594068846:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2319548658
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2548344617
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.049__0
+  2990762581:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2513249409
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2056275689:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2513249409
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2990762581
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.040__0
+  1996096659:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3535385827
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1335404395:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3535385827
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1996096659
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.041__0
+  3085252681:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 496607726
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  227991811:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 496607726
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3085252681
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.042__0
+  2569715141:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1409437550
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2560398413:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1409437550
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2569715141
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.043__0
+  1670476868:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3741909421
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2368742101:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3741909421
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1670476868
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.044__0
+  2841957650:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 420216293
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3706255271:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 420216293
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2841957650
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.045__0
+  2236564575:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 50620511
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2942418078
+    meshFile: Assets\Models\Backpack\backpack.obj/Plane.015__0
+  2942418078:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 50620511
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3229428961:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1604762541
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2119090176:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1604762541
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3229428961
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.046__0
+  2217219243:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 167971744
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2584779912:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 167971744
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2217219243
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.047__0
+  4191334581:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1879932418
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1665552584:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1879932418
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 4191334581
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.050__0
+  2721331579:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 571646897
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 157703598
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.048__0
+  157703598:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 571646897
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3650077594:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 488834357
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  4031860737:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 488834357
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3650077594
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.051__0
+  1244189034:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1739796678
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3428848691
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.052__0
+  3428848691:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1739796678
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1470095195:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1926482110
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1387214299
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.053__0
+  1387214299:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1926482110
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  324441974:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4289675895
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2976493929:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4289675895
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 324441974
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.054__0
+  2104165559:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3442650069
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3355918313:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3442650069
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2104165559
+    meshFile: Assets\Models\Backpack\backpack.obj/BezierCurve.003__0
+  102962868:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3279143057
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1733750849:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3279143057
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 102962868
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.049__0
+  2731776846:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1317456479
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1286187351:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1317456479
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2731776846
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.055__0
+  569527526:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2018044065
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 295380048
+    meshFile: Assets\Models\Backpack\backpack.obj/Cylinder.056__0
+  295380048:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2018044065
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  970495180:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3351681150
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2095641837
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.050__0
+  2095641837:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3351681150
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3883340245:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2968049872
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  4219928812:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2968049872
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3883340245
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.014__0
+  2821257047:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 829456486
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2829107209:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 829456486
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2821257047
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.015__0
+  3847759671:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1223668609
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  45999428:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1223668609
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3847759671
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.016__0
+  898988802:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2276789288
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3233377885:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2276789288
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 898988802
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.017__0
+  3939011893:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2137985574
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1007003697:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2137985574
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3939011893
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.051__0
+  3935947710:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 4094555759
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2013289365:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4094555759
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3935947710
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.018__0
+  3548082238:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1129984139
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2932911110:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1129984139
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3548082238
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.019__0
+  2705870747:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2412823785
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3599345205:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2412823785
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2705870747
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.020__0
+  2911679316:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1655462221
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2283913634:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1655462221
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2911679316
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.021__0
+  4080096144:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1106519134
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 834494023
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.052__0
+  834494023:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1106519134
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  242243230:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 11610768
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1490114971:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 11610768
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 242243230
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.053__0
+  2773696904:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 3570501165
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1025558406:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3570501165
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 2773696904
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.054__0
+  1193489225:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 487415271
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3522161256:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 487415271
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1193489225
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.022__0
+  177798836:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1546046919
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  579856264:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1546046919
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 177798836
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.023__0
+  803557672:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2340074895
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1671819971
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.024__0
+  1671819971:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 2340074895
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1733702732:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1740516949
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  2104769449:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1740516949
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 1733702732
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.025__0
+  2734845334:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1636463524
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 703944334
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.026__0
+  703944334:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 1636463524
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3293181736:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 421821016
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  3260333950:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 421821016
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3293181736
+    meshFile: Assets\Models\Backpack\backpack.obj/Sphere.027__0
+  3169217634:
+    type: Transform
+    rotation: 0.000000/-0.000000/0.000000
+    IsActive: true
+    m_owner: 554727527
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3926012154
+  1831055175:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 554727527
+    matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
+    transform: 3169217634
+    meshFile: Assets\Models\Backpack\backpack.obj/Cube.055__0

@@ -168,8 +168,11 @@ void Inspector::InspectComponents(Entity* entity, int id)
                 if (entity->RemoveBehaviour(behaviour))
                 {
                     ImGui::EndPopup(); 
-                    if (opened)
+                    if (opened) 
+                    {
                         ImGui::TreePop();
+                        ImGui::EndGroup();
+                    }
                     ImGui::PopID();
                     return;
                 }
@@ -389,7 +392,6 @@ void Inspector::InspectComponents(Entity* entity, int id)
                     continue;
                 }
             }
-
             ImGui::TreePop();
         }
         ImGui::EndGroup();

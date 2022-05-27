@@ -8,7 +8,8 @@ namespace CCScripting
 		Transform transform;
 		Vector3 maxPosition = new Vector3();
 		int step = 0;
-		float speed = 0.01f;
+		float speed = 2.0f;
+		float speedSensivity = 80.0f;
 		public CameraController(System.IntPtr cPtr, bool cMemoryOwn) 
 			: base(cPtr, cMemoryOwn)
 		{
@@ -49,18 +50,17 @@ namespace CCScripting
 			float z = sign * transform.Forward().z * speed * dt;
 			transform.SetPosition(transform.position +  new Vector3(x,y,z));
 
+			Vector2 deltaMouse = InputManager.GetMouseDelta();
+			float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;
+			float sensitityX = Time.GetInstance().GetDeltaTime() * deltaMouse.x;
 
+			double angleX = transform.eulerAngles.x + sensitityY * speedSensivity * dt;
+			angleX = Math.Min(Math.Max(angleX, -Math.PI * 0.4f), Math.PI * 0.4f);
+			
+			transform.eulerAngles = new Vector3((float)angleX, transform.eulerAngles.y, transform.eulerAngles.z);
 
-			//if (transform == null)
-			//	return;
-			//
-			//Vector2 deltaMouse = InputManager.GetMouseDelta();
-			//float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;
-			//
-			//double angle = transform.eulerAngles.x + sensitityY;
-			//angle = Math.Min(Math.Max(angle, -Math.PI * 0.4f), Math.PI * 0.4f);
-			//
-			//transform.eulerAngles = new Vector3((float)angle, transform.eulerAngles.y, transform.eulerAngles.z);
+			double angleY = transform.eulerAngles.y + sensitityX * speedSensivity * dt;
+			transform.eulerAngles = new Vector3(transform.eulerAngles.x, (float)angleY, transform.eulerAngles.z);
 		}
 	}
 }

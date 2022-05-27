@@ -49,6 +49,7 @@ void PortalComponent::PopulateMetadatas()
 
 	// Add property
 	m_metadatas.SetProperty("linkedPortalProp", &m_LinkedPortalProp, "PortalComponent");
+	m_metadatas.SetField("Test", m_portal.m_test);
 }
 
 void PortalComponent::BindToSignals()
@@ -84,13 +85,17 @@ void PortalComponent::LateUpdate()
 		Transform* transform = portalTeleporter->m_entityNode->m_transform;
 
 		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
-		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
-		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
+		Vector3 v = offsetFromPortal.Normalized();
+		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back));
+		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, -m_transform->GetWorldMatrix().back));
 
 		Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix/* * Matrix4::RotateY(CCMaths::PI)*/;
 		Matrix4 worldMatrix = worldMatrixLinkedPortal *
 			m_portal.m_modelMatrix.Inverse() * 
 			transform->GetWorldMatrix();
+
+		//worldMatrix.position += (m_transform->Forward() * portalSide) * 0.015;
+
 
 		CCMaths::Vector3 TRS[3] = {};
 		Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
@@ -112,23 +117,9 @@ void PortalComponent::LateUpdate()
 
 		portalTeleporter->UpdateEntityMatrix(portalTeleporter->m_cloneEntityNode->m_transform, TRS[0], TRS[1], TRS[2]);
 		UpdateSliceParamaters(portalTeleporter);
-
-		//TODO: portal clipping with portal and linkedPortal 
-		/*
-		float ProtectScreenFromClipping (Vector3 viewPoint)
-		{
-		float halfHeight = playerCam.nearClipPlane * Mathf.Tan (playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
-        float halfWidth = halfHeight * playerCam.aspect;
-        float dstToNearClipPlaneCorner = new Vector3 (halfWidth, halfHeight, playerCam.nearClipPlane).magnitude;
-        float screenThickness = dstToNearClipPlaneCorner;
-
-        Transform screenT = screen.transform;
-        bool camFacingSameDirAsPortal = Vector3.Dot (transform.forward, transform.position - viewPoint) > 0;
-        screenT.localScale = new Vector3 (screenT.localScale.x, screenT.localScale.y, screenThickness);
-        screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f);
-		}*/
 	}
 }
+
 
 void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTeleporter)
 {
