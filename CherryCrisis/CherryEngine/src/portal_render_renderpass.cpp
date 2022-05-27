@@ -89,7 +89,7 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 			Vector3 viewSpacePos = (mInverse * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
 
 			mInverse.position = Vector3::Zero;
-			Vector3 viewSpaceNormal = (mInverse * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * dot;
+			Vector3 viewSpaceNormal = (mInverse * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * (float)dot;
 			float viewSpaceDist = -Vector3::Dot(viewSpacePos, viewSpaceNormal);
 			Vector4 clipPlaneViewSpace = Vector4(viewSpaceNormal.x, viewSpaceNormal.y, viewSpaceNormal.z, viewSpaceDist);
 

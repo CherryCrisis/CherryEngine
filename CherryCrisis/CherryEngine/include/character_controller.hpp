@@ -27,20 +27,25 @@ private:
 	bool	m_isStarted = false;
 	bool	m_isGrounded = false;
 	bool	m_isRegistered = false;
-	float	m_contactOffset = 0.2f;
+	float	m_contactOffset = 0.1f;
 	float	m_moveSpeed = 10.f;
 	float	m_springStrength = 150.f;
 	float	m_springDampling = 20.f;
+	float	m_forwardMove = 0.f;
+	float	m_sideMove = 0.f;
+	float	m_sensitivity = 1.f;
 
-	class CapsuleCollider*	m_collider = nullptr;
-	class Rigidbody*		m_rigidbody = nullptr;
-	class Transform*		m_transform = nullptr;
+	CCMaths::Vector3	m_rotating = 0.f;
+
 	physx::PxRigidDynamic*	m_dynamicActor = nullptr;
 
 	void PopulateMetadatas() override;
 	
 public:
-	PhysicSystem::PhysicActor* m_physicActor = nullptr;
+	class CapsuleCollider*		m_collider = nullptr;
+	class Rigidbody*			m_rigidbody = nullptr;
+	class Transform*			m_transform = nullptr;
+	PhysicSystem::PhysicActor*	m_physicActor = nullptr;
 
 	CharacterController();
 	CharacterController(CCUUID& id);
@@ -52,11 +57,15 @@ public:
 	void Unregister();
 
 	void Update();
+	void FixedUpdate();
 
 	void InvalidateTransform();
 
 	void	SetSpeed(const float& moveSpeed) { m_moveSpeed = moveSpeed; }
 	float	GetSpeed() { return m_moveSpeed; }
+	
+	void	SetSensitivity(const float& sensitivity) { m_sensitivity = sensitivity; }
+	float	GetSensitivity() { return m_sensitivity; }
 
 	void	SetSpringStrength(const float& springStrength) { m_springStrength = springStrength; }
 	float	GetSpringStrength() { return m_springStrength; }
@@ -65,6 +74,7 @@ public:
 	float	GetSpringDampling() { return m_springDampling; }
 
 	floatProperty	moveSpeed		{ this, &CharacterController::SetSpeed,				&CharacterController::GetSpeed };
+	floatProperty	sensitivity		{ this, &CharacterController::SetSensitivity,		&CharacterController::GetSensitivity };
 	floatProperty	springStrength	{ this, &CharacterController::SetSpringStrength,	&CharacterController::GetSpringStrength };
 	floatProperty	springDampling	{ this, &CharacterController::SetSpringDampling,	&CharacterController::GetSpringDampling };
 };

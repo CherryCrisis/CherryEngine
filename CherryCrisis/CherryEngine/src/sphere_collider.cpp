@@ -91,6 +91,7 @@ void SphereCollider::Initialize()
 		m_transform->m_onRotationChange.Bind(&SphereCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroy.Bind(&SphereCollider::InvalidateTransform, this);
 	}
+
 	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&SphereCollider::Initialize, this);
@@ -115,10 +116,8 @@ void SphereCollider::Initialize()
 		}
 	}
 
-	SetEntityScale(m_transform->GetGlobalScale());
+	SetEntityScale(m_transform);
 }
-
-
 
 void SphereCollider::InvalidateTransform()
 {
@@ -146,14 +145,16 @@ void SphereCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Scale", &editableScale);
 }
 
-void SphereCollider::SetEntityScale(const CCMaths::Vector3& s)
+void SphereCollider::SetEntityScale(Transform* transform)
 {
-	CCMaths::Vector3 scale = m_transform->GetGlobalScale();
+	CCMaths::Vector3 scale = transform->GetGlobalScale();
 	m_entityScale = CCMaths::Max(CCMaths::Max(scale.x, scale.y), scale.z);
 
 	m_totalScale = m_editableScale * m_entityScale;
 	
 	ComputeModelMatrices();
+	
+	ResetPxShape();
 }
 
 void SphereCollider::SetPxShape()

@@ -26,8 +26,8 @@ public:
 	void Initialize();
 	void BindToSignals() override;
 
-	void ChangePosition(const CCMaths::Vector3& position);
-	void ChangeRotation(const CCMaths::Vector3& rotation);
+	void ChangePosition(Transform* transform);
+	void ChangeRotation(Transform* transform);
 
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;

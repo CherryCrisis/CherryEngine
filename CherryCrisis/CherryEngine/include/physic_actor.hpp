@@ -32,13 +32,12 @@ namespace PhysicSystem
 		bool	m_isDynamic			= false;
 		bool	m_isEnabled			= true;
 		bool	m_isStatic			= false;
-		int		m_isRemoveLocked	= 0;
 
 		CCMaths::Vector3 m_velocity			= CCMaths::Vector3::Zero;
 		CCMaths::Vector3 m_angularVelocity	= CCMaths::Vector3::Zero;
 		CCMaths::Vector3 m_InertiaTensor	= CCMaths::Vector3::Zero;
 		CCMaths::Vector3 m_oldPos;
-		CCMaths::Vector3 m_oldRot;
+		CCMaths::Quaternion m_oldRot;
 		
 		std::vector<Collider*> m_colliders;
 
@@ -56,13 +55,12 @@ namespace PhysicSystem
 		void InvalidateTransform();
 
 		void Update();
-		void SetActorPosition(const CCMaths::Vector3& position);
-		void SetActorRotation(const CCMaths::Vector3& rotation);
-		void SetActorScale(const CCMaths::Vector3& scale);
+		void SetActorPosition(Transform* transform);
+		void SetActorRotation(Transform* transform);
+		void SetActorScale(Transform* transform);
 		
 		void CreatePxActor();
 		void DestroyPxActor();
-		void UnlockDelete();
 
 		physx::PxShape* CreateShape(const physx::PxGeometry& geometry);
 		void			RemoveShape(physx::PxShape* shape);
@@ -95,6 +93,7 @@ namespace PhysicSystem
 
 		Rigidbody* GetRigidbody() { return m_rigidbody; }
 		bool HasRigidbody();
+		bool HasController();
 		bool HasColliders();
 	};
 }

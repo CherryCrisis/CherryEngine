@@ -60,8 +60,8 @@ void AudioEmitter::SetSpatialized(const bool& value)
 	m_isSpatial = value;
 	if (m_isSpatial && m_transform) 
 	{
-		ChangePosition(m_transform->GetPosition());
-		ChangeRotation(m_transform->GetRotation());
+		ChangePosition(m_transform);
+		ChangeRotation(m_transform);
 	}
 }
 
@@ -118,8 +118,8 @@ void AudioEmitter::Initialize()
 		m_transform->m_OnDestroy.Bind(&AudioEmitter::InvalidateTransform, this);
 	}
 
-	ChangePosition(m_transform->GetPosition());
-	ChangeRotation(m_transform->GetRotation());
+	ChangePosition(m_transform);
+	ChangeRotation(m_transform);
 
 	GetHost().m_OnAwake.Unbind(&AudioEmitter::Initialize, this);
 }
@@ -136,17 +136,18 @@ void AudioEmitter::InvalidateTransform()
 {
 	m_transform = nullptr;
 }
-void AudioEmitter::ChangePosition(const CCMaths::Vector3& position)
+
+void AudioEmitter::ChangePosition(Transform* transform)
 {
 	if (!m_sound || !m_isSpatial) return;
-	m_sound->SetPosition(position);
+	m_sound->SetPosition(transform->GetPosition());
 }
 
-void AudioEmitter::ChangeRotation(const CCMaths::Vector3& rotation)
+void AudioEmitter::ChangeRotation(Transform* transform)
 {
 	if (!m_sound || !m_isSpatial) return;
 	return;
-	m_sound->SetDirection(rotation);
+	m_sound->SetDirection(transform->GetRotation());
 }
 
 void AudioEmitter::PopulateMetadatas() 

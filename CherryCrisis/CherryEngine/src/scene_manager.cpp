@@ -33,13 +33,13 @@ void SceneManager::Update()
 void SceneManager::FixedUpdate()
 {
 	if (m_currentScene)
-		m_currentScene->Update();
+		m_currentScene->FixedUpdate();
 }
 
 void SceneManager::LateUpdate()
 {
 	if (m_currentScene)
-		m_currentScene->Update();
+		m_currentScene->LateUpdate();
 
 	if (m_lateChanged)
 		m_lateChanged->Invoke();

@@ -184,7 +184,7 @@ namespace PhysicSystem
 
 	bool PhysicManager::IsActorEmpty(PhysicActor& actor)
 	{
-		if (!actor.HasColliders() && !actor.HasRigidbody())
+		if (!actor.HasColliders() && !actor.HasRigidbody() && !actor.HasController())
 		{
 			for (size_t i = 0; i < m_physicActors.size(); ++i)
 			{

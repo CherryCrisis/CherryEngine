@@ -1,4 +1,5 @@
 #include <cmath>
+#include "matrix4.hpp"
 
 namespace CCMaths
 {
@@ -148,6 +149,21 @@ namespace CCMaths
 		};
 	}
 
+	inline void Matrix4::NormalizeScale()
+	{
+		this->right.Normalize();
+		this->up.Normalize();
+		this->back.Normalize();
+	}
+
+	inline Matrix4 Matrix4::NormalizedScale() const
+	{
+		Matrix4 out = *this;
+		out.NormalizeScale();
+
+		return out;
+	}
+
 	inline Matrix4 Matrix4::RotateXYZ(const Vector3& eulerAngles)
 	{
 		return RotateX(eulerAngles.pitch) * RotateY(eulerAngles.yaw) * RotateZ(eulerAngles.roll);
@@ -256,19 +272,42 @@ namespace CCMaths
 		outPos.data[2] = mat.position.z;
 	}
 
-	inline void Matrix4::NormalizeScale()
+	inline Matrix4 Matrix4::GetTranslationMatrix() const
 	{
-		this->right.Normalize();
-		this->up.Normalize();
-		this->back.Normalize();
+		return GetTranslationMatrix(*this);
 	}
 
-	inline Matrix4 Matrix4::NormalizedScale() const
+	inline Matrix4 Matrix4::GetTranslationMatrix(const Matrix4& matrix)
 	{
-		Matrix4 out = *this;
-		out.NormalizeScale();
+		return Matrix4::Translate(matrix.position);
+	}
 
-		return out;
+	inline Matrix4 Matrix4::GetRotationMatrix() const
+	{
+		return GetRotationMatrix(*this);
+	}
+
+	inline Matrix4 Matrix4::GetRotationMatrix(const Matrix4& matrix)
+	{
+		Matrix4 mat = matrix;
+
+		mat.right.Normalize();
+		mat.up.Normalize();
+		mat.back.Normalize();
+
+		mat.position = Vector3::Zero;
+
+		return mat;
+	}
+
+	inline Matrix4 Matrix4::GetScaleMatrix() const
+	{
+		return GetScaleMatrix(*this);
+	}
+
+	inline Matrix4 Matrix4::GetScaleMatrix(const Matrix4& matrix)
+	{
+		return Matrix4::Scale({ matrix.right.Length(), matrix.up.Length(), matrix.back.Length() });
 	}
 
 	inline Matrix4 Matrix4::Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far)

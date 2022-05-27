@@ -230,6 +230,10 @@ namespace CCMaths
 		*/
 		inline static Matrix4 Scale(const Vector3& inScale);
 
+		inline void NormalizeScale();
+
+		inline Matrix4 NormalizedScale() const;
+
 		//! Rotation Matrix
 		/*!
 		*	\param in: Vector3 euler angle in radians of the rotation { pitch, yaw, roll }
@@ -447,9 +451,15 @@ namespace CCMaths
 		*/
 		inline static void Decompose(const Matrix4& matrix, Vector3& outPos, Vector3& outRot, Vector3& outScale);
 
-		inline void NormalizeScale();
+		inline Matrix4 GetRotationMatrix() const;
+		inline static Matrix4 GetRotationMatrix(const Matrix4& matrix);
 
-		inline Matrix4 NormalizedScale() const;
+		inline Matrix4 GetTranslationMatrix() const;
+		inline static Matrix4 GetTranslationMatrix(const Matrix4& matrix);
+
+		inline Matrix4 GetScaleMatrix() const;
+		inline static Matrix4 GetScaleMatrix(const Matrix4& matrix);
+
 
 		//! \hiderefs
 		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);

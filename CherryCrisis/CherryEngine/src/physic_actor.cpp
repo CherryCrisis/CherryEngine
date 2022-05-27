@@ -27,8 +27,6 @@ namespace PhysicSystem
 			DestroyPxActor();
 		}
 
-		m_owner->m_OnDestroyed.Unbind(&PhysicActor::UnlockDelete, this);
-
 		if (m_transform)
 		{
 			m_transform->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
@@ -44,7 +42,6 @@ namespace PhysicSystem
 			return;
 
 		m_transform = m_owner->GetOrAddBehaviour<Transform>();
-		m_owner->m_OnDestroyed.Bind(&PhysicActor::UnlockDelete, this);
 
 		if (m_transform)
 		{
@@ -68,62 +65,57 @@ namespace PhysicSystem
 				m_rigidbody->GetKinematic())
 				return;
 			
-			Transform* t = m_owner->GetBehaviour<Transform>();
-			physx::PxTransform pxT = m_pxActor->getGlobalPose();
-			Vector3 pxRot = Quaternion::ToEuler({ pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z });
-
-			Vector3 pos = t ? t->GetPosition() : Vector3::Zero;
-			pos.x = pxT.p.x != m_oldPos.x ? pxT.p.x : pos.x;
-			pos.y = pxT.p.y != m_oldPos.y ? pxT.p.y : pos.y;
-			pos.z = pxT.p.z != m_oldPos.z ? pxT.p.z : pos.z;
-
-			Vector3 rot = t ? t->GetRotation() : Vector3::Zero;
-			rot.x = pxRot.x != m_oldRot.x ? pxRot.x : rot.x;
-			rot.y = pxRot.y != m_oldRot.y ? pxRot.y : rot.y;
-			rot.z = pxRot.z != m_oldRot.z ? pxRot.z : rot.z;
-
-			if (t)
-			{
-				t->SetPosition(pos);
-				t->SetRotation(rot);
-			}
-
-			if (m_controller)
-				m_controller->Update();
-		}
-	}
-
-	void PhysicActor::SetActorPosition(const CCMaths::Vector3& position)
-	{
-		m_oldPos = position;
-
-		if (m_pxActor)
-		{
-			physx::PxTransform pxT = m_pxActor->getGlobalPose();
-			m_pxActor->setGlobalPose(physx::PxTransform(physx::PxVec3(position.x, position.y, position.z),
-														pxT.q));
-		}
-	}
-
-	void PhysicActor::SetActorRotation(const CCMaths::Vector3& rotation)
-	{
-		m_oldRot = rotation;
-
-		if (m_pxActor)
-		{
-			Quaternion pxRotQ = Quaternion::FromEuler(rotation);
+			Transform* t = m_transform;
+			if (!t)
+				return;
 			
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
-			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
-				physx::PxQuat(pxRotQ.x, pxRotQ.y, pxRotQ.z, pxRotQ.w)));
+			Vector3 pxPos = { pxT.p.x, pxT.p.y, pxT.p.z };
+			Quaternion pxRot = { pxT.q.w, pxT.q.x, pxT.q.y, pxT.q.z };
+
+			if (pxPos != m_oldPos)
+			{
+				m_oldPos = pxPos;
+				t->SetGlobalPosition(pxPos);
+			}
+
+			if (pxRot != m_oldRot)
+			{
+				m_oldRot = pxRot;
+				t->SetGlobalRotation(Quaternion::ToEuler(pxRot));
+			}
 		}
 	}
 
-	void PhysicActor::SetActorScale(const CCMaths::Vector3& scale)
+	void PhysicActor::SetActorPosition(Transform* transform)
+	{
+		if (m_pxActor)
+		{
+			Vector3 pos = transform->GetGlobalPosition();
+			physx::PxTransform pxT = m_pxActor->getGlobalPose();
+			m_pxActor->setGlobalPose(physx::PxTransform(physx::PxVec3(pos.x, pos.y, pos.z),
+														pxT.q));
+			m_oldPos = pos;
+		}
+	}
+
+	void PhysicActor::SetActorRotation(Transform* transform)
+	{
+		if (m_pxActor)
+		{
+			Quaternion rot = Quaternion::FromEuler(transform->GetGlobalRotation());
+			physx::PxTransform pxT = m_pxActor->getGlobalPose();
+			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
+				physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
+			m_oldRot = rot;
+		}
+	}
+
+	void PhysicActor::SetActorScale(Transform* transform)
 	{
 		for (auto& collider : m_colliders)
 		{
-			collider->SetEntityScale(scale);
+			collider->SetEntityScale(transform);
 			collider->ResetPxShape();
 		}
 	}
@@ -169,8 +161,6 @@ namespace PhysicSystem
 		}
 
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
-
-		m_isRemoveLocked++;
 	}
 
 	void PhysicActor::DestroyPxActor()
@@ -181,11 +171,6 @@ namespace PhysicSystem
 
 			PX_RELEASE(m_pxActor);
 		}
-	}
-
-	void PhysicActor::UnlockDelete()
-	{
-		m_isRemoveLocked = 0;
 	}
 
 	physx::PxShape* PhysicActor::CreateShape(const physx::PxGeometry& geometry)
@@ -234,14 +219,16 @@ namespace PhysicSystem
 		if (!m_controller)
 		{
 			m_controller = controller;
-			m_isRemoveLocked++;
 		}
 	}
 
 	void PhysicActor::RemoveRigidbody(Rigidbody* rigidbody)
 	{
-		if (m_isRemoveLocked > 0)
-			return;
+		if (m_controller)
+		{
+			if (rigidbody == m_controller->m_rigidbody)
+				m_controller->m_rigidbody = nullptr;
+		}
 
 		if (m_rigidbody == rigidbody)
 		{
@@ -257,8 +244,11 @@ namespace PhysicSystem
 
 	void PhysicActor::RemoveCollider(Collider* collider)
 	{
-		if (m_isRemoveLocked > 0)
-			return;
+		if (m_controller)
+		{
+			if (collider == m_controller->m_collider)
+				m_controller->m_collider = nullptr;
+		}
 
 		for (size_t i = 0; i < m_colliders.size(); ++i)
 		{
@@ -281,7 +271,6 @@ namespace PhysicSystem
 		if (m_controller == controller)
 		{
 			m_controller = nullptr;
-			m_isRemoveLocked = false;
 		}
 	}
 
@@ -340,6 +329,11 @@ namespace PhysicSystem
 	bool PhysicActor::HasRigidbody()
 	{
 		return m_rigidbody;
+	}
+
+	bool PhysicActor::HasController()
+	{
+		return m_controller;
 	}
 
 	bool PhysicActor::HasColliders()

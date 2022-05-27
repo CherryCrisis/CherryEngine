@@ -93,16 +93,16 @@ void CameraComponent::Initialize()
 
 	m_camera.m_framebuffer->Init();
 
-	ChangePosition(m_transform->GetPosition());
-	ChangeRotation(m_transform->GetRotation());
+	ChangePosition(m_transform);
+	ChangeRotation(m_transform);
 }
 
 void CameraComponent::OnCellAdded(Cell* newCell)
 {
 	newCell->AddViewer(&m_camera);
 
-	ChangePosition(m_transform->GetPosition());
-	ChangeRotation(m_transform->GetRotation());
+	ChangePosition(m_transform);
+	ChangeRotation(m_transform);
 }
 
 void CameraComponent::OnCellRemoved(Cell* newCell)
@@ -110,14 +110,14 @@ void CameraComponent::OnCellRemoved(Cell* newCell)
 	newCell->RemoveViewer(&m_camera);
 }
 
-void CameraComponent::ChangePosition(const CCMaths::Vector3& position)
+void CameraComponent::ChangePosition(Transform* transform)
 {
-	m_camera.SetPosition(m_transform->GetGlobalPosition());
+	m_camera.SetPosition(transform->GetGlobalPosition());
 }
 
-void CameraComponent::ChangeRotation(const CCMaths::Vector3& rotation)
+void CameraComponent::ChangeRotation(Transform* transform)
 {
-	m_camera.SetRotation(m_transform->GetGlobalRotation());
+	m_camera.SetRotation(transform->GetGlobalRotation());
 }
 
 CameraComponent* CameraComponent::GetMainCamera()

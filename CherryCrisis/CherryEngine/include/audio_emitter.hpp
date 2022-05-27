@@ -55,8 +55,8 @@ public:
 
 	void InvalidateTransform();
 
-	void ChangePosition(const CCMaths::Vector3& position);
-	void ChangeRotation(const CCMaths::Vector3& position);
+	void ChangePosition(Transform* transform);
+	void ChangeRotation(Transform* transform);
 	
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;

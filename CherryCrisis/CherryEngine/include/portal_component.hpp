@@ -30,7 +30,7 @@ public:
 	void BindToSignals() override;
 	void LateUpdate() override;
 
-	void UpdatePortalMatrices(const CCMaths::Vector3& v);
+	void UpdatePortalMatrices(Transform* tranform);
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 

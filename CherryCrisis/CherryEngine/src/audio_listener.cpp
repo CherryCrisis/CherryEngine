@@ -38,8 +38,8 @@ void AudioListener::Initialize()
 		m_transform->m_OnDestroy.Bind(&AudioListener::InvalidateTransform, this);
 	}
 
-	ChangePosition(m_transform->GetGlobalPosition());
-	ChangeRotation(m_transform->GetGlobalRotation());
+	ChangePosition(m_transform);
+	ChangeRotation(m_transform);
 
 	GetHost().m_OnAwake.Unbind(&AudioListener::Initialize, this);
 }
@@ -54,17 +54,18 @@ void AudioListener::UnbindSignals()
 
 }
 
-void AudioListener::ChangePosition(const CCMaths::Vector3& position)
+void AudioListener::ChangePosition(Transform* transform)
 {
-	alListener3f(AL_POSITION, position.x, position.y, position.z);
+	Vector3 pos = transform->GetPosition();
+	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
 }
 
-void AudioListener::ChangeRotation(const CCMaths::Vector3& rotation)
+void AudioListener::ChangeRotation(Transform* transform)
 {
-	if (!m_transform)return;
+	if (!transform)return;
 
-	CCMaths::Vector3 up  = m_transform->GetWorldMatrix().up;
-	CCMaths::Vector3 fwd = m_transform->GetWorldMatrix().back;
+	CCMaths::Vector3 up  = transform->GetWorldMatrix().up;
+	CCMaths::Vector3 fwd = transform->GetWorldMatrix().back;
 	ALfloat listenerOri[] = 
 	{ 
 		fwd.x,fwd.y,fwd.z,

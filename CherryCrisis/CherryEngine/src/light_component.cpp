@@ -61,8 +61,8 @@ void LightComponent::Initialize()
 		m_transform->m_OnDestroy.Bind(&LightComponent::InvalidateTransform, this);
 	}
 
-	ChangePosition(m_transform->GetPosition());
-	ChangeRotation(m_transform->GetRotation());
+	ChangePosition(m_transform);
+	ChangeRotation(m_transform);
 
 	GetHost().m_OnAwake.Unbind(&LightComponent::Initialize, this);
 }
@@ -78,9 +78,9 @@ void LightComponent::PopulateMetadatas()
 	m_metadatas.SetField("isPoint", m_light.m_isPoint);
 }
 
-void LightComponent::ChangePosition(const CCMaths::Vector3& position)
+void LightComponent::ChangePosition(Transform* transform)
 {
-	m_light.m_position = position;
+	m_light.m_position = transform->GetPosition();
 
 	m_light.m_lookAtMatrix = CCMaths::Matrix4::LookAt(m_light.m_position);
 
@@ -88,7 +88,7 @@ void LightComponent::ChangePosition(const CCMaths::Vector3& position)
 	m_light.m_lightSpace = CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f) * m_light.m_lookAtMatrix;
 }
 
-void LightComponent::ChangeRotation(const CCMaths::Vector3& rotation)
+void LightComponent::ChangeRotation(Transform* transform)
 {
 	//m_light.rotation = rotation;
 }

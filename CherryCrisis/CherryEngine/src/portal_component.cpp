@@ -74,7 +74,7 @@ void PortalComponent::Initialize()
 
 	GetHost().m_OnAwake.Unbind(&PortalComponent::Initialize, this);
 	
-	UpdatePortalMatrices({});
+	UpdatePortalMatrices(m_transform);
 }
 
 void PortalComponent::LateUpdate()
@@ -148,7 +148,7 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 }
 
 
-void PortalComponent::UpdatePortalMatrices(const CCMaths::Vector3& v)
+void PortalComponent::UpdatePortalMatrices(Transform* tranform)
 {
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 

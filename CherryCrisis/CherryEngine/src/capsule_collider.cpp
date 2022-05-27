@@ -35,6 +35,7 @@ CapsuleCollider::CapsuleCollider(CCUUID& id) : Collider(id)
 CapsuleCollider::~CapsuleCollider()
 {
 	Unregister();
+
 	GetHost().m_OnSelected.Unbind(&CapsuleCollider::Visible, this);
 	GetHost().m_OnUnselected.Unbind(&CapsuleCollider::Unvisible, this);
 
@@ -115,7 +116,7 @@ void CapsuleCollider::Initialize()
 		}
 	}
 
-	SetEntityScale(m_transform->GetGlobalScale());
+	SetEntityScale(m_transform);
 }
 
 void CapsuleCollider::InvalidateTransform()
@@ -145,9 +146,9 @@ void CapsuleCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Radius", &radius);
 }
 
-void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& s)
+void CapsuleCollider::SetEntityScale(Transform* transform)
 {
-	CCMaths::Vector3 scale = m_transform->GetGlobalScale();
+	CCMaths::Vector3 scale = transform->GetGlobalScale();
 
 	m_entityRadius = CCMaths::Max(scale.x, scale.z);
 	m_entityScale = scale.y;
@@ -157,6 +158,8 @@ void CapsuleCollider::SetEntityScale(const CCMaths::Vector3& s)
 	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale) - m_totalRadius);
 
 	ComputeModelMatrices();
+
+	ResetPxShape();
 }
 
 void CapsuleCollider::SetPxShape()
