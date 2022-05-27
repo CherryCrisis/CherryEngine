@@ -145,7 +145,7 @@ namespace ImCherry
 		ImGui::PushID(label.c_str());
 		ImCherryInternal::BeginCherryComponent(label);
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
 		ImGui::PushStyleColor(ImGuiCol_Border, { .75f, .75f, .75f, 1.000f });
 		ImGui::BeginDisabled();
 		ImGui::InputText("###value", (char*)value.c_str(), value.size());
@@ -161,7 +161,7 @@ namespace ImCherry
 		ImGui::PushID(label.c_str());
 		ImCherryInternal::BeginCherryComponent(label);
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.f);
 		ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
@@ -187,11 +187,20 @@ namespace ImCherry
 		return val;
 	}
 
+	void CenteredText(const std::string& label) 
+	{
+		float textWidth = ImGui::CalcTextSize(label.c_str()).x;
+		float windowWidth = ImGui::GetContentRegionAvail().x;
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		ImGui::Text(label.c_str());
+	}
+
 	void SetKeyboardFocus()
 	{
 		if (!ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0))
 			ImGui::SetKeyboardFocusHere(0);
 	}
+
 }
 
 namespace ImCherryInternal
@@ -218,11 +227,21 @@ namespace ImCherryInternal
 		ImGui::PopID();
 	}
 
-	void BeginCherryHeader()
+	void BeginCherryHeader(bool active)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Header, { 0.166f, 0.166f, 0.221f, 1.000f });
-		ImGui::PushStyleColor(ImGuiCol_HeaderHovered, { 0.427f, 0.427f, 0.456f, 1.000f });
-		ImGui::PushStyleColor(ImGuiCol_HeaderActive, { 0.220f, 0.205f, 0.235f, 1.000f });
+
+		if (active) 
+		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, { 0.427f, 0.427f, 0.456f, 1.000f });
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, { 0.220f, 0.205f, 0.235f, 1.000f });
+		}
+		else 
+		{
+			ImGui::PushStyleColor(ImGuiCol_HeaderHovered, { 0.166f, 0.166f, 0.221f, 1.000f });
+			ImGui::PushStyleColor(ImGuiCol_HeaderActive, { 0.166f, 0.166f, 0.221f, 1.000f });
+		}
+
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 8.f);
 	}
 

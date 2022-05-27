@@ -55,7 +55,7 @@ private:
     //Panel's Classes
     AssetSettingsDisplayer   m_assetSettingsDisplayer{};
     AssetBrowser             m_browser               {&m_assetSettingsDisplayer, this};
-    BuildDisplayer           m_buildDisplayer        { false };
+    BuildDisplayer           m_buildDisplayer        {false};
     CellSystemDisplayer      m_cellSystemDisplayer   {this};
     GameDisplayer            m_gameDisplayer         {this};
     HierarchyDisplayer       m_hierarchyDisplayer    {true, this};

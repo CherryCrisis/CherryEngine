@@ -10,7 +10,7 @@
 #include "transform.hpp"
 #include "sky_renderer.hpp"
 #include "utils.hpp"
-
+#include "core/imcherry.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -55,60 +55,10 @@ void CellSystemDisplayer::Render()
 
         RenderCells();
 
-        if (m_selectedCell)
-        {
-            CellSettings();
-        }
-
-
-        ImGui::SameLine();
     }
 
     ImGui::PopStyleVar(1);
     ImGui::End();
-}
-
-void CellSystemDisplayer::CellSettings()
-{
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
-
-    ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-
-    ImGui::BeginChild("CategoryFocus", ImVec2(0, ImGui::GetContentRegionAvail().y), true, window_flags);
-
-    //-- SkyRenderer Settings --//
-    if (m_selectedCell->m_skyRenderer)
-    {
-        std::string skyRendererPath;
-
-        if (m_selectedCell->m_skyRenderer->m_texture)
-            skyRendererPath = m_selectedCell->m_skyRenderer->m_texture->GetFilepath();
-        else
-            skyRendererPath = "Null";
-
-        ImGui::InputText("SkyRenderer", skyRendererPath.data(), ImGuiInputTextFlags_::ImGuiInputTextFlags_ReadOnly);
-
-        if (ImGui::BeginDragDropTarget())
-        {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-            {
-                const char* path = (const char*)payload->Data;
-                std::string extension = String::ExtractLastValue(path, '.');
-
-                if (textureExtensions.end() != textureExtensions.find("." + extension))
-                {
-                    if (std::shared_ptr<Texture> texture = ResourceManager::GetInstance()->GetResource<Texture>(path))
-                    {
-                        m_selectedCell->m_skyRenderer->SetTexture(texture);
-                    }
-                }
-            }
-            ImGui::EndDragDropTarget();
-        }
-    }
-
-    ImGui::EndChild();
-    ImGui::PopStyleVar();
 }
 
 void CellSystemDisplayer::SelectCell(Cell* cell)
@@ -136,15 +86,9 @@ void CellSystemDisplayer::SelectCell(Cell* cell)
 void CellSystemDisplayer::RenderCells()
 {
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar;
-    ImGui::BeginChild("CategoryList", ImVec2(ImGui::GetContentRegionAvail().x * 0.25f, ImGui::GetContentRegionAvail().y), false, window_flags);
+    ImGui::Dummy({ ImGui::GetContentRegionAvail().x , ImGui::GetContentRegionAvail().y * .01f });
+    ImGui::BeginChild("CategoryList", {ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y * .8f } , false, window_flags);
 
-    if (ImGui::Button("Add Cell"))
-    {
-        ImGui::OpenPopup("AddCell");
-    }
-
-    CreateCell();
-    
     if (m_renameCell)
     {
         ImGui::OpenPopup("RenameCell");
@@ -219,8 +163,27 @@ void CellSystemDisplayer::RenderCells()
             i++;
         }
     }
+    ImGui::EndChild();
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 12.f,0.f });
+    ImGui::PushStyleColor(ImGuiCol_Button, { 0.166f, 0.166f, 0.221f, 1.000f });
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, { 0.427f, 0.427f, 0.456f, 1.000f });
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, { 0.220f, 0.205f, 0.235f, 1.000f });
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 5.f);
 
-    ImGui::EndChild(); ImGui::SameLine();
+
+    if (ImGui::Button("Create new Cell", { ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y}))
+    {
+        ImGui::PopStyleVar();
+        ImCherryInternal::EndCherryHeader();
+        ImGui::OpenPopup("AddCell");
+    }
+    else
+    {
+        ImGui::PopStyleVar();
+        ImCherryInternal::EndCherryHeader();
+    }
+
+    CreateCell();
 }
 
 void CellSystemDisplayer::InvalidatePointers()

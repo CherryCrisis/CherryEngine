@@ -28,7 +28,6 @@ public:
 
 	Cell* GetSelectedCell() { return m_selectedCell; }
 
-	void CellSettings();
 	void CreateCell();
 	void RenameCell();
 	bool Context();

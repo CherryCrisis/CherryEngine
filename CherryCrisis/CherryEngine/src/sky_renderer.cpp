@@ -42,7 +42,7 @@ SkyRenderer::~SkyRenderer()
 
 void SkyRenderer::PopulateMetadatas()
 {
-	m_metadatas.SetProperty("texturePath", &m_texturePath);
+	m_metadatas.SetProperty("texturePath", &m_texturePath, "dropzone");
 }
 
 void SkyRenderer::SetTextureFromPath(std::string texturePath)

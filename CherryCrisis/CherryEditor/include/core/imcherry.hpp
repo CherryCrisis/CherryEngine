@@ -14,7 +14,7 @@ namespace ImCherry
 	bool DragFloat(const std::string& label, float* v, float v_speed, float v_min, float v_max, const char* format);
 	void Dropzone(const std::string& label, const std::string& value);
 	bool DropzoneMenu(const std::string& label, const std::string& value, bool disabled = true);
-	
+	void CenteredText(const std::string& label);
 	void SetKeyboardFocus();
 }
 
@@ -23,7 +23,7 @@ namespace ImCherryInternal
 	void EndCherryComponent(int varPop=0, int colorPop=0);
 	void BeginCherryComponent(const std::string& label);
 
-	void BeginCherryHeader();
+	void BeginCherryHeader(bool active = true);
 	void EndCherryHeader();
 }
 

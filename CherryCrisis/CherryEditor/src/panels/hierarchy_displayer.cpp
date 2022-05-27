@@ -16,6 +16,7 @@
 #include "capsule_collider.hpp"
 #include "cell.hpp"
 #include "core/editor_manager.hpp"
+#include "core/imcherry.hpp"
 #include "light_component.hpp"
 #include "mesh.hpp"
 #include "scene.hpp"
@@ -23,7 +24,7 @@
 #include "sphere_collider.hpp"
 #include "transform.hpp"
 #include "portal_component.hpp"
-
+#include "sky_renderer.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 
@@ -74,7 +75,7 @@ void HierarchyDisplayer::Render()
         IO = &ImGui::GetIO();
         return;
     }
-
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f,5.f });
     if (ImGui::Begin("Hierarchy", &m_isOpened))
     {
         if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK) && ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows))
@@ -82,23 +83,56 @@ void HierarchyDisplayer::Render()
         
         if (ImGui::BeginPopupContextItem("context"))
             ContextCallback();
+        
+        // fps displayer
+        if (0)
+        {
+            static std::vector<float> m_fpsHistory;
+            static int range = 100;
 
-        ImGui::Text(std::format("FPS : {}", IO->Framerate).c_str());
-        ImGui::Text(SceneManager::GetInstance()->m_currentScene->GetName().c_str());
+            static float recordRemainTime = 1.f; // seconds
+            static float recordRange      = .05f; // seconds
+            recordRemainTime -= TimeManager::GetDeltaTime();
+            if ( recordRemainTime <= 0.f)
+            {
+                m_fpsHistory.push_back(IO->Framerate);
 
+                if (m_fpsHistory.size() > range) 
+                    m_fpsHistory.erase(m_fpsHistory.begin());
+            
+                recordRemainTime = recordRange;
+            }
+
+            float average = 0.0f;
+            for (const float& v : m_fpsHistory)
+                average += v;
+            average /= (float)m_fpsHistory.size();
+
+            std::string str = std::format("Average : {}", (int)average);
+            ImGui::PlotLines("###FpsGraph", m_fpsHistory.data(), sizeof(m_fpsHistory.data()), m_fpsHistory.size(), str.c_str(), 1, 1000, {0.f,80.f});
+            ImGui::Text(std::format("FPS : {}", IO->Framerate).c_str());
+        }
+
+        std::string name = std::filesystem::path(SceneManager::GetInstance()->m_currentScene->GetName()).filename().string();
+        //ImCherry::CenteredText(name);
+        ImCherryInternal::BeginCherryHeader(false);
+        ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_Framed);
+        ImGui::TreePop();
+        ImCherryInternal::EndCherryHeader();
         Cell* selectedCell = m_cellSystemDisplayer->GetSelectedCell();
 
         if (!selectedCell)
         {
             ImGui::Text("Please Select a Cell");
             ImGui::End();
+            ImGui::PopStyleVar();
             return;
         }
 
         ImGui::Text(std::format("Cell : {}", selectedCell->GetName().c_str()).c_str());
-        ImGui::Separator();
-
-        ImGui::BeginChild("###HIERARCHY");
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 12,2 });
+        ImGui::BeginChild("###HIERARCHY", {ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y * .9f});
+        ImGui::Dummy({ 1.f,8.f });
         for (auto& node : m_nodes)
         {
             if (!node.m_isRoot && node.m_entityTransform)
@@ -107,12 +141,44 @@ void HierarchyDisplayer::Render()
             if (RenderEntity(node))
                 break;
         }
-
         HandleShortcuts();
         ImGui::EndChild();
+        ImGui::PopStyleVar();
+        if (selectedCell->m_skyRenderer)
+        {
+            auto& metapack = selectedCell->m_skyRenderer->GetMetapack();
+            for (auto& [metaname, metadata] : metapack)
+            {
+                std::string defaultVal;
+                std::string* valPtr = &defaultVal;
+                metadata->Get((void**)&valPtr);
+
+                if (metadata->m_identifier.find("dropzone") != std::string::npos)
+                {
+                    bool disabled = metadata->m_identifier.find("off") != std::string::npos;
+                    std::string name = std::filesystem::path(defaultVal).filename().string();
+
+                    ImCherry::DropzoneMenu(metaname, name, disabled);
+
+                    if (ImGui::BeginDragDropTarget() && !disabled)
+                    {
+                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
+                        {
+                            const char* data = (const char*)payload->Data;
+                            std::string strData = data;
+                            metadata->Set(&strData);
+                        }
+                        ImGui::EndDragDropTarget();
+                    }
+                }
+            }
+            
+        }
     }
 
+
     ImGui::End();
+    ImGui::PopStyleVar();
 
     {
         if (m_isRenaming)

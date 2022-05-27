@@ -73,8 +73,8 @@ void AssetBrowser::RenderMenuBar()
 
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, { 4,2 });
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, { 2,3 });
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, { 0,2 });
         ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_MenuBarBg]);
-
         ImGui::Columns(2);
         bool isRoot = true;
         while (!directoryOrderNode.empty())
@@ -108,7 +108,7 @@ void AssetBrowser::RenderMenuBar()
         ImGui::PushStyleColor(ImGuiCol_Border, {0,0,0,1});
         ImGui::InputText("###Search", m_researchInput, IM_ARRAYSIZE(m_researchInput));
         ImGui::Columns(1);
-        ImGui::PopStyleVar(3);
+        ImGui::PopStyleVar(4);
         ImGui::PopStyleColor(2);
     }
     ImGui::EndMenuBar();
@@ -828,6 +828,11 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 continue;
             }
 
+            if (ignoredExtensions.end() != ignoredExtensions.find(extension))
+            {
+                continue;
+            }
+
             otherNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
         }
 
@@ -986,7 +991,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 std::shared_ptr<Material> material = resourceManager->AddResource<Material>(filepath.c_str(), true);
                 materialNode.m_resource = material;
 
-                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
+                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/mat_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.insert({ materialNode.m_path.string(), std::make_unique<MaterialNode>(materialNode) });
                 return pair.first->second.get();

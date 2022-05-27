@@ -190,7 +190,7 @@ void EditorManager::HandleMenuBar()
                 if (ImGui::MenuItem("Scene"))          { m_sceneDisplayer.Toggle(true); }
                 if (ImGui::MenuItem("Featurer"))       { m_isFeaturerOpened = true; }
                 if (ImGui::MenuItem("UI Editor"))      { m_uiEditor.Toggle(true);}
-
+                if (ImGui::MenuItem("Cell Displayer"))      { m_cellSystemDisplayer.Toggle(true); }
                 ImGui::EndMenu();
             }
 

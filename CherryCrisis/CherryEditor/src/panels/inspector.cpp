@@ -213,7 +213,7 @@ void Inspector::InspectComponents(Entity* entity, int id)
         {
             auto& metapack = behaviour->GetMetapack();
             for (auto& [metaname, metadata] : metapack)
-            {
+            { 
                 if (!metadata->m_isShownOnInspector)
                     continue;
 

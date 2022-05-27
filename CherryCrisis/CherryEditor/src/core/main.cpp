@@ -58,6 +58,7 @@ int main(int argc, char** argv)
 {
     // Check for leak
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //_CrtSetBreakAlloc(2588);
 
     int screenWidth = 1200;
     int screenHeight = 1000;
@@ -90,8 +91,10 @@ int main(int argc, char** argv)
     ImGui_ImplOpenGL3_Init("#version 330");
     ImFontConfig font_cfg;
     font_cfg.FontDataOwnedByAtlas = false;
-    io.Fonts->AddFontFromMemoryTTF((void*)tahoma, sizeof(tahoma), 17.f, &font_cfg);
-    ImGui::MergeIconsWithLatestFont(16.f, false);
+    //io.Fonts->AddFontFromMemoryTTF((void*)tahoma, sizeof(tahoma), 17.f, &font_cfg);
+    io.Fonts->AddFontFromFileTTF("Mockery.otf", 13.f);
+    //ImGui::MergeIconsWithLatestFont(16.f, false);
+
 
     std::string projectPath = ""; 
     if (argc > 1) 
@@ -211,6 +214,7 @@ int main(int argc, char** argv)
     SceneManager::GetInstance()->m_currentScene.reset();
     ResourceManager::Kill();
     glfwDestroyWindow(window);
+    glfwTerminate();
 
     return 0;
 }
