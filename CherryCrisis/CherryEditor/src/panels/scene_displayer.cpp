@@ -232,8 +232,10 @@ void SceneDisplayer::Render()
 
             if (!m_isManipulated)
                 m_guizmoTransform = t->GetWorldMatrix();
-
-            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, m_guizmoTransform.data))
+            
+            Matrix4 deltaMatrix = Matrix4::Identity; // Unused
+            Vector3 snapping = m_operation == ImGuizmo::ROTATE && m_isSnapping ? Vector3(m_rotSnap) : Vector3::Zero;
+            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, m_guizmoTransform.data, deltaMatrix.data, snapping.data));
             {
                 Transform* parent = t->GetParent();
                 CCMaths::Matrix4 mat = m_guizmoTransform;
@@ -241,38 +243,29 @@ void SceneDisplayer::Render()
                 if (parent)
                     mat = CCMaths::Matrix4::Inverse(parent->GetWorldMatrix()) * mat;
 
-                CCMaths::Vector3 p, r, s; // position, rotation and scale
-                CCMaths::Matrix4::Decompose(mat, p, r, s);
-
+                CCMaths::Vector3 p = mat.position;
+                CCMaths::Vector3 s = Matrix4::GetScaleInMatrix(mat);
+                CCMaths::Quaternion rot = Quaternion::FromMatrix(Matrix4::GetRotationMatrix(mat));
                 if (m_isSnapping)
                 {
                     Vector3 pos = t->GetPosition();
-                    Vector3 rot = t->GetRotation();
 
                     if (p.x != pos.x)
                         p.x = CCMaths::Round(p.x / m_posSnap) * m_posSnap;
-                    
+
                     if (p.y != pos.y)
                         p.y = CCMaths::Round(p.y / m_posSnap) * m_posSnap;
-                    
+
                     if (p.z != pos.z)
                         p.z = CCMaths::Round(p.z / m_posSnap) * m_posSnap;
-
-                    
-                    if (r.x != rot.x)
-                        r.x = CCMaths::Round(r.x / m_rotSnap) * m_rotSnap;
-                    
-                    if (r.y != rot.y)
-                        r.y = CCMaths::Round(r.y / m_rotSnap) * m_rotSnap;
-                    
-                    if (r.z != rot.z)
-                        r.z = CCMaths::Round(r.z / m_rotSnap) * m_rotSnap;
                 }
 
                 t->SetPosition(p);
-                t->SetRotation(r);
+                t->SetRotation(rot);
                 t->SetScale(s);
             }
+
+            //t->SetGlobalRotation({ 0.f, 1.f, 0.f });
 
             if (ImGuizmo::IsUsing() && InputManager::GetKey(Keycode::LEFT_CLICK))
                 m_isManipulated = true;
@@ -350,10 +343,7 @@ void SceneDisplayer::RenderMenuBar()
 
         ImGui::Spacing();
         ImGui::SetNextItemWidth(50.f);
-        float rot = m_rotSnap * CCMaths::RAD2DEG;
-        if (ImGui::DragFloat("Rotation", &rot, 0.1f, 0.1f, 90.f, "%.1f"))
-            m_rotSnap = rot * CCMaths::DEG2RAD;
-
+        ImGui::DragFloat("Rotation", &m_rotSnap, 0.1f, 0.1f, 90.f, "%.1f");
     }
 
     ImGui::EndMenuBar();

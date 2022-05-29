@@ -162,7 +162,7 @@ void CharacterController::FixedUpdate()
 
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);
 
-	CCMaths::Vector3 rot = m_transform->GetRotation() = m_rotating * TimeManager::GetFixedDeltaTime() * m_sensitivity;
+	CCMaths::Vector3 rot = m_rotating * TimeManager::GetFixedDeltaTime() * m_sensitivity;
 	CCMaths::Vector3 goalRVelocity = rot * m_moveSpeed;
 	CCMaths::Vector3 neededRAcceleration = CCMaths::Vector3::ClampLength((goalRVelocity - rVel) / TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
 

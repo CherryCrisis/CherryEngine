@@ -103,7 +103,7 @@ namespace PhysicSystem
 	{
 		if (m_pxActor)
 		{
-			Quaternion rot = Quaternion::FromEuler(transform->GetGlobalRotation());
+			Quaternion rot = transform->GetGlobalRotation();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
 				physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
@@ -126,7 +126,7 @@ namespace PhysicSystem
 			return;
 
 		Vector3 pos = m_transform->GetPosition();
-		Quaternion rot = Quaternion::FromEuler(m_transform->GetRotation());
+		Quaternion rot =  m_transform->GetRotation();
 
 		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.x, rot.y, rot.z, rot.w));
 

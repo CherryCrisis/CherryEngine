@@ -460,6 +460,8 @@ namespace CCMaths
 		inline Matrix4 GetScaleMatrix() const;
 		inline static Matrix4 GetScaleMatrix(const Matrix4& matrix);
 
+		inline Vector3 GetScaleInMatrix() const;
+		inline static Vector3 GetScaleInMatrix(const Matrix4& matrix);
 
 		//! \hiderefs
 		inline static Matrix4 Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far);

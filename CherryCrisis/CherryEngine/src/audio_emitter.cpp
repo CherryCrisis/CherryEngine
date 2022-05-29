@@ -147,7 +147,7 @@ void AudioEmitter::ChangeRotation(Transform* transform)
 {
 	if (!m_sound || !m_isSpatial) return;
 	return;
-	m_sound->SetDirection(transform->GetRotation());
+	m_sound->SetDirection(Quaternion::ToEuler(transform->GetRotation()));
 }
 
 void AudioEmitter::PopulateMetadatas() 
