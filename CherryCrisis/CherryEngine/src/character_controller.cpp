@@ -45,6 +45,7 @@ void CharacterController::PopulateMetadatas()
 	m_metadatas.SetProperty("Move Speed", &moveSpeed);
 	m_metadatas.SetProperty("Spring Dampling", &springDampling);
 	m_metadatas.SetProperty("String Strength", &springStrength);
+	m_metadatas.SetProperty("Rotation Sensivity", &sensitivity);
 }
 
 void CharacterController::BindToSignals()
@@ -92,6 +93,7 @@ void CharacterController::Initialize()
 
 	m_isStarted = true;
 	GetHost().m_OnStart.Unbind(&CharacterController::Initialize, this);
+
 }
 
 void CharacterController::Unregister()

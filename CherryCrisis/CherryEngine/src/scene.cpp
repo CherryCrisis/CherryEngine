@@ -367,14 +367,14 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 	int i = fromCell->PossessEntity(entity);
 	if (i == -1)
 	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to remove an entity from a cell not owning it");
+		m_debug->AddLog(ELogType::ERROR, std::format("Trying to remove an entity ({}) from a cell ({}) not owning it", entity->GetName(),fromCell->GetName()).c_str());
 		return;
 	}
 
 	i = toCell->PossessEntity(entity);
 	if (i != -1)
 	{
-		m_debug->AddLog(ELogType::ERROR, "Trying to move an entity to a cell already owning it");
+		m_debug->AddLog(ELogType::ERROR, std::format("Trying to move an entity ({}) to a cell ({}) already owning it", entity->GetName(), fromCell->GetName()).c_str());
 		return;
 	}
 

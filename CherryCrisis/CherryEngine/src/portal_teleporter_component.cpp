@@ -13,6 +13,8 @@
 #include "mixed_rendering_pipeline.hpp"
 #include "shape_renderer.hpp"
 #include "model_renderer.hpp"
+#include "rigidbody.hpp"
+#include "physic_actor.hpp"
 
 PortalTeleporterComponent::PortalTeleporterComponent()
 {
@@ -88,7 +90,14 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 
 		m_entityNode->m_transform->SetPosition(newPos);
 		m_entityNode->m_transform->SetRotation(newRot);
-		m_entityNode->m_transform->SetScale(newScale);
+
+		//m_entityNode->m_transform->SetScale(newScale);
+
+		//if (Rigidbody* rb = entity->GetBehaviour<Rigidbody>())
+		//{
+		//	rb->m_physicActor->SetActorPosition(m_entityNode->m_transform);
+		//	rb->m_physicActor->SetActorRotation(m_entityNode->m_transform);
+		//}
 	}
 }
 
@@ -211,7 +220,10 @@ void PortalTeleporterComponent::EnterPortal(const PortalComponent* linkedPortal,
 {
 	SetIsVisibleEntityNode(m_cloneEntityNode.get(), true);
 	if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
-		scene->MoveEntityFromCellToCell(m_cloneEntityNode->m_transform->GetHost().m_cell, linkedPortal->GetHost().m_cell, m_cloneEntityNode->m_transform->GetHostPtr());
+	{
+		if (linkedPortal->GetHost().m_cell != m_cloneEntityNode->m_transform->GetHost().m_cell)
+			scene->MoveEntityFromCellToCell(m_cloneEntityNode->m_transform->GetHost().m_cell, linkedPortal->GetHost().m_cell, m_cloneEntityNode->m_transform->GetHostPtr());
+	}
 }
 
 void PortalTeleporterComponent::ExitPortal()
