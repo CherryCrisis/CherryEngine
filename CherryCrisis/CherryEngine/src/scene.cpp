@@ -384,6 +384,14 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 	toCell->AddEntity(entity);
 	entity->m_OnCellAdded.Invoke(&*toCell);
 
+	//Recursive call
+	if (Transform* transform = entity->GetBehaviour<Transform>())
+	{
+		auto childrens = *transform->GetChildren();
+		for (Transform* child : childrens)
+			MoveEntityFromCellToCell(fromCell, toCell, child->GetHostPtr());
+	}
+
 	m_isHierarchyDirty = true;
 }
 
