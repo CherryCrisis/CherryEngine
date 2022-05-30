@@ -533,7 +533,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						if (value.as<std::string>() == "null")
 							continue;
 
-						auto& metadatas = cell->m_skyRenderer->GetMetapack();
+ 						auto& metadatas = cell->m_skyRenderer->GetMetapack();
 						if (metadatas.contains(key))
 						{
 							auto& metadata = metadatas[key];
@@ -858,48 +858,50 @@ bool Serializer::SerializeInputs()
 
 bool Serializer::UnserializeInputs()
 {
-	const char* filepath = "Assets/GameInputs.ccinputs";
-	if (!std::filesystem::exists(filepath))
-		return false;
-
-	InputManager::InputContext* userContext = InputManager::GetContext("User Context");
+	bool returnValue = false;
+	InputManager::InputContext* userContext = InputManager::GetOrAddContext("User Context");
 	InputManager::SetPollContext(userContext);
 	InputManager::PushContext(userContext);
 
-	YAML::Node loader = YAML::LoadFile(filepath);
+	const char* filepath = "Assets/GameInputs.ccinputs";
 
-	int success = 0;
-	if (loader["ActionSingle"])
+	if (std::filesystem::exists(filepath))
 	{
-		for (YAML::const_iterator it = loader["ActionSingle"].begin(); it != loader["ActionSingle"].end(); ++it)
+		returnValue = true;
+		YAML::Node loader = YAML::LoadFile(filepath);
+
+		int success = 0;
+		if (loader["ActionSingle"])
 		{
-			auto* action = InputManager::AddActionSingle(it->first.as<std::string>(), success);
-			for (auto key : it->second)
+			for (YAML::const_iterator it = loader["ActionSingle"].begin(); it != loader["ActionSingle"].end(); ++it)
 			{
-				std::string str = key.as<std::string>();
-				InputManager::AddInputToAction(action, InputManager::GetKeycode(str.c_str()));
+				auto* action = InputManager::AddActionSingle(it->first.as<std::string>(), success);
+				for (auto key : it->second)
+				{
+					std::string str = key.as<std::string>();
+					InputManager::AddInputToAction(action, InputManager::GetKeycode(str.c_str()));
+				}
 			}
 		}
-	}
 
-	if (loader["ActionAxes"])
-	{
-		for (YAML::const_iterator it = loader["ActionAxes"].begin(); it != loader["ActionAxes"].end(); ++it)
+		if (loader["ActionAxes"])
 		{
-			auto* action = InputManager::AddActionAxes(it->first.as<std::string>(), success);
-			for (auto key : it->second)
+			for (YAML::const_iterator it = loader["ActionAxes"].begin(); it != loader["ActionAxes"].end(); ++it)
 			{
-				std::string str = key.as<std::string>();
-				auto axis = InputManager::GetFromString(str);
-				InputManager::AddAxisToAction(action, axis);
+				auto* action = InputManager::AddActionAxes(it->first.as<std::string>(), success);
+				for (auto key : it->second)
+				{
+					std::string str = key.as<std::string>();
+					auto axis = InputManager::GetFromString(str);
+					InputManager::AddAxisToAction(action, axis);
+				}
 			}
 		}
 	}
 
 	InputManager::PopContext();
 	InputManager::SetPollContext(nullptr);
-
-	return true;
+	return returnValue;
 }
 
 bool Serializer::SerializeGame(const char* filepath)

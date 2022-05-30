@@ -8,8 +8,9 @@
 
 #include "framebuffer.hpp"
 #include "viewer.hpp"
+#include "element_mesh_generator.hpp"
 
-
+#include "camera_component.hpp"
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
 
@@ -73,4 +74,41 @@ RenderManager::RenderManager()
 RenderManager::~RenderManager()
 {
     glfwTerminate();
+}
+
+void RenderManager::GenerateMainWindow(MainWindow& mainWindow) 
+{
+    mainWindow.shader = ResourceManager::GetInstance()->AddResource<ShaderProgram>("game", true, "Assets/Shaders/game.vert", "Assets/Shaders/game.frag")->m_shaderProgram;
+    std::shared_ptr<Mesh> m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
+
+    if (!m_quadMesh->m_gpuMesh)
+    {
+        Mesh::CreateQuad(m_quadMesh, 1.f, 1.f);
+        ElementMeshGenerator m_meshGenerator;
+        m_meshGenerator.Generate(m_quadMesh.get());
+    }
+
+    mainWindow.quad = m_quadMesh->m_gpuMesh.get();
+}
+
+void RenderManager::DrawMainWindow(const MainWindow& mainWindow) 
+{
+    if (CameraComponent* cameraComp = CameraComponent::GetMainCamera())
+    {
+        Camera* cam = &cameraComp->m_camera;
+
+        auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mainWindow.quad);
+
+        glUseProgram(mainWindow.shader);
+        glBindVertexArray(gpuMesh->VAO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+        glDisable(GL_DEPTH_TEST);
+
+        glBindTexture(GL_TEXTURE_2D, cam->m_framebuffer->colorTex.texID);
+        glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
 }

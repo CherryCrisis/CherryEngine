@@ -759,7 +759,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         AssetNode* assetNode = pair.first->second.get();
 
         #pragma region Sort AssetNode
-
+        // LEAK: This leaks wtf?
         std::set<std::filesystem::directory_entry> entries;
         for (const std::filesystem::directory_entry& entry : directory_iterator)
             entries.emplace(entry);

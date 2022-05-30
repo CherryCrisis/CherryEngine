@@ -11,6 +11,12 @@ PreferencesDisplayer::PreferencesDisplayer(bool spawnOpened) : Panel(spawnOpened
     m_categories[1] = new ThirdParty("Third Party");
 }
 
+PreferencesDisplayer::~PreferencesDisplayer() 
+{
+    for (auto* category : m_categories)
+        delete category;
+}
+
 void PreferencesDisplayer::Render() 
 {
     if (!m_isOpened)

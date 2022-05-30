@@ -47,7 +47,7 @@ void SceneManager::LateUpdate()
 
 void SceneManager::SetHierarchyDirty(bool value) 
 {
-	if (GetInstance()->m_currentScene)
+	if (GetInstance() && GetInstance()->m_currentScene)
 		currentInstance->m_currentScene->m_isHierarchyDirty = value;
 }
 

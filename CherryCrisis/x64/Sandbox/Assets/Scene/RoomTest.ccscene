@@ -1,0 +1,558 @@
+resources:
+  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\MockupScene\mockupRoom.fbx
+  - Assets\Models\MockupScene\mockupRoom.obj
+  - Assets\Models\NonEuclidean\capsuleTemporel.obj
+  - Assets\Models\NonEuclidean\nonEuclideanModel.obj
+cells:
+  681872620:
+    name: default
+    settings:
+      texturePath: Assets\skydome\Arches_3k.hdr
+    entities:
+      3872909687:
+        name: mockupRoom.obj
+      4125727335:
+        name: Cube_Cube.001
+      1008350726:
+        name: Cube.001_Cube.002
+      2347875218:
+        name: Cube.002_Cube.003
+      963706259:
+        name: Cube.003_Cube.004
+      1722753820:
+        name: Cube.004_Cube.005
+      2530967889:
+        name: Cube.005_Cube.007
+      1487845103:
+        name: Cube.006_Cube.008
+      1514705197:
+        name: Portal_ToSecondHouse
+      696394166:
+        name: Player
+      4142624840:
+        name: Empty
+      1160852888:
+        name: PortalFromSecondHouse
+  2471330722:
+    name: second_house
+    settings:
+      texturePath: Assets\skydome\Arches_3k.hdr
+    entities:
+      4193898356:
+        name: mockupRoom.obj
+      3670749294:
+        name: Cube_Cube.001
+      3828522067:
+        name: Cube.001_Cube.002
+      2605558064:
+        name: Cube.002_Cube.003
+      3246827381:
+        name: Cube.003_Cube.004
+      2327079564:
+        name: Cube.004_Cube.005
+      1141250585:
+        name: Cube.005_Cube.007
+      2916698354:
+        name: Cube.006_Cube.008
+      1368381428:
+        name: Portal_FromDefault
+      1362005578:
+        name: Portal_ToDefault
+components:
+  2453965642:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3872909687
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  1198697074:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4125727335
+    matFile: Assets\Models\MockupScene\SecondHouse.ccmat
+    transform: 108143219
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube_Cube.001
+  108143219:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4125727335
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2453965642
+  3122748721:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 4125727335
+    Enabled: true
+    Scale: 37.493626/0.050000/38.293228
+    Is Trigger: false
+    Local Position: -15.490788/0.000000/14.352281
+  536901990:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1008350726
+    Enabled: true
+    Scale: 19.852575/6.758632/5.650865
+    Is Trigger: false
+    Local Position: -18.576958/5.622826/14.440463
+  3308663868:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1008350726
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2453965642
+  4194798775:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1008350726
+    matFile: Assets\Models\MockupScene\SecondHouse.ccmat
+    transform: 3308663868
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.001_Cube.002
+  1789656931:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2347875218
+    Enabled: true
+    Scale: 3.215654/6.758632/45.104725
+    Is Trigger: false
+    Local Position: 19.637600/5.622826/16.673546
+  4059882659:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2347875218
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2453965642
+  751233471:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2347875218
+    matFile: Assets\Models\MockupScene\SecondHouse.ccmat
+    transform: 4059882659
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.002_Cube.003
+  1225894057:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 963706259
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2453965642
+  1804932228:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 963706259
+    matFile: Assets\Models\MockupScene\SecondHouse.ccmat
+    transform: 1225894057
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.003_Cube.004
+  3226191185:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 963706259
+    Enabled: true
+    Scale: 3.215656/6.758632/42.531601
+    Is Trigger: false
+    Local Position: -53.332493/5.622826/15.575006
+  2019960360:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1722753820
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2453965642
+  205337035:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1722753820
+    matFile: Assets\Models\MockupScene\SecondHouse.ccmat
+    transform: 2019960360
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.004_Cube.005
+  252749324:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1722753820
+    Enabled: true
+    Scale: 35.631172/6.758632/3.215664
+    Is Trigger: false
+    Local Position: -17.503136/5.622826/53.330906
+  1160811779:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2530967889
+    matFile: Assets\Models\MockupScene\SecondHouse.ccmat
+    transform: 2847185824
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.005_Cube.007
+  2885375832:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2530967889
+    Enabled: true
+    Scale: 33.900295/6.758632/3.215664
+    Is Trigger: false
+    Local Position: -17.133789/5.622826/-24.142155
+  2847185824:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2530967889
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2453965642
+  1338071283:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1487845103
+    matFile: Assets\Models\MockupScene\SecondHouse.ccmat
+    transform: 534029664
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.006_Cube.008
+  534029664:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1487845103
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2453965642
+  1081615159:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1487845103
+    Enabled: true
+    Scale: 37.493626/0.050000/38.293228
+    Is Trigger: false
+    Local Position: -15.490788/11.720715/14.352281
+  3945222940:
+    type: PortalComponent
+    linkedPortalProp: 948888926
+    IsActive: true
+    m_owner: 1514705197
+    Test: 0
+  2106467867:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1514705197
+    position: 8.708165/5.959995/20.000000
+    scale: 8.499754/5.856317/1.000000
+    parent: ~
+  3981953903:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1514705197
+    Enabled: true
+    Scale: 1.000000/1.000000/0.250000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  306735543:
+    type: CapsuleCollider
+    Half height: 2.5
+    IsActive: true
+    m_owner: 696394166
+    Enabled: true
+    Is Trigger: false
+    Radius: 1
+    Local Position: 0.000000/0.000000/0.000000
+  3554631971:
+    type: Rigidbody
+    IsActive: true
+    m_owner: 696394166
+    Rotation constraints: 0/0/0
+    Density: 10
+    Kinematic: false
+    Enabled: true
+    Max angular velocity: 100
+    Position constraints: 0/0/0
+    Use gravity: true
+    Max velocity: 100
+    Max depenetration velocity: 100
+  3919547519:
+    type: CharacterController
+    Rotation Sensivity: 5
+    Move Speed: 10
+    IsActive: true
+    m_owner: 696394166
+    Jump Force: 1
+    Spring Dampling: 20
+    String Strength: 150
+  2959624967:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 696394166
+    position: 0.000000/6.203329/32.344307
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  2018787034:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 696394166
+  2711950053:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4142624840
+    position: 0.000000/2.363498/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2959624967
+  1699527180:
+    type: CameraComponent
+    fovY: 1.04719758
+    near: 0.00999999978
+    IsActive: true
+    m_owner: 4142624840
+    aspect: 0.90294838
+    far: 1500
+    transform: 2711950053
+  3293289130:
+    type: ScriptedBehaviour
+    step: 0
+    IsActive: true
+    m_owner: 4142624840
+    scriptName: CameraController
+    transform: ~
+    maxPosition: 0.000000/0.000000/0.000000
+    speed: 0.00999999978
+  1255159152:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1160852888
+    position: -44.157436/5.959995/20.000000
+    scale: 7.415072/5.856317/1.000000
+    parent: ~
+  2667962449:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1160852888
+    Enabled: true
+    Scale: 1.000000/1.000000/0.250000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  3435578978:
+    type: PortalComponent
+    linkedPortalProp: 3128585067
+    IsActive: true
+    m_owner: 1160852888
+    Test: 1
+  1104746232:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4193898356
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  3377534316:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3670749294
+    Enabled: true
+    Scale: 37.493626/0.050000/38.293228
+    Is Trigger: false
+    Local Position: -15.490788/0.000000/14.352281
+  392858732:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3670749294
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1104746232
+  1092223025:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3670749294
+    matFile: Assets\Models\MockupScene\None.ccmat
+    transform: 392858732
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube_Cube.001
+  3936369400:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3828522067
+    matFile: Assets\Models\MockupScene\None.ccmat
+    transform: 811843142
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.001_Cube.002
+  3085825947:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3828522067
+    Enabled: true
+    Scale: 19.852575/6.758632/5.650865
+    Is Trigger: false
+    Local Position: -18.576958/5.622826/14.440463
+  811843142:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3828522067
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1104746232
+  1648173562:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2605558064
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1104746232
+  2354781518:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2605558064
+    matFile: Assets\Models\MockupScene\None.ccmat
+    transform: 1648173562
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.002_Cube.003
+  460379024:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2605558064
+    Enabled: true
+    Scale: 3.215654/6.758632/45.104725
+    Is Trigger: false
+    Local Position: 19.637600/5.622826/16.673546
+  3640518675:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3246827381
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1104746232
+  2933241615:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3246827381
+    matFile: Assets\Models\MockupScene\None.ccmat
+    transform: 3640518675
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.003_Cube.004
+  1272861974:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3246827381
+    Enabled: true
+    Scale: 3.215656/6.758632/42.531601
+    Is Trigger: false
+    Local Position: -53.332493/5.622826/15.575006
+  1885465448:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2327079564
+    matFile: Assets\Models\MockupScene\None.ccmat
+    transform: 3771796961
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.004_Cube.005
+  3771796961:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2327079564
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1104746232
+  3637825425:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2327079564
+    Enabled: true
+    Scale: 35.631172/6.758632/3.215664
+    Is Trigger: false
+    Local Position: -17.503136/5.622826/53.330906
+  1201788171:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1141250585
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1104746232
+  352167423:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1141250585
+    matFile: Assets\Models\MockupScene\None.ccmat
+    transform: 1201788171
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.005_Cube.007
+  1524494446:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1141250585
+    Enabled: true
+    Scale: 33.900295/6.758632/3.215664
+    Is Trigger: false
+    Local Position: -17.133789/5.622826/-24.142155
+  637371111:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2916698354
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1104746232
+  4125285170:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2916698354
+    matFile: Assets\Models\MockupScene\None.ccmat
+    transform: 637371111
+    meshFile: Assets\Models\MockupScene\mockupRoom.obj/Cube.006_Cube.008
+  2332709121:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2916698354
+    Enabled: true
+    Scale: 37.493626/0.050000/38.293228
+    Is Trigger: false
+    Local Position: -15.490788/11.720715/14.352281
+  3094106815:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1368381428
+    Enabled: true
+    Scale: 1.000000/1.000000/0.250000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  948888926:
+    type: PortalComponent
+    linkedPortalProp: 3945222940
+    IsActive: true
+    m_owner: 1368381428
+    Test: 0
+  910502794:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1368381428
+    position: 8.708165/5.959995/20.000000
+    scale: 8.499754/5.856317/1.000000
+    parent: ~
+  3128585067:
+    type: PortalComponent
+    linkedPortalProp: 3435578978
+    IsActive: true
+    m_owner: 1362005578
+    Test: 0
+  4264534109:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1362005578
+    position: -44.157436/5.959995/20.000000
+    scale: 7.415072/5.856317/1.000000
+    parent: ~
+  550115667:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1362005578
+    Enabled: true
+    Scale: 1.000000/1.000000/0.250000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000

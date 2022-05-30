@@ -31,6 +31,7 @@ private:
 
 public:
 	PreferencesDisplayer(bool spawnOpened);
+	~PreferencesDisplayer();
 
 	void Render() override;
 

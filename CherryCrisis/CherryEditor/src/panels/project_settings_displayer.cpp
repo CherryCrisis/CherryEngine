@@ -24,9 +24,7 @@ ProjectSettingsDisplayer::ProjectSettingsDisplayer(bool spawnOpened = true) : Pa
 ProjectSettingsDisplayer::~ProjectSettingsDisplayer()
 {
     for (PanelCategory* category : m_categories)
-    {
         delete category;
-    }
 }
 
 void ProjectSettingsDisplayer::Render()
@@ -82,6 +80,13 @@ void ProjectSettingsDisplayer::General::Fill()
 ProjectSettingsDisplayer::Input::Input(std::string name) : PanelCategory(name)
 {
     userContext = InputManager::GetOrAddContext("User Context");
+}
+
+ProjectSettingsDisplayer::Input::~Input()
+{
+    m_axisNegIndex.clear();
+    m_axisPosIndex.clear();
+    m_inputsIndex.clear();
 }
 
 void ProjectSettingsDisplayer::Input::Fill()

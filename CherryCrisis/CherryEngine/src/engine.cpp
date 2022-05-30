@@ -41,13 +41,14 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	SceneManager::GetInstance()->m_currentScene.reset();
+	ResourceManager::Kill();
 	PhysicSystem::PhysicManager::Kill();
 	InputManager::Kill();
  	SoundManager::Kill();
 	TimeManager::Kill();
 	SceneManager::Kill();
 	CsScriptingSystem::Kill();
-	ResourceManager::Kill();
 	Pickinger::Kill();
 	RenderManager::Kill();
 	Debug::Kill();
