@@ -157,7 +157,7 @@ void CharacterController::FixedUpdate()
 		m_isGrounded = false;
 	}
 
-	CCMaths::Vector3 move = -m_transform->GetWorldMatrix().back.Normalized() * m_forwardMove + m_transform->GetWorldMatrix().right.Normalized() * m_sideMove;
+	CCMaths::Vector3 move = -m_transform->Forward() * m_forwardMove + m_transform->Right() * m_sideMove;
 	CCMaths::Vector3 goalVelocity = move * m_moveSpeed;
 	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) / TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * m_dynamicActor->getMass(), { 1, 0, 1 });

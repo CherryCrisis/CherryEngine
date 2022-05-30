@@ -277,9 +277,10 @@ namespace PhysicSystem
 	void PhysicActor::Empty()
 	{
 		if (m_rigidbody)
-		{
 			m_rigidbody->Unregister();
-		}
+
+		if (m_controller)
+			m_controller->Unregister();
 
 		while (!m_colliders.empty())
 		{
