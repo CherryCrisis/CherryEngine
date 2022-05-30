@@ -61,45 +61,46 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 				if (!gpuPortal->framebuffer)
 					continue;
 
-				//if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
-				//	continue;
+				if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
+					continue;
 
 				//UpdateFrameBuffer verif if width and heigth are changed
 				gpuPortal->framebuffer->UpdateFramebuffer(static_cast<float>(framebuffer.width), static_cast<float>(framebuffer.height));
 
 				portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
 
-				CCMaths::Matrix4 modelMat = portal->m_linkedPortal->m_modelMatrix;
-				//modelMat *= Matrix4::RotateY(CCMaths::PI);
-				modelMat *= portal->m_modelMatrix.Inverse();
-				//TODO: Optimize !
-				CCMaths::Matrix4 m = modelMat * viewer->m_viewMatrix.Inverse();
+				//Portal view world matrix from linked portal
+				//CCMaths::Matrix4 portalViewModel = portal->m_linkedPortal->m_modelMatrix * portal->m_modelMatrix.Inverse() * viewer->m_viewMatrix.Inverse();
+				CCMaths::Matrix4 portalViewModel = portal->m_relativeLinkedPortalMatrix * viewer->m_viewMatrix.Inverse();
 
 				Vector3 TRS[3];
-				Matrix4::Decompose(m, TRS[0], TRS[1], TRS[2]);
+				Matrix4::Decompose(portalViewModel, TRS[0], TRS[1], TRS[2]);
 
-				//CCMaths::Matrix4 mInverse = m.Inverse();
-				CCMaths::Matrix4 mInverse = Matrix4::RotateXYZ(-TRS[1]) * Matrix4::Translate(-TRS[0]);
-				
-				portal->m_linkedPortal->m_viewMatrix = mInverse;
+				//Remove scale from portalViewModel and make portal view matrix
+				CCMaths::Matrix4 portalView = Matrix4::RotateXYZ(-TRS[1]) * Matrix4::Translate(-TRS[0]);
 
-				portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader
+				portal->m_linkedPortal->m_viewMatrix = portalView;
 
-				CCMaths::Matrix4 clipPlaneWorldMatrix = portal->m_linkedPortal->m_modelMatrix;
+				//Necessary for the PBR
+				portal->m_linkedPortal->m_position = portalViewModel.position;
 
-				int dot = CCMaths::Sign(Vector3::Dot(clipPlaneWorldMatrix.back, clipPlaneWorldMatrix.position - m.position));
+				const CCMaths::Matrix4& clipPlaneWorldMatrix = portal->m_linkedPortal->m_modelMatrix;
+				const int dot = CCMaths::Sign(Vector3::Dot(clipPlaneWorldMatrix.back, clipPlaneWorldMatrix.position - portalViewModel.position));
 
-				Vector3 viewSpacePos = (mInverse * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
+				Vector3 viewSpacePos = (portalView * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
 
-				mInverse.position = Vector3::Zero;
-				Vector3 viewSpaceNormal = (mInverse * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * dot;
+				portalView.position = Vector3::Zero; //To only rotate clipPlaneWorldMatrix
+				Vector3 viewSpaceNormal = (portalView * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * dot;
+
 				float viewSpaceDist = -Vector3::Dot(viewSpacePos, viewSpaceNormal);
+
 				Vector4 clipPlaneViewSpace = Vector4(viewSpaceNormal.x, viewSpaceNormal.y, viewSpaceNormal.z, viewSpaceDist);
 
+				//Make clipping in front of the portal
 				portal->m_linkedPortal->m_projectionMatrix = Matrix4::ObliqueProjection(clipPlaneViewSpace, viewer->m_projectionMatrix);
 
 				float aspect = (float)framebuffer.width / (float)framebuffer.height;
-				portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(m, portal->m_fovY, aspect, portal->m_near, portal->m_far);
+				portal->m_linkedPortal->m_frustumPlanes = FrustumPlanes::CreateFromInverse(portalViewModel, portal->m_fovY, aspect, portal->m_near, portal->m_far);
 
 				portal->m_linkedPortal->Draw(viewer->m_currentIteration - 1);
 			}
@@ -111,8 +112,7 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	glDisable(GL_CULL_FACE);
 
 	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -139,42 +139,10 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 		if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
 			continue;
 
-		//float halfHeight = portal->m_near * CCMaths::Tan(portal->m_fovY * 0.5f * CCMaths::DEG2RAD);
-		//
-		//float aspect = (float)framebuffer.width / (float)framebuffer.height;
-		//float halfWidth = halfHeight * aspect;
-		//
-		//float dstToNearClipPlaneCorner = Vector3(halfWidth, halfHeight, portal->m_near).SquareLength();
-		//float screenThickness = dstToNearClipPlaneCorner;
-		//
-		//Matrix4 screenT = portal->m_modelMatrix * Matrix4::Scale(Vector3::One);
-		//
-		//CCMaths::Matrix4 modelMat = portal->m_linkedPortal->m_modelMatrix;
-		////modelMat *= Matrix4::RotateY(CCMaths::PI);
-		//modelMat *= portal->m_modelMatrix.Inverse();
-		////TODO: Optimize !
-		//CCMaths::Matrix4 m = modelMat * viewer->m_viewMatrix.Inverse();
-		//
-		//bool camFacingSameDirAsPortal = Vector3::Dot(-screenT.back, screenT.position - viewer->m_viewMatrix.Inverse().position) > 0;
-		////screenT.localScale = new Vector3(screenT.localScale.x, screenT.localScale.y, screenThickness);
-		//
-		//Vector3 TRS[3];
-		//Matrix4::Decompose(screenT, TRS[0], TRS[1], TRS[2]);
-		//
-		//screenT *= Matrix4::Translate({ Vector3::Forward * dstToNearClipPlaneCorner * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f) });
-		//screenT *= Matrix4::Scale({ TRS[2].x, TRS[2].y, dstToNearClipPlaneCorner });
-		//screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f);
-
 		glBindTextureUnit(0, gpuPortal->framebuffer->colorTex.texID);
 
-		//glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, screenT.data);
-		if (portal->m_test == 0)
-			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, portal->m_modelMatrix.data);
-		else
-		{
-			Matrix4 test = portal->m_modelMatrix * Matrix4::RotateY(CCMaths::PI);
-			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, test.data);
-		}
+		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, portal->m_modelMatrix.data);
+
 		glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 

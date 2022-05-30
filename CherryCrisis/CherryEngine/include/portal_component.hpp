@@ -34,6 +34,7 @@ public:
 	void LateUpdate() override;
 
 	void UpdatePortalMatrices(Transform* tranform);
+	void UpdateRelativeLinkedPortalMatrix();
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 

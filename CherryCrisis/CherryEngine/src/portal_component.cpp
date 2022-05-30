@@ -50,7 +50,6 @@ void PortalComponent::PopulateMetadatas()
 
 	// Add property
 	m_metadatas.SetProperty("linkedPortalProp", &m_LinkedPortalProp, "PortalComponent");
-	m_metadatas.SetField("Test", m_portal.m_test);
 }
 
 void PortalComponent::BindToSignals()
@@ -80,13 +79,24 @@ void PortalComponent::Initialize()
 		boxCollider->SetTrigger(true);
 	}
 
+	UpdatePortalMatrices(m_transform);
+
+	if (m_linkedPortal)
+	{
+		if (m_linkedPortal->m_transform)
+		{
+			m_linkedPortal->UpdatePortalMatrices(m_linkedPortal->m_transform);
+			UpdateRelativeLinkedPortalMatrix();
+		}
+	}
+
+
 	m_transform->m_onPositionChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
 	m_transform->m_onRotationChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
 	m_transform->m_onScaleChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
 
 	GetHost().m_OnAwake.Unbind(&PortalComponent::Initialize, this);
 	
-	UpdatePortalMatrices(m_transform);
 }
 
 void PortalComponent::LateUpdate()
@@ -98,6 +108,8 @@ void PortalComponent::LateUpdate()
 		Vector3 portalForward = -m_transform->GetWorldMatrix().back.Normalized();
 
 		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
+
+		//Get distance from normal (portal)
 		float distFromPortal = Vector3::Dot(offsetFromPortal, portalForward);
 		float previousDist = Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward);
 
@@ -179,9 +191,12 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 void PortalComponent::UpdatePortalMatrices(Transform* tranform)
 {
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
+	UpdateRelativeLinkedPortalMatrix();
+}
 
-	//if (m_portal.m_linkedPortal)
-	//	m_portal.m_viewLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix * m_portal.m_modelMatrix.Inverse();
+void PortalComponent::UpdateRelativeLinkedPortalMatrix()
+{
+	m_portal.m_relativeLinkedPortalMatrix = m_linkedPortal->m_portal.m_modelMatrix * m_portal.m_modelMatrix.Inverse();
 }
 
 
@@ -216,6 +231,20 @@ void PortalComponent::SetLinkedPortal(Behaviour* linkedObject)
 	linkedPortal->m_portal.m_linkedPortal = tempPortal;
 
 	m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
+
+	if (m_transform)
+	{
+		UpdatePortalMatrices(m_transform);
+
+		if (m_linkedPortal)
+		{
+			if (m_linkedPortal->m_transform)
+			{
+				m_linkedPortal->UpdatePortalMatrices(m_linkedPortal->m_transform);
+				UpdateRelativeLinkedPortalMatrix();
+			}
+		}
+	}
 }
 
 Behaviour* PortalComponent::GetLinkedPortal()

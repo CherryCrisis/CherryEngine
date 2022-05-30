@@ -508,6 +508,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="interface\behaviour.i" />
     <None Include="interface\camera_comp.i" />
@@ -813,7 +815,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(ProjectDir)..\x64\Release;$(ProjectDir)lib\PhysX\release;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mono-2.0-sgen.lib;freetype.lib;yaml-cpp.lib;assimp-vc142-mt.lib;zlibstatic.lib;OpenAL32.lib;PhysX_static.lib;PhysXCharacterKinematic_static.lib;PhysXCommon_static.lib;PhysXCooking_static.lib;PhysXExtensions_static.lib;PhysXFoundation_static.lib;PhysXPvdSDK_static.lib;PhysXVehicle_static.lib;nvtt30106.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;freetype.lib;yaml-cpp.lib;assimp-vc142-mt.lib;zlibstatic.lib;OpenAL32.lib;PhysX_static.lib;PhysXCharacterKinematic_static.lib;PhysXCommon_static.lib;PhysXCooking_static.lib;PhysXExtensions_static.lib;PhysXFoundation_static.lib;PhysXPvdSDK_static.lib;PhysXVehicle_static.lib;nvtt30106.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4099 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

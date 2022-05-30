@@ -754,11 +754,12 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true, true, ETextureFormat::RGBA);
 
         auto directory_iterator = std::filesystem::directory_iterator(m_path);
-        // LEAK: This possibly leads to leak
-        auto pair = m_assetNodes.insert({ directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode)});
+        // LEAK: This possibly leads to leak -- Maybe this leak is fixed 
+        auto pair = m_assetNodes.emplace(directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode));
         AssetNode* assetNode = pair.first->second.get();
 
         #pragma region Sort AssetNode
+
         // LEAK: This leaks wtf?
         std::set<std::filesystem::directory_entry> entries;
         for (const std::filesystem::directory_entry& entry : directory_iterator)
@@ -887,7 +888,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
                 modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.insert({ modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) });
+                auto pair = m_assetNodes.emplace( modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) );
                 AssetNode* assetNode = pair.first->second.get();
 
                 return assetNode;
@@ -907,7 +908,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
                 shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.insert({ shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) });
+                auto pair = m_assetNodes.emplace( shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) );
                 return pair.first->second.get();
             }
         }
@@ -922,7 +923,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
             scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true, true, ETextureFormat::RGBA);
 
-            auto pair = m_assetNodes.insert({ scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) });
+            auto pair = m_assetNodes.emplace( scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) );
 
             struct stat result;
             if (stat(scriptNode.m_path.string().c_str(), &result) == 0)
@@ -964,7 +965,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
             scnNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
 
-            auto pair = m_assetNodes.insert({ scnNode.m_path.string(), std::make_unique<SceneNode>(scnNode) });
+            auto pair = m_assetNodes.emplace( scnNode.m_path.string(), std::make_unique<SceneNode>(scnNode) );
             return pair.first->second.get();
         }
 
@@ -976,7 +977,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
             ttfNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/font_icon.png", true, true, ETextureFormat::RGBA);
 
-            auto pair = m_assetNodes.insert({ ttfNode.m_path.string(), std::make_unique<EmptyNode>(ttfNode) });
+            auto pair = m_assetNodes.emplace( ttfNode.m_path.string(), std::make_unique<EmptyNode>(ttfNode));
             return pair.first->second.get();
         }
 
@@ -993,7 +994,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
                 materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/mat_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.insert({ materialNode.m_path.string(), std::make_unique<MaterialNode>(materialNode) });
+                auto pair = m_assetNodes.emplace(materialNode.m_path.string(), std::make_unique<MaterialNode>(materialNode));
                 return pair.first->second.get();
             }
         }
@@ -1010,7 +1011,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
                 soundNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.insert({ soundNode.m_path.string(), std::make_unique<SoundNode>(soundNode) });
+                auto pair = m_assetNodes.emplace(soundNode.m_path.string(), std::make_unique<SoundNode>(soundNode));
                 return pair.first->second.get();
             }
         }
@@ -1022,7 +1023,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
     emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
-    auto pair = m_assetNodes.insert({ emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode)});
+    auto pair = m_assetNodes.emplace( emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode));
     return pair.first->second.get();
 }
 
