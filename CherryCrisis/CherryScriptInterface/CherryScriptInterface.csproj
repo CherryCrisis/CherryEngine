@@ -51,12 +51,14 @@
     <Compile Include="Entity.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Keycode.cs" />
+    <Compile Include="Matrix4.cs" />
     <Compile Include="Object.cs" />
+    <Compile Include="Quaternion.cs" />
     <Compile Include="SceneManager.cs" />
     <Compile Include="ScriptedBehaviour.cs" />
     <Compile Include="ScriptedBehaviourVector.cs" />
-    <Compile Include="SWIGTYPE_p_Camera.cs" />
     <Compile Include="SWIGTYPE_p_float.cs" />
+    <Compile Include="SWIGTYPE_p_Matrix4.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="TransformVector.cs" />

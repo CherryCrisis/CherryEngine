@@ -425,6 +425,12 @@ namespace Swig {
 	#include "maths/vector4.hpp"
 
 
+	#include "maths/matrix4.hpp"
+
+
+	#include "maths/quaternion.hpp"
+
+
 	#include "camera_component.hpp"
 
 
@@ -2524,6 +2530,1448 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Vector4(void * jarg1) {
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_data_set(void * jarg1, void * jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float *arg2 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (float *)jarg2; 
+  {
+    size_t ii;
+    float *b = (float *) arg1->data;
+    for (ii = 0; ii < (size_t)16; ii++) b[ii] = *((float *) arg2 + ii);
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_data_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float *result = 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (float *)(float *) ((arg1)->data);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_row_set(void * jarg1, void * jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector4 *arg2 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (CCMaths::Vector4 *)jarg2; 
+  {
+    size_t ii;
+    CCMaths::Vector4 *b = (CCMaths::Vector4 *) arg1->row;
+    for (ii = 0; ii < (size_t)4; ii++) b[ii] = *((CCMaths::Vector4 *) arg2 + ii);
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_row_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector4 *result = 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (CCMaths::Vector4 *)(CCMaths::Vector4 *) ((arg1)->row);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_right_set(void * jarg1, void * jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->right = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_right_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (CCMaths::Vector3 *)& ((arg1)->right);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_m4_set(void * jarg1, float jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m4 = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Matrix4_m4_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (float) ((arg1)->m4);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_up_set(void * jarg1, void * jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->up = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_up_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (CCMaths::Vector3 *)& ((arg1)->up);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_m8_set(void * jarg1, float jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m8 = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Matrix4_m8_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (float) ((arg1)->m8);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_back_set(void * jarg1, void * jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->back = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_back_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (CCMaths::Vector3 *)& ((arg1)->back);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_m12_set(void * jarg1, float jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m12 = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Matrix4_m12_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (float) ((arg1)->m12);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_position_set(void * jarg1, void * jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->position = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_position_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (CCMaths::Vector3 *)& ((arg1)->position);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_uniformScale_set(void * jarg1, float jarg2) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->uniformScale = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Matrix4_uniformScale_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = (float) ((arg1)->uniformScale);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Identity_get() {
+  void * jresult ;
+  CCMaths::Matrix4 *result = 0 ;
+  
+  result = (CCMaths::Matrix4 *)&CCMaths::Matrix4::Identity;
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_operator_multiply__SWIG_0(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Vector4 *arg2 = 0 ;
+  CCMaths::Vector4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (CCMaths::Vector4 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector4 const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Matrix4 const *)arg1)->operator *((CCMaths::Vector4 const &)*arg2);
+  jresult = new CCMaths::Vector4((const CCMaths::Vector4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_operator_multiply__SWIG_1(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Matrix4 *arg2 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (CCMaths::Matrix4 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Matrix4 const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Matrix4 const *)arg1)->operator *((CCMaths::Matrix4 const &)*arg2);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_operator_multiply__SWIG_2(void * jarg1, float jarg2) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  float arg2 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((CCMaths::Matrix4 const *)arg1)->operator *(arg2);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Transpose__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = ((CCMaths::Matrix4 const *)arg1)->Transpose();
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Inverse__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = ((CCMaths::Matrix4 const *)arg1)->Inverse();
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Translate(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::Translate((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Scale__SWIG_0(float jarg1) {
+  void * jresult ;
+  float arg1 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  result = CCMaths::Matrix4::Scale(arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Scale__SWIG_1(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::Scale((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_NormalizeScale(void * jarg1) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  (arg1)->NormalizeScale();
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_NormalizedScale(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = ((CCMaths::Matrix4 const *)arg1)->NormalizedScale();
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateXYZ(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::RotateXYZ((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateZYX(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::RotateZYX((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateZXY(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::RotateZXY((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateYXZ(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::RotateYXZ((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateXZY(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::RotateXZY((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateYZX(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::RotateYZX((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateX__SWIG_0(float jarg1) {
+  void * jresult ;
+  float arg1 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  result = CCMaths::Matrix4::RotateX(arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateY__SWIG_0(float jarg1) {
+  void * jresult ;
+  float arg1 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  result = CCMaths::Matrix4::RotateY(arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateZ__SWIG_0(float jarg1) {
+  void * jresult ;
+  float arg1 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  result = CCMaths::Matrix4::RotateZ(arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateX__SWIG_1(float jarg1, float jarg2) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  result = CCMaths::Matrix4::RotateX(arg1,arg2);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateY__SWIG_1(float jarg1, float jarg2) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  result = CCMaths::Matrix4::RotateY(arg1,arg2);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_RotateZ__SWIG_1(float jarg1, float jarg2) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  result = CCMaths::Matrix4::RotateZ(arg1,arg2);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Matrix4_Decompose(void * jarg1, void * jarg2, void * jarg3, void * jarg4) {
+  CCMaths::Matrix4 *arg1 = 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Vector3 *arg3 = 0 ;
+  CCMaths::Vector3 *arg4 = 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Matrix4 const & type is null", 0);
+    return ;
+  } 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
+    return ;
+  } 
+  arg3 = (CCMaths::Vector3 *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
+    return ;
+  } 
+  arg4 = (CCMaths::Vector3 *)jarg4;
+  if (!arg4) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
+    return ;
+  } 
+  CCMaths::Matrix4::Decompose((CCMaths::Matrix4 const &)*arg1,*arg2,*arg3,*arg4);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_GetRotationMatrix__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = ((CCMaths::Matrix4 const *)arg1)->GetRotationMatrix();
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_GetTranslationMatrix__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = ((CCMaths::Matrix4 const *)arg1)->GetTranslationMatrix();
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_GetScaleMatrix__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  result = ((CCMaths::Matrix4 const *)arg1)->GetScaleMatrix();
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Frustum(float jarg1, float jarg2, float jarg3, float jarg4, float jarg5, float jarg6) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  float arg5 ;
+  float arg6 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  arg5 = (float)jarg5; 
+  arg6 = (float)jarg6; 
+  result = CCMaths::Matrix4::Frustum(arg1,arg2,arg3,arg4,arg5,arg6);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Perspective(float jarg1, float jarg2, float jarg3, float jarg4) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  result = CCMaths::Matrix4::Perspective(arg1,arg2,arg3,arg4);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_Orthographic(float jarg1, float jarg2, float jarg3, float jarg4, float jarg5, float jarg6) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  float arg5 ;
+  float arg6 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  arg5 = (float)jarg5; 
+  arg6 = (float)jarg6; 
+  result = CCMaths::Matrix4::Orthographic(arg1,arg2,arg3,arg4,arg5,arg6);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_ObliqueProjection(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Vector4 *arg1 = 0 ;
+  CCMaths::Matrix4 *arg2 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector4 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector4 const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Matrix4 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Matrix4 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::ObliqueProjection((CCMaths::Vector4 const &)*arg1,(CCMaths::Matrix4 const &)*arg2);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_LookAt__SWIG_0(void * jarg1, void * jarg2, void * jarg3) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Vector3 *arg3 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  arg3 = (CCMaths::Vector3 *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::LookAt((CCMaths::Vector3 const &)*arg1,(CCMaths::Vector3 const &)*arg2,(CCMaths::Vector3 const &)*arg3);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_LookAt__SWIG_1(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::LookAt((CCMaths::Vector3 const &)*arg1,(CCMaths::Vector3 const &)*arg2);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Matrix4_LookAt__SWIG_2(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Matrix4::LookAt((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Matrix4() {
+  void * jresult ;
+  CCMaths::Matrix4 *result = 0 ;
+  
+  result = (CCMaths::Matrix4 *)new CCMaths::Matrix4();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Matrix4(void * jarg1) {
+  CCMaths::Matrix4 *arg1 = (CCMaths::Matrix4 *) 0 ;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Quaternion_x_set(void * jarg1, float jarg2) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->x = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Quaternion_x_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (float) ((arg1)->x);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Quaternion_y_set(void * jarg1, float jarg2) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->y = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Quaternion_y_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (float) ((arg1)->y);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Quaternion_z_set(void * jarg1, float jarg2) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->z = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Quaternion_z_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (float) ((arg1)->z);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Quaternion_w_set(void * jarg1, float jarg2) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float arg2 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->w = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Quaternion_w_get(void * jarg1) {
+  float jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (float) ((arg1)->w);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Quaternion_data_set(void * jarg1, void * jarg2) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float *arg2 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (float *)jarg2; 
+  {
+    size_t ii;
+    float *b = (float *) arg1->data;
+    for (ii = 0; ii < (size_t)4; ii++) b[ii] = *((float *) arg2 + ii);
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_data_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float *result = 0 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (float *)(float *) ((arg1)->data);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Quaternion_xyz_set(void * jarg1, void * jarg2) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->xyz = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_xyz_get(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (CCMaths::Vector3 *)& ((arg1)->xyz);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_Identity_get() {
+  void * jresult ;
+  CCMaths::Quaternion *result = 0 ;
+  
+  result = (CCMaths::Quaternion *)&CCMaths::Quaternion::Identity;
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Quaternion__SWIG_0() {
+  void * jresult ;
+  CCMaths::Quaternion *result = 0 ;
+  
+  result = (CCMaths::Quaternion *)new CCMaths::Quaternion();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Quaternion__SWIG_1(float jarg1, float jarg2, float jarg3, float jarg4) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  CCMaths::Quaternion *result = 0 ;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  result = (CCMaths::Quaternion *)new CCMaths::Quaternion(arg1,arg2,arg3,arg4);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Quaternion__SWIG_2(float jarg1, void * jarg2) {
+  void * jresult ;
+  float arg1 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Quaternion *result = 0 ;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = (CCMaths::Quaternion *)new CCMaths::Quaternion(arg1,(CCMaths::Vector3 const &)*arg2);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Quaternion__SWIG_3(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector4 *arg1 = 0 ;
+  CCMaths::Quaternion *result = 0 ;
+  
+  arg1 = (CCMaths::Vector4 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector4 const & type is null", 0);
+    return 0;
+  } 
+  result = (CCMaths::Quaternion *)new CCMaths::Quaternion((CCMaths::Vector4 const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_add(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Quaternion const *)arg1)->operator +((CCMaths::Quaternion const &)*arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_substract__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = ((CCMaths::Quaternion const *)arg1)->operator -();
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_substract__SWIG_1(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Quaternion const *)arg1)->operator -((CCMaths::Quaternion const &)*arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_multiply__SWIG_0(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Quaternion const *)arg1)->operator *((CCMaths::Quaternion const &)*arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_multiply__SWIG_1(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Quaternion const *)arg1)->operator *((CCMaths::Vector3 const &)*arg2);
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_multiply__SWIG_2(void * jarg1, float jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float arg2 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((CCMaths::Quaternion const *)arg1)->operator *(arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_divide__SWIG_0(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Quaternion const *)arg1)->operator /((CCMaths::Quaternion const &)*arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_operator_divide__SWIG_1(void * jarg1, float jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float arg2 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((CCMaths::Quaternion const *)arg1)->operator /(arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Quaternion_Dot__SWIG_0(void * jarg1, void * jarg2) {
+  float jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  result = (float)((CCMaths::Quaternion const *)arg1)->Dot((CCMaths::Quaternion const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Quaternion_SquareNorm(void * jarg1) {
+  float jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (float)((CCMaths::Quaternion const *)arg1)->SquareNorm();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Quaternion_Norm(void * jarg1) {
+  float jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  float result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (float)((CCMaths::Quaternion const *)arg1)->Norm();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_Normalize__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion *result = 0 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = (CCMaths::Quaternion *) &(arg1)->Normalize();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_Normalized__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = ((CCMaths::Quaternion const *)arg1)->Normalized();
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_Conjugate__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = ((CCMaths::Quaternion const *)arg1)->Conjugate();
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_Invert__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = ((CCMaths::Quaternion const *)arg1)->Invert();
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_ToEuler__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = ((CCMaths::Quaternion const *)arg1)->ToEuler();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_ToMatrix__SWIG_0(void * jarg1) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Matrix4 result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  result = ((CCMaths::Quaternion const *)arg1)->ToMatrix();
+  jresult = new CCMaths::Matrix4((const CCMaths::Matrix4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Quaternion_ToAxisAngle__SWIG_0(void * jarg1, void * jarg2, void * jarg3) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  float *arg3 = 0 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
+    return ;
+  } 
+  arg3 = (float *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "float & type is null", 0);
+    return ;
+  } 
+  ((CCMaths::Quaternion const *)arg1)->ToAxisAngle(*arg2,*arg3);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_FromEuler__SWIG_0(float jarg1, float jarg2, float jarg3) {
+  void * jresult ;
+  float arg1 ;
+  float arg2 ;
+  float arg3 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (float)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  result = CCMaths::Quaternion::FromEuler(arg1,arg2,arg3);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_FromEuler__SWIG_1(void * jarg1) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Quaternion::FromEuler((CCMaths::Vector3 const &)*arg1);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_FromAxisAngle(void * jarg1, float jarg2) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  float arg2 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (float)jarg2; 
+  result = CCMaths::Quaternion::FromAxisAngle((CCMaths::Vector3 const &)*arg1,arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_FromMatrix(void * jarg1) {
+  void * jresult ;
+  CCMaths::Matrix4 *arg1 = 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Matrix4 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Matrix4 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Quaternion::FromMatrix((CCMaths::Matrix4 const &)*arg1);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_FromToRotation(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = CCMaths::Quaternion::FromToRotation((CCMaths::Vector3 const &)*arg1,(CCMaths::Vector3 const &)*arg2);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_RotateVector3__SWIG_0(void * jarg1, void * jarg2) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = ((CCMaths::Quaternion const *)arg1)->RotateVector3((CCMaths::Vector3 const &)*arg2);
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_Lerp(void * jarg1, void * jarg2, float jarg3) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  float arg3 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  arg3 = (float)jarg3; 
+  result = CCMaths::Quaternion::Lerp((CCMaths::Quaternion const &)*arg1,(CCMaths::Quaternion const &)*arg2,arg3);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_NLerp(void * jarg1, void * jarg2, float jarg3) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  float arg3 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  arg3 = (float)jarg3; 
+  result = CCMaths::Quaternion::NLerp((CCMaths::Quaternion const &)*arg1,(CCMaths::Quaternion const &)*arg2,arg3);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Quaternion_SLerp(void * jarg1, void * jarg2, float jarg3) {
+  void * jresult ;
+  CCMaths::Quaternion *arg1 = 0 ;
+  CCMaths::Quaternion *arg2 = 0 ;
+  float arg3 ;
+  CCMaths::Quaternion result;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Quaternion *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Quaternion const & type is null", 0);
+    return 0;
+  } 
+  arg3 = (float)jarg3; 
+  result = CCMaths::Quaternion::SLerp((CCMaths::Quaternion const &)*arg1,(CCMaths::Quaternion const &)*arg2,arg3);
+  jresult = new CCMaths::Quaternion((const CCMaths::Quaternion &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Quaternion(void * jarg1) {
+  CCMaths::Quaternion *arg1 = (CCMaths::Quaternion *) 0 ;
+  
+  arg1 = (CCMaths::Quaternion *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_TAU_get() {
   float jresult ;
   float result;
@@ -2726,6 +4174,20 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetPosition(void * jarg1, 
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetGlobalPosition(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetGlobalPosition(*arg2);
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetPosition(void * jarg1) {
   void * jresult ;
   Transform *arg1 = (Transform *) 0 ;
@@ -2733,6 +4195,18 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetPosition(void * jarg1
   
   arg1 = (Transform *)jarg1; 
   result = (arg1)->GetPosition();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetGlobalPosition(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->GetGlobalPosition();
   jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
   return jresult;
 }
@@ -2752,6 +4226,20 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetRotation(void * jarg1, 
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetGlobalRotation(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetGlobalRotation(*arg2);
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetRotation(void * jarg1) {
   void * jresult ;
   Transform *arg1 = (Transform *) 0 ;
@@ -2759,6 +4247,18 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetRotation(void * jarg1
   
   arg1 = (Transform *)jarg1; 
   result = (arg1)->GetRotationV3();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetGlobalRotation(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->GetGlobalRotation();
   jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
   return jresult;
 }
@@ -2778,6 +4278,20 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetScale(void * jarg1, voi
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetGlobalScale(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetGlobalScale(*arg2);
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetScale(void * jarg1) {
   void * jresult ;
   Transform *arg1 = (Transform *) 0 ;
@@ -2785,6 +4299,18 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetScale(void * jarg1) {
   
   arg1 = (Transform *)jarg1; 
   result = (arg1)->GetScale();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetGlobalScale(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (arg1)->GetGlobalScale();
   jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
   return jresult;
 }

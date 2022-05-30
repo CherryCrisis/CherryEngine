@@ -9,7 +9,10 @@ namespace CCMaths
 	{
 		union
 		{
-			float data[16];		//!< Pointer on the Matrix4's data
+			float data[16] = { 1.f, 0.f, 0.f, 0.f,
+							   0.f, 1.f, 0.f, 0.f, 
+							   0.f, 0.f, 1.f, 0.f, 
+							   0.f, 0.f, 0.f, 1.f, };		//!< Pointer on the Matrix4's data
 			Vector4 row[4];		//!< Array of the four row of the Matrix4
 
 			struct

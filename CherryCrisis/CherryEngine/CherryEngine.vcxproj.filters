@@ -1552,6 +1552,12 @@
     <None Include="..\x64\Sandbox\Assets\Shaders\outline.vert">
       <Filter>Fichiers de ressources</Filter>
     </None>
+    <None Include="interface\quaternion.i">
+      <Filter>Fichiers sources\Interface\Maths</Filter>
+    </None>
+    <None Include="interface\matrix4.i">
+      <Filter>Fichiers sources\Interface\Maths</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">
