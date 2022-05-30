@@ -13,7 +13,7 @@ namespace ImCherry
 	bool ColoredButton(const char* label, ImVec4 color, ImVec2 size = {0,0}, bool isDisabled = false);
 	bool DragFloat(const std::string& label, float* v, float v_speed, float v_min, float v_max, const char* format);
 	void Dropzone(const std::string& label, const std::string& value);
-	bool DropzoneMenu(const std::string& label, const std::string& value, bool disabled = true);
+	bool DropzoneMenu(const std::string& label, const std::string& value,const char* type, void** data, bool disabled = true);
 	void CenteredText(const std::string& label);
 	void SetKeyboardFocus();
 }

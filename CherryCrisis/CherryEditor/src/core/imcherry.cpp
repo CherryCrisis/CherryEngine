@@ -154,7 +154,7 @@ namespace ImCherry
 		ImCherryInternal::EndCherryComponent(1, 1);
 	}
 
-	bool DropzoneMenu(const std::string& label, const std::string& value, bool disabled)
+	bool DropzoneMenu(const std::string& label, const std::string& value, const char* type, void** data, bool disabled)
 	{
 		bool val = false;
 
@@ -169,7 +169,16 @@ namespace ImCherry
 		if (disabled) ImGui::BeginDisabled();
 
 		val = ImGui::Button(value.c_str());
+		
+		if (ImGui::BeginDragDropTarget() && !disabled)
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(type))
+				*data = payload->Data;
 
+			
+			ImGui::EndDragDropTarget();
+		}
+		
 		ImGui::SameLine();
 
 		//-- TODO --------------------------------------------
