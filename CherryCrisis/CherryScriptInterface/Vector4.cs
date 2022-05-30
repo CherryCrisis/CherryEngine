@@ -50,6 +50,8 @@ public class Vector4 : global::System.IDisposable {
 	public static Vector4 operator -(Vector4 lhs, Vector4 rhs) => lhs.operator_substract(rhs);
 	public static Vector4 operator -(Vector4 lhs, float rhs) => lhs.operator_substract(rhs);
 
+	public static Vector4 operator *(Vector4 lhs, float rhs) => lhs.operator_multiply(rhs);
+	public static Vector4 operator *(float lhs, Vector4 rhs) => rhs.operator_multiply(lhs);
 
   public float x {
     set {
@@ -201,6 +203,17 @@ public class Vector4 : global::System.IDisposable {
 
   public Vector4 operator_substract(float rhs) {
     Vector4 ret = new Vector4(CherryEnginePINVOKE.Vector4_operator_substract__SWIG_2(swigCPtr, rhs), true);
+    return ret;
+  }
+
+  public float operator_multiply(Vector4 rhs) {
+    float ret = CherryEnginePINVOKE.Vector4_operator_multiply__SWIG_0(swigCPtr, Vector4.getCPtr(rhs));
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
+  public Vector4 operator_multiply(float rhs) {
+    Vector4 ret = new Vector4(CherryEnginePINVOKE.Vector4_operator_multiply__SWIG_1(swigCPtr, rhs), true);
     return ret;
   }
 

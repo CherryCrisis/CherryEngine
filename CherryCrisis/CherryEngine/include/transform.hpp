@@ -81,7 +81,7 @@ public:
 	void SetRotation(const Quaternion& rotation);
 	void SetGlobalRotation(const Vector3& rotation);
 	void SetGlobalRotation(const Quaternion& rotation);
-	Vector3 GetRotationV3() { return Quaternion::ToEuler(m_rotation); }
+	Vector3 GetEuler() { return Quaternion::ToEuler(m_rotation); }
 	Quaternion GetRotation() { return m_rotation; }
 	Quaternion GetGlobalRotation();
 
@@ -111,7 +111,7 @@ public:
 	Vector3 Up()		{ return m_up; }
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
-	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotationV3 };
+	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetEuler };
 	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
 
 	CCProperty::CopyProperty<Transform, Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };

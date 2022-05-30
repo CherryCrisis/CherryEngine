@@ -44,6 +44,57 @@ public class Matrix4 : global::System.IDisposable {
     }
   }
 
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32, float m33) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_0(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31, float m32) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_1(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30, float m31) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_2(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23, float m30) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_3(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22, float m23) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_4(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21, float m22) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_5(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20, float m21) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_6(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13, float m20) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_7(m00, m01, m02, m03, m10, m11, m12, m13, m20), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12, float m13) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_8(m00, m01, m02, m03, m10, m11, m12, m13), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11, float m12) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_9(m00, m01, m02, m03, m10, m11, m12), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10, float m11) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_10(m00, m01, m02, m03, m10, m11), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03, float m10) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_11(m00, m01, m02, m03, m10), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02, float m03) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_12(m00, m01, m02, m03), true) {
+  }
+
+  public Matrix4(float m00, float m01, float m02) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_13(m00, m01, m02), true) {
+  }
+
+  public Matrix4(float m00, float m01) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_14(m00, m01), true) {
+  }
+
+  public Matrix4(float m00) : this(CherryEnginePINVOKE.new_Matrix4__SWIG_15(m00), true) {
+  }
+
+  public Matrix4() : this(CherryEnginePINVOKE.new_Matrix4__SWIG_16(), true) {
+  }
+
   public SWIGTYPE_p_float data {
     set {
       CherryEnginePINVOKE.Matrix4_data_set(swigCPtr, SWIGTYPE_p_float.getCPtr(value));
@@ -297,6 +348,11 @@ public class Matrix4 : global::System.IDisposable {
     return ret;
   }
 
+  public Vector3 GetScaleInMatrix() {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Matrix4_GetScaleInMatrix__SWIG_0(swigCPtr), true);
+    return ret;
+  }
+
   public static Matrix4 Frustum(float Left, float Right, float Bottom, float Top, float Near, float Far) {
     Matrix4 ret = new Matrix4(CherryEnginePINVOKE.Matrix4_Frustum(Left, Right, Bottom, Top, Near, Far), true);
     return ret;
@@ -338,9 +394,6 @@ public class Matrix4 : global::System.IDisposable {
 
 		public static Matrix4 operator *(Matrix4 lhs, Matrix4 rhs) => lhs.operator_multiply(rhs);
 	
-  public Matrix4() : this(CherryEnginePINVOKE.new_Matrix4(), true) {
-  }
-
 }
 
 }

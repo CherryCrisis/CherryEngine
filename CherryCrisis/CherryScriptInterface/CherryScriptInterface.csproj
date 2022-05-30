@@ -48,6 +48,7 @@
     <Compile Include="CherryEngine.cs" />
     <Compile Include="CherryEnginePINVOKE.cs" />
     <Compile Include="Debug.cs" />
+    <Compile Include="EForceMode.cs" />
     <Compile Include="ELogType.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityVector.cs" />
@@ -55,12 +56,14 @@
     <Compile Include="Keycode.cs" />
     <Compile Include="Matrix4.cs" />
     <Compile Include="Object.cs" />
+    <Compile Include="PhysicActor.cs" />
+    <Compile Include="PhysicManager.cs" />
     <Compile Include="Quaternion.cs" />
+    <Compile Include="RaycastHit.cs" />
     <Compile Include="SceneManager.cs" />
     <Compile Include="ScriptedBehaviour.cs" />
     <Compile Include="ScriptedBehaviourVector.cs" />
     <Compile Include="SWIGTYPE_p_float.cs" />
-    <Compile Include="SWIGTYPE_p_Matrix4.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="TransformVector.cs" />

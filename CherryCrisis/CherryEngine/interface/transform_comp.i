@@ -18,10 +18,13 @@ public:
 	CCMaths::Vector3 GetPosition();
 	CCMaths::Vector3 GetGlobalPosition();
 
-	void SetRotation(CCMaths::Vector3& rotation);
-	void SetGlobalRotation(CCMaths::Vector3& rotation);
-	CCMaths::Vector3 GetRotation();
-	CCMaths::Vector3 GetGlobalRotation();
+	void SetRotation(const CCMaths::Vector3& rotation);
+	void SetRotation(const CCMaths::Quaternion& rotation);
+	void SetGlobalRotation(const CCMaths::Vector3& rotation);
+	void SetGlobalRotation(const CCMaths::Quaternion& rotation);
+	CCMaths::Vector3 GetEuler();
+	CCMaths::Quaternion GetRotation();
+	CCMaths::Quaternion GetGlobalRotation();
 
 	void SetScale(CCMaths::Vector3& scale);
 	void SetGlobalScale(CCMaths::Vector3& scale);
@@ -37,7 +40,8 @@ public:
 	%proxycode
 	%{
 		public Vector3 position { get => GetPosition(); set => SetPosition(value); }
-		public Vector3 eulerAngles { get => GetRotation(); set => SetRotation(value); }
+		public Vector3 eulerAngles { get => GetEuler(); set => SetRotation(value); }
+		public Quaternion rotation { get => GetRotation(); set => SetRotation(value); }
 		public Vector3 scale { get => GetScale(); set => SetScale(value); }
 	%}
 };

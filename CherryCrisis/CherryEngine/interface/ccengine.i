@@ -5,6 +5,9 @@ SWIG_CSBODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
 %include cherry_macros.hpp
 
+%include maths.i
+
+%include physic_manager.i
 %include input_manager.i
 %include scene_manager.i
 %include time_manager.i
@@ -12,5 +15,3 @@ SWIG_CSBODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
 %include behaviour.i
 %include entity.i
-%include maths.i
-

@@ -55,22 +55,37 @@ public class Transform : Behaviour {
   }
 
   public void SetRotation(Vector3 rotation) {
-    CherryEnginePINVOKE.Transform_SetRotation(swigCPtr, Vector3.getCPtr(rotation));
+    CherryEnginePINVOKE.Transform_SetRotation__SWIG_0(swigCPtr, Vector3.getCPtr(rotation));
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public void SetRotation(Quaternion rotation) {
+    CherryEnginePINVOKE.Transform_SetRotation__SWIG_1(swigCPtr, Quaternion.getCPtr(rotation));
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
   public void SetGlobalRotation(Vector3 rotation) {
-    CherryEnginePINVOKE.Transform_SetGlobalRotation(swigCPtr, Vector3.getCPtr(rotation));
+    CherryEnginePINVOKE.Transform_SetGlobalRotation__SWIG_0(swigCPtr, Vector3.getCPtr(rotation));
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
-  public Vector3 GetRotation() {
-    Vector3 ret = new Vector3(CherryEnginePINVOKE.Transform_GetRotation(swigCPtr), true);
+  public void SetGlobalRotation(Quaternion rotation) {
+    CherryEnginePINVOKE.Transform_SetGlobalRotation__SWIG_1(swigCPtr, Quaternion.getCPtr(rotation));
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public Vector3 GetEuler() {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Transform_GetEuler(swigCPtr), true);
     return ret;
   }
 
-  public Vector3 GetGlobalRotation() {
-    Vector3 ret = new Vector3(CherryEnginePINVOKE.Transform_GetGlobalRotation(swigCPtr), true);
+  public Quaternion GetRotation() {
+    Quaternion ret = new Quaternion(CherryEnginePINVOKE.Transform_GetRotation(swigCPtr), true);
+    return ret;
+  }
+
+  public Quaternion GetGlobalRotation() {
+    Quaternion ret = new Quaternion(CherryEnginePINVOKE.Transform_GetGlobalRotation(swigCPtr), true);
     return ret;
   }
 
@@ -110,7 +125,8 @@ public class Transform : Behaviour {
   }
 
 		public Vector3 position { get => GetPosition(); set => SetPosition(value); }
-		public Vector3 eulerAngles { get => GetRotation(); set => SetRotation(value); }
+		public Vector3 eulerAngles { get => GetEuler(); set => SetRotation(value); }
+		public Quaternion rotation { get => GetRotation(); set => SetRotation(value); }
 		public Vector3 scale { get => GetScale(); set => SetScale(value); }
 	
 }

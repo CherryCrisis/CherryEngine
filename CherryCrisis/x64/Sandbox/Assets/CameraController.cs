@@ -65,6 +65,12 @@ namespace CCScripting
 			transform.eulerAngles = Quaternion.Identity * transform.eulerAngles;
 
 			Debug.GetInstance().Info(GetHost().m_cell);
+
+			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.position, transform.Forward(), 5000f);
+			PhysicActor a = hit.actor;
+
+			if (a != null)
+				Debug.GetInstance().Info(a.m_owner);
 		}
 	}
 }

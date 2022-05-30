@@ -1414,9 +1414,6 @@
     </None>
     <None Include="Scripting.cd" />
     <None Include="Rendering.cd" />
-    <None Include="interface\physic_manager.i">
-      <Filter>Fichiers sources\Interface</Filter>
-    </None>
     <None Include="interface\box_collider.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
@@ -1427,9 +1424,6 @@
       <Filter>Fichiers sources\Interface</Filter>
     </None>
     <None Include="interface\sphere_collider.i">
-      <Filter>Fichiers sources\Interface</Filter>
-    </None>
-    <None Include="interface\physic_actor.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
     <None Include="interface\physic_scene.i">
@@ -1559,6 +1553,12 @@
       <Filter>Fichiers sources\Interface\Maths</Filter>
     </None>
     <None Include="interface\cell.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\physic_manager.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
+    <None Include="interface\physic_actor.i">
       <Filter>Fichiers sources\Interface</Filter>
     </None>
   </ItemGroup>

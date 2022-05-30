@@ -1,28 +1,29 @@
 %{
 	#include "physic_actor.hpp"
+
+	using namespace PhysicSystem;
 %}
 
 %include maths.i
-%include physic_manager.i
+%include entity.i
+
+%nodefaultctor PhysicActor;
 
 class PhysicActor
 {
-	Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
-	AddForce(const CCMaths::Vector3& force, EForceMode mode);
+public:
+	void AddForce(const CCMaths::Vector3& force, EForceMode mode);
+	void AddTorque(const CCMaths::Vector3& force, EForceMode mode);
+	RaycastHit Raycast(const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 
-	void	SetKinematic(const bool& isKinematic);
-	bool	GetKinematic();
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled();
-	void	SetGravity(const bool& useGravity);
-	bool	GetGravity();
 
-	void	SetDensity(const float& density);
-	float	GetDensity();
-	void	SetMaxVel(const float& velocity);
-	float	GetMaxVel();
-	void	SetMaxAngVel(const float& velocity);
-	float	GetMaxAngVel();
-	void	SetMaxDepVel(const float& velocity);
-	float	GetMaxDepVel();
+public:
+	%immutable;
+	Entity* m_owner = nullptr;
+
+	//Rigidbody* GetRigidbody();
+	bool HasRigidbody();
+	bool HasColliders();
 };

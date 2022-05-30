@@ -7,6 +7,19 @@ namespace CCMaths
 {
 	struct Matrix4
 	{
+		Matrix4(float m00 = 1.f, float m01 = 0.f, float m02 = 0.f, float m03 = 0.f,
+				float m10 = 0.f, float m11 = 1.f, float m12 = 0.f, float m13 = 0.f,
+				float m20 = 0.f, float m21 = 0.f, float m22 = 1.f, float m23 = 0.f,
+				float m30 = 0.f, float m31 = 0.f, float m32 = 0.f, float m33 = 1.f)
+			: data
+				{ 
+					m00, m01, m02, m03,
+					m10, m11, m12, m13,
+					m20, m21, m22, m23,
+					m30, m31, m32, m33
+				} {	}
+
+
 		union
 		{
 			float data[16] = { 1.f, 0.f, 0.f, 0.f,

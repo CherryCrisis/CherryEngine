@@ -10,6 +10,7 @@
 %include maths.i
 
 %include cell.i
+%include entity.i
 %include physic_actor.i
 
 %include std_string.i
@@ -39,10 +40,9 @@ public:
 	PhysicActor* FindActor(Entity& owningEntity);
 
 	%proxycode %{
-	public PhysicActor* GetActor(Entity& owningEntity)
-            => FindActor(Entity& owningEntity);
+	public PhysicActor GetActor(Entity owningEntity) => FindActor(owningEntity);
 	%}
 
-	static RaycastHit Raycast(Cell& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+	static RaycastHit Raycast(Cell& cell, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 	static void AddForce(Entity* entity, const CCMaths::Vector3& force, EForceMode mode);
 };
