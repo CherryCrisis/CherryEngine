@@ -102,9 +102,8 @@ void PortalComponent::LateUpdate()
 		float previousDist = Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward);
 
 		int portalSideNoOffset = CCMaths::Sign<float>(distFromPortal);
-		//-- TODO: Don't hardcode offset
 
-		//Clamp position
+		//Clamp position if portalTeleported exceeds the portal position
 		if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
 		{
 			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + (m_offset  * (float)portalSideNoOffset)));
@@ -114,10 +113,6 @@ void PortalComponent::LateUpdate()
 			distFromPortal = Vector3::Dot(offsetFromPortal, portalForward);
 
 			portalSideNoOffset = CCMaths::Sign<float>(distFromPortal);
-			
-			//TODO: Remove this
-			if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
-				Debug::GetInstance()->AddLog(ELogType::ERROR, "Not normal !");
 		}
 
 		Vector3 newOffsetFromPortal = offsetFromPortal - (portalForward * m_offset) * ((float)portalSideNoOffset);
@@ -141,10 +136,10 @@ void PortalComponent::LateUpdate()
 			CCMaths::Vector3 TRS[3] = {};
 			Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
 
+			portalTeleporter->Teleport(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
+
 			portalTeleporter->ExitPortal();
 			m_portalTeleporters.erase(portalTeleporter);
-
-			portalTeleporter->Teleport(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
 
 			m_linkedPortal->OnEntityEnter(portalTeleporter);
 
@@ -155,13 +150,9 @@ void PortalComponent::LateUpdate()
 			portalTeleporter->m_previousOffsetFromPortal = offsetFromPortal;
 		}
 
-		Matrix4 worldMatrix = worldMatrixPortals *
-			portalTeleporterMatrix;
+		Matrix4 worldMatrix = worldMatrixPortals * portalTeleporterMatrix;
 
-		CCMaths::Vector3 TRS[3] = {};
-		Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
-
-		portalTeleporter->UpdateEntityMatrix(portalTeleporter->m_cloneEntityNode->m_transform, TRS[0], TRS[1], TRS[2]);
+		portalTeleporter->UpdateEntityMatrix(portalTeleporter->m_cloneEntityNode->m_transform, worldMatrix);
 		UpdateSliceParamaters(portalTeleporter);
 	}
 }

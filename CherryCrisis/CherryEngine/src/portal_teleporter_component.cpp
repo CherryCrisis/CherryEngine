@@ -97,13 +97,16 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 	}
 }
 
-void PortalTeleporterComponent::UpdateEntityMatrix(Transform* transform, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
+void PortalTeleporterComponent::UpdateEntityMatrix(Transform* transform, const Matrix4& newWorldMatrix)
 {
 	if (transform)
 	{
-		transform->SetPosition(newPos);
-		transform->SetRotation(newRot);
-		transform->SetScale(newScale);
+		CCMaths::Vector3 TRS[3] = {};
+		Matrix4::Decompose(newWorldMatrix, TRS[0], TRS[1], TRS[2]);
+
+		transform->SetPosition(TRS[0]);
+		transform->SetRotation(TRS[1]);
+		transform->SetScale(TRS[2]);
 	}
 }
 
