@@ -269,8 +269,7 @@ void Mesh::CreateQuad(std::shared_ptr<Mesh> mesh, float xHalfRes, float yHalfRes
         vertex.position.x = xSign * xHalfRes;
         vertex.position.y = ySign * yHalfRes;
 
-        vertex.normal = Vector3(-xSign * xHalfRes, -ySign * yHalfRes, 0).Normalized();
-        vertex.normal.z = -1;
+        vertex.normal = Vector3(0.f, 0.f, 1.f);
         vertex.normal.Normalize();
 
         min.x = CCMaths::Min(min.x, vertex.position.x);

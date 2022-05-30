@@ -141,7 +141,9 @@ void HierarchyDisplayer::Render()
             if (RenderEntity(node))
                 break;
         }
+
         HandleShortcuts();
+        
         ImGui::EndChild();
         ImGui::PopStyleVar();
         if (selectedCell->m_skyRenderer)

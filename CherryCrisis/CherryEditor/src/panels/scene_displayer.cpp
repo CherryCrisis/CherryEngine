@@ -123,6 +123,19 @@ void SceneDisplayer::Render()
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)) 
         {
             if (InputManager::GetKeyDown(Keycode::RIGHT_CLICK)) { Focus(); }
+
+            if (!m_manager->m_entitySelector.IsEmpty())
+            {
+                if (InputManager::GetKeyDown(Keycode::DEL))
+                {
+                    for (Entity* entity : m_manager->m_entitySelector.m_entities)
+                        SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
+
+                    SceneManager::SetHierarchyDirty(true);
+
+                    m_manager->m_entitySelector.Clear(false);
+                }
+            }
         }
 
         if (m_isFocused)
