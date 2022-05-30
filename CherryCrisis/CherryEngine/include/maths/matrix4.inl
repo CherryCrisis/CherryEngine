@@ -307,7 +307,17 @@ namespace CCMaths
 
 	inline Matrix4 Matrix4::GetScaleMatrix(const Matrix4& matrix)
 	{
-		return Matrix4::Scale({ matrix.right.Length(), matrix.up.Length(), matrix.back.Length() });
+		return Matrix4::Scale(GetScaleInMatrix(matrix));
+	}
+
+	inline Vector3 Matrix4::GetScaleInMatrix() const
+	{
+		return GetScaleInMatrix(*this);
+	}
+
+	inline Vector3 Matrix4::GetScaleInMatrix(const Matrix4& matrix)
+	{
+		return { matrix.right.Length(), matrix.up.Length(), matrix.back.Length() };
 	}
 
 	inline Matrix4 Matrix4::Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far)

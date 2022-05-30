@@ -134,7 +134,7 @@ Matrix4 Transform::GetWorldMatrix()
 
 	m_isDirty &= ~(int)EDirtyFlag::WORLD_MATRIX;
 
-	m_worldMatrix = Matrix4::Translate(m_position) * Matrix4::RotateZYX(m_rotation) * Matrix4::Scale(m_scale);
+	m_worldMatrix = Matrix4::Translate(m_position) * Quaternion::ToMatrix(m_rotation) * Matrix4::Scale(m_scale);
 
 	if (m_parent)
 		m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
@@ -143,7 +143,9 @@ Matrix4 Transform::GetWorldMatrix()
 	m_right		= m_worldMatrix.right;
 	m_forward	= -m_worldMatrix.back;
 
-	CCMaths::Matrix4::Decompose(m_worldMatrix, m_worldPosition, m_worldRotation, m_worldScale);
+	Vector3 rotation;
+	CCMaths::Matrix4::Decompose(m_worldMatrix, m_worldPosition, rotation, m_worldScale);
+	m_worldRotation = Quaternion::FromEuler(rotation);
 
 	return m_worldMatrix;
 }
@@ -174,7 +176,7 @@ void Transform::SetPosition(const Vector3& position)
 
 void Transform::SetGlobalPosition(const Vector3& position)
 {
-	Matrix4 world = Matrix4::Translate(position) * Matrix4::RotateZYX(GetGlobalRotation()) * Matrix4::Scale(GetGlobalScale());
+	Matrix4 world = Matrix4::Translate(position) * Quaternion::ToMatrix(m_worldRotation) * Matrix4::Scale(GetGlobalScale());
 
 	if (m_parent)
 		world = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * world;
@@ -183,6 +185,11 @@ void Transform::SetGlobalPosition(const Vector3& position)
 }
 
 void Transform::SetRotation(const Vector3& rotation)
+{
+	SetRotation(Quaternion::FromEuler(rotation));
+}
+
+void Transform::SetRotation(const Quaternion& rotation)
 {
 	m_onTransformEdited.Invoke(this);
 	m_rotation = rotation;
@@ -195,7 +202,12 @@ void Transform::SetRotation(const Vector3& rotation)
 
 void Transform::SetGlobalRotation(const Vector3& rotation)
 {
-	Matrix4 world = Matrix4::Translate(GetGlobalPosition()) * Matrix4::RotateZYX(rotation) * Matrix4::Scale(GetGlobalScale());
+	SetGlobalRotation(Quaternion::FromEuler(rotation));
+}
+
+void Transform::SetGlobalRotation(const Quaternion& rotation)
+{
+	Matrix4 world = Matrix4::Translate(GetGlobalPosition()) * Quaternion::ToMatrix(rotation) * Matrix4::Scale(GetGlobalScale());
 
 	if (m_parent)
 		world = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * world;
@@ -221,7 +233,7 @@ void Transform::SetScale(const Vector3& scale)
 
 void Transform::SetGlobalScale(const Vector3& scale)
 {
-	Matrix4 world = Matrix4::Translate(GetGlobalPosition()) * Matrix4::RotateZYX(GetGlobalRotation()) * Matrix4::Scale(scale);
+	Matrix4 world = Matrix4::Translate(GetGlobalPosition()) * Quaternion::ToMatrix(m_worldRotation) * Matrix4::Scale(scale);
 
 	if (m_parent)
 		world = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * world;
@@ -287,7 +299,7 @@ Vector3 Transform::GetGlobalPosition()
 	return m_worldPosition;
 }
 
-Vector3 Transform::GetGlobalRotation()
+Quaternion Transform::GetGlobalRotation()
 {
 	GetWorldMatrix();
 	

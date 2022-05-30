@@ -4830,7 +4830,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetRotation(void * jarg1
   CCMaths::Vector3 result;
   
   arg1 = (Transform *)jarg1; 
-  result = (arg1)->GetRotation();
+  result = (arg1)->GetRotationV3();
   jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
   return jresult;
 }

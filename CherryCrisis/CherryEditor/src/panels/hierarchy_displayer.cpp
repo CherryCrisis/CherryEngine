@@ -141,7 +141,9 @@ void HierarchyDisplayer::Render()
             if (RenderEntity(node))
                 break;
         }
+
         HandleShortcuts();
+        
         ImGui::EndChild();
         ImGui::PopStyleVar();
         if (selectedCell->m_skyRenderer)
@@ -158,18 +160,16 @@ void HierarchyDisplayer::Render()
                     bool disabled = metadata->m_identifier.find("off") != std::string::npos;
                     std::string name = std::filesystem::path(defaultVal).filename().string();
 
-                    ImCherry::DropzoneMenu(metaname, name, disabled);
+                    void* data = nullptr;
+                    ImCherry::DropzoneMenu(metaname, name, "NODE", &data, disabled);
 
-                    if (ImGui::BeginDragDropTarget() && !disabled)
+                    if (data) 
                     {
-                        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
-                        {
-                            const char* data = (const char*)payload->Data;
-                            std::string strData = data;
-                            metadata->Set(&strData);
-                        }
-                        ImGui::EndDragDropTarget();
+                        const char* cdata = (const char*) data;
+                        std::string strData = cdata;
+                        metadata->Set(&strData);
                     }
+
                 }
             }
             

@@ -13,7 +13,7 @@ struct	GPUPortal { };
 struct Portal : public Viewer, public ARenderer
 {
 	int m_test = 0;
-	float m_near = 0.01f;
+	float m_near = 0.0001f;
 	float m_far = 1500.f;
 	float m_fovY = CCMaths::PI / 3.f;
 

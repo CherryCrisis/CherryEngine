@@ -118,7 +118,7 @@ void AssetBrowser::ResizeCell()
 {
     InputManager* inputManager = InputManager::GetInstance();
 
-    if (inputManager->GetKey(Keycode::LEFT_CONTROL) && inputManager->GetMouseWheel().y != 0)
+    if (ImGui::IsWindowHovered() && inputManager->GetKey(Keycode::LEFT_CONTROL) && inputManager->GetMouseWheel().y != 0)
     {
         m_thumbnailSize += InputManager::GetInstance()->GetMouseWheel().y * 2;
     }

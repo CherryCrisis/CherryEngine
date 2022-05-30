@@ -75,8 +75,12 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 				//TODO: Optimize !
 				CCMaths::Matrix4 m = modelMat * viewer->m_viewMatrix.Inverse();
 
-				CCMaths::Matrix4 mInverse = m.Inverse();
+				Vector3 TRS[3];
+				Matrix4::Decompose(m, TRS[0], TRS[1], TRS[2]);
 
+				//CCMaths::Matrix4 mInverse = m.Inverse();
+				CCMaths::Matrix4 mInverse = Matrix4::RotateXYZ(-TRS[1]) * Matrix4::Translate(-TRS[0]);
+				
 				portal->m_linkedPortal->m_viewMatrix = mInverse;
 
 				portal->m_linkedPortal->m_position = m.position; //uViewPosition in pbr shader
@@ -135,27 +139,30 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 		if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
 			continue;
 
-		float halfHeight = portal->m_near * CCMaths::Tan(portal->m_fovY * 0.5f * CCMaths::DEG2RAD);
-		
-		float aspect = (float)framebuffer.width / (float)framebuffer.height;
-		float halfWidth = halfHeight * aspect;
-		
-		float dstToNearClipPlaneCorner = Vector3(halfWidth, halfHeight, portal->m_near).Length();
-		float screenThickness = dstToNearClipPlaneCorner;
-		
-		//Matrix4 screenT = portal->m_modelMatrix;
-		
+		//float halfHeight = portal->m_near * CCMaths::Tan(portal->m_fovY * 0.5f * CCMaths::DEG2RAD);
+		//
+		//float aspect = (float)framebuffer.width / (float)framebuffer.height;
+		//float halfWidth = halfHeight * aspect;
+		//
+		//float dstToNearClipPlaneCorner = Vector3(halfWidth, halfHeight, portal->m_near).SquareLength();
+		//float screenThickness = dstToNearClipPlaneCorner;
+		//
+		//Matrix4 screenT = portal->m_modelMatrix * Matrix4::Scale(Vector3::One);
+		//
 		//CCMaths::Matrix4 modelMat = portal->m_linkedPortal->m_modelMatrix;
-		//modelMat *= Matrix4::RotateY(CCMaths::PI);
+		////modelMat *= Matrix4::RotateY(CCMaths::PI);
 		//modelMat *= portal->m_modelMatrix.Inverse();
-		//TODO: Optimize !
+		////TODO: Optimize !
 		//CCMaths::Matrix4 m = modelMat * viewer->m_viewMatrix.Inverse();
-		
-		//bool camFacingSameDirAsPortal = Vector3::Dot(-screenT.back, screenT.position - m.position) > 0;
-		//screenT.localScale = new Vector3(screenT.localScale.x, screenT.localScale.y, screenThickness);
-		
-		//screenT *= Matrix4::Translate({ Vector3::Forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f) });
-		//screenT *= Matrix4::Scale({ 1.f, 1.f, screenThickness });
+		//
+		//bool camFacingSameDirAsPortal = Vector3::Dot(-screenT.back, screenT.position - viewer->m_viewMatrix.Inverse().position) > 0;
+		////screenT.localScale = new Vector3(screenT.localScale.x, screenT.localScale.y, screenThickness);
+		//
+		//Vector3 TRS[3];
+		//Matrix4::Decompose(screenT, TRS[0], TRS[1], TRS[2]);
+		//
+		//screenT *= Matrix4::Translate({ Vector3::Forward * dstToNearClipPlaneCorner * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f) });
+		//screenT *= Matrix4::Scale({ TRS[2].x, TRS[2].y, dstToNearClipPlaneCorner });
 		//screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f);
 
 		glBindTextureUnit(0, gpuPortal->framebuffer->colorTex.texID);

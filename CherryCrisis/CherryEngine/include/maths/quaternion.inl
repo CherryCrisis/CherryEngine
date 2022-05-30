@@ -198,13 +198,13 @@ namespace CCMaths
 		float wz = 2 * in.w * in.z;
 
 		result.data[0] = 1 - y2 - z2;
-		result.data[1] = xy - wz;
-		result.data[2] = xz + wy;
-		result.data[4] = xy + wz;
+		result.data[4] = xy - wz;
+		result.data[8] = xz + wy;
+		result.data[1] = xy + wz;
 		result.data[5] = 1 - x2 - z2;
-		result.data[6] = yz - wx;
-		result.data[8] = xz - wy;
-		result.data[9] = yz + wx;
+		result.data[9] = yz - wx;
+		result.data[2] = xz - wy;
+		result.data[6] = yz + wx;
 		result.data[10] = 1 - x2 - y2;
 
 		return result;
@@ -279,16 +279,30 @@ namespace CCMaths
 
 	inline Quaternion Quaternion::FromMatrix(const Matrix4& in)
 	{
-		if ((in.data[0] > in.data[5]) && (in.data[0] > in.data[10]))
+		float tr = in.data[0] + in.data[5] + in.data[10];
+
+		if (tr > 0)
+		{
+			float s = sqrtf(1.0f + tr) * 2;
+
+			return
+			{
+				0.25f * s,						// w
+				(in.data[6] - in.data[9]) / s,	// x
+				(in.data[8] - in.data[2]) / s,	// y
+				(in.data[1] - in.data[4]) / s	// z
+			};
+		}
+		else if ((in.data[0] > in.data[5]) && (in.data[0] > in.data[10]))
 		{
 			float s = sqrtf(1.0f + in.data[0] - in.data[5] - in.data[10]) * 2;
 
 			return
 			{
-				(in.data[9] - in.data[6]) / s,	// w
+				(in.data[6] - in.data[9]) / s,	// w
 				0.25f * s,						// x
 				(in.data[4] + in.data[1]) / s,	// y
-				(in.data[2] + in.data[8]) / s	// z
+				(in.data[8] + in.data[2]) / s	// z
 			};
 		}
 		else if (in.data[5] > in.data[10])
@@ -297,10 +311,10 @@ namespace CCMaths
 
 			return
 			{
-				(in.data[2] + in.data[8]) / s,	// w
+				(in.data[8] - in.data[2]) / s,	// w
 				(in.data[4] + in.data[1]) / s,	// x
 				0.25f * s,						// y
-				(in.data[9] - in.data[6]) / s	// z
+				(in.data[9] + in.data[6]) / s	// z
 			};
 		}
 		else
@@ -309,9 +323,9 @@ namespace CCMaths
 
 			return
 			{
-				(in.data[4] + in.data[1]) / s,	// w
-				(in.data[2] + in.data[8]) / s,	// x
-				(in.data[9] - in.data[6]) / s,	// y
+				(in.data[1] - in.data[4]) / s,	// w
+				(in.data[8] + in.data[2]) / s,	// x
+				(in.data[9] + in.data[6]) / s,	// y
 				0.25f * s						// z
 			};
 		}

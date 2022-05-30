@@ -3,6 +3,7 @@
 #include "portal_component.hpp"
 
 #include "render_manager.hpp"
+#include "debug.hpp"
 
 #include "cell.hpp"
 #include "entity.hpp"
@@ -13,7 +14,6 @@
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
 #include "mesh_renderer.hpp"
-
 
 PortalComponent::PortalComponent()
 {
@@ -78,42 +78,85 @@ void PortalComponent::Initialize()
 	UpdatePortalMatrices(m_transform);
 }
 
+float GetDistanceFromPlane(Vector3 normal, Vector3 planePos, Vector3 position)
+{
+	return Vector3::Dot(position - planePos, normal);
+}
+
 void PortalComponent::LateUpdate()
 {
 	for (PortalTeleporterComponent* portalTeleporter : m_portalTeleporters)
 	{
 		Transform* transform = portalTeleporter->m_entityNode->m_transform;
 
+		Vector3 portalForward = -m_transform->GetWorldMatrix().back.Normalized();
+
 		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
-		Vector3 v = offsetFromPortal.Normalized();
-		int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back));
-		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, -m_transform->GetWorldMatrix().back));
+		float distFromPortal = Vector3::Dot(offsetFromPortal, portalForward);
+		float previousDist = Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward);
 
-		Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix/* * Matrix4::RotateY(CCMaths::PI)*/;
-		Matrix4 worldMatrix = worldMatrixLinkedPortal *
-			m_portal.m_modelMatrix.Inverse() * 
-			transform->GetWorldMatrix();
+		int portalSideNoOffset = CCMaths::Sign<float>(distFromPortal);
+		//-- TODO: Don't hardcode offset
 
-		//worldMatrix.position += (m_transform->Forward() * portalSide) * 0.015;
+		//Clamp position
+		if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
+		{
+			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + (0.01f  * (float)portalSideNoOffset)));
+			transform->SetPosition(newPosition);
 
+			offsetFromPortal = newPosition - m_transform->GetPosition();
+			distFromPortal = Vector3::Dot(offsetFromPortal, portalForward);
 
-		CCMaths::Vector3 TRS[3] = {};
-		Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
+			portalSideNoOffset = CCMaths::Sign<float>(distFromPortal);
+			
+			//TODO: Remove this
+			if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
+				Debug::GetInstance()->AddLog(ELogType::ERROR, "Not normal !");
+		}
+
+		Vector3 newOffsetFromPortal = offsetFromPortal - (portalForward * 0.01f) * ((float)portalSideNoOffset);
+
+		int portalSide = CCMaths::Sign<float>(Vector3::Dot(newOffsetFromPortal, portalForward));
+		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward));
+
+		Matrix4 portalTeleporterMatrix = transform->GetWorldMatrix();
+		Matrix4 worldMatrixPortals = m_portal.m_linkedPortal->m_modelMatrix * m_portal.m_modelMatrix.Inverse();
+
+		bool portalSideDiff = (portalSide != previousPortalSide);
+		bool distCheck = (CCMaths::Abs(previousDist) > CCMaths::Abs(distFromPortal));
 
 		//Teleport entity if it has crossed from one side of portal to the other
-		if (portalSide != previousPortalSide)
+		if (portalSideDiff && distCheck)
 		{
+			portalTeleporterMatrix.position -= portalForward * (distFromPortal - (0.01f * (float)portalSide));
+
+			Matrix4 worldMatrix = worldMatrixPortals *
+				portalTeleporterMatrix;
+
+			CCMaths::Vector3 TRS[3] = {};
+			Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
+
 			portalTeleporter->Teleport(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
 
+			Debug::GetInstance()->AddLog(ELogType::INFO, std::format("Teleported to cell : {} | MatrixOffset = ({}; {}; {}) | TRS[0] = ({}; {}; {})", m_linkedPortal->GetHost().m_cell->GetName(), portalTeleporterMatrix.position.x, portalTeleporterMatrix.position.y, portalTeleporterMatrix.position.z, TRS[0].x, TRS[0].y, TRS[0].z).c_str());
+
 			portalTeleporter->ExitPortal();
-			m_linkedPortal->OnEntityEnter(portalTeleporter);
 			m_portalTeleporters.erase(portalTeleporter);
+
+			m_linkedPortal->OnEntityEnter(portalTeleporter);
+
 			return;
 		}
 		else
 		{
 			portalTeleporter->m_previousOffsetFromPortal = offsetFromPortal;
 		}
+
+		Matrix4 worldMatrix = worldMatrixPortals *
+			portalTeleporterMatrix;
+
+		CCMaths::Vector3 TRS[3] = {};
+		Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
 
 		portalTeleporter->UpdateEntityMatrix(portalTeleporter->m_cloneEntityNode->m_transform, TRS[0], TRS[1], TRS[2]);
 		UpdateSliceParamaters(portalTeleporter);
@@ -203,6 +246,8 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	if (m_portalTeleporters.end() != m_portalTeleporters.find(portalTeleporter))
 		return;
 
+	//Debug::GetInstance()->AddLog(ELogType::INFO, std::format("portalTeleporter enter").c_str());
+
 	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix/* * Matrix4::RotateY(CCMaths::PI)*/;
 	Matrix4 worldMatrix = worldMatrixLinkedPortal *
 		m_portal.m_modelMatrix.Inverse() *
@@ -212,7 +257,7 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
 
 	portalTeleporter->EnterPortal(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
-	portalTeleporter->m_previousOffsetFromPortal = portalTeleporter->m_entityNode->m_transform->GetPosition() - m_transform->GetPosition();
+	portalTeleporter->m_previousOffsetFromPortal = portalTeleporter->m_entityNode->m_transform->GetGlobalPosition() - m_transform->GetGlobalPosition();
 	m_portalTeleporters.insert(portalTeleporter);
 
 	UpdateSliceParamaters(portalTeleporter);
@@ -231,6 +276,7 @@ void PortalComponent::OnTriggerExit(Entity* other)
 		auto it = m_portalTeleporters.find(portalTeleporter);
 		if (it != m_portalTeleporters.end())
 		{
+			//Debug::GetInstance()->AddLog(ELogType::INFO, std::format("portalTeleporter exit").c_str());
 			portalTeleporter->ExitPortal();
 			m_portalTeleporters.erase(it);
 		}

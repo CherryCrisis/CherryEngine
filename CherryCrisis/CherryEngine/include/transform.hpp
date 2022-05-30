@@ -30,17 +30,17 @@ private:
 						      (int)EDirtyFlag::WORLD_ROTATION |
 							  (int)EDirtyFlag::WORLD_SCALE;
 
-	Vector3	m_position = Vector3::Zero;
-	Vector3 m_rotation = Vector3::Zero;
-	Vector3	m_scale	   = Vector3::One;
+	Vector3	m_position			= Vector3::Zero;
+	Vector3	m_scale				= Vector3::One;
+	Quaternion m_rotation		= Quaternion::Identity;
 
-	Vector3 m_up		= Vector3::Zero;
-	Vector3 m_right		= Vector3::Zero;
-	Vector3 m_forward	= Vector3::Zero;
+	Vector3 m_up				= Vector3::Zero;
+	Vector3 m_right				= Vector3::Zero;
+	Vector3 m_forward			= Vector3::Zero;
 
-	Vector3	m_worldPosition = Vector3::Zero;
-	Vector3 m_worldRotation = Vector3::Zero;
-	Vector3	m_worldScale	= Vector3::One;
+	Vector3	m_worldPosition		= Vector3::Zero;
+	Vector3	m_worldScale		= Vector3::One;
+	Quaternion m_worldRotation	= Quaternion::Identity;
 	
 	Matrix4 m_worldMatrix = Matrix4::Identity;
 
@@ -78,9 +78,12 @@ public:
 	Vector3 GetGlobalPosition();
 
 	void SetRotation(const Vector3& rotation);
+	void SetRotation(const Quaternion& rotation);
 	void SetGlobalRotation(const Vector3& rotation);
-	Vector3 GetRotation() { return m_rotation; }
-	Vector3 GetGlobalRotation();
+	void SetGlobalRotation(const Quaternion& rotation);
+	Vector3 GetRotationV3() { return Quaternion::ToEuler(m_rotation); }
+	Quaternion GetRotation() { return m_rotation; }
+	Quaternion GetGlobalRotation();
 
 	void SetScale(const Vector3& scale);
 	void SetGlobalScale(const Vector3& scale);
@@ -108,7 +111,7 @@ public:
 	Vector3 Up()		{ return m_up; }
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
-	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotation };
+	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetRotationV3 };
 	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
 
 	CCProperty::CopyProperty<Transform, Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };

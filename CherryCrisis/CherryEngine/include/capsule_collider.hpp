@@ -52,9 +52,11 @@ public:
 	
 	void SetScale(const float& scale);
 	float GetScale() { return m_totalScale; }
+	float GetEditableScale() { return m_editableScale; }
 
 	void SetRadius(const float& radius);
 	float GetRadius() { return m_totalRadius; }
+	float GetEditableRadius() { return m_editableRadius; }
 
 	void RecomputeMatrix(Transform* transform) override { ComputeModelMatrices(); }
 	void ComputeModelMatrices() override;
@@ -65,6 +67,6 @@ public:
 	void OnCellAdded(Cell* newCell);
 	void OnCellRemoved(Cell* newCell);
 
-	floatProperty editableScale{ this, &CapsuleCollider::SetScale, &CapsuleCollider::GetScale };
-	floatProperty radius{ this, &CapsuleCollider::SetRadius, &CapsuleCollider::GetRadius };
+	floatProperty editableScale{ this, &CapsuleCollider::SetScale, &CapsuleCollider::GetEditableScale };
+	floatProperty radius{ this, &CapsuleCollider::SetRadius, &CapsuleCollider::GetEditableRadius };
 };

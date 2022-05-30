@@ -117,7 +117,7 @@ void CameraComponent::ChangePosition(Transform* transform)
 
 void CameraComponent::ChangeRotation(Transform* transform)
 {
-	m_camera.SetRotation(transform->GetGlobalRotation());
+	m_camera.SetRotation(Quaternion::ToEuler(transform->GetGlobalRotation()));
 }
 
 CameraComponent* CameraComponent::GetMainCamera()
