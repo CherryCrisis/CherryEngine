@@ -162,8 +162,6 @@ void CharacterController::FixedUpdate()
 	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) / TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * m_dynamicActor->getMass(), { 1, 0, 1 });
 
-	std::cout << std::format("NeededForce = ({}; {}; {})", neededForce.x, neededForce.y, neededForce.z) << std::endl;
-
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);
 
 	CCMaths::Vector3 rot = m_rotating * TimeManager::GetFixedDeltaTime();

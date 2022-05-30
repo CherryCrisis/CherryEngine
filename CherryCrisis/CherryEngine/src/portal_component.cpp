@@ -14,6 +14,7 @@
 #include "basic_renderpass.hpp"
 #include "skybox_renderpass.hpp"
 #include "mesh_renderer.hpp"
+#include "box_collider.hpp"
 
 PortalComponent::PortalComponent()
 {
@@ -69,6 +70,16 @@ void PortalComponent::Initialize()
 {
 	m_transform = GetHost().GetOrAddBehaviour<Transform>();
 
+	BoxCollider* boxCollider = GetHost().GetBehaviour<BoxCollider>();
+
+	if (!boxCollider)
+	{
+		GetHost().AddBehaviour<BoxCollider>();
+		boxCollider->Initialize();
+		boxCollider->SetScale(m_boxColliderScale);
+		boxCollider->SetTrigger(true);
+	}
+
 	m_transform->m_onPositionChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
 	m_transform->m_onRotationChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
 	m_transform->m_onScaleChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
@@ -96,7 +107,7 @@ void PortalComponent::LateUpdate()
 		//Clamp position
 		if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
 		{
-			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + (0.001f  * (float)portalSideNoOffset)));
+			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + (m_offset  * (float)portalSideNoOffset)));
 			transform->SetPosition(newPosition);
 
 			offsetFromPortal = newPosition - m_transform->GetPosition();
@@ -109,7 +120,7 @@ void PortalComponent::LateUpdate()
 				Debug::GetInstance()->AddLog(ELogType::ERROR, "Not normal !");
 		}
 
-		Vector3 newOffsetFromPortal = offsetFromPortal - (portalForward * 0.01f) * ((float)portalSideNoOffset);
+		Vector3 newOffsetFromPortal = offsetFromPortal - (portalForward * m_offset) * ((float)portalSideNoOffset);
 
 		int portalSide = CCMaths::Sign<float>(Vector3::Dot(newOffsetFromPortal, portalForward));
 		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward));
@@ -123,7 +134,7 @@ void PortalComponent::LateUpdate()
 		//Teleport entity if it has crossed from one side of portal to the other
 		if (portalSideDiff && distCheck)
 		{
-			portalTeleporterMatrix.position -= portalForward * (distFromPortal - (0.01f * (float)portalSide));
+			portalTeleporterMatrix.position -= portalForward * (distFromPortal - (m_offset * (float)portalSide));
 
 			Matrix4 worldMatrix = worldMatrixPortals * portalTeleporterMatrix;
 

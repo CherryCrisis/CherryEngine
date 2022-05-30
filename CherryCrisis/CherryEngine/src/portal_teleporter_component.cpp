@@ -78,7 +78,6 @@ void PortalTeleporterComponent::Start()
 	}
 }
 
-
 void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
 {
 	if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)

@@ -40,6 +40,8 @@ namespace CCFunction
 		//bind with memberSharedPtr.get() the shared ptr may be destroy
 		std::shared_ptr<T> m_memberRef;
 
+		std::unique_ptr<T> m_uniqueMember;
+
 		void (T::* m_f)(Args... m_type);
 		T* m_member;
 		std::tuple<Args...> m_args;
@@ -52,6 +54,11 @@ namespace CCFunction
 
 		MemberFunction(void (T::* f)(Args... type), std::shared_ptr<T> c, Args&&... args)
 			: m_f(f), m_member(c.get()), m_memberRef(c), m_args(std::forward<Args>(args)...)
+		{
+		}
+
+		MemberFunction(void (T::* f)(Args... type), std::unique_ptr<T>& c, Args&&... args)
+			: m_f(f), m_member(c.get()), m_uniqueMember(std::move(c)), m_args(std::forward<Args>(args)...)
 		{
 		}
 
@@ -70,6 +77,13 @@ namespace CCFunction
 
 	template<class T, typename... Args>
 	std::unique_ptr<AFunction> BindFunction(void (T::* f)(Args... type), std::shared_ptr<T> c, Args&&... args)
+	{
+		return std::make_unique<MemberFunction<T, Args...>>
+			(f, c, std::forward<Args>(args)...);
+	}
+
+	template<class T, typename... Args>
+	std::unique_ptr<AFunction> BindFunction(void (T::* f)(Args... type), std::unique_ptr<T>& c, Args&&... args)
 	{
 		return std::make_unique<MemberFunction<T, Args...>>
 			(f, c, std::forward<Args>(args)...);
