@@ -16,7 +16,9 @@ std::shared_ptr<ResourceT>* AResourcesContainer::Add(std::shared_ptr<ResourceT>&
 	assert(resourceContainer != nullptr);
 
 	auto func = CCFunction::BindFunctionUnsafe(&AResourcesContainer::Erase, this, (*resource->GetFilesystemPath()));
-	resource->m_OnDeleted.Bind(&CCFunction::AFunction::Invoke, func.release());
+	auto callback = CCCallback::BindCallback(&CCFunction::AFunction::Invoke, func);
+
+	resource->m_OnDeleted.Bind(callback);
 
 	return resourceContainer->Add(resource);
 }

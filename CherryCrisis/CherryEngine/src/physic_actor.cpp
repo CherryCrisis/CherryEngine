@@ -125,8 +125,8 @@ namespace PhysicSystem
 		if (!m_transform)
 			return;
 
-		Vector3 pos = m_transform->GetPosition();
-		Quaternion rot =  m_transform->GetRotation();
+		Vector3 pos = m_transform->GetGlobalPosition();
+		Quaternion rot = m_transform->GetGlobalRotation();
 
 		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.x, rot.y, rot.z, rot.w));
 

@@ -39,17 +39,17 @@ class CCENGINE_API ThreadPool : public Singleton<ThreadPool>
 private:
 	friend class Singleton<ThreadPool>;
 
-	bool								m_stopThreads = false;
+	bool												m_stopThreads = false;
 
-	std::vector<std::thread>			m_threads;
-	std::condition_variable				m_condition;
-	std::mutex							m_multiThreadsQueueLock;
-	std::queue<std::unique_ptr<Task>>	m_multiThreadsTasks;
+	std::vector<std::thread>							m_threads;
+	std::condition_variable								m_condition;
+	std::mutex											m_multiThreadsQueueLock;
+	std::queue<std::unique_ptr<CCFunction::AFunction>>	m_multiThreadsTasks;
 
-	std::mutex							m_mainThreadQueueLock;
-	std::queue<std::unique_ptr<Task>>	m_mainThreadTasks;
+	std::mutex											m_mainThreadQueueLock;
+	std::queue<std::unique_ptr<CCFunction::AFunction>>	m_mainThreadTasks;
 
-	std::thread::id m_mainThreadID;
+	std::thread::id										m_mainThreadID;
 
 public:
 	ThreadPool();

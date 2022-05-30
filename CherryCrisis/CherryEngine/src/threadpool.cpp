@@ -37,13 +37,13 @@ void ThreadPool::CreateTask(std::unique_ptr<CCFunction::AFunction>& task, EChann
 	if (channelTask == EChannelTask::MULTITHREAD)
 	{
 		std::unique_lock<std::mutex> queueLock(m_multiThreadsQueueLock);
-		m_multiThreadsTasks.push(std::make_unique<Task>(task));
+		m_multiThreadsTasks.push(std::move(task));
 		m_condition.notify_one();
 	}
 	else
 	{
 		std::unique_lock<std::mutex> queueLock(m_mainThreadQueueLock);
-		m_mainThreadTasks.push(std::make_unique<Task>(task));
+		m_mainThreadTasks.push(std::move(task));
 	}
 }
 
@@ -53,7 +53,7 @@ void ThreadPool::Update(EChannelTask channelTask)
 	{
 		while (!m_stopThreads)
 		{
-			std::unique_ptr<Task> task;
+			std::unique_ptr<CCFunction::AFunction> task;
 			{
 				std::unique_lock<std::mutex> queueLock(m_multiThreadsQueueLock);
 
@@ -73,7 +73,7 @@ void ThreadPool::Update(EChannelTask channelTask)
 
 			try
 			{
-				task->m_func->Invoke();
+				task->Invoke();
 			}
 			catch (const std::exception& exception)
 			{
@@ -86,7 +86,7 @@ void ThreadPool::Update(EChannelTask channelTask)
 	}
 	else
 	{
-		std::unique_ptr<Task> task;
+		std::unique_ptr<CCFunction::AFunction> task;
 
 		while (!m_mainThreadTasks.empty())
 		{
@@ -100,7 +100,7 @@ void ThreadPool::Update(EChannelTask channelTask)
 				m_mainThreadTasks.pop();
 			}
 
-			task->m_func->Invoke();
+			task->Invoke();
 		}
 		
 	}

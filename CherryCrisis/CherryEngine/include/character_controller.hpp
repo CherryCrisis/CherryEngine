@@ -59,6 +59,8 @@ public:
 	void Update();
 	void FixedUpdate();
 
+	void Freeze();
+
 	void InvalidateTransform();
 
 	void	SetSpeed(const float& moveSpeed) { m_moveSpeed = moveSpeed; }

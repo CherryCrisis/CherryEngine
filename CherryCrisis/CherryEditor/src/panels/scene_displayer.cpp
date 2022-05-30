@@ -58,11 +58,6 @@ SceneDisplayer::SceneDisplayer()
 
     m_camera.m_pipeline = std::make_unique<MixedPipeline>();
     CameraComponent::m_editorCamera = &m_camera;
-
-    if (Scene* scene = SceneManager::GetInstance()->m_currentScene.get())
-    {
-        scene->AddCell("Default")->AddViewer(&m_camera);
-    }
 }
 
 SceneDisplayer::~SceneDisplayer()

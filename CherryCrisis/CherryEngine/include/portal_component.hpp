@@ -14,6 +14,9 @@ class CCENGINE_API PortalComponent : public Behaviour
 protected:
 	void PopulateMetadatas() override;
 
+	const Vector3 m_boxColliderScale { 1.f,1.f,0.025f };
+	const float m_offset { 0.005f };
+
 public:
 	Portal	m_portal;
 	Transform* m_transform = nullptr;

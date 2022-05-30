@@ -19,8 +19,6 @@ Cell::Cell(CCUUID id)
 {
 	m_debug = Debug::GetInstance();
 	m_pxManager = PhysicSystem::PhysicManager::GetInstance();
-
-	m_pxManager->Register(this);
 }
 
 Cell::~Cell()
@@ -37,6 +35,8 @@ Cell::~Cell()
 void Cell::Initialize()
 {
 	m_skyRenderer = new SkyRenderer(this);
+
+	m_pxManager->Register(this);
 }
 
 void Cell::AddEntity(Entity* newEntity)

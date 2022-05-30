@@ -118,7 +118,7 @@ void CharacterController::Update()
 	m_sideMove = InputManager::GetAxis(Keycode::D, Keycode::A);
 
 	if (InputManager::GetKey(Keycode::SPACE) && m_isGrounded)
-		m_physicActor->AddForce({ 0, 10.f, 0 }, PhysicSystem::EForceMode::eIMPULSE);
+		m_physicActor->AddForce({ 0, 1.f, 0 }, PhysicSystem::EForceMode::eIMPULSE);
 
 	m_rotating = CCMaths::Vector3::YAxis * InputManager::GetMouseDelta().x;
 	
@@ -169,6 +169,15 @@ void CharacterController::FixedUpdate()
 	CCMaths::Vector3 neededRAcceleration = CCMaths::Vector3::ClampLength((goalRVelocity - rVel) / TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
 
 	m_physicActor->AddTorque(neededRAcceleration, PhysicSystem::EForceMode::eFORCE);
+}
+
+void CharacterController::Freeze()
+{
+	m_dynamicActor->clearForce(physx::PxForceMode::eACCELERATION);
+	m_dynamicActor->clearForce(physx::PxForceMode::eFORCE);
+	m_dynamicActor->clearForce(physx::PxForceMode::eIMPULSE);
+	m_dynamicActor->clearForce(physx::PxForceMode::eVELOCITY_CHANGE);
+	m_dynamicActor->setLinearVelocity({ 0, 0, 0 });
 }
 
 void CharacterController::InvalidateTransform()
