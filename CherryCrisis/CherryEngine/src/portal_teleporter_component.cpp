@@ -13,7 +13,7 @@
 #include "mixed_rendering_pipeline.hpp"
 #include "shape_renderer.hpp"
 #include "model_renderer.hpp"
-#include "rigidbody.hpp"
+#include "character_controller.hpp"
 #include "physic_actor.hpp"
 
 PortalTeleporterComponent::PortalTeleporterComponent()
@@ -85,19 +85,16 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 	{
 		Entity* entity = destPortal->GetHostPtr();
 
+		if (CharacterController* cc = GetHostPtr()->GetBehaviour<CharacterController>())
+		{
+			cc->Freeze();
+		}
+
 		if (GetHost().m_cell != entity->m_cell)
 			scene->MoveEntityFromCellToCell(GetHost().m_cell, entity->m_cell, GetHostPtr());
 
 		m_entityNode->m_transform->SetPosition(newPos);
 		m_entityNode->m_transform->SetRotation(newRot);
-
-		//m_entityNode->m_transform->SetScale(newScale);
-
-		//if (Rigidbody* rb = entity->GetBehaviour<Rigidbody>())
-		//{
-		//	rb->m_physicActor->SetActorPosition(m_entityNode->m_transform);
-		//	rb->m_physicActor->SetActorRotation(m_entityNode->m_transform);
-		//}
 	}
 }
 
@@ -230,7 +227,7 @@ void PortalTeleporterComponent::ExitPortal()
 {
 	if (m_cloneEntityNode)
 		SetIsVisibleEntityNode(m_cloneEntityNode.get(), false);
-
+	
 	SetSliceParams(m_entityNode.get(), false, {}, {});
 }
 

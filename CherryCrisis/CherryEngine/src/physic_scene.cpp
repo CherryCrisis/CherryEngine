@@ -198,6 +198,9 @@ namespace PhysicSystem
 			if (!actor1 || !actor2)
 				return;
 
+			if (PossessActor(actor2) == -1)
+				return;
+
 			if (cp.status & physx::PxPairFlag::eNOTIFY_TOUCH_FOUND)
 			{
 				actor1->m_owner->OnTriggerEnter(actor2->m_owner);

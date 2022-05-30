@@ -31,7 +31,7 @@ PortalComponent::~PortalComponent()
 {
 	InvalidateLinkedPortal();
 
-	GetHost().m_OnTick.Unbind(&PortalComponent::LateUpdate, this);
+	GetHost().m_OnLateTick.Unbind(&PortalComponent::LateUpdate, this);
 
 	GetHost().m_cell->RemoveViewer(&m_portal);
 	GetHost().m_cell->RemoveRenderer(&m_portal);
@@ -55,7 +55,7 @@ void PortalComponent::PopulateMetadatas()
 void PortalComponent::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&PortalComponent::Initialize, this);
-	GetHost().m_OnTick.Bind(&PortalComponent::LateUpdate, this);
+	GetHost().m_OnLateTick.Bind(&PortalComponent::LateUpdate, this);
 	GetHost().m_OnTriggerEnter.Bind(&PortalComponent::OnTriggerEnter, this);
 	GetHost().m_OnTriggerExit.Bind(&PortalComponent::OnTriggerExit, this);
 
@@ -78,11 +78,6 @@ void PortalComponent::Initialize()
 	UpdatePortalMatrices(m_transform);
 }
 
-float GetDistanceFromPlane(Vector3 normal, Vector3 planePos, Vector3 position)
-{
-	return Vector3::Dot(position - planePos, normal);
-}
-
 void PortalComponent::LateUpdate()
 {
 	for (PortalTeleporterComponent* portalTeleporter : m_portalTeleporters)
@@ -101,7 +96,7 @@ void PortalComponent::LateUpdate()
 		//Clamp position
 		if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
 		{
-			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + (0.01f  * (float)portalSideNoOffset)));
+			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + (0.001f  * (float)portalSideNoOffset)));
 			transform->SetPosition(newPosition);
 
 			offsetFromPortal = newPosition - m_transform->GetPosition();
@@ -130,18 +125,15 @@ void PortalComponent::LateUpdate()
 		{
 			portalTeleporterMatrix.position -= portalForward * (distFromPortal - (0.01f * (float)portalSide));
 
-			Matrix4 worldMatrix = worldMatrixPortals *
-				portalTeleporterMatrix;
+			Matrix4 worldMatrix = worldMatrixPortals * portalTeleporterMatrix;
 
 			CCMaths::Vector3 TRS[3] = {};
 			Matrix4::Decompose(worldMatrix, TRS[0], TRS[1], TRS[2]);
 
-			portalTeleporter->Teleport(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
-
-			Debug::GetInstance()->AddLog(ELogType::INFO, std::format("Teleported to cell : {} | MatrixOffset = ({}; {}; {}) | TRS[0] = ({}; {}; {})", m_linkedPortal->GetHost().m_cell->GetName(), portalTeleporterMatrix.position.x, portalTeleporterMatrix.position.y, portalTeleporterMatrix.position.z, TRS[0].x, TRS[0].y, TRS[0].z).c_str());
-
 			portalTeleporter->ExitPortal();
 			m_portalTeleporters.erase(portalTeleporter);
+
+			portalTeleporter->Teleport(m_linkedPortal, TRS[0], TRS[1], TRS[2]);
 
 			m_linkedPortal->OnEntityEnter(portalTeleporter);
 
@@ -246,9 +238,7 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	if (m_portalTeleporters.end() != m_portalTeleporters.find(portalTeleporter))
 		return;
 
-	//Debug::GetInstance()->AddLog(ELogType::INFO, std::format("portalTeleporter enter").c_str());
-
-	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix/* * Matrix4::RotateY(CCMaths::PI)*/;
+	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix;
 	Matrix4 worldMatrix = worldMatrixLinkedPortal *
 		m_portal.m_modelMatrix.Inverse() *
 		portalTeleporter->m_entityNode->m_transform->GetWorldMatrix();
@@ -266,7 +256,9 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 void PortalComponent::OnTriggerEnter(Entity* other)
 {
 	if (PortalTeleporterComponent* portalTeleporter = other->GetBehaviour<PortalTeleporterComponent>())
+	{
 		OnEntityEnter(portalTeleporter);
+	}
 }
 
 void PortalComponent::OnTriggerExit(Entity* other)
@@ -276,7 +268,6 @@ void PortalComponent::OnTriggerExit(Entity* other)
 		auto it = m_portalTeleporters.find(portalTeleporter);
 		if (it != m_portalTeleporters.end())
 		{
-			//Debug::GetInstance()->AddLog(ELogType::INFO, std::format("portalTeleporter exit").c_str());
 			portalTeleporter->ExitPortal();
 			m_portalTeleporters.erase(it);
 		}

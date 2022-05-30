@@ -30,7 +30,6 @@ namespace PhysicSystem
 
 		std::vector<PhysicActor*> m_actors;
 
-		physx::PxController*	m_playerPxController = nullptr;
 		physx::PxScene*			m_pxScene = nullptr;
 
 	public:
