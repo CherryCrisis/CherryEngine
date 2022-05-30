@@ -85,7 +85,7 @@ void HierarchyDisplayer::Render()
             ContextCallback();
         
         // fps displayer
-        if (0)
+        if (1)
         {
             static std::vector<float> m_fpsHistory;
             static int range = 100;

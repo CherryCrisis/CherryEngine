@@ -46,6 +46,7 @@ void CharacterController::PopulateMetadatas()
 	m_metadatas.SetProperty("Spring Dampling", &springDampling);
 	m_metadatas.SetProperty("String Strength", &springStrength);
 	m_metadatas.SetProperty("Rotation Sensivity", &sensitivity);
+	m_metadatas.SetProperty("Jump Force", &jumpForce);
 }
 
 void CharacterController::BindToSignals()
@@ -118,10 +119,10 @@ void CharacterController::Update()
 	m_sideMove = InputManager::GetAxis(Keycode::D, Keycode::A);
 
 	if (InputManager::GetKey(Keycode::SPACE) && m_isGrounded)
-		m_physicActor->AddForce({ 0, 10.f, 0 }, PhysicSystem::EForceMode::eIMPULSE);
+		m_physicActor->AddForce({ 0, m_jumpForce, 0 }, PhysicSystem::EForceMode::eIMPULSE);
 
 	m_rotating = CCMaths::Vector3::YAxis * InputManager::GetMouseDelta().x;
-	
+	Debug::GetInstance()->AddLog(ELogType::INFO, std::to_string(InputManager::GetMouseDelta().x).c_str());
 	InputManager::PopContext();
 }
 

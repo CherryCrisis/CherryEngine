@@ -48,7 +48,7 @@ void SkyRenderer::PopulateMetadatas()
 void SkyRenderer::SetTextureFromPath(std::string texturePath)
 {
 	if (!texturePath.empty())
-		SetTexture(ResourceManager::GetInstance()->AddResourceRef<Texture>(texturePath.c_str()));
+		SetTexture(ResourceManager::GetInstance()->AddResource<Texture>(texturePath.c_str(),true));
 }
 
 std::string SkyRenderer::GetTexturePath()

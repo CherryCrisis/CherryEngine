@@ -38,6 +38,8 @@ int GLAD_GL_VERSION_4_2 = 0;
 int GLAD_GL_VERSION_4_3 = 0;
 int GLAD_GL_VERSION_4_4 = 0;
 int GLAD_GL_VERSION_4_5 = 0;
+int GLAD_GL_ARB_texture_compression_bptc = 0;
+int GLAD_GL_EXT_texture_compression_s3tc = 0;
 int GLAD_GL_KHR_debug = 0;
 int GLAD_GL_NV_command_list = 0;
 
@@ -6339,6 +6341,8 @@ static int glad_gl_find_extensions_gl( int version) {
     char **exts_i = NULL;
     if (!glad_gl_get_extensions(version, &exts, &num_exts_i, &exts_i)) return 0;
 
+    GLAD_GL_ARB_texture_compression_bptc = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_ARB_texture_compression_bptc");
+    GLAD_GL_EXT_texture_compression_s3tc = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_EXT_texture_compression_s3tc");
     GLAD_GL_KHR_debug = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_KHR_debug");
     GLAD_GL_NV_command_list = glad_gl_has_extension(version, exts, num_exts_i, exts_i, "GL_NV_command_list");
 

@@ -34,6 +34,7 @@ private:
 	float	m_forwardMove = 0.f;
 	float	m_sideMove = 0.f;
 	float	m_sensitivity = 1.f;
+	float	m_jumpForce = 1.f;
 
 	CCMaths::Vector3	m_rotating = 0.f;
 
@@ -64,6 +65,9 @@ public:
 	void	SetSpeed(const float& moveSpeed) { m_moveSpeed = moveSpeed; }
 	float	GetSpeed() { return m_moveSpeed; }
 	
+	void	SetJumpForce(const float& jumpForce) { m_jumpForce = jumpForce; }
+	float	GetJumpForce() { return m_jumpForce; }
+
 	void	SetSensitivity(const float& sensitivity) { m_sensitivity = sensitivity; }
 	float	GetSensitivity() { return m_sensitivity; }
 
@@ -77,4 +81,5 @@ public:
 	floatProperty	sensitivity		{ this, &CharacterController::SetSensitivity,		&CharacterController::GetSensitivity };
 	floatProperty	springStrength	{ this, &CharacterController::SetSpringStrength,	&CharacterController::GetSpringStrength };
 	floatProperty	springDampling	{ this, &CharacterController::SetSpringDampling,	&CharacterController::GetSpringDampling };
+	floatProperty	jumpForce    	{ this, &CharacterController::SetJumpForce,	        &CharacterController::GetJumpForce};
 };
