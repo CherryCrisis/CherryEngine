@@ -41,8 +41,8 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-	//ResourceManager::Kill();
 	PhysicSystem::PhysicManager::Kill();
+	ResourceManager::Kill();
 	InputManager::Kill();
  	SoundManager::Kill();
 	TimeManager::Kill();

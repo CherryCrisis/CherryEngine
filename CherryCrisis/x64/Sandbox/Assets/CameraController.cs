@@ -5,6 +5,8 @@ namespace CCScripting
 {
 	public class CameraController : Behaviour
 	{
+		Matrix4 matrix = new Matrix4();
+
 		Transform transform;
 		Vector3 maxPosition = new Vector3();
 		int step = 0;
@@ -29,7 +31,7 @@ namespace CCScripting
 				return;
 			
 			Vector2 deltaMouse = InputManager.GetMouseDelta();
-			float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;  
+			float sensitityY = Time.GetDeltaTime() * deltaMouse.y;  
 
 			float dt = Time.GetDeltaTime();
 
@@ -50,9 +52,7 @@ namespace CCScripting
 			float z = sign * transform.Forward().z * speed * dt;
 			transform.SetPosition(transform.position +  new Vector3(x,y,z));
 
-			Vector2 deltaMouse = InputManager.GetMouseDelta();
-			float sensitityY = Time.GetInstance().GetDeltaTime() * deltaMouse.y;
-			float sensitityX = Time.GetInstance().GetDeltaTime() * deltaMouse.x;
+			float sensitityX = Time.GetDeltaTime() * deltaMouse.x;
 
 			double angleX = transform.eulerAngles.x + sensitityY * speedSensivity * dt;
 			angleX = Math.Min(Math.Max(angleX, -Math.PI * 0.4f), Math.PI * 0.4f);
@@ -61,6 +61,8 @@ namespace CCScripting
 
 			double angleY = transform.eulerAngles.y + sensitityX * speedSensivity * dt;
 			transform.eulerAngles = new Vector3(transform.eulerAngles.x, (float)angleY, transform.eulerAngles.z);
+
+			transform.eulerAngles = Quaternion.Identity * transform.eulerAngles;
 		}
 	}
 }

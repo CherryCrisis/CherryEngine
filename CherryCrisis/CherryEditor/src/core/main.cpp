@@ -108,113 +108,115 @@ int main(int argc, char** argv)
     callEx("open", "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv", solutionPath.c_str());
 #endif
 
-    Engine engine{};
     {
-        EditorManager editor{ projectPath };
-
-        glfwSetWindowUserPointer(window, &editor);
-        glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
-            {
-                InputManager::KeyCallback(w, k, s, a, m);
-            });
-        glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int i)
-            {
-                static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->FocusCallback(w, i);
-            });
-        glfwSetScrollCallback(window, [](GLFWwindow* w, double x, double y)
-            {
-                InputManager::MouseWheelCallback(w, x, y);
-            });
-        glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y)
-            {
-                InputManager::MousePosCallback(w, x, y);
-            });
-        glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int k, int a, int m)
-            {
-                InputManager::MouseClickCallback(w, k, a, m);
-            });
-        ImGui_ImplGlfw_InitForOpenGL(window, true);
-
-        glfwSetDropCallback(window, drop_callback);
-
-        InputManager::GetInstance()->HideCursor = HideCursor;
-        InputManager::GetInstance()->ShowCursor = ShowCursor;
-        Engine::window_handle = window;
-
-        Serializer::UnserializeInputs();
-
-        editor.LinkEngine(&engine);
-        engine.window_handle = window;
-
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
-        // TODO: Change to pre-compiled image
-        stbi_set_flip_vertically_on_load(false);
-        GLFWimage icon[1];
-        icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
-        glfwSetWindowIcon(window, 1, icon);
-        stbi_image_free(icon[0].pixels);
-        //-----------------------------------
-        
-        ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
-
-        int isSceneFocused = false;
-        glfwSwapInterval(0);
-
-        SceneManager::GetInstance()->m_lateHierarchyRefresh.Bind(&EditorManager::RefreshHierarchy, &editor);
-        SceneManager::GetInstance()->m_sceneChanged.Bind(&EntitySelector::ClearEx, &editor.m_entitySelector);
-        SceneManager::GetInstance()->m_sceneChanged.Bind(&EditorManager::InvalidateCellDisplayer, &editor);
-
-        while (glfwWindowShouldClose(window) == false)
+        Engine engine{};
         {
-            InputManager::UpdateKeys();
-            TimeManager::GetInstance()->Update((float)glfwGetTime());
-            glfwPollEvents();
+            EditorManager editor{ projectPath };
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(0.f, 0.f, 0.f, 1.f);
+            glfwSetWindowUserPointer(window, &editor);
+            glfwSetKeyCallback(window, [](GLFWwindow* w, int k, int s, int a, int m)
+                {
+                    InputManager::KeyCallback(w, k, s, a, m);
+                });
+            glfwSetWindowFocusCallback(window, [](GLFWwindow* w, int i)
+                {
+                    static_cast<EditorManager*>(glfwGetWindowUserPointer(w))->FocusCallback(w, i);
+                });
+            glfwSetScrollCallback(window, [](GLFWwindow* w, double x, double y)
+                {
+                    InputManager::MouseWheelCallback(w, x, y);
+                });
+            glfwSetCursorPosCallback(window, [](GLFWwindow* w, double x, double y)
+                {
+                    InputManager::MousePosCallback(w, x, y);
+                });
+            glfwSetMouseButtonCallback(window, [](GLFWwindow* w, int k, int a, int m)
+                {
+                    InputManager::MouseClickCallback(w, k, a, m);
+                });
+            ImGui_ImplGlfw_InitForOpenGL(window, true);
 
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-            ImGuizmo::BeginFrame();
+            glfwSetDropCallback(window, drop_callback);
 
-            editor.DisplayEditorUI(window);
+            InputManager::GetInstance()->HideCursor = HideCursor;
+            InputManager::GetInstance()->ShowCursor = ShowCursor;
+            Engine::window_handle = window;
 
-            engine.TickEngine();
+            Serializer::UnserializeInputs();
 
-            if (Engine::isPlaying && !Engine::isPaused)
+            editor.LinkEngine(&engine);
+            engine.window_handle = window;
+
+            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
+            // TODO: Change to pre-compiled image
+            stbi_set_flip_vertically_on_load(false);
+            GLFWimage icon[1];
+            icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);
+            glfwSetWindowIcon(window, 1, icon);
+            stbi_image_free(icon[0].pixels);
+            //-----------------------------------
+        
+            ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
+
+            int isSceneFocused = false;
+            glfwSwapInterval(0);
+
+            SceneManager::GetInstance()->m_lateHierarchyRefresh.Bind(&EditorManager::RefreshHierarchy, &editor);
+            SceneManager::GetInstance()->m_sceneChanged.Bind(&EntitySelector::ClearEx, &editor.m_entitySelector);
+            SceneManager::GetInstance()->m_sceneChanged.Bind(&EditorManager::InvalidateCellDisplayer, &editor);
+
+            while (glfwWindowShouldClose(window) == false)
             {
-                InputManager::PushContext("User Context");
-                engine.Tick();
-                InputManager::PopContext();
+                InputManager::UpdateKeys();
+                TimeManager::GetInstance()->Update((float)glfwGetTime());
+                glfwPollEvents();
+
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                glClearColor(0.f, 0.f, 0.f, 1.f);
+
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+                ImGuizmo::BeginFrame();
+
+                editor.DisplayEditorUI(window);
+
+                engine.TickEngine();
+
+                if (Engine::isPlaying && !Engine::isPaused)
+                {
+                    InputManager::PushContext("User Context");
+                    engine.Tick();
+                    InputManager::PopContext();
+                }
+
+                glfwSwapBuffers(window);
+
+                if (!isSceneFocused)
+                {
+                    ImGui::SetWindowFocus("Scene");
+                    isSceneFocused = true;
+                }
+
+                editor.CheckForHierarchyRefresh();
             }
+            //Save editor file
+            Serializer::SerializeEditor();
 
-            glfwSwapBuffers(window);
+            io.Fonts->ClearFonts();
 
-            if (!isSceneFocused)
-            {
-                ImGui::SetWindowFocus("Scene");
-                isSceneFocused = true;
-            }
+            // Cleanup
+            ImGui_ImplOpenGL3_Shutdown();
+            ImGui_ImplGlfw_Shutdown();
+            ImGui::DestroyContext();
 
-            editor.CheckForHierarchyRefresh();
+
         }
-        //Save editor file
-        Serializer::SerializeEditor();
-
-        io.Fonts->ClearFonts();
-
-        // Cleanup
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-
-
+        // need to put the glfwDestroyWindow after so that opengl context is still on
+        SceneManager::GetInstance()->m_currentScene.reset();
     }
-    // need to put the glfwDestroyWindow after so that opengl context is still on
-    SceneManager::GetInstance()->m_currentScene.reset();
-    ResourceManager::Kill();
+
     glfwDestroyWindow(window);
     glfwTerminate();
 

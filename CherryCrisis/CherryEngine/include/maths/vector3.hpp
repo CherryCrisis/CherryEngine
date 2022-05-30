@@ -20,11 +20,11 @@ namespace CCMaths
 							
 		//! Construct the Vector3 as the \b Zero Vector3
 		Vector3()
-			:x(0.f), y(0.f), z(0.f) {}
+			: x(0.f), y(0.f), z(0.f) {}
 
 		//! Construct the Vector3 with the three components equal to the given value
 		Vector3(const float value)
-			:x(value), y(value), z(value) {}
+			: x(value), y(value), z(value) {}
 
 		//! Construct the Vector3 with the three given members
 		Vector3(const float x, const float y, const float z)

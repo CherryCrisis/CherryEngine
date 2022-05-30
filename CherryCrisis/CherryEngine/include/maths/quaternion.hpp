@@ -21,7 +21,7 @@ namespace CCMaths
 			Vector3 xyz;		//!< Quaternion complex components as a Vector3 
 		};
 
-		CCENGINE_API const static Quaternion Identity;		//!< { w = 1, x = 0, y = 0, z = 0 }
+		CCENGINE_API static const Quaternion Identity;		//!< { w = 1, x = 0, y = 0, z = 0 }
 
 		//! Construct the Quaternion as the \b Identity Quaternion
 		Quaternion()

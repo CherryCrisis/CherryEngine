@@ -631,6 +631,309 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Vector4")]
   public static extern void delete_Vector4(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_data_set")]
+  public static extern void Matrix4_data_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_data_get")]
+  public static extern global::System.IntPtr Matrix4_data_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_row_set")]
+  public static extern void Matrix4_row_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_row_get")]
+  public static extern global::System.IntPtr Matrix4_row_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_right_set")]
+  public static extern void Matrix4_right_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_right_get")]
+  public static extern global::System.IntPtr Matrix4_right_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_m4_set")]
+  public static extern void Matrix4_m4_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_m4_get")]
+  public static extern float Matrix4_m4_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_up_set")]
+  public static extern void Matrix4_up_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_up_get")]
+  public static extern global::System.IntPtr Matrix4_up_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_m8_set")]
+  public static extern void Matrix4_m8_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_m8_get")]
+  public static extern float Matrix4_m8_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_back_set")]
+  public static extern void Matrix4_back_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_back_get")]
+  public static extern global::System.IntPtr Matrix4_back_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_m12_set")]
+  public static extern void Matrix4_m12_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_m12_get")]
+  public static extern float Matrix4_m12_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_position_set")]
+  public static extern void Matrix4_position_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_position_get")]
+  public static extern global::System.IntPtr Matrix4_position_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_uniformScale_set")]
+  public static extern void Matrix4_uniformScale_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_uniformScale_get")]
+  public static extern float Matrix4_uniformScale_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Identity_get")]
+  public static extern global::System.IntPtr Matrix4_Identity_get();
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_operator_multiply__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_operator_multiply__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_operator_multiply__SWIG_1")]
+  public static extern global::System.IntPtr Matrix4_operator_multiply__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_operator_multiply__SWIG_2")]
+  public static extern global::System.IntPtr Matrix4_operator_multiply__SWIG_2(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Transpose__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_Transpose__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Inverse__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_Inverse__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Translate")]
+  public static extern global::System.IntPtr Matrix4_Translate(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Scale__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_Scale__SWIG_0(float jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Scale__SWIG_1")]
+  public static extern global::System.IntPtr Matrix4_Scale__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_NormalizeScale")]
+  public static extern void Matrix4_NormalizeScale(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_NormalizedScale")]
+  public static extern global::System.IntPtr Matrix4_NormalizedScale(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateXYZ")]
+  public static extern global::System.IntPtr Matrix4_RotateXYZ(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateZYX")]
+  public static extern global::System.IntPtr Matrix4_RotateZYX(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateZXY")]
+  public static extern global::System.IntPtr Matrix4_RotateZXY(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateYXZ")]
+  public static extern global::System.IntPtr Matrix4_RotateYXZ(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateXZY")]
+  public static extern global::System.IntPtr Matrix4_RotateXZY(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateYZX")]
+  public static extern global::System.IntPtr Matrix4_RotateYZX(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateX__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_RotateX__SWIG_0(float jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateY__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_RotateY__SWIG_0(float jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateZ__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_RotateZ__SWIG_0(float jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateX__SWIG_1")]
+  public static extern global::System.IntPtr Matrix4_RotateX__SWIG_1(float jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateY__SWIG_1")]
+  public static extern global::System.IntPtr Matrix4_RotateY__SWIG_1(float jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_RotateZ__SWIG_1")]
+  public static extern global::System.IntPtr Matrix4_RotateZ__SWIG_1(float jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Decompose")]
+  public static extern void Matrix4_Decompose(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3, global::System.Runtime.InteropServices.HandleRef jarg4);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_GetRotationMatrix__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_GetRotationMatrix__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_GetTranslationMatrix__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_GetTranslationMatrix__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_GetScaleMatrix__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_GetScaleMatrix__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Frustum")]
+  public static extern global::System.IntPtr Matrix4_Frustum(float jarg1, float jarg2, float jarg3, float jarg4, float jarg5, float jarg6);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Perspective")]
+  public static extern global::System.IntPtr Matrix4_Perspective(float jarg1, float jarg2, float jarg3, float jarg4);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_Orthographic")]
+  public static extern global::System.IntPtr Matrix4_Orthographic(float jarg1, float jarg2, float jarg3, float jarg4, float jarg5, float jarg6);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_ObliqueProjection")]
+  public static extern global::System.IntPtr Matrix4_ObliqueProjection(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_LookAt__SWIG_0")]
+  public static extern global::System.IntPtr Matrix4_LookAt__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_LookAt__SWIG_1")]
+  public static extern global::System.IntPtr Matrix4_LookAt__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Matrix4_LookAt__SWIG_2")]
+  public static extern global::System.IntPtr Matrix4_LookAt__SWIG_2(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Matrix4")]
+  public static extern global::System.IntPtr new_Matrix4();
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Matrix4")]
+  public static extern void delete_Matrix4(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_x_set")]
+  public static extern void Quaternion_x_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_x_get")]
+  public static extern float Quaternion_x_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_y_set")]
+  public static extern void Quaternion_y_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_y_get")]
+  public static extern float Quaternion_y_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_z_set")]
+  public static extern void Quaternion_z_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_z_get")]
+  public static extern float Quaternion_z_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_w_set")]
+  public static extern void Quaternion_w_set(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_w_get")]
+  public static extern float Quaternion_w_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_data_set")]
+  public static extern void Quaternion_data_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_data_get")]
+  public static extern global::System.IntPtr Quaternion_data_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_xyz_set")]
+  public static extern void Quaternion_xyz_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_xyz_get")]
+  public static extern global::System.IntPtr Quaternion_xyz_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Identity_get")]
+  public static extern global::System.IntPtr Quaternion_Identity_get();
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Quaternion__SWIG_0")]
+  public static extern global::System.IntPtr new_Quaternion__SWIG_0();
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Quaternion__SWIG_1")]
+  public static extern global::System.IntPtr new_Quaternion__SWIG_1(float jarg1, float jarg2, float jarg3, float jarg4);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Quaternion__SWIG_2")]
+  public static extern global::System.IntPtr new_Quaternion__SWIG_2(float jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Quaternion__SWIG_3")]
+  public static extern global::System.IntPtr new_Quaternion__SWIG_3(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_add")]
+  public static extern global::System.IntPtr Quaternion_operator_add(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_substract__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_operator_substract__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_substract__SWIG_1")]
+  public static extern global::System.IntPtr Quaternion_operator_substract__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_multiply__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_operator_multiply__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_multiply__SWIG_1")]
+  public static extern global::System.IntPtr Quaternion_operator_multiply__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_multiply__SWIG_2")]
+  public static extern global::System.IntPtr Quaternion_operator_multiply__SWIG_2(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_divide__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_operator_divide__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_operator_divide__SWIG_1")]
+  public static extern global::System.IntPtr Quaternion_operator_divide__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Dot__SWIG_0")]
+  public static extern float Quaternion_Dot__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_SquareNorm")]
+  public static extern float Quaternion_SquareNorm(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Norm")]
+  public static extern float Quaternion_Norm(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Normalize__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_Normalize__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Normalized__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_Normalized__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Conjugate__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_Conjugate__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Invert__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_Invert__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_ToEuler__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_ToEuler__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_ToMatrix__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_ToMatrix__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_ToAxisAngle__SWIG_0")]
+  public static extern void Quaternion_ToAxisAngle__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_FromEuler__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_FromEuler__SWIG_0(float jarg1, float jarg2, float jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_FromEuler__SWIG_1")]
+  public static extern global::System.IntPtr Quaternion_FromEuler__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_FromAxisAngle")]
+  public static extern global::System.IntPtr Quaternion_FromAxisAngle(global::System.Runtime.InteropServices.HandleRef jarg1, float jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_FromMatrix")]
+  public static extern global::System.IntPtr Quaternion_FromMatrix(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_FromToRotation")]
+  public static extern global::System.IntPtr Quaternion_FromToRotation(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_RotateVector3__SWIG_0")]
+  public static extern global::System.IntPtr Quaternion_RotateVector3__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_Lerp")]
+  public static extern global::System.IntPtr Quaternion_Lerp(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, float jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_NLerp")]
+  public static extern global::System.IntPtr Quaternion_NLerp(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, float jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Quaternion_SLerp")]
+  public static extern global::System.IntPtr Quaternion_SLerp(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, float jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Quaternion")]
+  public static extern void delete_Quaternion(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_TAU_get")]
   public static extern float TAU_get();
 
@@ -682,20 +985,38 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetPosition")]
   public static extern void Transform_SetPosition(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetGlobalPosition")]
+  public static extern void Transform_SetGlobalPosition(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetPosition")]
   public static extern global::System.IntPtr Transform_GetPosition(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetGlobalPosition")]
+  public static extern global::System.IntPtr Transform_GetGlobalPosition(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetRotation")]
   public static extern void Transform_SetRotation(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetGlobalRotation")]
+  public static extern void Transform_SetGlobalRotation(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetRotation")]
   public static extern global::System.IntPtr Transform_GetRotation(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetGlobalRotation")]
+  public static extern global::System.IntPtr Transform_GetGlobalRotation(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetScale")]
   public static extern void Transform_SetScale(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetGlobalScale")]
+  public static extern void Transform_SetGlobalScale(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetScale")]
   public static extern global::System.IntPtr Transform_GetScale(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetGlobalScale")]
+  public static extern global::System.IntPtr Transform_GetGlobalScale(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_Up")]
   public static extern global::System.IntPtr Transform_Up(global::System.Runtime.InteropServices.HandleRef jarg1);
