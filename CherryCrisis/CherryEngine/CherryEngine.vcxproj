@@ -456,6 +456,7 @@
     <None Include="..\x64\Sandbox\Assets\Shaders\uiShader.vert" />
     <None Include="interface\box_collider.i" />
     <None Include="interface\capsule_collider.i" />
+    <None Include="interface\cell.i" />
     <None Include="interface\collider.i" />
     <None Include="interface\matrix4.i" />
     <None Include="interface\physic_actor.i" />

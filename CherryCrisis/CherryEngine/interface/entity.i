@@ -6,6 +6,7 @@
 %include std_string.i
 %include std_vector.i
 
+%include cell.i
 %include transform_comp.i
 %include camera_comp.i
 %include scripted_behaviour.i
@@ -43,6 +44,8 @@ private:
 	std::vector<Behaviour*> m_behaviours;
 
 public:
+	Cell* m_cell = nullptr;
+
 	virtual ~Entity();
 
 	template <class CompT>

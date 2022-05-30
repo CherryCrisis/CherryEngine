@@ -63,6 +63,8 @@ namespace CCScripting
 			transform.eulerAngles = new Vector3(transform.eulerAngles.x, (float)angleY, transform.eulerAngles.z);
 
 			transform.eulerAngles = Quaternion.Identity * transform.eulerAngles;
+
+			Debug.GetInstance().Info(GetHost().m_cell);
 		}
 	}
 }

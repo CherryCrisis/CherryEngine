@@ -44,11 +44,13 @@
     <Compile Include="Behaviour.cs" />
     <Compile Include="CameraComponent.cs" />
     <Compile Include="CameraComponentVector.cs" />
+    <Compile Include="Cell.cs" />
     <Compile Include="CherryEngine.cs" />
     <Compile Include="CherryEnginePINVOKE.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="ELogType.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="EntityVector.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Keycode.cs" />
     <Compile Include="Matrix4.cs" />

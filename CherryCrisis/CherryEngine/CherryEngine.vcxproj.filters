@@ -1558,6 +1558,9 @@
     <None Include="interface\matrix4.i">
       <Filter>Fichiers sources\Interface\Maths</Filter>
     </None>
+    <None Include="interface\cell.i">
+      <Filter>Fichiers sources\Interface</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">

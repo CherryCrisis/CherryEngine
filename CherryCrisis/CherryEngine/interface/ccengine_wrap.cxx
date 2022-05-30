@@ -406,6 +406,126 @@ namespace Swig {
 #include <stdexcept>
 
 
+	#include "behaviour.hpp"
+	#include "object.hpp"
+
+SWIGINTERN std::vector< Entity * > *new_std_vector_Sl_Entity_Sm__Sg___SWIG_2(int capacity){
+        std::vector< Entity * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< Entity * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN Entity *std_vector_Sl_Entity_Sm__Sg__getitemcopy(std::vector< Entity * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< Entity * >::value_type const &std_vector_Sl_Entity_Sm__Sg__getitem(std::vector< Entity * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__setitem(std::vector< Entity * > *self,int index,Entity *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__AddRange(std::vector< Entity * > *self,std::vector< Entity * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< Entity * > *std_vector_Sl_Entity_Sm__Sg__GetRange(std::vector< Entity * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< Entity * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__Insert(std::vector< Entity * > *self,int index,Entity *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__InsertRange(std::vector< Entity * > *self,int index,std::vector< Entity * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__RemoveAt(std::vector< Entity * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__RemoveRange(std::vector< Entity * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< Entity * > *std_vector_Sl_Entity_Sm__Sg__Repeat(Entity *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< Entity * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__Reverse__SWIG_0(std::vector< Entity * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__Reverse__SWIG_1(std::vector< Entity * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_Entity_Sm__Sg__SetRange(std::vector< Entity * > *self,int index,std::vector< Entity * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_Entity_Sm__Sg__Contains(std::vector< Entity * > *self,Entity *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_Entity_Sm__Sg__IndexOf(std::vector< Entity * > *self,Entity *const &value){
+        int index = -1;
+        std::vector< Entity * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_Entity_Sm__Sg__LastIndexOf(std::vector< Entity * > *self,Entity *const &value){
+        int index = -1;
+        std::vector< Entity * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_Entity_Sm__Sg__Remove(std::vector< Entity * > *self,Entity *const &value){
+        std::vector< Entity * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+
 	#include "transform.hpp"
 	#include "behaviour.hpp"
 	#include "maths.hpp"
@@ -1119,6 +1239,470 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Behaviour_director_connect(void *obj
   Behaviour *obj = (Behaviour *)objarg;
   SwigDirector_Behaviour *director = static_cast<SwigDirector_Behaviour *>(obj);
   director->swig_connect_director();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_Clear(void * jarg1) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_Add(void * jarg1, void * jarg2) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  Entity **arg2 = 0 ;
+  Entity *temp2 = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  temp2 = (Entity *)jarg2;
+  arg2 = (Entity **)&temp2; 
+  (arg1)->push_back((Entity *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_EntityVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  std::vector< Entity * >::size_type result;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  result = ((std::vector< Entity * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_EntityVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  std::vector< Entity * >::size_type result;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  result = ((std::vector< Entity * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  std::vector< Entity * >::size_type arg2 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (std::vector< Entity * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_EntityVector__SWIG_0() {
+  void * jresult ;
+  std::vector< Entity * > *result = 0 ;
+  
+  result = (std::vector< Entity * > *)new std::vector< Entity * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_EntityVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< Entity * > *arg1 = 0 ;
+  std::vector< Entity * > *result = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Entity * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< Entity * > *)new std::vector< Entity * >((std::vector< Entity * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_EntityVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< Entity * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< Entity * > *)new_std_vector_Sl_Entity_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_EntityVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  Entity *result = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (Entity *)std_vector_Sl_Entity_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_EntityVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  std::vector< Entity * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< Entity * >::value_type *) &std_vector_Sl_Entity_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  Entity **arg3 = 0 ;
+  Entity *temp3 = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (Entity *)jarg3;
+  arg3 = (Entity **)&temp3; 
+  try {
+    std_vector_Sl_Entity_Sm__Sg__setitem(arg1,arg2,(Entity *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  std::vector< Entity * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (std::vector< Entity * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Entity * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_Entity_Sm__Sg__AddRange(arg1,(std::vector< Entity * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_EntityVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< Entity * > *result = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< Entity * > *)std_vector_Sl_Entity_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  Entity **arg3 = 0 ;
+  Entity *temp3 = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (Entity *)jarg3;
+  arg3 = (Entity **)&temp3; 
+  try {
+    std_vector_Sl_Entity_Sm__Sg__Insert(arg1,arg2,(Entity *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  std::vector< Entity * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< Entity * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Entity * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_Entity_Sm__Sg__InsertRange(arg1,arg2,(std::vector< Entity * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_Entity_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_Entity_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_EntityVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  Entity **arg1 = 0 ;
+  int arg2 ;
+  Entity *temp1 = 0 ;
+  std::vector< Entity * > *result = 0 ;
+  
+  temp1 = (Entity *)jarg1;
+  arg1 = (Entity **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< Entity * > *)std_vector_Sl_Entity_Sm__Sg__Repeat((Entity *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  std_vector_Sl_Entity_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_Entity_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_EntityVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  int arg2 ;
+  std::vector< Entity * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< Entity * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Entity * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_Entity_Sm__Sg__SetRange(arg1,arg2,(std::vector< Entity * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_EntityVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  Entity **arg2 = 0 ;
+  Entity *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  temp2 = (Entity *)jarg2;
+  arg2 = (Entity **)&temp2; 
+  result = (bool)std_vector_Sl_Entity_Sm__Sg__Contains(arg1,(Entity *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_EntityVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  Entity **arg2 = 0 ;
+  Entity *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  temp2 = (Entity *)jarg2;
+  arg2 = (Entity **)&temp2; 
+  result = (int)std_vector_Sl_Entity_Sm__Sg__IndexOf(arg1,(Entity *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_EntityVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  Entity **arg2 = 0 ;
+  Entity *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  temp2 = (Entity *)jarg2;
+  arg2 = (Entity **)&temp2; 
+  result = (int)std_vector_Sl_Entity_Sm__Sg__LastIndexOf(arg1,(Entity *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_EntityVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  Entity **arg2 = 0 ;
+  Entity *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  temp2 = (Entity *)jarg2;
+  arg2 = (Entity **)&temp2; 
+  result = (bool)std_vector_Sl_Entity_Sm__Sg__Remove(arg1,(Entity *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_EntityVector(void * jarg1) {
+  std::vector< Entity * > *arg1 = (std::vector< Entity * > *) 0 ;
+  
+  arg1 = (std::vector< Entity * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Cell_Initialize(void * jarg1) {
+  Cell *arg1 = (Cell *) 0 ;
+  
+  arg1 = (Cell *)jarg1; 
+  (arg1)->Initialize();
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Cell_GetEntities(void * jarg1) {
+  void * jresult ;
+  Cell *arg1 = (Cell *) 0 ;
+  std::vector< Entity * > *result = 0 ;
+  
+  arg1 = (Cell *)jarg1; 
+  result = (std::vector< Entity * > *) &(arg1)->GetEntities();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Cell_SetName(void * jarg1, char * jarg2) {
+  Cell *arg1 = (Cell *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  arg1 = (Cell *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  (arg1)->SetName((std::string const &)*arg2);
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_Cell_GetName(void * jarg1) {
+  char * jresult ;
+  Cell *arg1 = (Cell *) 0 ;
+  std::string *result = 0 ;
+  
+  arg1 = (Cell *)jarg1; 
+  result = (std::string *) &(arg1)->GetName();
+  jresult = SWIG_csharp_string_callback(result->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Cell(void * jarg1) {
+  Cell *arg1 = (Cell *) 0 ;
+  
+  arg1 = (Cell *)jarg1; 
+  delete arg1;
 }
 
 
@@ -5662,6 +6246,28 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ScriptedBehaviourVector(void 
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_set(void * jarg1, void * jarg2) {
+  Entity *arg1 = (Entity *) 0 ;
+  Cell *arg2 = (Cell *) 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  arg2 = (Cell *)jarg2; 
+  if (arg1) (arg1)->m_cell = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_get(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  Cell *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (Cell *) ((arg1)->m_cell);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Entity(void * jarg1) {
   Entity *arg1 = (Entity *) 0 ;
   
@@ -5799,6 +6405,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfTransform(void * ja
 
 
 SWIGEXPORT Object * SWIGSTDCALL CSharp_CCEngine_Behaviour_SWIGUpcast(Behaviour *jarg1) {
+    return (Object *)jarg1;
+}
+
+SWIGEXPORT Object * SWIGSTDCALL CSharp_CCEngine_Cell_SWIGUpcast(Cell *jarg1) {
     return (Object *)jarg1;
 }
 

@@ -34,6 +34,17 @@ public class Entity : Object {
     }
   }
 
+  public Cell m_cell {
+    set {
+      CherryEnginePINVOKE.Entity_m_cell_set(swigCPtr, Cell.getCPtr(value));
+    } 
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_m_cell_get(swigCPtr);
+      Cell ret = (cPtr == global::System.IntPtr.Zero) ? null : new Cell(cPtr, false);
+      return ret;
+    } 
+  }
+
   public void Destroy() {
     CherryEnginePINVOKE.Entity_Destroy(swigCPtr);
   }
