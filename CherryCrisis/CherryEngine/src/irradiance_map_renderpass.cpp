@@ -47,7 +47,7 @@ void IrradianceMapRenderPass::SetupIrradianceMap()
 
 	Texture* spheremap = m_skyRenderer->m_texture.get();
 
-	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0 || !spheremap->m_gpuTextureSpheremap)
+	if (!spheremap || spheremap->GetWidth() <= 0 || spheremap->GetHeight() <= 0)
 		return;
 
 	if (!spheremap->m_gpuIrradiancemap)
