@@ -47,6 +47,8 @@ public:
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 
+	void Copy(Behaviour* copy) override;
+
 	void Visible() override { this->Collider::Visible(); }
 	void Unvisible() override { this->Collider::Unvisible(); }
 	

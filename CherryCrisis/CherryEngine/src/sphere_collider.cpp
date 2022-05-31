@@ -242,3 +242,15 @@ CCMaths::Matrix4 SphereCollider::GetModelMatrix()
 {
 	return m_model;
 }
+
+void SphereCollider::Copy(Behaviour* copy)
+{
+	Collider::Copy(copy);
+
+	SphereCollider* copiedCollider = dynamic_cast<SphereCollider*>(copy);
+
+	m_entityScale = copiedCollider->m_entityScale;
+	SetScale(copiedCollider->m_editableScale);
+
+	ResetPxShape();
+}

@@ -95,6 +95,8 @@ public:
 
 	void	SetPxLocalPos();
 
+	virtual void Copy(Behaviour* copy) override;
+
 	virtual void Visible()		{ m_isVisible = true; }
 	virtual void Unvisible()	{ m_isVisible = false; }
 

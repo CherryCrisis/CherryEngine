@@ -289,3 +289,17 @@ CCMaths::Matrix4 CapsuleCollider::GetBotMatrix()
 {
 	return m_botModel;
 }
+
+void CapsuleCollider::Copy(Behaviour* copy)
+{
+	Collider::Copy(copy);
+
+	CapsuleCollider* copiedCollider = dynamic_cast<CapsuleCollider*>(copy);
+
+	m_entityScale = copiedCollider->m_entityScale;
+	m_entityRadius = copiedCollider->m_entityRadius;
+	SetScale(copiedCollider->m_editableScale);
+	SetRadius(copiedCollider->m_editableRadius);
+
+	ResetPxShape();
+}

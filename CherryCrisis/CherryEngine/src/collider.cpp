@@ -32,3 +32,18 @@ void Collider::SetLocalPos(const CCMaths::Vector3& localPos)
 	if (m_pxShape)
 		SetPxLocalPos();
 }
+
+void Collider::Copy(Behaviour* copy)
+{
+	Collider* copiedCollider = dynamic_cast<Collider*>(copy);
+
+	m_isRegistered = copiedCollider->m_isRegistered;
+	m_isEnabled = copiedCollider->m_isEnabled;
+	m_isTrigger = copiedCollider->m_isTrigger;
+	m_isAddedFromInspector = copiedCollider->m_isAddedFromInspector;
+
+	m_localPosition = copiedCollider->m_localPosition;
+	m_model = copiedCollider->m_model;
+
+	ResetPxShape();
+}

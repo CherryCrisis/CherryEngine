@@ -251,3 +251,15 @@ CCMaths::Matrix4 BoxCollider::GetModelMatrix()
 {
 	return m_model;
 }
+
+void BoxCollider::Copy(Behaviour* copy)
+{
+	Collider::Copy(copy);
+
+	BoxCollider* copiedCollider = dynamic_cast<BoxCollider*>(copy);
+
+	m_entityScale = copiedCollider->m_entityScale;
+	SetScale(copiedCollider->m_editableScale);
+
+	ResetPxShape();
+}
