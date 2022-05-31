@@ -159,42 +159,24 @@ void LogDisplayer::RenderMenuBar()
         ImGui::Spacing();
         ImGui::Selectable("Collapse", &m_isCollapsing, 0, ImGui::CalcTextSize("Collapse"));
 
-        const std::array<int, 3>* logTypeCounts = m_debug->GetLogTypeCounts();
+        const std::array<int, 3u>& logTypeCounts = m_debug->GetLogTypeCounts();
 
-        m_displayInfo ? colorButton = colorButtonDown : colorButton = colorButtonUp;
-
-
-        if (ImGui::ImageButtonWithText(m_gpuTextureIDs[0], std::format("({})", (*logTypeCounts)[0]).c_str(), buttonSize, {0,0}, {1,1}, -1, {0,0,0,0}, colorButton))
+        for (unsigned int i = 0; i < 3u; i++)
         {
-            m_displayInfo = !m_displayInfo;
+            unsigned char showedLogBit = 1 << i;
+            bool shouldDisplay = m_showedLogMask & showedLogBit;
 
-            if (m_displayInfo)
-                m_showedLogMask |= 1 << (int)ELogType::INFO;
-            else
-                m_showedLogMask &= ~(1 << (int)ELogType::INFO);
-        }
+            colorButton = shouldDisplay ? colorButtonDown : colorButtonUp;
 
-        m_displayWarning ? colorButton = colorButtonDown : colorButton = colorButtonUp;
+            std::string logCountStr = std::format("({}) ### {}", logTypeCounts[i], i);
 
-        if (ImGui::ImageButtonWithText(m_gpuTextureIDs[1], std::format("({})", (*logTypeCounts)[1]).c_str(), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
-        {
-            m_displayWarning = !m_displayWarning;
-
-            if (m_displayWarning)
-                m_showedLogMask |= 1 << (int)ELogType::WARNING;
-            else
-                m_showedLogMask &= ~(1 << (int)ELogType::WARNING);
-        }
-
-        m_displayError ? colorButton = colorButtonDown : colorButton = colorButtonUp;
-
-        if (ImGui::ImageButtonWithText(m_gpuTextureIDs[2], std::format("({})", (*logTypeCounts)[2]).c_str(), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
-        {
-            m_displayError = !m_displayError;
-            if (m_displayError)
-                m_showedLogMask |= 1 << (int)ELogType::ERROR;
-            else
-                m_showedLogMask &= ~(1 << (int)ELogType::ERROR);
+            if (ImGui::ImageButtonWithText(m_gpuTextureIDs[i], logCountStr.c_str(), buttonSize, { 0,0 }, { 1,1 }, -1, { 0,0,0,0 }, colorButton))
+            {
+                if (shouldDisplay)
+                    m_showedLogMask &= ~showedLogBit;
+                else
+                    m_showedLogMask |= showedLogBit;
+            }
         }
 
         if (ImGui::Button("Clear")) Clear();

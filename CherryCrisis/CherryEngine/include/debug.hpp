@@ -74,7 +74,7 @@ public:
 
 	std::vector<Log>* GetLogs() { return &m_logs; }
 	const std::map<size_t, LogMessage>* GetCollapsedLogs() { return &m_logMessages; }
-	const std::array<int, 3>* GetLogTypeCounts() { return &m_logTypeCounts; }
+	const std::array<int, 3>& GetLogTypeCounts() { return m_logTypeCounts; }
 	
 	// Print a string in the console and cache it
 	void AddLog(ELogType logType, const char* message, std::source_location location =
