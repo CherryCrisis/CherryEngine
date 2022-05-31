@@ -2,18 +2,18 @@
 
 #include <cherry_macros.hpp>
 
-#include "entity.hpp"
 #include "metadata.hpp"
 #include "object.hpp"
 #include "scene.hpp"
 #include "serializer.hpp"
 
+class Entity;
 
 class CCENGINE_API Behaviour : public Object
 {
-	friend class Entity;
-	friend class Scene;
-	friend class Serializer;
+	friend Entity;
+	friend Scene;
+	friend Serializer;
 private:
 	Entity* m_owner = nullptr;
 

@@ -11,7 +11,7 @@
 #include "scene_manager.hpp"
 #include "ui_context.hpp"
 #include "ui_item.hpp"
-
+#include "entity.hpp"
 
 UIEditor::UIEditor() 
 {

@@ -20,7 +20,7 @@
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
-
+#include "entity.hpp"
 
 EditorManager::EditorManager(const std::string& projectPath) 
 {

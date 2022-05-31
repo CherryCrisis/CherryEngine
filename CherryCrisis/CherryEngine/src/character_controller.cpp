@@ -11,6 +11,7 @@
 #include "physic_actor.hpp"
 #include "rigidbody.hpp"
 #include "transform.hpp"
+#include "entity.hpp"
 
 CharacterController::CharacterController()
 {

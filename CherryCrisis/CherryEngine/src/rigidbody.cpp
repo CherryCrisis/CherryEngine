@@ -7,7 +7,7 @@
 #include "physic_manager.hpp"
 
 #include "transform.hpp"
-
+#include "entity.hpp"
 
 Rigidbody::Rigidbody()
 {
