@@ -243,7 +243,7 @@ void SceneDisplayer::Render()
             
             Matrix4 deltaMatrix = Matrix4::Identity; // Unused
             Vector3 snapping = m_operation == ImGuizmo::ROTATE && m_isSnapping ? Vector3(m_rotSnap) : Vector3::Zero;
-            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, m_guizmoTransform.data, deltaMatrix.data, snapping.data));
+            if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, m_guizmoTransform.data, deltaMatrix.data, snapping.data))
             {
                 Transform* parent = t->GetParent();
                 CCMaths::Matrix4 mat = m_guizmoTransform;
