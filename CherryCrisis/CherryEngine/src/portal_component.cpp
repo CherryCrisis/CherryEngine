@@ -119,10 +119,16 @@ void PortalComponent::LateUpdate()
 		if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
 		{
 			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + ((m_offset * 0.5f)  * (float)portalSideNoOffset)));
+
+			Vector3 previousPosition = transform->GetPosition() - (portalForward * (distFromPortal + ((m_offset) * (float)portalSideNoOffset)));
+
 			transform->SetPosition(newPosition);
 
 			offsetFromPortal = newPosition - m_transform->GetPosition();
 			distFromPortal = Vector3::Dot(offsetFromPortal, portalForward);
+
+			portalTeleporter->m_previousOffsetFromPortal = previousPosition - m_transform->GetPosition();
+			previousDist = Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward);
 
 			portalSideNoOffset = CCMaths::Sign<float>(distFromPortal);
 		}

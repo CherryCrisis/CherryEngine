@@ -106,9 +106,9 @@ public:
 
 	Matrix4 GetLocalMatrix();
 
-	Vector3 Forward()	{ return m_forward; }
-	Vector3 Right()		{ return m_right; }
-	Vector3 Up()		{ return m_up; }
+	Vector3 Forward()	{ GetWorldMatrix();  return m_forward; }
+	Vector3 Right()		{ GetWorldMatrix();  return m_right; }
+	Vector3 Up()		{ GetWorldMatrix();  return m_up; }
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
 	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetEuler };
