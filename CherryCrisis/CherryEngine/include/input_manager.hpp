@@ -202,8 +202,9 @@ private:
 	std::unordered_map<std::string, InputContext> m_contexts;
 
 	// Context (presets of differents callbacks and axes)
-	InputContext* m_pollContext = nullptr;
-	InputContext* m_defaultContext = nullptr;	
+	InputContext* m_pollContext		= nullptr;
+	InputContext* m_defaultContext	= nullptr;	
+	InputContext* m_fetchContextTop	= nullptr;
 	std::stack<InputContext*> m_fetchContext;
 
 	//list of keys just pressed

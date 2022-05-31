@@ -26,9 +26,7 @@ Rigidbody::~Rigidbody()
 
 void Rigidbody::BindToSignals()
 {
-	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-	
-	physicManager->Register(this);
+	PhysicSystem::PhysicManager::Register(this);
 	m_isRegistered = true;
 
 	GetHost().m_OnAwake.Bind(&Rigidbody::Initialize, this);
@@ -56,9 +54,7 @@ void Rigidbody::Unregister()
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-		physicManager->Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this);
 		m_isRegistered = false;
 	}
 }

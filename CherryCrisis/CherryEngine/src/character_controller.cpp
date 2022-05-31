@@ -55,9 +55,7 @@ void CharacterController::BindToSignals()
 	GetHost().m_OnFixedTick.Bind(&CharacterController::FixedUpdate, this);
 	GetHost().m_OnStart.Bind(&CharacterController::Initialize, this);
 
-	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-	physicManager->Register(this);
+	PhysicSystem::PhysicManager::Register(this);
 	m_isRegistered = true;
 }
 
@@ -100,9 +98,7 @@ void CharacterController::Unregister()
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-		physicManager->Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this);
 		m_isRegistered = false;
 	}
 }
@@ -118,10 +114,14 @@ void CharacterController::Update()
 	m_sideMove = InputManager::GetAxis(Keycode::D, Keycode::A);
 
 	if (InputManager::GetKey(Keycode::SPACE) && m_isGrounded)
-		m_physicActor->AddForce({ 0, m_jumpForce * 0.05f, 0 }, PhysicSystem::EForceMode::eIMPULSE);
+	{
+		m_physicActor->AddForce({ 0, m_jumpForce, 0 }, PhysicSystem::EForceMode::eIMPULSE);
+		m_isGrounded = false;
+	}
 
 	m_rotating = InputManager::GetMouseDelta().x;
-	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_rotating * m_sensitivity * TimeManager::GetDeltaTime();
+	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_rotating * m_sensitivity * 0.001f; // 0.01f to keep sensitivity above 1
+
 	m_transform->SetRotation(m_transform->GetRotation() * Quaternion::FromEuler(rot));
 
 	InputManager::PopContext();

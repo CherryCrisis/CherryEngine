@@ -95,85 +95,109 @@ namespace PhysicSystem
 
 	void PhysicManager::Register(Rigidbody* rigidbody)
 	{
-		PhysicActor& actor = FindOrCreateActor(rigidbody->GetHost());
-		
-		rigidbody->m_physicActor = &actor;
+		if (!currentInstance)
+			return;
 
-		actor.AddRigidbody(rigidbody, m_isPlaying);
+		PhysicActor* actor = PhysicManager::FindOrCreateActor(rigidbody->GetHost());
+		
+		rigidbody->m_physicActor = actor;
+
+		actor->AddRigidbody(rigidbody, currentInstance->m_isPlaying);
 	}
 
 	void PhysicManager::Register(Collider* collider)
 	{
-		PhysicActor& actor = FindOrCreateActor(collider->GetHost());
+		if (!currentInstance)
+			return;
 
-		collider->m_physicActor = &actor;
-		actor.AddCollider(collider, m_isPlaying);
+		PhysicActor* actor = PhysicManager::FindOrCreateActor(collider->GetHost());
+
+		collider->m_physicActor = actor;
+		actor->AddCollider(collider, currentInstance->m_isPlaying);
 	}
 
 	void PhysicManager::Register(CharacterController* controller)
 	{
-		PhysicActor& actor = FindOrCreateActor(controller->GetHost());
+		if (!currentInstance)
+			return;
 
-		controller->m_physicActor = &actor;
-		actor.AddController(controller, m_isPlaying);
+		PhysicActor* actor = PhysicManager::FindOrCreateActor(controller->GetHost());
+
+		controller->m_physicActor = actor;
+		actor->AddController(controller, currentInstance->m_isPlaying);
 	}
 
 	void PhysicManager::Unregister(Rigidbody* rigidbody)
 	{
+		if (!currentInstance)
+			return;
+
 		PhysicActor* actor = rigidbody->m_physicActor;
 		if (!actor)
 			return;
 
 		actor->RemoveRigidbody(rigidbody);
 
-		IsActorEmpty(*actor);
+		currentInstance->IsActorEmpty(*actor);
 	}
 
 	void PhysicManager::Unregister(Collider* collider)
 	{
+		if (!currentInstance)
+			return;
+
 		PhysicActor* actor = collider->m_physicActor;
 		if (!actor)
 			return;
 
 		actor->RemoveCollider(collider);
 
-		IsActorEmpty(*actor);
+		currentInstance->IsActorEmpty(*actor);
 	}
 
 	void PhysicManager::Unregister(CharacterController* controller)
 	{
+		if (!currentInstance)
+			return;
+
 		PhysicActor* actor = controller->m_physicActor;
 		if (!actor)
 			return;
 
 		actor->RemoveController(controller);
 
-		IsActorEmpty(*actor);
+		currentInstance->IsActorEmpty(*actor);
 	}
 
-	PhysicActor& PhysicManager::FindOrCreateActor(Entity& owningEntity)
+	PhysicActor* PhysicManager::FindOrCreateActor(Entity& owningEntity)
 	{
-		for (auto& actor : m_physicActors)
+		if (!currentInstance)
+			return nullptr;
+
+		for (auto& actor : currentInstance->m_physicActors)
 		{
 			if (actor->m_owner == &owningEntity)
-				return *actor;
+				return actor;
 		}
 
-		m_physicActors.push_back(new PhysicActor());
-		PhysicActor& newActor = *m_physicActors.back();
+		currentInstance->m_physicActors.push_back(new PhysicActor());
+		PhysicActor& newActor = *currentInstance->m_physicActors.back();
 		newActor.m_owner = &owningEntity;
 
-		if (m_isPlaying)
+		if (currentInstance->m_isPlaying)
 			newActor.CreatePxActor();
 
 		newActor.m_owner->m_cell->AddEntityToPhysicScene(newActor.m_owner);
 
-		return newActor;
+		return &newActor;
 	}
 
 	PhysicActor* PhysicManager::FindActor(Entity& owningEntity)
 	{
-		for (auto& actor : m_physicActors)
+		if (!currentInstance)
+			return nullptr;
+
+		for (auto& actor : currentInstance->m_physicActors)
 		{
 			if (actor->m_owner == &owningEntity)
 				return actor;
@@ -184,6 +208,9 @@ namespace PhysicSystem
 
 	bool PhysicManager::IsActorEmpty(PhysicActor& actor)
 	{
+		if (!currentInstance)
+			return false;
+
 		if (!actor.HasColliders() && !actor.HasRigidbody() && !actor.HasController())
 		{
 			for (size_t i = 0; i < m_physicActors.size(); ++i)
@@ -203,14 +230,20 @@ namespace PhysicSystem
 
 	void PhysicManager::Register(Cell* cell)
 	{
-		PhysicScene& cellScene = FindOrCreateScene(cell);
+		if (!currentInstance)
+			return;
 
-		cell->m_physicCell = &cellScene;
-		cellScene.AddCell(cell);
+		PhysicScene* cellScene = PhysicManager::FindOrCreateScene(cell);
+
+		cell->m_physicCell = cellScene;
+		cellScene->AddCell(cell);
 	}
 
 	void PhysicManager::Unregister(Cell* cell)
 	{
+		if (!currentInstance)
+			return;
+
 		PhysicScene* cellScene = cell->m_physicCell;
 		if (!cellScene)
 			return;
@@ -218,26 +251,32 @@ namespace PhysicSystem
 		cellScene->m_cell = nullptr;
 	}
 
-	PhysicScene& PhysicManager::FindOrCreateScene(Cell* cell)
+	PhysicScene* PhysicManager::FindOrCreateScene(Cell* cell)
 	{
-		for (auto& scene : m_scenes)
+		if (!currentInstance)
+			return nullptr;
+
+		for (auto& scene : currentInstance->m_scenes)
 		{
 			if (scene->m_cell == cell)
-				return *scene;
+				return scene;
 		}
 
-		m_scenes.push_back(new PhysicScene());
-		PhysicScene& newScene = *m_scenes.back();
+		currentInstance->m_scenes.push_back(new PhysicScene());
+		PhysicScene& newScene = *currentInstance->m_scenes.back();
 
-		if (m_isPlaying)
+		if (currentInstance->m_isPlaying)
 			newScene.CreatePxScene();
 
-		return newScene;
+		return &newScene;
 	}
 
 	PhysicScene* PhysicManager::FindScene(Cell* cell)
 	{
-		for (auto& scene : m_scenes)
+		if (!currentInstance)
+			return nullptr;
+
+		for (auto& scene : currentInstance->m_scenes)
 		{
 			if (scene->m_cell == cell)
 				return scene;
@@ -246,48 +285,36 @@ namespace PhysicSystem
 		return nullptr;
 	}
 
-	bool PhysicManager::IsSceneEmpty(PhysicScene& scene)
-	{
-		if (!scene.m_cell)
-		{
-			for (size_t i = 0; i < m_scenes.size(); ++i)
-			{
-				if (&scene == m_scenes[i])
-				{
-					m_scenes[i] = m_scenes.back();
-					m_scenes.pop_back();
-				}
-			}
-			return true;
-		}
-
-		return false;
-	}
-
 	void PhysicManager::Launch()
 	{
-		m_isPlaying = true;
+		if (!currentInstance)
+			return;
 
-		CreatePhysX();
+		currentInstance->m_isPlaying = true;
 
-		for (auto& scene : m_scenes)
+		currentInstance->CreatePhysX();
+
+		for (auto& scene : currentInstance->m_scenes)
 			scene->CreatePxScene();
 
-		for (auto& actor : m_physicActors)
+		for (auto& actor : currentInstance->m_physicActors)
 			actor->CreatePxActor();
 	}
 
 	void PhysicManager::Stop()
 	{
-		m_isPlaying = false;
+		if (!currentInstance)
+			return;
 
-		for (auto& actor : m_physicActors)
+		currentInstance->m_isPlaying = false;
+
+		for (auto& actor : currentInstance->m_physicActors)
 			actor->DestroyPxActor();
 
-		for (auto& scene : m_scenes)
+		for (auto& scene : currentInstance->m_scenes)
 			scene->DestroyPxScene();
 
-		DestroyPhysX();
+		currentInstance->DestroyPhysX();
 	}
 
 	RaycastHit PhysicManager::Raycast(Cell& cell, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
@@ -339,9 +366,10 @@ namespace PhysicSystem
 
 	void PhysicManager::AddForce(Entity* entity, const CCMaths::Vector3& force, EForceMode mode)
 	{
-		PhysicManager* px = PhysicManager::GetInstance();
+		if (!currentInstance)
+			return;
 
-		PhysicActor* actor = px->FindActor(*entity);
+		PhysicActor* actor = currentInstance->FindActor(*entity);
 		if (!actor)
 			return;
 
@@ -361,14 +389,20 @@ namespace PhysicSystem
 
 	void PhysicManager::Simulate()
 	{
-		for (auto& scene : m_scenes)
+		if (!currentInstance)
+			return;
+
+		for (auto& scene : currentInstance->m_scenes)
 			scene->Update(TimeManager::GetFixedDeltaTime());
 	}
 
 	PxMaterial* PhysicManager::GetMaterial(const uint32_t& index)
 	{
-		std::vector<PxMaterial*> materials(m_physics->getNbMaterials());
-		if (index < m_physics->getMaterials((PxMaterial**)&materials.front(), (PxU32)materials.size()))
+		if (!currentInstance)
+			return 0;
+
+		std::vector<PxMaterial*> materials(currentInstance->m_physics->getNbMaterials());
+		if (index < currentInstance->m_physics->getMaterials((PxMaterial**)&materials.front(), (PxU32)materials.size()))
 			return materials[index];
 		else
 			return 0;

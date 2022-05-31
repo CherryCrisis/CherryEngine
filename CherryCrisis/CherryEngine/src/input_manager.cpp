@@ -43,8 +43,8 @@ CCMaths::Vector2 InputManager::GetMouseWheel()
 {
 	InputManager& IM = *currentInstance;
 
-	if (IM.m_fetchContext.top())
-		return IM.m_fetchContext.top()->m_mouseWheel;
+	if (IM.m_fetchContextTop)
+		return IM.m_fetchContextTop->m_mouseWheel;
 
 	return { 0 };
 }
@@ -58,8 +58,8 @@ CCMaths::Vector2 InputManager::GetMouseDelta()
 {
 	InputManager& IM = *currentInstance;
 
-	if (IM.m_fetchContext.top())
-		return IM.m_fetchContext.top()->m_mouseDelta;
+	if (IM.m_fetchContextTop)
+		return IM.m_fetchContextTop->m_mouseDelta;
 
 	return { 0 };
 }
@@ -228,6 +228,8 @@ void InputManager::PushContext(InputContext* context)
 		context = IM.m_defaultContext;
 
 	IM.m_fetchContext.push(context);
+	IM.m_fetchContextTop = IM.m_fetchContext.top();
+
 }
 
 void InputManager::PopContext()
@@ -236,6 +238,8 @@ void InputManager::PopContext()
 
 	if (!IM.m_fetchContext.empty())
 		IM.m_fetchContext.pop();
+
+	IM.m_fetchContextTop = IM.m_fetchContext.top();
 }
 
 void InputManager::SetDefaultContext()
@@ -351,7 +355,7 @@ void InputManager::Input::Set(bool down, bool held, bool up)
 
 InputManager::Input* InputManager::GetInputRef(Keycode key)
 {
-	return &currentInstance->m_fetchContext.top()->m_keys[key];
+	return &currentInstance->m_fetchContextTop->m_keys[key];
 }
 
 
@@ -367,34 +371,34 @@ void InputManager::SetCursorDisplayed()
 
 bool InputManager::GetKeyDown(Keycode key)
 {
-	return currentInstance->m_fetchContext.top()->m_keys[key].Down();
+	return currentInstance->m_fetchContextTop->m_keys[key].Down();
 }
 
 bool InputManager::GetKey(Keycode key)
 {
-	return currentInstance->m_fetchContext.top()->m_keys[key].Held();
+	return currentInstance->m_fetchContextTop->m_keys[key].Held();
 }
 
 bool InputManager::GetKeyUp(Keycode key)
 {
-	return currentInstance->m_fetchContext.top()->m_keys[key].Up();
+	return currentInstance->m_fetchContextTop->m_keys[key].Up();
 }
 
 bool InputManager::GetKeyDown(const char* inputName)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 		return false;
 
-	if (IM.m_fetchContext.top()->m_single.empty() || !IM.m_fetchContext.top()->m_single.contains(inputName))
+	if (IM.m_fetchContextTop->m_single.empty() || !IM.m_fetchContextTop->m_single.contains(inputName))
 	{
 		IM.ErrorButtons(inputName);
 		return 0.f;
 	}
 	else
 	{
-		ActionSingle& current = IM.m_fetchContext.top()->m_single[inputName];
+		ActionSingle& current = IM.m_fetchContextTop->m_single[inputName];
 		return current.CheckDown();
 	}
 }
@@ -403,10 +407,10 @@ bool InputManager::GetKey(const char* inputName)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 		return false;
 
-	if (IM.m_fetchContext.top()->m_single.empty() || !IM.m_fetchContext.top()->m_single.contains(inputName))
+	if (IM.m_fetchContextTop->m_single.empty() || !IM.m_fetchContextTop->m_single.contains(inputName))
 	{
 		IM.ErrorButtons(inputName);
 
@@ -414,7 +418,7 @@ bool InputManager::GetKey(const char* inputName)
 	}
 	else
 	{
-		ActionSingle& current = IM.m_fetchContext.top()->m_single[inputName];
+		ActionSingle& current = IM.m_fetchContextTop->m_single[inputName];
 		return current.CheckHeld();
 	}
 }
@@ -423,10 +427,10 @@ bool InputManager::GetKeyUp(const char* inputName)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 		return false;
 
-	if (IM.m_fetchContext.top()->m_single.empty() || !IM.m_fetchContext.top()->m_single.contains(inputName))
+	if (IM.m_fetchContextTop->m_single.empty() || !IM.m_fetchContextTop->m_single.contains(inputName))
 	{
 		IM.ErrorButtons(inputName);
 
@@ -434,7 +438,7 @@ bool InputManager::GetKeyUp(const char* inputName)
 	}
 	else
 	{
-		ActionSingle& current = IM.m_fetchContext.top()->m_single[inputName];
+		ActionSingle& current = IM.m_fetchContextTop->m_single[inputName];
 		return current.CheckUp();
 	}
 }
@@ -445,32 +449,32 @@ InputManager::ActionSingle* InputManager::AddActionSingle(const std::string& nam
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 	{
 		success = -1;
 		return nullptr;
 	}
 
-	if (!IM.m_fetchContext.top()->m_single.contains(name))
+	if (!IM.m_fetchContextTop->m_single.contains(name))
 	{
 		success = 1;
 	}
 	else
 		success = 0;
 
-	return &IM.m_fetchContext.top()->m_single[name];
+	return &IM.m_fetchContextTop->m_single[name];
 }
 
 int InputManager::RemoveActionSingle(const std::string& name)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 		return -1;
 
-	if (IM.m_fetchContext.top()->m_single.contains(name))
+	if (IM.m_fetchContextTop->m_single.contains(name))
 	{
-		IM.m_fetchContext.top()->m_single.erase(name);
+		IM.m_fetchContextTop->m_single.erase(name);
 		return 1;
 	}
 	else
@@ -481,15 +485,15 @@ int InputManager::RenameActionButtons(const std::string& oldName, const std::str
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 		return -1;
 
-	if (IM.m_fetchContext.top()->m_single.contains(newName))
+	if (IM.m_fetchContextTop->m_single.contains(newName))
 		return 0;
 
-	auto button = IM.m_fetchContext.top()->m_single.extract(oldName);
+	auto button = IM.m_fetchContextTop->m_single.extract(oldName);
 	button.key() = newName;
-	IM.m_fetchContext.top()->m_single.insert(move(button));
+	IM.m_fetchContextTop->m_single.insert(move(button));
 
 	return 1;
 }
@@ -498,26 +502,26 @@ void InputManager::SetActionPriorKey(const std::string& name, EPriorKey priorKey
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top() || !IM.m_fetchContext.top()->m_single.contains(name))
+	if (!IM.m_fetchContextTop || !IM.m_fetchContextTop->m_single.contains(name))
 		return;
 
-	IM.m_fetchContext.top()->m_single[name].SetPriorKey(priorKey);
+	IM.m_fetchContextTop->m_single[name].SetPriorKey(priorKey);
 }
 
 int InputManager::AddInputToAction(const std::string& name, Keycode key)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top() || !IM.m_fetchContext.top()->m_single.contains(name))
+	if (!IM.m_fetchContextTop || !IM.m_fetchContextTop->m_single.contains(name))
 		return -1;
 
-	IM.m_fetchContext.top()->m_single[name].AddInput(key);
+	IM.m_fetchContextTop->m_single[name].AddInput(key);
 	return 1;
 }
 
 int InputManager::AddInputToAction(ActionSingle* preset, Keycode key)
 {
-	if (!currentInstance->m_fetchContext.top())
+	if (!currentInstance->m_fetchContextTop)
 		return -1;
 
 	preset->AddInput(key);
@@ -528,16 +532,16 @@ int InputManager::RemoveInputFromAction(const std::string& name, Keycode key)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top() || !IM.m_fetchContext.top()->m_single.contains(name))
+	if (!IM.m_fetchContextTop || !IM.m_fetchContextTop->m_single.contains(name))
 		return -1;
 
-	IM.m_fetchContext.top()->m_single[name].RemoveInput(key);
+	IM.m_fetchContextTop->m_single[name].RemoveInput(key);
 	return 1;
 }
 
 int InputManager::RemoveInputFromAction(ActionSingle* preset, Keycode key)
 {
-	if (!currentInstance->m_fetchContext.top())
+	if (!currentInstance->m_fetchContextTop)
 		return -1;
 
 	preset->RemoveInput(key);
@@ -686,10 +690,10 @@ float InputManager::GetAxis(const char* axisName)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 		return 0.f;
 
-	if (IM.m_fetchContext.top()->m_axes.empty() || !IM.m_fetchContext.top()->m_axes.contains(axisName))
+	if (IM.m_fetchContextTop->m_axes.empty() || !IM.m_fetchContextTop->m_axes.contains(axisName))
 	{
 		IM.ErrorAxes(axisName);
 
@@ -698,7 +702,7 @@ float InputManager::GetAxis(const char* axisName)
 	else
 	{
 		float totalValue = 0.f;
-		ActionAxes& axis = IM.m_fetchContext.top()->m_axes[axisName];
+		ActionAxes& axis = IM.m_fetchContextTop->m_axes[axisName];
 
 		return axis.ComputeValue();
 	}
@@ -725,21 +729,21 @@ void InputManager::SetNegativeKey(Axis* axis, Keycode key)
 
 void InputManager::Axis::BindUpdate()
 {
-	InputContext* context = currentInstance->m_fetchContext.top();
+	InputContext* context = currentInstance->m_fetchContextTop;
 	context->m_keys[m_positiveKey].m_isUpdated.Bind(&Axis::Update, this);
 	context->m_keys[m_negativeKey].m_isUpdated.Bind(&Axis::Update, this);
 }
 
 void InputManager::Axis::Destroy()
 {
-	InputContext* context = currentInstance->m_fetchContext.top();
+	InputContext* context = currentInstance->m_fetchContextTop;
 	context->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
 	context->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
 }
 
 void InputManager::Axis::SetPositiveKey(Keycode key)
 {
-	InputContext* context = currentInstance->m_fetchContext.top();
+	InputContext* context = currentInstance->m_fetchContextTop;
 
 	context->m_keys[m_positiveKey].m_isUpdated.Unbind(&Axis::Update, this);
 	
@@ -749,7 +753,7 @@ void InputManager::Axis::SetPositiveKey(Keycode key)
 
 void InputManager::Axis::SetNegativeKey(Keycode key)
 {
-	InputContext* context = currentInstance->m_fetchContext.top();
+	InputContext* context = currentInstance->m_fetchContextTop;
 
 	// Unbind update of previous key
 	context->m_keys[m_negativeKey].m_isUpdated.Unbind(&Axis::Update, this);
@@ -781,33 +785,33 @@ InputManager::ActionAxes* InputManager::AddActionAxes(const std::string& name, i
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 	{
 		success = -1;
 		return nullptr;
 	}
 
-	if (!IM.m_fetchContext.top()->m_axes.contains(name))
+	if (!IM.m_fetchContextTop->m_axes.contains(name))
 	{
 		success = 1;
 	}
 	else
 		success = 0;
 
-	return &IM.m_fetchContext.top()->m_axes[name];
+	return &IM.m_fetchContextTop->m_axes[name];
 }
 
 int InputManager::RemoveActionAxes(const std::string& name)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top())
+	if (!IM.m_fetchContextTop)
 		return -1;
 
-	if (IM.m_fetchContext.top()->m_axes.contains(name))
+	if (IM.m_fetchContextTop->m_axes.contains(name))
 	{
-		IM.m_fetchContext.top()->m_axes[name].Destroy();
-		IM.m_fetchContext.top()->m_axes.erase(name);
+		IM.m_fetchContextTop->m_axes[name].Destroy();
+		IM.m_fetchContextTop->m_axes.erase(name);
 		return 1;
 	}
 	else
@@ -818,18 +822,18 @@ int InputManager::RenameActionAxes(const std::string& oldName, const std::string
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top() || !IM.m_fetchContext.top()->m_axes.contains(oldName))
+	if (!IM.m_fetchContextTop || !IM.m_fetchContextTop->m_axes.contains(oldName))
 		return -1;
 
-	if (IM.m_fetchContext.top()->m_axes.contains(newName))
+	if (IM.m_fetchContextTop->m_axes.contains(newName))
 	{
-		IM.m_fetchContext.top()->m_axes[newName] = ActionAxes();
+		IM.m_fetchContextTop->m_axes[newName] = ActionAxes();
 		return 0;
 	}
 
-	auto button = IM.m_fetchContext.top()->m_axes.extract(oldName);
+	auto button = IM.m_fetchContextTop->m_axes.extract(oldName);
 	button.key() = newName;
-	IM.m_fetchContext.top()->m_axes.insert(move(button));
+	IM.m_fetchContextTop->m_axes.insert(move(button));
 
 	return 1;
 }
@@ -838,16 +842,16 @@ int InputManager::AddAxisToAction(const std::string& name, Axis axis)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top() || !IM.m_fetchContext.top()->m_axes.contains(name))
+	if (!IM.m_fetchContextTop || !IM.m_fetchContextTop->m_axes.contains(name))
 		return -1;
 
-	IM.m_fetchContext.top()->m_axes[name].AddAxis(new Axis(axis));
+	IM.m_fetchContextTop->m_axes[name].AddAxis(new Axis(axis));
 	return 1;
 }
 
 int InputManager::AddAxisToAction(ActionAxes* preset, Axis axis)
 {
-	if (!currentInstance->m_fetchContext.top())
+	if (!currentInstance->m_fetchContextTop)
 		return -1;
 
 	preset->AddAxis(new Axis(axis));
@@ -858,16 +862,16 @@ int InputManager::RemoveAxisFromAction(const std::string& name, Axis* axis)
 {
 	InputManager& IM = *currentInstance;
 
-	if (!IM.m_fetchContext.top() || !IM.m_fetchContext.top()->m_axes.contains(name))
+	if (!IM.m_fetchContextTop || !IM.m_fetchContextTop->m_axes.contains(name))
 		return -1;
 
-	IM.m_fetchContext.top()->m_axes[name].RemoveAxis(axis);
+	IM.m_fetchContextTop->m_axes[name].RemoveAxis(axis);
 	return 1;
 }
 
 int InputManager::RemoveAxisFromAction(ActionAxes* preset, Axis* axis)
 {
-	if (!currentInstance->m_fetchContext.top())
+	if (!currentInstance->m_fetchContextTop)
 		return -1;
 
 	preset->RemoveAxis(axis);

@@ -63,33 +63,32 @@ namespace PhysicSystem
 
 		physx::PxMaterial* CreateMaterial(float sf = 0.5f, float df = 0.5f, float cr = 0.1f);
 
-		void Register(Rigidbody* rigidbody);
-		void Register(Collider* collider);
-		void Register(CharacterController* controller);
+		static void Register(Rigidbody* rigidbody);
+		static void Register(Collider* collider);
+		static void Register(CharacterController* controller);
 
-		void Unregister(Rigidbody* rigidbody);
-		void Unregister(Collider* collider);
-		void Unregister(CharacterController* controller);
+		static void Unregister(Rigidbody* rigidbody);
+		static void Unregister(Collider* collider);
+		static void Unregister(CharacterController* controller);
 
-		PhysicActor& FindOrCreateActor(Entity& owningEntity);
-		PhysicActor* FindActor(Entity& owningEntity);
+		static PhysicActor* FindActor(Entity& owningEntity);
+		static PhysicActor* FindOrCreateActor(Entity& owningEntity);
 		bool IsActorEmpty(PhysicActor& actor);
 
-		void Register(Cell* cell);
-		void Unregister(Cell* cell);
+		static void Register(Cell* cell);
+		static void Unregister(Cell* cell);
 		
-		PhysicScene& FindOrCreateScene(Cell* cell);
-		PhysicScene* FindScene(Cell* cell);
-		bool IsSceneEmpty(PhysicScene&);
+		static PhysicScene* FindScene(Cell* cell);
+		static PhysicScene* FindOrCreateScene(Cell* cell);
 
 		// Instantiate physx for registered scenes and actors
-		void Launch();
+		static void Launch();
 
 		// Destroy physx for registered scenes and actors
-		void Stop();
+		static void Stop();
 
 		// Call scenes updates
-		void Simulate();
+		static void Simulate();
 
 		static RaycastHit Raycast(Cell& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
 		static RaycastHit Raycast(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
@@ -98,9 +97,9 @@ namespace PhysicSystem
 		static void AddForce(PhysicActor* actor, const CCMaths::Vector3& force, EForceMode mode);
 		static void AddForce(Entity* entity, const CCMaths::Vector3& force, EForceMode mode);
 
-		void MoveObjectFromScnToScn(PhysicScene* from, PhysicScene* to, PhysicActor* actor);
+		static void MoveObjectFromScnToScn(PhysicScene* from, PhysicScene* to, PhysicActor* actor);
 
-		physx::PxMaterial* GetMaterial(const uint32_t& index = 0);
-		physx::PxPhysics* Get() { return m_physics; }
+		static physx::PxMaterial* GetMaterial(const uint32_t& index = 0);
+		static physx::PxPhysics* Get() { return currentInstance->m_physics; }
 	};
 }

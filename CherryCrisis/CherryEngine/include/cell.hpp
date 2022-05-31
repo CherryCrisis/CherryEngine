@@ -33,7 +33,6 @@ private:
 	std::unordered_set<class Viewer*>		m_viewers;
 
 	Debug*							m_debug = nullptr;
-	PhysicSystem::PhysicManager*	m_pxManager = nullptr;
 
 public:
 	class SkyRenderer*			m_skyRenderer = nullptr;

@@ -130,7 +130,7 @@ namespace PhysicSystem
 
 		physx::PxTransform transform(physx::PxVec3(pos.x, pos.y, pos.z), physx::PxQuat(rot.x, rot.y, rot.z, rot.w));
 
-		physx::PxPhysics* physics = PhysicSystem::PhysicManager::GetInstance()->Get();
+		physx::PxPhysics* physics = PhysicSystem::PhysicManager::Get();
 
 		if (m_isStatic)
 		{
@@ -175,9 +175,7 @@ namespace PhysicSystem
 
 	physx::PxShape* PhysicActor::CreateShape(const physx::PxGeometry& geometry)
 	{
-		PhysicManager* physicManager = PhysicManager::GetInstance();
-
-		return physx::PxRigidActorExt::createExclusiveShape(*m_pxActor, geometry, *physicManager->GetMaterial());
+		return physx::PxRigidActorExt::createExclusiveShape(*m_pxActor, geometry, *PhysicManager::GetMaterial());
 	}
 
 	void PhysicActor::RemoveShape(physx::PxShape* shape)
