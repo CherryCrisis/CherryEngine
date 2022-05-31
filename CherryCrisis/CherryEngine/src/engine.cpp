@@ -41,9 +41,9 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	PhysicSystem::PhysicManager::Kill();
 	SceneManager::GetInstance()->m_currentScene.reset();
 	ResourceManager::Kill();
-	PhysicSystem::PhysicManager::Kill();
 	InputManager::Kill();
  	SoundManager::Kill();
 	TimeManager::Kill();

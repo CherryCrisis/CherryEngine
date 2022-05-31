@@ -40,7 +40,7 @@ void Transform::PopulateMetadatas()
 
 void Transform::SetDirty(int dirtyFlag)
 {
-	m_isDirty = true;
+	m_isDirty = dirtyFlag;
 
 	for (Transform* child : m_children)
 		child->SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
