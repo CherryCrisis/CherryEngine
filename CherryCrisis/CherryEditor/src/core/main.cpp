@@ -57,10 +57,10 @@ void drop_callback(GLFWwindow* window, int count, const char** paths)
 int main(int argc, char** argv)
 {
     // Check for leak
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    //_CrtSetBreakAlloc(11687);
-
+   // _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //744558
     int screenWidth = 1200;
+
     int screenHeight = 1000;
 
     if (!glfwInit())

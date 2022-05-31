@@ -80,10 +80,12 @@ namespace CCScripting
 
 		AssetBrowser*			m_assetBrowser = nullptr;
 
+		virtual ~AAssetNode() = default;
 		virtual void Rename(const char* newFilepath) = 0;
 		virtual void Reload() = 0;
 		virtual void Delete() = 0;
 		virtual void Action() = 0; //If double clicked action
+
 	};
 
 	struct DirectoryNode : public AAssetNode
@@ -224,7 +226,6 @@ public :
 	AssetSettingsDisplayer* m_assetSettingsDisplayer = nullptr;
 
 	AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer, EditorManager* manager = nullptr);
-	~AssetBrowser();
 
 	void SetCurrentDirectory(DirectoryNode* directoryNode) 
 	{ 

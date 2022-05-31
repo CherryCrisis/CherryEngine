@@ -339,13 +339,13 @@ void HierarchyDisplayer::ContextCallback()
         ImGui::Separator();
         if (ImGui::BeginMenu("New"))
         {
-            Entity* newEntity = nullptr;
+            std::unique_ptr<Entity> newEntity = nullptr;
 
             if (ImGui::MenuItem("Empty"))
             {
                 if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
                 {
-                    newEntity = new Entity("Empty", cell);
+                    newEntity = std::make_unique<Entity>("Empty", cell);
                 }
             }
 
@@ -355,7 +355,7 @@ void HierarchyDisplayer::ContextCallback()
                 {
                     if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
                     {
-                        newEntity = new Entity("Portal", cell);
+                        newEntity = std::make_unique<Entity>("Portal", cell);
                     }
 
                     newEntity->AddBehaviour<PortalComponent>();
@@ -366,9 +366,9 @@ void HierarchyDisplayer::ContextCallback()
                     if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
                     {
                         Scene* scene = SceneManager::GetInstance()->m_currentScene.get();
-                        Entity* entity_0 = new Entity("Portal_0", cell);
-
-                        Entity* entity_1 = new Entity("Portal_1", cell);
+                        
+                        std::unique_ptr<Entity> entity_0 = std::make_unique<Entity>("Portal_0", cell);
+                        std::unique_ptr<Entity> entity_1 = std::make_unique<Entity>("Portal_1", cell);
 
                         PortalComponent* portal_0 = entity_0->AddBehaviour<PortalComponent>();
                         PortalComponent* portal_1 = entity_1->AddBehaviour<PortalComponent>();
@@ -376,11 +376,11 @@ void HierarchyDisplayer::ContextCallback()
                         entity_0->Initialize();
                         entity_1->Initialize();
 
+                        m_manager->FocusEntity(entity_0.get());
                         scene->AddEntity(entity_0);
-                        m_manager->FocusEntity(entity_0);
 
+                        m_manager->FocusEntity(entity_1.get());
                         scene->AddEntity(entity_1);
-                        m_manager->FocusEntity(entity_1);
 
                         portal_0->SetLinkedPortal(portal_1);
                         //portal_1->SetLinkedPortal(portal_0);
@@ -394,7 +394,7 @@ void HierarchyDisplayer::ContextCallback()
             {
                 if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
                 {
-                    newEntity = new Entity("Camera", cell);
+                    newEntity = std::make_unique<Entity>("Camera", cell);
                     newEntity->AddBehaviour<CameraComponent>();
                     newEntity->AddBehaviour<AudioListener>();
                     newEntity->Initialize();
@@ -406,7 +406,7 @@ void HierarchyDisplayer::ContextCallback()
             {
                 if (Cell* cell = m_cellSystemDisplayer->GetSelectedCell())
                 {
-                    newEntity = new Entity("Audio Source", cell);
+                    newEntity = std::make_unique<Entity>("Audio Source", cell);
                     newEntity->AddBehaviour<AudioEmitter>();
                     newEntity->Initialize();
                 }
@@ -418,7 +418,7 @@ void HierarchyDisplayer::ContextCallback()
                 {
                     Scene* scene = SceneManager::GetInstance()->m_currentScene.get();
 
-                    newEntity = new Entity("Light", cell);
+                    newEntity = std::make_unique<Entity>("Light", cell);
                     newEntity->AddBehaviour<LightComponent>();
                     newEntity->Initialize();
                 }
@@ -434,7 +434,7 @@ void HierarchyDisplayer::ContextCallback()
                     ShapeRenderer* shape = nullptr;
                     if (ImGui::MenuItem("Cube"))
                     {
-                        newEntity = new Entity("Cube", cell);
+                        newEntity = std::make_unique<Entity>("Cube", cell);
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
@@ -444,7 +444,7 @@ void HierarchyDisplayer::ContextCallback()
 
                     if (ImGui::MenuItem("Sphere"))
                     {
-                        newEntity = new Entity("Sphere", cell);
+                        newEntity = std::make_unique<Entity>("Sphere", cell);
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
@@ -453,7 +453,7 @@ void HierarchyDisplayer::ContextCallback()
                     }
                     if (ImGui::MenuItem("Cylinder"))
                     {
-                        newEntity = new Entity("Cylinder", cell);
+                        newEntity = std::make_unique<Entity>("Cylinder", cell);
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
@@ -462,7 +462,7 @@ void HierarchyDisplayer::ContextCallback()
                     }
                     if (ImGui::MenuItem("Plane"))
                     {
-                        newEntity = new Entity("Plane", cell);
+                        newEntity = std::make_unique<Entity>("Plane", cell);
                         Transform* tranform = newEntity->AddBehaviour<Transform>();
                         shape = newEntity->AddBehaviour<ShapeRenderer>();
                         shape->m_transform = tranform;
@@ -483,8 +483,8 @@ void HierarchyDisplayer::ContextCallback()
 
             if (newEntity)
             {
+                m_manager->FocusEntity(newEntity.get());
                 SceneManager::GetInstance()->m_currentScene->AddEntity(newEntity);
-                m_manager->FocusEntity(newEntity);
             }
 
             ImGui::Separator();

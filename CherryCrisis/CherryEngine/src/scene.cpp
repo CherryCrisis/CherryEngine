@@ -28,7 +28,7 @@ Scene::Scene(const char* filePath)
 void Scene::Delete()
 {
 	while (!m_entities.empty())
-		RemoveEntity(m_entities[0]);
+		RemoveEntity(m_entities[0].get());
 }
 
 Scene::~Scene()
@@ -39,7 +39,7 @@ Scene::~Scene()
 
 void Scene::Initialize()
 {
-	for (Entity* entity : m_entities)
+	for (auto& entity : m_entities)
 		entity->Initialize();
 }
 
@@ -82,14 +82,16 @@ void Scene::LateUpdate()
 	}
 }
 
-void Scene::AddEntity(Entity* toAdd)
+Entity* Scene::AddEntity(std::unique_ptr<Entity>& toAdd)
 {
 	assert(toAdd != nullptr);
 
-	m_entities.resize(m_entities.size() + 1);
-	m_entities[m_entities.size() - 1] = toAdd;
-
 	m_isHierarchyDirty = true;
+
+	m_entities.push_back(std::move(toAdd));
+	
+	return m_entities[m_entities.size() - 1].get();
+
 }
 
 void Scene::RemoveEntity(Entity* toRemove)
@@ -110,11 +112,19 @@ void Scene::RemoveEntity(Entity* toRemove)
 		}
 	}
 
-	auto itPos = std::remove(m_entities.begin(), m_entities.end(), toRemove);
-	assert(itPos != m_entities.end());
-	
-	m_entities.erase(itPos);
-	toRemove->Destroy();
+	int entitiesCount = m_entities.size();
+	for (int id = 0; id < entitiesCount; ++id)
+	{
+		if (m_entities[id].get() == toRemove)
+		{
+			m_entities[id].reset(nullptr);
+			m_entities[id] = std::move(m_entities[entitiesCount - 1]);
+			m_entities.pop_back();
+			break;
+		}
+	}
+
+	//toRemove->Destroy();
 	m_isHierarchyDirty = true;
 }
 
@@ -139,7 +149,7 @@ bool Scene::SaveAs(const char* filepath)
 	return Serializer::SerializeScene(this, filepath);
 }
 
-void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities, Cell* cell)
+void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<std::unique_ptr<Entity>>& entities, Cell* cell)
 {
 	std::string entityName;
 
@@ -148,7 +158,7 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 	else
 		entityName = Entity::m_defaultName;
 
-	Entity* entity = new Entity(entityName, cell);
+	std::unique_ptr<Entity> entity = std::make_unique<Entity>(entityName, cell);
 
 	Transform* transform = entity->GetOrAddBehaviour<Transform>();
 
@@ -172,10 +182,10 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 		transform->SetParent(parentTransform);
 	}
 
-	entities.push_back(entity);
+	entities.push_back(std::move(entity));
 
 	for (ModelNode* childNode : node->m_childrenNode)
-		GenerateEntitiesRecursive(childNode, entity, entities, cell);
+		GenerateEntitiesRecursive(childNode, entity.get(), entities, cell);
 }
 
 void Scene::GenerateEntities(std::shared_ptr<Model> modelBase)
@@ -186,14 +196,14 @@ void Scene::GenerateEntities(std::shared_ptr<Model> modelBase)
 		return;
 	}
 
-	std::vector<Entity*> entities;
+	std::vector<std::unique_ptr<Entity>> entities;
 
 	ModelNode* rootNode = modelBase->GetRootNode();
 
 	if (modelBase->GetMeshCount() && rootNode)
 		GenerateEntitiesRecursive(rootNode, nullptr, entities, &m_cells.begin()->second);
 
-	for (Entity* entity : entities)
+	for (auto& entity : entities)
 	{
 		AddEntity(entity);
 		entity->Initialize();
@@ -202,14 +212,14 @@ void Scene::GenerateEntities(std::shared_ptr<Model> modelBase)
 
 void Scene::GenerateEntitiesInCell(std::shared_ptr<Model> modelBase, Cell* cell)
 {
-	std::vector<Entity*> entities;
+	std::vector<std::unique_ptr<Entity>> entities;
 
 	ModelNode* rootNode = modelBase->GetRootNode();
 
 	if (modelBase->GetMeshCount() && rootNode)
 		GenerateEntitiesRecursive(rootNode, nullptr, entities, cell);
 
-	for (Entity* entity : entities)
+	for (auto& entity : entities)
 	{
 		AddEntity(entity);
 		entity->Initialize();
@@ -219,10 +229,10 @@ void Scene::GenerateEntitiesInCell(std::shared_ptr<Model> modelBase, Cell* cell)
 Entity* Scene::FindEntity(uint32_t id)
 {
 	// TODO: Change this to unordered map of all uuid containers
-	for (Entity* entity : m_entities)
+	for (auto& entity : m_entities)
 	{
 		if ((uint32_t)entity->GetUUID() == id)
-			return entity;
+			return entity.get();
 	}
 
 	return nullptr;
@@ -230,13 +240,13 @@ Entity* Scene::FindEntity(uint32_t id)
 
 Entity* Scene::FindModelEntity(uint32_t id)
 {
-	for (Entity* entity : m_entities)
+	for (auto& entity : m_entities)
 	{
 		if (ModelRenderer* rdr = entity->GetBehaviour<ModelRenderer>(); rdr && rdr->m_id == id)
-			return entity;
+			return entity.get();
 
 		else if (ShapeRenderer* rdr = entity->GetBehaviour<ShapeRenderer>(); rdr && rdr->m_id == id)
-			return entity;
+			return entity.get();
 	}
 	return nullptr;
 }
@@ -397,7 +407,7 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 
 void Scene::CopyEntity(Entity* toCopy, Entity* parent) 
 {
-	Entity* entity = new Entity(toCopy);
+	std::unique_ptr<Entity> entity = std::make_unique<Entity>(toCopy);
 	
 	if (parent)
 		entity->GetBehaviour<Transform>()->SetParent(parent->GetBehaviour<Transform>());

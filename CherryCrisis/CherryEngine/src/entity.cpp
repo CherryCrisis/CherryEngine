@@ -133,7 +133,7 @@ void Entity::OnTriggerExit(Entity* other)
 
 void Entity::Destroy()
 {
-	delete this;
+	//delete this;
 }
 
 Behaviour* Entity::GetBehaviour(const std::string& componentTypeName)

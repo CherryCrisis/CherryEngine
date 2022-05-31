@@ -7,7 +7,10 @@
 
 class	ARenderingPipeline;
 
-struct	GPUPortal { };
+struct GPUPortal 
+{ 
+	virtual ~GPUPortal() = default;
+};
 
 
 struct Portal : public Viewer, public ARenderer

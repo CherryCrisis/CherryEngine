@@ -26,7 +26,7 @@ private:
 public:
 	UIContext m_UIContext;
 
-	std::vector<Entity*> m_entities;
+	std::vector<std::unique_ptr<Entity>> m_entities;
 	std::map<std::string, Cell> m_cells;
 
 	Event<> m_onModifiedEntities;
@@ -57,7 +57,7 @@ public:
 	
 
 	void CopyEntity(Entity* toCopy, Entity* parent=nullptr);
-	void AddEntity(Entity* toAdd);
+	Entity* AddEntity(std::unique_ptr<Entity>& toAdd);
 	void RemoveEntity(Entity* toRemove);
 	void RemoveEntity(const std::string& name);
 
@@ -68,7 +68,7 @@ public:
 
 	void GenerateEntities(std::shared_ptr<Model> resource);
 	void GenerateEntitiesInCell(std::shared_ptr<Model> resource, Cell* cell);
-	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<Entity*>& entities, Cell* cell);
+	void GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std::vector<std::unique_ptr<Entity>>& entities, Cell* cell);
 
 	std::string GetName() { return GetFilepath(); }
 

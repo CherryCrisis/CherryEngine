@@ -153,7 +153,7 @@ void PortalTeleporterComponent::CloneEntities(EntityNode* cloneEntityNode, const
 	if (!entityNode->m_transform)
 		return;
 
-	Entity* cloneEntity = new Entity(std::format("Clone_{}", entityNode->m_transform->GetHost().GetName()).c_str(), destCell);
+	std::unique_ptr<Entity> cloneEntity = std::make_unique<Entity>(std::format("Clone_{}", entityNode->m_transform->GetHost().GetName()).c_str(), destCell);
 	cloneEntityNode->m_transform = cloneEntity->AddBehaviour<Transform>();
 
 	if (entityNode->m_meshRenderer)
@@ -200,7 +200,7 @@ void PortalTeleporterComponent::CloneEntities(EntityNode* cloneEntityNode, const
 	}
 	
 	cloneEntityNode->m_transform->GetHost().Initialize();
-	scene->AddEntity(cloneEntityNode->m_transform->GetHostPtr());
+	scene->AddEntity(cloneEntity);
 }
 
 void PortalTeleporterComponent::SetIsVisibleEntityNode(EntityNode* entityNode, bool isVisible)

@@ -13,7 +13,8 @@ protected:
 
 public:
 	Panel(bool spawnOpened = true) : m_isOpened(spawnOpened) {}
-	
+	virtual ~Panel() = default;
+
 	virtual void Render() = 0;
 	virtual void ContextCallback() {};
 

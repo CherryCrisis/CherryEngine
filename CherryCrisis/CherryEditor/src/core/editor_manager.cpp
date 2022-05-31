@@ -421,22 +421,48 @@ void EntitySelector::SetEndRange()
     m_endRange = m_startRange;
 }
 
+int Find(const std::vector<std::unique_ptr<Entity>>& entities, const Entity* toFind)
+{
+    int entitiesCount = entities.size();
+    for (int id = 0; id < entitiesCount; ++id)
+    {
+        if (entities[id].get() == toFind)
+        {
+            return id;
+        }
+    }
+
+    return -1;
+}
+
 void EntitySelector::ApplyRange() 
 {
     if (!m_endRange)
         return;
 
-    std::vector<Entity*>& entities = SceneManager::GetInstance()->m_currentScene->m_entities;
+    std::vector<std::unique_ptr<Entity>>& entities = SceneManager::GetInstance()->m_currentScene->m_entities;
 
-    auto startIt = std::find(entities.begin(), entities.end(), m_startRange);
-    auto endIt   = std::find(entities.begin(), entities.end(), m_endRange);
-    
-     if (startIt - entities.begin() > endIt - entities.begin())
-        for (auto it = endIt; it != startIt+1; it++)
-            Add(*it);
+    int startID = Find(entities, m_startRange);
+    int endID   = Find(entities, m_endRange);
+
+    if (startID > endID)
+    {
+        for (int id = endID; id < startID; ++id)
+            Add(entities[id].get());
+    }
     else
-        for (auto it = startIt; it != endIt+1; it++)
-            Add(*it);
+    {
+        for (int id = startID; id < endID; ++id)
+            Add(entities[id].get());
+    }
+    
+    //TODO: Remove this
+    // if (startIt - entities.begin() > endIt - entities.begin())
+    //    for (auto it = endIt; it != startIt+1; it++)
+    //        Add((*it).get());
+    //else
+    //    for (auto it = startIt; it != endIt+1; it++)
+    //        Add((*it).get());
     
     m_endRange = nullptr;
 }

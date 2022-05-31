@@ -222,7 +222,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 		const char* parseError = "#ERROR {}  is not handled !";//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
 		//Components Saving
 		YAML::Node components = save["components"];
-		for (Entity* entity : scene->m_entities)
+		for (auto& entity : scene->m_entities)
 		{
 			std::vector<Behaviour*> behaviours = entity->GetAllBehaviours();
 			for (const auto& behaviour : behaviours)
@@ -578,9 +578,9 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 				{
 					for (YAML::const_iterator it = entities.begin(); it != entities.end(); ++it)
 					{
-						Entity* empty = new Entity(it->second["name"].as<std::string>(), cell, it->first.as<uint32_t>());
+						std::unique_ptr<Entity> empty = std::make_unique<Entity>(it->second["name"].as<std::string>(), cell, it->first.as<uint32_t>());
+						m_wrappedBehaviours[empty->GetUUID()] = empty.get();
 						scene->AddEntity(empty);
-						m_wrappedBehaviours[empty->GetUUID()] = empty;
 					}
 				}
 			}
