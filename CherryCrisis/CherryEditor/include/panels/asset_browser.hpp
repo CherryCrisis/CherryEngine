@@ -203,7 +203,7 @@ namespace CCScripting
 	AssetNode*		m_focusedNode = nullptr;
 	EditorManager*	m_manager = nullptr;
 
-	void SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode);
+	void SetAssetNode(const std::filesystem::path& path, AssetNode* assetNode);
 	AssetNode* RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory); //return m_assetsDirectoryNode 
 
 	void RenderMenuBar();

@@ -724,20 +724,20 @@ void AssetBrowser::ContextCallback()
     }
 }
 
-void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode)
+void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode* assetNode)
 {
-    assetNode.m_path = path;
+    assetNode->m_path = path;
 
-    assetNode.m_relativePath = String::ExtractValueStr(path.string(), "Assets\\");
+    assetNode->m_relativePath = String::ExtractValueStr(path.string(), "Assets\\");
 
     std::string filename = path.filename().string();
-    assetNode.m_relativePath = String::ExtractKeyStr(assetNode.m_relativePath.string(), filename.c_str());
-    assetNode.m_filename = String::ExtractLastKey(filename, '.');
-    assetNode.m_extension = path.extension().string();
+    assetNode->m_relativePath = String::ExtractKeyStr(assetNode->m_relativePath.string(), filename.c_str());
+    assetNode->m_filename = String::ExtractLastKey(filename, '.');
+    assetNode->m_extension = path.extension().string();
 
-    assetNode.m_assetBrowser = this;
-    assetNode.m_fullFilename = assetNode.m_filename + assetNode.m_extension;
-    assetNode.m_fullLoweredFilename = String::ToLower(assetNode.m_fullFilename);
+    assetNode->m_assetBrowser = this;
+    assetNode->m_fullFilename = assetNode->m_filename + assetNode->m_extension;
+    assetNode->m_fullLoweredFilename = String::ToLower(assetNode->m_fullFilename);
 }
 
 AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory)
@@ -746,26 +746,19 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
     if (std::filesystem::is_directory(m_path))
     {
-        DirectoryNode directoryNode;
+        auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<DirectoryNode>());
+        AssetNode* assetNode = pair.first->second.get();
+        DirectoryNode* directoryNode = static_cast<DirectoryNode*>(assetNode);
+
         SetAssetNode(m_path.string(), directoryNode);
 
-        directoryNode.m_parentDirectory = parentDirectory;
+        directoryNode->m_parentDirectory = parentDirectory;
 
-        directoryNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true, true, ETextureFormat::RGBA);
+        directoryNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/folder_icon.png", true, true, ETextureFormat::RGBA);
 
         auto directory_iterator = std::filesystem::directory_iterator(m_path);
-        // LEAK: This possibly leads to leak -- Maybe this leak is fixed 
-        auto pair = m_assetNodes.emplace(directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode));
-        AssetNode* assetNode = pair.first->second.get();
 
-        #pragma region Sort AssetNode
-
-        // LEAK: This leaks wtf?
-        std::set<std::filesystem::directory_entry> entries;
-        for (const std::filesystem::directory_entry& entry : directory_iterator)
-            entries.emplace(entry);
-
-        DirectoryNode* directoryNodePtr = static_cast<DirectoryNode*>(assetNode);
+#pragma region Sort AssetNode
 
         std::vector<AssetNode*> directoryNodes;
         std::vector<AssetNode*> sceneNodes;
@@ -777,55 +770,57 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         std::vector<AssetNode*> soundNodes;
         std::vector<AssetNode*> otherNodes;
 
-        for (const auto& entry : entries)
+        for (const auto& entry : directory_iterator)
         {
-            if (std::filesystem::is_directory(entry.path()))
+            const std::filesystem::path& path = entry.path();
+
+            if (entry.is_directory())
             {
-                directoryNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                directoryNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
-            std::string extension = entry.path().extension().string();
+            std::string extension = path.extension().string();
 
             if (!sceneExtensions.compare(extension))
             {
-                sceneNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                sceneNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
             if (modelExtensions.end() != modelExtensions.find(extension))
             {
-                modelNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                modelNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
             if (textureExtensions.end() != textureExtensions.find(extension))
             {
-                textureNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                textureNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
             if (shaderExtensions.end() != shaderExtensions.find(extension))
             {
-                shaderNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                shaderNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
             if (!scriptExtensions.compare(extension))
             {
-                scriptNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                scriptNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
             if (!matExtensions.compare(extension))
             {
-                materialNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                materialNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
             if (soundExtensions.end() != soundExtensions.find(extension))
             {
-                soundNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+                soundNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
                 continue;
             }
 
@@ -834,18 +829,18 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 continue;
             }
 
-            otherNodes.push_back(RecursiveQuerryBrowser(entry.path(), directoryNodePtr));
+            otherNodes.push_back(RecursiveQuerryBrowser(path, directoryNode));
         }
 
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), directoryNodes.begin(), directoryNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), sceneNodes.begin(), sceneNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), modelNodes.begin(), modelNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), textureNodes.begin(), textureNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), shaderNodes.begin(), shaderNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), scriptNodes.begin(), scriptNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), materialNodes.begin(), materialNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), soundNodes.begin(), soundNodes.end());
-        directoryNodePtr->m_assetNodes.insert(directoryNodePtr->m_assetNodes.end(), otherNodes.begin(), otherNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), directoryNodes.begin(), directoryNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), sceneNodes.begin(), sceneNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), modelNodes.begin(), modelNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), textureNodes.begin(), textureNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), shaderNodes.begin(), shaderNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), scriptNodes.begin(), scriptNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), materialNodes.begin(), materialNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), soundNodes.begin(), soundNodes.end());
+        directoryNode->m_assetNodes.insert(directoryNode->m_assetNodes.end(), otherNodes.begin(), otherNodes.end());
 
        
         #pragma endregion
@@ -861,16 +856,18 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         {
             if (textureExtensions.end() != textureExtensions.find(extension))
             {
-                TextureNode textureNode;
+                auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<TextureNode>());
+                AssetNode* assetNode = pair.first->second.get();
+                TextureNode* textureNode = static_cast<TextureNode*>(assetNode);
+
                 SetAssetNode(m_path, textureNode);
             
-                std::string filepath(textureNode.m_relativePath.string() + textureNode.m_filename + textureNode.m_extension);
-                textureNode.m_resource = resourceManager->AddResource<Texture>(filepath.c_str(), true);
+                std::string filepath(textureNode->m_relativePath.string() + textureNode->m_filename + textureNode->m_extension);
+                textureNode->m_resource = resourceManager->AddResource<Texture>(filepath.c_str(), true);
             
-                textureNode.m_previewTexture = std::dynamic_pointer_cast<Texture>(textureNode.m_resource);
-                m_textureGenerator.Generate(textureNode.m_previewTexture.get());
-            
-                auto pair = m_assetNodes.insert({ textureNode.m_path.string(), std::make_unique<TextureNode>(textureNode) });
+                textureNode->m_previewTexture = std::dynamic_pointer_cast<Texture>(textureNode->m_resource);
+                m_textureGenerator.Generate(textureNode->m_previewTexture.get());
+
                 return pair.first->second.get();
             }
         }
@@ -879,19 +876,19 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         {
             if (modelExtensions.end() != modelExtensions.find(extension))
             {
-                ModelNode modelNode;
+                auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<ModelNode>());
+                AssetNode* assetNode = pair.first->second.get();
+                ModelNode* modelNode = static_cast<ModelNode*>(assetNode);
+
                 SetAssetNode(m_path, modelNode);
 
-                std::string filepath(modelNode.m_relativePath.string() + modelNode.m_filename + modelNode.m_extension);
+                std::string filepath(modelNode->m_relativePath.string() + modelNode->m_filename + modelNode->m_extension);
                 std::shared_ptr<Model> modelBase = resourceManager->AddResource<Model>(filepath.c_str(), true);
-                modelNode.m_resource = modelBase;
+                modelNode->m_resource = modelBase;
 
-                modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true, true, ETextureFormat::RGBA);
+                modelNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.emplace( modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) );
-                AssetNode* assetNode = pair.first->second.get();
-
-                return assetNode;
+                return pair.first->second.get();
             }
         }
 
@@ -899,16 +896,18 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         {
             if (shaderExtensions.end() != shaderExtensions.find(extension))
             {
-                ShaderNode shaderNode;
+                auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<ShaderNode>());
+                AssetNode* assetNode = pair.first->second.get();
+                ShaderNode* shaderNode = static_cast<ShaderNode*>(assetNode);
+
                 SetAssetNode(m_path, shaderNode);
 
-                std::string filepath(shaderNode.m_relativePath.string() + shaderNode.m_filename + shaderNode.m_extension);
+                std::string filepath(shaderNode->m_relativePath.string() + shaderNode->m_filename + shaderNode->m_extension);
                 std::shared_ptr<Shader> shader = resourceManager->AddResource<Shader>(filepath.c_str(), true);
-                shaderNode.m_resource = shader;
+                shaderNode->m_resource = shader;
 
-                shaderNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true, true, ETextureFormat::RGBA);
+                shaderNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/shader_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.emplace( shaderNode.m_path.string(), std::make_unique<ShaderNode>(shaderNode) );
                 return pair.first->second.get();
             }
         }
@@ -916,25 +915,26 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         //-- Script --//
         if (!scriptExtensions.compare(extension))
         {
-            ScriptNode scriptNode;
+            auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<ScriptNode>());
+            AssetNode* assetNode = pair.first->second.get();
+            ScriptNode* scriptNode = static_cast<ScriptNode*>(assetNode);
+
             SetAssetNode(m_path, scriptNode);
 
-            std::string filepath(scriptNode.m_relativePath.string() + scriptNode.m_filename + scriptNode.m_extension);
+            std::string filepath(scriptNode->m_relativePath.string() + scriptNode->m_filename + scriptNode->m_extension);
 
-            scriptNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true, true, ETextureFormat::RGBA);
-
-            auto pair = m_assetNodes.emplace( scriptNode.m_path.string(), std::make_unique<ScriptNode>(scriptNode) );
+            scriptNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/script_icon.png", true, true, ETextureFormat::RGBA);
 
             struct stat result;
-            if (stat(scriptNode.m_path.string().c_str(), &result) == 0)
+            if (stat(scriptNode->m_path.string().c_str(), &result) == 0)
             {
                 auto mod_time = result.st_mtime;
             
-                if (m_timeModified.contains(scriptNode.m_filename))
+                if (m_timeModified.contains(scriptNode->m_filename))
                 {
-                    if (m_timeModified[scriptNode.m_filename] != mod_time) 
+                    if (m_timeModified[scriptNode->m_filename] != mod_time) 
                     {
-                        m_timeModified[scriptNode.m_filename] = mod_time;
+                        m_timeModified[scriptNode->m_filename] = mod_time;
                         // TODO: check if reload already started
                         if (m_manager->m_engine) 
                         {
@@ -950,34 +950,38 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                     }
                 }
                 else
-                    m_timeModified.insert({ scriptNode.m_filename, mod_time });
+                    m_timeModified.insert({ scriptNode->m_filename, mod_time });
             }
 
-            CsScriptingSystem::GetInstance()->SubmitScript(scriptNode.m_filename.c_str());
+            CsScriptingSystem::GetInstance()->SubmitScript(scriptNode->m_filename.c_str());
             return pair.first->second.get();
         }
 
         //-- Scene --//
         if (!sceneExtensions.compare(extension))
         {
-            SceneNode scnNode;
+            auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<SceneNode>());
+            AssetNode* assetNode = pair.first->second.get();
+            SceneNode* scnNode = static_cast<SceneNode*>(assetNode);
+
             SetAssetNode(m_path, scnNode);
 
-            scnNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
+            scnNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/scene_icon.png", true, true, ETextureFormat::RGBA);
 
-            auto pair = m_assetNodes.emplace( scnNode.m_path.string(), std::make_unique<SceneNode>(scnNode) );
             return pair.first->second.get();
         }
 
         //-- Font --//
         if (fontExtensions.end() != fontExtensions.find(extension))
         {
-            EmptyNode ttfNode;
+            auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<EmptyNode>());
+            AssetNode* assetNode = pair.first->second.get();
+            EmptyNode* ttfNode = static_cast<EmptyNode*>(assetNode);
+
             SetAssetNode(m_path, ttfNode);
 
-            ttfNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/font_icon.png", true, true, ETextureFormat::RGBA);
+            ttfNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/font_icon.png", true, true, ETextureFormat::RGBA);
 
-            auto pair = m_assetNodes.emplace( ttfNode.m_path.string(), std::make_unique<EmptyNode>(ttfNode));
             return pair.first->second.get();
         }
 
@@ -985,16 +989,18 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         {
             if (!matExtensions.compare(extension))
             {
-                MaterialNode materialNode;
+                auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<MaterialNode>());
+                AssetNode* assetNode = pair.first->second.get();
+                MaterialNode* materialNode = static_cast<MaterialNode*>(assetNode);
+
                 SetAssetNode(m_path, materialNode);
 
-                std::string filepath(materialNode.m_relativePath.string() + materialNode.m_filename + materialNode.m_extension);
+                std::string filepath(materialNode->m_relativePath.string() + materialNode->m_filename + materialNode->m_extension);
                 std::shared_ptr<Material> material = resourceManager->AddResource<Material>(filepath.c_str(), true);
-                materialNode.m_resource = material;
+                materialNode->m_resource = material;
 
-                materialNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/mat_icon.png", true, true, ETextureFormat::RGBA);
+                materialNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/mat_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.emplace(materialNode.m_path.string(), std::make_unique<MaterialNode>(materialNode));
                 return pair.first->second.get();
             }
         }
@@ -1003,27 +1009,31 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         {
             if (soundExtensions.end() !=soundExtensions.find(extension))
             {
-                SoundNode soundNode;
+                auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<SoundNode>());
+                AssetNode* assetNode = pair.first->second.get();
+                SoundNode* soundNode = static_cast<SoundNode*>(assetNode);
+
                 SetAssetNode(m_path, soundNode);
 
-                std::string filepath(soundNode.m_relativePath.string() + soundNode.m_filename + soundNode.m_extension);
-                soundNode.m_resource = resourceManager->AddResource<Sound>(filepath.c_str(), true);
+                std::string filepath(soundNode->m_relativePath.string() + soundNode->m_filename + soundNode->m_extension);
+                soundNode->m_resource = resourceManager->AddResource<Sound>(filepath.c_str(), true);
 
-                soundNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true, true, ETextureFormat::RGBA);
+                soundNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/sound_icon.png", true, true, ETextureFormat::RGBA);
 
-                auto pair = m_assetNodes.emplace(soundNode.m_path.string(), std::make_unique<SoundNode>(soundNode));
                 return pair.first->second.get();
             }
         }
         
     }
 
-    EmptyNode emptyNode;
+    auto pair = m_assetNodes.emplace(m_path.string(), std::make_unique<EmptyNode>());
+    AssetNode* assetNode = pair.first->second.get();
+    EmptyNode* emptyNode = static_cast<EmptyNode*>(assetNode);
+
     SetAssetNode(m_path, emptyNode);
 
-    emptyNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
+    emptyNode->m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/file_icon.png", true, true, ETextureFormat::RGBA);
 
-    auto pair = m_assetNodes.emplace( emptyNode.m_path.string(), std::make_unique<EmptyNode>(emptyNode));
     return pair.first->second.get();
 }
 
