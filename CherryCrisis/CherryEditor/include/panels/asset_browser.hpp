@@ -30,7 +30,7 @@ const std::set<std::string> shaderExtensions	= { ".frag", ".vert" };
 const std::set<std::string> soundExtensions     = { ".wav" };
 const std::set<std::string> fontExtensions		= { ".ttf" };
 
-const std::set<std::string> ignoredExtensions   = { ".cctexture" };
+const std::set<std::string> ignoredExtensions   = { ".cctexture", ".mtl"};
 
 const std::string			scriptExtensions	= ".cs";
 const std::string			sceneExtensions		= ".ccscene";

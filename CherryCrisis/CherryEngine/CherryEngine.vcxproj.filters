@@ -1152,9 +1152,6 @@
     <ClInclude Include="include\basic_postprocess_renderpass.hpp">
       <Filter>Fichiers d%27en-tête\Rendering\Renderpass</Filter>
     </ClInclude>
-    <ClInclude Include="include\builder.hpp">
-      <Filter>Fichiers d%27en-tête\Core</Filter>
-    </ClInclude>
     <ClInclude Include="externals\include\nvtt\nvtt.h">
       <Filter>Fichiers externes\nvtt</Filter>
     </ClInclude>
@@ -1727,9 +1724,6 @@
     </ClCompile>
     <ClCompile Include="src\basic_postprocess_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\builder.cpp">
-      <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\bloom_renderpass.cpp">
       <Filter>Fichiers sources\Rendering\Renderpass</Filter>

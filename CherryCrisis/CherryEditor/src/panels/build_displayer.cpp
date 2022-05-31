@@ -2,7 +2,7 @@
 
 #include <imgui.h>
 
-#include "builder.hpp"
+#include "core/builder.hpp"
 #include "portable-file-dialogs.hpp"
 #undef far
 #undef near

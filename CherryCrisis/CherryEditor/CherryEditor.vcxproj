@@ -29,6 +29,7 @@
     <ClCompile Include="externals\src\imgui_tables.cpp" />
     <ClCompile Include="externals\src\imgui_widgets.cpp" />
     <ClCompile Include="externals\src\stb_image.cpp" />
+    <ClCompile Include="src\core\builder.cpp" />
     <ClCompile Include="src\core\editor_manager.cpp" />
     <ClCompile Include="src\core\imcherry.cpp" />
     <ClCompile Include="src\core\main.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="externals\include\ImGuizmo.h" />
     <ClInclude Include="externals\include\imgui_notify.h" />
     <ClInclude Include="externals\include\portable-file-dialogs.hpp" />
+    <ClInclude Include="include\core\builder.hpp" />
     <ClInclude Include="include\core\editor_manager.hpp" />
     <ClInclude Include="include\core\frame_displayer.hpp" />
     <ClInclude Include="include\core\imcherry.hpp" />
