@@ -13,7 +13,7 @@
 #include "mixed_rendering_pipeline.hpp"
 #include "shape_renderer.hpp"
 #include "model_renderer.hpp"
-#include "character_controller.hpp"
+#include "rigidbody.hpp"
 #include "physic_actor.hpp"
 
 PortalTeleporterComponent::PortalTeleporterComponent()
@@ -84,16 +84,21 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 	{
 		Entity* entity = destPortal->GetHostPtr();
 
-		if (CharacterController* cc = GetHostPtr()->GetBehaviour<CharacterController>())
-		{
-			cc->Freeze();
-		}
+		Rigidbody* rb = GetHostPtr()->GetBehaviour<Rigidbody>();
+
+		// Remove and save velocity
+		if (rb)
+			rb->SaveVelocity();
 
 		if (GetHost().m_cell != entity->m_cell)
 			scene->MoveEntityFromCellToCell(GetHost().m_cell, entity->m_cell, GetHostPtr());
 
 		m_entityNode->m_transform->SetPosition(newPos);
 		m_entityNode->m_transform->SetRotation(newRot);
+
+		// Reapply velocity
+		if (rb)
+			rb->ReapplyVelocity();
 	}
 }
 

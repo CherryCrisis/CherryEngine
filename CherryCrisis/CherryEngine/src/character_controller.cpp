@@ -93,8 +93,7 @@ void CharacterController::Initialize()
 		m_dynamicActor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	m_isStarted = true;
-	GetHost().m_OnStart.Unbind(&CharacterController::Initialize, this);
-
+	owner.m_OnStart.Unbind(&CharacterController::Initialize, this);
 }
 
 void CharacterController::Unregister()
@@ -119,9 +118,12 @@ void CharacterController::Update()
 	m_sideMove = InputManager::GetAxis(Keycode::D, Keycode::A);
 
 	if (InputManager::GetKey(Keycode::SPACE) && m_isGrounded)
-		m_physicActor->AddForce({ 0, m_jumpForce, 0 }, PhysicSystem::EForceMode::eIMPULSE);
+		m_physicActor->AddForce({ 0, m_jumpForce * 0.05f, 0 }, PhysicSystem::EForceMode::eIMPULSE);
 
-	m_rotating = CCMaths::Vector3::YAxis * InputManager::GetMouseDelta().x;
+	m_rotating = InputManager::GetMouseDelta().x;
+	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_rotating * m_sensitivity * TimeManager::GetDeltaTime();
+	m_transform->SetRotation(m_transform->GetRotation() * Quaternion::FromEuler(rot));
+
 	InputManager::PopContext();
 }
 
@@ -150,7 +152,6 @@ void CharacterController::FixedUpdate()
 		float force = deltaDistance * m_springStrength - downVel * m_springDampling;
 
 		m_physicActor->AddForce({ 0, -force, 0 }, PhysicSystem::EForceMode::eFORCE);
-
 	}
 	else
 	{
@@ -163,21 +164,6 @@ void CharacterController::FixedUpdate()
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * m_dynamicActor->getMass(), { 1, 0, 1 });
 
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);
-
-	CCMaths::Vector3 rot = m_rotating * TimeManager::GetFixedDeltaTime();
-	CCMaths::Vector3 goalRVelocity = rot * m_sensitivity;
-	CCMaths::Vector3 neededRAcceleration = CCMaths::Vector3::ClampLength((goalRVelocity - rVel) / TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
-
-	m_physicActor->AddTorque(neededRAcceleration, PhysicSystem::EForceMode::eFORCE);
-}
-
-void CharacterController::Freeze()
-{
-	m_dynamicActor->clearForce(physx::PxForceMode::eACCELERATION);
-	m_dynamicActor->clearForce(physx::PxForceMode::eFORCE);
-	m_dynamicActor->clearForce(physx::PxForceMode::eIMPULSE);
-	m_dynamicActor->clearForce(physx::PxForceMode::eVELOCITY_CHANGE);
-	m_dynamicActor->setLinearVelocity({ 0, 0, 0 });
 }
 
 void CharacterController::InvalidateTransform()
