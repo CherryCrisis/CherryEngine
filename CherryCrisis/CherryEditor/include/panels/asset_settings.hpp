@@ -37,9 +37,9 @@ private:
 public:
 	AssetSettingsDisplayer() = default;
 
-	void SetAssetSettings(AssetSettings* assetSettings) 
+	void SetAssetSettings(std::unique_ptr<AssetSettings> assetSettings)
 	{ 
-		m_assetSettings.reset(assetSettings); 
+		m_assetSettings = std::move(assetSettings); 
 		m_assetSettings->m_assetSettingsDisplayer = this;
 	}
 	

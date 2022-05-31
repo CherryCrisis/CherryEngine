@@ -27,6 +27,7 @@ private:
 
 public:
 	PanelCategory(std::string name = "default") : m_name(name) {}
+	virtual ~PanelCategory() = default;
 	
 	//Override this to implements the imgui stuff
 	virtual void Fill() = 0;

@@ -339,7 +339,7 @@ void MaterialSettings::ContextCallback()
             {
                 if (textureIt->second)
                 {
-                    m_assetSettingsDisplayer->SetAssetSettings(new TextureSettings(textureIt->second));
+                    m_assetSettingsDisplayer->SetAssetSettings(std::make_unique<TextureSettings>(textureIt->second));
                 }
             }
         }

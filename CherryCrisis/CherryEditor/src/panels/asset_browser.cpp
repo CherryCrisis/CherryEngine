@@ -124,7 +124,7 @@ void AssetBrowser::ResizeCell()
     }
 }
 
-bool AssetBrowser::DragAndDropTarget(AssetNode* assetNode)
+bool AssetBrowser::DragAndDropTarget(AAssetNode* assetNode)
 {
     //-- Drag and drop file or folder in folder --//
     if (ImGui::BeginDragDropTarget())
@@ -140,7 +140,7 @@ bool AssetBrowser::DragAndDropTarget(AssetNode* assetNode)
 
                 if (it != m_assetNodes.end() && it->second.get() != assetNode && it->second.get()->m_path.parent_path().compare(directoryNode->m_path))
                 {
-                    AssetNode* draggedAssetNode = it->second.get();
+                    AAssetNode* draggedAssetNode = it->second.get();
 
                     std::string draggedAssetPath = draggedAssetNode->m_path.string();
 
@@ -195,7 +195,7 @@ void AssetBrowser::RenderNodes()
         int columnID = columnCount;
         int assetID = 0;
 
-        std::vector<AssetNode*>& assetNodes = strlen(m_researchInput) > 0 ? m_allAssetNode : m_currentDirectoryNode->m_assetNodes;
+        std::vector<AAssetNode*>& assetNodes = strlen(m_researchInput) > 0 ? m_allAssetNode : m_currentDirectoryNode->m_assetNodes;
         std::string loweredResearh = String::ToLower(m_researchInput);
 
         for (const auto& assetNode : assetNodes)
@@ -724,7 +724,7 @@ void AssetBrowser::ContextCallback()
     }
 }
 
-void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode)
+void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AAssetNode& assetNode)
 {
     assetNode.m_path = path;
 
@@ -740,7 +740,7 @@ void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AssetNode& as
     assetNode.m_fullLoweredFilename = String::ToLower(assetNode.m_fullFilename);
 }
 
-AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory)
+AssetBrowser::AAssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory)
 {
     ResourceManager* resourceManager(ResourceManager::GetInstance());
 
@@ -756,7 +756,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
         auto directory_iterator = std::filesystem::directory_iterator(m_path);
         // LEAK: This possibly leads to leak -- Maybe this leak is fixed 
         auto pair = m_assetNodes.emplace(directoryNode.m_path.string(), std::make_unique<DirectoryNode>(directoryNode));
-        AssetNode* assetNode = pair.first->second.get();
+        AAssetNode* assetNode = pair.first->second.get();
 
         #pragma region Sort AssetNode
 
@@ -767,15 +767,15 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
 
         DirectoryNode* directoryNodePtr = static_cast<DirectoryNode*>(assetNode);
 
-        std::vector<AssetNode*> directoryNodes;
-        std::vector<AssetNode*> sceneNodes;
-        std::vector<AssetNode*> modelNodes;
-        std::vector<AssetNode*> textureNodes;
-        std::vector<AssetNode*> shaderNodes;
-        std::vector<AssetNode*> scriptNodes;
-        std::vector<AssetNode*> materialNodes;
-        std::vector<AssetNode*> soundNodes;
-        std::vector<AssetNode*> otherNodes;
+        std::vector<AAssetNode*> directoryNodes;
+        std::vector<AAssetNode*> sceneNodes;
+        std::vector<AAssetNode*> modelNodes;
+        std::vector<AAssetNode*> textureNodes;
+        std::vector<AAssetNode*> shaderNodes;
+        std::vector<AAssetNode*> scriptNodes;
+        std::vector<AAssetNode*> materialNodes;
+        std::vector<AAssetNode*> soundNodes;
+        std::vector<AAssetNode*> otherNodes;
 
         for (const auto& entry : entries)
         {
@@ -889,7 +889,7 @@ AssetBrowser::AssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesys
                 modelNode.m_previewTexture = resourceManager->AddResource<Texture>("Internal/Icons/model_icon.png", true, true, ETextureFormat::RGBA);
 
                 auto pair = m_assetNodes.emplace( modelNode.m_path.string(), std::make_unique<ModelNode>(modelNode) );
-                AssetNode* assetNode = pair.first->second.get();
+                AAssetNode* assetNode = pair.first->second.get();
 
                 return assetNode;
             }
@@ -1047,7 +1047,7 @@ void AssetBrowser::QuerryBrowser()
     if (std::filesystem::exists(m_assetsDirectory))
     {
        // LEAK: this possibly leads to leaks
-       AssetNode* assetNode = RecursiveQuerryBrowser(m_assetsDirectory, nullptr);
+       AAssetNode* assetNode = RecursiveQuerryBrowser(m_assetsDirectory, nullptr);
        m_assetsDirectoryNode = dynamic_cast<DirectoryNode*>(assetNode);
        m_assetsDirectoryNode->m_filename = "Assets";
        m_currentDirectoryNode = m_assetsDirectoryNode;

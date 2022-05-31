@@ -27,7 +27,6 @@ private:
 
 	class Input : public PanelCategory
 	{
-		// this leads to leak
 	private:
 		std::vector<int> m_axisPosIndex;
 		std::vector<int> m_axisNegIndex;
@@ -37,7 +36,7 @@ private:
 		InputManager::InputContext* userContext = nullptr;
 
 		Input(std::string name = "default");
-		~Input();
+
 		void Fill() override;
 		void CreateAction(int& type);
 		void CreateButtons(const char* name);

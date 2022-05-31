@@ -49,6 +49,8 @@ public:
 	MeshRenderer(ERendererType rendererType);
 	MeshRenderer(ERendererType rendererType, CCUUID& id);
 
+	virtual ~MeshRenderer() = default;
+
 	virtual void Initialize() {}
 	virtual void BindToSignals() override {}
 

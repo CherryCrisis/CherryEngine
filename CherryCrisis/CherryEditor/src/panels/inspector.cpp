@@ -72,7 +72,7 @@ void Inspector::DropzoneCallback(const std::string& path)
     {
         std::shared_ptr<Material> mat = ResourceManager::GetInstance()->GetResource<Material>(path.c_str());
         if (m_assetSettingsDisplayer)
-            m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(mat));
+            m_assetSettingsDisplayer->SetAssetSettings(std::make_unique<MaterialSettings>(mat));
     }
 }
 

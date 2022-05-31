@@ -65,7 +65,7 @@ namespace CCScripting
     }
 })CS";
 
-	struct AssetNode
+	struct AAssetNode
 	{
 		std::shared_ptr<Texture> m_previewTexture;
 
@@ -86,9 +86,9 @@ namespace CCScripting
 		virtual void Action() = 0; //If double clicked action
 	};
 
-	struct DirectoryNode : public AssetNode
+	struct DirectoryNode : public AAssetNode
 	{
-		std::vector<AssetNode*> m_assetNodes {};
+		std::vector<AAssetNode*> m_assetNodes {};
 		DirectoryNode*			m_parentDirectory = nullptr;
 
 		void Rename(const char* newFilepath) override {};
@@ -97,7 +97,7 @@ namespace CCScripting
 		void Action() override { m_assetBrowser->SetCurrentDirectory(this); };
 	};
 
-	struct EmptyNode : public AssetNode
+	struct EmptyNode : public AAssetNode
 	{
 		void Rename(const char* newFilepath) override {};
 		void Reload() override {};
@@ -105,7 +105,7 @@ namespace CCScripting
 		void Action() override {};
 	};
 
-	struct ScriptNode : public AssetNode
+	struct ScriptNode : public AAssetNode
 	{
 		void Rename(const char* newFilepath) override {};
 		void Reload() override {};
@@ -113,7 +113,7 @@ namespace CCScripting
 		void Action() override;
 	};
 
-	struct SceneNode : public AssetNode
+	struct SceneNode : public AAssetNode
 	{
 		void Rename(const char* newFilepath) override {};
 		void Reload() override {};
@@ -122,7 +122,7 @@ namespace CCScripting
 	};
 
 	template <class ResourceT>
-	struct ResourceAssetNode : public AssetNode
+	struct ResourceAssetNode : public AAssetNode
 	{
 		std::shared_ptr<ResourceT> m_resource;
 
@@ -149,7 +149,7 @@ namespace CCScripting
 	{
 		void Action() override
 		{
-			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(new MaterialSettings(m_resource));
+			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(std::make_unique<MaterialSettings>(m_resource));
 		};
 	};
 
@@ -157,7 +157,7 @@ namespace CCScripting
 	{
 		void Action() override 
 		{
-			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(new TextureSettings(m_resource));
+			m_assetBrowser->m_assetSettingsDisplayer->SetAssetSettings(std::make_unique<TextureSettings>(m_resource));
 		};
 	};
 
@@ -189,10 +189,11 @@ namespace CCScripting
 	float		m_thumbnailSize = 40.f;
 	char		m_researchInput[32] = "";
 
-	std::map<std::string, std::unique_ptr<AssetNode>> m_assetNodes;
+
+	std::map<std::string, std::unique_ptr<AAssetNode>> m_assetNodes;
 
 	std::filesystem::path	m_assetsDirectory;
-	std::vector<AssetNode*> m_allAssetNode;		//To search in all directories
+	std::vector<AAssetNode*> m_allAssetNode;		//To search in all directories
 
 	EBrowserAction		m_browserAction = EBrowserAction::NONE;
 	std::string			m_popupAssetType;
@@ -200,11 +201,11 @@ namespace CCScripting
 
 	DirectoryNode*	m_assetsDirectoryNode = nullptr;
 	DirectoryNode*	m_currentDirectoryNode = nullptr;
-	AssetNode*		m_focusedNode = nullptr;
+	AAssetNode*		m_focusedNode = nullptr;
 	EditorManager*	m_manager = nullptr;
 
-	void SetAssetNode(const std::filesystem::path& path, AssetNode& assetNode);
-	AssetNode* RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory); //return m_assetsDirectoryNode 
+	void SetAssetNode(const std::filesystem::path& path, AAssetNode& assetNode);
+	AAssetNode* RecursiveQuerryBrowser(const std::filesystem::path& m_path, DirectoryNode* parentDirectory); //return m_assetsDirectoryNode 
 
 	void RenderMenuBar();
 	void ResizeCell();
@@ -215,7 +216,7 @@ namespace CCScripting
 	void BrowserActionDelete();
 	void BrowserAction();
 
-	bool DragAndDropTarget(AssetNode* assetNode);
+	bool DragAndDropTarget(AAssetNode* assetNode);
 
 public :
 	std::unordered_map<std::string, time_t> m_timeModified;

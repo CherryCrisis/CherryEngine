@@ -27,7 +27,6 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
-    m_device = alcGetContextsDevice(m_context);
     alcMakeContextCurrent(NULL);
     alcDestroyContext(m_context);
     alcCloseDevice(m_device);
