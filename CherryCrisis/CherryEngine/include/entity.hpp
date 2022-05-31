@@ -81,6 +81,7 @@ public:
 
 	template <BehaviourT CompT>
 	bool TryGetBehaviour(CompT*& componentToReturn);
+	bool TryGetBehaviour(const std::string& componentTypeName, Behaviour*& componentToReturn);
 
 	template <BehaviourT CompT>
 	CompT* GetOrAddBehaviour();

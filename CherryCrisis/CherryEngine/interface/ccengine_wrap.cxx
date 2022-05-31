@@ -6151,6 +6151,25 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Entity(void * jarg1) {
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetBehaviour(void * jarg1, char * jarg2) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::string *arg2 = 0 ;
+  Behaviour *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return 0;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  result = (Behaviour *)(arg1)->GetBehaviour((std::string const &)*arg2);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_Destroy(void * jarg1) {
   Entity *arg1 = (Entity *) 0 ;
   

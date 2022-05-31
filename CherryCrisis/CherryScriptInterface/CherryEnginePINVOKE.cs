@@ -1300,6 +1300,9 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Entity")]
   public static extern void delete_Entity(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_GetBehaviour")]
+  public static extern global::System.IntPtr Entity_GetBehaviour(global::System.Runtime.InteropServices.HandleRef jarg1, string jarg2);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_Destroy")]
   public static extern void Entity_Destroy(global::System.Runtime.InteropServices.HandleRef jarg1);
 

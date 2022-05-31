@@ -18,7 +18,7 @@ namespace CCScripting
 
 		}
 
-		public void Start()
+		public void Awake()
 		{
 			transform = GetComponent<Transform>();
 		}

@@ -45,6 +45,13 @@ public class Entity : Object {
     } 
   }
 
+  public Behaviour GetBehaviour(string componentTypeName) {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetBehaviour(swigCPtr, componentTypeName);
+    Behaviour ret = (cPtr == global::System.IntPtr.Zero) ? null : new Behaviour(cPtr, false);
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
   public void Destroy() {
     CherryEnginePINVOKE.Entity_Destroy(swigCPtr);
   }
@@ -131,7 +138,7 @@ public class Entity : Object {
 
 	public override string ToString() => name;
 
-	public Behaviour AddComponent(System.Type type)
+	public Behaviour AddBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return AddTransform();
@@ -142,9 +149,9 @@ public class Entity : Object {
 		return AddScript(type.Name);
 	}
 
-	public T AddComponent<T>() where T : Behaviour => AddComponent(typeof(T)) as T;
+	public T AddBehaviour<T>() where T : Behaviour => AddBehaviour(typeof(T)) as T;
 
-	public Behaviour GetComponent(System.Type type)
+	public Behaviour GetBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return GetTransform();
@@ -155,7 +162,7 @@ public class Entity : Object {
 		return GetScript(type.Name);
 	}
 
-	public T GetComponent<T>() where T : Behaviour => GetComponent(typeof(T)) as T;
+	public T GetBehaviour<T>() where T : Behaviour => GetBehaviour(typeof(T)) as T;
 	
 }
 

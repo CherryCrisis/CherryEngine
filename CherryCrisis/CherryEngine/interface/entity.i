@@ -53,6 +53,7 @@ public:
 
 	template <class CompT>
 	CompT* GetBehaviour();
+	Behaviour* GetBehaviour(const std::string& componentTypeName);
 
 	template <class CompT>
 	std::vector<CompT*> GetBehavioursOfType();
@@ -101,7 +102,7 @@ public:
 
 	public override string ToString() => name;
 
-	public Behaviour AddComponent(System.Type type)
+	public Behaviour AddBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return AddTransform();
@@ -112,9 +113,9 @@ public:
 		return AddScript(type.Name);
 	}
 
-	public T AddComponent<T>() where T : Behaviour => AddComponent(typeof(T)) as T;
+	public T AddBehaviour<T>() where T : Behaviour => AddBehaviour(typeof(T)) as T;
 
-	public Behaviour GetComponent(System.Type type)
+	public Behaviour GetBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return GetTransform();
@@ -125,6 +126,6 @@ public:
 		return GetScript(type.Name);
 	}
 
-	public T GetComponent<T>() where T : Behaviour => GetComponent(typeof(T)) as T;
+	public T GetBehaviour<T>() where T : Behaviour => GetBehaviour(typeof(T)) as T;
 	%}
 };

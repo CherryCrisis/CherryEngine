@@ -155,6 +155,13 @@ Behaviour* Entity::GetBehaviour(const std::string& componentTypeName)
 	return nullptr;
 }
 
+bool Entity::TryGetBehaviour(const std::string& componentTypeName, Behaviour*& componentToReturn)
+{
+	componentToReturn = GetBehaviour(componentTypeName);
+
+	return componentToReturn != nullptr;
+}
+
 std::vector<Behaviour*> Entity::GetAllBehaviours()
 {
 	std::vector<Behaviour*> behaviours;
