@@ -202,9 +202,9 @@ void PortalComponent::UpdatePortalMatrices(Transform* tranform)
 
 void PortalComponent::UpdateRelativeLinkedPortalMatrix()
 {
-	m_portal.m_relativeLinkedPortalMatrix = m_linkedPortal->m_portal.m_modelMatrix * m_portal.m_modelMatrix.Inverse();
+	if (m_linkedPortal)
+		m_portal.m_relativeLinkedPortalMatrix = m_linkedPortal->m_portal.m_modelMatrix * m_portal.m_modelMatrix.Inverse();
 }
-
 
 void PortalComponent::InvalidateLinkedPortal()
 {
