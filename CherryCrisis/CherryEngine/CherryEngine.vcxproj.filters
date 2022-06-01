@@ -1594,6 +1594,9 @@
     <None Include="interface\sound.i">
       <Filter>Fichiers sources\Interface\Resource</Filter>
     </None>
+    <None Include="interface\portal_component.i">
+      <Filter>Fichiers sources\Interface\Components</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">

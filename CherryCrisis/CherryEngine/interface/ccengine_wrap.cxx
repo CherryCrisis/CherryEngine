@@ -459,6 +459,9 @@ namespace Swig {
 
 	#include "sound.hpp"
 
+
+	#include "portal_component.hpp"
+
 SWIGINTERN std::vector< CameraComponent * > *new_std_vector_Sl_CameraComponent_Sm__Sg___SWIG_2(int capacity){
         std::vector< CameraComponent * >* pv = 0;
         if (capacity >= 0) {
@@ -1265,6 +1268,122 @@ SWIGINTERN int std_vector_Sl_AudioEmitter_Sm__Sg__LastIndexOf(std::vector< Audio
       }
 SWIGINTERN bool std_vector_Sl_AudioEmitter_Sm__Sg__Remove(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
         std::vector< AudioEmitter * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< PortalComponent * > *new_std_vector_Sl_PortalComponent_Sm__Sg___SWIG_2(int capacity){
+        std::vector< PortalComponent * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< PortalComponent * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN PortalComponent *std_vector_Sl_PortalComponent_Sm__Sg__getitemcopy(std::vector< PortalComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< PortalComponent * >::value_type const &std_vector_Sl_PortalComponent_Sm__Sg__getitem(std::vector< PortalComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__setitem(std::vector< PortalComponent * > *self,int index,PortalComponent *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__AddRange(std::vector< PortalComponent * > *self,std::vector< PortalComponent * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< PortalComponent * > *std_vector_Sl_PortalComponent_Sm__Sg__GetRange(std::vector< PortalComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< PortalComponent * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__Insert(std::vector< PortalComponent * > *self,int index,PortalComponent *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__InsertRange(std::vector< PortalComponent * > *self,int index,std::vector< PortalComponent * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__RemoveAt(std::vector< PortalComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__RemoveRange(std::vector< PortalComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< PortalComponent * > *std_vector_Sl_PortalComponent_Sm__Sg__Repeat(PortalComponent *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< PortalComponent * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_0(std::vector< PortalComponent * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_1(std::vector< PortalComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__SetRange(std::vector< PortalComponent * > *self,int index,std::vector< PortalComponent * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_PortalComponent_Sm__Sg__Contains(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_PortalComponent_Sm__Sg__IndexOf(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        int index = -1;
+        std::vector< PortalComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_PortalComponent_Sm__Sg__LastIndexOf(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        int index = -1;
+        std::vector< PortalComponent * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_PortalComponent_Sm__Sg__Remove(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        std::vector< PortalComponent * >::iterator it = std::find(self->begin(), self->end(), value);
         if (it != self->end()) {
           self->erase(it);
           return true;
@@ -6882,6 +7001,58 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioEmitter(void * jarg1) {
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponent_m_transform_set(void * jarg1, void * jarg2) {
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponent_m_transform_get(void * jarg1) {
+  void * jresult ;
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponent_SetLinkedPortal(void * jarg1, void * jarg2) {
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Behaviour *arg2 = (Behaviour *) 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  arg2 = (Behaviour *)jarg2; 
+  (arg1)->SetLinkedPortal(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponent_GetLinkedPortal(void * jarg1) {
+  void * jresult ;
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Behaviour *result = 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  result = (Behaviour *)(arg1)->GetLinkedPortal();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponent(void * jarg1) {
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Clear(void * jarg1) {
   std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
   
@@ -9745,6 +9916,415 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioEmitterVector(void * jar
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Clear(void * jarg1) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Add(void * jarg1, void * jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  (arg1)->push_back((PortalComponent *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * >::size_type result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  result = ((std::vector< PortalComponent * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * >::size_type result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  result = ((std::vector< PortalComponent * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * >::size_type arg2 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (std::vector< PortalComponent * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalComponentVector__SWIG_0() {
+  void * jresult ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  result = (std::vector< PortalComponent * > *)new std::vector< PortalComponent * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalComponentVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = 0 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< PortalComponent * > *)new std::vector< PortalComponent * >((std::vector< PortalComponent * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalComponentVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< PortalComponent * > *)new_std_vector_Sl_PortalComponent_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  PortalComponent *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (PortalComponent *)std_vector_Sl_PortalComponent_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalComponent * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< PortalComponent * >::value_type *) &std_vector_Sl_PortalComponent_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  PortalComponent **arg3 = 0 ;
+  PortalComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (PortalComponent *)jarg3;
+  arg3 = (PortalComponent **)&temp3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__setitem(arg1,arg2,(PortalComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (std::vector< PortalComponent * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_PortalComponent_Sm__Sg__AddRange(arg1,(std::vector< PortalComponent * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< PortalComponent * > *)std_vector_Sl_PortalComponent_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  PortalComponent **arg3 = 0 ;
+  PortalComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (PortalComponent *)jarg3;
+  arg3 = (PortalComponent **)&temp3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__Insert(arg1,arg2,(PortalComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< PortalComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__InsertRange(arg1,arg2,(std::vector< PortalComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  PortalComponent **arg1 = 0 ;
+  int arg2 ;
+  PortalComponent *temp1 = 0 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  temp1 = (PortalComponent *)jarg1;
+  arg1 = (PortalComponent **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< PortalComponent * > *)std_vector_Sl_PortalComponent_Sm__Sg__Repeat((PortalComponent *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< PortalComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__SetRange(arg1,arg2,(std::vector< PortalComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (bool)std_vector_Sl_PortalComponent_Sm__Sg__Contains(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (int)std_vector_Sl_PortalComponent_Sm__Sg__IndexOf(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (int)std_vector_Sl_PortalComponent_Sm__Sg__LastIndexOf(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (bool)std_vector_Sl_PortalComponent_Sm__Sg__Remove(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponentVector(void * jarg1) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_set(void * jarg1, void * jarg2) {
   Entity *arg1 = (Entity *) 0 ;
   Cell *arg2 = (Cell *) 0 ;
@@ -10043,6 +10623,42 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfAudioEmitter(void *
   arg1 = (Entity *)jarg1; 
   result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< AudioEmitter >();
   jresult = new std::vector< AudioEmitter * >((const std::vector< AudioEmitter * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetPortalComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  PortalComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (PortalComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< PortalComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddPortalComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  PortalComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (PortalComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< PortalComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfPortalComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< PortalComponent * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< PortalComponent >();
+  jresult = new std::vector< PortalComponent * >((const std::vector< PortalComponent * > &)result); 
   return jresult;
 }
 
@@ -11120,6 +11736,10 @@ SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioListener_SWIGUpcast(Audi
 }
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SWIGUpcast(AudioEmitter *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_PortalComponent_SWIGUpcast(PortalComponent *jarg1) {
     return (Behaviour *)jarg1;
 }
 

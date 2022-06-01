@@ -1414,6 +1414,21 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_AudioEmitter")]
   public static extern void delete_AudioEmitter(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponent_m_transform_set")]
+  public static extern void PortalComponent_m_transform_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponent_m_transform_get")]
+  public static extern global::System.IntPtr PortalComponent_m_transform_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponent_SetLinkedPortal")]
+  public static extern void PortalComponent_SetLinkedPortal(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponent_GetLinkedPortal")]
+  public static extern global::System.IntPtr PortalComponent_GetLinkedPortal(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_PortalComponent")]
+  public static extern void delete_PortalComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_CameraComponentVector_Clear")]
   public static extern void CameraComponentVector_Clear(global::System.Runtime.InteropServices.HandleRef jarg1);
 
@@ -1960,6 +1975,84 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_AudioEmitterVector")]
   public static extern void delete_AudioEmitterVector(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Clear")]
+  public static extern void PortalComponentVector_Clear(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Add")]
+  public static extern void PortalComponentVector_Add(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_size")]
+  public static extern uint PortalComponentVector_size(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_capacity")]
+  public static extern uint PortalComponentVector_capacity(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_reserve")]
+  public static extern void PortalComponentVector_reserve(global::System.Runtime.InteropServices.HandleRef jarg1, uint jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_PortalComponentVector__SWIG_0")]
+  public static extern global::System.IntPtr new_PortalComponentVector__SWIG_0();
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_PortalComponentVector__SWIG_1")]
+  public static extern global::System.IntPtr new_PortalComponentVector__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_PortalComponentVector__SWIG_2")]
+  public static extern global::System.IntPtr new_PortalComponentVector__SWIG_2(int jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_getitemcopy")]
+  public static extern global::System.IntPtr PortalComponentVector_getitemcopy(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_getitem")]
+  public static extern global::System.IntPtr PortalComponentVector_getitem(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_setitem")]
+  public static extern void PortalComponentVector_setitem(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_AddRange")]
+  public static extern void PortalComponentVector_AddRange(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_GetRange")]
+  public static extern global::System.IntPtr PortalComponentVector_GetRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, int jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Insert")]
+  public static extern void PortalComponentVector_Insert(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_InsertRange")]
+  public static extern void PortalComponentVector_InsertRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_RemoveAt")]
+  public static extern void PortalComponentVector_RemoveAt(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_RemoveRange")]
+  public static extern void PortalComponentVector_RemoveRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, int jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Repeat")]
+  public static extern global::System.IntPtr PortalComponentVector_Repeat(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Reverse__SWIG_0")]
+  public static extern void PortalComponentVector_Reverse__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Reverse__SWIG_1")]
+  public static extern void PortalComponentVector_Reverse__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, int jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_SetRange")]
+  public static extern void PortalComponentVector_SetRange(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Contains")]
+  public static extern bool PortalComponentVector_Contains(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_IndexOf")]
+  public static extern int PortalComponentVector_IndexOf(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_LastIndexOf")]
+  public static extern int PortalComponentVector_LastIndexOf(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponentVector_Remove")]
+  public static extern bool PortalComponentVector_Remove(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_PortalComponentVector")]
+  public static extern void delete_PortalComponentVector(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_m_cell_set")]
   public static extern void Entity_m_cell_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
@@ -2037,6 +2130,15 @@ class CherryEnginePINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_GetAllOfAudioEmitter")]
   public static extern global::System.IntPtr Entity_GetAllOfAudioEmitter(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_GetPortalComponent")]
+  public static extern global::System.IntPtr Entity_GetPortalComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_AddPortalComponent")]
+  public static extern global::System.IntPtr Entity_AddPortalComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_GetAllOfPortalComponent")]
+  public static extern global::System.IntPtr Entity_GetAllOfPortalComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_EntityVector_Clear")]
   public static extern void EntityVector_Clear(global::System.Runtime.InteropServices.HandleRef jarg1);
@@ -2304,6 +2406,9 @@ class CherryEnginePINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_AudioEmitter_SWIGUpcast")]
   public static extern global::System.IntPtr AudioEmitter_SWIGUpcast(global::System.IntPtr jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_PortalComponent_SWIGUpcast")]
+  public static extern global::System.IntPtr PortalComponent_SWIGUpcast(global::System.IntPtr jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Entity_SWIGUpcast")]
   public static extern global::System.IntPtr Entity_SWIGUpcast(global::System.IntPtr jarg1);

@@ -173,6 +173,23 @@ public class Entity : Object {
     return ret;
   }
 
+  private PortalComponent GetPortalComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetPortalComponent(swigCPtr);
+    PortalComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new PortalComponent(cPtr, false);
+    return ret;
+  }
+
+  private PortalComponent AddPortalComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddPortalComponent(swigCPtr);
+    PortalComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new PortalComponent(cPtr, false);
+    return ret;
+  }
+
+  private PortalComponentVector GetAllOfPortalComponent() {
+    PortalComponentVector ret = new PortalComponentVector(CherryEnginePINVOKE.Entity_GetAllOfPortalComponent(swigCPtr), true);
+    return ret;
+  }
+
 	private Behaviour AddScript(string scriptPath)
 	{
 		ScriptedBehaviour script = AddScriptedBehaviour();
@@ -219,6 +236,9 @@ public class Entity : Object {
 		if (type == typeof(AudioEmitter))
 			return AddAudioEmitter();
 
+		if (type == typeof(PortalComponent))
+			return AddPortalComponent();
+			
 		return AddScript(type.Name);
 	}
 
@@ -243,7 +263,10 @@ public class Entity : Object {
 						
 		if (type == typeof(AudioEmitter))
 			return GetAudioEmitter();
-
+									
+		if (type == typeof(PortalComponent))
+			return GetPortalComponent();
+			
 		return GetScript(type.Name);
 	}
 
