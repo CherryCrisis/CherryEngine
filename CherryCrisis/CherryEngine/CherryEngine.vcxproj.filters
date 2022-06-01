@@ -1582,6 +1582,9 @@
     <None Include="interface\texture.i">
       <Filter>Fichiers sources\Interface\Resource</Filter>
     </None>
+    <None Include="interface\light_component.i">
+      <Filter>Fichiers sources\Interface\Components</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">

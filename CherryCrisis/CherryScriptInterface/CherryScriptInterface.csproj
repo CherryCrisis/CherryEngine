@@ -49,6 +49,7 @@
     <Compile Include="CherryEnginePINVOKE.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="EForceMode.cs" />
+    <Compile Include="ELightType.cs" />
     <Compile Include="ELogType.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityVector.cs" />
@@ -57,6 +58,8 @@
     <Compile Include="ETextureType.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Keycode.cs" />
+    <Compile Include="LightComponent.cs" />
+    <Compile Include="LightComponentVector.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Matrix4.cs" />
     <Compile Include="Mesh.cs" />

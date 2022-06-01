@@ -122,6 +122,23 @@ public class Entity : Object {
     return ret;
   }
 
+  private LightComponent GetLightComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetLightComponent(swigCPtr);
+    LightComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new LightComponent(cPtr, false);
+    return ret;
+  }
+
+  private LightComponent AddLightComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddLightComponent(swigCPtr);
+    LightComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new LightComponent(cPtr, false);
+    return ret;
+  }
+
+  private LightComponentVector GetAllOfLightComponent() {
+    LightComponentVector ret = new LightComponentVector(CherryEnginePINVOKE.Entity_GetAllOfLightComponent(swigCPtr), true);
+    return ret;
+  }
+
 	private Behaviour AddScript(string scriptPath)
 	{
 		ScriptedBehaviour script = AddScriptedBehaviour();
@@ -159,6 +176,9 @@ public class Entity : Object {
 		if (type == typeof(ModelRenderer))
 			return AddModelRenderer();
 
+		if (type == typeof(LightComponent))
+			return AddLightComponent();
+
 		return AddScript(type.Name);
 	}
 
@@ -174,6 +194,9 @@ public class Entity : Object {
 
 		if (type == typeof(ModelRenderer))
 			return GetModelRenderer();
+			
+		if (type == typeof(LightComponent))
+			return GetLightComponent();
 
 		return GetScript(type.Name);
 	}

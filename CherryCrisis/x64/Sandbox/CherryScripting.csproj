@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\LightModifier.cs" />
     <Compile Include="Assets\MeshModifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Assets\BackpackBehaviour.cs" />

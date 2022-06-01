@@ -458,6 +458,7 @@
     <None Include="interface\capsule_collider.i" />
     <None Include="interface\cell.i" />
     <None Include="interface\collider.i" />
+    <None Include="interface\light_component.i" />
     <None Include="interface\material.i" />
     <None Include="interface\matrix4.i" />
     <None Include="interface\mesh.i" />

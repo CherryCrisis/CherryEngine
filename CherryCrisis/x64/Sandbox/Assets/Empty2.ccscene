@@ -173,6 +173,8 @@ cells:
         name: Sphere.027__0
       28986036:
         name: Cube.055__0
+      2156536246:
+        name: Light
 components:
   1718631394:
     type: Transform
@@ -1404,3 +1406,29 @@ components:
     matFile: Assets\Models\Backpack\Scene_-_Root.ccmat
     transform: 2707703110
     meshFile: Assets\Models\Backpack\backpack.obj/Cube.055__0
+  3373466513:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2156536246
+    position: 0.000000/0.000000/1.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  3448215942:
+    type: LightComponent
+    attenuation: 1.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2156536246
+    diffuse: 0.000000/500.000000/0.000000
+    directon: -0.000000/0.000000/-1.000000
+    light type: 1
+    ambient: 1.000000/1.000000/1.000000
+    specular: 1.000000/1.000000/1.000000
+    cutoff: 0
+    outer cutoff: 0
+  2428082902:
+    type: ScriptedBehaviour
+    light: 3448215942
+    IsActive: true
+    m_owner: 2156536246
+    scriptName: LightModifier

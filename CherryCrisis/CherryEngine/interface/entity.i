@@ -11,6 +11,7 @@
 %include camera_comp.i
 %include scripted_behaviour.i
 %include model_renderer.i
+%include light_component.i
 %include object.i
 
 %define COMP_STD_WRAP(COMP_T)
@@ -35,6 +36,7 @@ COMP_STD_WRAP(CameraComponent)
 COMP_STD_WRAP(Transform)
 COMP_STD_WRAP(ScriptedBehaviour)
 COMP_STD_WRAP(ModelRenderer)
+COMP_STD_WRAP(LightComponent)
 
 %nodefaultctor Entity;
 class Entity : public Object
@@ -76,6 +78,7 @@ public:
 	COMP_TEMPLATE_WRAP(ScriptedBehaviour)
 	COMP_TEMPLATE_WRAP(Transform)
 	COMP_TEMPLATE_WRAP(ModelRenderer)
+	COMP_TEMPLATE_WRAP(LightComponent)
 
 	%proxycode %{
 	private Behaviour AddScript(string scriptPath)
@@ -115,6 +118,9 @@ public:
 		if (type == typeof(ModelRenderer))
 			return AddModelRenderer();
 
+		if (type == typeof(LightComponent))
+			return AddLightComponent();
+
 		return AddScript(type.Name);
 	}
 
@@ -130,6 +136,9 @@ public:
 
 		if (type == typeof(ModelRenderer))
 			return GetModelRenderer();
+			
+		if (type == typeof(LightComponent))
+			return GetLightComponent();
 
 		return GetScript(type.Name);
 	}
