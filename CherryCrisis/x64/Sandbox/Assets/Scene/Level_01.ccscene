@@ -1,8 +1,6 @@
 resources:
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\Backpack\backpack.obj
-  - Assets\Models\MockupScene\mockupRoom.fbx
-  - Assets\Models\MockupScene\mockupRoom.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
   - Assets\Models\Rooms\Room_01\Room_01.obj
@@ -113,35 +111,227 @@ cells:
         name: WardrobeDoor_01
       2090915486:
         name: Portal_0
+      303660238:
+        name: Player
+      3487056894:
+        name: Camera
   1074273426:
     name: Room_01
     settings:
       texturePath: Assets\skydome\Arches_3k.hdr
     entities:
       3417707768:
-        name: Portal_1
-      2667337768:
+        name: Portal_R0_To_R1
+      25333046:
+        name: Portal_To_Platform_Exit
+      4161875284:
+        name: Portal_Enter_Corridor_02
+      2717461655:
+        name: Portal_Enter_Corridor_01
+      403906653:
+        name: Portal_Enter_Corridor_00
+      1778709949:
+        name: Portal_To_Platform_Enter
+      3257577050:
+        name: Portal_Corridor
+      637055272:
+        name: Portal_Corridor_Loop
+      3197742867:
         name: Room_01.obj
-      3848358269:
+      3751812940:
         name: Cube.005_Cube.018
-      3604420261:
+      3172150989:
         name: Cube.005_Cube.018_M_Portal_01
-      2400199719:
+      4107806653:
         name: Cube.015_Cube.019
-      4293790717:
+      3828796002:
         name: Cube.015_Cube.019_M_Arche
-      4082996710:
+      947284538:
+        name: Cube.015_Cube.019_M_Arche_2
+      1378711967:
         name: Plane_Plane.002
-      1788197001:
+      1495193375:
         name: Plane_Plane.002_M_Floor_01
-      2520412605:
+      127191808:
         name: Plane.001_Plane.003
-      1652249301:
+      4283639258:
         name: Plane.001_Plane.003_M_WallCorner
-      1629829629:
+      1877969519:
+        name: Plane.001_Plane.003_M_Arche_2
+      501071375:
         name: Plane.005_Plane.004
-      713230762:
+      4010584378:
         name: Plane.005_Plane.004_M_Cellings_01
+      3484411685:
+        name: Plane.006_Plane.005
+      356125143:
+        name: Plane.006_Plane.005_M_R0_Wall
+      3670085832:
+        name: Cube.016_Cube.001
+      4037026780:
+        name: Cube.016_Cube.001_M_Arche
+      157748387:
+        name: Cube.016_Cube.001_M_Arche_2
+      4221332633:
+        name: Plane.007_Plane.006
+      3541196550:
+        name: Plane.007_Plane.006_M_R0_Wall
+      790594034:
+        name: Cube.017_Cube.003
+      3678280128:
+        name: Cube.017_Cube.003_M_Arche
+      1834314723:
+        name: Cube.017_Cube.003_M_Arche_2
+      2898631087:
+        name: Plane.008_Plane.007
+      3862796284:
+        name: Plane.008_Plane.007_M_R0_Wall
+      1531288041:
+        name: Cube.018_Cube.008
+      4263570743:
+        name: Cube.018_Cube.008_M_Arche
+      1241247244:
+        name: Cube.018_Cube.008_M_Arche_2
+      1153198814:
+        name: Plane.009_Plane.008
+      2619128502:
+        name: Plane.009_Plane.008_M_R0_Wall
+      2819004305:
+        name: Cube.019_Cube.020
+      2614166039:
+        name: Cube.019_Cube.020_M_Arche
+      2694662361:
+        name: Cube.019_Cube.020_M_Arche_2
+      2002282727:
+        name: Plane.010_Plane.009
+      4140247423:
+        name: Plane.010_Plane.009_M_Floor_01
+      1410763416:
+        name: Plane.011
+      4035046899:
+        name: Plane.011_Plane.011_M_R0_Wall
+      3735896694:
+        name: Plane.013
+      2205763040:
+        name: Plane.013_Plane.013_M_R0_Wall
+      4180411355:
+        name: Plane.014
+      2446603691:
+        name: Plane.014_Plane.014_M_R0_Wall
+      1438262722:
+        name: Plane.015
+      1947021318:
+        name: Plane.015_Plane.015_M_Floor_01
+      2623050472:
+        name: Plane.016
+      2838166985:
+        name: Plane.016_Plane.016_M_R0_Wall
+      3048799029:
+        name: Plane.017
+      1055715026:
+        name: Plane.017_Plane.017_M_R0_Wall
+      1097222783:
+        name: Plane.018
+      2257147182:
+        name: Plane.018_Plane.018_M_R0_Wall
+      2403735805:
+        name: Plane.019
+      3902122919:
+        name: Plane.019_Plane.019_M_R0_Wall
+      709124758:
+        name: Cube.020_Cube.021
+      2655881970:
+        name: Cube.020_Cube.021_M_Arche
+      1732216763:
+        name: Cube.020_Cube.021_M_Arche_2
+      1589167248:
+        name: Cube.021_Cube.022
+      303572586:
+        name: Cube.021_Cube.022_M_Arche
+      3367251199:
+        name: Cube.021_Cube.022_M_Arche_2
+      3346593024:
+        name: Plane.020
+      3700601595:
+        name: Plane.020_Plane.020_None
+      2037257960:
+        name: Plane.021
+      349788610:
+        name: Plane.021_Plane.021_None
+      2998418027:
+        name: Cube.022_Cube.023
+      2101391822:
+        name: Cube.022_Cube.023_M_Arche
+      224001603:
+        name: Cube.022_Cube.023_M_Arche_2
+      201339167:
+        name: Plane.022
+      4241284984:
+        name: Plane.022_Plane.022_M_Floor_01
+      3953741118:
+        name: Plane.023
+      2222793806:
+        name: Plane.023_Plane.023_M_Arche
+      183626706:
+        name: Plane.023_Plane.023_M_Arche_2
+      1103297496:
+        name: Cube.023_Cube
+      2984006688:
+        name: Cube.023_Cube_M_Portal_02
+      2235231931:
+        name: Plane.025
+      2259581863:
+        name: Plane.025_Plane.025_M_Floor_01
+      1137401412:
+        name: Plane.026
+      3386311406:
+        name: Plane.026_Plane.026_M_Floor_01
+      4260041305:
+        name: Plane.027
+      943810799:
+        name: Plane.027_Plane.027_M_Arche
+      459351628:
+        name: Plane.027_Plane.027_M_Arche_2
+      4021032830:
+        name: Cube.024
+      1405777236:
+        name: Cube.024_Cube.024_M_Portal_02
+      3823912913:
+        name: Plane.028
+      73881939:
+        name: Plane.028_Plane.028_M_R0_Wall
+      341028521:
+        name: Plane.029
+      3741747523:
+        name: Plane.029_Plane.029_M_R0_Wall
+      4200756720:
+        name: Plane.030
+      155678544:
+        name: Plane.030_Plane.030_M_R0_Wall
+      2153794390:
+        name: Plane.031
+      180406276:
+        name: Plane.031_Plane.031_M_Floor_01
+      2781123930:
+        name: Plane.032
+      609625151:
+        name: Plane.032_Plane.032_M_R0_Wall
+      3477103241:
+        name: Plane.024_Plane.033
+      1777100956:
+        name: Plane.024_Plane.033_M_Floor_01
+      3051510147:
+        name: Plane.033_Plane.034
+      2654716950:
+        name: Plane.033_Plane.034_M_R0_Wall
+      312355945:
+        name: Plane.034_Plane.035
+      1722069298:
+        name: Plane.034_Plane.035_M_R0_Wall
+      2945888529:
+        name: Plane.012_Plane.036
+      3263370843:
+        name: Plane.012_Plane.036_M_R0_Wall
 components:
   169441991:
     type: Transform
@@ -159,21 +349,6 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
-  2208661130:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 3171590953
-    matFile: Assets\Models\Rooms\Room_00\M_Floor.ccmat
-    transform: 2282580429
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Floor_Plane_M_Floor
-  2282580429:
-    type: Transform
-    rotation: 0.000000/0.000000/0.000000
-    IsActive: true
-    m_owner: 3171590953
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 169441991
   2961088815:
     type: BoxCollider
     IsActive: true
@@ -182,6 +357,21 @@ components:
     Scale: 2.145000/0.001000/1.500000
     Is Trigger: false
     Local Position: 0.000000/0.000000/0.000000
+  2282580429:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3171590953
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 169441991
+  2208661130:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3171590953
+    matFile: Assets\Models\Rooms\Room_00\M_Floor.ccmat
+    transform: 2282580429
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Floor_Plane_M_Floor
   3474939922:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -328,6 +518,13 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
+  83697198:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1304665076
+    matFile: Assets\Models\Rooms\Room_00\M_Mattress.ccmat
+    transform: 3941192068
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.001_Cube.004_M_Mattress
   3941192068:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -336,13 +533,6 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
-  83697198:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 1304665076
-    matFile: Assets\Models\Rooms\Room_00\M_Mattress.ccmat
-    transform: 3941192068
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.001_Cube.004_M_Mattress
   1401819499:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -535,13 +725,6 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
-  2712033516:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 154865881
-    matFile: Assets\Models\Rooms\Room_00\M_WindowSill.ccmat
-    transform: 2476538112
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.011_Cube.014_M_WindowSill
   2476538112:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -550,6 +733,13 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
+  2712033516:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 154865881
+    matFile: Assets\Models\Rooms\Room_00\M_WindowSill.ccmat
+    transform: 2476538112
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.011_Cube.014_M_WindowSill
   541040486:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -698,12 +888,20 @@ components:
     parent: 3796912580
   1255767839:
     type: Transform
-    rotation: -0.000000/0.349066/-0.000000
+    rotation: 0.000000/0.349066/0.000000
     IsActive: true
     m_owner: 3491960821
     position: 1.850000/0.000000/0.430000
     scale: 1.000002/1.000000/1.000002
     parent: 3796912580
+  2996894397:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2090915486
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
   699187334:
     type: PortalComponent
     linkedPortalProp: 156399687
@@ -717,27 +915,83 @@ components:
     position: 2.000000/0.570000/0.000000
     scale: 0.425000/0.550000/1.000000
     parent: 3796912580
-  2996894397:
-    type: BoxCollider
+  1698815949:
+    type: Rigidbody
     IsActive: true
-    m_owner: 2090915486
+    m_owner: 303660238
+    Rotation constraints: 1/0/1
+    Density: 10
+    Kinematic: false
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
-    Is Trigger: true
-    Local Position: 0.000000/0.000000/0.000000
-  156399687:
-    type: PortalComponent
-    linkedPortalProp: 699187334
+    Max angular velocity: 100
+    Position constraints: 0/0/0
+    Use gravity: true
+    Max velocity: 100
+    Max depenetration velocity: 100
+  1978638872:
+    type: CapsuleCollider
+    Half height: 0.400000006
     IsActive: true
-    m_owner: 3417707768
+    m_owner: 303660238
+    Enabled: true
+    Is Trigger: false
+    Radius: 0.200000003
+    Local Position: 0.000000/0.000000/0.000000
+  1210136599:
+    type: CharacterController
+    Rotation Sensivity: 1
+    Move Speed: 2
+    IsActive: true
+    m_owner: 303660238
+    Jump Force: 1
+    Spring Dampling: 20
+    String Strength: 150
+  811923594:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 303660238
+  1846076243:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 303660238
+    position: 0.000000/0.460000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  2627217119:
+    type: AudioListener
+    IsActive: true
+    m_owner: 3487056894
+  1416348563:
+    type: CameraComponent
+    fovY: 1.04719758
+    near: 0.00999999978
+    IsActive: true
+    m_owner: 3487056894
+    aspect: 0.787781358
+    far: 1500
+    transform: 1220475265
+  1220475265:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3487056894
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1846076243
   1598035751:
     type: Transform
-    rotation: 3.141593/-0.000000/3.141593
+    rotation: -3.141592/0.000000/-3.141592
     IsActive: true
     m_owner: 3417707768
     position: 0.010000/0.570000/0.010000
     scale: 0.425000/0.550000/1.000000
     parent: ~
+  156399687:
+    type: PortalComponent
+    linkedPortalProp: 699187334
+    IsActive: true
+    m_owner: 3417707768
   1191006523:
     type: BoxCollider
     IsActive: true
@@ -746,134 +1000,1312 @@ components:
     Scale: 1.000000/1.000000/0.025000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-  278047102:
+  2075376077:
+    type: PortalComponent
+    linkedPortalProp: 4094975552
+    IsActive: true
+    m_owner: 25333046
+  282038712:
+    type: Transform
+    rotation: 1.570796/0.000000/0.000000
+    IsActive: true
+    m_owner: 25333046
+    position: 4.550000/1.750000/7.260000
+    scale: 0.600000/0.600000/1.000000
+    parent: ~
+  1840047440:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 25333046
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  1184697490:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 4161875284
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  3433716594:
+    type: PortalComponent
+    linkedPortalProp: 3101177499
+    IsActive: true
+    m_owner: 4161875284
+  2448385387:
+    type: Transform
+    rotation: 0.000001/0.000000/-0.000001
+    IsActive: true
+    m_owner: 4161875284
+    position: -0.010000/0.570000/2.000000
+    scale: 0.500000/0.600000/1.000000
+    parent: ~
+  2842481011:
+    type: PortalComponent
+    linkedPortalProp: 3101177499
+    IsActive: true
+    m_owner: 2717461655
+  3842470334:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2717461655
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  1867716048:
+    type: Transform
+    rotation: -3.141592/-1.570308/-3.141592
+    IsActive: true
+    m_owner: 2717461655
+    position: -2.000000/0.570000/-0.010000
+    scale: 0.500000/0.600000/1.000000
+    parent: ~
+  2384676991:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 403906653
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  1114882782:
+    type: Transform
+    rotation: -3.141592/0.000000/-3.141592
+    IsActive: true
+    m_owner: 403906653
+    position: 0.010000/0.570000/-2.000000
+    scale: 0.500000/0.600000/1.000000
+    parent: ~
+  769923755:
+    type: PortalComponent
+    linkedPortalProp: 3101177499
+    IsActive: true
+    m_owner: 403906653
+  1381487404:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1778709949
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  4094975552:
+    type: PortalComponent
+    linkedPortalProp: 2075376077
+    IsActive: true
+    m_owner: 1778709949
+  1444786807:
+    type: Transform
+    rotation: 1.570796/0.000000/0.000000
+    IsActive: true
+    m_owner: 1778709949
+    position: 4.550000/0.130000/4.550000
+    scale: 0.600000/0.600000/1.000000
+    parent: ~
+  1229052854:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3257577050
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  756415134:
+    type: Transform
+    rotation: 0.000000/1.570451/0.000000
+    IsActive: true
+    m_owner: 3257577050
+    position: 1.000000/0.570000/-4.560000
+    scale: 0.500000/0.600000/1.000000
+    parent: ~
+  3101177499:
+    type: PortalComponent
+    linkedPortalProp: 769923755
+    IsActive: true
+    m_owner: 3257577050
+  2133991595:
+    type: PortalComponent
+    linkedPortalProp: 3101177499
+    IsActive: true
+    m_owner: 637055272
+  2912867950:
+    type: Transform
+    rotation: 0.000001/0.000000/-0.000001
+    IsActive: true
+    m_owner: 637055272
+    position: 3.540000/0.570000/-2.000000
+    scale: 0.500000/0.600000/1.000000
+    parent: ~
+  207944750:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 637055272
+    Enabled: true
+    Scale: 1.000000/1.000000/0.025000
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+  4121839853:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 2667337768
+    m_owner: 3197742867
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
-  259129069:
+  2719895500:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 3848358269
+    m_owner: 3751812940
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  1951147362:
+    parent: 4121839853
+  355475663:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 3604420261
+    m_owner: 3172150989
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  1298363861:
+    parent: 4121839853
+  914452213:
     type: ModelRenderer
     IsActive: true
-    m_owner: 3604420261
+    m_owner: 3172150989
     matFile: Assets\Models\Rooms\Room_01\M_Portal_01.ccmat
-    transform: 1951147362
+    transform: 355475663
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.005_Cube.018_M_Portal_01
-  1827338943:
+  1112960879:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 2400199719
+    m_owner: 4107806653
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  3430864545:
+    parent: 4121839853
+  437745597:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 4293790717
+    m_owner: 3828796002
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  2842299852:
+    parent: 4121839853
+  4176225677:
     type: ModelRenderer
     IsActive: true
-    m_owner: 4293790717
+    m_owner: 3828796002
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    transform: 3430864545
+    transform: 437745597
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.015_Cube.019_M_Arche
-  1864631042:
+  3926429924:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 4082996710
+    m_owner: 947284538
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  986665178:
-    type: Transform
-    rotation: 0.000000/0.000000/0.000000
-    IsActive: true
-    m_owner: 1788197001
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  2169691464:
+    parent: 4121839853
+  4002087779:
     type: ModelRenderer
     IsActive: true
-    m_owner: 1788197001
+    m_owner: 947284538
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 3926429924
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.015_Cube.019_M_Arche_2
+  2197980947:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1378711967
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1100443398:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1495193375
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  683025221:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1495193375
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    transform: 986665178
+    transform: 1100443398
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane_Plane.002_M_Floor_01
-  782512940:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 1788197001
-    Enabled: true
-    Scale: 2.000000/0.010000/2.000000
-    Is Trigger: false
-    Local Position: 0.000000/0.000000/0.000000
-  4089452246:
+  3756987087:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 2520412605
+    m_owner: 127191808
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  3525603129:
+    parent: 4121839853
+  3644169597:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 1652249301
+    m_owner: 4283639258
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  3151113618:
+    parent: 4121839853
+  557458602:
     type: ModelRenderer
     IsActive: true
-    m_owner: 1652249301
+    m_owner: 4283639258
     matFile: Assets\Models\Rooms\Room_01\M_WallCorner.ccmat
-    transform: 3525603129
+    transform: 3644169597
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.001_Plane.003_M_WallCorner
-  2540942673:
+  2025501404:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 1629829629
+    m_owner: 1877969519
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  2607645164:
-    type: Transform
-    rotation: 0.000000/0.000000/0.000000
-    IsActive: true
-    m_owner: 713230762
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 278047102
-  4179685979:
+    parent: 4121839853
+  2451921585:
     type: ModelRenderer
     IsActive: true
-    m_owner: 713230762
+    m_owner: 1877969519
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 2025501404
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.001_Plane.003_M_Arche_2
+  3787529170:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 501071375
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  592593949:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4010584378
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2022058870:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4010584378
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    transform: 2607645164
+    transform: 592593949
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.005_Plane.004_M_Cellings_01
+  3906858789:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3484411685
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  4277555662:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 356125143
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  956118676:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 356125143
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 4277555662
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.006_Plane.005_M_R0_Wall
+  1719695743:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3670085832
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3336627477:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4037026780
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2212844918:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4037026780
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 3336627477
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.016_Cube.001_M_Arche
+  2570098242:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 157748387
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2877903502:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 157748387
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 2570098242
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.016_Cube.001_M_Arche_2
+  2204708130:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4221332633
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  42910165:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3541196550
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3583384178:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3541196550
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 42910165
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.007_Plane.006_M_R0_Wall
+  2720185085:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 790594034
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2851830635:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3678280128
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  4189268558:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3678280128
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 2851830635
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.017_Cube.003_M_Arche
+  2373897425:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1834314723
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3675972292:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1834314723
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 2373897425
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.017_Cube.003_M_Arche_2
+  2591389384:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2898631087
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  33792275:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3862796284
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  175320361:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3862796284
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 33792275
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.008_Plane.007_M_R0_Wall
+  3438973497:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1531288041
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2282721659:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4263570743
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3461050976:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4263570743
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 2282721659
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.018_Cube.008_M_Arche
+  2080402556:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1241247244
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1402238172:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1241247244
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 2080402556
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.018_Cube.008_M_Arche_2
+  3118127190:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1153198814
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2245595909:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2619128502
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2716376115:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2619128502
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 2245595909
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.009_Plane.008_M_R0_Wall
+  3555767919:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2819004305
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3886859303:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2614166039
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3950391600:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2614166039
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 3886859303
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.019_Cube.020_M_Arche
+  3201611506:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2694662361
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2307979374:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2694662361
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 3201611506
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.019_Cube.020_M_Arche_2
+  1252970:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2002282727
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3454390931:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4140247423
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2276044181:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4140247423
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 3454390931
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.010_Plane.009_M_Floor_01
+  1180090106:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1410763416
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2428972380:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4035046899
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2515339967:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4035046899
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 2428972380
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.011_Plane.011_M_R0_Wall
+  957391181:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3735896694
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1979922747:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2205763040
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1898356603:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2205763040
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 1979922747
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.013_Plane.013_M_R0_Wall
+  717706952:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4180411355
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2603030703:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2446603691
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3276423353:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2446603691
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 2603030703
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.014_Plane.014_M_R0_Wall
+  4044127173:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1438262722
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1432489845:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1947021318
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2114718839:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1947021318
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 1432489845
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.015_Plane.015_M_Floor_01
+  2660885440:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2623050472
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  4148995852:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2838166985
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2966555942:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2838166985
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 4148995852
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.016_Plane.016_M_R0_Wall
+  3450574725:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3048799029
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2914889275:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1055715026
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3786961699:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1055715026
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 2914889275
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.017_Plane.017_M_R0_Wall
+  2462090351:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1097222783
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3438777079:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2257147182
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2732891725:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2257147182
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 3438777079
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.018_Plane.018_M_R0_Wall
+  4190941420:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2403735805
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2759328159:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3902122919
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2099764811:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3902122919
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 2759328159
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.019_Plane.019_M_R0_Wall
+  2519213577:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 709124758
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  36929412:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2655881970
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2027119610:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2655881970
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 36929412
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.020_Cube.021_M_Arche
+  4220508243:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1732216763
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1903407286:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1732216763
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 4220508243
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.020_Cube.021_M_Arche_2
+  676293134:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1589167248
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  275359160:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 303572586
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  21237930:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 303572586
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 275359160
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.021_Cube.022_M_Arche
+  3714407840:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3367251199
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  793380474:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3367251199
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 3714407840
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.021_Cube.022_M_Arche_2
+  2561380055:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3346593024
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3332056017:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3700601595
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1183660646:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3700601595
+    matFile: Assets\Models\Rooms\Room_01\None.ccmat
+    transform: 3332056017
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.020_Plane.020_None
+  2948986032:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2037257960
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2059831411:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 349788610
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  942431832:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 349788610
+    matFile: Assets\Models\Rooms\Room_01\None.ccmat
+    transform: 2059831411
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.021_Plane.021_None
+  3591581875:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2998418027
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3564965081:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2101391822
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3532157864:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2101391822
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 3564965081
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.022_Cube.023_M_Arche
+  159651606:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 224001603
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2828339818:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 224001603
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 159651606
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.022_Cube.023_M_Arche_2
+  3772840694:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 201339167
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1636358391:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4241284984
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3228119480:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4241284984
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 1636358391
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.022_Plane.022_M_Floor_01
+  2538712671:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3953741118
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  347427277:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2222793806
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2467532851:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2222793806
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 347427277
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.023_Plane.023_M_Arche
+  2322592008:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 183626706
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1709077930:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 183626706
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 2322592008
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.023_Plane.023_M_Arche_2
+  4131924569:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1103297496
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  505333350:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2984006688
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  4032308418:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2984006688
+    matFile: Assets\Models\Rooms\Room_01\M_Portal_02.ccmat
+    transform: 505333350
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.023_Cube_M_Portal_02
+  546515927:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2235231931
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2750115687:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2259581863
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3893875741:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2259581863
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 2750115687
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.025_Plane.025_M_Floor_01
+  1797038297:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1137401412
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3769738207:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3386311406
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3703718596:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3386311406
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 3769738207
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.026_Plane.026_M_Floor_01
+  3824083254:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4260041305
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1112347696:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 943810799
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2546014445:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 943810799
+    matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
+    transform: 1112347696
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.027_Plane.027_M_Arche
+  824780964:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 459351628
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1532529636:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 459351628
+    matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
+    transform: 824780964
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.027_Plane.027_M_Arche_2
+  3208733150:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4021032830
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2633668957:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1405777236
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  856316030:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1405777236
+    matFile: Assets\Models\Rooms\Room_01\M_Portal_02.ccmat
+    transform: 2633668957
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.024_Cube.024_M_Portal_02
+  2627997628:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3823912913
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1835575854:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 73881939
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1594756756:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 73881939
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 1835575854
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.028_Plane.028_M_R0_Wall
+  124467482:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 341028521
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3138871159:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3741747523
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3742042761:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3741747523
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 3138871159
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.029_Plane.029_M_R0_Wall
+  454464748:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 4200756720
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3234024253:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 155678544
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1974368454:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 155678544
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 3234024253
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.030_Plane.030_M_R0_Wall
+  2371016169:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2153794390
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1860198231:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 180406276
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3902480967:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 180406276
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 1860198231
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.031_Plane.031_M_Floor_01
+  2664535481:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2781123930
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3320637970:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 609625151
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2823605467:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 609625151
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 3320637970
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.032_Plane.032_M_R0_Wall
+  554000447:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3477103241
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3976925738:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1777100956
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3802938134:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1777100956
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 3976925738
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.024_Plane.033_M_Floor_01
+  356485391:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3051510147
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  3846647884:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2654716950
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  1527859782:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2654716950
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 3846647884
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.033_Plane.034_M_R0_Wall
+  2050269994:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 312355945
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2996409335:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 1722069298
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  2560698393:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1722069298
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 2996409335
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.034_Plane.035_M_R0_Wall
+  232877392:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 2945888529
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  4172043920:
+    type: Transform
+    rotation: 0.000000/0.000000/0.000000
+    IsActive: true
+    m_owner: 3263370843
+    position: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 4121839853
+  451837141:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3263370843
+    matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
+    transform: 4172043920
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.012_Plane.036_M_R0_Wall

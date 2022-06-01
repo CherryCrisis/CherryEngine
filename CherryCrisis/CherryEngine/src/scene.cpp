@@ -182,10 +182,11 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 		transform->SetParent(parentTransform);
 	}
 
+	Entity* entityTemp = entity.get();
 	entities.push_back(std::move(entity));
 
 	for (ModelNode* childNode : node->m_childrenNode)
-		GenerateEntitiesRecursive(childNode, entity.get(), entities, cell);
+		GenerateEntitiesRecursive(childNode, entityTemp, entities, cell);
 }
 
 void Scene::GenerateEntities(std::shared_ptr<Model> modelBase)

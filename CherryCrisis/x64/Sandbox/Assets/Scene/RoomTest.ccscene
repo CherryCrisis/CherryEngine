@@ -1,8 +1,6 @@
 resources:
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\Backpack\backpack.obj
-  - Assets\Models\MockupScene\mockupRoom.fbx
-  - Assets\Models\MockupScene\mockupRoom.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
 cells:

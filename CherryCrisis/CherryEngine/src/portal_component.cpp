@@ -29,7 +29,7 @@ PortalComponent::PortalComponent(CCUUID& id) : Behaviour(id)
 }
 
 PortalComponent::~PortalComponent()
-{
+{;
 	InvalidateLinkedPortal();
 
 	GetHost().m_OnLateTick.Unbind(&PortalComponent::LateUpdate, this);
@@ -42,6 +42,9 @@ PortalComponent::~PortalComponent()
 
 	GetHost().m_OnTriggerEnter.Unbind(&PortalComponent::OnTriggerEnter, this);
 	GetHost().m_OnTriggerExit.Unbind(&PortalComponent::OnTriggerExit, this);
+
+	if (m_linkedPortal)
+		m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
 }
 
 void PortalComponent::PopulateMetadatas()
@@ -79,15 +82,12 @@ void PortalComponent::Initialize()
 		boxCollider->SetTrigger(true);
 	}
 
-	UpdatePortalMatrices(m_transform);
+	UpdatePortalMatrices();
 
 	if (m_linkedPortal)
 	{
-		if (m_linkedPortal->m_transform)
-		{
-			m_linkedPortal->UpdatePortalMatrices(m_linkedPortal->m_transform);
-			UpdateRelativeLinkedPortalMatrix();
-		}
+		m_linkedPortal->UpdatePortalMatrices();
+		UpdateRelativeLinkedPortalMatrix();
 	}
 
 
@@ -196,28 +196,30 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 
 void PortalComponent::UpdatePortalMatrices(Transform* tranform)
 {
-	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
+	UpdateModelMatrix();
+	UpdateRelativeLinkedPortalMatrix();
+}
 
-	if (m_linkedPortal)
-		UpdateRelativeLinkedPortalMatrix();
+void PortalComponent::UpdateModelMatrix()
+{
+	if (m_transform)
+		m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
 }
 
 void PortalComponent::UpdateRelativeLinkedPortalMatrix()
 {
-	m_portal.m_relativeLinkedPortalMatrix = m_linkedPortal->m_portal.m_modelMatrix * m_portal.m_modelMatrix.Inverse();
+	if (m_linkedPortal)
+		m_portal.m_relativeLinkedPortalMatrix = m_linkedPortal->m_portal.m_modelMatrix * m_portal.m_modelMatrix.Inverse();
 }
-
 
 void PortalComponent::InvalidateLinkedPortal()
 {
 	if (!m_linkedPortal)
 		return;
 
-	m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, m_linkedPortal);
 	m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
-
-	m_portal.m_linkedPortal = m_linkedPortal->m_portal.m_linkedPortal = nullptr;
-	m_linkedPortal = m_linkedPortal->m_linkedPortal = nullptr;
+	m_portal.m_linkedPortal = nullptr;
+	m_linkedPortal  = nullptr;
 };
 
 void PortalComponent::SetLinkedPortal(Behaviour* linkedObject)
@@ -233,26 +235,16 @@ void PortalComponent::SetLinkedPortal(Behaviour* linkedObject)
 
 	m_linkedPortal->m_OnDestroy.Bind(&PortalComponent::InvalidateLinkedPortal, this);
 
-	linkedPortal->m_linkedPortal = this;
-	Portal* tempPortal = &m_portal;
+	//Portal* tempPortal = &m_portal;
+	//linkedPortal->m_linkedPortal = this;
+	//linkedPortal->m_portal.m_linkedPortal = tempPortal;
+
 	m_portal.m_linkedPortal = &linkedPortal->m_portal;
-	linkedPortal->m_portal.m_linkedPortal = tempPortal;
 
-	m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
+	UpdateModelMatrix();
+	m_linkedPortal->UpdateModelMatrix();
 
-	if (m_transform)
-	{
-		UpdatePortalMatrices(m_transform);
-
-		if (m_linkedPortal)
-		{
-			if (m_linkedPortal->m_transform)
-			{
-				m_linkedPortal->UpdatePortalMatrices(m_linkedPortal->m_transform);
-				UpdateRelativeLinkedPortalMatrix();
-			}
-		}
-	}
+	UpdateRelativeLinkedPortalMatrix();
 }
 
 Behaviour* PortalComponent::GetLinkedPortal()

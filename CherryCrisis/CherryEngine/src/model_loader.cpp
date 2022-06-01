@@ -876,7 +876,10 @@ namespace CCImporter
         }
         else
         {
-            Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Error parsing : {}", importer.GetErrorString()).c_str());
+            //TODO: Manage this addlog in multithread
+            if (ThreadPool::GetInstance()->GetMainThreadID() == std::this_thread::get_id())
+                Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Error parsing : {}", importer.GetErrorString()).c_str());
+
             return;
         }
     }
