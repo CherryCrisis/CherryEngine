@@ -36,7 +36,7 @@ void BuildDisplayer::Render()
         ImGui::SameLine();
         if (ImGui::Button("Build")) 
         {
-            bool result = Builder::BuildGame(outDir, projectSettings->GetBuildSettings().m_gameName.c_str());
+            bool result = Builder::BuildGame(outDir, projectSettings->GetBuildSettings().gameName.c_str(), false, browser);
             EditorNotifications::BuildGame(result);
             if (result)
                 m_isOpened = false;

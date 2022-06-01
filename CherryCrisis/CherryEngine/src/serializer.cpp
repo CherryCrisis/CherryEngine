@@ -759,7 +759,7 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 	return true;
 }
 
-bool Serializer::SerializeEditor(const char* filepath)
+bool Serializer::SerializeEditor(EditorPack pack, const char* filepath)
 {
 	// Better change all of this shit
 
@@ -767,8 +767,16 @@ bool Serializer::SerializeEditor(const char* filepath)
 
 	//Save scene
 	save["General"]["LastOpenedScene"] = SceneManager::GetInstance()->m_currentScene->m_filepath.string();
+	
+
 	//Save project settings
+	save["PS"]["GameName"]    =	pack.ps.gameName;
+	save["PS"]["GameVersion"] = pack.ps.gameVersion;
+	save["PS"]["GameCompany"] = pack.ps.gameCompany;
 	//Save preferences
+	// 
+	//Save builds
+	save["Build"]["DirectoryOutput"] = pack.builder.outDir;
 	std::ofstream out("editor.meta");
 
 	bool opened = out.is_open();
@@ -779,12 +787,12 @@ bool Serializer::SerializeEditor(const char* filepath)
 	return opened;
 }
 
-bool Serializer::UnserializeEditor(const char* filepath)
+EditorPack Serializer::UnserializeEditor(const char* filepath)
 {
+	EditorPack pack{};
 	if (!std::filesystem::exists(filepath)) 
 	{
 		SceneManager::LoadEmptyScene("Assets/Empty.ccscene");
-		return false;
 	}
 
 	YAML::Node loader = YAML::LoadFile(filepath);
@@ -799,9 +807,20 @@ bool Serializer::UnserializeEditor(const char* filepath)
 		SceneManager::LoadEmptyScene("Assets/Empty.ccscene");
 	}
 
-	//Save project settings
-	//Save preferences
-	return true;
+	//Loads Project Settings
+	if (loader["PS"])
+	{
+		pack.ps.gameName    = loader["PS"]["GameName"].as<std::string>();
+		pack.ps.gameVersion = loader["PS"]["GameVersion"].as<std::string>();
+		pack.ps.gameCompany = loader["PS"]["GameCompany"].as<std::string>();
+	}
+	//Loads Build
+	if (loader["Build"])
+	{
+		pack.builder.outDir = loader["Build"]["DirectoryOutput"].as<std::string>();
+	}
+
+	return pack;
 }
 
 bool Serializer::SerializeInputs()

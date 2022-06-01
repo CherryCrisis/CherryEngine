@@ -202,7 +202,8 @@ int main(int argc, char** argv)
                 editor.CheckForHierarchyRefresh();
             }
             //Save editor file
-            Serializer::SerializeEditor();
+            
+            Serializer::SerializeEditor(editor.GetPack());
 
             io.Fonts->ClearFonts();
 

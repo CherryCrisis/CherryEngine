@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <memory>
 
+#include "serializer.hpp"
+
 #include "cherry_header.hpp"
 #include "maths.hpp"
 #include "scene.hpp"
@@ -110,6 +112,10 @@ public:
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
 
     void CheckForHierarchyRefresh();
+
+    //serialization infos
+    EditorPack  GetPack();
+    void        ApplyPack(EditorPack pack);
 };
 
 // Wrapper for generic notifications

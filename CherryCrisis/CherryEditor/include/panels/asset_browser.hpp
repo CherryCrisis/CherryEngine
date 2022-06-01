@@ -39,7 +39,7 @@ const std::string			matExtensions       = ".ccmat";
 
 class AssetBrowser : public Panel
 {
-private:
+public:
 	const std::string scriptTemplate =
 		R"CS(using CCEngine;
 
@@ -233,6 +233,7 @@ public :
 
 	void Render() override;
 	void ContextCallback() override;
+	DirectoryNode* GetAssetNode() { return m_assetsDirectoryNode; }
 
 	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
 	

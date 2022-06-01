@@ -7,6 +7,23 @@
 class Behaviour;
 class UIItem;
 
+struct ProjectSettingsPack 
+{
+	std::string gameName;
+	std::string gameVersion;
+	std::string gameCompany;
+};
+
+struct BuilderPack
+{
+	std::string outDir;
+};
+
+struct EditorPack
+{
+	ProjectSettingsPack ps;
+	BuilderPack		    builder;
+};
 
 class CCENGINE_API Serializer
 {
@@ -20,9 +37,9 @@ public:
 	static bool UnserializeScene(std::shared_ptr<Scene> scene, const char* filepath="");
 
 	// Save editor user things 
-	static bool SerializeEditor(const char* filepath = "");
+	static bool SerializeEditor(EditorPack pack, const char* filepath = "");
 	// Load editor user things 
-	static bool UnserializeEditor(const char* filepath = "");
+	static EditorPack UnserializeEditor(const char* filepath = "");
 
 	// Save game input context
 	static bool SerializeInputs();
