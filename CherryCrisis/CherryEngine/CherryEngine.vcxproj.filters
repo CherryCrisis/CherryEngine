@@ -1585,6 +1585,15 @@
     <None Include="interface\light_component.i">
       <Filter>Fichiers sources\Interface\Components</Filter>
     </None>
+    <None Include="interface\audio_emitter.i">
+      <Filter>Fichiers sources\Interface\Components</Filter>
+    </None>
+    <None Include="interface\audio_listener.i">
+      <Filter>Fichiers sources\Interface\Components</Filter>
+    </None>
+    <None Include="interface\sound.i">
+      <Filter>Fichiers sources\Interface\Resource</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">

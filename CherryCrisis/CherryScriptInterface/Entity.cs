@@ -139,6 +139,40 @@ public class Entity : Object {
     return ret;
   }
 
+  private AudioListener GetAudioListener() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetAudioListener(swigCPtr);
+    AudioListener ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioListener(cPtr, false);
+    return ret;
+  }
+
+  private AudioListener AddAudioListener() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddAudioListener(swigCPtr);
+    AudioListener ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioListener(cPtr, false);
+    return ret;
+  }
+
+  private AudioListenerVector GetAllOfAudioListener() {
+    AudioListenerVector ret = new AudioListenerVector(CherryEnginePINVOKE.Entity_GetAllOfAudioListener(swigCPtr), true);
+    return ret;
+  }
+
+  private AudioEmitter GetAudioEmitter() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetAudioEmitter(swigCPtr);
+    AudioEmitter ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioEmitter(cPtr, false);
+    return ret;
+  }
+
+  private AudioEmitter AddAudioEmitter() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddAudioEmitter(swigCPtr);
+    AudioEmitter ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioEmitter(cPtr, false);
+    return ret;
+  }
+
+  private AudioEmitterVector GetAllOfAudioEmitter() {
+    AudioEmitterVector ret = new AudioEmitterVector(CherryEnginePINVOKE.Entity_GetAllOfAudioEmitter(swigCPtr), true);
+    return ret;
+  }
+
 	private Behaviour AddScript(string scriptPath)
 	{
 		ScriptedBehaviour script = AddScriptedBehaviour();
@@ -178,6 +212,12 @@ public class Entity : Object {
 
 		if (type == typeof(LightComponent))
 			return AddLightComponent();
+			
+		if (type == typeof(AudioListener))
+			return AddAudioListener();
+
+		if (type == typeof(AudioEmitter))
+			return AddAudioEmitter();
 
 		return AddScript(type.Name);
 	}
@@ -197,6 +237,12 @@ public class Entity : Object {
 			
 		if (type == typeof(LightComponent))
 			return GetLightComponent();
+						
+		if (type == typeof(AudioListener))
+			return GetAudioListener();
+						
+		if (type == typeof(AudioEmitter))
+			return GetAudioEmitter();
 
 		return GetScript(type.Name);
 	}

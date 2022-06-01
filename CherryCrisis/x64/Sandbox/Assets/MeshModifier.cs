@@ -18,9 +18,7 @@ namespace CCScripting
             //model = GetBehaviour<ModelRenderer>();
         }
         public void Start()
-		{
-            model.m_material.SetTexture(ETextureType.ALBEDO, "Assets/Models/Backpack/roughness");
-            model.SetMesh(GetBehaviour<Transform>().GetParent().host.GetBehaviour<ModelRenderer>().m_mesh);
+		{ 
             //model.m_mesh = GetBehaviour<Transform>().GetParent().host.GetBehaviour<ModelRenderer>().m_mesh;
         }
 

@@ -12,6 +12,8 @@
 %include scripted_behaviour.i
 %include model_renderer.i
 %include light_component.i
+%include audio_listener.i
+%include audio_emitter.i
 %include object.i
 
 %define COMP_STD_WRAP(COMP_T)
@@ -37,6 +39,8 @@ COMP_STD_WRAP(Transform)
 COMP_STD_WRAP(ScriptedBehaviour)
 COMP_STD_WRAP(ModelRenderer)
 COMP_STD_WRAP(LightComponent)
+COMP_STD_WRAP(AudioListener)
+COMP_STD_WRAP(AudioEmitter)
 
 %nodefaultctor Entity;
 class Entity : public Object
@@ -79,6 +83,8 @@ public:
 	COMP_TEMPLATE_WRAP(Transform)
 	COMP_TEMPLATE_WRAP(ModelRenderer)
 	COMP_TEMPLATE_WRAP(LightComponent)
+	COMP_TEMPLATE_WRAP(AudioListener)
+	COMP_TEMPLATE_WRAP(AudioEmitter)
 
 	%proxycode %{
 	private Behaviour AddScript(string scriptPath)
@@ -120,6 +126,12 @@ public:
 
 		if (type == typeof(LightComponent))
 			return AddLightComponent();
+			
+		if (type == typeof(AudioListener))
+			return AddAudioListener();
+
+		if (type == typeof(AudioEmitter))
+			return AddAudioEmitter();
 
 		return AddScript(type.Name);
 	}
@@ -139,6 +151,12 @@ public:
 			
 		if (type == typeof(LightComponent))
 			return GetLightComponent();
+						
+		if (type == typeof(AudioListener))
+			return GetAudioListener();
+						
+		if (type == typeof(AudioEmitter))
+			return GetAudioEmitter();
 
 		return GetScript(type.Name);
 	}

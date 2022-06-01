@@ -450,6 +450,15 @@ namespace Swig {
     #include "light_component.hpp"
     #include "maths.hpp"
 
+
+	#include "audio_listener.hpp"
+
+
+	#include "audio_emitter.hpp"
+
+
+	#include "sound.hpp"
+
 SWIGINTERN std::vector< CameraComponent * > *new_std_vector_Sl_CameraComponent_Sm__Sg___SWIG_2(int capacity){
         std::vector< CameraComponent * >* pv = 0;
         if (capacity >= 0) {
@@ -1024,6 +1033,238 @@ SWIGINTERN int std_vector_Sl_LightComponent_Sm__Sg__LastIndexOf(std::vector< Lig
       }
 SWIGINTERN bool std_vector_Sl_LightComponent_Sm__Sg__Remove(std::vector< LightComponent * > *self,LightComponent *const &value){
         std::vector< LightComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< AudioListener * > *new_std_vector_Sl_AudioListener_Sm__Sg___SWIG_2(int capacity){
+        std::vector< AudioListener * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< AudioListener * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN AudioListener *std_vector_Sl_AudioListener_Sm__Sg__getitemcopy(std::vector< AudioListener * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< AudioListener * >::value_type const &std_vector_Sl_AudioListener_Sm__Sg__getitem(std::vector< AudioListener * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__setitem(std::vector< AudioListener * > *self,int index,AudioListener *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__AddRange(std::vector< AudioListener * > *self,std::vector< AudioListener * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< AudioListener * > *std_vector_Sl_AudioListener_Sm__Sg__GetRange(std::vector< AudioListener * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< AudioListener * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__Insert(std::vector< AudioListener * > *self,int index,AudioListener *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__InsertRange(std::vector< AudioListener * > *self,int index,std::vector< AudioListener * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__RemoveAt(std::vector< AudioListener * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__RemoveRange(std::vector< AudioListener * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< AudioListener * > *std_vector_Sl_AudioListener_Sm__Sg__Repeat(AudioListener *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< AudioListener * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_0(std::vector< AudioListener * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_1(std::vector< AudioListener * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__SetRange(std::vector< AudioListener * > *self,int index,std::vector< AudioListener * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_AudioListener_Sm__Sg__Contains(std::vector< AudioListener * > *self,AudioListener *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_AudioListener_Sm__Sg__IndexOf(std::vector< AudioListener * > *self,AudioListener *const &value){
+        int index = -1;
+        std::vector< AudioListener * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_AudioListener_Sm__Sg__LastIndexOf(std::vector< AudioListener * > *self,AudioListener *const &value){
+        int index = -1;
+        std::vector< AudioListener * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_AudioListener_Sm__Sg__Remove(std::vector< AudioListener * > *self,AudioListener *const &value){
+        std::vector< AudioListener * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< AudioEmitter * > *new_std_vector_Sl_AudioEmitter_Sm__Sg___SWIG_2(int capacity){
+        std::vector< AudioEmitter * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< AudioEmitter * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN AudioEmitter *std_vector_Sl_AudioEmitter_Sm__Sg__getitemcopy(std::vector< AudioEmitter * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< AudioEmitter * >::value_type const &std_vector_Sl_AudioEmitter_Sm__Sg__getitem(std::vector< AudioEmitter * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__setitem(std::vector< AudioEmitter * > *self,int index,AudioEmitter *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__AddRange(std::vector< AudioEmitter * > *self,std::vector< AudioEmitter * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< AudioEmitter * > *std_vector_Sl_AudioEmitter_Sm__Sg__GetRange(std::vector< AudioEmitter * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< AudioEmitter * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__Insert(std::vector< AudioEmitter * > *self,int index,AudioEmitter *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__InsertRange(std::vector< AudioEmitter * > *self,int index,std::vector< AudioEmitter * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__RemoveAt(std::vector< AudioEmitter * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__RemoveRange(std::vector< AudioEmitter * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< AudioEmitter * > *std_vector_Sl_AudioEmitter_Sm__Sg__Repeat(AudioEmitter *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< AudioEmitter * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_0(std::vector< AudioEmitter * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_1(std::vector< AudioEmitter * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__SetRange(std::vector< AudioEmitter * > *self,int index,std::vector< AudioEmitter * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_AudioEmitter_Sm__Sg__Contains(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_AudioEmitter_Sm__Sg__IndexOf(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        int index = -1;
+        std::vector< AudioEmitter * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_AudioEmitter_Sm__Sg__LastIndexOf(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        int index = -1;
+        std::vector< AudioEmitter * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_AudioEmitter_Sm__Sg__Remove(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        std::vector< AudioEmitter * >::iterator it = std::find(self->begin(), self->end(), value);
         if (it != self->end()) {
           self->erase(it);
           return true;
@@ -6253,6 +6494,394 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_LightComponent(void * jarg1) 
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListener_m_transform_set(void * jarg1, void * jarg2) {
+  AudioListener *arg1 = (AudioListener *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (AudioListener *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListener_m_transform_get(void * jarg1) {
+  void * jresult ;
+  AudioListener *arg1 = (AudioListener *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (AudioListener *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioListener(void * jarg1) {
+  AudioListener *arg1 = (AudioListener *) 0 ;
+  
+  arg1 = (AudioListener *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_Play(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (arg1)->Play();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_Pause(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (arg1)->Pause();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_Stop(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (arg1)->Stop();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetLooping(void * jarg1, unsigned int jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  bool arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = jarg2 ? true : false; 
+  (arg1)->SetLooping(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetPosition__SWIG_0(void * jarg1, float jarg2, float jarg3, float jarg4) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  (arg1)->SetPosition(arg2,arg3,arg4);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetPosition__SWIG_1(void * jarg1, void * jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetPosition((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetDirection(void * jarg1, void * jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetDirection((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetRollOff(void * jarg1, float jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  (arg1)->SetRollOff(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetReferenceDistance(void * jarg1, float jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  (arg1)->SetReferenceDistance(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetPitch(void * jarg1, float jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  (arg1)->SetPitch(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Sound(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_m_transform_set(void * jarg1, void * jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_m_transform_get(void * jarg1) {
+  void * jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_Play(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  (arg1)->Play();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_Pause(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  (arg1)->Pause();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_Stop(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  (arg1)->Stop();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetLooping(void * jarg1, unsigned int jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetLooping((bool const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetPitch(void * jarg1, float jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetPitch((float const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetRollOff(void * jarg1, float jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetRollOff((float const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetReferenceDistance(void * jarg1, float jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetReferenceDistance((float const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetSpatialized(void * jarg1, unsigned int jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetSpatialized((bool const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_AddSound__SWIG_0(void * jarg1, char * jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  (arg1)->AddSound((std::string const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_AddSound__SWIG_1(void * jarg1, void * jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  std::shared_ptr< Sound > arg2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  if (jarg2) arg2 = *(std::shared_ptr< Sound > *)jarg2; 
+  (arg1)->AddSound(arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetLooping(void * jarg1) {
+  unsigned int jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (bool)(arg1)->GetLooping();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetSpatialized(void * jarg1) {
+  unsigned int jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (bool)(arg1)->GetSpatialized();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetRollOff(void * jarg1) {
+  float jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (float)(arg1)->GetRollOff();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetReferenceDistance(void * jarg1) {
+  float jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (float)(arg1)->GetReferenceDistance();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetPitch(void * jarg1) {
+  float jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (float)(arg1)->GetPitch();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetSoundPath(void * jarg1) {
+  char * jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  std::string result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (arg1)->GetSoundPath();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioEmitter(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CameraComponentVector_Clear(void * jarg1) {
   std::vector< CameraComponent * > *arg1 = (std::vector< CameraComponent * > *) 0 ;
   
@@ -8298,6 +8927,824 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_LightComponentVector(void * j
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Clear(void * jarg1) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Add(void * jarg1, void * jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  (arg1)->push_back((AudioListener *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * >::size_type result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  result = ((std::vector< AudioListener * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * >::size_type result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  result = ((std::vector< AudioListener * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * >::size_type arg2 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (std::vector< AudioListener * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioListenerVector__SWIG_0() {
+  void * jresult ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  result = (std::vector< AudioListener * > *)new std::vector< AudioListener * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioListenerVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = 0 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< AudioListener * > *)new std::vector< AudioListener * >((std::vector< AudioListener * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioListenerVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< AudioListener * > *)new_std_vector_Sl_AudioListener_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  AudioListener *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (AudioListener *)std_vector_Sl_AudioListener_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioListener * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioListener * >::value_type *) &std_vector_Sl_AudioListener_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  AudioListener **arg3 = 0 ;
+  AudioListener *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioListener *)jarg3;
+  arg3 = (AudioListener **)&temp3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__setitem(arg1,arg2,(AudioListener *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (std::vector< AudioListener * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_AudioListener_Sm__Sg__AddRange(arg1,(std::vector< AudioListener * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< AudioListener * > *)std_vector_Sl_AudioListener_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  AudioListener **arg3 = 0 ;
+  AudioListener *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioListener *)jarg3;
+  arg3 = (AudioListener **)&temp3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__Insert(arg1,arg2,(AudioListener *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioListener * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioListener * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__InsertRange(arg1,arg2,(std::vector< AudioListener * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  AudioListener **arg1 = 0 ;
+  int arg2 ;
+  AudioListener *temp1 = 0 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  temp1 = (AudioListener *)jarg1;
+  arg1 = (AudioListener **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioListener * > *)std_vector_Sl_AudioListener_Sm__Sg__Repeat((AudioListener *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioListener * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioListener * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__SetRange(arg1,arg2,(std::vector< AudioListener * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (bool)std_vector_Sl_AudioListener_Sm__Sg__Contains(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (int)std_vector_Sl_AudioListener_Sm__Sg__IndexOf(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (int)std_vector_Sl_AudioListener_Sm__Sg__LastIndexOf(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (bool)std_vector_Sl_AudioListener_Sm__Sg__Remove(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioListenerVector(void * jarg1) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Clear(void * jarg1) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Add(void * jarg1, void * jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  (arg1)->push_back((AudioEmitter *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * >::size_type result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  result = ((std::vector< AudioEmitter * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * >::size_type result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  result = ((std::vector< AudioEmitter * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * >::size_type arg2 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (std::vector< AudioEmitter * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioEmitterVector__SWIG_0() {
+  void * jresult ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  result = (std::vector< AudioEmitter * > *)new std::vector< AudioEmitter * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioEmitterVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = 0 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< AudioEmitter * > *)new std::vector< AudioEmitter * >((std::vector< AudioEmitter * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioEmitterVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< AudioEmitter * > *)new_std_vector_Sl_AudioEmitter_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  AudioEmitter *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (AudioEmitter *)std_vector_Sl_AudioEmitter_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioEmitter * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioEmitter * >::value_type *) &std_vector_Sl_AudioEmitter_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  AudioEmitter **arg3 = 0 ;
+  AudioEmitter *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioEmitter *)jarg3;
+  arg3 = (AudioEmitter **)&temp3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__setitem(arg1,arg2,(AudioEmitter *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (std::vector< AudioEmitter * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_AudioEmitter_Sm__Sg__AddRange(arg1,(std::vector< AudioEmitter * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< AudioEmitter * > *)std_vector_Sl_AudioEmitter_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  AudioEmitter **arg3 = 0 ;
+  AudioEmitter *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioEmitter *)jarg3;
+  arg3 = (AudioEmitter **)&temp3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__Insert(arg1,arg2,(AudioEmitter *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioEmitter * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioEmitter * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__InsertRange(arg1,arg2,(std::vector< AudioEmitter * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  AudioEmitter **arg1 = 0 ;
+  int arg2 ;
+  AudioEmitter *temp1 = 0 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  temp1 = (AudioEmitter *)jarg1;
+  arg1 = (AudioEmitter **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioEmitter * > *)std_vector_Sl_AudioEmitter_Sm__Sg__Repeat((AudioEmitter *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioEmitter * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioEmitter * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__SetRange(arg1,arg2,(std::vector< AudioEmitter * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (bool)std_vector_Sl_AudioEmitter_Sm__Sg__Contains(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (int)std_vector_Sl_AudioEmitter_Sm__Sg__IndexOf(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (int)std_vector_Sl_AudioEmitter_Sm__Sg__LastIndexOf(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (bool)std_vector_Sl_AudioEmitter_Sm__Sg__Remove(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioEmitterVector(void * jarg1) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_set(void * jarg1, void * jarg2) {
   Entity *arg1 = (Entity *) 0 ;
   Cell *arg2 = (Cell *) 0 ;
@@ -8524,6 +9971,78 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfLightComponent(void
   arg1 = (Entity *)jarg1; 
   result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< LightComponent >();
   jresult = new std::vector< LightComponent * >((const std::vector< LightComponent * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAudioListener(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioListener *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioListener *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< AudioListener >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddAudioListener(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioListener *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioListener *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< AudioListener >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfAudioListener(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< AudioListener * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< AudioListener >();
+  jresult = new std::vector< AudioListener * >((const std::vector< AudioListener * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAudioEmitter(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioEmitter *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioEmitter *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< AudioEmitter >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddAudioEmitter(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioEmitter *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioEmitter *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< AudioEmitter >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfAudioEmitter(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< AudioEmitter * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< AudioEmitter >();
+  jresult = new std::vector< AudioEmitter * >((const std::vector< AudioEmitter * > &)result); 
   return jresult;
 }
 
@@ -9593,6 +11112,14 @@ SWIGEXPORT MeshRenderer * SWIGSTDCALL CSharp_CCEngine_ModelRenderer_SWIGUpcast(M
 }
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_LightComponent_SWIGUpcast(LightComponent *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioListener_SWIGUpcast(AudioListener *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SWIGUpcast(AudioEmitter *jarg1) {
     return (Behaviour *)jarg1;
 }
 

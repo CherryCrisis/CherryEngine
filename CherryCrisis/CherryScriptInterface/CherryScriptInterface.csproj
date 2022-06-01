@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioEmitter.cs" />
+    <Compile Include="AudioEmitterVector.cs" />
+    <Compile Include="AudioListener.cs" />
+    <Compile Include="AudioListenerVector.cs" />
     <Compile Include="Behaviour.cs" />
     <Compile Include="CameraComponent.cs" />
     <Compile Include="CameraComponentVector.cs" />
@@ -75,6 +79,7 @@
     <Compile Include="SceneManager.cs" />
     <Compile Include="ScriptedBehaviour.cs" />
     <Compile Include="ScriptedBehaviourVector.cs" />
+    <Compile Include="Sound.cs" />
     <Compile Include="SWIGTYPE_p_float.cs" />
     <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
