@@ -73,7 +73,7 @@ void PortalComponent::Initialize()
 
 	if (!boxCollider)
 	{
-		GetHost().AddBehaviour<BoxCollider>();
+		boxCollider = GetHost().AddBehaviour<BoxCollider>();
 		boxCollider->Initialize();
 		boxCollider->SetScale(m_boxColliderScale);
 		boxCollider->SetTrigger(true);
@@ -197,7 +197,9 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 void PortalComponent::UpdatePortalMatrices(Transform* tranform)
 {
 	m_portal.m_modelMatrix = m_transform->GetWorldMatrix();
-	UpdateRelativeLinkedPortalMatrix();
+
+	if (m_linkedPortal)
+		UpdateRelativeLinkedPortalMatrix();
 }
 
 void PortalComponent::UpdateRelativeLinkedPortalMatrix()

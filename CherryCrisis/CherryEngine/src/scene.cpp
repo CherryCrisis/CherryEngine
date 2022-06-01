@@ -205,8 +205,8 @@ void Scene::GenerateEntities(std::shared_ptr<Model> modelBase)
 
 	for (auto& entity : entities)
 	{
-		AddEntity(entity);
-		entity->Initialize();
+		Entity* addedEntity = AddEntity(entity);
+		addedEntity->Initialize();
 	}
 }
 
@@ -221,8 +221,8 @@ void Scene::GenerateEntitiesInCell(std::shared_ptr<Model> modelBase, Cell* cell)
 
 	for (auto& entity : entities)
 	{
-		AddEntity(entity);
-		entity->Initialize();
+		Entity* addedEntity = AddEntity(entity);
+		addedEntity->Initialize();
 	}
 }
 
