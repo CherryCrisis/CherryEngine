@@ -43,6 +43,8 @@ public:
 	void BindToSignals() override;
 	void Start();
 
+	void OnRemovedClonedEntities();
+
 	void SetSliceParams(EntityNode* meshRendererNode, bool isSlice, const CCMaths::Vector3& sliceCentre, const CCMaths::Vector3& sliceNormal);
 	
 	void EnterPortal(const PortalComponent* linkedPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);

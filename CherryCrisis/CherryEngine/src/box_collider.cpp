@@ -105,6 +105,14 @@ void BoxCollider::Initialize()
 			if (renderer->m_mesh)
 			{
 				m_editableScale = renderer->m_mesh->m_aabb.m_extents;
+
+				if (m_editableScale.x == 0)
+					m_editableScale.x = 0.01f;
+				else if (m_editableScale.y == 0)
+					m_editableScale.y = 0.01f;
+				else if (m_editableScale.z == 0)
+					m_editableScale.z = 0.01f;
+
 				m_localPosition = renderer->m_mesh->m_aabb.m_center;
 			}
 		}

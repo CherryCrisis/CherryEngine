@@ -30,15 +30,19 @@ PortalTeleporterComponent::~PortalTeleporterComponent()
 {
 	if (m_cloneEntityNode)
 	{
-		if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
+		if (Entity* entity = m_cloneEntityNode->m_transform->GetHostPtr())
 		{
-			scene->RemoveEntity(m_cloneEntityNode->m_transform->GetHostPtr());
-			m_cloneEntityNode.reset();
+			entity->m_OnDestroyed.Unbind(&PortalTeleporterComponent::OnRemovedClonedEntities, this);
+
+			if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
+			{
+				scene->RemoveEntity(entity);
+					m_cloneEntityNode.reset();
+			}
 		}
 	}
 
 	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
-	//InvalidateLinkedPortal();
 }
 
 void PortalTeleporterComponent::PopulateMetadatas()
@@ -75,7 +79,14 @@ void PortalTeleporterComponent::Start()
 		m_cloneEntityNode = std::make_unique<EntityNode>();
 		CloneEntities(m_cloneEntityNode.get(), m_entityNode.get(), GetHost().m_cell, scene.get());
 		SetIsVisibleEntityNode(m_cloneEntityNode.get(), false);
+
+		m_cloneEntityNode->m_transform->GetHostPtr()->m_OnDestroyed.Bind(&PortalTeleporterComponent::OnRemovedClonedEntities, this);
 	}
+}
+
+void PortalTeleporterComponent::OnRemovedClonedEntities()
+{
+	m_cloneEntityNode.reset();
 }
 
 void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale)
@@ -93,8 +104,8 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 		if (GetHost().m_cell != entity->m_cell)
 			scene->MoveEntityFromCellToCell(GetHost().m_cell, entity->m_cell, GetHostPtr());
 
-		m_entityNode->m_transform->SetPosition(newPos);
-		m_entityNode->m_transform->SetRotation(newRot);
+		m_entityNode->m_transform->SetGlobalPosition(newPos);
+		m_entityNode->m_transform->SetGlobalRotation(newRot);
 
 		// Reapply velocity
 		if (rb)

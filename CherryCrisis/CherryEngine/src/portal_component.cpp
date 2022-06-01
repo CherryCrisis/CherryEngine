@@ -70,7 +70,8 @@ void PortalComponent::BindToSignals()
 
 void PortalComponent::Initialize()
 {
-	m_transform = GetHost().GetOrAddBehaviour<Transform>();
+	if (!m_transform)
+		m_transform = GetHost().GetOrAddBehaviour<Transform>();
 
 	BoxCollider* boxCollider = GetHost().GetBehaviour<BoxCollider>();
 
@@ -86,9 +87,16 @@ void PortalComponent::Initialize()
 
 	if (m_linkedPortal)
 	{
+		if (!m_linkedPortal->m_transform)
+		{
+			Transform* linkedTransform = m_linkedPortal->GetHost().GetOrAddBehaviour<Transform>();
+			m_linkedPortal->m_transform = linkedTransform;
+		}
+		
 		m_linkedPortal->UpdatePortalMatrices();
-		UpdateRelativeLinkedPortalMatrix();
 	}
+
+	UpdateRelativeLinkedPortalMatrix();
 
 
 	m_transform->m_onPositionChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
@@ -107,7 +115,7 @@ void PortalComponent::LateUpdate()
 
 		Vector3 portalForward = -m_transform->GetWorldMatrix().back.Normalized();
 
-		Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
+		Vector3 offsetFromPortal = transform->GetGlobalPosition() - m_transform->GetGlobalPosition();
 
 		//Get distance from normal (portal)
 		float distFromPortal = Vector3::Dot(offsetFromPortal, portalForward);
@@ -118,16 +126,16 @@ void PortalComponent::LateUpdate()
 		//Clamp position if portalTeleported exceeds the portal position
 		if (CCMaths::Sign(previousDist) != CCMaths::Sign(distFromPortal))
 		{
-			Vector3 newPosition = transform->GetPosition() - (portalForward * (distFromPortal + ((m_offset * 0.5f)  * (float)portalSideNoOffset)));
+			Vector3 newPosition = transform->GetGlobalPosition() - (portalForward * (distFromPortal + ((m_offset * 0.5f)  * (float)portalSideNoOffset)));
 
-			Vector3 previousPosition = transform->GetPosition() - (portalForward * (distFromPortal + ((m_offset) * (float)portalSideNoOffset)));
+			Vector3 previousPosition = transform->GetGlobalPosition() - (portalForward * (distFromPortal + ((m_offset) * (float)portalSideNoOffset)));
 
-			transform->SetPosition(newPosition);
+			transform->SetGlobalPosition(newPosition);
 
-			offsetFromPortal = newPosition - m_transform->GetPosition();
+			offsetFromPortal = newPosition - m_transform->GetGlobalPosition();
 			distFromPortal = Vector3::Dot(offsetFromPortal, portalForward);
 
-			portalTeleporter->m_previousOffsetFromPortal = previousPosition - m_transform->GetPosition();
+			portalTeleporter->m_previousOffsetFromPortal = previousPosition - m_transform->GetGlobalPosition();
 			previousDist = Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward);
 
 			portalSideNoOffset = CCMaths::Sign<float>(distFromPortal);
@@ -180,14 +188,14 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 {
 	Transform* transform = portalTeleporter->m_entityNode->m_transform;
 
-	Vector3 offsetFromPortal = transform->GetPosition() - m_transform->GetPosition();
+	Vector3 offsetFromPortal = transform->GetGlobalPosition() - m_transform->GetGlobalPosition();
 	int portalSide = CCMaths::Sign<float>(Vector3::Dot(offsetFromPortal, -m_transform->GetWorldMatrix().back.Normalized()));
 
 	Vector3 sliceNormal = (-m_transform->GetWorldMatrix().back.Normalized()) * (-static_cast<float>(portalSide));
-	Vector3 sliceCentre = m_transform->GetPosition();
+	Vector3 sliceCentre = m_transform->GetGlobalPosition();
 
 	Vector3 cloneSliceNormal = (-m_linkedPortal->m_transform->GetWorldMatrix().back.Normalized()) * static_cast<float>(portalSide);
-	Vector3 cloneSliceCentre = m_linkedPortal->m_transform->GetPosition();
+	Vector3 cloneSliceCentre = m_linkedPortal->m_transform->GetGlobalPosition();
 
 	portalTeleporter->SetSliceParams(portalTeleporter->m_entityNode.get(), true, sliceCentre, sliceNormal);
 	portalTeleporter->SetSliceParams(portalTeleporter->m_cloneEntityNode.get(), true, cloneSliceCentre, cloneSliceNormal);
@@ -234,10 +242,6 @@ void PortalComponent::SetLinkedPortal(Behaviour* linkedObject)
 	m_linkedPortal = linkedPortal;
 
 	m_linkedPortal->m_OnDestroy.Bind(&PortalComponent::InvalidateLinkedPortal, this);
-
-	//Portal* tempPortal = &m_portal;
-	//linkedPortal->m_linkedPortal = this;
-	//linkedPortal->m_portal.m_linkedPortal = tempPortal;
 
 	m_portal.m_linkedPortal = &linkedPortal->m_portal;
 
