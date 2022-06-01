@@ -43,11 +43,11 @@ public class Behaviour : Object {
 
 	public override string ToString() => System.String.Format("{0} ({1})", base.ToString(), host);
 
-	public Behaviour GetComponent(System.Type type) => host.GetComponent(type);
-	public T GetComponent<T>() where T : Behaviour => host.GetComponent<T>();
+	public Behaviour GetBehaviour(System.Type type) => host.GetBehaviour(type);
+	public T GetBehaviour<T>() where T : Behaviour => host.GetBehaviour<T>();
 
-	public Behaviour AddComponent(System.Type type) => host.AddComponent(type);
-	public T AddComponent<T>() where T : Behaviour => host.AddComponent<T>();
+	public Behaviour AddBehaviour(System.Type type) => host.AddBehaviour(type);
+	public T AddBehaviour<T>() where T : Behaviour => host.AddBehaviour<T>();
 	
   public Behaviour() : this(CherryEnginePINVOKE.new_Behaviour(), true) {
     SwigDirectorConnect();

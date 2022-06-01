@@ -124,6 +124,39 @@ public class Transform : Behaviour {
     return ret;
   }
 
+  public bool IsRoot() {
+    bool ret = CherryEnginePINVOKE.Transform_IsRoot(swigCPtr);
+    return ret;
+  }
+
+  public void SetParent(Transform parent, bool reapplyPosition, bool reapplyRot, bool reapplyScale) {
+    CherryEnginePINVOKE.Transform_SetParent__SWIG_0(swigCPtr, Transform.getCPtr(parent), reapplyPosition, reapplyRot, reapplyScale);
+  }
+
+  public void SetParent(Transform parent, bool reapplyPosition, bool reapplyRot) {
+    CherryEnginePINVOKE.Transform_SetParent__SWIG_1(swigCPtr, Transform.getCPtr(parent), reapplyPosition, reapplyRot);
+  }
+
+  public void SetParent(Transform parent, bool reapplyPosition) {
+    CherryEnginePINVOKE.Transform_SetParent__SWIG_2(swigCPtr, Transform.getCPtr(parent), reapplyPosition);
+  }
+
+  public void SetParent(Transform parent) {
+    CherryEnginePINVOKE.Transform_SetParent__SWIG_3(swigCPtr, Transform.getCPtr(parent));
+  }
+
+  public Transform GetParent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Transform_GetParent(swigCPtr);
+    Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
+    return ret;
+  }
+
+  public Transform GetRootParent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Transform_GetRootParent(swigCPtr);
+    Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
+    return ret;
+  }
+
 		public Vector3 position { get => GetPosition(); set => SetPosition(value); }
 		public Vector3 eulerAngles { get => GetEuler(); set => SetRotation(value); }
 		public Quaternion rotation { get => GetRotation(); set => SetRotation(value); }

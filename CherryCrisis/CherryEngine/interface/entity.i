@@ -10,6 +10,11 @@
 %include transform_comp.i
 %include camera_comp.i
 %include scripted_behaviour.i
+%include model_renderer.i
+%include light_component.i
+%include audio_listener.i
+%include audio_emitter.i
+%include portal_component.i
 %include object.i
 
 %define COMP_STD_WRAP(COMP_T)
@@ -33,6 +38,11 @@ COMP_PREFIX_WRAP(GetAllOf, COMP_T, GetBehavioursOfType)
 COMP_STD_WRAP(CameraComponent)
 COMP_STD_WRAP(Transform)
 COMP_STD_WRAP(ScriptedBehaviour)
+COMP_STD_WRAP(ModelRenderer)
+COMP_STD_WRAP(LightComponent)
+COMP_STD_WRAP(AudioListener)
+COMP_STD_WRAP(AudioEmitter)
+COMP_STD_WRAP(PortalComponent)
 
 %nodefaultctor Entity;
 class Entity : public Object
@@ -73,6 +83,11 @@ public:
 	COMP_TEMPLATE_WRAP(CameraComponent)
 	COMP_TEMPLATE_WRAP(ScriptedBehaviour)
 	COMP_TEMPLATE_WRAP(Transform)
+	COMP_TEMPLATE_WRAP(ModelRenderer)
+	COMP_TEMPLATE_WRAP(LightComponent)
+	COMP_TEMPLATE_WRAP(AudioListener)
+	COMP_TEMPLATE_WRAP(AudioEmitter)
+	COMP_TEMPLATE_WRAP(PortalComponent)
 
 	%proxycode %{
 	private Behaviour AddScript(string scriptPath)
@@ -101,7 +116,7 @@ public:
 
 	public override string ToString() => name;
 
-	public Behaviour AddComponent(System.Type type)
+	public Behaviour AddBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return AddTransform();
@@ -109,12 +124,27 @@ public:
 		if (type == typeof(CameraComponent))
 			return AddCameraComponent();
 
+		if (type == typeof(ModelRenderer))
+			return AddModelRenderer();
+
+		if (type == typeof(LightComponent))
+			return AddLightComponent();
+			
+		if (type == typeof(AudioListener))
+			return AddAudioListener();
+
+		if (type == typeof(AudioEmitter))
+			return AddAudioEmitter();
+
+		if (type == typeof(PortalComponent))
+			return AddPortalComponent();
+			
 		return AddScript(type.Name);
 	}
 
-	public T AddComponent<T>() where T : Behaviour => AddComponent(typeof(T)) as T;
+	public T AddBehaviour<T>() where T : Behaviour => AddBehaviour(typeof(T)) as T;
 
-	public Behaviour GetComponent(System.Type type)
+	public Behaviour GetBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return GetTransform();
@@ -122,9 +152,24 @@ public:
 		if (type == typeof(CameraComponent))
 			return GetCameraComponent();
 
+		if (type == typeof(ModelRenderer))
+			return GetModelRenderer();
+			
+		if (type == typeof(LightComponent))
+			return GetLightComponent();
+						
+		if (type == typeof(AudioListener))
+			return GetAudioListener();
+						
+		if (type == typeof(AudioEmitter))
+			return GetAudioEmitter();
+									
+		if (type == typeof(PortalComponent))
+			return GetPortalComponent();
+			
 		return GetScript(type.Name);
 	}
 
-	public T GetComponent<T>() where T : Behaviour => GetComponent(typeof(T)) as T;
+	public T GetBehaviour<T>() where T : Behaviour => GetBehaviour(typeof(T)) as T;
 	%}
 };

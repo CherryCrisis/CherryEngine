@@ -64,7 +64,6 @@ public:
 	~Material() = default;
 
 	static void Load(std::shared_ptr<Material> material);
-	static bool LoadFromCache(std::shared_ptr<Material> material, CCImporter::MaterialArgs& materialArgs); // TODO: remove or define
 
 	void Delete() override;
 	void Reload(bool saveOnly = false);

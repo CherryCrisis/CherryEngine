@@ -429,6 +429,39 @@ namespace Swig {
 	#include "scripted_behaviour.hpp"
 	#include "behaviour.hpp"
 
+
+	#include "mesh_renderer.hpp"
+
+
+	#include "behaviour.hpp"
+	#include "maths.hpp"
+
+
+	#include "mesh.hpp"
+
+
+	#include "material.hpp"
+	#include "maths.hpp"
+
+
+	#include "texture.hpp"
+
+
+    #include "light_component.hpp"
+    #include "maths.hpp"
+
+
+	#include "audio_listener.hpp"
+
+
+	#include "audio_emitter.hpp"
+
+
+	#include "sound.hpp"
+
+
+	#include "portal_component.hpp"
+
 SWIGINTERN std::vector< CameraComponent * > *new_std_vector_Sl_CameraComponent_Sm__Sg___SWIG_2(int capacity){
         std::vector< CameraComponent * >* pv = 0;
         if (capacity >= 0) {
@@ -771,6 +804,586 @@ SWIGINTERN int std_vector_Sl_ScriptedBehaviour_Sm__Sg__LastIndexOf(std::vector< 
       }
 SWIGINTERN bool std_vector_Sl_ScriptedBehaviour_Sm__Sg__Remove(std::vector< ScriptedBehaviour * > *self,ScriptedBehaviour *const &value){
         std::vector< ScriptedBehaviour * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< ModelRenderer * > *new_std_vector_Sl_ModelRenderer_Sm__Sg___SWIG_2(int capacity){
+        std::vector< ModelRenderer * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< ModelRenderer * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN ModelRenderer *std_vector_Sl_ModelRenderer_Sm__Sg__getitemcopy(std::vector< ModelRenderer * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< ModelRenderer * >::value_type const &std_vector_Sl_ModelRenderer_Sm__Sg__getitem(std::vector< ModelRenderer * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__setitem(std::vector< ModelRenderer * > *self,int index,ModelRenderer *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__AddRange(std::vector< ModelRenderer * > *self,std::vector< ModelRenderer * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< ModelRenderer * > *std_vector_Sl_ModelRenderer_Sm__Sg__GetRange(std::vector< ModelRenderer * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< ModelRenderer * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__Insert(std::vector< ModelRenderer * > *self,int index,ModelRenderer *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__InsertRange(std::vector< ModelRenderer * > *self,int index,std::vector< ModelRenderer * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__RemoveAt(std::vector< ModelRenderer * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__RemoveRange(std::vector< ModelRenderer * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< ModelRenderer * > *std_vector_Sl_ModelRenderer_Sm__Sg__Repeat(ModelRenderer *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< ModelRenderer * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__Reverse__SWIG_0(std::vector< ModelRenderer * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__Reverse__SWIG_1(std::vector< ModelRenderer * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_ModelRenderer_Sm__Sg__SetRange(std::vector< ModelRenderer * > *self,int index,std::vector< ModelRenderer * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_ModelRenderer_Sm__Sg__Contains(std::vector< ModelRenderer * > *self,ModelRenderer *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_ModelRenderer_Sm__Sg__IndexOf(std::vector< ModelRenderer * > *self,ModelRenderer *const &value){
+        int index = -1;
+        std::vector< ModelRenderer * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_ModelRenderer_Sm__Sg__LastIndexOf(std::vector< ModelRenderer * > *self,ModelRenderer *const &value){
+        int index = -1;
+        std::vector< ModelRenderer * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_ModelRenderer_Sm__Sg__Remove(std::vector< ModelRenderer * > *self,ModelRenderer *const &value){
+        std::vector< ModelRenderer * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< LightComponent * > *new_std_vector_Sl_LightComponent_Sm__Sg___SWIG_2(int capacity){
+        std::vector< LightComponent * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< LightComponent * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN LightComponent *std_vector_Sl_LightComponent_Sm__Sg__getitemcopy(std::vector< LightComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< LightComponent * >::value_type const &std_vector_Sl_LightComponent_Sm__Sg__getitem(std::vector< LightComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__setitem(std::vector< LightComponent * > *self,int index,LightComponent *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__AddRange(std::vector< LightComponent * > *self,std::vector< LightComponent * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< LightComponent * > *std_vector_Sl_LightComponent_Sm__Sg__GetRange(std::vector< LightComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< LightComponent * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__Insert(std::vector< LightComponent * > *self,int index,LightComponent *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__InsertRange(std::vector< LightComponent * > *self,int index,std::vector< LightComponent * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__RemoveAt(std::vector< LightComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__RemoveRange(std::vector< LightComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< LightComponent * > *std_vector_Sl_LightComponent_Sm__Sg__Repeat(LightComponent *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< LightComponent * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__Reverse__SWIG_0(std::vector< LightComponent * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__Reverse__SWIG_1(std::vector< LightComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_LightComponent_Sm__Sg__SetRange(std::vector< LightComponent * > *self,int index,std::vector< LightComponent * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_LightComponent_Sm__Sg__Contains(std::vector< LightComponent * > *self,LightComponent *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_LightComponent_Sm__Sg__IndexOf(std::vector< LightComponent * > *self,LightComponent *const &value){
+        int index = -1;
+        std::vector< LightComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_LightComponent_Sm__Sg__LastIndexOf(std::vector< LightComponent * > *self,LightComponent *const &value){
+        int index = -1;
+        std::vector< LightComponent * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_LightComponent_Sm__Sg__Remove(std::vector< LightComponent * > *self,LightComponent *const &value){
+        std::vector< LightComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< AudioListener * > *new_std_vector_Sl_AudioListener_Sm__Sg___SWIG_2(int capacity){
+        std::vector< AudioListener * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< AudioListener * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN AudioListener *std_vector_Sl_AudioListener_Sm__Sg__getitemcopy(std::vector< AudioListener * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< AudioListener * >::value_type const &std_vector_Sl_AudioListener_Sm__Sg__getitem(std::vector< AudioListener * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__setitem(std::vector< AudioListener * > *self,int index,AudioListener *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__AddRange(std::vector< AudioListener * > *self,std::vector< AudioListener * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< AudioListener * > *std_vector_Sl_AudioListener_Sm__Sg__GetRange(std::vector< AudioListener * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< AudioListener * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__Insert(std::vector< AudioListener * > *self,int index,AudioListener *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__InsertRange(std::vector< AudioListener * > *self,int index,std::vector< AudioListener * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__RemoveAt(std::vector< AudioListener * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__RemoveRange(std::vector< AudioListener * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< AudioListener * > *std_vector_Sl_AudioListener_Sm__Sg__Repeat(AudioListener *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< AudioListener * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_0(std::vector< AudioListener * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_1(std::vector< AudioListener * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioListener_Sm__Sg__SetRange(std::vector< AudioListener * > *self,int index,std::vector< AudioListener * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_AudioListener_Sm__Sg__Contains(std::vector< AudioListener * > *self,AudioListener *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_AudioListener_Sm__Sg__IndexOf(std::vector< AudioListener * > *self,AudioListener *const &value){
+        int index = -1;
+        std::vector< AudioListener * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_AudioListener_Sm__Sg__LastIndexOf(std::vector< AudioListener * > *self,AudioListener *const &value){
+        int index = -1;
+        std::vector< AudioListener * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_AudioListener_Sm__Sg__Remove(std::vector< AudioListener * > *self,AudioListener *const &value){
+        std::vector< AudioListener * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< AudioEmitter * > *new_std_vector_Sl_AudioEmitter_Sm__Sg___SWIG_2(int capacity){
+        std::vector< AudioEmitter * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< AudioEmitter * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN AudioEmitter *std_vector_Sl_AudioEmitter_Sm__Sg__getitemcopy(std::vector< AudioEmitter * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< AudioEmitter * >::value_type const &std_vector_Sl_AudioEmitter_Sm__Sg__getitem(std::vector< AudioEmitter * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__setitem(std::vector< AudioEmitter * > *self,int index,AudioEmitter *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__AddRange(std::vector< AudioEmitter * > *self,std::vector< AudioEmitter * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< AudioEmitter * > *std_vector_Sl_AudioEmitter_Sm__Sg__GetRange(std::vector< AudioEmitter * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< AudioEmitter * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__Insert(std::vector< AudioEmitter * > *self,int index,AudioEmitter *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__InsertRange(std::vector< AudioEmitter * > *self,int index,std::vector< AudioEmitter * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__RemoveAt(std::vector< AudioEmitter * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__RemoveRange(std::vector< AudioEmitter * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< AudioEmitter * > *std_vector_Sl_AudioEmitter_Sm__Sg__Repeat(AudioEmitter *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< AudioEmitter * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_0(std::vector< AudioEmitter * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_1(std::vector< AudioEmitter * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_AudioEmitter_Sm__Sg__SetRange(std::vector< AudioEmitter * > *self,int index,std::vector< AudioEmitter * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_AudioEmitter_Sm__Sg__Contains(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_AudioEmitter_Sm__Sg__IndexOf(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        int index = -1;
+        std::vector< AudioEmitter * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_AudioEmitter_Sm__Sg__LastIndexOf(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        int index = -1;
+        std::vector< AudioEmitter * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_AudioEmitter_Sm__Sg__Remove(std::vector< AudioEmitter * > *self,AudioEmitter *const &value){
+        std::vector< AudioEmitter * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< PortalComponent * > *new_std_vector_Sl_PortalComponent_Sm__Sg___SWIG_2(int capacity){
+        std::vector< PortalComponent * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< PortalComponent * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN PortalComponent *std_vector_Sl_PortalComponent_Sm__Sg__getitemcopy(std::vector< PortalComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< PortalComponent * >::value_type const &std_vector_Sl_PortalComponent_Sm__Sg__getitem(std::vector< PortalComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__setitem(std::vector< PortalComponent * > *self,int index,PortalComponent *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__AddRange(std::vector< PortalComponent * > *self,std::vector< PortalComponent * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< PortalComponent * > *std_vector_Sl_PortalComponent_Sm__Sg__GetRange(std::vector< PortalComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< PortalComponent * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__Insert(std::vector< PortalComponent * > *self,int index,PortalComponent *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__InsertRange(std::vector< PortalComponent * > *self,int index,std::vector< PortalComponent * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__RemoveAt(std::vector< PortalComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__RemoveRange(std::vector< PortalComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< PortalComponent * > *std_vector_Sl_PortalComponent_Sm__Sg__Repeat(PortalComponent *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< PortalComponent * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_0(std::vector< PortalComponent * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_1(std::vector< PortalComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_PortalComponent_Sm__Sg__SetRange(std::vector< PortalComponent * > *self,int index,std::vector< PortalComponent * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_PortalComponent_Sm__Sg__Contains(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_PortalComponent_Sm__Sg__IndexOf(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        int index = -1;
+        std::vector< PortalComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_PortalComponent_Sm__Sg__LastIndexOf(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        int index = -1;
+        std::vector< PortalComponent * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_PortalComponent_Sm__Sg__Remove(std::vector< PortalComponent * > *self,PortalComponent *const &value){
+        std::vector< PortalComponent * >::iterator it = std::find(self->begin(), self->end(), value);
         if (it != self->end()) {
           self->erase(it);
           return true;
@@ -4811,6 +5424,94 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_Forward(void * jarg1) {
 }
 
 
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Transform_IsRoot(void * jarg1) {
+  unsigned int jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  bool result;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (bool)(arg1)->IsRoot();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetParent__SWIG_0(void * jarg1, void * jarg2, unsigned int jarg3, unsigned int jarg4, unsigned int jarg5) {
+  Transform *arg1 = (Transform *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  bool arg3 ;
+  bool arg4 ;
+  bool arg5 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  arg3 = jarg3 ? true : false; 
+  arg4 = jarg4 ? true : false; 
+  arg5 = jarg5 ? true : false; 
+  (arg1)->SetParent(arg2,arg3,arg4,arg5);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetParent__SWIG_1(void * jarg1, void * jarg2, unsigned int jarg3, unsigned int jarg4) {
+  Transform *arg1 = (Transform *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  bool arg3 ;
+  bool arg4 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  arg3 = jarg3 ? true : false; 
+  arg4 = jarg4 ? true : false; 
+  (arg1)->SetParent(arg2,arg3,arg4);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetParent__SWIG_2(void * jarg1, void * jarg2, unsigned int jarg3) {
+  Transform *arg1 = (Transform *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  bool arg3 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  arg3 = jarg3 ? true : false; 
+  (arg1)->SetParent(arg2,arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetParent__SWIG_3(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  (arg1)->SetParent(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetParent(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (Transform *)(arg1)->GetParent();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetRootParent(void * jarg1) {
+  void * jresult ;
+  Transform *arg1 = (Transform *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  result = (Transform *)(arg1)->GetRootParent();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Transform(void * jarg1) {
   Transform *arg1 = (Transform *) 0 ;
   
@@ -4890,6 +5591,1464 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ScriptedBehaviour(void * jarg
   ScriptedBehaviour *arg1 = (ScriptedBehaviour *) 0 ;
   
   arg1 = (ScriptedBehaviour *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Mesh_CreateCylinder(void * jarg1, float jarg2, float jarg3, float jarg4) {
+  std::shared_ptr< Mesh > arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  
+  if (jarg1) arg1 = *(std::shared_ptr< Mesh > *)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  Mesh::CreateCylinder(arg1,arg2,arg3,arg4);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Mesh_CreateSphere(void * jarg1, float jarg2, float jarg3, float jarg4) {
+  std::shared_ptr< Mesh > arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  
+  if (jarg1) arg1 = *(std::shared_ptr< Mesh > *)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  Mesh::CreateSphere(arg1,arg2,arg3,arg4);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Mesh_CreateCube(void * jarg1, float jarg2, float jarg3, float jarg4) {
+  std::shared_ptr< Mesh > arg1 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  
+  if (jarg1) arg1 = *(std::shared_ptr< Mesh > *)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  Mesh::CreateCube(arg1,arg2,arg3,arg4);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Mesh_CreateQuad(void * jarg1, float jarg2, float jarg3) {
+  std::shared_ptr< Mesh > arg1 ;
+  float arg2 ;
+  float arg3 ;
+  
+  if (jarg1) arg1 = *(std::shared_ptr< Mesh > *)jarg1; 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  Mesh::CreateQuad(arg1,arg2,arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Mesh(void * jarg1) {
+  Mesh *arg1 = (Mesh *) 0 ;
+  std::shared_ptr< Mesh > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Mesh > *)jarg1;
+  arg1 = (Mesh *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_Texture_GetWidth(void * jarg1) {
+  int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  int result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (int)(arg1)->GetWidth();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_Texture_GetHeight(void * jarg1) {
+  int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  int result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (int)(arg1)->GetHeight();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_Texture_GetSize(void * jarg1) {
+  int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  int result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (int)(arg1)->GetSize();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_Texture_GetMipmapCount(void * jarg1) {
+  int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  int result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (int)(arg1)->GetMipmapCount();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_Texture_GetBlockSize(void * jarg1) {
+  int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  int result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (int)(arg1)->GetBlockSize();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_Texture_GetInternalFormat(void * jarg1) {
+  int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  ETextureFormat result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (ETextureFormat)(arg1)->GetInternalFormat();
+  jresult = (int)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Texture_SetInternalFormat(void * jarg1, int jarg2) {
+  Texture *arg1 = (Texture *) 0 ;
+  ETextureFormat arg2 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (ETextureFormat)jarg2; 
+  (arg1)->SetInternalFormat(arg2);
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_Texture_GetSurface(void * jarg1) {
+  int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  ETextureSurface result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (ETextureSurface)(arg1)->GetSurface();
+  jresult = (int)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Texture_SetSurface(void * jarg1, int jarg2) {
+  Texture *arg1 = (Texture *) 0 ;
+  ETextureSurface arg2 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (ETextureSurface)jarg2; 
+  (arg1)->SetSurface(arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Texture_GetIsFlipped(void * jarg1) {
+  unsigned int jresult ;
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture const > *smartarg1 = 0 ;
+  bool result;
+  
+  
+  smartarg1 = (std::shared_ptr< const Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (bool)((Texture const *)arg1)->GetIsFlipped();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Texture(void * jarg1) {
+  Texture *arg1 = (Texture *) 0 ;
+  std::shared_ptr< Texture > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Texture > *)jarg1;
+  arg1 = (Texture *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_ambient_set(void * jarg1, void * jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->m_ambient = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Material_m_ambient_get(void * jarg1) {
+  void * jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (CCMaths::Vector3 *)& ((arg1)->m_ambient);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_diffuse_set(void * jarg1, void * jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->m_diffuse = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Material_m_diffuse_get(void * jarg1) {
+  void * jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (CCMaths::Vector3 *)& ((arg1)->m_diffuse);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_specular_set(void * jarg1, void * jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->m_specular = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Material_m_specular_get(void * jarg1) {
+  void * jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (CCMaths::Vector3 *)& ((arg1)->m_specular);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_emissive_set(void * jarg1, void * jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2; 
+  if (arg1) (arg1)->m_emissive = *arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Material_m_emissive_get(void * jarg1) {
+  void * jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  CCMaths::Vector3 *result = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (CCMaths::Vector3 *)& ((arg1)->m_emissive);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_shininess_set(void * jarg1, float jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m_shininess = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Material_m_shininess_get(void * jarg1) {
+  float jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  float result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (float) ((arg1)->m_shininess);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_hasNormal_set(void * jarg1, unsigned int jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  bool arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = jarg2 ? true : false; 
+  if (arg1) (arg1)->m_hasNormal = arg2;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Material_m_hasNormal_get(void * jarg1) {
+  unsigned int jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  bool result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (bool) ((arg1)->m_hasNormal);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_specularFactor_set(void * jarg1, float jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m_specularFactor = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Material_m_specularFactor_get(void * jarg1) {
+  float jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  float result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (float) ((arg1)->m_specularFactor);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_metallicFactor_set(void * jarg1, float jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m_metallicFactor = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Material_m_metallicFactor_get(void * jarg1) {
+  float jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  float result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (float) ((arg1)->m_metallicFactor);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_roughnessFactor_set(void * jarg1, float jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m_roughnessFactor = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Material_m_roughnessFactor_get(void * jarg1) {
+  float jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  float result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (float) ((arg1)->m_roughnessFactor);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_ao_set(void * jarg1, float jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m_ao = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Material_m_ao_get(void * jarg1) {
+  float jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  float result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (float) ((arg1)->m_ao);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_clearCoatFactor_set(void * jarg1, float jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m_clearCoatFactor = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Material_m_clearCoatFactor_get(void * jarg1) {
+  float jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  float result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (float) ((arg1)->m_clearCoatFactor);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_m_clearCoatRoughnessFactor_set(void * jarg1, float jarg2) {
+  Material *arg1 = (Material *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  if (arg1) (arg1)->m_clearCoatRoughnessFactor = arg2;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Material_m_clearCoatRoughnessFactor_get(void * jarg1) {
+  float jresult ;
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  float result;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  result = (float) ((arg1)->m_clearCoatRoughnessFactor);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_SetTexture__SWIG_0(void * jarg1, int jarg2, void * jarg3) {
+  Material *arg1 = (Material *) 0 ;
+  ETextureType arg2 ;
+  std::shared_ptr< Texture > *arg3 = 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  std::shared_ptr< Texture > tempnull3 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (ETextureType)jarg2; 
+  arg3 = jarg3 ? (std::shared_ptr< Texture > *)jarg3 : &tempnull3; 
+  (arg1)->SetTexture(arg2,(std::shared_ptr< Texture > const &)*arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Material_SetTexture__SWIG_1(void * jarg1, int jarg2, char * jarg3) {
+  Material *arg1 = (Material *) 0 ;
+  ETextureType arg2 ;
+  char *arg3 = (char *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (ETextureType)jarg2; 
+  arg3 = (char *)jarg3; 
+  (arg1)->SetTexture(arg2,(char const *)arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Material(void * jarg1) {
+  Material *arg1 = (Material *) 0 ;
+  std::shared_ptr< Material > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Material > *)jarg1;
+  arg1 = (Material *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_MeshRenderer_m_material_get(void * jarg1) {
+  void * jresult ;
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  std::shared_ptr< Material > *result = 0 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  result = (std::shared_ptr< Material > *) & ((arg1)->m_material);
+  jresult = *result ? new std::shared_ptr< Material >(*result) : 0; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_MeshRenderer_m_mesh_get(void * jarg1) {
+  void * jresult ;
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  std::shared_ptr< Mesh > *result = 0 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  result = (std::shared_ptr< Mesh > *) & ((arg1)->m_mesh);
+  jresult = *result ? new std::shared_ptr< Mesh >(*result) : 0; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_MeshRenderer_m_transform_get(void * jarg1) {
+  void * jresult ;
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_MeshRenderer_SetMesh(void * jarg1, void * jarg2) {
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  std::shared_ptr< Mesh > arg2 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  if (jarg2) arg2 = *(std::shared_ptr< Mesh > *)jarg2; 
+  (arg1)->SetMesh(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_MeshRenderer_RemoveMesh(void * jarg1) {
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  (arg1)->RemoveMesh();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_MeshRenderer_SetMaterialFromPath(void * jarg1, char * jarg2) {
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  std::string arg2 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  (&arg2)->assign(jarg2); 
+  (arg1)->SetMaterialFromPath(arg2);
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_MeshRenderer_GetMaterialPath(void * jarg1) {
+  char * jresult ;
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  std::string result;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  result = (arg1)->GetMaterialPath();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_MeshRenderer_SetMaterial(void * jarg1, void * jarg2) {
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  std::shared_ptr< Material > arg2 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  if (jarg2) arg2 = *(std::shared_ptr< Material > *)jarg2; 
+  (arg1)->SetMaterial(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_MeshRenderer_RemoveMaterial(void * jarg1) {
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  (arg1)->RemoveMaterial();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_MeshRenderer(void * jarg1) {
+  MeshRenderer *arg1 = (MeshRenderer *) 0 ;
+  
+  arg1 = (MeshRenderer *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRenderer_SetMeshFromPath(void * jarg1, char * jarg2) {
+  ModelRenderer *arg1 = (ModelRenderer *) 0 ;
+  std::string arg2 ;
+  
+  arg1 = (ModelRenderer *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  (&arg2)->assign(jarg2); 
+  (arg1)->SetMeshFromPath(arg2);
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_ModelRenderer_GetMeshPath(void * jarg1) {
+  char * jresult ;
+  ModelRenderer *arg1 = (ModelRenderer *) 0 ;
+  std::string result;
+  
+  arg1 = (ModelRenderer *)jarg1; 
+  result = (arg1)->GetMeshPath();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRenderer_LoadModelFromPath(void * jarg1, char * jarg2) {
+  ModelRenderer *arg1 = (ModelRenderer *) 0 ;
+  std::string arg2 ;
+  
+  arg1 = (ModelRenderer *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  (&arg2)->assign(jarg2); 
+  (arg1)->LoadModelFromPath(arg2);
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_ModelRenderer_GetModelPath(void * jarg1) {
+  char * jresult ;
+  ModelRenderer *arg1 = (ModelRenderer *) 0 ;
+  std::string result;
+  
+  arg1 = (ModelRenderer *)jarg1; 
+  result = (arg1)->GetModelPath();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ModelRenderer(void * jarg1) {
+  ModelRenderer *arg1 = (ModelRenderer *) 0 ;
+  
+  arg1 = (ModelRenderer *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_m_transform_set(void * jarg1, void * jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponent_m_transform_get(void * jarg1) {
+  void * jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetPosition(void * jarg1, void * jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetPosition((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetRotation(void * jarg1, void * jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetRotation((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetAmbient(void * jarg1, void * jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetAmbient((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetDiffuse(void * jarg1, void * jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetDiffuse((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetSpecular(void * jarg1, void * jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetSpecular((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetAttenuation(void * jarg1, void * jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetAttenuation((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetCutoff(void * jarg1, float jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  float arg2 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (float)jarg2; 
+  (arg1)->SetCutoff(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetOuterCutoff(void * jarg1, float jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  float arg2 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (float)jarg2; 
+  (arg1)->SetOuterCutoff(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponent_SetLightType(void * jarg1, int jarg2) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  ELightType arg2 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  arg2 = (ELightType)jarg2; 
+  (arg1)->SetLightType(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponent_GetPosition(void * jarg1) {
+  void * jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (arg1)->GetPosition();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponent_GetDirection(void * jarg1) {
+  void * jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (arg1)->GetDirection();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponent_GetAmbient(void * jarg1) {
+  void * jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (arg1)->GetAmbient();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponent_GetDiffuse(void * jarg1) {
+  void * jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (arg1)->GetDiffuse();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponent_GetSpecular(void * jarg1) {
+  void * jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (arg1)->GetSpecular();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponent_GetAttenuation(void * jarg1) {
+  void * jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (arg1)->GetAttenuation();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_LightComponent_GetCutoff(void * jarg1) {
+  float jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  float result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (float)(arg1)->GetCutoff();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_LightComponent_GetOuterCutoff(void * jarg1) {
+  float jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  float result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (float)(arg1)->GetOuterCutoff();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_LightComponent_GetLightType(void * jarg1) {
+  int jresult ;
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  ELightType result;
+  
+  arg1 = (LightComponent *)jarg1; 
+  result = (ELightType)(arg1)->GetLightType();
+  jresult = (int)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_LightComponent(void * jarg1) {
+  LightComponent *arg1 = (LightComponent *) 0 ;
+  
+  arg1 = (LightComponent *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListener_m_transform_set(void * jarg1, void * jarg2) {
+  AudioListener *arg1 = (AudioListener *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (AudioListener *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListener_m_transform_get(void * jarg1) {
+  void * jresult ;
+  AudioListener *arg1 = (AudioListener *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (AudioListener *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioListener(void * jarg1) {
+  AudioListener *arg1 = (AudioListener *) 0 ;
+  
+  arg1 = (AudioListener *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_Play(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (arg1)->Play();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_Pause(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (arg1)->Pause();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_Stop(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (arg1)->Stop();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetLooping(void * jarg1, unsigned int jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  bool arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = jarg2 ? true : false; 
+  (arg1)->SetLooping(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetPosition__SWIG_0(void * jarg1, float jarg2, float jarg3, float jarg4) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  arg3 = (float)jarg3; 
+  arg4 = (float)jarg4; 
+  (arg1)->SetPosition(arg2,arg3,arg4);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetPosition__SWIG_1(void * jarg1, void * jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetPosition((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetDirection(void * jarg1, void * jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetDirection((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetRollOff(void * jarg1, float jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  (arg1)->SetRollOff(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetReferenceDistance(void * jarg1, float jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  (arg1)->SetReferenceDistance(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Sound_SetPitch(void * jarg1, float jarg2) {
+  Sound *arg1 = (Sound *) 0 ;
+  float arg2 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  arg2 = (float)jarg2; 
+  (arg1)->SetPitch(arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Sound(void * jarg1) {
+  Sound *arg1 = (Sound *) 0 ;
+  std::shared_ptr< Sound > *smartarg1 = 0 ;
+  
+  
+  smartarg1 = (std::shared_ptr<  Sound > *)jarg1;
+  arg1 = (Sound *)(smartarg1 ? smartarg1->get() : 0); 
+  (void)arg1; delete smartarg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_m_transform_set(void * jarg1, void * jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_m_transform_get(void * jarg1) {
+  void * jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_Play(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  (arg1)->Play();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_Pause(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  (arg1)->Pause();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_Stop(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  (arg1)->Stop();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetLooping(void * jarg1, unsigned int jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetLooping((bool const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetPitch(void * jarg1, float jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetPitch((float const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetRollOff(void * jarg1, float jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetRollOff((float const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetReferenceDistance(void * jarg1, float jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetReferenceDistance((float const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SetSpatialized(void * jarg1, unsigned int jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetSpatialized((bool const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_AddSound__SWIG_0(void * jarg1, char * jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  std::string *arg2 = 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  if (!jarg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "null string", 0);
+    return ;
+  }
+  std::string arg2_str(jarg2);
+  arg2 = &arg2_str; 
+  (arg1)->AddSound((std::string const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitter_AddSound__SWIG_1(void * jarg1, void * jarg2) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  std::shared_ptr< Sound > arg2 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  if (jarg2) arg2 = *(std::shared_ptr< Sound > *)jarg2; 
+  (arg1)->AddSound(arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetLooping(void * jarg1) {
+  unsigned int jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (bool)(arg1)->GetLooping();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetSpatialized(void * jarg1) {
+  unsigned int jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  bool result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (bool)(arg1)->GetSpatialized();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetRollOff(void * jarg1) {
+  float jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (float)(arg1)->GetRollOff();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetReferenceDistance(void * jarg1) {
+  float jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (float)(arg1)->GetReferenceDistance();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetPitch(void * jarg1) {
+  float jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  float result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (float)(arg1)->GetPitch();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_GetSoundPath(void * jarg1) {
+  char * jresult ;
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  std::string result;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  result = (arg1)->GetSoundPath();
+  jresult = SWIG_csharp_string_callback((&result)->c_str()); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioEmitter(void * jarg1) {
+  AudioEmitter *arg1 = (AudioEmitter *) 0 ;
+  
+  arg1 = (AudioEmitter *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponent_m_transform_set(void * jarg1, void * jarg2) {
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Transform *arg2 = (Transform *) 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  arg2 = (Transform *)jarg2; 
+  if (arg1) (arg1)->m_transform = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponent_m_transform_get(void * jarg1) {
+  void * jresult ;
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponent_SetLinkedPortal(void * jarg1, void * jarg2) {
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Behaviour *arg2 = (Behaviour *) 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  arg2 = (Behaviour *)jarg2; 
+  (arg1)->SetLinkedPortal(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponent_GetLinkedPortal(void * jarg1) {
+  void * jresult ;
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  Behaviour *result = 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
+  result = (Behaviour *)(arg1)->GetLinkedPortal();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponent(void * jarg1) {
+  PortalComponent *arg1 = (PortalComponent *) 0 ;
+  
+  arg1 = (PortalComponent *)jarg1; 
   delete arg1;
 }
 
@@ -6121,6 +8280,2051 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ScriptedBehaviourVector(void 
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Clear(void * jarg1) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Add(void * jarg1, void * jarg2) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  ModelRenderer **arg2 = 0 ;
+  ModelRenderer *temp2 = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  temp2 = (ModelRenderer *)jarg2;
+  arg2 = (ModelRenderer **)&temp2; 
+  (arg1)->push_back((ModelRenderer *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  std::vector< ModelRenderer * >::size_type result;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  result = ((std::vector< ModelRenderer * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  std::vector< ModelRenderer * >::size_type result;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  result = ((std::vector< ModelRenderer * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  std::vector< ModelRenderer * >::size_type arg2 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (std::vector< ModelRenderer * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_ModelRendererVector__SWIG_0() {
+  void * jresult ;
+  std::vector< ModelRenderer * > *result = 0 ;
+  
+  result = (std::vector< ModelRenderer * > *)new std::vector< ModelRenderer * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_ModelRendererVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< ModelRenderer * > *arg1 = 0 ;
+  std::vector< ModelRenderer * > *result = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ModelRenderer * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< ModelRenderer * > *)new std::vector< ModelRenderer * >((std::vector< ModelRenderer * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_ModelRendererVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< ModelRenderer * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< ModelRenderer * > *)new_std_vector_Sl_ModelRenderer_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  ModelRenderer *result = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (ModelRenderer *)std_vector_Sl_ModelRenderer_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  std::vector< ModelRenderer * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< ModelRenderer * >::value_type *) &std_vector_Sl_ModelRenderer_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  ModelRenderer **arg3 = 0 ;
+  ModelRenderer *temp3 = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (ModelRenderer *)jarg3;
+  arg3 = (ModelRenderer **)&temp3; 
+  try {
+    std_vector_Sl_ModelRenderer_Sm__Sg__setitem(arg1,arg2,(ModelRenderer *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  std::vector< ModelRenderer * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (std::vector< ModelRenderer * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ModelRenderer * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_ModelRenderer_Sm__Sg__AddRange(arg1,(std::vector< ModelRenderer * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< ModelRenderer * > *result = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< ModelRenderer * > *)std_vector_Sl_ModelRenderer_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  ModelRenderer **arg3 = 0 ;
+  ModelRenderer *temp3 = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (ModelRenderer *)jarg3;
+  arg3 = (ModelRenderer **)&temp3; 
+  try {
+    std_vector_Sl_ModelRenderer_Sm__Sg__Insert(arg1,arg2,(ModelRenderer *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  std::vector< ModelRenderer * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< ModelRenderer * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ModelRenderer * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_ModelRenderer_Sm__Sg__InsertRange(arg1,arg2,(std::vector< ModelRenderer * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_ModelRenderer_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_ModelRenderer_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  ModelRenderer **arg1 = 0 ;
+  int arg2 ;
+  ModelRenderer *temp1 = 0 ;
+  std::vector< ModelRenderer * > *result = 0 ;
+  
+  temp1 = (ModelRenderer *)jarg1;
+  arg1 = (ModelRenderer **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< ModelRenderer * > *)std_vector_Sl_ModelRenderer_Sm__Sg__Repeat((ModelRenderer *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  std_vector_Sl_ModelRenderer_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_ModelRenderer_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  int arg2 ;
+  std::vector< ModelRenderer * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< ModelRenderer * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< ModelRenderer * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_ModelRenderer_Sm__Sg__SetRange(arg1,arg2,(std::vector< ModelRenderer * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  ModelRenderer **arg2 = 0 ;
+  ModelRenderer *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  temp2 = (ModelRenderer *)jarg2;
+  arg2 = (ModelRenderer **)&temp2; 
+  result = (bool)std_vector_Sl_ModelRenderer_Sm__Sg__Contains(arg1,(ModelRenderer *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  ModelRenderer **arg2 = 0 ;
+  ModelRenderer *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  temp2 = (ModelRenderer *)jarg2;
+  arg2 = (ModelRenderer **)&temp2; 
+  result = (int)std_vector_Sl_ModelRenderer_Sm__Sg__IndexOf(arg1,(ModelRenderer *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  ModelRenderer **arg2 = 0 ;
+  ModelRenderer *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  temp2 = (ModelRenderer *)jarg2;
+  arg2 = (ModelRenderer **)&temp2; 
+  result = (int)std_vector_Sl_ModelRenderer_Sm__Sg__LastIndexOf(arg1,(ModelRenderer *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_ModelRendererVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  ModelRenderer **arg2 = 0 ;
+  ModelRenderer *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  temp2 = (ModelRenderer *)jarg2;
+  arg2 = (ModelRenderer **)&temp2; 
+  result = (bool)std_vector_Sl_ModelRenderer_Sm__Sg__Remove(arg1,(ModelRenderer *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_ModelRendererVector(void * jarg1) {
+  std::vector< ModelRenderer * > *arg1 = (std::vector< ModelRenderer * > *) 0 ;
+  
+  arg1 = (std::vector< ModelRenderer * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Clear(void * jarg1) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Add(void * jarg1, void * jarg2) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  LightComponent **arg2 = 0 ;
+  LightComponent *temp2 = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  temp2 = (LightComponent *)jarg2;
+  arg2 = (LightComponent **)&temp2; 
+  (arg1)->push_back((LightComponent *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_LightComponentVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  std::vector< LightComponent * >::size_type result;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  result = ((std::vector< LightComponent * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_LightComponentVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  std::vector< LightComponent * >::size_type result;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  result = ((std::vector< LightComponent * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  std::vector< LightComponent * >::size_type arg2 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (std::vector< LightComponent * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_LightComponentVector__SWIG_0() {
+  void * jresult ;
+  std::vector< LightComponent * > *result = 0 ;
+  
+  result = (std::vector< LightComponent * > *)new std::vector< LightComponent * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_LightComponentVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< LightComponent * > *arg1 = 0 ;
+  std::vector< LightComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< LightComponent * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< LightComponent * > *)new std::vector< LightComponent * >((std::vector< LightComponent * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_LightComponentVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< LightComponent * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< LightComponent * > *)new_std_vector_Sl_LightComponent_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponentVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  LightComponent *result = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (LightComponent *)std_vector_Sl_LightComponent_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponentVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< LightComponent * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< LightComponent * >::value_type *) &std_vector_Sl_LightComponent_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  LightComponent **arg3 = 0 ;
+  LightComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (LightComponent *)jarg3;
+  arg3 = (LightComponent **)&temp3; 
+  try {
+    std_vector_Sl_LightComponent_Sm__Sg__setitem(arg1,arg2,(LightComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  std::vector< LightComponent * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (std::vector< LightComponent * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< LightComponent * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_LightComponent_Sm__Sg__AddRange(arg1,(std::vector< LightComponent * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponentVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< LightComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< LightComponent * > *)std_vector_Sl_LightComponent_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  LightComponent **arg3 = 0 ;
+  LightComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (LightComponent *)jarg3;
+  arg3 = (LightComponent **)&temp3; 
+  try {
+    std_vector_Sl_LightComponent_Sm__Sg__Insert(arg1,arg2,(LightComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< LightComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< LightComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< LightComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_LightComponent_Sm__Sg__InsertRange(arg1,arg2,(std::vector< LightComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_LightComponent_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_LightComponent_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  LightComponent **arg1 = 0 ;
+  int arg2 ;
+  LightComponent *temp1 = 0 ;
+  std::vector< LightComponent * > *result = 0 ;
+  
+  temp1 = (LightComponent *)jarg1;
+  arg1 = (LightComponent **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< LightComponent * > *)std_vector_Sl_LightComponent_Sm__Sg__Repeat((LightComponent *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  std_vector_Sl_LightComponent_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_LightComponent_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_LightComponentVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< LightComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< LightComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< LightComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_LightComponent_Sm__Sg__SetRange(arg1,arg2,(std::vector< LightComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  LightComponent **arg2 = 0 ;
+  LightComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  temp2 = (LightComponent *)jarg2;
+  arg2 = (LightComponent **)&temp2; 
+  result = (bool)std_vector_Sl_LightComponent_Sm__Sg__Contains(arg1,(LightComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_LightComponentVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  LightComponent **arg2 = 0 ;
+  LightComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  temp2 = (LightComponent *)jarg2;
+  arg2 = (LightComponent **)&temp2; 
+  result = (int)std_vector_Sl_LightComponent_Sm__Sg__IndexOf(arg1,(LightComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_LightComponentVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  LightComponent **arg2 = 0 ;
+  LightComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  temp2 = (LightComponent *)jarg2;
+  arg2 = (LightComponent **)&temp2; 
+  result = (int)std_vector_Sl_LightComponent_Sm__Sg__LastIndexOf(arg1,(LightComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_LightComponentVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  LightComponent **arg2 = 0 ;
+  LightComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  temp2 = (LightComponent *)jarg2;
+  arg2 = (LightComponent **)&temp2; 
+  result = (bool)std_vector_Sl_LightComponent_Sm__Sg__Remove(arg1,(LightComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_LightComponentVector(void * jarg1) {
+  std::vector< LightComponent * > *arg1 = (std::vector< LightComponent * > *) 0 ;
+  
+  arg1 = (std::vector< LightComponent * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Clear(void * jarg1) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Add(void * jarg1, void * jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  (arg1)->push_back((AudioListener *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * >::size_type result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  result = ((std::vector< AudioListener * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * >::size_type result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  result = ((std::vector< AudioListener * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * >::size_type arg2 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (std::vector< AudioListener * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioListenerVector__SWIG_0() {
+  void * jresult ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  result = (std::vector< AudioListener * > *)new std::vector< AudioListener * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioListenerVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = 0 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< AudioListener * > *)new std::vector< AudioListener * >((std::vector< AudioListener * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioListenerVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< AudioListener * > *)new_std_vector_Sl_AudioListener_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  AudioListener *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (AudioListener *)std_vector_Sl_AudioListener_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioListener * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioListener * >::value_type *) &std_vector_Sl_AudioListener_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  AudioListener **arg3 = 0 ;
+  AudioListener *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioListener *)jarg3;
+  arg3 = (AudioListener **)&temp3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__setitem(arg1,arg2,(AudioListener *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  std::vector< AudioListener * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (std::vector< AudioListener * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_AudioListener_Sm__Sg__AddRange(arg1,(std::vector< AudioListener * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< AudioListener * > *)std_vector_Sl_AudioListener_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  AudioListener **arg3 = 0 ;
+  AudioListener *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioListener *)jarg3;
+  arg3 = (AudioListener **)&temp3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__Insert(arg1,arg2,(AudioListener *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioListener * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioListener * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__InsertRange(arg1,arg2,(std::vector< AudioListener * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  AudioListener **arg1 = 0 ;
+  int arg2 ;
+  AudioListener *temp1 = 0 ;
+  std::vector< AudioListener * > *result = 0 ;
+  
+  temp1 = (AudioListener *)jarg1;
+  arg1 = (AudioListener **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioListener * > *)std_vector_Sl_AudioListener_Sm__Sg__Repeat((AudioListener *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioListener * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioListener * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioListener * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioListener_Sm__Sg__SetRange(arg1,arg2,(std::vector< AudioListener * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (bool)std_vector_Sl_AudioListener_Sm__Sg__Contains(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (int)std_vector_Sl_AudioListener_Sm__Sg__IndexOf(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (int)std_vector_Sl_AudioListener_Sm__Sg__LastIndexOf(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioListenerVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  AudioListener **arg2 = 0 ;
+  AudioListener *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  temp2 = (AudioListener *)jarg2;
+  arg2 = (AudioListener **)&temp2; 
+  result = (bool)std_vector_Sl_AudioListener_Sm__Sg__Remove(arg1,(AudioListener *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioListenerVector(void * jarg1) {
+  std::vector< AudioListener * > *arg1 = (std::vector< AudioListener * > *) 0 ;
+  
+  arg1 = (std::vector< AudioListener * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Clear(void * jarg1) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Add(void * jarg1, void * jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  (arg1)->push_back((AudioEmitter *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * >::size_type result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  result = ((std::vector< AudioEmitter * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * >::size_type result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  result = ((std::vector< AudioEmitter * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * >::size_type arg2 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (std::vector< AudioEmitter * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioEmitterVector__SWIG_0() {
+  void * jresult ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  result = (std::vector< AudioEmitter * > *)new std::vector< AudioEmitter * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioEmitterVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = 0 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< AudioEmitter * > *)new std::vector< AudioEmitter * >((std::vector< AudioEmitter * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_AudioEmitterVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< AudioEmitter * > *)new_std_vector_Sl_AudioEmitter_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  AudioEmitter *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (AudioEmitter *)std_vector_Sl_AudioEmitter_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioEmitter * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioEmitter * >::value_type *) &std_vector_Sl_AudioEmitter_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  AudioEmitter **arg3 = 0 ;
+  AudioEmitter *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioEmitter *)jarg3;
+  arg3 = (AudioEmitter **)&temp3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__setitem(arg1,arg2,(AudioEmitter *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  std::vector< AudioEmitter * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (std::vector< AudioEmitter * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_AudioEmitter_Sm__Sg__AddRange(arg1,(std::vector< AudioEmitter * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< AudioEmitter * > *)std_vector_Sl_AudioEmitter_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  AudioEmitter **arg3 = 0 ;
+  AudioEmitter *temp3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (AudioEmitter *)jarg3;
+  arg3 = (AudioEmitter **)&temp3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__Insert(arg1,arg2,(AudioEmitter *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioEmitter * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioEmitter * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__InsertRange(arg1,arg2,(std::vector< AudioEmitter * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  AudioEmitter **arg1 = 0 ;
+  int arg2 ;
+  AudioEmitter *temp1 = 0 ;
+  std::vector< AudioEmitter * > *result = 0 ;
+  
+  temp1 = (AudioEmitter *)jarg1;
+  arg1 = (AudioEmitter **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< AudioEmitter * > *)std_vector_Sl_AudioEmitter_Sm__Sg__Repeat((AudioEmitter *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  int arg2 ;
+  std::vector< AudioEmitter * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< AudioEmitter * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< AudioEmitter * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_AudioEmitter_Sm__Sg__SetRange(arg1,arg2,(std::vector< AudioEmitter * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (bool)std_vector_Sl_AudioEmitter_Sm__Sg__Contains(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (int)std_vector_Sl_AudioEmitter_Sm__Sg__IndexOf(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (int)std_vector_Sl_AudioEmitter_Sm__Sg__LastIndexOf(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_AudioEmitterVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  AudioEmitter **arg2 = 0 ;
+  AudioEmitter *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  temp2 = (AudioEmitter *)jarg2;
+  arg2 = (AudioEmitter **)&temp2; 
+  result = (bool)std_vector_Sl_AudioEmitter_Sm__Sg__Remove(arg1,(AudioEmitter *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_AudioEmitterVector(void * jarg1) {
+  std::vector< AudioEmitter * > *arg1 = (std::vector< AudioEmitter * > *) 0 ;
+  
+  arg1 = (std::vector< AudioEmitter * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Clear(void * jarg1) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Add(void * jarg1, void * jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  (arg1)->push_back((PortalComponent *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * >::size_type result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  result = ((std::vector< PortalComponent * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * >::size_type result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  result = ((std::vector< PortalComponent * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * >::size_type arg2 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (std::vector< PortalComponent * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalComponentVector__SWIG_0() {
+  void * jresult ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  result = (std::vector< PortalComponent * > *)new std::vector< PortalComponent * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalComponentVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = 0 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< PortalComponent * > *)new std::vector< PortalComponent * >((std::vector< PortalComponent * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalComponentVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< PortalComponent * > *)new_std_vector_Sl_PortalComponent_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  PortalComponent *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (PortalComponent *)std_vector_Sl_PortalComponent_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalComponent * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< PortalComponent * >::value_type *) &std_vector_Sl_PortalComponent_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  PortalComponent **arg3 = 0 ;
+  PortalComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (PortalComponent *)jarg3;
+  arg3 = (PortalComponent **)&temp3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__setitem(arg1,arg2,(PortalComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  std::vector< PortalComponent * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (std::vector< PortalComponent * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_PortalComponent_Sm__Sg__AddRange(arg1,(std::vector< PortalComponent * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< PortalComponent * > *)std_vector_Sl_PortalComponent_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  PortalComponent **arg3 = 0 ;
+  PortalComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (PortalComponent *)jarg3;
+  arg3 = (PortalComponent **)&temp3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__Insert(arg1,arg2,(PortalComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< PortalComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__InsertRange(arg1,arg2,(std::vector< PortalComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  PortalComponent **arg1 = 0 ;
+  int arg2 ;
+  PortalComponent *temp1 = 0 ;
+  std::vector< PortalComponent * > *result = 0 ;
+  
+  temp1 = (PortalComponent *)jarg1;
+  arg1 = (PortalComponent **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< PortalComponent * > *)std_vector_Sl_PortalComponent_Sm__Sg__Repeat((PortalComponent *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< PortalComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_PortalComponent_Sm__Sg__SetRange(arg1,arg2,(std::vector< PortalComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (bool)std_vector_Sl_PortalComponent_Sm__Sg__Contains(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (int)std_vector_Sl_PortalComponent_Sm__Sg__IndexOf(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (int)std_vector_Sl_PortalComponent_Sm__Sg__LastIndexOf(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PortalComponentVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  PortalComponent **arg2 = 0 ;
+  PortalComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  temp2 = (PortalComponent *)jarg2;
+  arg2 = (PortalComponent **)&temp2; 
+  result = (bool)std_vector_Sl_PortalComponent_Sm__Sg__Remove(arg1,(PortalComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponentVector(void * jarg1) {
+  std::vector< PortalComponent * > *arg1 = (std::vector< PortalComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalComponent * > *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_set(void * jarg1, void * jarg2) {
   Entity *arg1 = (Entity *) 0 ;
   Cell *arg2 = (Cell *) 0 ;
@@ -6275,6 +10479,186 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfTransform(void * ja
   arg1 = (Entity *)jarg1; 
   result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< Transform >();
   jresult = new std::vector< Transform * >((const std::vector< Transform * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetModelRenderer(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  ModelRenderer *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (ModelRenderer *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< ModelRenderer >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddModelRenderer(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  ModelRenderer *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (ModelRenderer *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< ModelRenderer >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfModelRenderer(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< ModelRenderer * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< ModelRenderer >();
+  jresult = new std::vector< ModelRenderer * >((const std::vector< ModelRenderer * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetLightComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  LightComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (LightComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< LightComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddLightComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  LightComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (LightComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< LightComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfLightComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< LightComponent * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< LightComponent >();
+  jresult = new std::vector< LightComponent * >((const std::vector< LightComponent * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAudioListener(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioListener *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioListener *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< AudioListener >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddAudioListener(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioListener *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioListener *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< AudioListener >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfAudioListener(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< AudioListener * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< AudioListener >();
+  jresult = new std::vector< AudioListener * >((const std::vector< AudioListener * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAudioEmitter(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioEmitter *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioEmitter *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< AudioEmitter >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddAudioEmitter(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  AudioEmitter *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (AudioEmitter *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< AudioEmitter >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfAudioEmitter(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< AudioEmitter * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< AudioEmitter >();
+  jresult = new std::vector< AudioEmitter * >((const std::vector< AudioEmitter * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetPortalComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  PortalComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (PortalComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< PortalComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddPortalComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  PortalComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (PortalComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< PortalComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfPortalComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< PortalComponent * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< PortalComponent >();
+  jresult = new std::vector< PortalComponent * >((const std::vector< PortalComponent * > &)result); 
   return jresult;
 }
 
@@ -7332,6 +11716,30 @@ SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_CameraComponent_SWIGUpcast(Ca
 }
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_ScriptedBehaviour_SWIGUpcast(ScriptedBehaviour *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_MeshRenderer_SWIGUpcast(MeshRenderer *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT MeshRenderer * SWIGSTDCALL CSharp_CCEngine_ModelRenderer_SWIGUpcast(ModelRenderer *jarg1) {
+    return (MeshRenderer *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_LightComponent_SWIGUpcast(LightComponent *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioListener_SWIGUpcast(AudioListener *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SWIGUpcast(AudioEmitter *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_PortalComponent_SWIGUpcast(PortalComponent *jarg1) {
     return (Behaviour *)jarg1;
 }
 

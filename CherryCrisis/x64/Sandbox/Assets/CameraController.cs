@@ -18,9 +18,10 @@ namespace CCScripting
 
 		}
 
-		public void Start()
+		public void Awake()
 		{
-			transform = GetComponent<Transform>();
+			transform = GetBehaviour<Transform>();
+
 		}
 
 
@@ -61,16 +62,6 @@ namespace CCScripting
 
 			double angleY = transform.eulerAngles.y + sensitityX * speedSensivity * dt;
 			transform.eulerAngles = new Vector3(transform.eulerAngles.x, (float)angleY, transform.eulerAngles.z);
-
-			transform.eulerAngles = Quaternion.Identity * transform.eulerAngles;
-
-			Debug.GetInstance().Info(GetHost().m_cell);
-
-			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.position, transform.Forward(), 5000f);
-			PhysicActor a = hit.actor;
-
-			if (a != null)
-				Debug.GetInstance().Info(a.m_owner);
 		}
 	}
 }

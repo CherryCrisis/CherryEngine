@@ -105,6 +105,91 @@ public class Entity : Object {
     return ret;
   }
 
+  private ModelRenderer GetModelRenderer() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetModelRenderer(swigCPtr);
+    ModelRenderer ret = (cPtr == global::System.IntPtr.Zero) ? null : new ModelRenderer(cPtr, false);
+    return ret;
+  }
+
+  private ModelRenderer AddModelRenderer() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddModelRenderer(swigCPtr);
+    ModelRenderer ret = (cPtr == global::System.IntPtr.Zero) ? null : new ModelRenderer(cPtr, false);
+    return ret;
+  }
+
+  private ModelRendererVector GetAllOfModelRenderer() {
+    ModelRendererVector ret = new ModelRendererVector(CherryEnginePINVOKE.Entity_GetAllOfModelRenderer(swigCPtr), true);
+    return ret;
+  }
+
+  private LightComponent GetLightComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetLightComponent(swigCPtr);
+    LightComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new LightComponent(cPtr, false);
+    return ret;
+  }
+
+  private LightComponent AddLightComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddLightComponent(swigCPtr);
+    LightComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new LightComponent(cPtr, false);
+    return ret;
+  }
+
+  private LightComponentVector GetAllOfLightComponent() {
+    LightComponentVector ret = new LightComponentVector(CherryEnginePINVOKE.Entity_GetAllOfLightComponent(swigCPtr), true);
+    return ret;
+  }
+
+  private AudioListener GetAudioListener() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetAudioListener(swigCPtr);
+    AudioListener ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioListener(cPtr, false);
+    return ret;
+  }
+
+  private AudioListener AddAudioListener() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddAudioListener(swigCPtr);
+    AudioListener ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioListener(cPtr, false);
+    return ret;
+  }
+
+  private AudioListenerVector GetAllOfAudioListener() {
+    AudioListenerVector ret = new AudioListenerVector(CherryEnginePINVOKE.Entity_GetAllOfAudioListener(swigCPtr), true);
+    return ret;
+  }
+
+  private AudioEmitter GetAudioEmitter() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetAudioEmitter(swigCPtr);
+    AudioEmitter ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioEmitter(cPtr, false);
+    return ret;
+  }
+
+  private AudioEmitter AddAudioEmitter() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddAudioEmitter(swigCPtr);
+    AudioEmitter ret = (cPtr == global::System.IntPtr.Zero) ? null : new AudioEmitter(cPtr, false);
+    return ret;
+  }
+
+  private AudioEmitterVector GetAllOfAudioEmitter() {
+    AudioEmitterVector ret = new AudioEmitterVector(CherryEnginePINVOKE.Entity_GetAllOfAudioEmitter(swigCPtr), true);
+    return ret;
+  }
+
+  private PortalComponent GetPortalComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetPortalComponent(swigCPtr);
+    PortalComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new PortalComponent(cPtr, false);
+    return ret;
+  }
+
+  private PortalComponent AddPortalComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddPortalComponent(swigCPtr);
+    PortalComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new PortalComponent(cPtr, false);
+    return ret;
+  }
+
+  private PortalComponentVector GetAllOfPortalComponent() {
+    PortalComponentVector ret = new PortalComponentVector(CherryEnginePINVOKE.Entity_GetAllOfPortalComponent(swigCPtr), true);
+    return ret;
+  }
+
 	private Behaviour AddScript(string scriptPath)
 	{
 		ScriptedBehaviour script = AddScriptedBehaviour();
@@ -131,7 +216,7 @@ public class Entity : Object {
 
 	public override string ToString() => name;
 
-	public Behaviour AddComponent(System.Type type)
+	public Behaviour AddBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return AddTransform();
@@ -139,12 +224,27 @@ public class Entity : Object {
 		if (type == typeof(CameraComponent))
 			return AddCameraComponent();
 
+		if (type == typeof(ModelRenderer))
+			return AddModelRenderer();
+
+		if (type == typeof(LightComponent))
+			return AddLightComponent();
+			
+		if (type == typeof(AudioListener))
+			return AddAudioListener();
+
+		if (type == typeof(AudioEmitter))
+			return AddAudioEmitter();
+
+		if (type == typeof(PortalComponent))
+			return AddPortalComponent();
+			
 		return AddScript(type.Name);
 	}
 
-	public T AddComponent<T>() where T : Behaviour => AddComponent(typeof(T)) as T;
+	public T AddBehaviour<T>() where T : Behaviour => AddBehaviour(typeof(T)) as T;
 
-	public Behaviour GetComponent(System.Type type)
+	public Behaviour GetBehaviour(System.Type type)
 	{
 		if (type == typeof(Transform))
 			return GetTransform();
@@ -152,10 +252,25 @@ public class Entity : Object {
 		if (type == typeof(CameraComponent))
 			return GetCameraComponent();
 
+		if (type == typeof(ModelRenderer))
+			return GetModelRenderer();
+			
+		if (type == typeof(LightComponent))
+			return GetLightComponent();
+						
+		if (type == typeof(AudioListener))
+			return GetAudioListener();
+						
+		if (type == typeof(AudioEmitter))
+			return GetAudioEmitter();
+									
+		if (type == typeof(PortalComponent))
+			return GetPortalComponent();
+			
 		return GetScript(type.Name);
 	}
 
-	public T GetComponent<T>() where T : Behaviour => GetComponent(typeof(T)) as T;
+	public T GetBehaviour<T>() where T : Behaviour => GetBehaviour(typeof(T)) as T;
 	
 }
 

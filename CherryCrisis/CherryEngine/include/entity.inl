@@ -47,7 +47,7 @@ bool Entity::HasBehaviour()
 template <BehaviourT CompT>
 bool Entity::TryGetBehaviour(CompT*& componentToReturn)
 {
-	componentToReturn = GetBehaviour<CompT>();
+	componentToReturn = static_cast<CompT*>(GetBehaviour(String::ExtractTypeName<CompT>()));
 
 	return componentToReturn != nullptr;
 }
