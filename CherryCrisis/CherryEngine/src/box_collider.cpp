@@ -53,9 +53,7 @@ BoxCollider::~BoxCollider()
 
 void BoxCollider::BindToSignals()
 {
-	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-	physicManager->Register(this);
+	PhysicSystem::PhysicManager::Register(this);
 	m_isRegistered = true;
 
 	GetHost().m_OnAwake.Bind(&BoxCollider::Initialize, this);
@@ -124,9 +122,7 @@ void BoxCollider::Unregister()
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-		physicManager->Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this);
 		m_isRegistered = false;
 	}
 }
@@ -254,4 +250,16 @@ void BoxCollider::ComputeModelMatrices()
 CCMaths::Matrix4 BoxCollider::GetModelMatrix()
 {
 	return m_model;
+}
+
+void BoxCollider::Copy(Behaviour* copy)
+{
+	Collider::Copy(copy);
+
+	BoxCollider* copiedCollider = dynamic_cast<BoxCollider*>(copy);
+
+	m_entityScale = copiedCollider->m_entityScale;
+	SetScale(copiedCollider->m_editableScale);
+
+	ResetPxShape();
 }

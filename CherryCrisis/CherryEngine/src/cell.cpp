@@ -18,12 +18,11 @@ Cell::Cell(CCUUID id)
 	: Object(id)
 {
 	m_debug = Debug::GetInstance();
-	m_pxManager = PhysicSystem::PhysicManager::GetInstance();
 }
 
 Cell::~Cell()
 {
-	m_pxManager->Unregister(this);
+	PhysicSystem::PhysicManager::Unregister(this);
 
 	if (m_skyRenderer)
 	{
@@ -36,7 +35,7 @@ void Cell::Initialize()
 {
 	m_skyRenderer = new SkyRenderer(this);
 
-	m_pxManager->Register(this);
+	PhysicSystem::PhysicManager::Register(this);
 }
 
 void Cell::AddEntity(Entity* newEntity)
@@ -57,7 +56,7 @@ void Cell::AddEntityToPhysicScene(Entity* newEntity)
 	if (!m_physicCell)
 		return;
 
-	PhysicSystem::PhysicActor* actor = m_pxManager->FindActor(*newEntity);
+	PhysicSystem::PhysicActor* actor = PhysicSystem::PhysicManager::FindActor(*newEntity);
 
 	if (actor)
 		m_physicCell->AddActor(actor);
@@ -154,7 +153,7 @@ void Cell::RemoveEntityFromPhysicScene(Entity* newEntity)
 	if (!m_physicCell)
 		return;
 
-	PhysicSystem::PhysicActor* actor = m_pxManager->FindActor(*newEntity);
+	PhysicSystem::PhysicActor* actor = PhysicSystem::PhysicManager::FindActor(*newEntity);
 
 	if (actor)
 		m_physicCell->RemoveActor(actor);

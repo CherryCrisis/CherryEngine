@@ -107,6 +107,9 @@ void SceneDisplayer::Render()
     if (!m_isOpened)
         return;
 
+    if (!m_isFocused && InputManager::GetKeyDown("Save"))
+        EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
+
     m_isActive = true;
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.f,0.f });
     if (ImGui::Begin("Scene", &m_isOpened, ImGuiWindowFlags_MenuBar))
@@ -141,9 +144,6 @@ void SceneDisplayer::Render()
 
         if (!InputManager::GetKey(Keycode::RIGHT_CLICK))
         {
-            if (InputManager::GetKeyDown("Save"))
-                EditorNotifications::SceneSaving(SceneManager::SaveCurrentScene());
-
             if (ImGui::IsWindowFocused(ImGuiHoveredFlags_ChildWindows))
             {
                 if (InputManager::GetKeyDown("Translate"))   m_operation = ImGuizmo::OPERATION::TRANSLATE;
@@ -241,7 +241,7 @@ void SceneDisplayer::Render()
             if (!m_isManipulated)
                 m_guizmoTransform = t->GetWorldMatrix();
             
-            Matrix4 deltaMatrix = Matrix4::Identity; // Unused
+            Matrix4 deltaMatrix = Matrix4::Identity; // Not used
             Vector3 snapping = m_operation == ImGuizmo::ROTATE && m_isSnapping ? Vector3(m_rotSnap) : Vector3::Zero;
             if (ImGuizmo::Manipulate(view.data, projection.data, m_operation, m_mode, m_guizmoTransform.data, deltaMatrix.data, snapping.data))
             {
@@ -254,6 +254,7 @@ void SceneDisplayer::Render()
                 CCMaths::Vector3 p = mat.position;
                 CCMaths::Vector3 s = Matrix4::GetScaleInMatrix(mat);
                 CCMaths::Quaternion rot = Quaternion::FromMatrix(Matrix4::GetRotationMatrix(mat));
+                
                 if (m_isSnapping)
                 {
                     Vector3 pos = t->GetPosition();
@@ -272,8 +273,6 @@ void SceneDisplayer::Render()
                 t->SetRotation(rot);
                 t->SetScale(s);
             }
-
-            //t->SetGlobalRotation({ 0.f, 1.f, 0.f });
 
             if (ImGuizmo::IsUsing() && InputManager::GetKey(Keycode::LEFT_CLICK))
                 m_isManipulated = true;

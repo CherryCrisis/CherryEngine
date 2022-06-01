@@ -35,8 +35,7 @@ private:
 	float	m_sideMove = 0.f;
 	float	m_sensitivity = 1.f;
 	float	m_jumpForce = 1.f;
-
-	CCMaths::Vector3	m_rotating = 0.f;
+	float	m_rotating = 0.f;
 
 	physx::PxRigidDynamic*	m_dynamicActor = nullptr;
 
@@ -59,8 +58,6 @@ public:
 
 	void Update();
 	void FixedUpdate();
-
-	void Freeze();
 
 	void InvalidateTransform();
 

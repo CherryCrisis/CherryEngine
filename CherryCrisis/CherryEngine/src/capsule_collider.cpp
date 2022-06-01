@@ -55,9 +55,7 @@ CapsuleCollider::~CapsuleCollider()
 
 void CapsuleCollider::BindToSignals()
 {
-	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-	physicManager->Register(this);
+	PhysicSystem::PhysicManager::Register(this);
 	m_isRegistered = true;
 
 	GetHost().m_OnAwake.Bind(&CapsuleCollider::Initialize, this);
@@ -128,9 +126,7 @@ void CapsuleCollider::Unregister()
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-		physicManager->Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this);
 		m_isRegistered = false;
 	}
 }
@@ -292,4 +288,18 @@ CCMaths::Matrix4 CapsuleCollider::GetTopMatrix()
 CCMaths::Matrix4 CapsuleCollider::GetBotMatrix()
 {
 	return m_botModel;
+}
+
+void CapsuleCollider::Copy(Behaviour* copy)
+{
+	Collider::Copy(copy);
+
+	CapsuleCollider* copiedCollider = dynamic_cast<CapsuleCollider*>(copy);
+
+	m_entityScale = copiedCollider->m_entityScale;
+	m_entityRadius = copiedCollider->m_entityRadius;
+	SetScale(copiedCollider->m_editableScale);
+	SetRadius(copiedCollider->m_editableRadius);
+
+	ResetPxShape();
 }

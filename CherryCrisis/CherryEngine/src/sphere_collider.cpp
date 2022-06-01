@@ -55,9 +55,7 @@ SphereCollider::~SphereCollider()
 
 void SphereCollider::BindToSignals()
 {
-	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-	physicManager->Register(this);
+	PhysicSystem::PhysicManager::Register(this);
 	m_isRegistered = true;
 
 	GetHost().m_OnAwake.Bind(&SphereCollider::Initialize, this);
@@ -128,9 +126,7 @@ void SphereCollider::Unregister()
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-		physicManager->Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this);
 		m_isRegistered = false;
 	}
 }
@@ -245,4 +241,16 @@ void SphereCollider::ComputeModelMatrices()
 CCMaths::Matrix4 SphereCollider::GetModelMatrix()
 {
 	return m_model;
+}
+
+void SphereCollider::Copy(Behaviour* copy)
+{
+	Collider::Copy(copy);
+
+	SphereCollider* copiedCollider = dynamic_cast<SphereCollider*>(copy);
+
+	m_entityScale = copiedCollider->m_entityScale;
+	SetScale(copiedCollider->m_editableScale);
+
+	ResetPxShape();
 }

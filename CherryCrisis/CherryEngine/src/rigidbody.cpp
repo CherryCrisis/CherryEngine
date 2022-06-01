@@ -26,12 +26,11 @@ Rigidbody::~Rigidbody()
 
 void Rigidbody::BindToSignals()
 {
-	PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-	
-	physicManager->Register(this);
+	PhysicSystem::PhysicManager::Register(this);
 	m_isRegistered = true;
 
 	GetHost().m_OnAwake.Bind(&Rigidbody::Initialize, this);
+	GetHost().m_OnStart.Bind(&Rigidbody::Start, this);
 }
 
 void Rigidbody::Initialize()
@@ -41,13 +40,21 @@ void Rigidbody::Initialize()
 	GetHost().m_OnAwake.Unbind(&Rigidbody::Initialize, this);
 }
 
+void Rigidbody::Start()
+{
+	if (m_physicActor->Get())
+		m_dynamicActor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
+
+	m_transform = GetHost().GetOrAddBehaviour<Transform>();
+
+	GetHost().m_OnStart.Unbind(&Rigidbody::Start, this);
+}
+
 void Rigidbody::Unregister()
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager* physicManager = PhysicSystem::PhysicManager::GetInstance();
-
-		physicManager->Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this);
 		m_isRegistered = false;
 	}
 }
@@ -74,6 +81,34 @@ void Rigidbody::Rigidbody::SetEnabled()
 {
 	if (m_physicActor)
 		m_physicActor->SetEnabled(m_isEnabled);
+}
+
+void Rigidbody::SaveVelocity()
+{
+	physx::PxVec3 pxVelocity = m_dynamicActor->getLinearVelocity();
+	Vector3 velocity = { pxVelocity.x, pxVelocity.y, pxVelocity.z };
+
+	m_SavedVelocity.x = Vector3::Dot(m_transform->Right(), velocity);
+	m_SavedVelocity.y = Vector3::Dot(m_transform->Up(), velocity);
+	m_SavedVelocity.z = Vector3::Dot(m_transform->Forward(), velocity);
+
+	m_dynamicActor->setLinearVelocity({ 0, 0, 0 });
+}
+
+void Rigidbody::ReapplyVelocity()
+{
+	// To recompute world matrix and Right, Forwrd and Up vectors
+	m_transform->GetWorldMatrix();
+
+	Vector3 velocity =	m_transform->Right() * m_SavedVelocity.x +
+						m_transform->Up() * m_SavedVelocity.y + 
+						m_transform->Forward() * m_SavedVelocity.z;
+
+	physx::PxVec3 pxVelocity = { velocity.x, velocity.y, velocity.z };
+
+	m_dynamicActor->setLinearVelocity(pxVelocity);
+
+	m_SavedVelocity = Vector3::Zero;
 }
 
 void Rigidbody::SetEnabled(const bool& isEnabled)

@@ -11,6 +11,11 @@ namespace PhysicSystem
 	class PhysicActor;
 }
 
+namespace physx
+{
+	class PxRigidDynamic;
+}
+
 using namespace CCMaths;
 
 
@@ -34,6 +39,11 @@ private:
 	Bool3	m_positionConstraints = {};
 	Bool3	m_rotationConstraints = {};
 
+	Vector3 m_SavedVelocity = Vector3::Zero;
+
+	Transform* m_transform = nullptr;
+	physx::PxRigidDynamic* m_dynamicActor = nullptr;
+
 	void PopulateMetadatas() override;
 
 public:
@@ -45,6 +55,7 @@ public:
 
 	void	BindToSignals() override;
 	void	Initialize();
+	void	Start();
 
 	//! Unregister the rigidbody from the Physic Manager
 	/*!
@@ -53,6 +64,9 @@ public:
 	void	Unregister();
 
 	void	SetEnabled();
+
+	void SaveVelocity();
+	void ReapplyVelocity();
 
 	// Set in Rigidbody
 	void	SetEnabled(const bool& isEnabled);
