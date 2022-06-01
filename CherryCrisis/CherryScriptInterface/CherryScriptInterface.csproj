@@ -52,9 +52,17 @@
     <Compile Include="ELogType.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityVector.cs" />
+    <Compile Include="ETextureFormat.cs" />
+    <Compile Include="ETextureSurface.cs" />
+    <Compile Include="ETextureType.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="Keycode.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="Matrix4.cs" />
+    <Compile Include="Mesh.cs" />
+    <Compile Include="MeshRenderer.cs" />
+    <Compile Include="ModelRenderer.cs" />
+    <Compile Include="ModelRendererVector.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="PhysicActor.cs" />
     <Compile Include="PhysicManager.cs" />
@@ -65,6 +73,7 @@
     <Compile Include="ScriptedBehaviour.cs" />
     <Compile Include="ScriptedBehaviourVector.cs" />
     <Compile Include="SWIGTYPE_p_float.cs" />
+    <Compile Include="Texture.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="TransformVector.cs" />

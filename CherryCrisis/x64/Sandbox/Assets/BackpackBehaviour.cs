@@ -13,7 +13,7 @@ namespace CCScripting
 
 		public void Awake()
 		{
-			transform = GetComponent<Transform>();
+			transform = GetBehaviour<Transform>();
 		}
 
 		public void Start()

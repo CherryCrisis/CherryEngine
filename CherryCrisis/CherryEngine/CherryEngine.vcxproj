@@ -458,13 +458,18 @@
     <None Include="interface\capsule_collider.i" />
     <None Include="interface\cell.i" />
     <None Include="interface\collider.i" />
+    <None Include="interface\material.i" />
     <None Include="interface\matrix4.i" />
+    <None Include="interface\mesh.i" />
+    <None Include="interface\mesh_renderer.i" />
+    <None Include="interface\model_renderer.i" />
     <None Include="interface\physic_actor.i" />
     <None Include="interface\physic_manager.i" />
     <None Include="interface\physic_scene.i" />
     <None Include="interface\quaternion.i" />
     <None Include="interface\scene_manager.i" />
     <None Include="interface\sphere_collider.i" />
+    <None Include="interface\texture.i" />
     <None Include="Scripting.cd" />
     <None Include="Rendering.cd" />
     <None Include="externals\include\assimp\color4.inl" />
@@ -508,8 +513,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </CustomBuild>
     <None Include="interface\behaviour.i" />
     <None Include="interface\camera_comp.i" />
@@ -519,7 +526,6 @@
     <None Include="interface\input_manager.i" />
     <None Include="interface\maths.i" />
     <None Include="interface\scripted_behaviour.i" />
-    <None Include="interface\singleton.i" />
     <None Include="interface\time_manager.i" />
     <None Include="interface\transform_comp.i" />
     <None Include="interface\vector.i" />

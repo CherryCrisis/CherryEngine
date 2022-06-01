@@ -10,6 +10,7 @@
 %include transform_comp.i
 %include camera_comp.i
 %include scripted_behaviour.i
+%include model_renderer.i
 %include object.i
 
 %define COMP_STD_WRAP(COMP_T)
@@ -33,6 +34,7 @@ COMP_PREFIX_WRAP(GetAllOf, COMP_T, GetBehavioursOfType)
 COMP_STD_WRAP(CameraComponent)
 COMP_STD_WRAP(Transform)
 COMP_STD_WRAP(ScriptedBehaviour)
+COMP_STD_WRAP(ModelRenderer)
 
 %nodefaultctor Entity;
 class Entity : public Object
@@ -53,7 +55,6 @@ public:
 
 	template <class CompT>
 	CompT* GetBehaviour();
-	Behaviour* GetBehaviour(const std::string& componentTypeName);
 
 	template <class CompT>
 	std::vector<CompT*> GetBehavioursOfType();
@@ -74,6 +75,7 @@ public:
 	COMP_TEMPLATE_WRAP(CameraComponent)
 	COMP_TEMPLATE_WRAP(ScriptedBehaviour)
 	COMP_TEMPLATE_WRAP(Transform)
+	COMP_TEMPLATE_WRAP(ModelRenderer)
 
 	%proxycode %{
 	private Behaviour AddScript(string scriptPath)
@@ -110,6 +112,9 @@ public:
 		if (type == typeof(CameraComponent))
 			return AddCameraComponent();
 
+		if (type == typeof(ModelRenderer))
+			return AddModelRenderer();
+
 		return AddScript(type.Name);
 	}
 
@@ -122,6 +127,9 @@ public:
 
 		if (type == typeof(CameraComponent))
 			return GetCameraComponent();
+
+		if (type == typeof(ModelRenderer))
+			return GetModelRenderer();
 
 		return GetScript(type.Name);
 	}

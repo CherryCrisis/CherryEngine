@@ -7,6 +7,8 @@
 %include behaviour.i
 %include maths.i
 
+%nodefaultctor Transform;
+
 class Transform : public Behaviour
 {
 private:
@@ -35,7 +37,12 @@ public:
 	CCMaths::Vector3 Right();
 	CCMaths::Vector3 Forward();
 
-	%ignore Transform();
+	bool IsRoot();
+
+	void SetParent(Transform* parent, bool reapplyPosition, bool reapplyRot = false, bool reapplyScale = false);
+	void SetParent(Transform* parent);
+	Transform* GetParent();
+	Transform* GetRootParent();
 
 	%proxycode
 	%{

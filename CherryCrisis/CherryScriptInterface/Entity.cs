@@ -45,13 +45,6 @@ public class Entity : Object {
     } 
   }
 
-  public Behaviour GetBehaviour(string componentTypeName) {
-    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetBehaviour(swigCPtr, componentTypeName);
-    Behaviour ret = (cPtr == global::System.IntPtr.Zero) ? null : new Behaviour(cPtr, false);
-    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
-    return ret;
-  }
-
   public void Destroy() {
     CherryEnginePINVOKE.Entity_Destroy(swigCPtr);
   }
@@ -112,6 +105,23 @@ public class Entity : Object {
     return ret;
   }
 
+  private ModelRenderer GetModelRenderer() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetModelRenderer(swigCPtr);
+    ModelRenderer ret = (cPtr == global::System.IntPtr.Zero) ? null : new ModelRenderer(cPtr, false);
+    return ret;
+  }
+
+  private ModelRenderer AddModelRenderer() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddModelRenderer(swigCPtr);
+    ModelRenderer ret = (cPtr == global::System.IntPtr.Zero) ? null : new ModelRenderer(cPtr, false);
+    return ret;
+  }
+
+  private ModelRendererVector GetAllOfModelRenderer() {
+    ModelRendererVector ret = new ModelRendererVector(CherryEnginePINVOKE.Entity_GetAllOfModelRenderer(swigCPtr), true);
+    return ret;
+  }
+
 	private Behaviour AddScript(string scriptPath)
 	{
 		ScriptedBehaviour script = AddScriptedBehaviour();
@@ -146,6 +156,9 @@ public class Entity : Object {
 		if (type == typeof(CameraComponent))
 			return AddCameraComponent();
 
+		if (type == typeof(ModelRenderer))
+			return AddModelRenderer();
+
 		return AddScript(type.Name);
 	}
 
@@ -158,6 +171,9 @@ public class Entity : Object {
 
 		if (type == typeof(CameraComponent))
 			return GetCameraComponent();
+
+		if (type == typeof(ModelRenderer))
+			return GetModelRenderer();
 
 		return GetScript(type.Name);
 	}
