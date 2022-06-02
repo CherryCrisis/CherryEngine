@@ -24,6 +24,12 @@ void Collider::SetTrigger(const bool& isTrigger)
 	SetPxData();
 }
 
+void Collider::SetBlockRaycast(const bool& isBlocking)
+{
+	m_isBlockingRaycast = isBlocking;
+	SetPxData();
+}
+
 void Collider::SetLocalPos(const CCMaths::Vector3& localPos)
 {
 	m_localPosition = localPos;

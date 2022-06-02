@@ -32,6 +32,7 @@ protected:
 	bool	m_isEnabled = true;
 	bool	m_isTrigger = false;
 	bool	m_isAddedFromInspector = false;
+	bool	m_isBlockingRaycast	= true;
 
 	CCMaths::Vector3 m_localPosition = CCMaths::Vector3::Zero;
 	CCMaths::Matrix4 m_model = CCMaths::Matrix4::Identity;
@@ -104,6 +105,9 @@ public:
 	bool	GetEnabled() { return m_isEnabled; }
 	void	SetTrigger(const bool& isTrigger);
 	bool	GetTrigger() { return m_isTrigger; }
+	
+	void	SetBlockRaycast(const bool& isBlocking);
+	bool	GetBlockRaycast() { return m_isBlockingRaycast; }
 
 	void				SetLocalPos(const CCMaths::Vector3& localPos);
 	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
@@ -112,7 +116,8 @@ public:
 	virtual void ComputeModelMatrices() = 0;
 	virtual CCMaths::Matrix4 GetModelMatrix() = 0;
 
-	boolProperty isEnabled{ this, &Collider::SetEnabled, &Collider::GetEnabled };
-	boolProperty isTrigger{ this, &Collider::SetTrigger, &Collider::GetTrigger };
-	Vector3Property localPosition{ this, &Collider::SetLocalPos, &Collider::GetLocalPos };
+	boolProperty isEnabled			{ this, &Collider::SetEnabled,		&Collider::GetEnabled };
+	boolProperty isTrigger			{ this, &Collider::SetTrigger,		&Collider::GetTrigger };
+	boolProperty isBlocking			{ this, &Collider::SetBlockRaycast, &Collider::GetBlockRaycast };
+	Vector3Property localPosition	{ this, &Collider::SetLocalPos,		&Collider::GetLocalPos };
 };
