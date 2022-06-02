@@ -64,6 +64,8 @@ public:
 	template <class CompT>
 	CompT* GetBehaviour();
 
+	Behaviour* GetBehaviour(const std::string& componentTypeName);
+
 	template <class CompT>
 	std::vector<CompT*> GetBehavioursOfType();
 
@@ -100,16 +102,11 @@ public:
 
 	private Behaviour GetScript(string scriptPath)
 	{
-        ScriptedBehaviourVector scriptedBehaviours = GetAllOfScriptedBehaviour();
+        Behaviour behaviour = GetBehaviour(scriptPath);
+        global::System.IntPtr cPtr = Behaviour.getCPtr(behaviour).Handle;
+        ScriptedBehaviour scriptedBehaviour = (cPtr == global::System.IntPtr.Zero) ? null : new ScriptedBehaviour(cPtr, false);
 
-        for (int i = 0; i < scriptedBehaviours.Count; i++)
-        {
-			ScriptedBehaviour script = scriptedBehaviours[i];
-			if (script.GetScriptPath() == scriptPath)
-				return script.GetInstance();
-        }
-
-		return null;
+        return scriptedBehaviour.GetInstance();
 	}
 
 	public string name => GetName();
