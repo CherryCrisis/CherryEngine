@@ -10,6 +10,9 @@
 #include <ImGuizmo.h>
 #include <stb_image.h>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 #include <glad/gl.h>
@@ -21,6 +24,8 @@
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
 #include "entity.hpp"
+
+
 
 EditorManager::EditorManager(const std::string& projectPath) 
 {
@@ -47,6 +52,24 @@ EditorManager::EditorManager(const std::string& projectPath)
     m_browser.SetPath(m_projectPath);
 
     ApplyPack (Serializer::UnserializeEditor("editor.meta"));
+}
+
+EditorManager::~EditorManager() 
+{
+    auto width  = m_sceneDisplayer.m_camera.m_framebuffer->width;
+    auto height = m_sceneDisplayer.m_camera.m_framebuffer->height;
+    static GLubyte* data = new GLubyte[3 * width * height];
+    memset(data, 0, 3 * width * height);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_sceneDisplayer.m_camera.m_framebuffer->FBO);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    // Write the PNG image
+    int numOfComponents = 3; // RGB
+    int strideInBytes = width * 3;
+    stbi_write_png("preview.png", width, height, 3, data, width * 3);
+    delete data;
 }
 
 void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)

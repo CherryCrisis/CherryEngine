@@ -94,7 +94,7 @@ public:
     InputManager::InputContext* m_editorContext = nullptr;
 
     EditorManager(const std::string& projectPath="");
-    
+    ~EditorManager();
     void LinkEngine(Engine* engine);
 
     void DisplayEditorUI(GLFWwindow* window);

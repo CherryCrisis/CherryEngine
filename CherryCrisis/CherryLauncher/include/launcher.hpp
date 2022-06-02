@@ -25,14 +25,13 @@ public:
 
 class Launcher
 {
-	std::vector<Project> m_projects;
 	GLFWwindow* m_window = nullptr;
 	std::string version = "1.0.0";
 
 public:
 	Launcher(GLFWwindow* window) : m_window(window) { ReadLauncherInfos(); }
 
-	void AddProjectPath();
+	Project* AddProjectPath();
 	void RemoveProjectPath(const Project& project);
 
 	void StartProjectCreation(); 
@@ -46,7 +45,7 @@ public:
 	Project* FindProject(const std::filesystem::path& path);
 	int FindProjectIndex(const std::filesystem::path& path);
 
-	std::vector<Project> GetProjectList() const;
+	std::vector<Project> m_projects;
 
 	ELauncherState state = ELauncherState::MAIN;
 };

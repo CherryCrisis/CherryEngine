@@ -185,6 +185,9 @@
     <ClInclude Include="include\core\builder.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
+    <ClInclude Include="externals\include\stb_image_write.h">
+      <Filter>Fichiers externes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CherryEditor.rc">
