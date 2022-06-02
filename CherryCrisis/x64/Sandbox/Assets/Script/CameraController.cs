@@ -36,15 +36,12 @@ namespace CCScripting
 
 				PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
 				if (switcher != null)
-				{
 					switcher.Switch();
-				}
 
 				Wardrobe wardrobe = hit.actor.m_owner.GetBehaviour<Wardrobe>();
 				if (wardrobe != null)
-				{
 					wardrobe.SetInMovement();
-				}
+
 			}
 		}
 

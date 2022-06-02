@@ -24,18 +24,21 @@ private:
 	using boolProperty	= CCProperty::ConstRefProperty<CharacterController, bool>;
 	using floatProperty	= CCProperty::ConstRefProperty<CharacterController, float>;
 
-	bool	m_isStarted = false;
-	bool	m_isGrounded = false;
-	bool	m_isRegistered = false;
-	float	m_contactOffset = 0.1f;
-	float	m_moveSpeed = 10.f;
+	bool	m_isStarted		 = false;
+	bool	m_isGrounded	 = false;
+	bool	m_isRegistered	 = false;
+	float	m_contactOffset  = 0.1f;
+	float	m_walkingSpeed   = 1.5f;
+	float	m_runningSpeed   = 2.5f;
 	float	m_springStrength = 150.f;
 	float	m_springDampling = 20.f;
-	float	m_forwardMove = 0.f;
-	float	m_sideMove = 0.f;
-	float	m_sensitivity = 1.f;
-	float	m_jumpForce = 1.f;
-	float	m_rotating = 0.f;
+	float	m_forwardMove	 = 0.f;
+	float	m_sideMove		 = 0.f;
+	float	m_sensitivity	 = 1.f;
+	float	m_jumpForce		 = 1.f;
+	float	m_rotating		 = 0.f;
+
+	bool m_isRunning = false;
 
 	physx::PxRigidDynamic*	m_dynamicActor = nullptr;
 
@@ -61,9 +64,12 @@ public:
 
 	void InvalidateTransform();
 
-	void	SetSpeed(const float& moveSpeed) { m_moveSpeed = moveSpeed; }
-	float	GetSpeed() { return m_moveSpeed; }
+	void	SetWalkingSpeed(const float& moveSpeed) { m_walkingSpeed = moveSpeed; }
+	float	GetWalkingSpeed() { return m_walkingSpeed; }
 	
+	void	SetRunningSpeed(const float& moveSpeed) { m_runningSpeed = moveSpeed; }
+	float	GetRunningSpeed() { return m_runningSpeed; }
+
 	void	SetJumpForce(const float& jumpForce) { m_jumpForce = jumpForce; }
 	float	GetJumpForce() { return m_jumpForce; }
 
@@ -76,9 +82,10 @@ public:
 	void	SetSpringDampling(const float& springDampling) { m_springDampling = springDampling; }
 	float	GetSpringDampling() { return m_springDampling; }
 
-	floatProperty	moveSpeed		{ this, &CharacterController::SetSpeed,				&CharacterController::GetSpeed };
-	floatProperty	sensitivity		{ this, &CharacterController::SetSensitivity,		&CharacterController::GetSensitivity };
+	floatProperty	runningSpeed    { this, &CharacterController::SetRunningSpeed,		&CharacterController::GetRunningSpeed   };
+	floatProperty	walkingSpeed    { this, &CharacterController::SetWalkingSpeed,		&CharacterController::GetWalkingSpeed   };
+	floatProperty	sensitivity		{ this, &CharacterController::SetSensitivity,		&CharacterController::GetSensitivity    };
 	floatProperty	springStrength	{ this, &CharacterController::SetSpringStrength,	&CharacterController::GetSpringStrength };
 	floatProperty	springDampling	{ this, &CharacterController::SetSpringDampling,	&CharacterController::GetSpringDampling };
-	floatProperty	jumpForce    	{ this, &CharacterController::SetJumpForce,	        &CharacterController::GetJumpForce};
+	floatProperty	jumpForce    	{ this, &CharacterController::SetJumpForce,	        &CharacterController::GetJumpForce	    };
 };

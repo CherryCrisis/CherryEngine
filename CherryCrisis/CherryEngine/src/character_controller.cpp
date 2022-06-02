@@ -42,7 +42,8 @@ void CharacterController::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
-	m_metadatas.SetProperty("Move Speed", &moveSpeed);
+	m_metadatas.SetProperty("Walking Speed", &walkingSpeed);
+	m_metadatas.SetProperty("Running Speed", &runningSpeed);
 	m_metadatas.SetProperty("Spring Dampling", &springDampling);
 	m_metadatas.SetProperty("String Strength", &springStrength);
 	m_metadatas.SetProperty("Rotation Sensivity", &sensitivity);
@@ -118,7 +119,7 @@ void CharacterController::Update()
 		m_physicActor->AddForce({ 0, m_jumpForce, 0 }, PhysicSystem::EForceMode::eIMPULSE);
 		m_isGrounded = false;
 	}
-
+	m_isRunning = InputManager::GetKey(Keycode::LEFT_SHIFT);
 	m_rotating = InputManager::GetMouseDelta().x;
 	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_rotating * m_sensitivity * 0.001f; // 0.01f to keep sensitivity above 1
 
@@ -158,8 +159,9 @@ void CharacterController::FixedUpdate()
 		m_isGrounded = false;
 	}
 
+	float moveSpeed = m_isRunning ? m_runningSpeed : m_walkingSpeed;
 	CCMaths::Vector3 move = m_transform->Forward() * m_forwardMove + m_transform->Right() * m_sideMove;
-	CCMaths::Vector3 goalVelocity = move * m_moveSpeed;
+	CCMaths::Vector3 goalVelocity = move * moveSpeed;
 	CCMaths::Vector3 neededAcceleration = CCMaths::Vector3::ClampLength((goalVelocity - vel) / TimeManager::GetFixedDeltaTime(), -150.f, 150.f);
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * m_dynamicActor->getMass(), { 1, 0, 1 });
 
