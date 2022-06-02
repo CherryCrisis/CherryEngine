@@ -17,7 +17,7 @@ namespace CCScripting
         public void Switch() 
         {
             active = !active;
-            Debug.GetInstance().Log(ELogType.INFO, "Switching portals");
+
             if (active)
                 sourcePortal.SetLinkedPortal(portal_1);
             else

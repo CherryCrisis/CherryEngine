@@ -10,26 +10,43 @@ namespace CCScripting
         Transform leftDoor;
         Transform rightDoor;
 
-        bool opened = false;
+        public bool opened = false;
+        public bool isMoving = false;
 
-        public void ToggleState()
+        public float elapsedTime = 0f;
+        public float totalTime   = 1f;
+        public float movementScale = 5f;
+        public void Start() 
         {
-            // play open sound
-            opened = !opened;
 
-            if (opened)
-            {
-                Debug.GetInstance().Log(ELogType.INFO, "Door opened");
-            }
-            else
-            {
-                Debug.GetInstance().Log(ELogType.INFO, "Door closed");
-            }
+        }
+
+        public void SetInMovement()
+        {
+            isMoving = true;
         }
 
         public void Update() 
         {
-            // need homemade timeline
+            if (isMoving && !opened) 
+            {
+                float dt = Time.GetDeltaTime();
+                float offset = movementScale * dt;
+                elapsedTime += dt;
+
+                Vector3 leftDoorRot = leftDoor.GetEuler();
+                leftDoor.SetRotation(new Vector3( leftDoorRot.x, leftDoorRot.y + offset, leftDoorRot.z));
+
+                Vector3 rightDoorRot = rightDoor.GetEuler();
+                rightDoor.SetRotation(new Vector3(rightDoorRot.x, rightDoorRot.y - offset, rightDoorRot.z));
+
+                if (elapsedTime >= totalTime) 
+                {
+                    opened = true;
+                    isMoving = false;
+                    elapsedTime = 0f;
+                }
+            }
         }
     }
 }

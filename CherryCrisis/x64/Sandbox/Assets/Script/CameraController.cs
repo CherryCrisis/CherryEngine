@@ -12,6 +12,7 @@ namespace CCScripting
 
 		float speedSensivity = 80.0f;
 		float interactRange  = 25f;
+
 		public void Awake() => transform = GetBehaviour<Transform>();
 
 		public void Update()
@@ -20,15 +21,15 @@ namespace CCScripting
 
 			UpdateCameraRotation();
 
-			if (InputManager.GetKeyDown(Keycode.E))
-				TryInteract();
-
+			if (InputManager.GetKeyDown(Keycode.E)) TryInteract(); 
 		}
-
+		
+		// fuck interfaces
 		void TryInteract()  
 		{
-			Debug.GetInstance().Log(ELogType.INFO, "Pressing E"); 
+			// this needs to be improved, vectors seems to be wrongs
 			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
+			
 			if (hit != null && hit.actor != null &&hit.actor.m_owner != null)
 			{
 				Debug.GetInstance().Log(ELogType.INFO, "Hitted " + hit.actor.m_owner.name);
@@ -36,17 +37,13 @@ namespace CCScripting
 				PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
 				if (switcher != null)
 				{
-				Debug.GetInstance().Log(ELogType.INFO, "Hitted Portal Switcher !");
-
 					switcher.Switch();
 				}
 
 				Wardrobe wardrobe = hit.actor.m_owner.GetBehaviour<Wardrobe>();
 				if (wardrobe != null)
 				{
-					Debug.GetInstance().Log(ELogType.INFO, "Hitted Wardrobe !");
-
-					wardrobe.ToggleState();
+					wardrobe.SetInMovement();
 				}
 			}
 		}

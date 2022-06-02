@@ -87,20 +87,20 @@ cells:
         name: Wardrobe
       3199957718:
         name: Cube.013_Cube.016
-      2438419510:
-        name: Cube.013_Cube.016_M_WardrobeDoor
+      1004001305:
+        name: Empty
       3742095367:
         name: Cube.014_Cube.017
-      319666849:
-        name: Cube.014_Cube.017_M_WardrobeDoor
+      303660238:
+        name: Player
       2937862517:
         name: Cylinder.001
-      2242154140:
-        name: Cylinder.001_Cylinder.001_M_WardrobeDoorknob
+      1625147419:
+        name: RaycastOrigin
       2070297550:
         name: Cylinder.002
-      3915333292:
-        name: Cylinder.002_Cylinder.002_M_WardrobeDoorknob
+      3487056894:
+        name: Camera
       4059912050:
         name: Floor.001_Plane.001
       1727173103:
@@ -111,14 +111,6 @@ cells:
         name: WardrobeDoor_01
       2090915486:
         name: Portal_0
-      303660238:
-        name: Player
-      3487056894:
-        name: Camera
-      1004001305:
-        name: Empty
-      1625147419:
-        name: RaycastOrigin
   1074273426:
     name: Room_01
     settings:
@@ -809,6 +801,16 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
+  3663098993:
+    type: ScriptedBehaviour
+    IsActive: true
+    totalTime: 1
+    m_owner: 2863444527
+    rightDoor: ~
+    scriptName: Wardrobe
+    leftDoor: 1255767839
+    elapsedTime: 0
+    movementScale: 5
   1607221936:
     type: BoxCollider
     IsActive: true
@@ -833,13 +835,6 @@ components:
     matFile: Assets\Models\Rooms\Room_00\M_Wardrobe.ccmat
     transform: 3796912580
     meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.012_Cube.015_M_Wardrobe
-  3663098993:
-    type: ScriptedBehaviour
-    IsActive: true
-    m_owner: 2863444527
-    rightDoor: 1134409113
-    scriptName: Wardrobe
-    leftDoor: 1255767839
   937178011:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -848,30 +843,14 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
-  701349839:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 2438419510
-    Enabled: true
-    Block Raycast: false
-    Scale: 0.005000/0.554500/0.219000
-    Is Trigger: false
-    Local Position: 1.849444/0.565500/-0.221000
-  1850031986:
+  2785912640:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 2438419510
-    position: -1.850000/0.000000/0.440000
+    m_owner: 61080842
+    position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 1134409113
-  1006761159:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 2438419510
-    matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoor.ccmat
-    transform: 1850031986
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.013_Cube.016_M_WardrobeDoor
+    parent: 533578411
   2485435997:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -880,30 +859,14 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
-  887524092:
+  2853111993:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 319666849
-    position: -1.850000/0.000000/-0.430000
+    m_owner: 3685188329
+    position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 1255767839
-  3771004933:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 319666849
-    matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoor.ccmat
-    transform: 887524092
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.014_Cube.017_M_WardrobeDoor
-  4057136078:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 319666849
-    Enabled: true
-    Block Raycast: false
-    Scale: 0.005000/0.554500/0.219000
-    Is Trigger: false
-    Local Position: 1.849444/0.565500/0.221000
+    parent: 533578411
   810793444:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -912,21 +875,21 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
-  3241481140:
+  2928518775:
     type: Transform
-    rotation: 0.000000/-0.000345/0.000000
+    rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 2242154140
+    m_owner: 3584830702
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 1850031986
-  2130901146:
+    parent: 533578411
+  3913151736:
     type: ModelRenderer
     IsActive: true
-    m_owner: 2242154140
-    matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoorknob.ccmat
-    transform: 3241481140
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cylinder.001_Cylinder.001_M_WardrobeDoorknob
+    m_owner: 3584830702
+    matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
+    transform: 2928518775
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.041_Plane.043_M_Cellings_01
   957512017:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -935,21 +898,21 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 169441991
-  700861970:
+  43329461:
     type: ModelRenderer
     IsActive: true
-    m_owner: 3915333292
-    matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoorknob.ccmat
-    transform: 3216699307
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cylinder.002_Cylinder.002_M_WardrobeDoorknob
-  3216699307:
+    m_owner: 1562755311
+    matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
+    transform: 2859247569
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.040_Plane.042_M_Cellings_01
+  2859247569:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
     IsActive: true
-    m_owner: 3915333292
+    m_owner: 1562755311
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
-    parent: 887524092
+    parent: 533578411
   3875470457:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -1011,16 +974,6 @@ components:
     position: 2.000000/0.570000/0.000000
     scale: 0.425000/0.550000/1.000000
     parent: 3796912580
-  1978638872:
-    type: CapsuleCollider
-    Half height: 0.400000006
-    IsActive: true
-    m_owner: 303660238
-    Enabled: true
-    Block Raycast: false
-    Is Trigger: false
-    Radius: 0.200000003
-    Local Position: 0.000000/0.000000/0.000000
   1698815949:
     type: Rigidbody
     IsActive: true
@@ -1034,6 +987,16 @@ components:
     Use gravity: true
     Max velocity: 100
     Max depenetration velocity: 100
+  1978638872:
+    type: CapsuleCollider
+    Half height: 0.400000006
+    IsActive: true
+    m_owner: 303660238
+    Enabled: true
+    Block Raycast: false
+    Is Trigger: false
+    Radius: 0.200000003
+    Local Position: 0.000000/0.000000/0.000000
   1210136599:
     type: CharacterController
     Rotation Sensivity: 1
@@ -1055,6 +1018,16 @@ components:
     type: PortalTeleporterComponent
     IsActive: true
     m_owner: 303660238
+  952850575:
+    type: ScriptedBehaviour
+    IsActive: true
+    totalTime: 1
+    m_owner: 3487056894
+    rightDoor: ~
+    scriptName: Wardrobe
+    leftDoor: ~
+    elapsedTime: 0
+    movementScale: 5
   2627217119:
     type: AudioListener
     IsActive: true
@@ -1062,7 +1035,7 @@ components:
   1416348563:
     type: CameraComponent
     fovY: 1.04719758
-    near: 0.00999999978
+    near: 0.00100000005
     IsActive: true
     m_owner: 3487056894
     aspect: 0.787781358
@@ -2719,49 +2692,3 @@ components:
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
     transform: 1620404067
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.039_Plane.041_M_Cellings_01
-  2853111993:
-    type: Transform
-    rotation: 0.000000/0.000000/0.000000
-    IsActive: true
-    m_owner: 3685188329
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 533578411
-  43329461:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 1562755311
-    matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    transform: 2859247569
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.040_Plane.042_M_Cellings_01
-  2859247569:
-    type: Transform
-    rotation: 0.000000/0.000000/0.000000
-    IsActive: true
-    m_owner: 1562755311
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 533578411
-  2785912640:
-    type: Transform
-    rotation: 0.000000/0.000000/0.000000
-    IsActive: true
-    m_owner: 61080842
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 533578411
-  2928518775:
-    type: Transform
-    rotation: 0.000000/0.000000/0.000000
-    IsActive: true
-    m_owner: 3584830702
-    position: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 533578411
-  3913151736:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 3584830702
-    matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    transform: 2928518775
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.041_Plane.043_M_Cellings_01

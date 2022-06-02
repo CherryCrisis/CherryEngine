@@ -208,6 +208,9 @@ public class Entity : Object {
 	private Behaviour GetScript(string scriptPath)
 	{
         Behaviour behaviour = GetBehaviour(scriptPath);
+		if (behaviour is null) 
+			return null;
+
         global::System.IntPtr cPtr = Behaviour.getCPtr(behaviour).Handle;
         ScriptedBehaviour scriptedBehaviour = (cPtr == global::System.IntPtr.Zero) ? null : new ScriptedBehaviour(cPtr, false);
 
