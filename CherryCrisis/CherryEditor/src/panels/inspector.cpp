@@ -169,10 +169,9 @@ void Inspector::InspectComponents(Entity* entity, int id)
                 {
                     ImGui::EndPopup(); 
                     if (opened) 
-                    {
                         ImGui::TreePop();
-                        ImGui::EndGroup();
-                    }
+
+                    ImGui::EndGroup();
                     ImGui::PopID();
                     return;
                 }
