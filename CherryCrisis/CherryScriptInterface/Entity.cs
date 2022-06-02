@@ -45,6 +45,13 @@ public class Entity : Object {
     } 
   }
 
+  public Behaviour GetBehaviour(string componentTypeName) {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetBehaviour(swigCPtr, componentTypeName);
+    Behaviour ret = (cPtr == global::System.IntPtr.Zero) ? null : new Behaviour(cPtr, false);
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
   public void Destroy() {
     CherryEnginePINVOKE.Entity_Destroy(swigCPtr);
   }
@@ -200,16 +207,11 @@ public class Entity : Object {
 
 	private Behaviour GetScript(string scriptPath)
 	{
-        ScriptedBehaviourVector scriptedBehaviours = GetAllOfScriptedBehaviour();
+        Behaviour behaviour = GetBehaviour(scriptPath);
+        global::System.IntPtr cPtr = Behaviour.getCPtr(behaviour).Handle;
+        ScriptedBehaviour scriptedBehaviour = (cPtr == global::System.IntPtr.Zero) ? null : new ScriptedBehaviour(cPtr, false);
 
-        for (int i = 0; i < scriptedBehaviours.Count; i++)
-        {
-			ScriptedBehaviour script = scriptedBehaviours[i];
-			if (script.GetScriptPath() == scriptPath)
-				return script.GetInstance();
-        }
-
-		return null;
+        return scriptedBehaviour.GetInstance();
 	}
 
 	public string name => GetName();
