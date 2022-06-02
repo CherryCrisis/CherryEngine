@@ -953,6 +953,15 @@ components:
     position: 2.000000/0.570000/0.000000
     scale: 0.425000/0.550000/1.000000
     parent: 3796912580
+  1978638872:
+    type: CapsuleCollider
+    Half height: 0.400000006
+    IsActive: true
+    m_owner: 303660238
+    Enabled: true
+    Is Trigger: false
+    Radius: 0.200000003
+    Local Position: 0.000000/0.000000/0.000000
   1698815949:
     type: Rigidbody
     IsActive: true
@@ -966,15 +975,6 @@ components:
     Use gravity: true
     Max velocity: 100
     Max depenetration velocity: 100
-  1978638872:
-    type: CapsuleCollider
-    Half height: 0.400000006
-    IsActive: true
-    m_owner: 303660238
-    Enabled: true
-    Is Trigger: false
-    Radius: 0.200000003
-    Local Position: 0.000000/0.000000/0.000000
   1210136599:
     type: CharacterController
     Rotation Sensivity: 1
@@ -1003,10 +1003,10 @@ components:
   1416348563:
     type: CameraComponent
     fovY: 1.04719758
-    near: 0.00999999978
+    near: 0.00100000005
     IsActive: true
     m_owner: 3487056894
-    aspect: 1.65363133
+    aspect: 0.787781358
     far: 1500
     transform: 1220475265
   1220475265:
@@ -1056,7 +1056,7 @@ components:
     IsActive: true
     m_owner: 25333046
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
+    Scale: 1.000000/1.000000/0.050000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
   1184697490:
@@ -1064,7 +1064,7 @@ components:
     IsActive: true
     m_owner: 4161875284
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
+    Scale: 1.000000/1.000000/0.050000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
   3433716594:
@@ -1085,7 +1085,7 @@ components:
     IsActive: true
     m_owner: 2717461655
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
+    Scale: 1.000000/1.000000/0.050000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
   2842481011:
@@ -1106,7 +1106,7 @@ components:
     IsActive: true
     m_owner: 403906653
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
+    Scale: 1.000000/1.000000/0.050000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
   1114882782:
@@ -1127,7 +1127,7 @@ components:
     IsActive: true
     m_owner: 1778709949
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
+    Scale: 1.000000/1.000000/0.050000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
   4094975552:
@@ -1148,7 +1148,7 @@ components:
     IsActive: true
     m_owner: 3257577050
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
+    Scale: 1.000000/1.000000/0.050000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
   3101177499:
@@ -1182,7 +1182,7 @@ components:
     IsActive: true
     m_owner: 637055272
     Enabled: true
-    Scale: 1.000000/1.000000/0.025000
+    Scale: 1.000000/1.000000/0.050000
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
   533578411:
@@ -1270,13 +1270,6 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 533578411
-  1470437398:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 1002540219
-    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    transform: 3365073589
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane_Plane.002_M_Floor_01
   3625860408:
     type: BoxCollider
     IsActive: true
@@ -1285,6 +1278,13 @@ components:
     Scale: 2.000000/0.010000/2.000000
     Is Trigger: false
     Local Position: 0.000000/0.000000/0.000000
+  1470437398:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 1002540219
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 3365073589
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane_Plane.002_M_Floor_01
   1142561052:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -2088,6 +2088,14 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 533578411
+  878761899:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 479699224
+    Enabled: true
+    Scale: 2.000000/0.400000/0.000001
+    Is Trigger: false
+    Local Position: 4.550000/0.400000/6.560000
   520932104:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -2103,14 +2111,6 @@ components:
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
     transform: 520932104
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.026_Plane.026_M_Floor_01
-  878761899:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 479699224
-    Enabled: true
-    Scale: 2.000000/0.400000/0.000001
-    Is Trigger: false
-    Local Position: 4.550000/0.400000/6.560000
   1274068930:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -2410,13 +2410,6 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 533578411
-  608327378:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 2896154800
-    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    transform: 913997195
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.035_Plane.037_M_Floor_01
   1725042357:
     type: BoxCollider
     IsActive: true
@@ -2425,6 +2418,13 @@ components:
     Scale: 2.000000/0.010000/0.671667
     Is Trigger: false
     Local Position: 4.550000/0.000000/5.888333
+  608327378:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2896154800
+    matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
+    transform: 913997195
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.035_Plane.037_M_Floor_01
   3470513586:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -2433,6 +2433,14 @@ components:
     position: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 533578411
+  3430766221:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 423836308
+    Enabled: true
+    Scale: 2.000000/0.010000/0.670166
+    Is Trigger: false
+    Local Position: 4.550000/0.000000/3.230166
   1633567324:
     type: Transform
     rotation: 0.000000/0.000000/0.000000
@@ -2448,14 +2456,6 @@ components:
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
     transform: 1633567324
     meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.036_Plane.038_M_Floor_01
-  3430766221:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 423836308
-    Enabled: true
-    Scale: 2.000000/0.010000/0.670166
-    Is Trigger: false
-    Local Position: 4.550000/0.000000/3.230166
   1380104518:
     type: Transform
     rotation: 0.000000/0.000000/0.000000

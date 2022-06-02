@@ -57,6 +57,7 @@ public:
 	Event<Transform*>	m_onRotationChange;
 	Event<Transform*>	m_onScaleChange;
 	Event<Transform*>	m_onTransformEdited;
+	Event<>				m_onDestroyed;
 
 	Transform();
 	Transform(CCUUID& owner);
@@ -69,6 +70,7 @@ public:
 	Transform* GetParent() { return m_parent; }
 	Transform* GetRootParent();
 	bool IsEqualToParent(Transform* transform);
+	void OnParentDestroyed();
 
 	bool IsDirty() { return m_isDirty; }
 

@@ -61,6 +61,8 @@ public:
 	void RemoveEntity(Entity* toRemove);
 	void RemoveEntity(const std::string& name);
 
+	void RemoveAllEntities();
+
 	//Find Entity by its UUID
 	Entity* FindEntity(uint32_t id);
 	//!!INTERNAL!! - Find Entity by its modelID (picking)

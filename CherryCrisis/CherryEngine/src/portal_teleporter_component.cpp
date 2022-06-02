@@ -33,12 +33,7 @@ PortalTeleporterComponent::~PortalTeleporterComponent()
 		if (Entity* entity = m_cloneEntityNode->m_transform->GetHostPtr())
 		{
 			entity->m_OnDestroyed.Unbind(&PortalTeleporterComponent::OnRemovedClonedEntities, this);
-
-			if (std::shared_ptr<Scene> scene = SceneManager::GetInstance()->m_currentScene)
-			{
-				scene->RemoveEntity(entity);
-					m_cloneEntityNode.reset();
-			}
+			OnRemovedClonedEntities();
 		}
 	}
 

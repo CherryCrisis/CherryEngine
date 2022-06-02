@@ -9,7 +9,8 @@
 
 struct CCENGINE_API GPUBRDF { };
 
-
+//TODO: We can optimize the skyRenderer because when a cell is destroy, skyRenderer too
+//so when we exit playmode the scene is reloaded and the skyRenderer doesn't changed but it is destroyed
 class CCENGINE_API SkyRenderer : public ARenderer
 {
 private:
