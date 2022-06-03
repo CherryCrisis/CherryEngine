@@ -176,10 +176,6 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 
 void ScriptedBehaviour::PopulateMetadatas()
 {
-	Behaviour::PopulateMetadatas();
-
-	m_metadatas.SetProperty("scriptName", &scriptPath, "0", false);
-
 	auto handleRefClass = m_scriptingAssembly->m_context->FindSystemClass("System.Runtime.InteropServices", "HandleRef");
 	MonoProperty* getHandleProp = mono_class_get_property_from_name(handleRefClass, "Handle");
 	MonoMethod* getHandleMethod = mono_property_get_get_method(getHandleProp);

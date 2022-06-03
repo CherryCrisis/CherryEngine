@@ -214,9 +214,13 @@ void Inspector::InspectComponents(Entity* entity, int id)
 
         if (opened)
         {
-            auto& metapack = behaviour->GetMetapack();
-            for (auto& [metaname, metadata] : metapack)
+            auto& metaorder = behaviour->m_metadatas.m_insertOrder;
+            auto& metadatas = behaviour->m_metadatas.m_metadatas;
+
+            for (const auto& metaname : metaorder)
             { 
+                auto& metadata = metadatas[metaname];
+
                 if (!metadata->m_isShownOnInspector)
                     continue;
 
