@@ -16,13 +16,13 @@
 
 class Viewer;
 
-
 class PortalRenderPass : public ARenderingRenderPass
 {
 private:
 	std::unordered_set<Portal*>	m_portals;
-
-	std::shared_ptr<Mesh> m_quadMesh;
+	std::shared_ptr<Mesh>		m_quadMesh;
+	bool						m_isExecuted = false;
+	int							m_portalRecursionCount = 4;
 
 protected:
 	ElementMeshGenerator m_meshGenerator;

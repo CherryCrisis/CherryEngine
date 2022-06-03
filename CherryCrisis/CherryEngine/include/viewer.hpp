@@ -33,9 +33,16 @@ public:
 	Viewer()
 		: m_framebuffer(std::make_shared<Framebuffer>()) {}
 
-	void Draw(int iteration)
+	void Draw(int iteration, bool clearFBO = true)
 	{
 		glViewport(0, 0, m_framebuffer->width, m_framebuffer->height);
+
+		if (clearFBO)
+		{
+			glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer->FBO);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
 
 		// TODO: Make this parametrable
 		//camera.Draw(m_framebuffer, 1);
