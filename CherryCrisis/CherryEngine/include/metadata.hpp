@@ -88,21 +88,27 @@ struct CCENGINE_API MetaProperty : public AMetadata
 
 struct CCENGINE_API Metapack
 {
+	std::vector<std::string> m_insertOrder;
 	std::unordered_map<std::string, std::shared_ptr<AMetadata>> m_metadatas;
+
+	void SetMetadata(const char* fieldName, std::shared_ptr<AMetadata> metadata, bool shown = true, const char* identifier = "0")
+	{
+		m_insertOrder.push_back(fieldName);
+		m_metadatas.insert({ fieldName, metadata });
+	}
 
 	template <typename T>
 	void SetField(const char* fieldName, Field& fieldToSet, bool shown = true, const char* identifier = "0")
 	{
 		// todo use unique ptr
-		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, fieldToSet, identifier, shown);
+		SetMetadata(fieldName, std::make_shared<MetaField<T>>(fieldName, fieldToSet, identifier, shown));
 	}
 
 	template <typename T>
 	void SetField(const char* fieldName, std::any value, const std::type_index& fieldType, bool shown = true, const char* identifier = "0")
 	{
 		// todo use unique ptr
-
-		m_metadatas[fieldName] = std::make_shared<MetaField<T>>(fieldName, value, fieldType, identifier, shown);
+		SetMetadata(fieldName, std::make_shared<MetaField<T>>(fieldName, value, fieldType, identifier, shown));
 	}
 
 	template <typename CastT, typename RefT>
@@ -131,8 +137,6 @@ struct CCENGINE_API Metapack
 
 	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop, const char* identifier = "0", bool shown = true)
 	{
-		// todo use unique ptr
-
-		m_metadatas[fieldName] = std::make_shared<MetaProperty>(fieldName, prop, identifier, shown);
+		SetMetadata(fieldName, std::make_shared<MetaProperty>(fieldName, prop, identifier, shown));
 	}
 };

@@ -231,9 +231,13 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				YAML::Node node = components[UUID];
 				node["type"] = String::ExtractValue(typeid(*behaviour).name(), ' ');
 
-				auto& metadatas = behaviour->GetMetapack();
-				for (const auto& [metaName, metaData] : metadatas)
+				auto& metaorder = behaviour->m_metadatas.m_insertOrder;
+				auto& metadatas = behaviour->m_metadatas.m_metadatas;
+
+				for (const auto& metaName : metaorder)
 				{
+					auto& metaData = metadatas[metaName];
+
 					const std::type_index& type = metaData->GetType();
 
 					if (type == typeid(CCMaths::Vector3))
