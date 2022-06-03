@@ -29,8 +29,11 @@ struct Material
 	vec3	emissiveCol;
 	float	shininess;
 
+	bool	hasCelShade;
+
 	sampler2D albedoTex;
 	sampler2D normalMap;
+	sampler2D celshadePallet;
 };
 
 uniform Material uMaterial;
@@ -152,10 +155,12 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 		float lightDist = length(lightDir);
 		lightDir /= lightDist;
 
-		// Pre-compute normal �lightDir
+		// Pre-compute normal dot lightDir
 		float NdotL = dot(normal, lightDir);
 
-		float diffuseVal = max(NdotL, 0.0);
+		float intensity = clamp(NdotL, 0.0, 1.0);
+
+		float diffuseVal = uMaterial.hasCelShade ? texture(uMaterial.celshadePallet, vec2(intensity, 0.0)).r : intensity;
 
 		if (diffuseVal <= 0)
 			continue;
@@ -174,7 +179,7 @@ void getLightColor(in vec3 normal, out vec3 ambient, out vec3 diffuse, out vec3 
 			float dotValue = dot(normal, H);
 		#else
 			// Phong
-			vec3 reflectDir = 2.0 * NdotL * normal - lightDir; 
+			vec3 reflectDir = 2.0 * diffuseVal * normal - lightDir; 
 			float dotValue = dot(viewDir, reflectDir);
 		#endif
 

@@ -567,6 +567,7 @@ namespace CCImporter
             settingsSave["emissive"] = materialArgs.m_materialHeader.m_emissive;
             settingsSave["shininess"] = materialArgs.m_materialHeader.m_shininess;
             settingsSave["hasNormal"] = materialArgs.m_materialHeader.m_hasNormal;
+            settingsSave["hasCelshade"] = materialArgs.m_materialHeader.m_hasCelshade;
             settingsSave["specularFactor"] = materialArgs.m_materialHeader.m_specularFactor;
             settingsSave["metallicFactor"] = materialArgs.m_materialHeader.m_metallicFactor;
             settingsSave["roughnessFactor"] = materialArgs.m_materialHeader.m_roughnessFactor;
@@ -715,14 +716,18 @@ namespace CCImporter
         YAML::Node loader = YAML::LoadFile(path.string().c_str());
 
         YAML::Node settingsLoaded = loader["settings"];
-
         materialArgs.m_materialHeader.m_ambient = settingsLoaded["ambient"].as<CCMaths::Vector3>();
         materialArgs.m_materialHeader.m_diffuse = settingsLoaded["diffuse"].as<CCMaths::Vector3>();
         materialArgs.m_materialHeader.m_specular = settingsLoaded["specular"].as<CCMaths::Vector3>();
         materialArgs.m_materialHeader.m_emissive = settingsLoaded["emissive"].as<CCMaths::Vector3>();
         materialArgs.m_materialHeader.m_shininess = settingsLoaded["shininess"].as<float>();
 
-        materialArgs.m_materialHeader.m_hasNormal = settingsLoaded["hasNormal"].as<bool>();
+        if (YAML::Node normalNode = settingsLoaded["hasNormal"]; normalNode.IsDefined())
+            materialArgs.m_materialHeader.m_hasNormal = normalNode.as<bool>();
+
+        if (YAML::Node celshadeNode = settingsLoaded["hasCelshade"]; celshadeNode.IsDefined())
+            materialArgs.m_materialHeader.m_hasCelshade = celshadeNode.as<bool>();
+
         materialArgs.m_materialHeader.m_specularFactor = settingsLoaded["specularFactor"].as<float>();
         materialArgs.m_materialHeader.m_metallicFactor = settingsLoaded["metallicFactor"].as<float>();
         materialArgs.m_materialHeader.m_roughnessFactor = settingsLoaded["roughnessFactor"].as<float>();

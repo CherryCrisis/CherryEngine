@@ -64,6 +64,7 @@ namespace CCImporter
 
         //-- PBR --//
         bool    m_hasNormal = true;
+        bool    m_hasCelshade = false;
         float   m_specularFactor = 1.f;
         float   m_metallicFactor = 1.f;
         float   m_roughnessFactor = 1.f;
