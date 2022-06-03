@@ -45,17 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\LightModifier.cs" />
-    <Compile Include="Assets\Script\MeshModifier.cs" />
-    <Compile Include="Assets\Script\PortalModifier.cs" />
-    <Compile Include="Assets\Script\PortalSwitcher.cs" />
-    <Compile Include="Assets\Script\SoundModifier.cs" />
-    <Compile Include="Assets\Script\Wardrobe.cs" />
+    <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\CloseButton.cs" />
+    <Compile Include="Assets\Scripts\PlayButton.cs" />
+    <Compile Include="Assets\Scripts\PortalSwitcher.cs" />
+    <Compile Include="Assets\Scripts\Wardrobe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Assets\Script\BackpackBehaviour.cs" />
-    <Compile Include="Assets\Script\CameraController.cs" />
-    <Compile Include="Assets\Script\DebugTest.cs" />
-    <Compile Include="Assets\Script\Script.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

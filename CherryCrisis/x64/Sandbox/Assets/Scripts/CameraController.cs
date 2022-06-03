@@ -5,38 +5,55 @@ namespace CCScripting
 {
 	public class CameraController : Behaviour
 	{
-		Matrix4 matrix = new Matrix4();
+		public CameraController(System.IntPtr cPtr, bool cMemoryOwn)
+		: base(cPtr, cMemoryOwn) { }
 
 		Transform transform;
-		Vector3 maxPosition = new Vector3();
+
 		float speedSensivity = 80.0f;
-		public CameraController(System.IntPtr cPtr, bool cMemoryOwn) 
-			: base(cPtr, cMemoryOwn)
-		{
+		float interactRange  = 25f;
 
-		}
-
-		public void Awake()
-		{
-			transform = GetBehaviour<Transform>();
-
-		}
-
+		public void Awake() => transform = GetBehaviour<Transform>();
 
 		public void Update()
 		{
-			Debug.GetInstance().Info(transform);
-			if (transform == null)
-				return;
-			
-			Vector2 deltaMouse = InputManager.GetMouseDelta();
-			float sensitityY = Time.GetDeltaTime() * deltaMouse.y;  
+			if (transform == null) return;
 
+			UpdateCameraRotation();
+
+			if (InputManager.GetKeyDown(Keycode.E)) TryInteract(); 
+		}
+		
+		// fuck interfaces
+		void TryInteract()  
+		{
+			// this needs to be improved, vectors seems to be wrongs
+			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
+			
+			if (hit != null && hit.actor != null &&hit.actor.m_owner != null)
+			{
+				Debug.GetInstance().Log(ELogType.INFO, "Hitted " + hit.actor.m_owner.name);
+
+				PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
+				if (switcher != null)
+					switcher.Switch();
+
+				Wardrobe wardrobe = hit.actor.m_owner.GetBehaviour<Wardrobe>();
+				if (wardrobe != null)
+					wardrobe.SetInMovement();
+
+			}
+		}
+
+		void UpdateCameraRotation() 
+		{
+			Vector2 deltaMouse = InputManager.GetMouseDelta();
 			float dt = Time.GetDeltaTime();
 
+			float sensitityY = deltaMouse.y;
 			double angleX = transform.eulerAngles.x + sensitityY * speedSensivity * dt;
 			angleX = Math.Min(Math.Max(angleX, -Math.PI * 0.4f), Math.PI * 0.4f);
-			
+
 			transform.eulerAngles = new Vector3((float)angleX, transform.eulerAngles.y, transform.eulerAngles.z);
 		}
 	}

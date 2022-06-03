@@ -1,0 +1,64 @@
+resources:
+  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\capsuleTemporel.obj
+  - Assets\Models\NonEuclidean\nonEuclideanModel.obj
+  - Assets\Models\Rooms\Room_01\Room_01.obj
+  - Assets\Models\Rooms\Room_00\Room_00.obj
+cells:
+  1153411759:
+    name: Default
+    settings:
+      texturePath: ""
+    entities:
+      1080595771:
+        name: Camera
+components:
+  3311103365:
+    type: AudioListener
+    IsActive: true
+    m_owner: 1080595771
+  413510137:
+    type: CameraComponent
+    IsActive: true
+    m_owner: 1080595771
+    aspect: 1.15353537
+    near: 0.00100000005
+    far: 1500
+    fovY: 1.04719758
+    transform: 4278765354
+  4278765354:
+    type: Transform
+    IsActive: true
+    m_owner: 1080595771
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+UI:
+  1915487402:
+    type: UIButton
+    Text: "Play\x00\x00\x00\x00\x00\x00\x00"
+    Name: "BPlay\x00"
+    Position: 250.000000/300.000000/0.000000
+    Size: 50.000000/50.000000
+    Text Size: 50.000000/50.000000
+    Font: Assets\Fonts\Mockery.ttf
+    Background: Assets\Sprites\kill_button.png
+    Text Position: 310.000000/290.000000/0.000000
+    Background Size: 50.000000/50.000000
+    Behaviour: Assets\Scripts\PlayButton.cs
+    Background Position: 250.000000/300.000000/0.000000
+  2326335061:
+    type: UIButton
+    Text: "Quit\x00\x00\x00\x00\x00\x00\x00"
+    Name: "BQuit\x00"
+    Position: 250.000000/100.000000/0.000000
+    Size: 50.000000/50.000000
+    Text Size: 50.000000/50.000000
+    Font: Assets\Fonts\Mockery.ttf
+    Background: Assets\Sprites\kill_button.png
+    Text Position: 310.000000/90.000000/0.000000
+    Background Size: 50.000000/50.000000
+    Behaviour: Assets\Scripts\CloseButton.cs
+    Background Position: 250.000000/100.000000/0.000000

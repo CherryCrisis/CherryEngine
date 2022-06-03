@@ -2,9 +2,9 @@ using CCEngine;
 
 namespace CCScripting
 {
-    public class Script : Behaviour 
+    public class CloseButton : Behaviour 
     {
-        public Script(System.IntPtr cPtr, bool cMemoryOwn)
+        public CloseButton(System.IntPtr cPtr, bool cMemoryOwn)
             : base(cPtr, cMemoryOwn) {}
 
 

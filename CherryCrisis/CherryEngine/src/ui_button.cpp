@@ -109,7 +109,6 @@ bool UIButton::CompareId(int id)
 void UIButton::Interact() 
 {
 	m_onClicked.Invoke();
-	Engine::shouldStop = true;
 }
 
 void UIButton::SetBehaviourName(const std::string& path)
