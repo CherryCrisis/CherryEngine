@@ -94,6 +94,23 @@ public class InputManager : global::System.IDisposable {
     return ret;
   }
 
+  public static void SetUIFocus(bool value) {
+    CherryEnginePINVOKE.InputManager_SetUIFocus(value);
+  }
+
+  public static bool IsUIFocused() {
+    bool ret = CherryEnginePINVOKE.InputManager_IsUIFocused();
+    return ret;
+  }
+
+  public static void SetCursorHidden() {
+    CherryEnginePINVOKE.InputManager_SetCursorHidden();
+  }
+
+  public static void SetCursorDisplayed() {
+    CherryEnginePINVOKE.InputManager_SetCursorDisplayed();
+  }
+
 }
 
 }

@@ -11600,6 +11600,34 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_InputManager_GetMouseDelta() {
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_InputManager_SetUIFocus(unsigned int jarg1) {
+  bool arg1 ;
+  
+  arg1 = jarg1 ? true : false; 
+  InputManager::SetUIFocus(arg1);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_InputManager_IsUIFocused() {
+  unsigned int jresult ;
+  bool result;
+  
+  result = (bool)InputManager::IsUIFocused();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_InputManager_SetCursorHidden() {
+  InputManager::SetCursorHidden();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_InputManager_SetCursorDisplayed() {
+  InputManager::SetCursorDisplayed();
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_InputManager(void * jarg1) {
   InputManager *arg1 = (InputManager *) 0 ;
   

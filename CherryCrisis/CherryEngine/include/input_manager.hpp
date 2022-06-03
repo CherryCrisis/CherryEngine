@@ -210,8 +210,9 @@ private:
 	//list of keys just pressed
 	bool m_isListening = false;
 	int m_listenedKey = -1;
-	CCMaths::Vector2 m_mousePos{};
 
+	CCMaths::Vector2 m_mousePos{};
+	bool m_isUIFocus = false;
 	const char* keynames[122] =
 	{
 		"NONE",
@@ -675,6 +676,9 @@ public:
 	static Keycode		GetKeycode(int index);
 	static Keycode		GetKeycode(const char* name);
 	static int			GetKeycodeIndex(Keycode code);
+
+	static void SetUIFocus(bool value);
+	static bool IsUIFocused();
 };
 
 #pragma warning(pop)

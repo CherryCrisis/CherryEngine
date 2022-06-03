@@ -10,6 +10,8 @@ namespace CCScripting
 
         public void OnClick() 
         {
+            InputManager.SetUIFocus(false);
+            InputManager.SetCursorHidden();
             SceneManager.ChangeScene("Scene/Level_01"); 
         }
     }

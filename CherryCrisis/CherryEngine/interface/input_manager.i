@@ -25,4 +25,8 @@ public:
 	static CCMaths::Vector2 GetMouseWheel();
 	static CCMaths::Vector2 GetMousePos();
 	static CCMaths::Vector2 GetMouseDelta();
+	static void SetUIFocus(bool value);
+	static bool IsUIFocused();
+	static void SetCursorHidden();
+	static void SetCursorDisplayed();
 };

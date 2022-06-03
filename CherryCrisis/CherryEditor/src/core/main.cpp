@@ -27,12 +27,14 @@ void HideCursor(void* window)
 {
     GLFWwindow* castedWindow = (GLFWwindow*) window;
     glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
 void ShowCursor(void* window)
 {
     GLFWwindow* castedWindow = (GLFWwindow*)window;
     glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 
 void drop_callback(GLFWwindow* window, int count, const char** paths)

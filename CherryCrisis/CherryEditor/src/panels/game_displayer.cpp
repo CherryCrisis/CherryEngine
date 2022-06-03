@@ -93,9 +93,13 @@ void GameDisplayer::Render()
 void GameDisplayer::Focus()
 {
     InputManager::SetPollContext("User Context");
-    InputManager::SetCursorHidden();
+    if (!InputManager::IsUIFocused()) 
+    {
+        InputManager::SetCursorHidden();
+        ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
+    }
+
     m_isFocused = true;
-    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
     ImGui::SetWindowFocus("Game");
 }
 

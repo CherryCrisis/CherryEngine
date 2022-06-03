@@ -140,6 +140,19 @@ int InputManager::GetKeycodeIndex(Keycode code)
 	return 0;
 }
 
+void InputManager::SetUIFocus(bool value)
+{
+	currentInstance->m_isUIFocus = value; 
+	if (value)
+		SetPollContext(nullptr);
+	else 
+		SetPollContext("User Context");
+
+}
+bool InputManager::IsUIFocused()
+{
+	return currentInstance->m_isUIFocus; 
+}
 
 #pragma region Errors
 void InputManager::ErrorButtons(const char* name)

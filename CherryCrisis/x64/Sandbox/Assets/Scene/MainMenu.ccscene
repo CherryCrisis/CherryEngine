@@ -14,19 +14,19 @@ cells:
       1080595771:
         name: Camera
 components:
-  3311103365:
-    type: AudioListener
-    IsActive: true
-    m_owner: 1080595771
   413510137:
     type: CameraComponent
     IsActive: true
     m_owner: 1080595771
-    aspect: 1.15353537
+    aspect: 0.787781358
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
     transform: 4278765354
+  3311103365:
+    type: AudioListener
+    IsActive: true
+    m_owner: 1080595771
   4278765354:
     type: Transform
     IsActive: true
@@ -35,6 +35,11 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
+  3034906307:
+    type: ScriptedBehaviour
+    IsActive: true
+    m_owner: 1080595771
+    scriptName: MainMenuHandler
 UI:
   1915487402:
     type: UIButton

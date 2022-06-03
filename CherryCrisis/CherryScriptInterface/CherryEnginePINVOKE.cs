@@ -2347,6 +2347,18 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_GetMouseDelta")]
   public static extern global::System.IntPtr InputManager_GetMouseDelta();
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_SetUIFocus")]
+  public static extern void InputManager_SetUIFocus(bool jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_IsUIFocused")]
+  public static extern bool InputManager_IsUIFocused();
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_SetCursorHidden")]
+  public static extern void InputManager_SetCursorHidden();
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_InputManager_SetCursorDisplayed")]
+  public static extern void InputManager_SetCursorDisplayed();
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_InputManager")]
   public static extern void delete_InputManager(global::System.Runtime.InteropServices.HandleRef jarg1);
 
