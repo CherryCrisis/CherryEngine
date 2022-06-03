@@ -15,7 +15,7 @@ class Cell;
 class CCENGINE_API Viewer
 {
 public:
-	int m_currentIteration = 5;
+	int m_currentIteration = 1;
 
 	CCMaths::Matrix4 m_viewMatrix = CCMaths::Matrix4::Identity;
 	CCMaths::Matrix4 m_projectionMatrix = CCMaths::Matrix4::Identity;
@@ -29,6 +29,8 @@ public:
 	std::shared_ptr<Framebuffer> m_framebuffer;
 	
 	Cell* m_ownerCell = nullptr;
+
+	bool m_isDrawed = false;
 
 	Viewer()
 		: m_framebuffer(std::make_shared<Framebuffer>()) {}
