@@ -27,8 +27,7 @@ Scene::Scene(const char* filePath)
 
 void Scene::Delete()
 {
-	while (!m_entities.empty())
-		RemoveEntity(m_entities[0].get());
+	RemoveAllEntities();
 }
 
 Scene::~Scene()
@@ -117,14 +116,22 @@ void Scene::RemoveEntity(Entity* toRemove)
 	{
 		if (m_entities[id].get() == toRemove)
 		{
-			m_entities[id].reset(nullptr);
+			m_entities[id].reset();
 			m_entities[id] = std::move(m_entities[entitiesCount - 1]);
 			m_entities.pop_back();
 			break;
 		}
 	}
 
-	//toRemove->Destroy();
+	m_isHierarchyDirty = true;
+}
+
+void Scene::RemoveAllEntities()
+{
+	if (m_entities.empty())
+		return;
+
+	m_entities.clear();
 	m_isHierarchyDirty = true;
 }
 

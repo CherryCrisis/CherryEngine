@@ -17,7 +17,7 @@ private:
 	EType m_type = EType::PERSPECTIVE;
 
 	float m_aspect = 4.f / 3.f;
-	float m_near = 0.01f;
+	float m_near = 0.001f;
 	float m_far = 1500.f;
 	float m_fovY = CCMaths::PI / 3.f;
 	float m_width = 1920.f;

@@ -25,6 +25,7 @@ Transform::Transform(CCUUID& id)
 Transform::~Transform()
 {
 	SetParent(nullptr);
+	m_onDestroyed.Invoke();
 }
 
 
@@ -57,6 +58,12 @@ bool Transform::IsEqualToParent(Transform* transform)
 	return m_parent->IsEqualToParent(transform);
 }
 
+void Transform::OnParentDestroyed()
+{
+	m_parent = nullptr;
+	SetParent(nullptr);
+}
+
 bool Transform::CanDelete()
 {
 	if (m_children.empty())
@@ -87,13 +94,18 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 				break;
 			}
 		}
+
+		m_parent->m_onDestroyed.Unbind(&Transform::OnParentDestroyed, this);
+
 	}
 	if (parent) // Subscribe to the new parent if there is one
 	{
 		parent->m_children.push_back(this);
+		parent->m_onDestroyed.Bind(&Transform::OnParentDestroyed, this);
 	}
 
 	m_parent = parent;
+	
 
 	if (m_parent)
 		current = CCMaths::Matrix4::Inverse(m_parent->GetWorldMatrix()) * m_worldMatrix;
@@ -139,9 +151,9 @@ Matrix4 Transform::GetWorldMatrix()
 	if (m_parent)
 		m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 
-	m_up		= m_worldMatrix.up;
-	m_right		= m_worldMatrix.right;
-	m_forward	= -m_worldMatrix.back;
+	m_up		= m_worldMatrix.up.Normalized();
+	m_right		= m_worldMatrix.right.Normalized();
+	m_forward	= -m_worldMatrix.back.Normalized();
 
 	Vector3 rotation;
 	CCMaths::Matrix4::Decompose(m_worldMatrix, m_worldPosition, rotation, m_worldScale);
