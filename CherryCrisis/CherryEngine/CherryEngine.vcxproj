@@ -460,6 +460,7 @@
     <None Include="interface\capsule_collider.i" />
     <None Include="interface\cell.i" />
     <None Include="interface\collider.i" />
+    <None Include="interface\engine.i" />
     <None Include="interface\light_component.i" />
     <None Include="interface\material.i" />
     <None Include="interface\matrix4.i" />
@@ -520,8 +521,8 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;$(CsOutdir)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="interface\behaviour.i" />
     <None Include="interface\camera_comp.i" />

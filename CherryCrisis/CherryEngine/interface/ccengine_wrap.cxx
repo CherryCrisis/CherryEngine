@@ -385,6 +385,9 @@ namespace Swig {
 	#include "maths/quaternion.hpp"
 
 
+	#include "engine.hpp"
+
+
 	#include "singleton.hpp"
 	#include "physic_manager.hpp"
 
@@ -5134,6 +5137,19 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Round(double jarg1) {
   result = (float)CCMaths::Round((double const &)*arg1);
   jresult = result; 
   return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Engine_Quit() {
+  Engine::Quit();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Engine(void * jarg1) {
+  Engine *arg1 = (Engine *) 0 ;
+  
+  arg1 = (Engine *)jarg1; 
+  delete arg1;
 }
 
 

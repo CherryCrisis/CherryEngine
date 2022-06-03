@@ -55,6 +55,7 @@
     <Compile Include="EForceMode.cs" />
     <Compile Include="ELightType.cs" />
     <Compile Include="ELogType.cs" />
+    <Compile Include="Engine.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityVector.cs" />
     <Compile Include="ETextureFormat.cs" />

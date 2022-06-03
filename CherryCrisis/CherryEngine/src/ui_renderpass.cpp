@@ -65,6 +65,7 @@ void UIRenderPass::Execute(Viewer*& viewer)
 
 		CCMaths::Matrix4 modelMat = image->GetModel();
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uHovered"), image->IsHovered());
 
 		auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(image->m_texture->m_gpuTexture2D.get());
 		glBindTextureUnit(0, gpuTexture->ID);

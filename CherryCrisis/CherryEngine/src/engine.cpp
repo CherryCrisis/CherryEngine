@@ -16,9 +16,10 @@
 #include "time_manager.hpp"
 
 
-void* Engine::window_handle = nullptr;
-bool Engine::isPaused       = false;
-bool Engine::isPlaying      = false;
+void* Engine::window_handle  = nullptr;
+bool Engine::isPaused        = false;
+bool Engine::isPlaying	     = false;
+bool Engine::shouldStop      = false;
 
 Engine::Engine() 
 {
@@ -91,4 +92,12 @@ void Engine::Stop()
 	PhysicSystem::PhysicManager::GetInstance()->Stop();
 	SceneManager::ResetScene();
 	m_OnStop.Invoke();
+}
+
+void Engine::EndFrame() 
+{
+	if (shouldStop)
+		Stop();
+
+	shouldStop = false;
 }

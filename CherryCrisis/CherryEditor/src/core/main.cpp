@@ -23,7 +23,6 @@
 #include "command.hpp"
 #include "utils.hpp"
 
-
 void HideCursor(void* window) 
 {
     GLFWwindow* castedWindow = (GLFWwindow*) window;
@@ -139,7 +138,8 @@ int main(int argc, char** argv)
             glfwSetDropCallback(window, drop_callback);
 
             InputManager::GetInstance()->HideCursor = HideCursor;
-            InputManager::GetInstance()->ShowCursor = ShowCursor;
+            InputManager::GetInstance()->ShowCursor = ShowCursor; 
+            
             Engine::window_handle = window;
 
             Serializer::UnserializeInputs();
@@ -175,6 +175,9 @@ int main(int argc, char** argv)
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glClearColor(0.f, 0.f, 0.f, 1.f);
 
+                for (UIItem* item : SceneManager::GetInstance()->m_currentScene->m_UIContext.m_items)
+                    item->SetHovered(false);
+
                 ImGui_ImplOpenGL3_NewFrame();
                 ImGui_ImplGlfw_NewFrame();
                 ImGui::NewFrame();
@@ -199,6 +202,7 @@ int main(int argc, char** argv)
                     isSceneFocused = true;
                 }
 
+                engine.EndFrame();
                 editor.CheckForHierarchyRefresh();
             }
             //Save editor file

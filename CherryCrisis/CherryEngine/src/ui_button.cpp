@@ -13,28 +13,12 @@
 
 UIButton::UIButton()
 {
-	PopulateMetadatas();
-
-	SetName("Button");
-
-	CameraComponent* cam = CameraComponent::GetMainCamera();
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
+	Init();
 }
 
 UIButton::UIButton(CCUUID& id) : UIItem(id)
 {
-	PopulateMetadatas();
-
-	SetName("Button");
-
-	CameraComponent* cam = CameraComponent::GetMainCamera();
-	if (!cam)
-		return;
-
-	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
+	Init();
 }
 
 void UIButton::SubscribeToPipeline(ARenderingPipeline* pipeline)
@@ -51,6 +35,16 @@ void UIButton::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 	pipeline->UnsubscribeToPipeline<TextRenderPass>(&m_text);
 }
 
+bool UIButton::IsHovered() 
+{
+	return m_text.IsHovered() || m_background.IsHovered();
+}
+
+void UIButton::SetHovered(bool value)
+{
+	m_text.SetHovered(value);
+	m_background.SetHovered(value);
+}
 
 void UIButton::PopulateMetadatas()
 {
@@ -86,6 +80,22 @@ void UIButton::OnSetPos()
 	m_background.SetPos(GetPos());
 }
 
+void UIButton::Init() 
+{
+	PopulateMetadatas();
+
+	SetName("Button");
+	m_isHoverable = true;
+	m_text.SetHoverable(true);
+	m_background.SetHoverable(true);
+
+	CameraComponent* cam = CameraComponent::GetMainCamera();
+	if (!cam)
+		return;
+
+	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
+}
+
 void UIButton::OnSetSize()
 {
 	m_background.SetSize(GetSize());
@@ -93,12 +103,13 @@ void UIButton::OnSetSize()
 
 bool UIButton::CompareId(int id) 
 {
-	return id == m_id || id == m_text.m_id || id == m_background.m_id;
+	return id == m_text.m_id || id == m_background.m_id;
 }
 
 void UIButton::Interact() 
 {
 	m_onClicked.Invoke();
+	Engine::shouldStop = true;
 }
 
 void UIButton::SetBehaviourName(const std::string& path)
@@ -108,4 +119,13 @@ void UIButton::SetBehaviourName(const std::string& path)
 	behaviour.SetScriptClass(String::ExtractKey(name, '.').c_str());
 	behaviourPath = path;
 	m_onClicked.Bind(&ButtonBehaviour::OnClick, &behaviour);
+}
+
+void UIButton::Delete()
+{
+	CameraComponent* cam = CameraComponent::GetMainCamera();
+	if (!cam)
+		return;
+
+	UnsubscribeToPipeline(cam->m_camera.m_pipeline.get());
 }

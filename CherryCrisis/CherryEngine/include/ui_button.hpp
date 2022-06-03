@@ -19,6 +19,7 @@ private:
 	ButtonBehaviour behaviour;
 	std::string behaviourPath = " ";
 
+	void Init();
 protected:
 	void PopulateMetadatas() override;
 	void OnSetPos() override;
@@ -31,12 +32,14 @@ public:
 	
 	UIButton(CCUUID& id);
 	UIButton();
-
+	void Delete() override;
 	bool CompareId(int id) override;
 	void Interact() override;
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
 	void UnsubscribeToPipeline(ARenderingPipeline* pipeline) override;
 
+	bool IsHovered() override;
+	void SetHovered(bool value) override;
 	void SetBehaviourName(const std::string& path);
 
 	std::string GetBehaviourName() {return behaviourPath;}

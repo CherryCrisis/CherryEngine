@@ -109,7 +109,7 @@ int main()
         MainWindow mainWindow{ window };
         RenderManager::GenerateMainWindow(mainWindow);
 
-        while (glfwWindowShouldClose(window) == false)
+        while (glfwWindowShouldClose(window) == false || (engine.isPlaying || engine.isPaused))
         {
             InputManager::UpdateKeys();
             TimeManager::GetInstance()->Update((float)glfwGetTime());
@@ -135,9 +135,12 @@ int main()
                 engine.Tick();
 
             glfwSwapBuffers(window);
+            
+            engine.EndFrame();
         }
 
         InputManager::PopContext();
+
     }
     
     // Terminate glfw

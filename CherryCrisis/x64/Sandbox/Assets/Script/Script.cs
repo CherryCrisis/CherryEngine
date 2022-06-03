@@ -10,7 +10,8 @@ namespace CCScripting
 
         public void OnClick() 
         {
-            SceneManager.ChangeScene("Empty2");  
+            Engine.Quit();
+            Debug.GetInstance().Log(ELogType.INFO, "Killing the game");
         }
     }
 }

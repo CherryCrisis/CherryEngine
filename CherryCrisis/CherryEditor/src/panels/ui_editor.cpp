@@ -18,9 +18,6 @@ UIEditor::UIEditor()
     m_items.push_back("Image");
     m_items.push_back("Text");
     m_items.push_back("Button");
-    //m_items.push_back("Toggle");
-    //m_items.push_back("Slider");
-    //m_items.push_back("Input Text");
 }
 
 void UIEditor::Render() 
@@ -172,7 +169,17 @@ void UIEditor::InspectSelectedItem()
             CCMaths::Vector3 defaultVal;
             CCMaths::Vector3* valPtr = &defaultVal;
             metadata->Get((void**)&valPtr);
-            if (valPtr && ImCherry::ColoredDragFloat3(metaname, valPtr->data))
+            if (valPtr && ImGui::DragFloat3(metaname.c_str(), valPtr->data))
+                metadata->Set(valPtr);
+            continue;
+        }
+
+        if (type == typeid(CCMaths::Vector2))
+        {
+            CCMaths::Vector2 defaultVal;
+            CCMaths::Vector2* valPtr = &defaultVal;
+            metadata->Get((void**)&valPtr);
+            if (valPtr && ImGui::DragFloat2(metaname.c_str(), valPtr->data))
                 metadata->Set(valPtr);
             continue;
         }

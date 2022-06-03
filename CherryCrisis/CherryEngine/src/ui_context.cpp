@@ -96,9 +96,11 @@ void UIContext::AddItemByType(const EItemUI& type)
 
 UIItem* UIContext::Get(uint32_t id)
 {
-	for (UIItem* item : m_items)
+	for (UIItem* item : m_items) 
+	{
 		if (item->CompareId(id))	
 			return item;
+	}
 	
 	return nullptr;
 }

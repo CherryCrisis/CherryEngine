@@ -7,6 +7,7 @@ SWIG_CSBODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
 
 %include maths.i
 
+%include engine.i
 %include physic_manager.i
 %include input_manager.i
 %include scene_manager.i

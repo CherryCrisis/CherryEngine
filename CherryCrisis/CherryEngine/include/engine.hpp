@@ -15,6 +15,8 @@ public:
 	static bool isPlaying;
 	static bool isPaused;
 	
+	static bool shouldStop;
+
 	Event<> m_OnStop;
 	
 	Engine();
@@ -26,4 +28,8 @@ public:
 
 	void Tick();
 	void TickEngine();
+
+	void EndFrame();
+
+	static void Quit() { shouldStop = true; }
 };

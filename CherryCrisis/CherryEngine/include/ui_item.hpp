@@ -27,16 +27,22 @@ protected:
 	virtual void OnSetPos() {};
 	virtual void OnSetSize() {};
 
+	bool m_isHoverable = false;
+
 public:
 	int m_id = -1;
 
+	bool m_isHovered = false;
+
+	virtual bool IsHovered() { return m_isHoverable && m_isHovered; }
+	void SetHoverable(bool value) { m_isHoverable = value; }
+	virtual void SetHovered(bool value) { m_isHovered = value; }
 	CCMaths::Vector3 m_position;
 	std::shared_ptr<Mesh> m_mesh = nullptr;
 	
 	UIItem();
 	UIItem(CCUUID& id);
-
-	virtual bool CompareId(int id) { return id == m_id; };
+	virtual bool CompareId(int id) { return id == m_id; }
 	virtual void Delete();
 	virtual void Interact() {};
 	void SubscribeToPipeline(ARenderingPipeline* pipeline) override;
