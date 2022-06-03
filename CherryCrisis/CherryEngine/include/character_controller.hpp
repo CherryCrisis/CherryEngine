@@ -18,6 +18,17 @@ namespace physx
 }
 
 
+struct AlignementData
+{
+	bool	m_isRotating = false;
+	float	m_lerpPercent = 0.0f;
+	
+	CCMaths::Vector3	m_to = CCMaths::Vector3::Up;
+
+	CCMaths::Quaternion m_startRotation;
+	CCMaths::Quaternion m_goalRotation;
+};
+
 class CCENGINE_API CharacterController : public Behaviour
 {
 private:
@@ -27,6 +38,8 @@ private:
 	bool	m_isStarted		 = false;
 	bool	m_isGrounded	 = false;
 	bool	m_isRegistered	 = false;
+	bool	m_isRunning		= false;
+
 	float	m_contactOffset  = 0.1f;
 	float	m_walkingSpeed   = 1.5f;
 	float	m_runningSpeed   = 2.5f;
@@ -38,8 +51,9 @@ private:
 	float	m_jumpForce		 = 1.f;
 	float	m_rotating		 = 0.f;
 
-	bool m_isRunning = false;
+	CCMaths::Vector3 m_raycastDir = -CCMaths::Vector3::Up;
 
+	AlignementData m_alignement = {};
 	physx::PxRigidDynamic*	m_dynamicActor = nullptr;
 
 	void PopulateMetadatas() override;
@@ -61,6 +75,7 @@ public:
 
 	void Update();
 	void FixedUpdate();
+	void AlignToGravity();
 
 	void InvalidateTransform();
 
@@ -81,6 +96,8 @@ public:
 
 	void	SetSpringDampling(const float& springDampling) { m_springDampling = springDampling; }
 	float	GetSpringDampling() { return m_springDampling; }
+
+	void	SetRaycastDir(const CCMaths::Vector3& dir) { m_raycastDir = dir; m_alignement.m_to = -dir; }
 
 	floatProperty	runningSpeed    { this, &CharacterController::SetRunningSpeed,		&CharacterController::GetRunningSpeed   };
 	floatProperty	walkingSpeed    { this, &CharacterController::SetWalkingSpeed,		&CharacterController::GetWalkingSpeed   };

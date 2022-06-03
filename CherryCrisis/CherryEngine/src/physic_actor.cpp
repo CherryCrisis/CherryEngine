@@ -341,6 +341,12 @@ namespace PhysicSystem
 	}
 
 
+	void PhysicActor::SetRaycastDir(const CCMaths::Vector3& dir)
+	{
+		if (m_controller)
+			m_controller->SetRaycastDir(dir.Normalized());
+	}
+
 	void PhysicActor::SetPxActor()
 	{
 		SetActorEnabled();

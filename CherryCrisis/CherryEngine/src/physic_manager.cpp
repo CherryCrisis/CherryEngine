@@ -350,6 +350,7 @@ namespace PhysicSystem
 
 		if (pxHit.actor)
 		{
+			hit.collider = reinterpret_cast<Collider*>(pxHit.shape->userData);
 			hit.actor = reinterpret_cast<PhysicActor*>(pxHit.actor->userData);
 			hit.distance = pxHit.distance;
 			hit.normal = { pxHit.normal.x, pxHit.normal.y, pxHit.normal.z };

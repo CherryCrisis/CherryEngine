@@ -72,7 +72,7 @@ namespace PhysicSystem
 			return;
 		}
 
-		m_pxScene->setGravity({ 0.0f, -m_gravity, 0.0f });
+		m_pxScene->setGravity({ m_gravity.x, m_gravity.y, m_gravity.z });
 
 		physx::PxPvdSceneClient* pvdClient = m_pxScene->getScenePvdClient();
 		if (pvdClient)
@@ -101,6 +101,7 @@ namespace PhysicSystem
 			return;
 
 		AddPxActor(actor);
+		actor->SetRaycastDir(m_gravity);
 		m_actors.push_back(actor);
 	}
 

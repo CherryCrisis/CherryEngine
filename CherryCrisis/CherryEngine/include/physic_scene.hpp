@@ -1,7 +1,8 @@
 #pragma once
 
-#include <PxPhysicsAPI.h>
 #include <set>
+
+#include <PxPhysicsAPI.h>
 
 #include <cherry_macros.hpp>
 
@@ -25,8 +26,8 @@ namespace PhysicSystem
 	class PhysicScene : public physx::PxSimulationEventCallback
 	{
 	private:
-		bool	m_paused = false;
-		float	m_gravity = 9.81f;
+		bool				m_paused = false;
+		CCMaths::Vector3	m_gravity = { 0.f, -9.81f, 0.f };
 
 		std::vector<PhysicActor*> m_actors;
 
@@ -58,8 +59,9 @@ namespace PhysicSystem
 		virtual void onSleep(physx::PxActor**, physx::PxU32) {}
 		virtual void onAdvance(const physx::PxRigidBody* const*, const physx::PxTransform*, const physx::PxU32) {}
 
-		void			Pause(bool value)	{ m_paused = value; }
-		bool			IsPaused()			{ return m_paused; }
-		physx::PxScene* Get()				{ return m_pxScene; }
+		void				Pause(bool value)	{ m_paused = value; }
+		bool				IsPaused()			{ return m_paused; }
+		physx::PxScene*		Get()				{ return m_pxScene; }
+		CCMaths::Vector3	GetGravity()		{ return m_gravity; }
 	};
 }

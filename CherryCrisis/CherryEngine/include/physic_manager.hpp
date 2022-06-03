@@ -33,6 +33,7 @@ namespace PhysicSystem
 		float				distance	= 0.0f;
 
 		PhysicActor* actor = nullptr;
+		Collider* collider = nullptr;
 	};
 
 	enum class EForceMode

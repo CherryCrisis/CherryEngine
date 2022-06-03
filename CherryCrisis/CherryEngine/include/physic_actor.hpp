@@ -80,6 +80,7 @@ namespace PhysicSystem
 
 		physx::PxRigidActor* Get() { return m_pxActor; }
 
+		void	SetRaycastDir(const CCMaths::Vector3& dir);
 		void	SetPxActor();
 		void	SetActorConstraints();
 		void	SetActorEnabled();
@@ -91,7 +92,9 @@ namespace PhysicSystem
 		void	SetEnabled(const bool& isEnabled) { m_isEnabled = isEnabled; SetActorEnabled(); }
 		bool	GetEnabled() { return m_isEnabled; }
 
-		Rigidbody* GetRigidbody() { return m_rigidbody; }
+		Rigidbody*				GetRigidbody()	{ return m_rigidbody; }
+		CharacterController*	GetController() { return m_controller; }
+		std::vector<Collider*>& GetColliders()	{ return m_colliders; }
 		bool HasRigidbody();
 		bool HasController();
 		bool HasColliders();

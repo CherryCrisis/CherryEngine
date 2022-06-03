@@ -1,4 +1,5 @@
 #include <cmath>
+#include "vector3.hpp"
 
 
 namespace CCMaths
@@ -91,7 +92,9 @@ namespace CCMaths
 
 	inline bool Vector3::operator==(const Vector3& rhs) const
 	{
-		return (x == rhs.x && y == rhs.y && z == rhs.z);
+		return (Abs(x - rhs.x) <= epsilon &&
+				Abs(y - rhs.y) <= epsilon &&
+				Abs(z - rhs.z) <= epsilon);
 	}
 
 	inline bool Vector3::operator!=(const Vector3& rhs) const
@@ -162,7 +165,7 @@ namespace CCMaths
 
 	inline float Vector3::Length() const
 	{
-		return std::sqrt(this->SquareLength());
+		return 1.f / InverseSqrt(this->SquareLength());
 	}
 
 	inline void Vector3::ClampLength(float minLength, float maxLength)
@@ -183,6 +186,16 @@ namespace CCMaths
 		return toClamp;
 	}
 
+	inline Vector3 Vector3::Lerp(const Vector3& lhs, const Vector3& rhs, const float lambda)
+	{
+		return
+		{
+			lhs.x + lambda * (rhs.x - lhs.x),
+			lhs.y + lambda * (rhs.y - lhs.y),
+			lhs.z + lambda * (rhs.z - lhs.z)
+		};
+	}
+
 	inline Vector3& Vector3::Normalize()
 	{
 		return Vector3::Normalize(*this);
@@ -201,9 +214,9 @@ namespace CCMaths
 
 	inline Vector3 Vector3::Normalized(const Vector3& lhs)
 	{
-		float length = lhs.Length();
-		float invLength = 1.f / (length == 0.f ? 1.f : length);
+		float length = lhs.SquareLength();
+		length = length == 0.0f ? 1.f : length;
 
-		return lhs * invLength;
+		return lhs * InverseSqrt(length);
 	}
 }

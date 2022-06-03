@@ -81,7 +81,10 @@ namespace CCMaths
 
 	inline bool Vector4::operator==(const Vector4& rhs) const
 	{
-		return (x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w);
+		return (Abs(x - rhs.x) <= epsilon &&
+				Abs(y - rhs.y) <= epsilon &&
+				Abs(z - rhs.z) <= epsilon &&
+				Abs(w - rhs.w) <= epsilon);
 	}
 
 	inline bool Vector4::operator!=(const Vector4& rhs) const
@@ -126,7 +129,7 @@ namespace CCMaths
 
 	inline float Vector4::Length() const
 	{
-		return std::sqrt(this->SquareLength());
+		return 1.f / InverseSqrt(this->SquareLength());
 	}
 
 	inline Vector4& Vector4::Normalize()
@@ -147,9 +150,9 @@ namespace CCMaths
 
 	inline Vector4 Vector4::Normalized(const Vector4& inVector)
 	{
-		float length = inVector.Length();
-		float invLength = 1.f / (length == 0 ? 1.f : length);
+		float length = inVector.SquareLength();
+		length = length == 0.0f ? 1.f : length;
 
-		return inVector * invLength;
+		return inVector * InverseSqrt(length);
 	}
 }

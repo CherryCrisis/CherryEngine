@@ -87,7 +87,10 @@ namespace CCMaths
 
 	inline bool Quaternion::operator==(const Quaternion& rhs) const
 	{
-		return (w == rhs.w && x == rhs.x && y == rhs.y && z == rhs.z);
+		return (Abs(w - rhs.w) <= epsilon && 
+				Abs(x - rhs.x) <= epsilon && 
+				Abs(y - rhs.y) <= epsilon && 
+				Abs(z - rhs.z) <= epsilon);
 	}
 
 	inline bool Quaternion::operator!=(const Quaternion& rhs) const
@@ -107,12 +110,12 @@ namespace CCMaths
 
 	inline float Quaternion::SquareNorm() const
 	{
-		return this->Conjugate().Dot(*this);
+		return this->Dot(*this);
 	}
 
 	inline float Quaternion::Norm() const
 	{
-		return std::sqrtf(this->SquareNorm());
+		return 1.f / InverseSqrt(this->SquareNorm());
 	}
 
 	inline Quaternion& Quaternion::Normalize()
@@ -133,10 +136,10 @@ namespace CCMaths
 
 	inline Quaternion Quaternion::Normalized(const Quaternion& inQuaternion)
 	{
-		float norm = inQuaternion.Norm();
-		float invNorm = 1.f / (norm == 0 ? 1.f : norm);
+		float norm = inQuaternion.SquareNorm();
+		norm = norm == 0.0f ? 1.f : norm;
 
-		return inQuaternion * invNorm;
+		return inQuaternion * InverseSqrt(norm);
 	}
 
 	inline Quaternion Quaternion::Conjugate() const
@@ -275,6 +278,8 @@ namespace CCMaths
 
 			return out.Normalized();
 		}
+
+		return Quaternion::Identity;
 	}
 
 	inline Quaternion Quaternion::FromMatrix(const Matrix4& in)
@@ -346,7 +351,13 @@ namespace CCMaths
 
 	inline Vector3 Quaternion::RotateVector3(const Quaternion& in, const Vector3& inV)
 	{
-		return Quaternion(in * Quaternion(0.f, inV) * in.Conjugate()).xyz;
+		return
+		{
+			inV.x * (in.x * in.x + in.w * in.w - in.y * in.y - in.z * in.z) + inV.y * (2 * in.x * in.y - 2 * in.w * in.z) + inV.z * (2 * in.x * in.z + 2 * in.w * in.y),
+			inV.x * (2 * in.w * in.z + 2 * in.x * in.y) + inV.y * (in.w * in.w - in.x * in.x + in.y * in.y - in.z * in.z) + inV.z * (-2 * in.w * in.x + 2 * in.y * in.z),
+			inV.x * (-2 * in.w * in.y + 2 * in.x * in.z) + inV.y * (2 * in.w * in.x + 2 * in.y * in.z) + inV.z * (in.w * in.w - in.x * in.x - in.y * in.y + in.z * in.z)
+
+		};
 	}
 
 	inline Quaternion Quaternion::Lerp(const Quaternion& lhs, const Quaternion& rhs, const float lambda)
@@ -368,13 +379,21 @@ namespace CCMaths
 	inline Quaternion Quaternion::SLerp(const Quaternion& lhs, const Quaternion& rhs, const float lambda)
 	{
 		float cosHalfTheta = Quaternion::Dot(lhs, rhs);
+		Quaternion negRhs = rhs;
 
-		const char sign = cosHalfTheta < 0.f ? -1 : 1;
+		if (cosHalfTheta < 0.f)
+		{
+			negRhs.x = -rhs.x; negRhs.y = -rhs.y; negRhs.z = -rhs.z; negRhs.w = -rhs.w;
+			cosHalfTheta = -cosHalfTheta;
+		}
 
 		cosHalfTheta = fabsf(cosHalfTheta);
 
 		if (cosHalfTheta >= 1.0f)
 			return lhs;
+
+		if (cosHalfTheta > 0.95f)
+			return NLerp(lhs, negRhs, lambda);
 
 		const float halfTheta = acosf(cosHalfTheta);
 		const float oneOverSinHalfTheta = 1.f / sqrtf(1.0f - cosHalfTheta * cosHalfTheta);
@@ -384,6 +403,6 @@ namespace CCMaths
 		const float ratioA = sinf(halfTheta - phi) * oneOverSinHalfTheta;
 		const float ratioB = sinf(phi) * oneOverSinHalfTheta;
 
-		return  lhs * ratioA +  rhs * ratioB * sign;
+		return  lhs * ratioA + negRhs * ratioB;
 	}
 }
