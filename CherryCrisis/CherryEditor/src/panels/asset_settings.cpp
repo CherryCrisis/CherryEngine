@@ -139,6 +139,7 @@ const std::vector<std::string> TextureTypeToStr
     {"ROUGHNESS"},
     {"SPECULAR"},
     {"AO"},
+    {"CELSHADE_PALETTE"},
 };
 
 MaterialSettings::MaterialSettings(std::shared_ptr<Material> material)
@@ -207,7 +208,9 @@ void MaterialSettings::Render()
             ImGui::DragFloat3("Diffuse", m_material->m_diffuse.data, 0.1f, 0.f) +
             ImGui::DragFloat3("Specular", m_material->m_specular.data, 0.1f, 0.f) +
             ImGui::DragFloat3("Emissive", m_material->m_emissive.data, 0.1f, 0.f) +
-            ImGui::DragFloat("Shininess", &m_material->m_shininess, 0.1f, 0.f);
+            ImGui::DragFloat("Shininess", &m_material->m_shininess, 0.1f, 0.f) +
+            ImGui::Checkbox("Use cell shading", &m_material->m_hasCelShade);
+
     }
     else if (EPipelineType::PBR == static_cast<EPipelineType>(currentPipeline))
     {
@@ -218,7 +221,8 @@ void MaterialSettings::Render()
             ImGui::DragFloat("Ambiant occlusion", &m_material->m_ao, 0.1f, 0.f, 1.f) +
             ImGui::DragFloat("Clear coat factor", &m_material->m_clearCoatFactor, 0.1f, 0.f, 1.f) +
             ImGui::DragFloat("Clear coat roughness factor", &m_material->m_clearCoatRoughnessFactor, 0.1f, 0.f, 1.f) +
-            ImGui::Checkbox("Use normal map", &m_material->m_hasNormal);
+            ImGui::Checkbox("Use normal map", &m_material->m_hasNormal) +
+            ImGui::Checkbox("Use cell shading", &m_material->m_hasCelShade);
     }
 #pragma warning(pop)
 

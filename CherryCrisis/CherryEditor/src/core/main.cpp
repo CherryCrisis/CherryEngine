@@ -68,6 +68,9 @@ int main(int argc, char** argv)
         printf("glfwInit failed\n");
         return -1;
     }
+
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+
     GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Cherry Crisis Engine", nullptr, nullptr);
     if (window == nullptr)
     {

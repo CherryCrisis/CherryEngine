@@ -28,6 +28,7 @@ enum class ETextureType : unsigned int
 	ROUGHNESS,
 	SPECULAR,
 	AO,
+	CELSHADE_PALETTE,
 
 	COUNT,
 };
@@ -55,6 +56,7 @@ public:
 	float m_ao = 1.f;
 	float m_clearCoatFactor = 0.f;
 	float m_clearCoatRoughnessFactor = 0.f;
+	bool  m_hasCelShade = false;
 
 	std::map<ETextureType, std::shared_ptr<Texture>> m_textures;
 

@@ -11,6 +11,9 @@
 #include "element_mesh_generator.hpp"
 
 #include "camera_component.hpp"
+#include "debug.hpp"
+
+
 template <>
 RenderManager* Singleton<RenderManager>::currentInstance = nullptr;
 
@@ -45,6 +48,25 @@ void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsiz
         }
     }();
 
+    auto const type_logType = [type]() {
+        switch (type)
+        {
+        case GL_DEBUG_TYPE_ERROR:
+            return ELogType::ERROR;
+
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+        case GL_DEBUG_TYPE_PORTABILITY:
+        case GL_DEBUG_TYPE_PERFORMANCE:
+            return ELogType::WARNING;
+
+        case GL_DEBUG_TYPE_MARKER:
+        case GL_DEBUG_TYPE_OTHER:
+        default:
+            return ELogType::INFO;
+        }
+    }();
+
     auto const severity_str = [severity]() {
         switch (severity) {
         case GL_DEBUG_SEVERITY_LOW: return "LOW";
@@ -56,7 +78,8 @@ void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsiz
         }
     }();
 
-    printf("[%s] OpenGL %s - %s : %s\n", severity_str, src_str, type_str, message);
+    std::string logStr = std::format("[{}] OpenGL {} - {} : {}\n", severity_str, src_str, type_str, message);
+    Debug::GetInstance()->AddLog(type_logType, logStr.c_str());
 }
 
 RenderManager::RenderManager()
