@@ -161,6 +161,11 @@ namespace CCImporter
 
         YAML::Node settingsSave = yamlSave["settings"];
         settingsSave["format"] = static_cast<unsigned int>(textureHeader.internalFormat);
+        settingsSave["wrapS"] = static_cast<unsigned int>(textureHeader.wrapS);
+        settingsSave["wrapT"] = static_cast<unsigned int>(textureHeader.wrapT);
+        settingsSave["wrapR"] = static_cast<unsigned int>(textureHeader.wrapR);
+        settingsSave["minFilter"] = static_cast<unsigned int>(textureHeader.minFilter);
+        settingsSave["magFilter"] = static_cast<unsigned int>(textureHeader.magFilter);
         settingsSave["surface"] = static_cast<unsigned int>(textureHeader.surface);
         settingsSave["flipped"] = textureHeader.flipped;
 
@@ -427,7 +432,7 @@ namespace CCImporter
     {
         unsigned char* data;
         TextureHeader textureHeader;
-        ImportTexture(filepath, &data, textureHeader, true, ETextureFormat::RGBA, ETextureSurface::TEXTURE_2D);
+        ImportTexture(filepath, &data, textureHeader, true, ETextureFormat::RGBA, ETextureSurface::TEXTURE_2D, ETextureWrap::REPEAT, ETextureWrap::REPEAT, ETextureWrap::REPEAT, ETextureFilter::LINEAR_MIPMAP_LINEAR, ETextureFilter::LINEAR);
         delete data;
     }
 
@@ -456,7 +461,9 @@ namespace CCImporter
         materialArgs.m_texturesPath.push_back(filepath.string());
     }
 
-    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, ETextureSurface textureSurface, bool importSettings)
+    void ImportTexture(const std::filesystem::path& filepath, unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, ETextureSurface textureSurface,
+        ETextureWrap textureWrapS, ETextureWrap textureWrapT, ETextureWrap textureWrapR,
+        ETextureFilter textureMinFilter, ETextureFilter textureMagFilter, bool importSettings)
     {
         if (importSettings)
         {
@@ -466,7 +473,24 @@ namespace CCImporter
 
                 YAML::Node settingsLoaded = loader["settings"];
 
-                textureFormat = static_cast<ETextureFormat>(settingsLoaded["format"].as<unsigned int>());
+                if (YAML::Node formatNode = settingsLoaded["format"]; formatNode.IsDefined())
+                    textureFormat = static_cast<ETextureFormat>(formatNode.as<unsigned int>());
+
+                if (YAML::Node wrapSNode = settingsLoaded["wrapS"]; wrapSNode.IsDefined())
+                    textureWrapS = static_cast<ETextureWrap>(wrapSNode.as<unsigned int>());
+
+                if (YAML::Node wrapTNode = settingsLoaded["wrapT"]; wrapTNode.IsDefined())
+                    textureWrapT = static_cast<ETextureWrap>(wrapTNode.as<unsigned int>());
+
+                if (YAML::Node wrapRNode = settingsLoaded["wrapR"]; wrapRNode.IsDefined())
+                    textureWrapR = static_cast<ETextureWrap>(wrapRNode.as<unsigned int>());
+
+                if (YAML::Node minFilterNode = settingsLoaded["minFilter"]; minFilterNode.IsDefined())
+                    textureMinFilter = static_cast<ETextureFilter>(minFilterNode.as<unsigned int>());
+
+                if (YAML::Node magFilterNode = settingsLoaded["magFilter"]; magFilterNode.IsDefined())
+                    textureMagFilter = static_cast<ETextureFilter>(magFilterNode.as<unsigned int>());
+
                 textureSurface = static_cast<ETextureSurface>(settingsLoaded["surface"].as<unsigned int>());
                 flipTexture = settingsLoaded["flipped"].as<bool>();
             }
@@ -484,6 +508,12 @@ namespace CCImporter
             image.flipY();
 
         textureHeader.internalFormat = textureFormat;
+        textureHeader.wrapS = textureWrapS;
+        textureHeader.wrapT = textureWrapT;
+        textureHeader.wrapR = textureWrapR;
+        textureHeader.minFilter = textureMinFilter;
+        textureHeader.magFilter = textureMagFilter;
+
         textureHeader.surface = textureSurface;
         textureHeader.width = image.width();
         textureHeader.height = image.height();

@@ -10,6 +10,8 @@
 
 enum class ETextureFormat;
 enum class ETextureSurface;
+enum class ETextureFilter;
+enum class ETextureWrap;
 class Cubemap;
 class Spheremap;
 
@@ -49,6 +51,11 @@ namespace CCImporter
         int size;
         ETextureFormat internalFormat;
         ETextureSurface surface;
+        ETextureWrap wrapS;
+        ETextureWrap wrapT;
+        ETextureWrap wrapR;
+        ETextureFilter minFilter;
+        ETextureFilter magFilter;
         int mipmapsLevel;
         int blockSize;
         bool flipped;
@@ -133,7 +140,9 @@ namespace CCImporter
 
 	void ImportModel(const std::filesystem::path& filepath, std::vector<ImportModelUtils>& models);
     void ImportTexture(const std::filesystem::path& filepath,
-        unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, ETextureSurface textureSurface, bool importSettings = true);
+        unsigned char** textureData, TextureHeader& textureHeader, bool flipTexture, ETextureFormat textureFormat, ETextureSurface textureSurface,
+        ETextureWrap textureWrapS, ETextureWrap textureWrapT, ETextureWrap textureWrapR,
+        ETextureFilter textureMinFilter, ETextureFilter textureMagFilter, bool importSettings = true);
 
     void CCENGINE_API SaveMaterial(Material* material);
     bool ImportMaterial(const std::filesystem::path& path, MaterialArgs& materialArgs);

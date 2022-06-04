@@ -50,6 +50,44 @@ const std::map<const int, const ETextureFormat> textureFormatByID
     {7, ETextureFormat::DXT7},
 };
 
+const std::map<const ETextureWrap, const int> IdOfTextureWrap
+{
+    {ETextureWrap::REPEAT, 0},
+    {ETextureWrap::CLAMP_TO_EDGE, 1},
+    {ETextureWrap::CLAMP_TO_BORDER, 2},
+    {ETextureWrap::MIRRORED_REPEAT, 3},
+    {ETextureWrap::MIRROR_CLAMP_TO_EDGE, 4},
+};
+
+const std::map<const int, const ETextureWrap> textureWrapByID
+{
+    {0, ETextureWrap::REPEAT},
+    {1, ETextureWrap::CLAMP_TO_EDGE},
+    {2, ETextureWrap::CLAMP_TO_BORDER},
+    {3, ETextureWrap::MIRRORED_REPEAT},
+    {4, ETextureWrap::MIRROR_CLAMP_TO_EDGE},
+};
+
+const std::map<const ETextureFilter, const int> IdOfTextureFilter
+{
+    {ETextureFilter::NEAREST, 0},
+    {ETextureFilter::LINEAR, 1},
+    {ETextureFilter::NEAREST_MIPMAP_NEAREST, 2},
+    {ETextureFilter::NEAREST_MIPMAP_LINEAR, 3},
+    {ETextureFilter::LINEAR_MIPMAP_NEAREST, 4},
+    {ETextureFilter::LINEAR_MIPMAP_LINEAR, 5},
+};
+
+const std::map<const int, const ETextureFilter> textureFilterByID
+{
+    {0, ETextureFilter::NEAREST},
+    {1, ETextureFilter::LINEAR},
+    {2, ETextureFilter::NEAREST_MIPMAP_NEAREST},
+    {3, ETextureFilter::NEAREST_MIPMAP_LINEAR},
+    {4, ETextureFilter::LINEAR_MIPMAP_NEAREST},
+    {5, ETextureFilter::LINEAR_MIPMAP_LINEAR},
+};
+
 TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
     : m_texture(texture)
 {
@@ -58,6 +96,11 @@ TextureSettings::TextureSettings(std::shared_ptr<Texture> texture)
 
     m_currentTypeId = IdOfTextureFormat.at(m_texture->GetInternalFormat());
     m_currentSurfaceId = static_cast<int>(m_texture->GetSurface());
+    m_currentWrapSId = IdOfTextureWrap.at(m_texture->GetWrapS());
+    m_currentWrapTId = IdOfTextureWrap.at(m_texture->GetWrapT());
+    m_currentWrapRId = IdOfTextureWrap.at(m_texture->GetWrapR());
+    m_currentMinFilterId = IdOfTextureFilter.at(m_texture->GetMinFilter());
+    m_currentMagFilterId = IdOfTextureFilter.at(m_texture->GetMagFilter());
     m_isFlipped = m_texture->GetIsFlipped();
 }
 
@@ -67,10 +110,9 @@ void TextureSettings::Render()
         ImGui::Text(std::format("Texture name : {}", m_texture->GetFilesystemPath()->filename().string()).c_str());
         ImGui::Separator();
 
-        const char* labelSurface = "Texture Surface";
         const char* listSurface[] = { "TEXTURE_2D", "TEXTURE_CUBEMAP", "TEXTURE_SPHEREMAP"};
 
-        if (ImGui::BeginCombo(labelSurface, listSurface[m_currentSurfaceId]))
+        if (ImGui::BeginCombo("Texture Surface", listSurface[m_currentSurfaceId]))
         {
             int textureSurfaceCount = static_cast<int>(ETextureSurface::COUNT);
             for (int n = 0; n < textureSurfaceCount; n++)
@@ -88,10 +130,103 @@ void TextureSettings::Render()
             ImGui::EndCombo();
         }
 
-        const char* labelType = "Texture Format";
+        const char* listWrap[] = { "REPEAT", "CLAMP_TO_EDGE", "CLAMP_TO_BORDER", "MIRRORED_REPEAT", "MIRROR_CLAMP_TO_EDGE", };
+
+        if (ImGui::BeginCombo("Texture Wrap S", listWrap[m_currentWrapSId]))
+        {
+            for (int n = 0; n < IdOfTextureWrap.size(); n++)
+            {
+                const bool is_selected = (m_currentWrapSId == n);
+                if (ImGui::Selectable(listWrap[n], is_selected))
+                {
+                    m_currentWrapSId = n;
+                    m_hasSettingsChanged = true;
+                }
+
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+
+            ImGui::EndCombo();
+        }
+
+        if (ImGui::BeginCombo("Texture Wrap T", listWrap[m_currentWrapTId]))
+        {
+            for (int n = 0; n < IdOfTextureWrap.size(); n++)
+            {
+                const bool is_selected = (m_currentWrapTId == n);
+                if (ImGui::Selectable(listWrap[n], is_selected))
+                {
+                    m_currentWrapTId = n;
+                    m_hasSettingsChanged = true;
+                }
+
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+
+            ImGui::EndCombo();
+        }
+
+        if (ImGui::BeginCombo("Texture Wrap R", listWrap[m_currentWrapRId]))
+        {
+            for (int n = 0; n < IdOfTextureWrap.size(); n++)
+            {
+                const bool is_selected = (m_currentWrapRId == n);
+                if (ImGui::Selectable(listWrap[n], is_selected))
+                {
+                    m_currentWrapRId = n;
+                    m_hasSettingsChanged = true;
+                }
+
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+
+            ImGui::EndCombo();
+        }
+
+        const char* listFilter[] = { "NEAREST", "LINEAR", "NEAREST_MIPMAP_NEAREST", "LINEAR_MIPMAP_NEAREST", "NEAREST_MIPMAP_LINEAR", "LINEAR_MIPMAP_LINEAR", };
+
+        if (ImGui::BeginCombo("Texture Min Filter", listFilter[m_currentMinFilterId]))
+        {
+            for (int n = 0; n < IdOfTextureFilter.size(); n++)
+            {
+                const bool is_selected = (m_currentMinFilterId == n);
+                if (ImGui::Selectable(listFilter[n], is_selected))
+                {
+                    m_currentMinFilterId = n;
+                    m_hasSettingsChanged = true;
+                }
+
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+
+            ImGui::EndCombo();
+        }
+
+        if (ImGui::BeginCombo("Texture Mag Filter", listFilter[m_currentMagFilterId]))
+        {
+            for (int n = 0; n < IdOfTextureFilter.size(); n++)
+            {
+                const bool is_selected = (m_currentMagFilterId == n);
+                if (ImGui::Selectable(listFilter[n], is_selected))
+                {
+                    m_currentMagFilterId = n;
+                    m_hasSettingsChanged = true;
+                }
+
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+
+            ImGui::EndCombo();
+        }
+
         const char* listType[] = { "RGB", "RGBA", "DXT1", "DXT1a", "DXT3", "DXT5", "DXT6", "DXT7" };
 
-        if (ImGui::BeginCombo(labelType, listType[m_currentTypeId]))
+        if (ImGui::BeginCombo("Texture Format", listType[m_currentTypeId]))
         {
             for (int n = 0; n < IdOfTextureFormat.size(); n++)
             {
@@ -105,7 +240,8 @@ void TextureSettings::Render()
                 if (is_selected)
                     ImGui::SetItemDefaultFocus();
             }
-        ImGui::EndCombo();
+
+            ImGui::EndCombo();
         }
 
         if (ImGui::Checkbox("Flip", &m_isFlipped))
@@ -117,6 +253,11 @@ void TextureSettings::Render()
             {
                 m_texture->SetInternalFormat(textureFormatByID.at(m_currentTypeId));
                 m_texture->SetSurface(static_cast<ETextureSurface>(m_currentSurfaceId));
+                m_texture->SetWrapS(textureWrapByID.at(m_currentWrapSId));
+                m_texture->SetWrapT(textureWrapByID.at(m_currentWrapTId));
+                m_texture->SetWrapR(textureWrapByID.at(m_currentWrapRId));
+                m_texture->SetMinFilter(textureFilterByID.at(m_currentMinFilterId));
+                m_texture->SetMagFilter(textureFilterByID.at(m_currentMagFilterId));
 
                 Resource<Texture>::ReloadResource(m_texture, m_isFlipped);
                 m_hasSettingsChanged = false;

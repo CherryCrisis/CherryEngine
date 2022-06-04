@@ -50,7 +50,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
 
     if (!LoadFromCache(texture, &data, textureHeader))
     {
-       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat, ETextureSurface::TEXTURE_2D);
+       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat, ETextureSurface::TEXTURE_2D, ETextureWrap::REPEAT, ETextureWrap::REPEAT, ETextureWrap::REPEAT, ETextureFilter::LINEAR_MIPMAP_LINEAR, ETextureFilter::LINEAR);
     }
 
     if (!data)
@@ -59,12 +59,17 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
         debug->AddLog(ELogType::ERROR, std::format("Failed to load image : {}", texture->GetFilepath()).c_str());
     }
 
-    texture->m_data = (void*)std::move(data);
+    texture->m_data = data;
     texture->m_height = textureHeader.height;
     texture->m_width = textureHeader.width;
     texture->m_size = textureHeader.size;
     texture->m_mipmapLevels = textureHeader.mipmapsLevel;
     texture->m_internalFormat = textureHeader.internalFormat;
+    texture->m_wrapS = textureHeader.wrapS;
+    texture->m_wrapT = textureHeader.wrapT;
+    texture->m_wrapR = textureHeader.wrapR;
+    texture->m_minFilter = textureHeader.minFilter;
+    texture->m_magFilter = textureHeader.magFilter;
     texture->m_surface = textureHeader.surface;
     texture->m_blockSize = textureHeader.blockSize;
     texture->m_flipped = textureHeader.flipped;
@@ -112,7 +117,7 @@ void Texture::Reload(bool flipTexture)
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
-    CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat, m_surface, false);
+    CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat, m_surface, m_wrapS, m_wrapT, m_wrapR, m_minFilter, m_magFilter, false);
 
     if (!data)
     {

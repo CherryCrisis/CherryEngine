@@ -53,6 +53,11 @@ class TextureSettings : public AssetSettings
 private:
 	int		m_currentTypeId = 0;
 	int		m_currentSurfaceId = 0;
+	int		m_currentWrapSId = 0;
+	int		m_currentWrapTId = 0;
+	int		m_currentWrapRId = 0;
+	int		m_currentMinFilterId = 0;
+	int		m_currentMagFilterId = 0;
 	bool	m_isFlipped = false;
 
 	std::shared_ptr<Texture> m_texture;
