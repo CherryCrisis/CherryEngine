@@ -39,7 +39,7 @@ LightGenerator::GPULightBasic::~GPULightBasic()
 	if (TexID)
 		glDeleteTextures(1, &TexID);
 
-	indices.erase(index);
+	indices.erase(static_cast<unsigned int>(index));
 }
 
 void LightGenerator::GPULightBasic::GetCorrectIndex()
@@ -54,7 +54,7 @@ void LightGenerator::GPULightBasic::GetCorrectIndex()
 		}
 	}
 
-	indices.insert(index);
+	indices.insert(static_cast<unsigned int>(index));
 }
 
 void LightGenerator::GPULightBasic::Update()

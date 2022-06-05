@@ -102,7 +102,7 @@ namespace PhysicSystem
 		
 		rigidbody->m_physicActor = actor;
 
-		actor->AddRigidbody(rigidbody, currentInstance->m_isPlaying);
+		actor->AddRigidbody(rigidbody);
 	}
 
 	void PhysicManager::Register(Collider* collider)
@@ -113,7 +113,7 @@ namespace PhysicSystem
 		PhysicActor* actor = PhysicManager::FindOrCreateActor(collider->GetHost());
 
 		collider->m_physicActor = actor;
-		actor->AddCollider(collider, currentInstance->m_isPlaying);
+		actor->AddCollider(collider);
 	}
 
 	void PhysicManager::Register(CharacterController* controller)
@@ -124,7 +124,7 @@ namespace PhysicSystem
 		PhysicActor* actor = PhysicManager::FindOrCreateActor(controller->GetHost());
 
 		controller->m_physicActor = actor;
-		actor->AddController(controller, currentInstance->m_isPlaying);
+		actor->AddController(controller);
 	}
 
 	void PhysicManager::Unregister(Rigidbody* rigidbody)
@@ -183,9 +183,6 @@ namespace PhysicSystem
 		currentInstance->m_physicActors.push_back(new PhysicActor());
 		PhysicActor& newActor = *currentInstance->m_physicActors.back();
 		newActor.m_owner = &owningEntity;
-
-		if (currentInstance->m_isPlaying)
-			newActor.CreatePxActor();
 
 		newActor.m_owner->m_cell->AddEntityToPhysicScene(newActor.m_owner);
 
@@ -350,6 +347,7 @@ namespace PhysicSystem
 
 		if (pxHit.actor)
 		{
+			hit.collider = reinterpret_cast<Collider*>(pxHit.shape->userData);
 			hit.actor = reinterpret_cast<PhysicActor*>(pxHit.actor->userData);
 			hit.distance = pxHit.distance;
 			hit.normal = { pxHit.normal.x, pxHit.normal.y, pxHit.normal.z };

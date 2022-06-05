@@ -81,7 +81,8 @@ namespace CCMaths
 
 	inline bool Vector2::operator==(const Vector2& rhs) const
 	{
-		return (x == rhs.x && y == rhs.y);
+		return (Abs(x - rhs.x) <= epsilon &&
+				Abs(y - rhs.y) <= epsilon);
 	}
 
 	inline bool Vector2::operator!=(const Vector2& rhs) const
@@ -126,7 +127,7 @@ namespace CCMaths
 
 	inline float Vector2::Length() const
 	{
-		return std::sqrt(this->SquareLength());
+		return 1.f / InverseSqrt(this->SquareLength());
 	}
 
 	inline Vector2& Vector2::Normalize()
@@ -147,9 +148,9 @@ namespace CCMaths
 
 	inline Vector2 Vector2::Normalized(const Vector2& lhs)
 	{
-		float length = lhs.Length();
-		float invLength = 1.f / (length == 0 ? 1.f : length);
+		float length = lhs.SquareLength();
+		length = length == 0.0f ? 1.f : length;
 
-		return lhs * lhs.Length();
+		return lhs * InverseSqrt(length);
 	}
 }

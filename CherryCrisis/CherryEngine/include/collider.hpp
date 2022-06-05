@@ -54,7 +54,7 @@ public:
 
 	virtual void BindToSignals() override {}
 	virtual void Initialize() {}
-	virtual void InvalidateTransform() {}
+	virtual void InvalidateTransform() {}	// Set pointer on transform to nullptr if transform is deleted to avoid crash
 
 	//! Unregister collider from the Physic Manager
 	/*!
@@ -94,13 +94,16 @@ public:
 	*/
 	virtual void SetPxData() {}
 
+	// Set the local transform of the PxShape relative to the PxActor
 	void	SetPxLocalPos();
 
 	virtual void Copy(Behaviour* copy) override;
-
+	
+	// Set if collider debug is displayed
 	virtual void Visible()		{ m_isVisible = true; }
 	virtual void Unvisible()	{ m_isVisible = false; }
 
+	// Set and gets used for the properties and Serialization
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled() { return m_isEnabled; }
 	void	SetTrigger(const bool& isTrigger);
@@ -112,8 +115,9 @@ public:
 	void				SetLocalPos(const CCMaths::Vector3& localPos);
 	CCMaths::Vector3	GetLocalPos() { return m_localPosition; }
 
-	virtual void RecomputeMatrix(Transform* transform) = 0;
-	virtual void ComputeModelMatrices() = 0;
+
+	virtual void RecomputeMatrix(Transform* transform) = 0;	// Called by a transform event, calls the following function
+	virtual void ComputeModelMatrices() = 0;				// Calculate collider display model matrix
 	virtual CCMaths::Matrix4 GetModelMatrix() = 0;
 
 	boolProperty isEnabled			{ this, &Collider::SetEnabled,		&Collider::GetEnabled };

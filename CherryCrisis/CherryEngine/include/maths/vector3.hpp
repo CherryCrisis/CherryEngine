@@ -454,6 +454,8 @@ namespace CCMaths
 		
 		inline static Vector3 ClampLength(const Vector3& toClamp, float minLength, float maxLength);
 
+		inline static Vector3 Lerp(const Vector3& lhs, const Vector3& rhs, const float lambda);
+
 		//! Normalize the Vector3
 		/*!
 		*	\attention Use as a member method of a specific object

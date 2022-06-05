@@ -69,6 +69,8 @@ void CharacterController::Initialize()
 	if (m_transform)
 		m_transform->m_OnDestroy.Bind(&CharacterController::InvalidateTransform, this);
 
+	m_physicActor->Init();
+
 	m_collider = owner.GetOrAddBehaviour<CapsuleCollider>();
 
 	if (!owner.HasBehaviour<Rigidbody>())
@@ -77,7 +79,7 @@ void CharacterController::Initialize()
 
 		m_rigidbody->SetGravity(true);
 		m_rigidbody->SetKinematic(false);
-		m_rigidbody->SetRotContraints({ true, false, true });
+		m_rigidbody->SetRotContraints({ true, true, true });
 
 		if (m_physicActor->Get())
 		{
@@ -120,10 +122,13 @@ void CharacterController::Update()
 		m_isGrounded = false;
 	}
 	m_isRunning = InputManager::GetKey(Keycode::LEFT_SHIFT);
-	m_rotating = InputManager::GetMouseDelta().x;
-	CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_rotating * m_sensitivity * 0.001f; // 0.01f to keep sensitivity above 1
 
-	m_transform->SetRotation(m_transform->GetRotation() * Quaternion::FromEuler(rot));
+	if (!m_alignement.m_isRotating)
+	{
+		m_rotating = InputManager::GetMouseDelta().x;
+		CCMaths::Vector3 rot = CCMaths::Vector3::YAxis * m_rotating * m_sensitivity * 0.001f; // 0.001f to keep sensitivity value above 1
+		m_transform->SetRotation((m_transform->GetRotation() * Quaternion::FromEuler(rot)).Normalized());
+	}
 
 	InputManager::PopContext();
 }
@@ -135,7 +140,25 @@ void CharacterController::FixedUpdate()
 
 	float raycastDist = m_collider->GetScale() + m_collider->GetRadius() + m_contactOffset;
 
-	PhysicSystem::RaycastHit hit = m_physicActor->Raycast(m_transform->GetGlobalPosition(), { 0, -1, 0 }, raycastDist);
+	Vector3 from = m_transform->Up();
+
+	if (m_alignement.m_isRotating)
+		AlignToGravity();
+	else if (from != m_alignement.m_to)
+	{
+		m_alignement.m_isRotating = true;
+
+		m_alignement.m_startRotation = m_transform->GetRotation();
+
+		Quaternion rotationToUp = Quaternion::FromToRotation(from, Vector3::Up);
+		Vector3 rotatedForward = Quaternion::RotateVector3(rotationToUp, m_transform->Forward());
+		Quaternion verticalRotation = Quaternion::FromToRotation(-Vector3::Forward, rotatedForward);
+		m_alignement.m_goalRotation = verticalRotation * Quaternion::FromToRotation(Vector3::Up, m_alignement.m_to);
+
+		AlignToGravity();
+	}
+
+	PhysicSystem::RaycastHit hit = m_physicActor->Raycast(m_transform->GetGlobalPosition(), m_raycastDir, raycastDist);
 
 	physx::PxVec3 pxVel = m_dynamicActor->getLinearVelocity();
 	CCMaths::Vector3 vel = { pxVel.x, pxVel.y, pxVel.z };
@@ -143,16 +166,16 @@ void CharacterController::FixedUpdate()
 	physx::PxVec3 pxRVel = m_dynamicActor->getAngularVelocity();
 	CCMaths::Vector3 rVel = { pxRVel.x, pxRVel.y, pxRVel.z };
 
-	if (hit.actor)
+	if (hit.actor && !hit.collider->GetTrigger())
 	{
 		m_isGrounded = true;
 
 		float deltaDistance = hit.distance - raycastDist;
-		float downVel = CCMaths::Vector3::Dot({ 0, -1, 0 }, vel);
+		float downVel = CCMaths::Vector3::Dot(m_raycastDir, vel);
 
 		float force = deltaDistance * m_springStrength - downVel * m_springDampling;
 
-		m_physicActor->AddForce({ 0, -force, 0 }, PhysicSystem::EForceMode::eFORCE);
+		m_physicActor->AddForce(m_raycastDir * force, PhysicSystem::EForceMode::eFORCE);
 	}
 	else
 	{
@@ -166,6 +189,25 @@ void CharacterController::FixedUpdate()
 	CCMaths::Vector3 neededForce = CCMaths::Vector3::Multiply(neededAcceleration * m_dynamicActor->getMass(), { 1, 0, 1 });
 
 	m_physicActor->AddForce(neededForce, PhysicSystem::EForceMode::eFORCE);
+}
+
+void CharacterController::AlignToGravity()
+{
+	m_alignement.m_lerpPercent += 0.005f;
+	
+	if (m_alignement.m_lerpPercent >= 1.0f)
+	{
+		m_alignement.m_lerpPercent = 0.0f;
+		m_alignement.m_isRotating = false;
+
+		m_transform->SetRotation(m_alignement.m_goalRotation);
+
+		return;
+	}
+
+	Quaternion newRot = Quaternion::SLerp(m_alignement.m_startRotation, m_alignement.m_goalRotation, m_alignement.m_lerpPercent);
+
+	m_transform->SetRotation(newRot);
 }
 
 void CharacterController::InvalidateTransform()

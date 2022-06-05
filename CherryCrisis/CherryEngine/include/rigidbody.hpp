@@ -68,7 +68,7 @@ public:
 	void SaveVelocity();
 	void ReapplyVelocity();
 
-	// Set in Rigidbody
+	// Set and gets used for the properties and Serialization
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled();
 	void	SetKinematic(const bool& isKinematic);

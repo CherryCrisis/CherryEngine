@@ -151,9 +151,16 @@ Matrix4 Transform::GetWorldMatrix()
 	if (m_parent)
 		m_worldMatrix = m_parent->GetWorldMatrix() * m_worldMatrix;
 
-	m_up		= m_worldMatrix.up.Normalized();
-	m_right		= m_worldMatrix.right.Normalized();
-	m_forward	= -m_worldMatrix.back.Normalized();
+	Vector3 up = m_worldMatrix.up.Normalized();
+	Vector3 right = m_worldMatrix.right.Normalized();
+	Vector3 forward = -m_worldMatrix.back.Normalized();
+	
+	if (up != m_up)
+		m_up = up;
+	if (right != m_right)
+		m_right = right;
+	if (forward != m_forward)
+		m_forward = forward;
 
 	Vector3 rotation;
 	CCMaths::Matrix4::Decompose(m_worldMatrix, m_worldPosition, rotation, m_worldScale);

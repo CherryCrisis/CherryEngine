@@ -38,13 +38,23 @@ namespace PhysicSystem
 
 	void PhysicActor::Init()
 	{
+		// Transform already set means Init() has already been called by another physic related component
 		if (m_transform)
-			return;
+		{
+			if (PhysicManager::IsPlaying())
+				CreatePxActor();
 
+			return;
+		}
+		
+		// Else set transform
 		m_transform = m_owner->GetOrAddBehaviour<Transform>();
 
 		if (m_transform)
 		{
+			if (PhysicManager::IsPlaying())
+				CreatePxActor();
+
 			m_transform->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
 			m_transform->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
 			m_transform->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
@@ -160,6 +170,7 @@ namespace PhysicSystem
 			collider->SetPxShape();
 		}
 
+
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
 	}
 
@@ -184,12 +195,12 @@ namespace PhysicSystem
 			m_pxActor->detachShape(*shape);
 	}
 
-	void PhysicActor::AddRigidbody(Rigidbody* rigidbody, bool isPlaying)
+	void PhysicActor::AddRigidbody(Rigidbody* rigidbody)
 	{
 		if (!m_rigidbody)
 		{
 			m_rigidbody = rigidbody;
-			if (isPlaying)
+			if (m_pxActor)
 			{
 				DestroyPxActor();
 				CreatePxActor();
@@ -197,7 +208,7 @@ namespace PhysicSystem
 		}
 	}
 
-	void PhysicActor::AddCollider(Collider* collider, bool isPlaying)
+	void PhysicActor::AddCollider(Collider* collider)
 	{
 		for (auto& coll : m_colliders)
 			if (collider == coll)
@@ -205,14 +216,14 @@ namespace PhysicSystem
 
 		m_colliders.push_back(collider);
 
-		if (isPlaying)
+		if (m_pxActor)
 		{
 			DestroyPxActor();
 			CreatePxActor();
 		}
 	}
 
-	void PhysicActor::AddController(CharacterController* controller, bool isPlaying)
+	void PhysicActor::AddController(CharacterController* controller)
 	{
 		if (!m_controller)
 		{
@@ -340,6 +351,12 @@ namespace PhysicSystem
 		return !m_colliders.empty();
 	}
 
+
+	void PhysicActor::SetRaycastDir(const CCMaths::Vector3& dir)
+	{
+		if (m_controller)
+			m_controller->SetRaycastDir(dir.Normalized());
+	}
 
 	void PhysicActor::SetPxActor()
 	{

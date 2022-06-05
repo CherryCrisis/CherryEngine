@@ -77,7 +77,7 @@ void Rigidbody::PopulateMetadatas()
 }
 
 #pragma region Set&Get
-void Rigidbody::Rigidbody::SetEnabled()
+void Rigidbody::SetEnabled()
 {
 	if (m_physicActor)
 		m_physicActor->SetEnabled(m_isEnabled);

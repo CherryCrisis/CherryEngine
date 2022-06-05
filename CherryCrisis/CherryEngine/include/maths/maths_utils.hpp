@@ -9,42 +9,43 @@ namespace CCMaths
     constexpr static float PI = 3.141592653f;
     constexpr static float DEG2RAD = CCMaths::PI / 180.f;
     constexpr static float RAD2DEG = 180.f / CCMaths::PI;
+    constexpr static float epsilon = 0.00001f;
 
-    inline float ToRadians(float angle) { return angle * DEG2RAD; }
-    inline float ToDegrees(float angle) { return angle * RAD2DEG; }
-    inline float Cos(float rad) { return std::cos(rad); }
-    inline float Sin(float rad) { return std::sin(rad); }
-    inline float Tan(float rad) { return std::tan(rad); }
-    inline float Atan(float value) { return std::atan(value); }
-    inline float Abs(float value) { return std::abs(value); }
+    inline float ToRadians(float angle);
+    inline float ToDegrees(float angle);
+    inline float Cos(float rad);
+    inline float Sin(float rad);
+    inline float Tan(float rad);
+    inline float Atan(float value);
+    inline float Abs(float value);
 
-    inline float Sqrt(float value) { return std::sqrt(value); }
+    inline float Sqrt(float value);
 
-    constexpr bool BoolPattern(int index, unsigned int pattern = 2u) { return index % (2 * pattern) < pattern; }
+    inline float InverseSqrt(float value);
 
-    constexpr int BoolSign(bool flag) { return 1 - 2 * !flag; }
+    constexpr bool BoolPattern(int index, unsigned int pattern = 2u);
+
+    constexpr int BoolSign(bool flag);
 
     template<typename T>
-    constexpr T Remap(const T& value, const T& oldMin, const T& oldMax, const T& newMin, const T& newMax)
-    {
-        return (value - oldMin) * (newMax - newMin) / (oldMax - oldMin) + newMin;
-    }
+    constexpr T Remap(const T& value, const T& oldMin, const T& oldMax, const T& newMin, const T& newMax);
 
-    inline float Round(const double& value) { return (float)floor(value + 0.5); }
+    inline float Round(const double& value);
 
     template <typename T>
-    int Sign(const T& value) { return (T(0) < value) - (value < T(0)); }
+    int Sign(const T& value);
 
     template<typename T>
-    T Min(const T& lhs, const T& rhs) { return lhs < rhs ? lhs : rhs; }
+    T Min(const T& lhs, const T& rhs);
 
     template<typename T>
-    T Max(const T& lhs, const T& rhs) { return lhs > rhs ? lhs : rhs; }
+    T Max(const T& lhs, const T& rhs);
 
     template<typename T>
-    T Clamp(const T& X, const T& minValue, const T& maxValue) { return Min(Max(X, minValue), maxValue); }
+    T Clamp(const T& X, const T& minValue, const T& maxValue);
 
     template<typename T, typename S>
-    T Lerp(const T& lhs, const T& rhs, const S& factor) { return (1.f - factor) * lhs + factor * rhs; }
-
+    T Lerp(const T& lhs, const T& rhs, const S& factor);
 }
+
+#include "maths_utils.inl"
