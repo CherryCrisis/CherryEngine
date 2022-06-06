@@ -1,7 +1,6 @@
 #pragma once
 
 #include <deque>
-#include <memory>
 #include <set>
 #include <typeindex>
 

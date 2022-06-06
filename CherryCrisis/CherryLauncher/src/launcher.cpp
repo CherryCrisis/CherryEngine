@@ -16,13 +16,13 @@
 #include "utils.hpp"
 
 
-void Launcher::AddProjectPath()
+Project* Launcher::AddProjectPath()
 {
 	Project project{};
 	
 	auto selection = pfd::open_file("Select a project").result();
 	if (selection.empty())
-		return;
+		return nullptr;
 
 	const char* cSelection = selection[0].c_str();
 	std::filesystem::path path = cSelection;
@@ -30,16 +30,17 @@ void Launcher::AddProjectPath()
 	if (path.extension() != ".cherryproject") 
 	{
 		AddProjectPath();
-		return;
+		return nullptr;
 	}
 
 	project.path = path;
 	project.name = path.filename().string();
 
 	if (FindProject(path))
-		return;
+		return nullptr;
 
 	m_projects.push_back(project);
+	return &m_projects.back();
 }
 
 void Launcher::RemoveProjectPath(const Project& project)
@@ -61,7 +62,7 @@ void Launcher::CreateProject(const std::string& path, const std::string& name)
 
 	//Create project Folder
 	CreateFolder(path, name);
-	CopyFolder("ProjectKit", newPath);
+	//CopyFolder("ProjectKit", newPath);
 
 	//Create cherryproject 
 	std::ofstream out(projectfilePath);
@@ -114,10 +115,6 @@ void Launcher::WriteLauncherInfos()
 	out.close();
 }
 
-std::vector<Project> Launcher::GetProjectList() const
-{
-	return m_projects;
-}
 
 void Project::Open() const
 {

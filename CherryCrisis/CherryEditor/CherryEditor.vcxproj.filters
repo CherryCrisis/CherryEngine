@@ -111,6 +111,9 @@
     <ClCompile Include="src\panels\ui_editor.cpp">
       <Filter>Fichiers sources\Panels</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\builder.cpp">
+      <Filter>Fichiers sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -178,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="include\core\frame_displayer.hpp">
       <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\builder.hpp">
+      <Filter>Fichiers d%27en-tête\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\stb_image_write.h">
+      <Filter>Fichiers externes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

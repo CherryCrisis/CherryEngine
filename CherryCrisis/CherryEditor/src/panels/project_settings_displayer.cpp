@@ -71,11 +71,7 @@ void ProjectSettingsDisplayer::Render()
 void ProjectSettingsDisplayer::General::Fill()
 {
     IMGUI_LEFT_LABEL(ImGui::InputText, "Game Name :", name, IM_ARRAYSIZE(name));
-
-    static char version[32] = "0.0.1";
     IMGUI_LEFT_LABEL(ImGui::InputText, "Version :", version, IM_ARRAYSIZE(version));
-
-    static char company[32] = "Cherry";
     IMGUI_LEFT_LABEL(ImGui::InputText, "Company :", company, IM_ARRAYSIZE(company));
 }
 
@@ -593,11 +589,28 @@ void ProjectSettingsDisplayer::ResourceViewer::Fill()
     }   */
 }
 
-BuildSettings ProjectSettingsDisplayer::GetBuildSettings()
+ProjectSettingsPack ProjectSettingsDisplayer::GetBuildSettings()
 {
-    BuildSettings settings;
+    ProjectSettingsPack settings;
     ProjectSettingsDisplayer::General* g = (ProjectSettingsDisplayer::General*)m_categories[0];
-    settings.m_gameName = g->name;
+
+    settings.gameName    = g->name;
+    settings.gameVersion = g->version;
+    settings.gameCompany = g->company;
 
     return settings;
+}
+
+void ProjectSettingsDisplayer::ApplyBuildSettings(ProjectSettingsPack pack) 
+{
+    ProjectSettingsDisplayer::General* g = (ProjectSettingsDisplayer::General*)m_categories[0];
+
+    if (!pack.gameName.empty())
+        strcpy_s(g->name, pack.gameName.c_str());
+
+    if (!pack.gameVersion.empty())
+        strcpy_s(g->version, pack.gameVersion.c_str());
+
+    if (!pack.gameCompany.empty())
+        strcpy_s(g->company, pack.gameCompany.c_str());
 }

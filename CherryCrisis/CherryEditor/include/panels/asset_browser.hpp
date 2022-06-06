@@ -30,7 +30,7 @@ const std::set<std::string> shaderExtensions	= { ".frag", ".vert" };
 const std::set<std::string> soundExtensions     = { ".wav" };
 const std::set<std::string> fontExtensions		= { ".ttf" };
 
-const std::set<std::string> ignoredExtensions   = { ".cctexture" };
+const std::set<std::string> ignoredExtensions   = { ".cctexture", ".mtl"};
 
 const std::string			scriptExtensions	= ".cs";
 const std::string			sceneExtensions		= ".ccscene";
@@ -39,7 +39,7 @@ const std::string			matExtensions       = ".ccmat";
 
 class AssetBrowser : public Panel
 {
-private:
+public:
 	const std::string scriptTemplate =
 		R"CS(using CCEngine;
 
@@ -238,6 +238,7 @@ public :
 
 	void Render() override;
 	void ContextCallback() override;
+	DirectoryNode* GetAssetNode() { return m_assetsDirectoryNode; }
 
 	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
 	

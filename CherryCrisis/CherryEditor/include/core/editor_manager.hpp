@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <memory>
 
+#include "serializer.hpp"
+
 #include "cherry_header.hpp"
 #include "maths.hpp"
 #include "scene.hpp"
@@ -93,7 +95,7 @@ public:
     InputManager::InputContext* m_editorContext = nullptr;
 
     EditorManager(const std::string& projectPath="");
-    
+    ~EditorManager();
     void LinkEngine(Engine* engine);
 
     void DisplayEditorUI(GLFWwindow* window);
@@ -112,6 +114,10 @@ public:
 
     void CheckForHierarchyRefresh();
     void SetPath() { m_browser.SetPath(m_projectPath); }
+
+    //serialization infos
+    EditorPack  GetPack();
+    void        ApplyPack(EditorPack pack);
 };
 
 // Wrapper for generic notifications

@@ -218,7 +218,6 @@
     <ClInclude Include="include\basic_rendering_pipeline.hpp" />
     <ClInclude Include="include\brdf_renderpass.hpp" />
     <ClInclude Include="include\box_collider.hpp" />
-    <ClInclude Include="include\builder.hpp" />
     <ClInclude Include="include\capsule_collider.hpp" />
     <ClInclude Include="include\cell.hpp" />
     <ClInclude Include="include\character_controller.hpp" />
@@ -549,7 +548,6 @@
     <ClCompile Include="src\bloom_renderpass.cpp" />
     <ClCompile Include="src\box_collider.cpp" />
     <ClCompile Include="src\brdf_renderpass.cpp" />
-    <ClCompile Include="src\builder.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\capsule_collider.cpp" />
     <ClCompile Include="src\cell.cpp" />

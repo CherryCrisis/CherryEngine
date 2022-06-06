@@ -15,6 +15,7 @@
 #include "pickinger.hpp"
 #include "transform.hpp"
 #include "utils.hpp"
+#include "entity.hpp"
 
 #undef near
 #undef far

@@ -25,6 +25,7 @@
 #include "transform.hpp"
 #include "portal_component.hpp"
 #include "sky_renderer.hpp"
+#include "entity.hpp"
 
 #define IMGUI_LEFT_LABEL(func, label, ...) (ImGui::TextUnformatted(label), ImGui::SameLine(), func("##" label, __VA_ARGS__))
 

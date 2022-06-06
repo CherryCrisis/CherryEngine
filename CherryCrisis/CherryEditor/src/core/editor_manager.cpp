@@ -10,16 +10,21 @@
 #include <ImGuizmo.h>
 #include <stb_image.h>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h> 
 #include <glad/gl.h>
 
-#include "builder.hpp"
+#include "core/builder.hpp"
 #include "command.hpp"
 #include "csscripting_system.hpp"
 #include "render_manager.hpp"
 #include "resource_manager.hpp"
 #include "scene_manager.hpp"
+#include "entity.hpp"
+
 
 
 EditorManager::EditorManager(const std::string& projectPath) 
@@ -39,12 +44,31 @@ EditorManager::EditorManager(const std::string& projectPath)
     }
 
     m_buildDisplayer.projectSettings = &m_projSettingsDisplayer;
+    m_buildDisplayer.browser = &m_browser;
     m_cellSystemDisplayer.m_camera = &m_sceneDisplayer.m_camera;
 
     m_uiEditor.m_manager = this;
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
 
-    Serializer::UnserializeEditor("editor.meta");
+    ApplyPack (Serializer::UnserializeEditor("editor.meta"));
+}
+
+EditorManager::~EditorManager() 
+{
+    auto width  = m_sceneDisplayer.m_camera.m_framebuffer->width;
+    auto height = m_sceneDisplayer.m_camera.m_framebuffer->height;
+    static GLubyte* data = new GLubyte[3 * width * height];
+    memset(data, 0, 3 * width * height);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_sceneDisplayer.m_camera.m_framebuffer->FBO);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    // Write the PNG image
+    int numOfComponents = 3; // RGB
+    int strideInBytes = width * 3;
+    stbi_write_png("preview.png", width, height, 3, data, width * 3);
+    delete data;
 }
 
 void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
@@ -171,7 +195,7 @@ void EditorManager::HandleMenuBar()
             if (ImGui::MenuItem("Build")) { m_buildDisplayer.Toggle(true); } // Open Build Menu 
             if (ImGui::MenuItem("Build And Run")) 
             {
-                Builder::BuildGame(m_buildDisplayer.outDir, m_projSettingsDisplayer.GetBuildSettings().m_gameName.c_str(), true);
+                Builder::BuildGame(m_buildDisplayer.outDir, m_projSettingsDisplayer.GetBuildSettings().gameName.c_str(), true, &m_browser);
             }
             ImGui::EndMenu();
         }
@@ -289,6 +313,23 @@ void EditorManager::UpdateFocusGame()
         }
         InputManager::PopContext();
     }
+}
+
+void EditorManager::ApplyPack(EditorPack pack) 
+{
+    m_projSettingsDisplayer.ApplyBuildSettings(pack.ps);
+
+    if (!pack.builder.outDir.empty())
+        strcpy_s(m_buildDisplayer.outDir, pack.builder.outDir.c_str());
+}
+
+EditorPack EditorManager::GetPack() 
+{
+    EditorPack pack {};
+
+    pack.builder.outDir = m_buildDisplayer.outDir;
+    pack.ps = m_projSettingsDisplayer.GetBuildSettings();
+    return pack;
 }
 
 //Display time in seconds

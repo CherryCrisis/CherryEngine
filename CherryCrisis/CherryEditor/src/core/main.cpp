@@ -234,7 +234,8 @@ int main(int argc, char** argv)
                 CsScriptingSystem::GetInstance()->onReload.Invoke();
             }
             //Save editor file
-            Serializer::SerializeEditor();
+            
+            Serializer::SerializeEditor(editor.GetPack());
 
             io.Fonts->ClearFonts();
 

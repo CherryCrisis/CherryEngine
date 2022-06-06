@@ -14,7 +14,7 @@
 #include "texture_generator.hpp"
 #include "transform.hpp"
 #include "viewer.hpp"
-
+#include "entity.hpp"
 
 GuizmoRenderPass::GuizmoRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/billboard.vert", "Assets/Shaders/billboard.frag")

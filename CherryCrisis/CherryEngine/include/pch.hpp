@@ -29,5 +29,6 @@
 #include <unordered_set>
 
 #include "maths.hpp"
+#include "resource.hpp"
 
 #endif //PCH_H

@@ -5,13 +5,7 @@
 
 #include "core/panel.hpp"
 #include "input_manager.hpp"
-
-
-struct BuildSettings
-{
-	std::string m_gameName;
-};
-
+#include "serializer.hpp"
 
 class ProjectSettingsDisplayer : public Panel
 {
@@ -20,6 +14,8 @@ private:
 	{
 	public:
 		char name[32] = "MyCherryGame";
+		char version[32] = "0.0.1";
+		char company[32] = "Cherry";
 
 		General(std::string name = "default") : PanelCategory(name) {}
 		void Fill() override;
@@ -93,7 +89,8 @@ public:
 	ProjectSettingsDisplayer(bool spawnOpened);
 	~ProjectSettingsDisplayer();
 
-	BuildSettings GetBuildSettings();
+	ProjectSettingsPack GetBuildSettings();
+	void  ApplyBuildSettings(ProjectSettingsPack pack); 
 
 	void Render() override;
 };
