@@ -95,24 +95,7 @@ void SphereCollider::Initialize()
 	GetHost().m_OnAwake.Unbind(&SphereCollider::Initialize, this);
 
 	if (m_isAddedFromInspector)
-	{
-		MeshRenderer* renderer = nullptr;
-		renderer = GetHost().GetBehaviour<ModelRenderer>();
-
-		if (!renderer)
-			renderer = GetHost().GetBehaviour<ShapeRenderer>();
-
-		if (renderer)
-		{
-			if (renderer->m_mesh)
-			{
-				Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
-
-				m_editableScale = Max(Max(extents.x, extents.y), extents.z);
-				m_localPosition = renderer->m_mesh->m_aabb.m_center;
-			}
-		}
-	}
+		SetAABBScale();
 
 	SetEntityScale(m_transform);
 }
@@ -140,6 +123,27 @@ void SphereCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Local Position", &localPosition);
 	m_metadatas.SetProperty("Scale", &editableScale);
 	m_metadatas.SetProperty("Block Raycast", &isBlocking);
+}
+
+void SphereCollider::SetAABBScale()
+{
+	MeshRenderer* renderer = nullptr;
+	renderer = GetHost().GetBehaviour<ModelRenderer>();
+
+	if (!renderer)
+		renderer = GetHost().GetBehaviour<ShapeRenderer>();
+
+	if (renderer)
+	{
+		if (renderer->m_mesh)
+		{
+			Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
+
+			m_editableScale = Max(Max(extents.x, extents.y), extents.z);
+			m_editableScale = Clamp(m_editableScale, 0.01f, m_editableScale);
+			m_localPosition = renderer->m_mesh->m_aabb.m_center;
+		}
+	}
 }
 
 void SphereCollider::SetEntityScale(Transform* transform)
@@ -258,6 +262,9 @@ void SphereCollider::Copy(Behaviour* copy)
 
 	m_entityScale = copiedCollider->m_entityScale;
 	SetScale(copiedCollider->m_editableScale);
+
+	SetAABBScale();
+	SetEntityScale(m_transform);
 
 	ResetPxShape();
 }

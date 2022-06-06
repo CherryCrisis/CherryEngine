@@ -50,6 +50,4 @@ void Collider::Copy(Behaviour* copy)
 
 	m_localPosition = copiedCollider->m_localPosition;
 	m_model = copiedCollider->m_model;
-
-	ResetPxShape();
 }
