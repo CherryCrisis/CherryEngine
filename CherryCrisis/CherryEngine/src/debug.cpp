@@ -18,28 +18,30 @@ void Debug::AddLog(ELogType logType, const char* message, std::source_location l
 
 void Debug::AddLog(ELogType logType, const char* message, unsigned int line, const char* file, const char* function)
 {
+	Debug* debug = currentInstance;
+
 	LogMessage* logMessage = nullptr;
 
 	size_t key;
-	GetKeyOfLog(key, message, logType);
+	debug->GetKeyOfLog(key, message, logType);
 
-	auto conditional = m_logMessages.find(key);
-	if (conditional != m_logMessages.end())
+	auto conditional = debug->m_logMessages.find(key);
+	if (conditional != debug->m_logMessages.end())
 	{
 		conditional->second.m_count++;
 		logMessage = &conditional->second;
 	}
 	else
 	{
-		auto pair = m_logMessages.emplace(key, LogMessage(message, logType));
+		auto pair = debug->m_logMessages.emplace(key, LogMessage(message, logType));
 		logMessage = &pair.first->second;
 	}
 
-	m_logTypeCounts[(int)logType]++;
+	debug->m_logTypeCounts[(int)logType]++;
 
-	m_logs.emplace_back(logMessage, m_timeManager->GetCurrentTime(), line, file, function);
+	debug->m_logs.emplace_back(logMessage, debug->m_timeManager->GetCurrentTime(), line, file, function);
 
-	m_isLogAdded = true;
+	debug->m_isLogAdded = true;
 }
 
 void Debug::Clear()

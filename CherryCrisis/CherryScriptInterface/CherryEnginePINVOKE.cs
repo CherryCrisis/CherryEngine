@@ -2371,11 +2371,8 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Time")]
   public static extern void delete_Time(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Debug_GetInstance")]
-  public static extern global::System.IntPtr Debug_GetInstance();
-
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Debug_AddLog")]
-  public static extern void Debug_AddLog(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, string jarg3, uint jarg4, string jarg5, string jarg6);
+  public static extern void Debug_AddLog(int jarg1, string jarg2, uint jarg3, string jarg4, string jarg5);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Debug")]
   public static extern global::System.IntPtr new_Debug();
