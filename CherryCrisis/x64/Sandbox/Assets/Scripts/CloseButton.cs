@@ -8,10 +8,10 @@ namespace CCScripting
             : base(cPtr, cMemoryOwn) {}
 
 
-        public void OnClick() 
+        public void OnClick()  
         {
             Engine.Quit();
-            Debug.GetInstance().Log(ELogType.INFO, "Killing the game");
+            Debug.Log(ELogType.INFO, "Killing the game");
         }
     }
 }

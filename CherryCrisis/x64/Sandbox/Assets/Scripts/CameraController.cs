@@ -32,7 +32,7 @@ namespace CCScripting
 			
 			if (hit != null && hit.actor != null &&hit.actor.m_owner != null)
 			{
-				Debug.GetInstance().Log(ELogType.INFO, "Hitted " + hit.actor.m_owner.name);
+				Debug.Log(ELogType.INFO, "Hitted " + hit.actor.m_owner.name);
 
 				PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
 				if (switcher != null)

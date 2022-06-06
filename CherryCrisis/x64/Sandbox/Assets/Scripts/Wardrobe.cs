@@ -34,11 +34,11 @@ namespace CCScripting
                 float offset = movementScale * dt;
                 elapsedTime += dt;
 
-                Vector3 leftDoorRot = leftDoor.GetEuler();
-                leftDoor.SetRotation(new Vector3( leftDoorRot.x, leftDoorRot.y + offset, leftDoorRot.z));
+                Vector3 leftDoorRot = leftDoor.GetEuler(); 
+                leftDoor.eulerAngles = new Vector3( leftDoorRot.x, leftDoorRot.y + offset, leftDoorRot.z);
 
                 Vector3 rightDoorRot = rightDoor.GetEuler();
-                rightDoor.SetRotation(new Vector3(rightDoorRot.x, rightDoorRot.y - offset, rightDoorRot.z));
+                rightDoor.eulerAngles = new Vector3(rightDoorRot.x, rightDoorRot.y - offset, rightDoorRot.z);
 
                 if (elapsedTime >= totalTime) 
                 {

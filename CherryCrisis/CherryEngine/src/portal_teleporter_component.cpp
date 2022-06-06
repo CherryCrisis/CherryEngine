@@ -116,7 +116,7 @@ void PortalTeleporterComponent::UpdateEntityMatrix(Transform* transform, const M
 		Matrix4::Decompose(newWorldMatrix, TRS[0], TRS[1], TRS[2]);
 
 		transform->SetPosition(TRS[0]);
-		transform->SetRotation(TRS[1]);
+		transform->SetEuler(TRS[1]);
 		transform->SetScale(TRS[2]);
 	}
 }

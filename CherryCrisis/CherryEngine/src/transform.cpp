@@ -116,7 +116,7 @@ void Transform::SetParent(Transform* parent, bool reapplyPosition, bool reapplyR
 	CCMaths::Matrix4::Decompose(GetLocalMatrix(), tempPos, tempRot, tempScale);
 	
 	if (reapplyPosition) SetPosition(tempPos);
-	if (reapplyRotation) SetRotation(tempRot);
+	if (reapplyRotation) SetEuler(tempRot);
 	if (reapplyScale)    SetScale(tempScale);
 
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION | (int)EDirtyFlag::WORLD_ROTATION | (int)EDirtyFlag::WORLD_SCALE);
@@ -203,7 +203,7 @@ void Transform::SetGlobalPosition(const Vector3& position)
 	SetPosition(world.position);
 }
 
-void Transform::SetRotation(const Vector3& rotation)
+void Transform::SetEuler(const Vector3& rotation)
 {
 	SetRotation(Quaternion::FromEuler(rotation));
 }
@@ -236,7 +236,7 @@ void Transform::SetGlobalRotation(const Quaternion& rotation)
 	CCMaths::Vector3 tempScale;
 	CCMaths::Matrix4::Decompose(world, tempPos, tempRot, tempScale);
 
-	SetRotation(tempRot);
+	SetEuler(tempRot);
 }
 
 void Transform::SetScale(const Vector3& scale)
@@ -330,6 +330,21 @@ Vector3 Transform::GetGlobalScale()
 	GetWorldMatrix();
 	
 	return m_worldScale;
+}
+
+void Transform::Translate(const Vector3& translation)
+{
+	SetPosition(GetPosition() + translation);
+}
+
+void Transform::Rotate(const Vector3& eulerAngles)
+{
+	SetEuler(GetEuler() + eulerAngles);
+}
+
+void Transform::Rotate(const Vector3& axis, float angle)
+{
+	SetRotation(GetRotation() * Quaternion::FromAxisAngle(axis, angle));
 }
 
 void Transform::Copy(Behaviour* copy)

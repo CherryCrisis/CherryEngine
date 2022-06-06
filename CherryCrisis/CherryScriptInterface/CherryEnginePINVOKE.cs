@@ -997,11 +997,11 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetGlobalPosition")]
   public static extern global::System.IntPtr Transform_GetGlobalPosition(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetRotation__SWIG_0")]
-  public static extern void Transform_SetRotation__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetEuler")]
+  public static extern void Transform_SetEuler(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetRotation__SWIG_1")]
-  public static extern void Transform_SetRotation__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetRotation")]
+  public static extern void Transform_SetRotation(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_SetGlobalRotation__SWIG_0")]
   public static extern void Transform_SetGlobalRotation__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
@@ -1029,6 +1029,15 @@ class CherryEnginePINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_GetGlobalScale")]
   public static extern global::System.IntPtr Transform_GetGlobalScale(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_Translate")]
+  public static extern void Transform_Translate(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_Rotate__SWIG_0")]
+  public static extern void Transform_Rotate__SWIG_0(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_Rotate__SWIG_1")]
+  public static extern void Transform_Rotate__SWIG_1(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, float jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Transform_Up")]
   public static extern global::System.IntPtr Transform_Up(global::System.Runtime.InteropServices.HandleRef jarg1);
@@ -2389,11 +2398,8 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_Time")]
   public static extern void delete_Time(global::System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Debug_GetInstance")]
-  public static extern global::System.IntPtr Debug_GetInstance();
-
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Debug_AddLog")]
-  public static extern void Debug_AddLog(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2, string jarg3, uint jarg4, string jarg5, string jarg6);
+  public static extern void Debug_AddLog(int jarg1, string jarg2, uint jarg3, string jarg4, string jarg5);
 
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_new_Debug")]
   public static extern global::System.IntPtr new_Debug();

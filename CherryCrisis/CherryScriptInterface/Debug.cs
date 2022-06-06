@@ -44,35 +44,29 @@ public class Debug : global::System.IDisposable {
     }
   }
 
-  public static Debug GetInstance() {
-    global::System.IntPtr cPtr = CherryEnginePINVOKE.Debug_GetInstance();
-    Debug ret = (cPtr == global::System.IntPtr.Zero) ? null : new Debug(cPtr, false);
-    return ret;
+  public static void AddLog(ELogType logType, string message, uint line, string file, string function) {
+    CherryEnginePINVOKE.Debug_AddLog((int)logType, message, line, file, function);
   }
 
-  public void AddLog(ELogType logType, string message, uint line, string file, string function) {
-    CherryEnginePINVOKE.Debug_AddLog(swigCPtr, (int)logType, message, line, file, function);
-  }
-
-	public void Log(ELogType type, object message,
+	public static void Log(ELogType type, object message,
         [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
         [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
         [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
             => AddLog(type, message.ToString(), sourceLineNumber, sourceFilePath, memberName);
 
-	public void Info(object message,
+	public static void Info(object message,
         [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
         [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
         [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
             => AddLog(ELogType.INFO, message.ToString(), sourceLineNumber, sourceFilePath, memberName);
 
-	public void Warning(object message,
+	public static void Warning(object message,
         [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
         [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
         [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")
             => AddLog(ELogType.WARNING, message.ToString(), sourceLineNumber, sourceFilePath, memberName);
 
-	public void Error(object message,
+	public static void Error(object message,
         [System.Runtime.CompilerServices.CallerLineNumber] uint sourceLineNumber = 0u,
         [System.Runtime.CompilerServices.CallerFilePath] string sourceFilePath = "",
         [System.Runtime.CompilerServices.CallerMemberName] string memberName = "")

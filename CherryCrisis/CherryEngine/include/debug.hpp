@@ -80,7 +80,7 @@ public:
 	void AddLog(ELogType logType, const char* message, std::source_location location =
 		std::source_location::current());
 
-	void AddLog(ELogType logType, const char* message, unsigned int line, const char* file, const char* function);
+	static void AddLog(ELogType logType, const char* message, unsigned int line, const char* file, const char* function);
 
 	void Clear();
 

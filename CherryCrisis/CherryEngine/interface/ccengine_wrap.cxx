@@ -5260,7 +5260,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetGlobalPosition(void *
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetRotation__SWIG_0(void * jarg1, void * jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetEuler(void * jarg1, void * jarg2) {
   Transform *arg1 = (Transform *) 0 ;
   CCMaths::Vector3 *arg2 = 0 ;
   
@@ -5270,11 +5270,11 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetRotation__SWIG_0(void *
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
     return ;
   } 
-  (arg1)->SetRotation((CCMaths::Vector3 const &)*arg2);
+  (arg1)->SetEuler((CCMaths::Vector3 const &)*arg2);
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetRotation__SWIG_1(void * jarg1, void * jarg2) {
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_SetRotation(void * jarg1, void * jarg2) {
   Transform *arg1 = (Transform *) 0 ;
   CCMaths::Quaternion *arg2 = 0 ;
   
@@ -5401,6 +5401,50 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Transform_GetGlobalScale(void * ja
   result = (arg1)->GetGlobalScale();
   jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
   return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_Translate(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->Translate((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_Rotate__SWIG_0(void * jarg1, void * jarg2) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->Rotate((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Transform_Rotate__SWIG_1(void * jarg1, void * jarg2, float jarg3) {
+  Transform *arg1 = (Transform *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  float arg3 ;
+  
+  arg1 = (Transform *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  arg3 = (float)jarg3; 
+  (arg1)->Rotate((CCMaths::Vector3 const &)*arg2,arg3);
 }
 
 
@@ -11720,31 +11764,19 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Time(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Debug_GetInstance() {
-  void * jresult ;
-  Debug *result = 0 ;
-  
-  result = (Debug *)Debug::GetInstance();
-  jresult = (void *)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Debug_AddLog(void * jarg1, int jarg2, char * jarg3, unsigned int jarg4, char * jarg5, char * jarg6) {
-  Debug *arg1 = (Debug *) 0 ;
-  ELogType arg2 ;
-  char *arg3 = (char *) 0 ;
-  unsigned int arg4 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Debug_AddLog(int jarg1, char * jarg2, unsigned int jarg3, char * jarg4, char * jarg5) {
+  ELogType arg1 ;
+  char *arg2 = (char *) 0 ;
+  unsigned int arg3 ;
+  char *arg4 = (char *) 0 ;
   char *arg5 = (char *) 0 ;
-  char *arg6 = (char *) 0 ;
   
-  arg1 = (Debug *)jarg1; 
-  arg2 = (ELogType)jarg2; 
-  arg3 = (char *)jarg3; 
-  arg4 = (unsigned int)jarg4; 
+  arg1 = (ELogType)jarg1; 
+  arg2 = (char *)jarg2; 
+  arg3 = (unsigned int)jarg3; 
+  arg4 = (char *)jarg4; 
   arg5 = (char *)jarg5; 
-  arg6 = (char *)jarg6; 
-  (arg1)->AddLog(arg2,(char const *)arg3,arg4,(char const *)arg5,(char const *)arg6);
+  Debug::AddLog(arg1,(char const *)arg2,arg3,(char const *)arg4,(char const *)arg5);
 }
 
 
