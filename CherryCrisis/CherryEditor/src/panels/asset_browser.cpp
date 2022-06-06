@@ -31,23 +31,25 @@ AssetBrowser::AssetBrowser(AssetSettingsDisplayer* assetSettingsDisplayer, Edito
 }
 void AssetBrowser::Render()
 {
-    if (!m_isOpened) return;
-
-    ImGui::PushStyleColor(ImGuiCol_MenuBarBg, { 0.166f, 0.166f, 0.221f, 1.000f });
-    if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_MenuBar))
+    if (m_isOpened) 
     {
-        //This order is very important !
-        ContextCallback();
+        ImGui::PushStyleColor(ImGuiCol_MenuBarBg, { 0.166f, 0.166f, 0.221f, 1.000f });
+        if (ImGui::Begin("Browser", &m_isOpened, ImGuiWindowFlags_MenuBar))
+        {
+            //This order is very important !
+            ContextCallback();
 
-        RenderMenuBar();
-        ResizeCell();
-        RenderNodes();
+            RenderMenuBar();
+            ResizeCell();
+            RenderNodes();
 
-        BrowserAction();
-
+            BrowserAction();
+        }
+        ImGui::End();
+        ImGui::PopStyleColor();
     }
-    ImGui::End();
-    ImGui::PopStyleColor();
+
+    RenderReloadPopup();
 }
 
 void AssetBrowser::RenderMenuBar()
@@ -171,6 +173,24 @@ bool AssetBrowser::DragAndDropTarget(AAssetNode* assetNode)
     }
 
     return false;
+}
+
+void AssetBrowser::RenderReloadPopup()
+{
+    if (!m_isReloading)
+        return;
+
+    if (m_isReloading)
+        ImGui::OpenPopup("reload");
+    
+    if (ImGui::BeginPopupModal("reload", 0 , ImGuiWindowFlags_NoDecoration))
+    {
+        ImGui::Text("Scripts reloading ...");
+        if (!m_isReloading)
+            ImGui::CloseCurrentPopup();
+
+        ImGui::EndPopup();
+    }  
 }
 
 void AssetBrowser::RenderNodes()
@@ -387,7 +407,7 @@ void AssetBrowser::BrowserActionCreate()
 
                     EditorManager::SendNotification("Script Created", ENotifType::Success);
 
-                    ReloadScripts();
+                    BindReloadScripts();
                 }
             }
             else if (!m_popupAssetType.compare("folder"))
@@ -934,11 +954,11 @@ AssetBrowser::AAssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesy
                         {
                             if (Engine::isPlaying)
                             {
-                                m_manager->m_engine->m_OnStop.Bind(&AssetBrowser::ReloadScripts, this);
+                                m_manager->m_engine->m_OnStop.Bind(&AssetBrowser::BindReloadScripts, this);
                             }
                             else 
                             {
-                                ReloadScripts();
+                                BindReloadScripts();
                             }
                         }
                     }
@@ -1074,11 +1094,27 @@ void AssetBrowser::QuerryBrowser()
     }
 }
 
+void AssetBrowser::BindReloadScripts()
+{
+    // prepare the reload for the end of 
+    CsScriptingSystem::GetInstance()->onReload.Bind(&AssetBrowser::ReloadScripts, this);
+    m_isReloading = true;
+    // open popup
+}
 void AssetBrowser::ReloadScripts()
 {   
+    if (m_reloadTimer > 0.f) 
+    {
+        m_reloadTimer -= TimeManager::GetDeltaTime();
+        return;
+    }
+
+    m_isReloading = false;
+    m_reloadTimer = .5f;
     std::string solutionPath = (m_assetsDirectory.parent_path() / "CherryScripting.sln").string();
     CsScriptingSystem::GetInstance()->InitializeHotReload(m_manager->GetCompilerPath().c_str(), solutionPath.c_str());
-    m_manager->m_engine->m_OnStop.Unbind(&AssetBrowser::ReloadScripts, this);
+    m_manager->m_engine->m_OnStop.Unbind(&AssetBrowser::BindReloadScripts, this);
+    CsScriptingSystem::GetInstance()->onReload.Unbind(&AssetBrowser::ReloadScripts, this);
 }
 
 void AssetBrowser::ScriptNode::Action() 

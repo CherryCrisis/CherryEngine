@@ -17,6 +17,7 @@
 #include "input_manager.hpp"
 #include "scene_manager.hpp"
 #include "time_manager.hpp"
+#include "csscripting_system.hpp"
 
 #include "core/editor_manager.hpp"
 #include "core/imgui_style.hpp"
@@ -94,6 +95,7 @@ int main(int argc, char** argv)
     font_cfg.FontDataOwnedByAtlas = false;
     //io.Fonts->AddFontFromMemoryTTF((void*)tahoma, sizeof(tahoma), 17.f, &font_cfg);
     io.Fonts->AddFontFromFileTTF("Mockery.otf", 13.f);
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     //ImGui::MergeIconsWithLatestFont(16.f, false);
 
 
@@ -135,9 +137,36 @@ int main(int argc, char** argv)
                 {
                     InputManager::MouseClickCallback(w, k, a, m);
                 });
-            ImGui_ImplGlfw_InitForOpenGL(window, true);
 
             glfwSetDropCallback(window, drop_callback);
+
+            ImGui_ImplGlfw_InitForOpenGL(window, true);
+
+            //Render first time loading screen
+            if (1) {
+                glfwPollEvents();
+
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                glClearColor(0.f, 0.f, 0.f, 1.f);
+
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplGlfw_NewFrame();
+                ImGui::NewFrame();
+
+                //EditorManager::HandleDocking();
+                
+                ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
+                ImGui::SetNextWindowSize(io.DisplaySize);
+                ImGui::Begin("###fkfndkf", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoMouseInputs);
+                ImGui::Text("Loading Project...");
+                ImGui::End();
+
+                ImGui::Render();
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+                glfwSwapBuffers(window);
+            }
+
+            editor.SetPath();
 
             InputManager::GetInstance()->HideCursor = HideCursor;
             InputManager::GetInstance()->ShowCursor = ShowCursor; 
@@ -148,8 +177,6 @@ int main(int argc, char** argv)
 
             editor.LinkEngine(&engine);
             engine.window_handle = window;
-
-            io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
             // TODO: Change to pre-compiled image
             stbi_set_flip_vertically_on_load(false);
@@ -185,8 +212,6 @@ int main(int argc, char** argv)
                 ImGui::NewFrame();
                 ImGuizmo::BeginFrame();
 
-                editor.DisplayEditorUI(window);
-
                 engine.TickEngine();
 
                 if (Engine::isPlaying && !Engine::isPaused)
@@ -196,16 +221,17 @@ int main(int argc, char** argv)
                     InputManager::PopContext();
                 }
 
-                glfwSwapBuffers(window);
-
                 if (!isSceneFocused)
                 {
                     ImGui::SetWindowFocus("Scene");
                     isSceneFocused = true;
                 }
 
+                editor.DisplayEditorUI(window);
+                glfwSwapBuffers(window);
                 engine.EndFrame();
                 editor.CheckForHierarchyRefresh();
+                CsScriptingSystem::GetInstance()->onReload.Invoke();
             }
             //Save editor file
             Serializer::SerializeEditor();
@@ -216,8 +242,6 @@ int main(int argc, char** argv)
             ImGui_ImplOpenGL3_Shutdown();
             ImGui_ImplGlfw_Shutdown();
             ImGui::DestroyContext();
-
-
         } 
     }
 

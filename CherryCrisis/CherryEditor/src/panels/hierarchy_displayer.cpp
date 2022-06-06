@@ -135,10 +135,10 @@ void HierarchyDisplayer::Render()
         ImGui::Dummy({ 1.f,8.f });
         for (auto& node : m_nodes)
         {
-            if (!node.m_isRoot && node.m_entityTransform)
+            if (!node->m_isRoot && node->m_entityTransform)
                 continue;
 
-            if (RenderEntity(node))
+            if (RenderEntity(node.get()))
                 break;
         }
 
@@ -215,26 +215,26 @@ void HierarchyDisplayer::Render()
     }
 }
  
-bool HierarchyDisplayer::RenderEntity(HierarchyNode& node)
+bool HierarchyDisplayer::RenderEntity(HierarchyNode* node)
 {
     //References
     EntitySelector* selector = &m_manager->m_entitySelector;
-    Transform* entityTransform = node.m_entityTransform;
-    Entity* entity = node.m_entity;
+    Transform* entityTransform = node->m_entityTransform;
+    Entity* entity = node->m_entity;
 
     // TreeNode Flags
     ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-    if (selector->Contains(node.m_entity))                                     flags |= ImGuiTreeNodeFlags_Selected;
+    if (selector->Contains(node->m_entity))                                     flags |= ImGuiTreeNodeFlags_Selected;
     if (!entityTransform || entityTransform->GetChildren()->size() <= 0)       flags |= ImGuiTreeNodeFlags_Leaf;
 
     // Tree node display
-    bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, node.m_name.c_str());
+    bool opened = ImGui::TreeNodeEx((void*)(intptr_t)entity->GetUUID(), flags, node->m_name.c_str());
 
     // Drag Source
     if (ImGui::BeginDragDropSource())
     {
         ImGui::SetDragDropPayloadNoCopy("HIERARCHY_DROP", entity, sizeof(Entity), ImGuiCond_Once);
-        ImGui::Text(node.m_name.c_str());
+        ImGui::Text(node->m_name.c_str());
         ImGui::EndDragDropSource();
         m_isDragging = true;
     }
@@ -321,8 +321,8 @@ bool HierarchyDisplayer::RenderEntity(HierarchyNode& node)
     // Recursive call
     if (opened && entityTransform)
     {
-        for (auto& child : node.m_childrens)
-            if (RenderEntity(child)) { ImGui::TreePop(); return true; }
+        for (auto& child : node->m_childrens)
+            if (RenderEntity(child.get())) { ImGui::TreePop(); return true; }
     }
 
     // Pop if opened node
@@ -551,22 +551,22 @@ void HierarchyDisplayer::Refresh()
         node.m_entityTransform = entity->GetBehaviour<Transform>();
         node.m_isRoot = node.m_entityTransform ? node.m_entityTransform->IsRoot() : false;
         node.m_name = entity->GetName();
-        m_nodes.push_back(node);
+        m_nodes.push_back(std::make_shared<HierarchyNode>(node));
     }
 
     for (auto& node : m_nodes) 
     {
-        if (!node.m_entityTransform)
+        if (!node->m_entityTransform)
             continue;
         
-        auto children = node.m_entityTransform->GetChildren();
+        auto children = node->m_entityTransform->GetChildren();
         for (const auto& child : *children)
         {
             for (auto& itNode : m_nodes) 
             {
-                if (itNode.m_entityTransform == child) 
+                if (itNode->m_entityTransform == child)
                 {
-                    node.m_childrens.push_back(itNode);
+                    node->m_childrens.push_back(itNode);
                     continue;
                 }
             }

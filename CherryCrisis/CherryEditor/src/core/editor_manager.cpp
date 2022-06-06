@@ -43,7 +43,6 @@ EditorManager::EditorManager(const std::string& projectPath)
 
     m_uiEditor.m_manager = this;
     m_projectPath = projectPath.size() > 0 ? projectPath : std::filesystem::current_path().filename().string();
-    m_browser.SetPath(m_projectPath);
 
     Serializer::UnserializeEditor("editor.meta");
 }

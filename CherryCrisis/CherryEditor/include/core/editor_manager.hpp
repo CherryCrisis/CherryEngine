@@ -73,7 +73,6 @@ private:
 
     std::shared_ptr<Texture> m_menuBarTextures[4];
 
-    void HandleDocking();
     void HandleFeaturerWindow(GLFWwindow* window);
     void HandleNotifications();
     void HandleMenuBar();
@@ -83,6 +82,8 @@ private:
     void GenerateGPUTexture(std::shared_ptr<Texture> texture);
 
 public:
+    static void HandleDocking();
+    
     float       m_menubarSize = 0.f;
     std::string m_projectPath = "";
 
@@ -110,6 +111,7 @@ public:
     static void SendNotification(const char* title, ENotifType type, float displayTime = 3.f);
 
     void CheckForHierarchyRefresh();
+    void SetPath() { m_browser.SetPath(m_projectPath); }
 };
 
 // Wrapper for generic notifications

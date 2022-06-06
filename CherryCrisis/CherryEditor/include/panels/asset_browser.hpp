@@ -212,6 +212,7 @@ namespace CCScripting
 	void RenderMenuBar();
 	void ResizeCell();
 	void RenderNodes();
+	void RenderReloadPopup();
 
 	void BrowserActionCreate();
 	void BrowserActionRename();
@@ -219,6 +220,8 @@ namespace CCScripting
 	void BrowserAction();
 
 	bool DragAndDropTarget(AAssetNode* assetNode);
+	bool m_isReloading = false;
+	float m_reloadTimer = .5f; // internal
 
 public :
 	std::unordered_map<std::string, time_t> m_timeModified;
@@ -239,6 +242,7 @@ public :
 	void QuerryBrowser(); //Refresh the asset list, return assetsDirectoryNode
 	
 	void ReloadScripts();
+	void BindReloadScripts();
 	void SetPath(const std::filesystem::path& path);
 	
 	std::string GetCurrentDirectoryPath() { return m_currentDirectoryNode ? m_currentDirectoryNode->m_path.string() : ""; }

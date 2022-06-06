@@ -6,6 +6,8 @@
 
 #include "singleton.hpp"
 
+#include "event.hpp"
+
 namespace mono
 {
 	class ManagedScriptSystem;
@@ -26,6 +28,7 @@ private:
 	std::shared_ptr<CsAssembly> m_scriptAssembly;
 
 public:
+	Event<> onReload;
 	std::vector<std::string> classesName;
 
 	mono::ManagedScriptContext* CreateContext(char* domainName, const char* contextPath, bool makeCopy);

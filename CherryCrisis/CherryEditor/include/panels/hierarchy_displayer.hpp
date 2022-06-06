@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <memory>
 
 #include "core/panel.hpp"
 
@@ -23,13 +24,13 @@ private:
 		bool		m_isRoot = false;
 		std::string m_name = "";
 
-		std::vector<HierarchyNode> m_childrens;
+		std::vector<std::shared_ptr<HierarchyNode>> m_childrens;
 	};
 
 	bool	m_isDragging = false;
 	bool	m_isRenaming = false;
 
-	std::vector<HierarchyNode> m_nodes;
+	std::vector<std::shared_ptr<HierarchyNode>> m_nodes;
 
 	CellSystemDisplayer*	m_cellSystemDisplayer = nullptr;
 	Entity*					m_draggedEntity = nullptr;
@@ -46,7 +47,7 @@ public:
 
 	void Refresh();
 
-	bool RenderEntity(HierarchyNode& node);
+	bool RenderEntity(HierarchyNode* node);
 
 	void EmptyDrop();
 };
