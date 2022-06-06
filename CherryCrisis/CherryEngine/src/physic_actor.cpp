@@ -142,24 +142,19 @@ namespace PhysicSystem
 
 		physx::PxPhysics* physics = PhysicSystem::PhysicManager::Get();
 
-		if (m_isStatic)
-		{
-			m_isDynamic = false;
-
-			m_pxActor = physics->createRigidStatic(transform);
-		}
-		else if (m_rigidbody)
+		if (m_rigidbody)
 		{
 			m_isDynamic = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
 			SetPxActor();
 		}
-		else if (!m_pxActor || m_isDynamic)
+		else
 		{
 			m_isDynamic = false;
+			m_isStatic = true;
 
-			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
+			m_pxActor = physics->createRigidStatic(transform);
 			SetPxActor();
 		}
 
@@ -169,7 +164,6 @@ namespace PhysicSystem
 		{
 			collider->SetPxShape();
 		}
-
 
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
 	}

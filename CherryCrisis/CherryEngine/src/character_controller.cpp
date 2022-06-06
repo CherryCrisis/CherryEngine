@@ -194,7 +194,7 @@ void CharacterController::FixedUpdate()
 
 void CharacterController::AlignToGravity()
 {
-	m_alignement.m_lerpPercent += 0.005f;
+	m_alignement.m_lerpPercent += 0.01f;
 	
 	if (m_alignement.m_lerpPercent >= 1.0f)
 	{

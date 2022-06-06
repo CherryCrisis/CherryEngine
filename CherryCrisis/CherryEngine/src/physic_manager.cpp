@@ -57,12 +57,14 @@ namespace PhysicSystem
 			return;
 		}
 
+#ifdef _DEBUG
 		if (!m_pvd)
 		{
 			m_pvd = PxCreatePvd(*m_foundation);
 			PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 			m_pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 		}
+#endif
 
 		PxTolerancesScale toleranceScale;
 		toleranceScale.length = 100;        // typical length of an object
