@@ -44,7 +44,7 @@ public:
 	std::unordered_map<std::string, std::shared_ptr<AMetadata>>& GetMetapack() { return m_metadatas.m_metadatas; }
 
 	//Verif is the texture when is reloaded the surface is compatible with skyRenderer
-	void OnReloadTexture(std::shared_ptr<Texture> texture);
+	void OnReloadTexture(Texture* texture);
 	void OnSetTexture(std::shared_ptr<Texture> texture);
 	void SetTexture(std::shared_ptr<Texture> texture);
 

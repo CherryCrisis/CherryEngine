@@ -21,7 +21,7 @@ private:
 public:
 	struct GPUPrefilterMapSphereMap : GPUPrefilterMap
 	{
-		Event<std::shared_ptr<Texture>>* m_OnReloaded = nullptr;
+		Event<Texture*>* m_OnReloaded = nullptr;
 		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
 
 		const unsigned int	m_maxMipLevels = 5;
@@ -35,7 +35,7 @@ public:
 
 		GPUPrefilterMapSphereMap(Texture* texture);
 		virtual ~GPUPrefilterMapSphereMap();
-		void OnReload(std::shared_ptr<Texture> texture);
+		void OnReload(Texture* texture);
 	};
 
 	PrefilterMapRenderPass(const char* name);

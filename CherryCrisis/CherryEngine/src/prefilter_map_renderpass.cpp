@@ -198,7 +198,7 @@ PrefilterMapRenderPass::GPUPrefilterMapSphereMap::~GPUPrefilterMapSphereMap()
 	Destroy();
 }
 
-void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::OnReload(std::shared_ptr<Texture> texture)
+void PrefilterMapRenderPass::GPUPrefilterMapSphereMap::OnReload(Texture* texture)
 {
-	Regenerate(texture.get());
+	Regenerate(texture);
 }

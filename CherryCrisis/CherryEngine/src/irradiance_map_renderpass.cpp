@@ -175,7 +175,7 @@ IrradianceMapRenderPass::GPUIrradianceMapSphereMap::~GPUIrradianceMapSphereMap()
 	Destroy();
 }
 
-void IrradianceMapRenderPass::GPUIrradianceMapSphereMap::OnReload(std::shared_ptr<Texture> texture)
+void IrradianceMapRenderPass::GPUIrradianceMapSphereMap::OnReload(Texture* texture)
 {
-	Regenerate(texture.get());
+	Regenerate(texture);
 }

@@ -38,6 +38,8 @@ protected:
 public:
 	PBRRenderPass(const char* name);
 
+	void OnPreDrawBind() override;
+
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)
 	{

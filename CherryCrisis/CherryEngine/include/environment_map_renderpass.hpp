@@ -21,7 +21,7 @@ private:
 public:
 	struct GPUEnvironmentMap: GPUTextureSpheremap
 	{
-		Event<std::shared_ptr<Texture>>* m_OnTextureReloaded = nullptr;
+		Event<Texture*>* m_OnTextureReloaded = nullptr;
 		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
 
 		const int envMapSize = 1024;
@@ -34,7 +34,7 @@ public:
 
 		GPUEnvironmentMap(Texture* texture);
 		virtual ~GPUEnvironmentMap();
-		void OnReload(std::shared_ptr<Texture> texture);
+		void OnReload(Texture* texture);
 	};
 
 	EnvironmentMapRenderPass(const char* name);

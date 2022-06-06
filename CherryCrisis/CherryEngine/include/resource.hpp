@@ -62,8 +62,8 @@ protected:
 
 public:
 	Event<std::shared_ptr<T>> m_OnLoaded {};
-	Event<std::shared_ptr<T>> m_OnPreReloaded {};
-	Event<std::shared_ptr<T>> m_OnReloaded {};
+	Event<T*> m_OnPreReloaded {};
+	Event<T*> m_OnReloaded {};
 	Event<> m_OnDeleted {};
 
 	Resource(const std::filesystem::path& filepath)
@@ -92,16 +92,15 @@ public:
 	}
 
 	template<typename... Args>
-	static void ReloadResource(std::shared_ptr<T> resource, Args... args)
+	static void ReloadResource(T* resource, Args... args)
 	{
-		std::shared_ptr<T> resourceCopyPtr = resource;
-		resource->m_OnPreReloaded.Invoke(std::move(resourceCopyPtr));
+		resource->m_OnPreReloaded.Invoke(std::forward<T*>(resource));
 
 		resource->SetResourceState(EResourceState::LOADING);
 		resource->Reload(args...);
 		resource->SetResourceState(EResourceState::LOADED);
 
-		resource->m_OnReloaded.Invoke(std::move(resource));
+		resource->m_OnReloaded.Invoke(std::forward<T*>(resource));
 	}
 };
 

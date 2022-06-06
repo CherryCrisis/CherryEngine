@@ -62,7 +62,7 @@ public:
 	virtual std::string GetMaterialPath();
 
 	virtual void OnMaterialLoaded(std::shared_ptr<Material> newMat);
-	virtual void OnMaterialReloaded(std::shared_ptr<Material> newMat);
+	virtual void OnMaterialReloaded(Material* newMat);
 	virtual void SetMaterial(std::shared_ptr<Material> newMat);
 	virtual void RemoveMaterial();
 

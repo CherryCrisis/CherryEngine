@@ -3,7 +3,10 @@
 template<class T>
 std::shared_ptr<T>& ResourceManager::CreateResource(const char* filepath)
 {
-	std::shared_ptr<T> resource = std::make_shared<T>(filepath);
+	std::filesystem::path normalPath = std::filesystem::path(filepath).lexically_normal();
+	std::string normalPathStr = normalPath.string();
+
+	std::shared_ptr<T> resource = std::make_shared<T>(normalPathStr.c_str());
 
 	auto resourceContainerIt = m_resources.find(typeid(T));
 
@@ -32,7 +35,10 @@ std::shared_ptr<T>& ResourceManager::AddResourceRef(const char* filepath, bool v
 		auto resourceContainerIt = m_resources.find(typeid(T));
 		if (resourceContainerIt != m_resources.end())
 		{
-			std::shared_ptr<T>* findedResource = resourceContainerIt->second->GetResource<T>(filepath);
+			std::filesystem::path normalPath = std::filesystem::path(filepath).lexically_normal();
+			std::string normalPathStr = normalPath.string();
+
+			std::shared_ptr<T>* findedResource = resourceContainerIt->second->GetResource<T>(normalPathStr.c_str());
 			if (findedResource != nullptr)
 				return *findedResource;
 		}

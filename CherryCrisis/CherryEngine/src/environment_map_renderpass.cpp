@@ -59,7 +59,7 @@ void EnvironmentMapRenderPass::SetupEnvironmentMap()
 	{
 		if (!spheremap->GetData())
 		{
-			Resource<Texture>::ReloadResource(m_skyRenderer->m_texture);
+			Resource<Texture>::ReloadResource(m_skyRenderer->m_texture.get());
 
 			if (!spheremap->GetData())
 				return;
@@ -199,7 +199,7 @@ EnvironmentMapRenderPass::GPUEnvironmentMap::~GPUEnvironmentMap()
 	Destroy();
 }
 
-void EnvironmentMapRenderPass::GPUEnvironmentMap::OnReload(std::shared_ptr<Texture> texture)
+void EnvironmentMapRenderPass::GPUEnvironmentMap::OnReload(Texture* texture)
 {
-	Regenerate(texture.get());
+	Regenerate(texture);
 }

@@ -37,8 +37,8 @@ public:
 	void Init();
 	void ReloadContextes();
 
-	void OnPreReload(std::shared_ptr<CsAssembly> assembly);
-	void OnReload(std::shared_ptr<CsAssembly> assembly);
+	void OnPreReload(CsAssembly* assembly);
+	void OnReload(CsAssembly* assembly);
 	
 	void InitializeHotReload(const char* compilerPath, const char* solutionPath);
 

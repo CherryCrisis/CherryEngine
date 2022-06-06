@@ -86,15 +86,15 @@ void CsScriptingSystem::InitializeAssembly(std::shared_ptr<CsAssembly> assembly,
 
 void CsScriptingSystem::ReloadContextes()
 {
-	Resource<CsAssembly>::ReloadResource(m_scriptAssembly);
+	Resource<CsAssembly>::ReloadResource(m_scriptAssembly.get());
 }
 
-void CsScriptingSystem::OnPreReload(std::shared_ptr<CsAssembly> assembly)
+void CsScriptingSystem::OnPreReload(CsAssembly* assembly)
 {
 	SceneManager::GetInstance()->FlipScene();
 }
 
-void CsScriptingSystem::OnReload(std::shared_ptr<CsAssembly> assembly)
+void CsScriptingSystem::OnReload(CsAssembly* assembly)
 {
 	SceneManager::GetInstance()->ResetScene();
 }

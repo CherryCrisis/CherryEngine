@@ -259,7 +259,7 @@ void TextureSettings::Render()
                 m_texture->SetMinFilter(textureFilterByID.at(m_currentMinFilterId));
                 m_texture->SetMagFilter(textureFilterByID.at(m_currentMagFilterId));
 
-                Resource<Texture>::ReloadResource(m_texture, m_isFlipped);
+                Resource<Texture>::ReloadResource(m_texture.get(), m_isFlipped);
                 m_hasSettingsChanged = false;
 
                 //Reaply texture surface during reload because it can be changed if the texture doesn't support cubemap settings
@@ -444,7 +444,7 @@ void MaterialSettings::Render()
     if (m_hasSettingsChanged)
     {
         //true for save only
-        Resource<Material>::ReloadResource(m_material, true);
+        Resource<Material>::ReloadResource(m_material.get(), true);
         GenerateTextureList();
         m_hasSettingsChanged = false;
     }

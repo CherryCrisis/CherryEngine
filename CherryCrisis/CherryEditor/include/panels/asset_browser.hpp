@@ -130,7 +130,7 @@ namespace CCScripting
 
 		void Reload() override
 		{
-			Resource<ResourceT>::ReloadResource(m_resource);
+			Resource<ResourceT>::ReloadResource(m_resource.get());
 		}
 
 		void Rename(const char* newFilepath) override

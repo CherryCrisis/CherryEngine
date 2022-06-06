@@ -190,7 +190,7 @@ void Model::Reload()
 
             if (mesh)
             { 
-                Resource<Mesh>::ReloadResource(mesh, modelUtils.m_vertices, modelUtils.m_indices, modelUtils.modelHeader.m_meshHeader.m_aabb);
+                Resource<Mesh>::ReloadResource(mesh.get(), modelUtils.m_vertices, modelUtils.m_indices, modelUtils.modelHeader.m_meshHeader.m_aabb);
             }
             else
             {
@@ -204,7 +204,7 @@ void Model::Reload()
             {
                 if (materialsReloaded.find(material) == materialsReloaded.end())
                 {
-                    Resource<Material>::ReloadResource(material);
+                    Resource<Material>::ReloadResource(material.get());
                     materialsReloaded.insert(material);
                 }
             }

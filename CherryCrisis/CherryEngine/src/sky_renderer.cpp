@@ -57,9 +57,9 @@ std::string SkyRenderer::GetTexturePath()
 }
 
 
-void SkyRenderer::OnReloadTexture(std::shared_ptr<Texture> texture)
+void SkyRenderer::OnReloadTexture(Texture* texture)
 {
-	assert(m_texture == texture);
+	assert(m_texture.get() == texture);
 
 	ETextureSurface textureSurface = texture->GetSurface();
 
@@ -70,7 +70,7 @@ void SkyRenderer::OnReloadTexture(std::shared_ptr<Texture> texture)
 	}
 	else if (textureSurface != m_currentTextureSurface)
 	{
-		SetTexture(texture);
+		SetTexture(m_texture);
 	}
 }
 

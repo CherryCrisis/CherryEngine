@@ -80,9 +80,9 @@ TextureGenerator::GPUTextureBasic::~GPUTextureBasic()
 	Destroy();
 }
 
-void TextureGenerator::GPUTextureBasic::OnReload(std::shared_ptr<Texture> texture)
+void TextureGenerator::GPUTextureBasic::OnReload(Texture* texture)
 {
-	Regenerate(texture.get());
+	Regenerate(texture);
 }
 
 bool TextureGenerator::Generate(Texture* toGenerate)
