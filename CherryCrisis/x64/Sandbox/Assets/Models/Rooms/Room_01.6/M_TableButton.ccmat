@@ -1,0 +1,15 @@
+settings:
+  ambient: 1.000000/1.000000/1.000000
+  diffuse: 0.800000/0.800000/0.800000
+  specular: 0.500000/0.500000/0.500000
+  emissive: 0.000000/0.000000/0.000000
+  shininess: 225
+  hasNormal: true
+  specularFactor: 1
+  metallicFactor: 0
+  roughnessFactor: 1
+  ao: 1
+  clearCoatFactor: 0
+  clearCoatRoughnessFactor: 0
+  pipeline: 0
+  texturesCount: 0

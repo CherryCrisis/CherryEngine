@@ -207,7 +207,7 @@ void SceneDisplayer::Render()
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
             {
                 const char* data = (const char*)payload->Data;
-                std::string extension = String::ExtractValue(data, '.');
+                std::string extension = String::ExtractLastValue(data, '.');
 
                 if (sceneExtensions.compare('.' + extension) == 0)
                 {
