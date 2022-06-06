@@ -9,9 +9,12 @@ namespace CCScripting
 		: base(cPtr, cMemoryOwn) { }
 
 		Transform transform;
+		Transform cubeOffset;
+
+		PickableCube pickedCube;
 
 		float speedSensivity = 80.0f;
-		float interactRange  = 25f;
+		float interactRange = 25f;
 
 		public void Awake() => transform = GetBehaviour<Transform>();
 
@@ -21,16 +24,17 @@ namespace CCScripting
 
 			UpdateCameraRotation();
 
-			if (InputManager.GetKeyDown(Keycode.E)) TryInteract(); 
+			if (InputManager.GetKeyDown(Keycode.E)) TryInteract();
+			if (InputManager.GetKeyDown(Keycode.LEFT_CLICK)) TryAction();
 		}
-		
+
 		// fuck interfaces
-		void TryInteract()  
+		void TryInteract()
 		{
 			// this needs to be improved, vectors seems to be wrongs
 			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
-			
-			if (hit != null && hit.actor != null &&hit.actor.m_owner != null)
+
+			if (hit != null && hit.actor != null && hit.actor.m_owner != null)
 			{
 				Debug.Log(ELogType.INFO, "Hitted " + hit.actor.m_owner.name);
 
@@ -42,7 +46,16 @@ namespace CCScripting
 				if (wardrobe != null)
 					wardrobe.SetInMovement();
 
+				PickableCube cube = hit.actor.m_owner.GetBehaviour<PickableCube>();
+				if (cube != null)
+					PickupCube(cube);
 			}
+		}
+
+		void TryAction() 
+		{
+			if (pickedCube != null)
+				ThrowCube();
 		}
 
 		void UpdateCameraRotation() 
@@ -55,6 +68,18 @@ namespace CCScripting
 			angleX = Math.Min(Math.Max(angleX, -Math.PI * 0.4f), Math.PI * 0.4f);
 
 			transform.eulerAngles = new Vector3((float)angleX, transform.eulerAngles.y, transform.eulerAngles.z);
+		}
+
+		void PickupCube(PickableCube cube) 
+		{
+			cube.Pick(cubeOffset);
+			pickedCube = cube;
+		}
+
+		void ThrowCube()
+		{
+			pickedCube.Throw();
+			pickedCube = null;
 		}
 	}
 }

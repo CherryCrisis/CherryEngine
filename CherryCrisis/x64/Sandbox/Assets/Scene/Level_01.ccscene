@@ -115,6 +115,10 @@ cells:
         name: Player
       3487056894:
         name: Camera
+      804455480:
+        name: Cube
+      1608613446:
+        name: Empty
   1074273426:
     name: Room_01
     settings:
@@ -410,7 +414,7 @@ components:
     m_owner: 3171590953
     transform: 2282580429
     matFile: Assets\Models\Rooms\Room_00\M_Floor.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Floor_Plane_M_Floor
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Floor_Plane_M_Floor
   3474939922:
     type: Transform
     IsActive: true
@@ -425,7 +429,7 @@ components:
     m_owner: 2138283578
     transform: 3915643615
     matFile: Assets\Models\Rooms\Room_00\M_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Wall_01_Wall_01_M_Wall
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Wall_01_Wall_01_M_Wall
   3915643615:
     type: Transform
     IsActive: true
@@ -456,7 +460,7 @@ components:
     m_owner: 3486005396
     transform: 1340747195
     matFile: Assets\Models\Rooms\Room_00\M_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Plane.002_Wall_04_M_Wall
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Plane.002_Wall_04_M_Wall
   2321400396:
     type: Transform
     IsActive: true
@@ -479,7 +483,7 @@ components:
     m_owner: 92746319
     transform: 810258414
     matFile: Assets\Models\Rooms\Room_00\M_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Plane.003_Wall_03_M_Wall
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Plane.003_Wall_03_M_Wall
   3524453708:
     type: Transform
     IsActive: true
@@ -502,7 +506,7 @@ components:
     m_owner: 1703103933
     transform: 3418770021
     matFile: Assets\Models\Rooms\Room_00\M_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Plane.004_Wall_02_M_Wall
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Plane.004_Wall_02_M_Wall
   3836083966:
     type: Transform
     IsActive: true
@@ -525,7 +529,7 @@ components:
     m_owner: 956521534
     transform: 687473583
     matFile: Assets\Models\Rooms\Room_00\M_Bedspring.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube_Cube.002_M_Bedspring
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube_Cube.002_M_Bedspring
   1350841367:
     type: Transform
     IsActive: true
@@ -548,7 +552,7 @@ components:
     m_owner: 2384749230
     transform: 2734367071
     matFile: Assets\Models\Rooms\Room_00\M_Bedspring.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cylinder_Cylinder_M_Bedspring
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cylinder_Cylinder_M_Bedspring
   2026468716:
     type: Transform
     IsActive: true
@@ -571,7 +575,7 @@ components:
     m_owner: 1304665076
     transform: 3941192068
     matFile: Assets\Models\Rooms\Room_00\M_Mattress.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.001_Cube.004_M_Mattress
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.001_Cube.004_M_Mattress
   1401819499:
     type: Transform
     IsActive: true
@@ -594,7 +598,7 @@ components:
     m_owner: 3288189997
     transform: 2614465370
     matFile: Assets\Models\Rooms\Room_00\M_Pillow.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.002_Cube.005_M_Pillow
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.002_Cube.005_M_Pillow
   636523493:
     type: Transform
     IsActive: true
@@ -617,7 +621,7 @@ components:
     m_owner: 3884505771
     transform: 535462164
     matFile: Assets\Models\Rooms\Room_00\M_Pillow.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.003_Cube.006_M_Pillow
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.003_Cube.006_M_Pillow
   563273628:
     type: Transform
     IsActive: true
@@ -632,7 +636,7 @@ components:
     m_owner: 411321674
     transform: 1759644645
     matFile: Assets\Models\Rooms\Room_00\M_Conforter.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.004_Cube.007_M_Conforter
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.004_Cube.007_M_Conforter
   1759644645:
     type: Transform
     IsActive: true
@@ -655,7 +659,7 @@ components:
     m_owner: 903919950
     transform: 3749915133
     matFile: Assets\Models\Rooms\Room_00\M_Table.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.006_Cube.009_M_Table
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.006_Cube.009_M_Table
   3749915133:
     type: Transform
     IsActive: true
@@ -686,7 +690,7 @@ components:
     m_owner: 1034909171
     transform: 3918745097
     matFile: Assets\Models\Rooms\Room_00\M_WindowSill.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.007_Cube.010_M_WindowSill
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.007_Cube.010_M_WindowSill
   4072828858:
     type: Transform
     IsActive: true
@@ -701,7 +705,7 @@ components:
     m_owner: 765237155
     transform: 3578846277
     matFile: Assets\Models\Rooms\Room_00\M_WindowSill.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.008_Cube.011_M_WindowSill
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.008_Cube.011_M_WindowSill
   3578846277:
     type: Transform
     IsActive: true
@@ -732,7 +736,7 @@ components:
     m_owner: 1610261352
     transform: 70254395
     matFile: Assets\Models\Rooms\Room_00\M_WindowSill.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.009_Cube.012_M_WindowSill
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.009_Cube.012_M_WindowSill
   427832271:
     type: Transform
     IsActive: true
@@ -755,7 +759,7 @@ components:
     m_owner: 4128150012
     transform: 1537286619
     matFile: Assets\Models\Rooms\Room_00\M_WindowSill.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.010_Cube.013_M_WindowSill
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.010_Cube.013_M_WindowSill
   3299891542:
     type: Transform
     IsActive: true
@@ -770,7 +774,7 @@ components:
     m_owner: 154865881
     transform: 2476538112
     matFile: Assets\Models\Rooms\Room_00\M_WindowSill.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.011_Cube.014_M_WindowSill
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.011_Cube.014_M_WindowSill
   2476538112:
     type: Transform
     IsActive: true
@@ -801,7 +805,7 @@ components:
     m_owner: 2863444527
     transform: 3796912580
     matFile: Assets\Models\Rooms\Room_00\M_Wardrobe.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.012_Cube.015_M_Wardrobe
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.012_Cube.015_M_Wardrobe
   502194303:
     type: BoxCollider
     IsActive: true
@@ -843,7 +847,7 @@ components:
     m_owner: 2438419510
     transform: 1850031986
     matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoor.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.013_Cube.016_M_WardrobeDoor
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.013_Cube.016_M_WardrobeDoor
   2485435997:
     type: Transform
     IsActive: true
@@ -866,7 +870,7 @@ components:
     m_owner: 319666849
     transform: 887524092
     matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoor.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cube.014_Cube.017_M_WardrobeDoor
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cube.014_Cube.017_M_WardrobeDoor
   810793444:
     type: Transform
     IsActive: true
@@ -889,7 +893,7 @@ components:
     m_owner: 2242154140
     transform: 3241481140
     matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoorknob.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cylinder.001_Cylinder.001_M_WardrobeDoorknob
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cylinder.001_Cylinder.001_M_WardrobeDoorknob
   957512017:
     type: Transform
     IsActive: true
@@ -904,7 +908,7 @@ components:
     m_owner: 3915333292
     transform: 3216699307
     matFile: Assets\Models\Rooms\Room_00\M_WardrobeDoorknob.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Cylinder.002_Cylinder.002_M_WardrobeDoorknob
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Cylinder.002_Cylinder.002_M_WardrobeDoorknob
   3216699307:
     type: Transform
     IsActive: true
@@ -935,7 +939,7 @@ components:
     m_owner: 1727173103
     transform: 3077006634
     matFile: Assets\Models\Rooms\Room_00\M_Celling.ccmat
-    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj/Floor.001_Plane.001_M_Celling
+    meshFile: Assets\Models\Rooms\Room_00\Room_00.obj\Floor.001_Plane.001_M_Celling
   1134409113:
     type: Transform
     IsActive: true
@@ -974,6 +978,10 @@ components:
     rotation: 0.000000/-1.570451/0.000000
     scale: 0.425000/0.550000/1.000000
     parent: 3796912580
+  811923594:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 303660238
   1978638872:
     type: CapsuleCollider
     IsActive: true
@@ -993,7 +1001,7 @@ components:
     Kinematic: false
     Use gravity: true
     Position constraints: 0/0/0
-    Rotation constraints: 1/0/1
+    Rotation constraints: 1/1/1
     Max velocity: 100
     Max angular velocity: 100
     Max depenetration velocity: 100
@@ -1015,10 +1023,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: ~
-  811923594:
-    type: PortalTeleporterComponent
-    IsActive: true
-    m_owner: 303660238
   2627217119:
     type: AudioListener
     IsActive: true
@@ -1027,7 +1031,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3487056894
-    aspect: 1.09494948
+    aspect: 1.31343281
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
@@ -1045,9 +1049,49 @@ components:
     IsActive: true
     m_owner: 3487056894
     scriptName: CameraController
+    cubeOffset: 2668840479
     transform: 1220475265
-    speedSensivity: 0.5
     interactRange: 25
+    pickedCube: ~
+    speedSensivity: 0.5
+  2388973877:
+    type: ScriptedBehaviour
+    IsActive: true
+    m_owner: 804455480
+    scriptName: PickableCube
+    transform: ~
+  2567659172:
+    type: ShapeRenderer
+    IsActive: true
+    m_owner: 804455480
+    transform: 1126502589
+    matFile: ""
+    Type: 1
+  3758365727:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 804455480
+    Enabled: true
+    Is Trigger: false
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/1.000000
+    Block Raycast: true
+  1126502589:
+    type: Transform
+    IsActive: true
+    m_owner: 804455480
+    position: 0.000000/0.387095/-1.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 0.145384/0.145384/0.145384
+    parent: ~
+  2668840479:
+    type: Transform
+    IsActive: true
+    m_owner: 1608613446
+    position: 0.000000/-0.148310/-0.544185
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1846076243
   1598035751:
     type: Transform
     IsActive: true
@@ -1254,7 +1298,7 @@ components:
     m_owner: 2201445478
     transform: 3293270115
     matFile: Assets\Models\Rooms\Room_01\M_Portal_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.005_Cube.018_M_Portal_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.005_Cube.018_M_Portal_01
   1063090423:
     type: Transform
     IsActive: true
@@ -1277,7 +1321,7 @@ components:
     m_owner: 3894031589
     transform: 1876627975
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.015_Cube.019_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.015_Cube.019_M_Arche
   3709756149:
     type: Transform
     IsActive: true
@@ -1292,7 +1336,7 @@ components:
     m_owner: 3250799976
     transform: 3709756149
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.015_Cube.019_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.015_Cube.019_M_Arche_2
   1386819627:
     type: Transform
     IsActive: true
@@ -1324,7 +1368,7 @@ components:
     m_owner: 1002540219
     transform: 3365073589
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane_Plane.002_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane_Plane.002_M_Floor_01
   1142561052:
     type: Transform
     IsActive: true
@@ -1339,7 +1383,7 @@ components:
     m_owner: 450605608
     transform: 3743398172
     matFile: Assets\Models\Rooms\Room_01\M_WallCorner.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.001_Plane.003_M_WallCorner
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.001_Plane.003_M_WallCorner
   3743398172:
     type: Transform
     IsActive: true
@@ -1362,7 +1406,7 @@ components:
     m_owner: 3692547040
     transform: 726854220
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.001_Plane.003_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.001_Plane.003_M_Arche_2
   276025046:
     type: Transform
     IsActive: true
@@ -1377,7 +1421,7 @@ components:
     m_owner: 3400289110
     transform: 1868377953
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.005_Plane.004_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.005_Plane.004_M_Cellings_01
   1868377953:
     type: Transform
     IsActive: true
@@ -1400,7 +1444,7 @@ components:
     m_owner: 2542217126
     transform: 2638609124
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.006_Plane.005_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.006_Plane.005_M_R0_Wall
   2638609124:
     type: Transform
     IsActive: true
@@ -1423,7 +1467,7 @@ components:
     m_owner: 2313793229
     transform: 54680313
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.016_Cube.001_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.016_Cube.001_M_Arche
   54680313:
     type: Transform
     IsActive: true
@@ -1446,7 +1490,7 @@ components:
     m_owner: 4198253608
     transform: 2861055125
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.016_Cube.001_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.016_Cube.001_M_Arche_2
   2080803090:
     type: Transform
     IsActive: true
@@ -1469,7 +1513,7 @@ components:
     m_owner: 2426962883
     transform: 1829506341
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.007_Plane.006_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.007_Plane.006_M_R0_Wall
   2134553152:
     type: Transform
     IsActive: true
@@ -1492,7 +1536,7 @@ components:
     m_owner: 1912651272
     transform: 1600005035
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.017_Cube.003_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.017_Cube.003_M_Arche
   3839330515:
     type: Transform
     IsActive: true
@@ -1507,7 +1551,7 @@ components:
     m_owner: 747068186
     transform: 3839330515
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.017_Cube.003_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.017_Cube.003_M_Arche_2
   3505017568:
     type: Transform
     IsActive: true
@@ -1530,7 +1574,7 @@ components:
     m_owner: 2365808454
     transform: 3703016389
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.008_Plane.007_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.008_Plane.007_M_R0_Wall
   19381315:
     type: Transform
     IsActive: true
@@ -1553,7 +1597,7 @@ components:
     m_owner: 405136513
     transform: 1288366729
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.018_Cube.008_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.018_Cube.008_M_Arche
   408801918:
     type: Transform
     IsActive: true
@@ -1568,7 +1612,7 @@ components:
     m_owner: 2925606952
     transform: 408801918
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.018_Cube.008_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.018_Cube.008_M_Arche_2
   426532636:
     type: Transform
     IsActive: true
@@ -1591,7 +1635,7 @@ components:
     m_owner: 3308047163
     transform: 4240850132
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.009_Plane.008_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.009_Plane.008_M_R0_Wall
   1484766656:
     type: Transform
     IsActive: true
@@ -1614,7 +1658,7 @@ components:
     m_owner: 2523637672
     transform: 4200909626
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.019_Cube.020_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.019_Cube.020_M_Arche
   3276658117:
     type: Transform
     IsActive: true
@@ -1629,7 +1673,7 @@ components:
     m_owner: 1739145654
     transform: 3276658117
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.019_Cube.020_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.019_Cube.020_M_Arche_2
   2056058095:
     type: Transform
     IsActive: true
@@ -1644,7 +1688,7 @@ components:
     m_owner: 1673875485
     transform: 3750605638
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.010_Plane.009_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.010_Plane.009_M_Floor_01
   3750605638:
     type: Transform
     IsActive: true
@@ -1684,7 +1728,7 @@ components:
     m_owner: 299428545
     transform: 2619709836
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.011_Plane.011_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.011_Plane.011_M_R0_Wall
   384611008:
     type: Transform
     IsActive: true
@@ -1707,7 +1751,7 @@ components:
     m_owner: 4216129459
     transform: 107349814
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.013_Plane.013_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.013_Plane.013_M_R0_Wall
   4235448510:
     type: Transform
     IsActive: true
@@ -1730,7 +1774,7 @@ components:
     m_owner: 1979727674
     transform: 786824725
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.014_Plane.014_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.014_Plane.014_M_R0_Wall
   806293560:
     type: Transform
     IsActive: true
@@ -1753,7 +1797,7 @@ components:
     m_owner: 1335940890
     transform: 3156455541
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.015_Plane.015_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.015_Plane.015_M_Floor_01
   1060014964:
     type: BoxCollider
     IsActive: true
@@ -1785,7 +1829,7 @@ components:
     m_owner: 3301706604
     transform: 2720026944
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.016_Plane.016_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.016_Plane.016_M_R0_Wall
   1933179354:
     type: Transform
     IsActive: true
@@ -1808,7 +1852,7 @@ components:
     m_owner: 68143552
     transform: 2607408068
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.017_Plane.017_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.017_Plane.017_M_R0_Wall
   799322857:
     type: Transform
     IsActive: true
@@ -1831,7 +1875,7 @@ components:
     m_owner: 3799655985
     transform: 3897863687
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.018_Plane.018_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.018_Plane.018_M_R0_Wall
   329705960:
     type: Transform
     IsActive: true
@@ -1854,7 +1898,7 @@ components:
     m_owner: 3920664532
     transform: 3577773068
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.019_Plane.019_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.019_Plane.019_M_R0_Wall
   3865999419:
     type: Transform
     IsActive: true
@@ -1869,7 +1913,7 @@ components:
     m_owner: 2859501123
     transform: 4215887803
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.020_Cube.021_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.020_Cube.021_M_Arche
   4215887803:
     type: Transform
     IsActive: true
@@ -1884,7 +1928,7 @@ components:
     m_owner: 422282244
     transform: 209727450
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.020_Cube.021_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.020_Cube.021_M_Arche_2
   209727450:
     type: Transform
     IsActive: true
@@ -1915,14 +1959,14 @@ components:
     m_owner: 897227593
     transform: 2043526058
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.021_Cube.022_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.021_Cube.022_M_Arche
   2881987303:
     type: ModelRenderer
     IsActive: true
     m_owner: 4105831759
     transform: 1713955803
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.021_Cube.022_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.021_Cube.022_M_Arche_2
   1713955803:
     type: Transform
     IsActive: true
@@ -1953,7 +1997,7 @@ components:
     m_owner: 1312418244
     transform: 2100418380
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.020_Plane.020_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.020_Plane.020_M_Cellings_01
   4050002917:
     type: Transform
     IsActive: true
@@ -1976,7 +2020,7 @@ components:
     m_owner: 1580082169
     transform: 3021251905
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.021_Plane.021_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.021_Plane.021_M_Cellings_01
   1468237547:
     type: Transform
     IsActive: true
@@ -1999,7 +2043,7 @@ components:
     m_owner: 1756329484
     transform: 730584812
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.022_Cube.023_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.022_Cube.023_M_Arche
   3017602716:
     type: Transform
     IsActive: true
@@ -2014,7 +2058,7 @@ components:
     m_owner: 2095007266
     transform: 3017602716
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.022_Cube.023_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.022_Cube.023_M_Arche_2
   3449800636:
     type: Transform
     IsActive: true
@@ -2037,14 +2081,14 @@ components:
     m_owner: 3962266623
     transform: 23770325
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.023_Plane.023_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.023_Plane.023_M_Arche
   2078800351:
     type: ModelRenderer
     IsActive: true
     m_owner: 3750867464
     transform: 1394248989
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.023_Plane.023_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.023_Plane.023_M_Arche_2
   1394248989:
     type: Transform
     IsActive: true
@@ -2067,7 +2111,7 @@ components:
     m_owner: 4009690657
     transform: 1396830049
     matFile: Assets\Models\Rooms\Room_01\M_Portal_02.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.023_Cube_M_Portal_02
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.023_Cube_M_Portal_02
   1396830049:
     type: Transform
     IsActive: true
@@ -2082,7 +2126,7 @@ components:
     m_owner: 3516511608
     transform: 1799921976
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.023_Cube_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.023_Cube_M_Arche_2
   1799921976:
     type: Transform
     IsActive: true
@@ -2113,7 +2157,7 @@ components:
     m_owner: 3122680247
     transform: 1329671749
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.025_Plane.025_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.025_Plane.025_M_Floor_01
   2794356243:
     type: BoxCollider
     IsActive: true
@@ -2154,7 +2198,7 @@ components:
     m_owner: 479699224
     transform: 520932104
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.026_Plane.026_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.026_Plane.026_M_Floor_01
   1274068930:
     type: Transform
     IsActive: true
@@ -2169,7 +2213,7 @@ components:
     m_owner: 3657469756
     transform: 1448854555
     matFile: Assets\Models\Rooms\Room_01\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.027_Plane.027_M_Arche
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.027_Plane.027_M_Arche
   1448854555:
     type: Transform
     IsActive: true
@@ -2192,7 +2236,7 @@ components:
     m_owner: 1012321591
     transform: 3227443600
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.027_Plane.027_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.027_Plane.027_M_Arche_2
   3580069846:
     type: Transform
     IsActive: true
@@ -2215,7 +2259,7 @@ components:
     m_owner: 3900238326
     transform: 32332596
     matFile: Assets\Models\Rooms\Room_01\M_Portal_02.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.024_Cube.024_M_Portal_02
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.024_Cube.024_M_Portal_02
   4058762444:
     type: Transform
     IsActive: true
@@ -2230,7 +2274,7 @@ components:
     m_owner: 1760218445
     transform: 4058762444
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.024_Cube.024_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.024_Cube.024_M_Arche_2
   2484545720:
     type: Transform
     IsActive: true
@@ -2245,7 +2289,7 @@ components:
     m_owner: 3085992717
     transform: 1186887280
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.028_Plane.028_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.028_Plane.028_M_R0_Wall
   1186887280:
     type: Transform
     IsActive: true
@@ -2276,7 +2320,7 @@ components:
     m_owner: 384154859
     transform: 1161875780
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.029_Plane.029_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.029_Plane.029_M_R0_Wall
   3551104535:
     type: Transform
     IsActive: true
@@ -2291,7 +2335,7 @@ components:
     m_owner: 2689511592
     transform: 1920756743
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.030_Plane.030_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.030_Plane.030_M_R0_Wall
   1920756743:
     type: Transform
     IsActive: true
@@ -2322,7 +2366,7 @@ components:
     m_owner: 1798504820
     transform: 1818545103
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.031_Plane.031_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.031_Plane.031_M_Cellings_01
   1434365350:
     type: Transform
     IsActive: true
@@ -2337,7 +2381,7 @@ components:
     m_owner: 1638662588
     transform: 1170776517
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.032_Plane.032_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.032_Plane.032_M_R0_Wall
   1170776517:
     type: Transform
     IsActive: true
@@ -2368,7 +2412,7 @@ components:
     m_owner: 2516434389
     transform: 1982850229
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.024_Plane.033_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.024_Plane.033_M_Cellings_01
   353910757:
     type: Transform
     IsActive: true
@@ -2391,7 +2435,7 @@ components:
     m_owner: 4236557561
     transform: 2433568881
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.033_Plane.034_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.033_Plane.034_M_R0_Wall
   3811453817:
     type: Transform
     IsActive: true
@@ -2414,7 +2458,7 @@ components:
     m_owner: 3105924463
     transform: 1316293093
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.034_Plane.035_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.034_Plane.035_M_R0_Wall
   371022263:
     type: Transform
     IsActive: true
@@ -2437,7 +2481,7 @@ components:
     m_owner: 4228591705
     transform: 3960558536
     matFile: Assets\Models\Rooms\Room_01\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.012_Plane.036_M_R0_Wall
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.012_Plane.036_M_R0_Wall
   3074157259:
     type: Transform
     IsActive: true
@@ -2469,7 +2513,7 @@ components:
     m_owner: 2896154800
     transform: 913997195
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.035_Plane.037_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.035_Plane.037_M_Floor_01
   3470513586:
     type: Transform
     IsActive: true
@@ -2501,7 +2545,7 @@ components:
     m_owner: 423836308
     transform: 1633567324
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.036_Plane.038_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.036_Plane.038_M_Floor_01
   1380104518:
     type: Transform
     IsActive: true
@@ -2524,7 +2568,7 @@ components:
     m_owner: 3568029762
     transform: 2019731836
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.037_Plane.039_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.037_Plane.039_M_Floor_01
   695927959:
     type: BoxCollider
     IsActive: true
@@ -2556,7 +2600,7 @@ components:
     m_owner: 248505111
     transform: 2146628851
     matFile: Assets\Models\Rooms\Room_01\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.038_Plane.040_M_Floor_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.038_Plane.040_M_Floor_01
   3118320429:
     type: BoxCollider
     IsActive: true
@@ -2580,7 +2624,7 @@ components:
     m_owner: 2679080219
     transform: 3208867425
     matFile: Assets\Models\Rooms\Room_01\M_TableButton.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.025_Cube.025_M_TableButton
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.025_Cube.025_M_TableButton
   3208867425:
     type: Transform
     IsActive: true
@@ -2603,7 +2647,7 @@ components:
     m_owner: 733451090
     transform: 1164395420
     matFile: Assets\Models\Rooms\Room_01\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Cube.025_Cube.025_M_Arche_2
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Cube.025_Cube.025_M_Arche_2
   1146783910:
     type: Transform
     IsActive: true
@@ -2626,7 +2670,7 @@ components:
     m_owner: 2332587791
     transform: 979891339
     matFile: Assets\Models\Rooms\Room_01\M_Button.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Sphere_Sphere_M_Button
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Sphere_Sphere_M_Button
   1536545877:
     type: Transform
     IsActive: true
@@ -2649,7 +2693,7 @@ components:
     m_owner: 546373379
     transform: 1620404067
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.039_Plane.041_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.039_Plane.041_M_Cellings_01
   2853111993:
     type: Transform
     IsActive: true
@@ -2664,7 +2708,7 @@ components:
     m_owner: 1562755311
     transform: 2859247569
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.040_Plane.042_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.040_Plane.042_M_Cellings_01
   2859247569:
     type: Transform
     IsActive: true
@@ -2695,4 +2739,4 @@ components:
     m_owner: 3584830702
     transform: 2928518775
     matFile: Assets\Models\Rooms\Room_01\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj/Plane.041_Plane.043_M_Cellings_01
+    meshFile: Assets\Models\Rooms\Room_01\Room_01.obj\Plane.041_Plane.043_M_Cellings_01
