@@ -9,6 +9,7 @@ class Transform;
 namespace PhysicSystem
 {
 	class PhysicActor;
+	enum class EForceMode;
 }
 
 namespace physx
@@ -89,7 +90,10 @@ public:
 	float	GetMaxAngVel();
 	void	SetMaxDepVel(const float& velocity);
 	float	GetMaxDepVel();
-	
+
+	void AddForce(const CCMaths::Vector3& force, PhysicSystem::EForceMode mode);
+	void AddTorque(const CCMaths::Vector3& force, PhysicSystem::EForceMode mode);
+
 	boolProperty	isEnabled	{ this, &Rigidbody::SetEnabled,   &Rigidbody::GetEnabled   };
 	boolProperty	isKinematic	{ this, &Rigidbody::SetKinematic, &Rigidbody::GetKinematic };
 	boolProperty	useGravity	{ this, &Rigidbody::SetGravity,   &Rigidbody::GetGravity   };

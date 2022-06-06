@@ -5,6 +5,8 @@
 
 %include collider.i
 
+%nodefaultctor CapsuleCollider;
+
 class CapsuleCollider : public Collider
 {
 public:

@@ -248,6 +248,12 @@ public class Vector3 : global::System.IDisposable {
     CherryEnginePINVOKE.Vector3_ClampLength__SWIG_0(swigCPtr, minLength, maxLength);
   }
 
+  public static Vector3 Lerp(Vector3 lhs, Vector3 rhs, float lambda) {
+    Vector3 ret = new Vector3(CherryEnginePINVOKE.Vector3_Lerp(Vector3.getCPtr(lhs), Vector3.getCPtr(rhs), lambda), true);
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+    return ret;
+  }
+
   public Vector3 Normalize() {
     Vector3 ret = new Vector3(CherryEnginePINVOKE.Vector3_Normalize__SWIG_0(swigCPtr), false);
     return ret;

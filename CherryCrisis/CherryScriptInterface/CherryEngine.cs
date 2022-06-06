@@ -39,6 +39,13 @@ public class CherryEngine {
     } 
   }
 
+  public static float epsilon {
+    get {
+      float ret = CherryEnginePINVOKE.epsilon_get();
+      return ret;
+    } 
+  }
+
   public static float ToRadians(float angle) {
     float ret = CherryEnginePINVOKE.ToRadians(angle);
     return ret;
@@ -76,6 +83,11 @@ public class CherryEngine {
 
   public static float Sqrt(float value) {
     float ret = CherryEnginePINVOKE.Sqrt(value);
+    return ret;
+  }
+
+  public static float InverseSqrt(float value) {
+    float ret = CherryEnginePINVOKE.InverseSqrt(value);
     return ret;
   }
 

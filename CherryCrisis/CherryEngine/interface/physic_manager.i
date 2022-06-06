@@ -3,8 +3,6 @@
 %{
 	#include "singleton.hpp"
 	#include "physic_manager.hpp"
-
-	using namespace PhysicSystem;
 %}
 
 %include maths.i
@@ -15,34 +13,37 @@
 
 %include std_string.i
 
-struct RaycastHit
+namespace PhysicSystem
 {
-	CCMaths::Vector3	position;
-	CCMaths::Vector3	normal;
-	float				distance;
+	struct RaycastHit
+	{
+		CCMaths::Vector3	position;
+		CCMaths::Vector3	normal;
+		float				distance;
 
-	PhysicActor* actor = nullptr;
-};
+		PhysicActor* actor = nullptr;
+	};
 
-enum class EForceMode
-{
-	eFORCE,
-	eIMPULSE,
-	eVELOCITY_CHANGE,
-	eACCELERATION
-};
+	enum class EForceMode
+	{
+		eFORCE,
+		eIMPULSE,
+		eVELOCITY_CHANGE,
+		eACCELERATION
+	};
 
-class PhysicManager
-{
-public:
-	static PhysicManager* GetInstance();
+	class PhysicManager
+	{
+	public:
+		static PhysicManager* GetInstance();
 
-	PhysicActor* FindActor(Entity& owningEntity);
+		PhysicActor* FindActor(Entity& owningEntity);
 
-	%proxycode %{
-	public PhysicActor GetActor(Entity owningEntity) => FindActor(owningEntity);
-	%}
+		%proxycode %{
+		public PhysicActor GetActor(Entity owningEntity) => FindActor(owningEntity);
+		%}
 
-	static RaycastHit Raycast(Cell& cell, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
-	static void AddForce(Entity* entity, const CCMaths::Vector3& force, EForceMode mode);
-};
+		static RaycastHit Raycast(Cell& cell, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange);
+		static void AddForce(Entity* entity, const CCMaths::Vector3& force, PhysicSystem::EForceMode mode);
+	};
+}

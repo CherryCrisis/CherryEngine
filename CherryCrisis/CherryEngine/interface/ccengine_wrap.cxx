@@ -391,8 +391,6 @@ namespace Swig {
 	#include "singleton.hpp"
 	#include "physic_manager.hpp"
 
-	using namespace PhysicSystem;
-
 
 	#include "behaviour.hpp"
 	#include "object.hpp"
@@ -464,6 +462,26 @@ namespace Swig {
 
 
 	#include "portal_component.hpp"
+
+
+	#include "rigidbody.hpp"
+
+	using namespace PhysicSystem;
+
+
+	#include "box_collider.hpp"
+	#include "collider.hpp"
+
+
+	#include "collider.hpp"
+
+
+	#include "sphere_collider.hpp"
+	#include "collider.hpp"
+
+
+	#include "capsule_collider.hpp"
+	#include "collider.hpp"
 
 SWIGINTERN std::vector< CameraComponent * > *new_std_vector_Sl_CameraComponent_Sm__Sg___SWIG_2(int capacity){
         std::vector< CameraComponent * >* pv = 0;
@@ -1393,6 +1411,470 @@ SWIGINTERN bool std_vector_Sl_PortalComponent_Sm__Sg__Remove(std::vector< Portal
         }
         return false;
       }
+SWIGINTERN std::vector< Rigidbody * > *new_std_vector_Sl_Rigidbody_Sm__Sg___SWIG_2(int capacity){
+        std::vector< Rigidbody * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< Rigidbody * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN Rigidbody *std_vector_Sl_Rigidbody_Sm__Sg__getitemcopy(std::vector< Rigidbody * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< Rigidbody * >::value_type const &std_vector_Sl_Rigidbody_Sm__Sg__getitem(std::vector< Rigidbody * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__setitem(std::vector< Rigidbody * > *self,int index,Rigidbody *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__AddRange(std::vector< Rigidbody * > *self,std::vector< Rigidbody * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< Rigidbody * > *std_vector_Sl_Rigidbody_Sm__Sg__GetRange(std::vector< Rigidbody * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< Rigidbody * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__Insert(std::vector< Rigidbody * > *self,int index,Rigidbody *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__InsertRange(std::vector< Rigidbody * > *self,int index,std::vector< Rigidbody * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__RemoveAt(std::vector< Rigidbody * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__RemoveRange(std::vector< Rigidbody * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< Rigidbody * > *std_vector_Sl_Rigidbody_Sm__Sg__Repeat(Rigidbody *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< Rigidbody * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__Reverse__SWIG_0(std::vector< Rigidbody * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__Reverse__SWIG_1(std::vector< Rigidbody * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_Rigidbody_Sm__Sg__SetRange(std::vector< Rigidbody * > *self,int index,std::vector< Rigidbody * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_Rigidbody_Sm__Sg__Contains(std::vector< Rigidbody * > *self,Rigidbody *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_Rigidbody_Sm__Sg__IndexOf(std::vector< Rigidbody * > *self,Rigidbody *const &value){
+        int index = -1;
+        std::vector< Rigidbody * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_Rigidbody_Sm__Sg__LastIndexOf(std::vector< Rigidbody * > *self,Rigidbody *const &value){
+        int index = -1;
+        std::vector< Rigidbody * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_Rigidbody_Sm__Sg__Remove(std::vector< Rigidbody * > *self,Rigidbody *const &value){
+        std::vector< Rigidbody * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< BoxCollider * > *new_std_vector_Sl_BoxCollider_Sm__Sg___SWIG_2(int capacity){
+        std::vector< BoxCollider * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< BoxCollider * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN BoxCollider *std_vector_Sl_BoxCollider_Sm__Sg__getitemcopy(std::vector< BoxCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< BoxCollider * >::value_type const &std_vector_Sl_BoxCollider_Sm__Sg__getitem(std::vector< BoxCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__setitem(std::vector< BoxCollider * > *self,int index,BoxCollider *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__AddRange(std::vector< BoxCollider * > *self,std::vector< BoxCollider * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< BoxCollider * > *std_vector_Sl_BoxCollider_Sm__Sg__GetRange(std::vector< BoxCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< BoxCollider * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__Insert(std::vector< BoxCollider * > *self,int index,BoxCollider *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__InsertRange(std::vector< BoxCollider * > *self,int index,std::vector< BoxCollider * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__RemoveAt(std::vector< BoxCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__RemoveRange(std::vector< BoxCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< BoxCollider * > *std_vector_Sl_BoxCollider_Sm__Sg__Repeat(BoxCollider *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< BoxCollider * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__Reverse__SWIG_0(std::vector< BoxCollider * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__Reverse__SWIG_1(std::vector< BoxCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_BoxCollider_Sm__Sg__SetRange(std::vector< BoxCollider * > *self,int index,std::vector< BoxCollider * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_BoxCollider_Sm__Sg__Contains(std::vector< BoxCollider * > *self,BoxCollider *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_BoxCollider_Sm__Sg__IndexOf(std::vector< BoxCollider * > *self,BoxCollider *const &value){
+        int index = -1;
+        std::vector< BoxCollider * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_BoxCollider_Sm__Sg__LastIndexOf(std::vector< BoxCollider * > *self,BoxCollider *const &value){
+        int index = -1;
+        std::vector< BoxCollider * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_BoxCollider_Sm__Sg__Remove(std::vector< BoxCollider * > *self,BoxCollider *const &value){
+        std::vector< BoxCollider * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< SphereCollider * > *new_std_vector_Sl_SphereCollider_Sm__Sg___SWIG_2(int capacity){
+        std::vector< SphereCollider * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< SphereCollider * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN SphereCollider *std_vector_Sl_SphereCollider_Sm__Sg__getitemcopy(std::vector< SphereCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< SphereCollider * >::value_type const &std_vector_Sl_SphereCollider_Sm__Sg__getitem(std::vector< SphereCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__setitem(std::vector< SphereCollider * > *self,int index,SphereCollider *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__AddRange(std::vector< SphereCollider * > *self,std::vector< SphereCollider * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< SphereCollider * > *std_vector_Sl_SphereCollider_Sm__Sg__GetRange(std::vector< SphereCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< SphereCollider * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__Insert(std::vector< SphereCollider * > *self,int index,SphereCollider *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__InsertRange(std::vector< SphereCollider * > *self,int index,std::vector< SphereCollider * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__RemoveAt(std::vector< SphereCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__RemoveRange(std::vector< SphereCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< SphereCollider * > *std_vector_Sl_SphereCollider_Sm__Sg__Repeat(SphereCollider *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< SphereCollider * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__Reverse__SWIG_0(std::vector< SphereCollider * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__Reverse__SWIG_1(std::vector< SphereCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_SphereCollider_Sm__Sg__SetRange(std::vector< SphereCollider * > *self,int index,std::vector< SphereCollider * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_SphereCollider_Sm__Sg__Contains(std::vector< SphereCollider * > *self,SphereCollider *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_SphereCollider_Sm__Sg__IndexOf(std::vector< SphereCollider * > *self,SphereCollider *const &value){
+        int index = -1;
+        std::vector< SphereCollider * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_SphereCollider_Sm__Sg__LastIndexOf(std::vector< SphereCollider * > *self,SphereCollider *const &value){
+        int index = -1;
+        std::vector< SphereCollider * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_SphereCollider_Sm__Sg__Remove(std::vector< SphereCollider * > *self,SphereCollider *const &value){
+        std::vector< SphereCollider * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< CapsuleCollider * > *new_std_vector_Sl_CapsuleCollider_Sm__Sg___SWIG_2(int capacity){
+        std::vector< CapsuleCollider * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< CapsuleCollider * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN CapsuleCollider *std_vector_Sl_CapsuleCollider_Sm__Sg__getitemcopy(std::vector< CapsuleCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< CapsuleCollider * >::value_type const &std_vector_Sl_CapsuleCollider_Sm__Sg__getitem(std::vector< CapsuleCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__setitem(std::vector< CapsuleCollider * > *self,int index,CapsuleCollider *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__AddRange(std::vector< CapsuleCollider * > *self,std::vector< CapsuleCollider * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< CapsuleCollider * > *std_vector_Sl_CapsuleCollider_Sm__Sg__GetRange(std::vector< CapsuleCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< CapsuleCollider * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__Insert(std::vector< CapsuleCollider * > *self,int index,CapsuleCollider *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__InsertRange(std::vector< CapsuleCollider * > *self,int index,std::vector< CapsuleCollider * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__RemoveAt(std::vector< CapsuleCollider * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__RemoveRange(std::vector< CapsuleCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< CapsuleCollider * > *std_vector_Sl_CapsuleCollider_Sm__Sg__Repeat(CapsuleCollider *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< CapsuleCollider * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__Reverse__SWIG_0(std::vector< CapsuleCollider * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__Reverse__SWIG_1(std::vector< CapsuleCollider * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_CapsuleCollider_Sm__Sg__SetRange(std::vector< CapsuleCollider * > *self,int index,std::vector< CapsuleCollider * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_CapsuleCollider_Sm__Sg__Contains(std::vector< CapsuleCollider * > *self,CapsuleCollider *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_CapsuleCollider_Sm__Sg__IndexOf(std::vector< CapsuleCollider * > *self,CapsuleCollider *const &value){
+        int index = -1;
+        std::vector< CapsuleCollider * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_CapsuleCollider_Sm__Sg__LastIndexOf(std::vector< CapsuleCollider * > *self,CapsuleCollider *const &value){
+        int index = -1;
+        std::vector< CapsuleCollider * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_CapsuleCollider_Sm__Sg__Remove(std::vector< CapsuleCollider * > *self,CapsuleCollider *const &value){
+        std::vector< CapsuleCollider * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
 SWIGINTERN std::vector< Entity * > *new_std_vector_Sl_Entity_Sm__Sg___SWIG_2(int capacity){
         std::vector< Entity * >* pv = 0;
         if (capacity >= 0) {
@@ -1511,8 +1993,6 @@ SWIGINTERN bool std_vector_Sl_Entity_Sm__Sg__Remove(std::vector< Entity * > *sel
       }
 
 	#include "physic_actor.hpp"
-
-	using namespace PhysicSystem;
 
 
 	#include "keycode.hpp"
@@ -2405,6 +2885,30 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Vector3_ClampLength__SWIG_0(void * j
   arg2 = (float)jarg2; 
   arg3 = (float)jarg3; 
   (arg1)->ClampLength(arg2,arg3);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Vector3_Lerp(void * jarg1, void * jarg2, float jarg3) {
+  void * jresult ;
+  CCMaths::Vector3 *arg1 = 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  float arg3 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (CCMaths::Vector3 *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  arg3 = (float)jarg3; 
+  result = CCMaths::Vector3::Lerp((CCMaths::Vector3 const &)*arg1,(CCMaths::Vector3 const &)*arg2,arg3);
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
 }
 
 
@@ -4992,6 +5496,16 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_RAD2DEG_get() {
 }
 
 
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_epsilon_get() {
+  float jresult ;
+  float result;
+  
+  result = (float)CCMaths::epsilon;
+  jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_ToRadians(float jarg1) {
   float jresult ;
   float arg1 ;
@@ -5083,6 +5597,18 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Sqrt(float jarg1) {
   
   arg1 = (float)jarg1; 
   result = (float)CCMaths::Sqrt(arg1);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_InverseSqrt(float jarg1) {
+  float jresult ;
+  float arg1 ;
+  float result;
+  
+  arg1 = (float)jarg1; 
+  result = (float)CCMaths::InverseSqrt(arg1);
   jresult = result; 
   return jresult;
 }
@@ -7109,6 +7635,444 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponent(void * jarg1)
   PortalComponent *arg1 = (PortalComponent *) 0 ;
   
   arg1 = (PortalComponent *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetEnabled(void * jarg1, unsigned int jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetEnabled((bool const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetEnabled(void * jarg1) {
+  unsigned int jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  bool result;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (bool)(arg1)->GetEnabled();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetKinematic(void * jarg1, unsigned int jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetKinematic((bool const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetKinematic(void * jarg1) {
+  unsigned int jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  bool result;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (bool)(arg1)->GetKinematic();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetGravity(void * jarg1, unsigned int jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetGravity((bool const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetGravity(void * jarg1) {
+  unsigned int jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  bool result;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (bool)(arg1)->GetGravity();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetDensity(void * jarg1, float jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetDensity((float const &)*arg2);
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetDensity(void * jarg1) {
+  float jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float result;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (float)(arg1)->GetDensity();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetMaxVel(void * jarg1, float jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetMaxVel((float const &)*arg2);
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetMaxVel(void * jarg1) {
+  float jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float result;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (float)(arg1)->GetMaxVel();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetMaxAngVel(void * jarg1, float jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetMaxAngVel((float const &)*arg2);
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetMaxAngVel(void * jarg1) {
+  float jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float result;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (float)(arg1)->GetMaxAngVel();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetMaxDepVel(void * jarg1, float jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetMaxDepVel((float const &)*arg2);
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetMaxDepVel(void * jarg1) {
+  float jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  float result;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (float)(arg1)->GetMaxDepVel();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_AddForce(void * jarg1, void * jarg2, int jarg3) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  PhysicSystem::EForceMode arg3 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  arg3 = (PhysicSystem::EForceMode)jarg3; 
+  (arg1)->AddForce((CCMaths::Vector3 const &)*arg2,arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_AddTorque(void * jarg1, void * jarg2, int jarg3) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  PhysicSystem::EForceMode arg3 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  arg3 = (PhysicSystem::EForceMode)jarg3; 
+  (arg1)->AddTorque((CCMaths::Vector3 const &)*arg2,arg3);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Rigidbody(void * jarg1) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Collider_m_physicActor_set(void * jarg1, void * jarg2) {
+  Collider *arg1 = (Collider *) 0 ;
+  PhysicSystem::PhysicActor *arg2 = (PhysicSystem::PhysicActor *) 0 ;
+  
+  arg1 = (Collider *)jarg1; 
+  arg2 = (PhysicSystem::PhysicActor *)jarg2; 
+  if (arg1) (arg1)->m_physicActor = arg2;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Collider_m_physicActor_get(void * jarg1) {
+  void * jresult ;
+  Collider *arg1 = (Collider *) 0 ;
+  PhysicSystem::PhysicActor *result = 0 ;
+  
+  arg1 = (Collider *)jarg1; 
+  result = (PhysicSystem::PhysicActor *) ((arg1)->m_physicActor);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Collider_SetEnabled(void * jarg1, unsigned int jarg2) {
+  Collider *arg1 = (Collider *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (Collider *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetEnabled((bool const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Collider_GetEnabled(void * jarg1) {
+  unsigned int jresult ;
+  Collider *arg1 = (Collider *) 0 ;
+  bool result;
+  
+  arg1 = (Collider *)jarg1; 
+  result = (bool)(arg1)->GetEnabled();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Collider_SetTrigger(void * jarg1, unsigned int jarg2) {
+  Collider *arg1 = (Collider *) 0 ;
+  bool *arg2 = 0 ;
+  bool temp2 ;
+  
+  arg1 = (Collider *)jarg1; 
+  temp2 = jarg2 ? true : false; 
+  arg2 = &temp2; 
+  (arg1)->SetTrigger((bool const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Collider_GetTrigger(void * jarg1) {
+  unsigned int jresult ;
+  Collider *arg1 = (Collider *) 0 ;
+  bool result;
+  
+  arg1 = (Collider *)jarg1; 
+  result = (bool)(arg1)->GetTrigger();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Collider(void * jarg1) {
+  Collider *arg1 = (Collider *) 0 ;
+  
+  arg1 = (Collider *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_BoxCollider() {
+  void * jresult ;
+  BoxCollider *result = 0 ;
+  
+  result = (BoxCollider *)new BoxCollider();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxCollider_SetScale(void * jarg1, void * jarg2) {
+  BoxCollider *arg1 = (BoxCollider *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (BoxCollider *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetScale((CCMaths::Vector3 const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_BoxCollider_GetScale(void * jarg1) {
+  void * jresult ;
+  BoxCollider *arg1 = (BoxCollider *) 0 ;
+  CCMaths::Vector3 result;
+  
+  arg1 = (BoxCollider *)jarg1; 
+  result = (arg1)->GetScale();
+  jresult = new CCMaths::Vector3((const CCMaths::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_BoxCollider(void * jarg1) {
+  BoxCollider *arg1 = (BoxCollider *) 0 ;
+  
+  arg1 = (BoxCollider *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_SphereCollider() {
+  void * jresult ;
+  SphereCollider *result = 0 ;
+  
+  result = (SphereCollider *)new SphereCollider();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereCollider_SetScale(void * jarg1, float jarg2) {
+  SphereCollider *arg1 = (SphereCollider *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (SphereCollider *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetScale((float const &)*arg2);
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_SphereCollider_GetScale(void * jarg1) {
+  float jresult ;
+  SphereCollider *arg1 = (SphereCollider *) 0 ;
+  float result;
+  
+  arg1 = (SphereCollider *)jarg1; 
+  result = (float)(arg1)->GetScale();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_SphereCollider(void * jarg1) {
+  SphereCollider *arg1 = (SphereCollider *) 0 ;
+  
+  arg1 = (SphereCollider *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CapsuleCollider() {
+  void * jresult ;
+  CapsuleCollider *result = 0 ;
+  
+  result = (CapsuleCollider *)new CapsuleCollider();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleCollider_SetScale(void * jarg1, float jarg2) {
+  CapsuleCollider *arg1 = (CapsuleCollider *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (CapsuleCollider *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetScale((float const &)*arg2);
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_CapsuleCollider_GetScale(void * jarg1) {
+  float jresult ;
+  CapsuleCollider *arg1 = (CapsuleCollider *) 0 ;
+  float result;
+  
+  arg1 = (CapsuleCollider *)jarg1; 
+  result = (float)(arg1)->GetScale();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleCollider_SetRadius(void * jarg1, float jarg2) {
+  CapsuleCollider *arg1 = (CapsuleCollider *) 0 ;
+  float *arg2 = 0 ;
+  float temp2 ;
+  
+  arg1 = (CapsuleCollider *)jarg1; 
+  temp2 = (float)jarg2; 
+  arg2 = &temp2; 
+  (arg1)->SetRadius((float const &)*arg2);
+}
+
+
+SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_CapsuleCollider_GetRadius(void * jarg1) {
+  float jresult ;
+  CapsuleCollider *arg1 = (CapsuleCollider *) 0 ;
+  float result;
+  
+  arg1 = (CapsuleCollider *)jarg1; 
+  result = (float)(arg1)->GetRadius();
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_CapsuleCollider(void * jarg1) {
+  CapsuleCollider *arg1 = (CapsuleCollider *) 0 ;
+  
+  arg1 = (CapsuleCollider *)jarg1; 
   delete arg1;
 }
 
@@ -10385,6 +11349,1642 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponentVector(void * 
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Clear(void * jarg1) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Add(void * jarg1, void * jarg2) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  Rigidbody **arg2 = 0 ;
+  Rigidbody *temp2 = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  temp2 = (Rigidbody *)jarg2;
+  arg2 = (Rigidbody **)&temp2; 
+  (arg1)->push_back((Rigidbody *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  std::vector< Rigidbody * >::size_type result;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  result = ((std::vector< Rigidbody * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  std::vector< Rigidbody * >::size_type result;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  result = ((std::vector< Rigidbody * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  std::vector< Rigidbody * >::size_type arg2 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (std::vector< Rigidbody * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_RigidbodyVector__SWIG_0() {
+  void * jresult ;
+  std::vector< Rigidbody * > *result = 0 ;
+  
+  result = (std::vector< Rigidbody * > *)new std::vector< Rigidbody * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_RigidbodyVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< Rigidbody * > *arg1 = 0 ;
+  std::vector< Rigidbody * > *result = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Rigidbody * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< Rigidbody * > *)new std::vector< Rigidbody * >((std::vector< Rigidbody * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_RigidbodyVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< Rigidbody * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< Rigidbody * > *)new_std_vector_Sl_Rigidbody_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  Rigidbody *result = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (Rigidbody *)std_vector_Sl_Rigidbody_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  std::vector< Rigidbody * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< Rigidbody * >::value_type *) &std_vector_Sl_Rigidbody_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  Rigidbody **arg3 = 0 ;
+  Rigidbody *temp3 = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (Rigidbody *)jarg3;
+  arg3 = (Rigidbody **)&temp3; 
+  try {
+    std_vector_Sl_Rigidbody_Sm__Sg__setitem(arg1,arg2,(Rigidbody *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  std::vector< Rigidbody * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (std::vector< Rigidbody * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Rigidbody * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_Rigidbody_Sm__Sg__AddRange(arg1,(std::vector< Rigidbody * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< Rigidbody * > *result = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< Rigidbody * > *)std_vector_Sl_Rigidbody_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  Rigidbody **arg3 = 0 ;
+  Rigidbody *temp3 = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (Rigidbody *)jarg3;
+  arg3 = (Rigidbody **)&temp3; 
+  try {
+    std_vector_Sl_Rigidbody_Sm__Sg__Insert(arg1,arg2,(Rigidbody *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  std::vector< Rigidbody * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< Rigidbody * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Rigidbody * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_Rigidbody_Sm__Sg__InsertRange(arg1,arg2,(std::vector< Rigidbody * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_Rigidbody_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_Rigidbody_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  Rigidbody **arg1 = 0 ;
+  int arg2 ;
+  Rigidbody *temp1 = 0 ;
+  std::vector< Rigidbody * > *result = 0 ;
+  
+  temp1 = (Rigidbody *)jarg1;
+  arg1 = (Rigidbody **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< Rigidbody * > *)std_vector_Sl_Rigidbody_Sm__Sg__Repeat((Rigidbody *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  std_vector_Sl_Rigidbody_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_Rigidbody_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  int arg2 ;
+  std::vector< Rigidbody * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< Rigidbody * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< Rigidbody * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_Rigidbody_Sm__Sg__SetRange(arg1,arg2,(std::vector< Rigidbody * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  Rigidbody **arg2 = 0 ;
+  Rigidbody *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  temp2 = (Rigidbody *)jarg2;
+  arg2 = (Rigidbody **)&temp2; 
+  result = (bool)std_vector_Sl_Rigidbody_Sm__Sg__Contains(arg1,(Rigidbody *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  Rigidbody **arg2 = 0 ;
+  Rigidbody *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  temp2 = (Rigidbody *)jarg2;
+  arg2 = (Rigidbody **)&temp2; 
+  result = (int)std_vector_Sl_Rigidbody_Sm__Sg__IndexOf(arg1,(Rigidbody *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  Rigidbody **arg2 = 0 ;
+  Rigidbody *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  temp2 = (Rigidbody *)jarg2;
+  arg2 = (Rigidbody **)&temp2; 
+  result = (int)std_vector_Sl_Rigidbody_Sm__Sg__LastIndexOf(arg1,(Rigidbody *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  Rigidbody **arg2 = 0 ;
+  Rigidbody *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  temp2 = (Rigidbody *)jarg2;
+  arg2 = (Rigidbody **)&temp2; 
+  result = (bool)std_vector_Sl_Rigidbody_Sm__Sg__Remove(arg1,(Rigidbody *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_RigidbodyVector(void * jarg1) {
+  std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
+  
+  arg1 = (std::vector< Rigidbody * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Clear(void * jarg1) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Add(void * jarg1, void * jarg2) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  BoxCollider **arg2 = 0 ;
+  BoxCollider *temp2 = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  temp2 = (BoxCollider *)jarg2;
+  arg2 = (BoxCollider **)&temp2; 
+  (arg1)->push_back((BoxCollider *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  std::vector< BoxCollider * >::size_type result;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  result = ((std::vector< BoxCollider * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  std::vector< BoxCollider * >::size_type result;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  result = ((std::vector< BoxCollider * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  std::vector< BoxCollider * >::size_type arg2 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (std::vector< BoxCollider * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_BoxColliderVector__SWIG_0() {
+  void * jresult ;
+  std::vector< BoxCollider * > *result = 0 ;
+  
+  result = (std::vector< BoxCollider * > *)new std::vector< BoxCollider * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_BoxColliderVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< BoxCollider * > *arg1 = 0 ;
+  std::vector< BoxCollider * > *result = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< BoxCollider * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< BoxCollider * > *)new std::vector< BoxCollider * >((std::vector< BoxCollider * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_BoxColliderVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< BoxCollider * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< BoxCollider * > *)new_std_vector_Sl_BoxCollider_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  BoxCollider *result = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (BoxCollider *)std_vector_Sl_BoxCollider_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< BoxCollider * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< BoxCollider * >::value_type *) &std_vector_Sl_BoxCollider_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  BoxCollider **arg3 = 0 ;
+  BoxCollider *temp3 = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (BoxCollider *)jarg3;
+  arg3 = (BoxCollider **)&temp3; 
+  try {
+    std_vector_Sl_BoxCollider_Sm__Sg__setitem(arg1,arg2,(BoxCollider *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  std::vector< BoxCollider * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (std::vector< BoxCollider * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< BoxCollider * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_BoxCollider_Sm__Sg__AddRange(arg1,(std::vector< BoxCollider * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< BoxCollider * > *result = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< BoxCollider * > *)std_vector_Sl_BoxCollider_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  BoxCollider **arg3 = 0 ;
+  BoxCollider *temp3 = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (BoxCollider *)jarg3;
+  arg3 = (BoxCollider **)&temp3; 
+  try {
+    std_vector_Sl_BoxCollider_Sm__Sg__Insert(arg1,arg2,(BoxCollider *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< BoxCollider * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< BoxCollider * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< BoxCollider * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_BoxCollider_Sm__Sg__InsertRange(arg1,arg2,(std::vector< BoxCollider * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_BoxCollider_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_BoxCollider_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  BoxCollider **arg1 = 0 ;
+  int arg2 ;
+  BoxCollider *temp1 = 0 ;
+  std::vector< BoxCollider * > *result = 0 ;
+  
+  temp1 = (BoxCollider *)jarg1;
+  arg1 = (BoxCollider **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< BoxCollider * > *)std_vector_Sl_BoxCollider_Sm__Sg__Repeat((BoxCollider *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  std_vector_Sl_BoxCollider_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_BoxCollider_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< BoxCollider * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< BoxCollider * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< BoxCollider * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_BoxCollider_Sm__Sg__SetRange(arg1,arg2,(std::vector< BoxCollider * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  BoxCollider **arg2 = 0 ;
+  BoxCollider *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  temp2 = (BoxCollider *)jarg2;
+  arg2 = (BoxCollider **)&temp2; 
+  result = (bool)std_vector_Sl_BoxCollider_Sm__Sg__Contains(arg1,(BoxCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  BoxCollider **arg2 = 0 ;
+  BoxCollider *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  temp2 = (BoxCollider *)jarg2;
+  arg2 = (BoxCollider **)&temp2; 
+  result = (int)std_vector_Sl_BoxCollider_Sm__Sg__IndexOf(arg1,(BoxCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  BoxCollider **arg2 = 0 ;
+  BoxCollider *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  temp2 = (BoxCollider *)jarg2;
+  arg2 = (BoxCollider **)&temp2; 
+  result = (int)std_vector_Sl_BoxCollider_Sm__Sg__LastIndexOf(arg1,(BoxCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_BoxColliderVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  BoxCollider **arg2 = 0 ;
+  BoxCollider *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  temp2 = (BoxCollider *)jarg2;
+  arg2 = (BoxCollider **)&temp2; 
+  result = (bool)std_vector_Sl_BoxCollider_Sm__Sg__Remove(arg1,(BoxCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_BoxColliderVector(void * jarg1) {
+  std::vector< BoxCollider * > *arg1 = (std::vector< BoxCollider * > *) 0 ;
+  
+  arg1 = (std::vector< BoxCollider * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Clear(void * jarg1) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Add(void * jarg1, void * jarg2) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  SphereCollider **arg2 = 0 ;
+  SphereCollider *temp2 = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  temp2 = (SphereCollider *)jarg2;
+  arg2 = (SphereCollider **)&temp2; 
+  (arg1)->push_back((SphereCollider *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  std::vector< SphereCollider * >::size_type result;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  result = ((std::vector< SphereCollider * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  std::vector< SphereCollider * >::size_type result;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  result = ((std::vector< SphereCollider * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  std::vector< SphereCollider * >::size_type arg2 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (std::vector< SphereCollider * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_SphereColliderVector__SWIG_0() {
+  void * jresult ;
+  std::vector< SphereCollider * > *result = 0 ;
+  
+  result = (std::vector< SphereCollider * > *)new std::vector< SphereCollider * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_SphereColliderVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< SphereCollider * > *arg1 = 0 ;
+  std::vector< SphereCollider * > *result = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< SphereCollider * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< SphereCollider * > *)new std::vector< SphereCollider * >((std::vector< SphereCollider * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_SphereColliderVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< SphereCollider * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< SphereCollider * > *)new_std_vector_Sl_SphereCollider_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  SphereCollider *result = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (SphereCollider *)std_vector_Sl_SphereCollider_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< SphereCollider * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< SphereCollider * >::value_type *) &std_vector_Sl_SphereCollider_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  SphereCollider **arg3 = 0 ;
+  SphereCollider *temp3 = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (SphereCollider *)jarg3;
+  arg3 = (SphereCollider **)&temp3; 
+  try {
+    std_vector_Sl_SphereCollider_Sm__Sg__setitem(arg1,arg2,(SphereCollider *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  std::vector< SphereCollider * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (std::vector< SphereCollider * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< SphereCollider * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_SphereCollider_Sm__Sg__AddRange(arg1,(std::vector< SphereCollider * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< SphereCollider * > *result = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< SphereCollider * > *)std_vector_Sl_SphereCollider_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  SphereCollider **arg3 = 0 ;
+  SphereCollider *temp3 = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (SphereCollider *)jarg3;
+  arg3 = (SphereCollider **)&temp3; 
+  try {
+    std_vector_Sl_SphereCollider_Sm__Sg__Insert(arg1,arg2,(SphereCollider *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< SphereCollider * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< SphereCollider * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< SphereCollider * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_SphereCollider_Sm__Sg__InsertRange(arg1,arg2,(std::vector< SphereCollider * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_SphereCollider_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_SphereCollider_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  SphereCollider **arg1 = 0 ;
+  int arg2 ;
+  SphereCollider *temp1 = 0 ;
+  std::vector< SphereCollider * > *result = 0 ;
+  
+  temp1 = (SphereCollider *)jarg1;
+  arg1 = (SphereCollider **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< SphereCollider * > *)std_vector_Sl_SphereCollider_Sm__Sg__Repeat((SphereCollider *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  std_vector_Sl_SphereCollider_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_SphereCollider_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< SphereCollider * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< SphereCollider * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< SphereCollider * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_SphereCollider_Sm__Sg__SetRange(arg1,arg2,(std::vector< SphereCollider * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  SphereCollider **arg2 = 0 ;
+  SphereCollider *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  temp2 = (SphereCollider *)jarg2;
+  arg2 = (SphereCollider **)&temp2; 
+  result = (bool)std_vector_Sl_SphereCollider_Sm__Sg__Contains(arg1,(SphereCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  SphereCollider **arg2 = 0 ;
+  SphereCollider *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  temp2 = (SphereCollider *)jarg2;
+  arg2 = (SphereCollider **)&temp2; 
+  result = (int)std_vector_Sl_SphereCollider_Sm__Sg__IndexOf(arg1,(SphereCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  SphereCollider **arg2 = 0 ;
+  SphereCollider *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  temp2 = (SphereCollider *)jarg2;
+  arg2 = (SphereCollider **)&temp2; 
+  result = (int)std_vector_Sl_SphereCollider_Sm__Sg__LastIndexOf(arg1,(SphereCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_SphereColliderVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  SphereCollider **arg2 = 0 ;
+  SphereCollider *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  temp2 = (SphereCollider *)jarg2;
+  arg2 = (SphereCollider **)&temp2; 
+  result = (bool)std_vector_Sl_SphereCollider_Sm__Sg__Remove(arg1,(SphereCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_SphereColliderVector(void * jarg1) {
+  std::vector< SphereCollider * > *arg1 = (std::vector< SphereCollider * > *) 0 ;
+  
+  arg1 = (std::vector< SphereCollider * > *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Clear(void * jarg1) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Add(void * jarg1, void * jarg2) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  CapsuleCollider **arg2 = 0 ;
+  CapsuleCollider *temp2 = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  temp2 = (CapsuleCollider *)jarg2;
+  arg2 = (CapsuleCollider **)&temp2; 
+  (arg1)->push_back((CapsuleCollider *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  std::vector< CapsuleCollider * >::size_type result;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  result = ((std::vector< CapsuleCollider * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  std::vector< CapsuleCollider * >::size_type result;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  result = ((std::vector< CapsuleCollider * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  std::vector< CapsuleCollider * >::size_type arg2 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (std::vector< CapsuleCollider * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CapsuleColliderVector__SWIG_0() {
+  void * jresult ;
+  std::vector< CapsuleCollider * > *result = 0 ;
+  
+  result = (std::vector< CapsuleCollider * > *)new std::vector< CapsuleCollider * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CapsuleColliderVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< CapsuleCollider * > *arg1 = 0 ;
+  std::vector< CapsuleCollider * > *result = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CapsuleCollider * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< CapsuleCollider * > *)new std::vector< CapsuleCollider * >((std::vector< CapsuleCollider * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_CapsuleColliderVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< CapsuleCollider * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< CapsuleCollider * > *)new_std_vector_Sl_CapsuleCollider_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  CapsuleCollider *result = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (CapsuleCollider *)std_vector_Sl_CapsuleCollider_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< CapsuleCollider * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< CapsuleCollider * >::value_type *) &std_vector_Sl_CapsuleCollider_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  CapsuleCollider **arg3 = 0 ;
+  CapsuleCollider *temp3 = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (CapsuleCollider *)jarg3;
+  arg3 = (CapsuleCollider **)&temp3; 
+  try {
+    std_vector_Sl_CapsuleCollider_Sm__Sg__setitem(arg1,arg2,(CapsuleCollider *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  std::vector< CapsuleCollider * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (std::vector< CapsuleCollider * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CapsuleCollider * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_CapsuleCollider_Sm__Sg__AddRange(arg1,(std::vector< CapsuleCollider * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< CapsuleCollider * > *result = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< CapsuleCollider * > *)std_vector_Sl_CapsuleCollider_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  CapsuleCollider **arg3 = 0 ;
+  CapsuleCollider *temp3 = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (CapsuleCollider *)jarg3;
+  arg3 = (CapsuleCollider **)&temp3; 
+  try {
+    std_vector_Sl_CapsuleCollider_Sm__Sg__Insert(arg1,arg2,(CapsuleCollider *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< CapsuleCollider * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< CapsuleCollider * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CapsuleCollider * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_CapsuleCollider_Sm__Sg__InsertRange(arg1,arg2,(std::vector< CapsuleCollider * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_CapsuleCollider_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_CapsuleCollider_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  CapsuleCollider **arg1 = 0 ;
+  int arg2 ;
+  CapsuleCollider *temp1 = 0 ;
+  std::vector< CapsuleCollider * > *result = 0 ;
+  
+  temp1 = (CapsuleCollider *)jarg1;
+  arg1 = (CapsuleCollider **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< CapsuleCollider * > *)std_vector_Sl_CapsuleCollider_Sm__Sg__Repeat((CapsuleCollider *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  std_vector_Sl_CapsuleCollider_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_CapsuleCollider_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  int arg2 ;
+  std::vector< CapsuleCollider * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< CapsuleCollider * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< CapsuleCollider * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_CapsuleCollider_Sm__Sg__SetRange(arg1,arg2,(std::vector< CapsuleCollider * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  CapsuleCollider **arg2 = 0 ;
+  CapsuleCollider *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  temp2 = (CapsuleCollider *)jarg2;
+  arg2 = (CapsuleCollider **)&temp2; 
+  result = (bool)std_vector_Sl_CapsuleCollider_Sm__Sg__Contains(arg1,(CapsuleCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  CapsuleCollider **arg2 = 0 ;
+  CapsuleCollider *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  temp2 = (CapsuleCollider *)jarg2;
+  arg2 = (CapsuleCollider **)&temp2; 
+  result = (int)std_vector_Sl_CapsuleCollider_Sm__Sg__IndexOf(arg1,(CapsuleCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  CapsuleCollider **arg2 = 0 ;
+  CapsuleCollider *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  temp2 = (CapsuleCollider *)jarg2;
+  arg2 = (CapsuleCollider **)&temp2; 
+  result = (int)std_vector_Sl_CapsuleCollider_Sm__Sg__LastIndexOf(arg1,(CapsuleCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_CapsuleColliderVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  CapsuleCollider **arg2 = 0 ;
+  CapsuleCollider *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  temp2 = (CapsuleCollider *)jarg2;
+  arg2 = (CapsuleCollider **)&temp2; 
+  result = (bool)std_vector_Sl_CapsuleCollider_Sm__Sg__Remove(arg1,(CapsuleCollider *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_CapsuleColliderVector(void * jarg1) {
+  std::vector< CapsuleCollider * > *arg1 = (std::vector< CapsuleCollider * > *) 0 ;
+  
+  arg1 = (std::vector< CapsuleCollider * > *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_set(void * jarg1, void * jarg2) {
   Entity *arg1 = (Entity *) 0 ;
   Cell *arg2 = (Cell *) 0 ;
@@ -10738,6 +13338,150 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfPortalComponent(voi
   arg1 = (Entity *)jarg1; 
   result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< PortalComponent >();
   jresult = new std::vector< PortalComponent * >((const std::vector< PortalComponent * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetRigidbody(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  Rigidbody *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (Rigidbody *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< Rigidbody >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddRigidbody(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  Rigidbody *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (Rigidbody *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< Rigidbody >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfRigidbody(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< Rigidbody * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< Rigidbody >();
+  jresult = new std::vector< Rigidbody * >((const std::vector< Rigidbody * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetBoxCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  BoxCollider *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (BoxCollider *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< BoxCollider >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddBoxCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  BoxCollider *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (BoxCollider *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< BoxCollider >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfBoxCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< BoxCollider * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< BoxCollider >();
+  jresult = new std::vector< BoxCollider * >((const std::vector< BoxCollider * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetSphereCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  SphereCollider *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (SphereCollider *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< SphereCollider >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddSphereCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  SphereCollider *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (SphereCollider *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< SphereCollider >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfSphereCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< SphereCollider * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< SphereCollider >();
+  jresult = new std::vector< SphereCollider * >((const std::vector< SphereCollider * > &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetCapsuleCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  CapsuleCollider *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (CapsuleCollider *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< CapsuleCollider >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddCapsuleCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  CapsuleCollider *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (CapsuleCollider *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< CapsuleCollider >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfCapsuleCollider(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< CapsuleCollider * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< CapsuleCollider >();
+  jresult = new std::vector< CapsuleCollider * >((const std::vector< CapsuleCollider * > &)result); 
   return jresult;
 }
 
@@ -11207,46 +13951,46 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Cell(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PhysicActor_AddForce(void * jarg1, void * jarg2, int jarg3) {
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   CCMaths::Vector3 *arg2 = 0 ;
-  EForceMode arg3 ;
+  PhysicSystem::EForceMode arg3 ;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2;
   if (!arg2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
     return ;
   } 
-  arg3 = (EForceMode)jarg3; 
+  arg3 = (PhysicSystem::EForceMode)jarg3; 
   (arg1)->AddForce((CCMaths::Vector3 const &)*arg2,arg3);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PhysicActor_AddTorque(void * jarg1, void * jarg2, int jarg3) {
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   CCMaths::Vector3 *arg2 = 0 ;
-  EForceMode arg3 ;
+  PhysicSystem::EForceMode arg3 ;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2;
   if (!arg2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
     return ;
   } 
-  arg3 = (EForceMode)jarg3; 
+  arg3 = (PhysicSystem::EForceMode)jarg3; 
   (arg1)->AddTorque((CCMaths::Vector3 const &)*arg2,arg3);
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicActor_Raycast(void * jarg1, void * jarg2, void * jarg3, float jarg4) {
   void * jresult ;
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   CCMaths::Vector3 *arg2 = 0 ;
   CCMaths::Vector3 *arg3 = 0 ;
   float arg4 ;
-  RaycastHit result;
+  PhysicSystem::RaycastHit result;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2;
   if (!arg2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
@@ -11259,17 +14003,17 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicActor_Raycast(void * jarg1, 
   } 
   arg4 = (float)jarg4; 
   result = (arg1)->Raycast((CCMaths::Vector3 const &)*arg2,(CCMaths::Vector3 const &)*arg3,arg4);
-  jresult = new RaycastHit((const RaycastHit &)result); 
+  jresult = new PhysicSystem::RaycastHit((const PhysicSystem::RaycastHit &)result); 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PhysicActor_SetEnabled(void * jarg1, unsigned int jarg2) {
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   bool *arg2 = 0 ;
   bool temp2 ;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   temp2 = jarg2 ? true : false; 
   arg2 = &temp2; 
   (arg1)->SetEnabled((bool const &)*arg2);
@@ -11278,10 +14022,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PhysicActor_SetEnabled(void * jarg1,
 
 SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PhysicActor_GetEnabled(void * jarg1) {
   unsigned int jresult ;
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   bool result;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   result = (bool)(arg1)->GetEnabled();
   jresult = result; 
   return jresult;
@@ -11290,10 +14034,10 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PhysicActor_GetEnabled(void 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicActor_m_owner_get(void * jarg1) {
   void * jresult ;
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   Entity *result = 0 ;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   result = (Entity *) ((arg1)->m_owner);
   jresult = (void *)result; 
   return jresult;
@@ -11302,10 +14046,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicActor_m_owner_get(void * jar
 
 SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PhysicActor_HasRigidbody(void * jarg1) {
   unsigned int jresult ;
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   bool result;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   result = (bool)(arg1)->HasRigidbody();
   jresult = result; 
   return jresult;
@@ -11314,10 +14058,10 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PhysicActor_HasRigidbody(voi
 
 SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PhysicActor_HasColliders(void * jarg1) {
   unsigned int jresult ;
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   bool result;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   result = (bool)(arg1)->HasColliders();
   jresult = result; 
   return jresult;
@@ -11325,18 +14069,18 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PhysicActor_HasColliders(voi
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PhysicActor(void * jarg1) {
-  PhysicActor *arg1 = (PhysicActor *) 0 ;
+  PhysicSystem::PhysicActor *arg1 = (PhysicSystem::PhysicActor *) 0 ;
   
-  arg1 = (PhysicActor *)jarg1; 
+  arg1 = (PhysicSystem::PhysicActor *)jarg1; 
   delete arg1;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RaycastHit_position_set(void * jarg1, void * jarg2) {
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
   CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
   
-  arg1 = (RaycastHit *)jarg1; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2; 
   if (arg1) (arg1)->position = *arg2;
 }
@@ -11344,10 +14088,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RaycastHit_position_set(void * jarg1
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RaycastHit_position_get(void * jarg1) {
   void * jresult ;
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
   CCMaths::Vector3 *result = 0 ;
   
-  arg1 = (RaycastHit *)jarg1; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
   result = (CCMaths::Vector3 *)& ((arg1)->position);
   jresult = (void *)result; 
   return jresult;
@@ -11355,10 +14099,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RaycastHit_position_get(void * jar
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RaycastHit_normal_set(void * jarg1, void * jarg2) {
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
   CCMaths::Vector3 *arg2 = (CCMaths::Vector3 *) 0 ;
   
-  arg1 = (RaycastHit *)jarg1; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2; 
   if (arg1) (arg1)->normal = *arg2;
 }
@@ -11366,10 +14110,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RaycastHit_normal_set(void * jarg1, 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RaycastHit_normal_get(void * jarg1) {
   void * jresult ;
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
   CCMaths::Vector3 *result = 0 ;
   
-  arg1 = (RaycastHit *)jarg1; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
   result = (CCMaths::Vector3 *)& ((arg1)->normal);
   jresult = (void *)result; 
   return jresult;
@@ -11377,10 +14121,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RaycastHit_normal_get(void * jarg1
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RaycastHit_distance_set(void * jarg1, float jarg2) {
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
   float arg2 ;
   
-  arg1 = (RaycastHit *)jarg1; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
   arg2 = (float)jarg2; 
   if (arg1) (arg1)->distance = arg2;
 }
@@ -11388,10 +14132,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RaycastHit_distance_set(void * jarg1
 
 SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_RaycastHit_distance_get(void * jarg1) {
   float jresult ;
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
   float result;
   
-  arg1 = (RaycastHit *)jarg1; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
   result = (float) ((arg1)->distance);
   jresult = result; 
   return jresult;
@@ -11399,22 +14143,22 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_RaycastHit_distance_get(void * jarg
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RaycastHit_actor_set(void * jarg1, void * jarg2) {
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
-  PhysicActor *arg2 = (PhysicActor *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
+  PhysicSystem::PhysicActor *arg2 = (PhysicSystem::PhysicActor *) 0 ;
   
-  arg1 = (RaycastHit *)jarg1; 
-  arg2 = (PhysicActor *)jarg2; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
+  arg2 = (PhysicSystem::PhysicActor *)jarg2; 
   if (arg1) (arg1)->actor = arg2;
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RaycastHit_actor_get(void * jarg1) {
   void * jresult ;
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
-  PhysicActor *result = 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
+  PhysicSystem::PhysicActor *result = 0 ;
   
-  arg1 = (RaycastHit *)jarg1; 
-  result = (PhysicActor *) ((arg1)->actor);
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
+  result = (PhysicSystem::PhysicActor *) ((arg1)->actor);
   jresult = (void *)result; 
   return jresult;
 }
@@ -11422,27 +14166,27 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_RaycastHit_actor_get(void * jarg1)
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_RaycastHit() {
   void * jresult ;
-  RaycastHit *result = 0 ;
+  PhysicSystem::RaycastHit *result = 0 ;
   
-  result = (RaycastHit *)new RaycastHit();
+  result = (PhysicSystem::RaycastHit *)new PhysicSystem::RaycastHit();
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_RaycastHit(void * jarg1) {
-  RaycastHit *arg1 = (RaycastHit *) 0 ;
+  PhysicSystem::RaycastHit *arg1 = (PhysicSystem::RaycastHit *) 0 ;
   
-  arg1 = (RaycastHit *)jarg1; 
+  arg1 = (PhysicSystem::RaycastHit *)jarg1; 
   delete arg1;
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicManager_GetInstance() {
   void * jresult ;
-  PhysicManager *result = 0 ;
+  PhysicSystem::PhysicManager *result = 0 ;
   
-  result = (PhysicManager *)PhysicManager::GetInstance();
+  result = (PhysicSystem::PhysicManager *)PhysicSystem::PhysicManager::GetInstance();
   jresult = (void *)result; 
   return jresult;
 }
@@ -11450,17 +14194,17 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicManager_GetInstance() {
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicManager_FindActor(void * jarg1, void * jarg2) {
   void * jresult ;
-  PhysicManager *arg1 = (PhysicManager *) 0 ;
+  PhysicSystem::PhysicManager *arg1 = (PhysicSystem::PhysicManager *) 0 ;
   Entity *arg2 = 0 ;
-  PhysicActor *result = 0 ;
+  PhysicSystem::PhysicActor *result = 0 ;
   
-  arg1 = (PhysicManager *)jarg1; 
+  arg1 = (PhysicSystem::PhysicManager *)jarg1; 
   arg2 = (Entity *)jarg2;
   if (!arg2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Entity & type is null", 0);
     return 0;
   } 
-  result = (PhysicActor *)(arg1)->FindActor(*arg2);
+  result = (PhysicSystem::PhysicActor *)(arg1)->FindActor(*arg2);
   jresult = (void *)result; 
   return jresult;
 }
@@ -11472,7 +14216,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicManager_Raycast(void * jarg1
   CCMaths::Vector3 *arg2 = 0 ;
   CCMaths::Vector3 *arg3 = 0 ;
   float arg4 ;
-  RaycastHit result;
+  PhysicSystem::RaycastHit result;
   
   arg1 = (Cell *)jarg1;
   if (!arg1) {
@@ -11490,8 +14234,8 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicManager_Raycast(void * jarg1
     return 0;
   } 
   arg4 = (float)jarg4; 
-  result = PhysicManager::Raycast(*arg1,(CCMaths::Vector3 const &)*arg2,(CCMaths::Vector3 const &)*arg3,arg4);
-  jresult = new RaycastHit((const RaycastHit &)result); 
+  result = PhysicSystem::PhysicManager::Raycast(*arg1,(CCMaths::Vector3 const &)*arg2,(CCMaths::Vector3 const &)*arg3,arg4);
+  jresult = new PhysicSystem::RaycastHit((const PhysicSystem::RaycastHit &)result); 
   return jresult;
 }
 
@@ -11499,7 +14243,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PhysicManager_Raycast(void * jarg1
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PhysicManager_AddForce(void * jarg1, void * jarg2, int jarg3) {
   Entity *arg1 = (Entity *) 0 ;
   CCMaths::Vector3 *arg2 = 0 ;
-  EForceMode arg3 ;
+  PhysicSystem::EForceMode arg3 ;
   
   arg1 = (Entity *)jarg1; 
   arg2 = (CCMaths::Vector3 *)jarg2;
@@ -11507,25 +14251,25 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PhysicManager_AddForce(void * jarg1,
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
     return ;
   } 
-  arg3 = (EForceMode)jarg3; 
-  PhysicManager::AddForce(arg1,(CCMaths::Vector3 const &)*arg2,arg3);
+  arg3 = (PhysicSystem::EForceMode)jarg3; 
+  PhysicSystem::PhysicManager::AddForce(arg1,(CCMaths::Vector3 const &)*arg2,arg3);
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PhysicManager() {
   void * jresult ;
-  PhysicManager *result = 0 ;
+  PhysicSystem::PhysicManager *result = 0 ;
   
-  result = (PhysicManager *)new PhysicManager();
+  result = (PhysicSystem::PhysicManager *)new PhysicSystem::PhysicManager();
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PhysicManager(void * jarg1) {
-  PhysicManager *arg1 = (PhysicManager *) 0 ;
+  PhysicSystem::PhysicManager *arg1 = (PhysicSystem::PhysicManager *) 0 ;
   
-  arg1 = (PhysicManager *)jarg1; 
+  arg1 = (PhysicSystem::PhysicManager *)jarg1; 
   delete arg1;
 }
 
@@ -11836,6 +14580,26 @@ SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SWIGUpcast(Audio
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_PortalComponent_SWIGUpcast(PortalComponent *jarg1) {
     return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_Rigidbody_SWIGUpcast(Rigidbody *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_Collider_SWIGUpcast(Collider *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Collider * SWIGSTDCALL CSharp_CCEngine_BoxCollider_SWIGUpcast(BoxCollider *jarg1) {
+    return (Collider *)jarg1;
+}
+
+SWIGEXPORT Collider * SWIGSTDCALL CSharp_CCEngine_SphereCollider_SWIGUpcast(SphereCollider *jarg1) {
+    return (Collider *)jarg1;
+}
+
+SWIGEXPORT Collider * SWIGSTDCALL CSharp_CCEngine_CapsuleCollider_SWIGUpcast(CapsuleCollider *jarg1) {
+    return (Collider *)jarg1;
 }
 
 SWIGEXPORT Object * SWIGSTDCALL CSharp_CCEngine_Entity_SWIGUpcast(Entity *jarg1) {

@@ -57,8 +57,8 @@ public class PhysicManager : global::System.IDisposable {
     return ret;
   }
 
-	public PhysicActor GetActor(Entity owningEntity) => FindActor(owningEntity);
-	
+		public PhysicActor GetActor(Entity owningEntity) => FindActor(owningEntity);
+		
   public static RaycastHit Raycast(Cell cell, Vector3 origin, Vector3 dir, float maxRange) {
     RaycastHit ret = new RaycastHit(CherryEnginePINVOKE.PhysicManager_Raycast(Cell.getCPtr(cell), Vector3.getCPtr(origin), Vector3.getCPtr(dir), maxRange), true);
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();

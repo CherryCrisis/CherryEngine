@@ -5,6 +5,8 @@
 
 %include collider.i
 
+%nodefaultctor SphereCollider;
+
 class SphereCollider : public Collider
 {
 public:

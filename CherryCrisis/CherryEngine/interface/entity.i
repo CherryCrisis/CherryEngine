@@ -15,6 +15,10 @@
 %include audio_listener.i
 %include audio_emitter.i
 %include portal_component.i
+%include rigidbody.i
+%include box_collider.i
+%include sphere_collider.i
+%include capsule_collider.i
 %include object.i
 
 %define COMP_STD_WRAP(COMP_T)
@@ -43,6 +47,10 @@ COMP_STD_WRAP(LightComponent)
 COMP_STD_WRAP(AudioListener)
 COMP_STD_WRAP(AudioEmitter)
 COMP_STD_WRAP(PortalComponent)
+COMP_STD_WRAP(Rigidbody)
+COMP_STD_WRAP(BoxCollider)
+COMP_STD_WRAP(SphereCollider)
+COMP_STD_WRAP(CapsuleCollider)
 
 %nodefaultctor Entity;
 class Entity : public Object
@@ -90,6 +98,10 @@ public:
 	COMP_TEMPLATE_WRAP(AudioListener)
 	COMP_TEMPLATE_WRAP(AudioEmitter)
 	COMP_TEMPLATE_WRAP(PortalComponent)
+	COMP_TEMPLATE_WRAP(Rigidbody)
+	COMP_TEMPLATE_WRAP(BoxCollider)
+	COMP_TEMPLATE_WRAP(SphereCollider)
+	COMP_TEMPLATE_WRAP(CapsuleCollider)
 
 	%proxycode %{
 	private Behaviour AddScript(string scriptPath)
@@ -138,6 +150,18 @@ public:
 
 		if (type == typeof(PortalComponent))
 			return AddPortalComponent();
+
+		if (type == typeof(Rigidbody))
+			return AddRigidbody();
+
+		if (type == typeof(BoxCollider))
+			return AddBoxCollider();
+
+		if (type == typeof(SphereCollider))
+			return AddSphereCollider();
+
+		if (type == typeof(CapsuleCollider))
+			return AddCapsuleCollider();
 			
 		return AddScript(type.Name);
 	}
@@ -166,6 +190,18 @@ public:
 									
 		if (type == typeof(PortalComponent))
 			return GetPortalComponent();
+			
+		if (type == typeof(Rigidbody))
+			return GetRigidbody();
+			
+		if (type == typeof(BoxCollider))
+			return GetBoxCollider();
+			
+		if (type == typeof(SphereCollider))
+			return GetSphereCollider();
+			
+		if (type == typeof(CapsuleCollider))
+			return GetCapsuleCollider();
 			
 		return GetScript(type.Name);
 	}

@@ -225,3 +225,15 @@ float Rigidbody::GetMaxDepVel()
 	return m_maxDepenetrationVelocity;
 }
 #pragma endregion
+
+void Rigidbody::AddForce(const CCMaths::Vector3& force, PhysicSystem::EForceMode mode)
+{
+	if (m_physicActor)
+		m_physicActor->AddForce(force, mode);
+}
+
+void Rigidbody::AddTorque(const CCMaths::Vector3& force, PhysicSystem::EForceMode mode)
+{
+	if (m_physicActor)
+		m_physicActor->AddTorque(force, mode);
+}

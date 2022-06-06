@@ -197,6 +197,74 @@ public class Entity : Object {
     return ret;
   }
 
+  private Rigidbody GetRigidbody() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetRigidbody(swigCPtr);
+    Rigidbody ret = (cPtr == global::System.IntPtr.Zero) ? null : new Rigidbody(cPtr, false);
+    return ret;
+  }
+
+  private Rigidbody AddRigidbody() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddRigidbody(swigCPtr);
+    Rigidbody ret = (cPtr == global::System.IntPtr.Zero) ? null : new Rigidbody(cPtr, false);
+    return ret;
+  }
+
+  private RigidbodyVector GetAllOfRigidbody() {
+    RigidbodyVector ret = new RigidbodyVector(CherryEnginePINVOKE.Entity_GetAllOfRigidbody(swigCPtr), true);
+    return ret;
+  }
+
+  private BoxCollider GetBoxCollider() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetBoxCollider(swigCPtr);
+    BoxCollider ret = (cPtr == global::System.IntPtr.Zero) ? null : new BoxCollider(cPtr, false);
+    return ret;
+  }
+
+  private BoxCollider AddBoxCollider() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddBoxCollider(swigCPtr);
+    BoxCollider ret = (cPtr == global::System.IntPtr.Zero) ? null : new BoxCollider(cPtr, false);
+    return ret;
+  }
+
+  private BoxColliderVector GetAllOfBoxCollider() {
+    BoxColliderVector ret = new BoxColliderVector(CherryEnginePINVOKE.Entity_GetAllOfBoxCollider(swigCPtr), true);
+    return ret;
+  }
+
+  private SphereCollider GetSphereCollider() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetSphereCollider(swigCPtr);
+    SphereCollider ret = (cPtr == global::System.IntPtr.Zero) ? null : new SphereCollider(cPtr, false);
+    return ret;
+  }
+
+  private SphereCollider AddSphereCollider() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddSphereCollider(swigCPtr);
+    SphereCollider ret = (cPtr == global::System.IntPtr.Zero) ? null : new SphereCollider(cPtr, false);
+    return ret;
+  }
+
+  private SphereColliderVector GetAllOfSphereCollider() {
+    SphereColliderVector ret = new SphereColliderVector(CherryEnginePINVOKE.Entity_GetAllOfSphereCollider(swigCPtr), true);
+    return ret;
+  }
+
+  private CapsuleCollider GetCapsuleCollider() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetCapsuleCollider(swigCPtr);
+    CapsuleCollider ret = (cPtr == global::System.IntPtr.Zero) ? null : new CapsuleCollider(cPtr, false);
+    return ret;
+  }
+
+  private CapsuleCollider AddCapsuleCollider() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddCapsuleCollider(swigCPtr);
+    CapsuleCollider ret = (cPtr == global::System.IntPtr.Zero) ? null : new CapsuleCollider(cPtr, false);
+    return ret;
+  }
+
+  private CapsuleColliderVector GetAllOfCapsuleCollider() {
+    CapsuleColliderVector ret = new CapsuleColliderVector(CherryEnginePINVOKE.Entity_GetAllOfCapsuleCollider(swigCPtr), true);
+    return ret;
+  }
+
 	private Behaviour AddScript(string scriptPath)
 	{
 		ScriptedBehaviour script = AddScriptedBehaviour();
@@ -243,6 +311,18 @@ public class Entity : Object {
 
 		if (type == typeof(PortalComponent))
 			return AddPortalComponent();
+
+		if (type == typeof(Rigidbody))
+			return AddRigidbody();
+
+		if (type == typeof(BoxCollider))
+			return AddBoxCollider();
+
+		if (type == typeof(SphereCollider))
+			return AddSphereCollider();
+
+		if (type == typeof(CapsuleCollider))
+			return AddCapsuleCollider();
 			
 		return AddScript(type.Name);
 	}
@@ -271,6 +351,18 @@ public class Entity : Object {
 									
 		if (type == typeof(PortalComponent))
 			return GetPortalComponent();
+			
+		if (type == typeof(Rigidbody))
+			return GetRigidbody();
+			
+		if (type == typeof(BoxCollider))
+			return GetBoxCollider();
+			
+		if (type == typeof(SphereCollider))
+			return GetSphereCollider();
+			
+		if (type == typeof(CapsuleCollider))
+			return GetCapsuleCollider();
 			
 		return GetScript(type.Name);
 	}

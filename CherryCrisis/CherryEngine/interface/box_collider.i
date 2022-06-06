@@ -5,6 +5,8 @@
 
 %include collider.i
 
+%nodefaultctor BoxCollider;
+
 class BoxCollider : public Collider
 {
 public:
@@ -12,6 +14,6 @@ public:
 
 	%ignore BoxCollider();
 
-	void SetScale(const float& scale);
-	float GetScale();
+	void SetScale(const CCMaths::Vector3& scale);
+	CCMaths::Vector3 GetScale() { return m_editableScale; }
 };
