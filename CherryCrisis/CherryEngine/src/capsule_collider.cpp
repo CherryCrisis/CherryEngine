@@ -94,25 +94,7 @@ void CapsuleCollider::Initialize()
 	GetHost().m_OnAwake.Unbind(&CapsuleCollider::Initialize, this);
 
 	if (m_isAddedFromInspector)
-	{
-		MeshRenderer* renderer = nullptr;
-		renderer = GetHost().GetBehaviour<ModelRenderer>();
-
-		if (!renderer)
-			renderer = GetHost().GetBehaviour<ShapeRenderer>();
-
-		if (renderer)
-		{
-			if (renderer->m_mesh)
-			{
-				Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
-
-				m_editableScale = extents.y;
-				m_editableRadius = Max(extents.x, extents.z);
-				m_localPosition = renderer->m_mesh->m_aabb.m_center;
-			}
-		}
-	}
+		SetAABBScale();
 
 	SetEntityScale(m_transform);
 }
@@ -141,6 +123,27 @@ void CapsuleCollider::PopulateMetadatas()
 	m_metadatas.SetProperty("Half height", &editableScale);
 	m_metadatas.SetProperty("Radius", &radius);
 	m_metadatas.SetProperty("Block Raycast", &isBlocking);
+}
+
+void CapsuleCollider::SetAABBScale()
+{
+	MeshRenderer* renderer = nullptr;
+	renderer = GetHost().GetBehaviour<ModelRenderer>();
+
+	if (!renderer)
+		renderer = GetHost().GetBehaviour<ShapeRenderer>();
+
+	if (renderer)
+	{
+		if (renderer->m_mesh)
+		{
+			Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
+
+			m_editableScale = CCMaths::Clamp(extents.y, 0.01f, extents.y);
+			m_editableRadius = Max(extents.x, extents.z) > 0.01f ? Max(extents.x, extents.z) : 0.01f;
+			m_localPosition = renderer->m_mesh->m_aabb.m_center;
+		}
+	}
 }
 
 void CapsuleCollider::SetEntityScale(Transform* transform)
@@ -307,6 +310,9 @@ void CapsuleCollider::Copy(Behaviour* copy)
 	m_entityRadius = copiedCollider->m_entityRadius;
 	SetScale(copiedCollider->m_editableScale);
 	SetRadius(copiedCollider->m_editableRadius);
+
+	SetAABBScale();
+	SetEntityScale(m_transform);
 
 	ResetPxShape();
 }

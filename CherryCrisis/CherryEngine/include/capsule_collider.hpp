@@ -37,6 +37,7 @@ public:
 	void InvalidateTransform() override;
 	void Unregister() override;
 
+	void SetAABBScale();
 	void SetEntityScale(Transform* transform) override;
 	void SetPxShape() override;
 	void ClearPxShape() override;
