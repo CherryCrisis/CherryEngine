@@ -36,6 +36,8 @@ class CCENGINE_API BasicRenderPass : public ARenderingRenderPass
 public:
 	BasicRenderPass(const char* name);
 
+	void OnPreDrawBind() override;
+
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)
 	{

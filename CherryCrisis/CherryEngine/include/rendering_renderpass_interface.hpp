@@ -16,18 +16,27 @@ protected:
 public:
 	virtual void InvalidatePass() { m_program = nullptr; m_callExecute = nullptr; }
 
-	void PreDrawBind(ShaderProgram* program) { OnPreDrawBind(); }
+	void PreDrawBind(ShaderProgram* program)
+	{
+		if (m_program)
+			OnPreDrawBind();
+	}
 
 	virtual void OnPreDrawBind() { }
+
+	void OnProgramLoaded(std::shared_ptr<ShaderProgram> program)
+	{
+		m_program->m_OnReloaded.Bind(&ARenderingRenderPass::PreDrawBind, this);
+		m_program->m_OnDeleted.Bind(&ARenderingRenderPass::InvalidatePass, this);
+
+		if (m_program)
+			OnPreDrawBind();
+	}
 
 	ARenderingRenderPass(const char* pipelineName, const char* vert, const char* frag)
 		: ARenderPass(pipelineName, vert, frag)
 	{
-		if (m_program)
-		{
-			m_program->m_OnReloaded.Bind(&ARenderingRenderPass::PreDrawBind, this);
-			m_program->m_OnDeleted.Bind(&ARenderingRenderPass::InvalidatePass, this);
-		}
+		m_program->m_OnLoaded.Bind(&ARenderingRenderPass::OnProgramLoaded, this);
 	}
 
 	void CallOnExecute(Viewer* viewer)
