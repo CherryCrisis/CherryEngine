@@ -163,7 +163,7 @@ void Scene::GenerateEntitiesRecursive(ModelNode* node, Entity* parentEntity, std
 	}
 
 	transform->SetPosition(node->m_baseTRS[0]);
-	transform->SetRotation(node->m_baseTRS[1]);
+	transform->SetEuler(node->m_baseTRS[1]);
 	transform->SetScale(node->m_baseTRS[2]);
 
 	if (parentEntity)

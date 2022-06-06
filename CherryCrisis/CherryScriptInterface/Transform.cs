@@ -54,13 +54,13 @@ public class Transform : Behaviour {
     return ret;
   }
 
-  public void SetRotation(Vector3 rotation) {
-    CherryEnginePINVOKE.Transform_SetRotation__SWIG_0(swigCPtr, Vector3.getCPtr(rotation));
+  public void SetEuler(Vector3 rotation) {
+    CherryEnginePINVOKE.Transform_SetEuler(swigCPtr, Vector3.getCPtr(rotation));
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
   public void SetRotation(Quaternion rotation) {
-    CherryEnginePINVOKE.Transform_SetRotation__SWIG_1(swigCPtr, Quaternion.getCPtr(rotation));
+    CherryEnginePINVOKE.Transform_SetRotation(swigCPtr, Quaternion.getCPtr(rotation));
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
@@ -107,6 +107,21 @@ public class Transform : Behaviour {
   public Vector3 GetGlobalScale() {
     Vector3 ret = new Vector3(CherryEnginePINVOKE.Transform_GetGlobalScale(swigCPtr), true);
     return ret;
+  }
+
+  public void Translate(Vector3 translation) {
+    CherryEnginePINVOKE.Transform_Translate(swigCPtr, Vector3.getCPtr(translation));
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public void Rotate(Vector3 eulerAngles) {
+    CherryEnginePINVOKE.Transform_Rotate__SWIG_0(swigCPtr, Vector3.getCPtr(eulerAngles));
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  }
+
+  public void Rotate(Vector3 axis, float angle) {
+    CherryEnginePINVOKE.Transform_Rotate__SWIG_1(swigCPtr, Vector3.getCPtr(axis), angle);
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
   }
 
   public Vector3 Up() {
@@ -158,7 +173,7 @@ public class Transform : Behaviour {
   }
 
 		public Vector3 position { get => GetPosition(); set => SetPosition(value); }
-		public Vector3 eulerAngles { get => GetEuler(); set => SetRotation(value); }
+		public Vector3 eulerAngles { get => GetEuler(); set => SetEuler(value); }
 		public Quaternion rotation { get => GetRotation(); set => SetRotation(value); }
 		public Vector3 scale { get => GetScale(); set => SetScale(value); }
 	

@@ -93,7 +93,7 @@ void PortalTeleporterComponent::Teleport(PortalComponent* destPortal, const CCMa
 			scene->MoveEntityFromCellToCell(GetHost().m_cell, entity->m_cell, GetHostPtr());
 
 		m_entityNode->m_transform->SetPosition(newPos);
-		m_entityNode->m_transform->SetRotation(newRot);
+		m_entityNode->m_transform->SetEuler(newRot);
 	}
 }
 
@@ -105,7 +105,7 @@ void PortalTeleporterComponent::UpdateEntityMatrix(Transform* transform, const M
 		Matrix4::Decompose(newWorldMatrix, TRS[0], TRS[1], TRS[2]);
 
 		transform->SetPosition(TRS[0]);
-		transform->SetRotation(TRS[1]);
+		transform->SetEuler(TRS[1]);
 		transform->SetScale(TRS[2]);
 	}
 }

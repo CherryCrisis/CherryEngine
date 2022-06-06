@@ -77,7 +77,7 @@ public:
 	Vector3 GetPosition() { return m_position; }
 	Vector3 GetGlobalPosition();
 
-	void SetRotation(const Vector3& rotation);
+	void SetEuler(const Vector3& rotation);
 	void SetRotation(const Quaternion& rotation);
 	void SetGlobalRotation(const Vector3& rotation);
 	void SetGlobalRotation(const Quaternion& rotation);
@@ -89,6 +89,10 @@ public:
 	void SetGlobalScale(const Vector3& scale);
 	Vector3 GetScale() { return m_scale; }
 	Vector3 GetGlobalScale();
+
+	void Translate(const Vector3& translation);
+	void Rotate(const Vector3& eulerAngles);
+	void Rotate(const Vector3& axis, float angle);
 
 	void AddChildren(Transform* transform);
 	std::vector<Transform*>* GetChildren() { return &m_children; }
@@ -111,7 +115,7 @@ public:
 	Vector3 Up()		{ GetWorldMatrix();  return m_up; }
 
 	Vector3Property position{ this, &Transform::SetPosition, &Transform::GetPosition };
-	Vector3Property rotation{ this, &Transform::SetRotation, &Transform::GetEuler };
+	Vector3Property rotation{ this, &Transform::SetEuler, &Transform::GetEuler };
 	Vector3Property scale{ this, &Transform::SetScale, &Transform::GetScale };
 
 	CCProperty::CopyProperty<Transform, Transform*> parent{ this, &Transform::SetParent, &Transform::GetParent };
