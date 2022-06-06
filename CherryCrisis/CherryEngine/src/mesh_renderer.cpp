@@ -98,7 +98,7 @@ void MeshRenderer::RemoveMesh()
 	m_mesh = nullptr;
 }
 
-void MeshRenderer::OnMaterialReloaded(std::shared_ptr<Material> material)
+void MeshRenderer::OnMaterialReloaded(Material* material)
 {
 	GetHost().m_cell->RemoveRenderer(this);
 	GetHost().m_cell->AddRenderer(this);

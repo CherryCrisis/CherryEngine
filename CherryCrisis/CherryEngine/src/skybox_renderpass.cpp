@@ -34,7 +34,7 @@ int SkyboxRenderPass::Subscribe(SkyRenderer* toGenerate)
 	{
 		if (!cubemap->GetData())
 		{
-			Resource<Texture>::ReloadResource(toGenerate->m_texture);
+			Resource<Texture>::ReloadResource(toGenerate->m_texture.get());
 
 			if (!cubemap->GetData())
 				return -1;
@@ -152,7 +152,7 @@ SkyboxRenderPass::GPUSkyboxCubemap::~GPUSkyboxCubemap()
 	Destroy();
 }
 
-void SkyboxRenderPass::GPUSkyboxCubemap::OnReload(std::shared_ptr<Texture> texture)
+void SkyboxRenderPass::GPUSkyboxCubemap::OnReload(Texture* texture)
 {
-	Regenerate(texture.get());
+	Regenerate(texture);
 }

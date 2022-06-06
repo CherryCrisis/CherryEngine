@@ -43,7 +43,7 @@ public:
 
 	void SetScriptClass(const std::string& scriptName);
 
-	void Reload(std::shared_ptr<CsAssembly> csAssembly);
+	void Reload(CsAssembly* csAssembly);
 
 	void OnClick();
 

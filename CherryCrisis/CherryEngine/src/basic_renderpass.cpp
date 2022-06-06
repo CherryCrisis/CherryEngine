@@ -22,6 +22,7 @@ BasicRenderPass::BasicRenderPass(const char* name)
 
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoTex"), 0);
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.normalMap"), 1);
+		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.celshadePallet"), 2);
 
 		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
 
@@ -30,10 +31,11 @@ BasicRenderPass::BasicRenderPass(const char* name)
 		glUseProgram(0);
 
 		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
-		m_defaultTextures[ETextureType::ALBEDO] = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
+		m_defaultTextures[ETextureType::CELSHADE_PALLET] = m_defaultTextures[ETextureType::ALBEDO] = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
 
 		unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
 		m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
+
 
 		for (auto& [texType, texRef] : m_defaultTextures)
 			m_textureGenerator.Generate(texRef.get());
@@ -147,7 +149,7 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 		Light* light = m_lights[lightID];
 		if (auto gpuLight = static_cast<LightGenerator::GPULightBasic*>(light->m_gpuLight.get()))
 		{
-			GLuint textureNum = 3 + (GLsizei)gpuLight->index;
+			GLuint textureNum = 4 + (GLsizei)gpuLight->index;
 			glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uShadowMaps") + (GLsizei)gpuLight->index, textureNum);
 			glBindTextureUnit(textureNum, gpuLight->TexID);
 		}
@@ -178,9 +180,13 @@ void BasicRenderPass::Execute(Viewer*& viewer)
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specularCol"), 1, material->m_specular.data);
 			glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.emissiveCol"), 1, material->m_emissive.data);
 			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.shininess"), material->m_shininess);
+			glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.hasCelShade"), material->m_hasCelshade);
 
 			BindTexture(material, ETextureType::ALBEDO, 0);
 			BindTexture(material, ETextureType::NORMAL_MAP, 1);
+
+			if (material->m_hasCelshade)
+				BindTexture(material, ETextureType::CELSHADE_PALLET, 2);
 		}
 
 		auto gpuMesh = static_cast<ElementTBNGenerator::GPUMeshBasic*>(mesh->m_gpuMesh.get());

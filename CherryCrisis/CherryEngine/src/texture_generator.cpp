@@ -7,10 +7,10 @@ void TextureGenerator::GPUTextureBasic::Generate(Texture* texture)
 {
 	glCreateTextures(GL_TEXTURE_2D, 1, &ID);
 
-	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_S, (GLint)texture->GetWrapS());
+	glTextureParameteri(ID, GL_TEXTURE_WRAP_T, (GLint)texture->GetWrapT());
+	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, (GLint)texture->GetMinFilter());
+	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, (GLint)texture->GetMagFilter());
 
 	ETextureFormat textureFormat = texture->GetInternalFormat();
 
@@ -21,7 +21,7 @@ void TextureGenerator::GPUTextureBasic::Generate(Texture* texture)
 			internalFormat = GL_RGB8;
 
 		glTextureStorage2D(ID, 1, internalFormat, texture->GetWidth(), texture->GetHeight());
-		glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (unsigned int)textureFormat, GL_UNSIGNED_BYTE, texture->GetData());
+		glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (GLenum)textureFormat, GL_UNSIGNED_BYTE, texture->GetData());
 
 		glGenerateTextureMipmap(ID);
 	}
@@ -41,7 +41,7 @@ void TextureGenerator::GPUTextureBasic::Generate(Texture* texture)
 			CCMaths::Min(height, 1);
 
 			int size = ((width + 3) / 4) * ((height + 3) / 4) * texture->GetBlockSize();
-			glCompressedTexImage2D(GL_TEXTURE_2D, mipmapId, (unsigned int)textureFormat,
+			glCompressedTexImage2D(GL_TEXTURE_2D, mipmapId, (GLenum)textureFormat,
 				width, height, 0, size, data + offset);
 
 
@@ -80,9 +80,9 @@ TextureGenerator::GPUTextureBasic::~GPUTextureBasic()
 	Destroy();
 }
 
-void TextureGenerator::GPUTextureBasic::OnReload(std::shared_ptr<Texture> texture)
+void TextureGenerator::GPUTextureBasic::OnReload(Texture* texture)
 {
-	Regenerate(texture.get());
+	Regenerate(texture);
 }
 
 bool TextureGenerator::Generate(Texture* toGenerate)

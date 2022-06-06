@@ -37,6 +37,25 @@ enum class CCENGINE_API ETextureSurface
     COUNT,
 };
 
+enum class CCENGINE_API ETextureWrap
+{
+    REPEAT = 0x2901,
+    CLAMP_TO_EDGE = 0x812F,
+    CLAMP_TO_BORDER = 0x812D,
+    MIRRORED_REPEAT = 0x8370,
+    MIRROR_CLAMP_TO_EDGE = 0x8743,
+};
+
+enum class CCENGINE_API ETextureFilter
+{
+    NEAREST = 0x2600,
+    LINEAR = 0x2601,
+    NEAREST_MIPMAP_NEAREST = 0x2700,
+    NEAREST_MIPMAP_LINEAR = 0x2702,
+    LINEAR_MIPMAP_NEAREST = 0x2701,
+    LINEAR_MIPMAP_LINEAR = 0x2703,
+};
+
 enum class ETextureFormat
 {
     // https://www.reedbeta.com/blog/understanding-bcn-texture-compression-formats/
@@ -61,6 +80,11 @@ private:
     int             m_blockSize = 0;
     ETextureFormat  m_internalFormat = ETextureFormat::RGBA;
     ETextureSurface m_surface = ETextureSurface::TEXTURE_2D;
+    ETextureWrap    m_wrapS = ETextureWrap::REPEAT;
+    ETextureWrap    m_wrapT = ETextureWrap::REPEAT;
+    ETextureWrap    m_wrapR = ETextureWrap::REPEAT;
+    ETextureFilter  m_minFilter = ETextureFilter::LINEAR;
+    ETextureFilter  m_magFilter = ETextureFilter::LINEAR;
     bool            m_flipped = false;
 
     void*           m_data = nullptr;
@@ -79,18 +103,32 @@ public:
     Texture(const char* texturePath);
     virtual ~Texture();
 
-    int GetWidth()  { return m_width; }
-    int GetHeight() { return m_height; }
-    int GetSize()   { return m_size; }
-    int GetMipmapCount() { return m_mipmapLevels; }
-    int GetBlockSize() { return m_blockSize; }
+    int GetWidth()   const { return m_width; }
+    int GetHeight()  const { return m_height; }
+    int GetSize()    const { return m_size; }
+    int GetMipmapCount() const { return m_mipmapLevels; }
+    int GetBlockSize()  const { return m_blockSize; }
 
-    ETextureFormat GetInternalFormat() { return m_internalFormat; }
+    ETextureFormat GetInternalFormat() const { return m_internalFormat; }
     void SetInternalFormat(ETextureFormat textureFormat) { m_internalFormat = textureFormat; }
 
-    ETextureSurface GetSurface() { return m_surface; }
+    ETextureSurface GetSurface()  const { return m_surface; }
     void SetSurface(ETextureSurface surface) { m_surface = surface; }
 
+    ETextureWrap GetWrapS() const { return m_wrapS; }
+    void SetWrapS(ETextureWrap wrap) { m_wrapS = wrap; }
+
+    ETextureWrap GetWrapT()  const { return m_wrapT; }
+    void SetWrapT(ETextureWrap wrap) { m_wrapT = wrap; }
+
+    ETextureWrap GetWrapR()  const { return m_wrapR; }
+    void SetWrapR(ETextureWrap wrap) { m_wrapR = wrap; }
+
+    ETextureFilter GetMinFilter() const { return m_minFilter; }
+    void SetMinFilter(ETextureFilter filter) { m_minFilter = filter; }
+
+    ETextureFilter GetMagFilter()  const { return m_magFilter; }
+    void SetMagFilter(ETextureFilter filter) { m_magFilter = filter; }
 
     bool GetIsFlipped() const { return m_flipped; }
 

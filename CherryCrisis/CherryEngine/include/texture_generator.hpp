@@ -18,7 +18,7 @@ public:
 
 		GPUTextureBasic(Texture* texture);
 		virtual ~GPUTextureBasic();
-		void OnReload(std::shared_ptr<Texture> texture);
+		void OnReload(Texture* texture);
 	};
 
 	virtual bool Generate(Texture* toGenerate);

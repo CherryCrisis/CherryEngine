@@ -17,7 +17,7 @@ private:
 
 	struct GPUSkyboxCubemap : public SkyRenderer::GPUSkybox
 	{
-		Event<std::shared_ptr<Texture>>* m_OnTextureReloaded = nullptr;
+		Event<Texture*>* m_OnTextureReloaded = nullptr;
 		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
 
 		void Generate(Texture* texture);
@@ -26,7 +26,7 @@ private:
 
 		GPUSkyboxCubemap(Texture* texture);
 		virtual ~GPUSkyboxCubemap();
-		void OnReload(std::shared_ptr<Texture> texture);
+		void OnReload(Texture* texture);
 	};
 
 public:

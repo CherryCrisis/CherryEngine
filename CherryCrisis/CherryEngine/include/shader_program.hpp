@@ -10,6 +10,7 @@ class Shader;
 class ShaderProgram : public Resource<ShaderProgram>
 {
 private:
+	void InitializeProgram();
 	void CreateProgram();
 
 public:
@@ -26,4 +27,7 @@ public:
 
 	void Delete() override;
 	void Reload();
+	void OnReload(Shader* shader);
+	void Reload(std::shared_ptr<Shader> shader);
+	void Invalidate();
 };

@@ -22,7 +22,7 @@ private:
 public:
 	struct GPUIrradianceMapSphereMap : GPUIrradianceMap
 	{
-		Event<std::shared_ptr<Texture>>* m_OnTextureReloaded = nullptr;
+		Event<Texture*>* m_OnTextureReloaded = nullptr;
 		std::shared_ptr<CCCallback::ACallback<>> m_OnGpuReloaded = nullptr;
 
 		GLuint		ID = 0u;
@@ -34,7 +34,7 @@ public:
 
 		GPUIrradianceMapSphereMap(Texture* texture);
 		virtual ~GPUIrradianceMapSphereMap();
-		void OnReload(std::shared_ptr<Texture> texture);
+		void OnReload(Texture* texture);
 	};
 
 	IrradianceMapRenderPass(const char* name);

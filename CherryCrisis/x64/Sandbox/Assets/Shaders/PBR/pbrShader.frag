@@ -38,8 +38,10 @@ struct Material
     sampler2D metallicMap;
     sampler2D roughnessMap;
     sampler2D aoMap;
+	sampler2D celshadePallet;
 
     bool hasNormalMap;
+    bool hasCelShade;
 
     vec3  albedo;
     float specular;

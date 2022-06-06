@@ -12,8 +12,9 @@
 void ShaderProgram::Delete()
 {
 	glDeleteProgram(m_shaderProgram);
-}
 
+	Invalidate();
+}
 
 void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, const char* vxFilepath, const char* fgFilepath)
 {
@@ -52,8 +53,7 @@ void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shar
 	if (fg.get() != nullptr)
 		shaderProgram->m_shaders.push_back(fg);
 
-	shaderProgram->CreateProgram();
-
+	shaderProgram->InitializeProgram();
 }
 
 void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shared_ptr<Shader>& vx, std::shared_ptr<Shader>& fg, std::shared_ptr<Shader>& gm)
@@ -68,16 +68,24 @@ void ShaderProgram::Load(std::shared_ptr<ShaderProgram> shaderProgram, std::shar
 	if (fg.get() != nullptr)
 		shaderProgram->m_shaders.push_back(fg);
 
-	shaderProgram->CreateProgram();
+	shaderProgram->InitializeProgram();
+}
 
+void ShaderProgram::InitializeProgram()
+{
+	for (auto& shader : m_shaders)
+	{
+		shader->m_OnDeleted.Bind(&ShaderProgram::Invalidate, this);
+		shader->m_OnReloaded.Bind(&ShaderProgram::OnReload, this);
+	}
+
+	CreateProgram();
 }
 
 void ShaderProgram::CreateProgram()
 {
 	for (auto& shader : m_shaders)
-	{
 		glAttachShader(m_shaderProgram, shader->GetShaderID());
-	}
 
 	glLinkProgram(m_shaderProgram);
 
@@ -94,12 +102,21 @@ void ShaderProgram::CreateProgram()
 
 void ShaderProgram::Reload()
 {
-	glDeleteProgram(m_shaderProgram);
+	glDeleteProgram(m_shaderProgram); 
 	m_shaderProgram = glCreateProgram();
-
-	for (auto& shader : m_shaders)
-		Resource<Shader>::ReloadResource(shader);
 
 	CreateProgram();
 }
 
+void ShaderProgram::OnReload(Shader* shader)
+{
+	Resource<ShaderProgram>::ReloadResource(this);
+}
+
+void ShaderProgram::Invalidate()
+{
+	for (auto& shader : m_shaders)
+		shader->m_OnReloaded.Unbind(&ShaderProgram::OnReload, this);
+
+	m_shaders.clear();
+}

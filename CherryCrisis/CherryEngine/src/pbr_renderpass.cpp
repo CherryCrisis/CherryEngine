@@ -24,39 +24,42 @@ PBRRenderPass::PBRRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/PBR/pbrShader.vert", "Assets/Shaders/PBR/pbrShader.frag")
 {
 	if (m_program)
-	{
-		glUseProgram(m_program->m_shaderProgram);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoMap"), 0);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.normalMap"), 1);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specularMap"), 2);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.metallicMap"), 3);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.roughnessMap"), 4);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.aoMap"), 5);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "irradianceMap"), 6);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "prefilterMap"), 7);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "brdfLUT"), 8);
+		OnPreDrawBind();
 
-		m_callExecute = CCCallback::BindCallback(&PBRRenderPass::Execute, this);
+	unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
+	std::shared_ptr<Texture> whiteTexture = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
+	m_defaultTextures[ETextureType::ALBEDO] = whiteTexture;
+	m_defaultTextures[ETextureType::SPECULAR] = whiteTexture;
+	m_defaultTextures[ETextureType::METALLIC] = whiteTexture;
+	m_defaultTextures[ETextureType::ROUGHNESS] = whiteTexture;
+	m_defaultTextures[ETextureType::AO] = whiteTexture;
 
-		GLuint lightBlock = glGetUniformBlockIndex(m_program->m_shaderProgram, "uLightsBlock");
-		glUniformBlockBinding(m_program->m_shaderProgram, lightBlock, LightGenerator::UBOBindingPoint);
+	unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
+	m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
 
-		glUseProgram(0);
+	for (auto& [texType, texRef] : m_defaultTextures)
+		m_textureGenerator.Generate(texRef.get());
+}
 
-		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
-		std::shared_ptr<Texture> whiteTexture = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
-		m_defaultTextures[ETextureType::ALBEDO] = whiteTexture;
-		m_defaultTextures[ETextureType::SPECULAR] = whiteTexture;
-		m_defaultTextures[ETextureType::METALLIC] = whiteTexture;
-		m_defaultTextures[ETextureType::ROUGHNESS] = whiteTexture;
-		m_defaultTextures[ETextureType::AO] = whiteTexture;
+void PBRRenderPass::OnPreDrawBind()
+{
+	glUseProgram(m_program->m_shaderProgram);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoMap"), 0);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.normalMap"), 1);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.specularMap"), 2);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.metallicMap"), 3);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.roughnessMap"), 4);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.aoMap"), 5);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "irradianceMap"), 6);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "prefilterMap"), 7);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "brdfLUT"), 8);
 
-		unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
-		m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
+	m_callExecute = CCCallback::BindCallback(&PBRRenderPass::Execute, this);
 
-		for (auto& [texType, texRef] : m_defaultTextures)
-			m_textureGenerator.Generate(texRef.get());
-	}
+	GLuint lightBlock = glGetUniformBlockIndex(m_program->m_shaderProgram, "uLightsBlock");
+	glUniformBlockBinding(m_program->m_shaderProgram, lightBlock, LightGenerator::UBOBindingPoint);
+
+	glUseProgram(0);
 }
 
 template <>

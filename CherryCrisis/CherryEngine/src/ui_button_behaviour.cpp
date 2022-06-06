@@ -69,7 +69,7 @@ void ButtonBehaviour::SetScriptClass(const std::string& scriptName)
 	m_linked = true;
 }
 
-void ButtonBehaviour::Reload(std::shared_ptr<CsAssembly> csAssembly)
+void ButtonBehaviour::Reload(CsAssembly* csAssembly)
 {
 
 }
