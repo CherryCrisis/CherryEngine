@@ -197,7 +197,7 @@ void SceneDisplayer::Render()
 
         m_camera.SetSize({ wsize.x, wsize.y });
         m_camera.m_isDrawed = false;
-        m_camera.Draw(1);
+        m_camera.Draw(3);
 
         uint64_t ViewTex = (uint64_t)m_camera.m_framebuffer->colorTex.texID;
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));

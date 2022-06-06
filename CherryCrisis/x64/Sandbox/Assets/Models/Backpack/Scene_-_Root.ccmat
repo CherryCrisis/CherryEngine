@@ -1,16 +1,24 @@
 settings:
   ambient: 0.200000/0.200000/0.200000
   diffuse: 0.800000/0.800000/0.800000
-  specular: 0.000000/0.000000/0.000000
+  specular: 1.000000/1.000000/1.000000
   emissive: 0.000000/0.000000/0.000000
-  shininess: 0
+  shininess: 225
   hasNormal: true
   hasCelshade: false
   specularFactor: 1
-  metallicFactor: 1
+  metallicFactor: 0
   roughnessFactor: 1
-  ao: 1
+  ao: 0.200000003
   clearCoatFactor: 0
   clearCoatRoughnessFactor: 0
   pipeline: 0
-  texturesCount: 0
+  texturesCount: 4
+  texture_0: Assets\Models\Backpack\normal.png
+  textureTypes_0: 2
+  texture_1: Assets\Models\Backpack\diffuse.jpg
+  textureTypes_1: 1
+  texture_2: Assets\Models\Backpack\roughness.jpg
+  textureTypes_2: 4
+  texture_3: Assets\Models\Backpack\specular.jpg
+  textureTypes_3: 5

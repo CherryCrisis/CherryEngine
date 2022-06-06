@@ -65,29 +65,24 @@ void PortalRenderPass::ComputePortalView(Portal* portal, Viewer* viewer, std::ve
 		//portalViewModels.insert(portalViewModel);
 
 		PortalViewer& portalViewer = portalViewers[i];
+		
 		CCMaths::Matrix4& portalViewModel = portalViewer.m_modelViewPortal;
-
-		Vector3 TRS[3];
-		Matrix4::Decompose(portalViewModel, TRS[0], TRS[1], TRS[2]);
-
-		//Remove scale from portalViewModel and make portal view matrix
 		CCMaths::Matrix4 portalView = portalViewModel.Inverse();
 
 		portalViewer.m_viewMatrix = portalView;
-
-		portalView = Matrix4::RotateXYZ(-TRS[1]) * Matrix4::Translate(-TRS[0]);
-
 
 		//Necessary for the PBR
 		portalViewer.m_position = portalViewModel.position;
 
 		const CCMaths::Matrix4& clipPlaneWorldMatrix = portal->m_linkedPortal->m_modelMatrix;
-		const int dot = CCMaths::Sign(Vector3::Dot(clipPlaneWorldMatrix.back, clipPlaneWorldMatrix.position - portalViewModel.position));
+		const Vector3 clipPlaneForward = -clipPlaneWorldMatrix.back.Normalized();
+
+		const int dot = CCMaths::Sign(Vector3::Dot(clipPlaneForward, clipPlaneWorldMatrix.position - portalViewModel.position));
 
 		Vector3 viewSpacePos = (portalView * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
 
 		portalView.position = Vector3::Zero; //To only rotate clipPlaneWorldMatrix
-		Vector3 viewSpaceNormal = (portalView * Vector4(clipPlaneWorldMatrix.back, 1.f)).xyz * dot;
+		Vector3 viewSpaceNormal = (portalView * Vector4(clipPlaneForward, 1.f)).xyz * dot;
 
 		float viewSpaceDist = -Vector3::Dot(viewSpacePos, viewSpaceNormal);
 
@@ -103,8 +98,8 @@ void PortalRenderPass::ComputePortalView(Portal* portal, Viewer* viewer, std::ve
 
 void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, int currentRecursion)
 {
-	//if (currentRecursion < 0)
-	//	return;
+	if (viewer == portal->m_linkedPortal)
+		return;
 
 	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
@@ -120,7 +115,10 @@ void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, int curr
 		gpuPortal->framebuffer->UpdateFramebuffer(static_cast<float>(framebuffer.width),
 			static_cast<float>(framebuffer.height));
 
+		std::shared_ptr<Framebuffer> previousFramebuffer = nullptr;
+
 		portal->m_linkedPortal->m_framebuffer = gpuPortal->framebuffer;
+		
 
 		glBindFramebuffer(GL_FRAMEBUFFER, gpuPortal->framebuffer->FBO);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -128,19 +126,6 @@ void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, int curr
 
 		std::vector<PortalViewer> portalViewers;
 		ComputePortalView(portal, viewer, portalViewers);
-
-		if (portal->m_linkedPortal->m_ownerCell != portal->m_ownerCell)
-		{
-			PortalViewer& portalViewer = portalViewers[m_portalRecursionCount - 1];
-		
-			portal->m_linkedPortal->m_viewMatrix = portalViewer.m_viewMatrix;
-			portal->m_linkedPortal->m_position = portalViewer.m_position;
-			portal->m_linkedPortal->m_frustumPlanes = portalViewer.m_frustumPlanes;
-			portal->m_linkedPortal->m_projectionMatrix = portalViewer.m_projectionMatrix;
-		
-			std::unordered_set<Portal*>& portals = portal->m_linkedPortal->m_pipeline->GetSubpipeline<PortalRenderPass>()->m_portals;
- 			ComputePortals(portals, portal->m_linkedPortal, currentRecursion);
-		}
 
 		for (int i = 0; i < m_portalRecursionCount; ++i)
 		{
@@ -151,29 +136,30 @@ void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, int curr
 			portal->m_linkedPortal->m_frustumPlanes = portalViewer.m_frustumPlanes;
 			portal->m_linkedPortal->m_projectionMatrix = portalViewer.m_projectionMatrix;
 
+			//TODO: Optimize ! 
+
+			int recursion = 0;
+
+			if (i == m_portalRecursionCount - 1)
+				recursion = currentRecursion - 1;
+
 			glBindFramebuffer(GL_FRAMEBUFFER, gpuPortal->framebuffer->FBO);
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-			portal->m_linkedPortal->Draw(0, false);
+			portal->m_linkedPortal->Draw(recursion, false);
 		}
 	}
 }
 
 void PortalRenderPass::ComputePortals(std::unordered_set<Portal*>& portals, Viewer* viewer, int currentRecursion)
 {
-	const Framebuffer& framebuffer = *viewer->m_framebuffer;
-
-	if (currentRecursion >= 0)
+	for (Portal* portal : portals)
 	{
-		currentRecursion--;
-		for (Portal* portal : portals)
-		{
-			if (!portal->m_linkedPortal)
-				return;
+		if (!portal->m_linkedPortal)
+			return;
 
-			ComputePortalFBO(portal, viewer, currentRecursion);
-		}
+		ComputePortalFBO(portal, viewer, currentRecursion);
 	}
 }
 
@@ -184,13 +170,13 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 
 	if (viewer->m_currentIteration > 0)
 	{
-		ComputePortals(m_portals, viewer, m_recursionCell);
+		ComputePortals(m_portals, viewer, viewer->m_currentIteration);
 	}
 
 
 	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
-	glViewport(0, 0, framebuffer.width, framebuffer.height);
+ 	glViewport(0, 0, framebuffer.width, framebuffer.height);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
 
@@ -217,8 +203,8 @@ void PortalRenderPass::Execute(Viewer*& viewer)
 			if (!gpuPortal)
 				continue;
 
-			if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
-				continue;
+			//if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
+			//	continue;
 
 			glBindTextureUnit(0, gpuPortal->framebuffer->colorTex.texID);
 

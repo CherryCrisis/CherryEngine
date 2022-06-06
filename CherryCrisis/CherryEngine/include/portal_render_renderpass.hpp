@@ -27,11 +27,11 @@ private:
 
 	struct PortalViewer
 	{
-		CCMaths::Matrix4 m_modelViewPortal;
-		CCMaths::Matrix4 m_viewMatrix;
-		CCMaths::Matrix4 m_projectionMatrix;
-		FrustumPlanes m_frustumPlanes;
-		CCMaths::Vector3 m_position;
+		CCMaths::Matrix4	m_modelViewPortal;
+		CCMaths::Matrix4	m_viewMatrix;
+		CCMaths::Matrix4	m_projectionMatrix;
+		FrustumPlanes		m_frustumPlanes;
+		CCMaths::Vector3	m_position;
 	};
 
 	void ComputePortalView(Portal* portal, Viewer* viewer, std::vector<PortalViewer>& portalViewers);
