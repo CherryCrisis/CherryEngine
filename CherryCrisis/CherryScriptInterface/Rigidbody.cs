@@ -105,6 +105,11 @@ public class Rigidbody : Behaviour {
     return ret;
   }
 
+  public void SetVelocity(Vector3 vel) {
+    CherryEnginePINVOKE.Rigidbody_SetVelocity(swigCPtr, Vector3.getCPtr(vel));
+    if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();
+  }
+
   public void AddForce(Vector3 force, EForceMode mode) {
     CherryEnginePINVOKE.Rigidbody_AddForce(swigCPtr, Vector3.getCPtr(force), (int)mode);
     if (CherryEnginePINVOKE.SWIGPendingException.Pending) throw CherryEnginePINVOKE.SWIGPendingException.Retrieve();

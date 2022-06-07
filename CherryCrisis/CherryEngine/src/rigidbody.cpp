@@ -83,6 +83,12 @@ void Rigidbody::SetEnabled()
 		m_physicActor->SetEnabled(m_isEnabled);
 }
 
+void Rigidbody::SetVelocity(const Vector3& vel) 
+{
+	m_dynamicActor->setLinearVelocity({vel.x, vel.y, vel.z});
+	m_dynamicActor->setAngularVelocity({ vel.x, vel.y, vel.z });
+}
+
 void Rigidbody::SaveVelocity()
 {
 	physx::PxVec3 pxVelocity = m_dynamicActor->getLinearVelocity();
@@ -92,7 +98,7 @@ void Rigidbody::SaveVelocity()
 	m_SavedVelocity.y = Vector3::Dot(m_transform->Up(), velocity);
 	m_SavedVelocity.z = Vector3::Dot(m_transform->Forward(), velocity);
 
-	m_dynamicActor->setLinearVelocity({ 0, 0, 0 });
+	SetVelocity(Vector3::Zero);
 }
 
 void Rigidbody::ReapplyVelocity()

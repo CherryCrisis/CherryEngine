@@ -7819,6 +7819,20 @@ SWIGEXPORT float SWIGSTDCALL CSharp_CCEngine_Rigidbody_GetMaxDepVel(void * jarg1
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetVelocity(void * jarg1, void * jarg2) {
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  CCMaths::Vector3 *arg2 = 0 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  arg2 = (CCMaths::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "CCMaths::Vector3 const & type is null", 0);
+    return ;
+  } 
+  (arg1)->SetVelocity((CCMaths::Vector3 const &)*arg2);
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_AddForce(void * jarg1, void * jarg2, int jarg3) {
   Rigidbody *arg1 = (Rigidbody *) 0 ;
   CCMaths::Vector3 *arg2 = 0 ;
@@ -12997,16 +13011,6 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_CapsuleColliderVector(void * 
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_set(void * jarg1, void * jarg2) {
-  Entity *arg1 = (Entity *) 0 ;
-  Cell *arg2 = (Cell *) 0 ;
-  
-  arg1 = (Entity *)jarg1; 
-  arg2 = (Cell *)jarg2; 
-  if (arg1) (arg1)->m_cell = arg2;
-}
-
-
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_m_cell_get(void * jarg1) {
   void * jresult ;
   Entity *arg1 = (Entity *) 0 ;
@@ -13063,6 +13067,16 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_CCEngine_Entity_GetName(void * jarg1) {
   result = (arg1)->GetName();
   jresult = SWIG_csharp_string_callback((&result)->c_str()); 
   return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Entity_SetCell(void * jarg1, void * jarg2) {
+  Entity *arg1 = (Entity *) 0 ;
+  Cell *arg2 = (Cell *) 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  arg2 = (Cell *)jarg2; 
+  (arg1)->SetCell(arg2);
 }
 
 

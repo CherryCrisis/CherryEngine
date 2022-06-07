@@ -508,10 +508,9 @@ void HierarchyDisplayer::ContextCallback()
                     if (m_manager->m_entitySelector.Contains(entity))
                         m_manager->m_entitySelector.Remove(entity);
 
-                    SceneManager::GetInstance()->m_currentScene->RemoveEntity(entity);
-
-
+                    entity->Destroy();
                 }
+
                 SceneManager::SetHierarchyDirty();
             }
 

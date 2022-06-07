@@ -35,9 +35,6 @@ public class Entity : Object {
   }
 
   public Cell m_cell {
-    set {
-      CherryEnginePINVOKE.Entity_m_cell_set(swigCPtr, Cell.getCPtr(value));
-    } 
     get {
       global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_m_cell_get(swigCPtr);
       Cell ret = (cPtr == global::System.IntPtr.Zero) ? null : new Cell(cPtr, false);
@@ -59,6 +56,10 @@ public class Entity : Object {
   private string GetName() {
     string ret = CherryEnginePINVOKE.Entity_GetName(swigCPtr);
     return ret;
+  }
+
+  public void SetCell(Cell cell) {
+    CherryEnginePINVOKE.Entity_SetCell(swigCPtr, Cell.getCPtr(cell));
   }
 
   private CameraComponent GetCameraComponent() {

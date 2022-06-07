@@ -32,6 +32,8 @@ public:
 	void	SetMaxDepVel(const float& velocity);
 	float	GetMaxDepVel();
 
+	void SetVelocity(const CCMaths::Vector3& vel);
+
 	void AddForce(const CCMaths::Vector3& force, PhysicSystem::EForceMode mode);
 	void AddTorque(const CCMaths::Vector3& force, PhysicSystem::EForceMode mode);
 };

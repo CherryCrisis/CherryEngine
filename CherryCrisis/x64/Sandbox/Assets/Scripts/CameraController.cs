@@ -40,16 +40,32 @@ namespace CCScripting
 				Debug.Log(ELogType.INFO, "Hitted " + hit.actor.m_owner.name);
 
 				PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
-				if (switcher != null)
+				if (switcher != null) 
+				{
 					switcher.Switch();
+					return;
+				}
 
 				Wardrobe wardrobe = hit.actor.m_owner.GetBehaviour<Wardrobe>();
 				if (wardrobe != null)
+				{
 					wardrobe.SetInMovement();
+					return;
+				}
 
 				PickableCube cube = hit.actor.m_owner.GetBehaviour<PickableCube>();
-				if (cube != null)
+				if (cube != null) 
+				{
 					PickupCube(cube);
+					return;
+				}
+
+				CubeSpawner spawner = hit.actor.m_owner.GetBehaviour<CubeSpawner>();
+				if (spawner != null) 
+				{
+					spawner.SpawnCube();
+					return;
+				}
 			}
 		}
 

@@ -62,6 +62,7 @@ private:
 	std::vector<Behaviour*> m_behaviours;
 
 public:
+	%immutable; 
 	Cell* m_cell = nullptr;
 
 	virtual ~Entity();
@@ -89,6 +90,8 @@ public:
 	void Destroy();
 
 	std::string GetName();
+
+	void SetCell(Cell* cell);
 
 	COMP_TEMPLATE_WRAP(CameraComponent)
 	COMP_TEMPLATE_WRAP(ScriptedBehaviour)

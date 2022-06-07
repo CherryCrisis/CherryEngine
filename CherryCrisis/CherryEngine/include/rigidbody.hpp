@@ -68,7 +68,7 @@ public:
 
 	void SaveVelocity();
 	void ReapplyVelocity();
-
+	void SetVelocity(const Vector3& vel);
 	// Set and gets used for the properties and Serialization
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled();

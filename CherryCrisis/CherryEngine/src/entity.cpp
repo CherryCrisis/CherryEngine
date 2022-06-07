@@ -5,6 +5,7 @@
 #include <typeinfo>
 
 #include "debug.hpp"
+#include "scene_manager.hpp"
 
 #include "behaviour.hpp"
 #include "cell.hpp"
@@ -133,7 +134,12 @@ void Entity::OnTriggerExit(Entity* other)
 
 void Entity::Destroy()
 {
-	//delete this;
+	SceneManager::GetInstance()->m_currentScene->RemoveEntity(this);
+}
+
+void Entity::SetCell(Cell* destination) 
+{
+	SceneManager::GetInstance()->m_currentScene->MoveEntityFromCellToCell(m_cell, destination, this);
 }
 
 Behaviour* Entity::GetBehaviour(const std::string& componentTypeName)

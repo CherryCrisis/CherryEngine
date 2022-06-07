@@ -100,6 +100,8 @@ public:
 
 	void Destroy();
 
+	void SetCell(Cell* destination);
+	
 	void SetName(std::string name) { m_name = name; }
 	std::string GetName() const { return m_name; }
 };
