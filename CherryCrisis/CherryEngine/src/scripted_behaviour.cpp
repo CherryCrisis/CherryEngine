@@ -201,6 +201,10 @@ void ScriptedBehaviour::PopulateMetadatas()
 		{
 			currentProperty = std::make_shared<ReflectedField<float>>(m_managedInstance, fieldRef.get());
 		}
+		else if (fieldType->Equals(mono::ManagedType::GetBoolean()))
+		{
+			currentProperty = std::make_shared<ReflectedField<bool>>(m_managedInstance, fieldRef.get());
+		}
 
 		if (currentProperty)
 		{
