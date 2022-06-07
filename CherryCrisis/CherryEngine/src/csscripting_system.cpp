@@ -39,28 +39,7 @@ void CsScriptingSystem::Init()
 	m_scriptAssembly->m_OnReloaded.Bind(&CsScriptingSystem::OnReload, this);
 
 	m_interfaceAssembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScriptInterface.dll", true, "InterfaceDomain", false);
-
-	mono::ManagedAssembly* scriptAssembly = m_scriptAssembly->m_context->FindAssembly("CherryScripting.copy.dll");
-	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
-
-	m_scriptAssembly->m_context->FindClass("CCScripting", "DebugTest");
-	m_scriptAssembly->m_context->FindClass("CCScripting", "BackpackBehaviour");
-	m_scriptAssembly->m_context->FindClass("CCScripting", "CameraController");
-	m_scriptAssembly->m_context->FindClass("CCScripting", "Script");
-
-	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
-
-	auto& classes = scriptAssembly->GetClasses();
-	for (auto& [className, classRef] : classes)
-	{
-		if (className == "Behaviour")
-			continue;
-		
-		MonoClass* classParentMDR = mono_class_get_parent(classRef->RawClass());
-		MonoType* typeParentMDR = mono_class_get_type(classParentMDR);
-		if (mono_type_get_type(typeParentMDR) == behaviourTypeID)
-			classesName.push_back(className);
-	}
+	m_behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
 }
 
 mono::ManagedScriptContext* CsScriptingSystem::CreateContext(char* domainName, const char* contextPath, bool makeCopy)
@@ -113,17 +92,16 @@ void CsScriptingSystem::SubmitScript(const char* name)
 	if (std::find(classesName.begin(), classesName.end(), std::string(name)) != classesName.end())
 		return;
 
-	mono::ManagedClass* theclass = m_scriptAssembly->m_context->FindClass("CCScripting", name);
-	mono::ManagedClass* behaviourClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Behaviour");
+	mono::ManagedClass* managedCustomClass = m_scriptAssembly->m_context->FindClass("CCScripting", name);
 
-	if (!theclass || !behaviourClass)
+	if (!managedCustomClass || !m_behaviourClass)
 		return;
 
-	auto behaviourTypeID = mono_type_get_type(behaviourClass->RawType());
+	auto behaviourTypeID = mono_type_get_type(m_behaviourClass->RawType());
 
-	MonoClass* classParentMDR = mono_class_get_parent(theclass->RawClass());
-	MonoType* typeParentMDR = mono_class_get_type(classParentMDR);
+	MonoClass* parentClass = mono_class_get_parent(managedCustomClass->RawClass());
+	MonoType* parentType = mono_class_get_type(parentClass);
 
-	if (mono_type_get_type(typeParentMDR) == behaviourTypeID)
+	if (mono_type_get_type(parentType) == behaviourTypeID)
 		classesName.push_back(name);
 }

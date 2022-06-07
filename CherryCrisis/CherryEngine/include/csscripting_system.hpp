@@ -12,6 +12,7 @@ namespace mono
 {
 	class ManagedScriptSystem;
 	class ManagedScriptContext;
+	class ManagedClass;
 }
 
 class CsAssembly;
@@ -26,6 +27,8 @@ private:
 
 	std::shared_ptr<CsAssembly> m_interfaceAssembly;
 	std::shared_ptr<CsAssembly> m_scriptAssembly;
+
+	mono::ManagedClass* m_behaviourClass = nullptr;
 
 public:
 	Event<> onReload;
