@@ -105,11 +105,11 @@ void SphereCollider::InvalidateTransform()
 	m_transform = nullptr;
 }
 
-void SphereCollider::Unregister()
+void SphereCollider::Unregister(bool checkEmpty)
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager::Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this, checkEmpty);
 		m_isRegistered = false;
 	}
 }

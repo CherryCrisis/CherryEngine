@@ -61,7 +61,7 @@ public:
 	/*!
 	*	Unregister the rigidbody from the Physic Manager
 	*/
-	void	Unregister();
+	void	Unregister(bool checkEmpty = true);
 
 	void	SetEnabled();
 

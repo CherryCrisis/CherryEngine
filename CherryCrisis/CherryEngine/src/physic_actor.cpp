@@ -147,7 +147,6 @@ namespace PhysicSystem
 			m_isDynamic = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
-			SetPxActor();
 		}
 		else
 		{
@@ -155,15 +154,15 @@ namespace PhysicSystem
 			m_isStatic = true;
 
 			m_pxActor = physics->createRigidStatic(transform);
-			SetPxActor();
 		}
-
-		m_pxActor->userData = this;
 
 		for (auto& collider : m_colliders)
 		{
 			collider->SetPxShape();
 		}
+
+		m_pxActor->userData = this;
+		SetPxActor();
 
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
 	}
@@ -280,14 +279,14 @@ namespace PhysicSystem
 	void PhysicActor::Empty()
 	{
 		if (m_rigidbody)
-			m_rigidbody->Unregister();
+			m_rigidbody->Unregister(false);
 
 		if (m_controller)
-			m_controller->Unregister();
+			m_controller->Unregister(false);
 
 		while (!m_colliders.empty())
 		{
-			m_colliders.back()->Unregister();
+			m_colliders.back()->Unregister(false);
 		}
 	}
 

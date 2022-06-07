@@ -103,11 +103,11 @@ void BoxCollider::InvalidateTransform()
 	m_transform = nullptr;
 }
 
-void BoxCollider::Unregister()
+void BoxCollider::Unregister(bool checkEmpty)
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager::Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this, checkEmpty);
 		m_isRegistered = false;
 	}
 }

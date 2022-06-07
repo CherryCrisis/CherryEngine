@@ -48,6 +48,7 @@ namespace PhysicSystem
 	{
 	private:
 		bool m_isPlaying = false;
+		bool m_isInDebugMode = false;
 
 		std::vector<PhysicScene*> m_scenes;
 		std::vector<PhysicActor*> m_physicActors;
@@ -57,10 +58,11 @@ namespace PhysicSystem
 		physx::PxPvd*			m_pvd = nullptr;
 
 	public:
+		PhysicManager();
 		~PhysicManager();
 
-		void CreatePhysX();
-		void DestroyPhysX();
+		void CreatePhysX();		// Setup physx
+		void DestroyPhysX();	// physx destruction
 
 		physx::PxMaterial* CreateMaterial(float sf = 0.5f, float df = 0.5f, float cr = 0.1f);
 
@@ -68,9 +70,9 @@ namespace PhysicSystem
 		static void Register(Collider* collider);						// Same as above with a Collider component of any type (Box, Sphere, Capsule)
 		static void Register(CharacterController* controller);			// Same as above with a character controller
 
-		static void Unregister(Rigidbody* rigidbody);					// Unregister the Rigidbody behaviour in the PhysicActor of its entity, destroy the PhysicActor if empty
-		static void Unregister(Collider* collider);						// Same as above with a Collider component of any type (Box, Sphere, Capsule)
-		static void Unregister(CharacterController* controller);		// Same as above with a character controller
+		static void Unregister(Rigidbody* rigidbody, bool checkEmpty = true);				// Unregister the Rigidbody behaviour in the PhysicActor of its entity, destroy the PhysicActor if empty
+		static void Unregister(Collider* collider, bool checkEmpty = true);					// Same as above with a Collider component of any type (Box, Sphere, Capsule)
+		static void Unregister(CharacterController* controller, bool checkEmpty = true);	// Same as above with a character controller
 
 		static PhysicActor* FindActor(Entity& owningEntity);			// Try and get the PhysicActor of the Entity, return nullptr if it doesn't find it
 		static PhysicActor* FindOrCreateActor(Entity& owningEntity);	// Same as above but create the PhysicActor if it doesn't find it

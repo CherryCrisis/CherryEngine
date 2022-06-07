@@ -71,7 +71,7 @@ public:
 	void Initialize();
 
 	void BindToSignals() override;
-	void Unregister();
+	void Unregister(bool checkEmpty = true);
 
 	void Update();
 	void FixedUpdate();

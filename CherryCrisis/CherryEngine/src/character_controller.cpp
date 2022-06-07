@@ -98,11 +98,11 @@ void CharacterController::Initialize()
 	owner.m_OnStart.Unbind(&CharacterController::Initialize, this);
 }
 
-void CharacterController::Unregister()
+void CharacterController::Unregister(bool checkEmpty)
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager::Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this, checkEmpty);
 		m_isRegistered = false;
 	}
 }

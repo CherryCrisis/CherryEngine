@@ -20,14 +20,31 @@ using namespace physx;
 
 namespace PhysicSystem
 {
+	PhysicManager::PhysicManager()
+	{
+#ifdef _DEBUG
+		m_isInDebugMode = true;
+#endif
+
+		// PhysX is setup only once in release
+		// In debug it is reset every time the game is launched and destroyed when the game is stopped to reset PVD
+		if (!m_isInDebugMode)
+			CreatePhysX();
+	}
+
 	PhysicManager::~PhysicManager()
 	{
 		if (m_physics)
 			Stop();
 
+		if (!m_isInDebugMode)
+			DestroyPhysX();
+
 		for (auto& actor : m_physicActors)
 		{
-			actor->Empty();
+			actor->Empty();		// Unlink every physic related component from physicActor
+			delete actor;
+			actor = nullptr;
 		}
 
 		m_physicActors.clear();
@@ -57,18 +74,16 @@ namespace PhysicSystem
 			return;
 		}
 
-#ifdef _DEBUG
-		if (!m_pvd)
+		if (m_isInDebugMode && !m_pvd)
 		{
 			m_pvd = PxCreatePvd(*m_foundation);
 			PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate("127.0.0.1", 5425, 10);
 			m_pvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 		}
-#endif
 
 		PxTolerancesScale toleranceScale;
-		toleranceScale.length = 100;        // typical length of an object
-		toleranceScale.speed = 981;         // typical speed of an object, gravity*1s is a reasonable choice
+		toleranceScale.length = 100;
+		toleranceScale.speed = 981;
 
 		if (!m_physics)
 			m_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_foundation, toleranceScale, true, m_pvd);
@@ -129,7 +144,7 @@ namespace PhysicSystem
 		actor->AddController(controller);
 	}
 
-	void PhysicManager::Unregister(Rigidbody* rigidbody)
+	void PhysicManager::Unregister(Rigidbody* rigidbody, bool checkEmpty)
 	{
 		if (!currentInstance)
 			return;
@@ -140,10 +155,11 @@ namespace PhysicSystem
 
 		actor->RemoveRigidbody(rigidbody);
 
-		currentInstance->IsActorEmpty(*actor);
+		if (checkEmpty)
+			currentInstance->IsActorEmpty(*actor);
 	}
 
-	void PhysicManager::Unregister(Collider* collider)
+	void PhysicManager::Unregister(Collider* collider, bool checkEmpty)
 	{
 		if (!currentInstance)
 			return;
@@ -154,10 +170,11 @@ namespace PhysicSystem
 
 		actor->RemoveCollider(collider);
 
-		currentInstance->IsActorEmpty(*actor);
+		if (checkEmpty)
+			currentInstance->IsActorEmpty(*actor);
 	}
 
-	void PhysicManager::Unregister(CharacterController* controller)
+	void PhysicManager::Unregister(CharacterController* controller, bool checkEmpty)
 	{
 		if (!currentInstance)
 			return;
@@ -168,7 +185,8 @@ namespace PhysicSystem
 
 		actor->RemoveController(controller);
 
-		currentInstance->IsActorEmpty(*actor);
+		if (checkEmpty)
+			currentInstance->IsActorEmpty(*actor);
 	}
 
 	PhysicActor* PhysicManager::FindOrCreateActor(Entity& owningEntity)
@@ -198,6 +216,9 @@ namespace PhysicSystem
 
 		for (auto& actor : currentInstance->m_physicActors)
 		{
+			if (!actor)
+				continue;
+
 			if (actor->m_owner == &owningEntity)
 				return actor;
 		}
@@ -291,7 +312,8 @@ namespace PhysicSystem
 
 		currentInstance->m_isPlaying = true;
 
-		currentInstance->CreatePhysX();
+		if (currentInstance->m_isInDebugMode)
+			currentInstance->CreatePhysX();
 
 		for (auto& scene : currentInstance->m_scenes)
 			scene->CreatePxScene();
@@ -313,7 +335,8 @@ namespace PhysicSystem
 		for (auto& scene : currentInstance->m_scenes)
 			scene->DestroyPxScene();
 
-		currentInstance->DestroyPhysX();
+		if (currentInstance->m_isInDebugMode)
+			currentInstance->DestroyPhysX();
 	}
 
 	RaycastHit PhysicManager::Raycast(Cell& cell, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)
