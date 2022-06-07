@@ -34,9 +34,12 @@ private:
 		CCMaths::Vector3	m_position;
 	};
 
-	void ComputePortalView(Portal* portal, Viewer* viewer, std::vector<PortalViewer>& portalViewers);
-	void ComputePortalFBO(Portal* portal, Viewer* viewer, int currentRecursion);
-	void ComputePortals(std::unordered_set<Portal*>& portals, Viewer* viewer, int currentRecursion);
+	void ComputePortalView(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, std::vector<PortalViewer>& portalViewers);
+	void ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
+	void ComputePortals(std::unordered_set<Portal*>& portals, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
+
+	[[nodiscard]] PortalViewer SavePortalViewerParams(const Portal* portal);
+	void ApplyPortalViewerParams(Portal* portal, const PortalViewer& portalViewer);
 
 protected:
 	ElementMeshGenerator m_meshGenerator;
@@ -64,5 +67,5 @@ public:
 	template <>
 	void Unsubscribe(Portal* toGenerate);
 
-	void Execute(Viewer*& viewer);
+	void Execute(Viewer* viewer, Framebuffer* framebuffer);
 };

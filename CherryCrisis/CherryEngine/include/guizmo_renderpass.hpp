@@ -62,5 +62,5 @@ public:
 	template <>
 	void Unsubscribe(LightComponent* toGenerate);
 
-	void Execute(Viewer*& viewer);
+	void Execute(Viewer* viewer, Framebuffer* framebuffer);
 };

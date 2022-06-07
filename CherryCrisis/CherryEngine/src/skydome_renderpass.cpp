@@ -78,14 +78,12 @@ void SkydomeRenderPass::SetupSkydome()
 	}
 }
 
-void SkydomeRenderPass::Execute(Viewer*& viewer)
+void SkydomeRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
 	if (!viewer)
 		return;
 
-	const Framebuffer& framebuffer = *viewer->m_framebuffer;
-
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);

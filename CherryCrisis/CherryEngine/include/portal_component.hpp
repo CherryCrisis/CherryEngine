@@ -33,7 +33,8 @@ public:
 	void BindToSignals() override;
 	void LateUpdate() override;
 
-	void UpdatePortalMatrices(Transform* tranform = nullptr);
+	void OnUpdatePortalMatrices(Transform* tranform = nullptr);
+	void UpdatePortalMatrices(bool updateLinkedPortal = true);
 	void UpdateModelMatrix();
 	void UpdateRelativeLinkedPortalMatrix();
 

@@ -75,7 +75,7 @@ void GameDisplayer::Render()
             if (m_isActive && mainCamera)
             {
                 mainCamera->SetSize({ wsize.x, wsize.y });
-                mainCamera->Draw(1);
+                mainCamera->Draw(2);
 
                 viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
             }

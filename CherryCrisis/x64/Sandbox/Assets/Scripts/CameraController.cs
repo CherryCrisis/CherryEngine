@@ -28,7 +28,7 @@ namespace CCScripting
 		void TryInteract()  
 		{
 			// this needs to be improved, vectors seems to be wrongs
-			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
+			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward(), interactRange);
 			
 			if (hit != null && hit.actor != null &&hit.actor.m_owner != null)
 			{

@@ -99,9 +99,9 @@ void PortalComponent::Initialize()
 	UpdateRelativeLinkedPortalMatrix();
 
 
-	m_transform->m_onPositionChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
-	m_transform->m_onRotationChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
-	m_transform->m_onScaleChange.Bind(&PortalComponent::UpdatePortalMatrices, this);
+	m_transform->m_onPositionChange.Bind(&PortalComponent::OnUpdatePortalMatrices, this);
+	m_transform->m_onRotationChange.Bind(&PortalComponent::OnUpdatePortalMatrices, this);
+	m_transform->m_onScaleChange.Bind(&PortalComponent::OnUpdatePortalMatrices, this);
 
 	GetHost().m_OnAwake.Unbind(&PortalComponent::Initialize, this);
 	
@@ -111,7 +111,7 @@ void PortalComponent::LateUpdate()
 {
 	for (PortalTeleporterComponent* portalTeleporter : m_portalTeleporters)
 	{
-		Transform* transform = portalTeleporter->m_entityNode->m_transform;
+		Transform* transform = portalTeleporter->m_transform;
 
 		Vector3 portalForward = -m_transform->GetWorldMatrix().back.Normalized();
 
@@ -146,7 +146,7 @@ void PortalComponent::LateUpdate()
 		int portalSide = CCMaths::Sign<float>(Vector3::Dot(newOffsetFromPortal, portalForward));
 		int previousPortalSide = CCMaths::Sign<float>(Vector3::Dot(portalTeleporter->m_previousOffsetFromPortal, portalForward));
 
-		Matrix4 portalTeleporterMatrix = transform->GetWorldMatrix();
+		Matrix4 portalTeleporterMatrix = portalTeleporter->m_entityNode->m_transform->GetWorldMatrix();
 		Matrix4 worldMatrixPortals = m_portal.m_linkedPortal->m_modelMatrix * m_portal.m_modelMatrix.Inverse();
 
 		bool portalSideDiff = (portalSide != previousPortalSide);
@@ -202,9 +202,18 @@ void PortalComponent::UpdateSliceParamaters(PortalTeleporterComponent* portalTel
 }
 
 
-void PortalComponent::UpdatePortalMatrices(Transform* tranform)
+void PortalComponent::OnUpdatePortalMatrices(Transform* tranform)
+{
+	UpdatePortalMatrices(true);
+}
+
+void PortalComponent::UpdatePortalMatrices(bool updateLinkedPortal)
 {
 	UpdateModelMatrix();
+
+	if (updateLinkedPortal && m_linkedPortal && updateLinkedPortal)
+		m_linkedPortal->UpdatePortalMatrices(false);
+	
 	UpdateRelativeLinkedPortalMatrix();
 }
 
@@ -249,6 +258,7 @@ void PortalComponent::SetLinkedPortal(Behaviour* linkedObject)
 	m_linkedPortal->UpdateModelMatrix();
 
 	UpdateRelativeLinkedPortalMatrix();
+	m_linkedPortal->UpdateRelativeLinkedPortalMatrix();
 }
 
 Behaviour* PortalComponent::GetLinkedPortal()

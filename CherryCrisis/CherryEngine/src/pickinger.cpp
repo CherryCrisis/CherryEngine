@@ -29,7 +29,7 @@ Entity* Pickinger::GetEntity(float x, float y)
 	// flip texture
 	y = (float)instance->m_viewer->m_framebuffer->height - y;
 
-	instance->m_renderpass->Execute(instance->m_viewer);
+	instance->m_renderpass->Execute(instance->m_viewer, instance->m_viewer->m_framebuffer.get());
 
 	glFlush();
 	glFinish();
@@ -61,7 +61,7 @@ UIItem* Pickinger::GetUIItem(float x, float y)
 	// flip texture
 	y = (float)instance->m_viewer->m_framebuffer->height - y;
 
-	instance->m_renderpass->Execute(instance->m_viewer);
+	instance->m_renderpass->Execute(instance->m_viewer, instance->m_viewer->m_framebuffer.get());
 
 	glFlush();
 	glFinish();

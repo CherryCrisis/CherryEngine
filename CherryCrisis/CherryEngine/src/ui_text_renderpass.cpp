@@ -46,15 +46,13 @@ void TextRenderPass::Unsubscribe(UIText* toGenerate)
 // Font rendering from LearnGL
 // https://learnopengl.com/In-Practice/Text-Rendering
 // TODO: Optimize quad size calculation
-void TextRenderPass::Execute(Viewer*& viewer)
+void TextRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
 	if (!viewer)
 		return;
-	
-	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
-	glViewport(0, 0, framebuffer.width, framebuffer.height);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+	glViewport(0, 0, framebuffer->width, framebuffer->height);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -66,8 +64,8 @@ void TextRenderPass::Execute(Viewer*& viewer)
 	glUseProgram(m_program->m_shaderProgram);
 
 	//TODO: Optimize !
-	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer.width),
-														   0.0f, static_cast<const float>(framebuffer.height), -1.f, 5.f);
+	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer->width),
+														   0.0f, static_cast<const float>(framebuffer->height), -1.f, 5.f);
 
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "projection"), 1, GL_FALSE, proj.data);
 	for (UIText* text : m_texts)

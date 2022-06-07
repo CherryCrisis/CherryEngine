@@ -55,5 +55,5 @@ public:
 	template <>
 	void Unsubscribe(UIItem* toGenerate);
 
-	void Execute(Viewer*& viewer);
+	void Execute(Viewer* viewer, Framebuffer* framebuffer);
 };

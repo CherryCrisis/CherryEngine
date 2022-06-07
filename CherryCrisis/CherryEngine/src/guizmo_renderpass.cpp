@@ -77,16 +77,14 @@ void GuizmoRenderPass::Unsubscribe(AudioEmitter* toGenerate)
 	m_audioEmitters.erase(toGenerate);
 }
 
-void GuizmoRenderPass::Execute(Viewer*& viewer)
+void GuizmoRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
 	if (!viewer)
 		return;
 
-	const Framebuffer& framebuffer = *viewer->m_framebuffer;
+	glViewport(0, 0, framebuffer->width, framebuffer->height);
 
-	glViewport(0, 0, framebuffer.width, framebuffer.height);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);

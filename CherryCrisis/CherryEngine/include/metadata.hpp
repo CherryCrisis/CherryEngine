@@ -91,51 +91,51 @@ struct CCENGINE_API Metapack
 	std::vector<std::string> m_insertOrder;
 	std::unordered_map<std::string, std::shared_ptr<AMetadata>> m_metadatas;
 
-	void SetMetadata(const char* fieldName, std::shared_ptr<AMetadata> metadata, bool shown = true, const char* identifier = "0")
+	void SetMetadata(const char* fieldName, std::shared_ptr<AMetadata> metadata)
 	{
 		m_insertOrder.push_back(fieldName);
 		m_metadatas.insert({ fieldName, metadata });
 	}
 
 	template <typename T>
-	void SetField(const char* fieldName, Field& fieldToSet, bool shown = true, const char* identifier = "0")
+	void SetField(const char* fieldName, Field& fieldToSet, bool shown = true, const char* identifier = "\0")
 	{
 		// todo use unique ptr
 		SetMetadata(fieldName, std::make_shared<MetaField<T>>(fieldName, fieldToSet, identifier, shown));
 	}
 
 	template <typename T>
-	void SetField(const char* fieldName, std::any value, const std::type_index& fieldType, bool shown = true, const char* identifier = "0")
+	void SetField(const char* fieldName, std::any value, const std::type_index& fieldType, bool shown = true, const char* identifier = "\0")
 	{
 		// todo use unique ptr
 		SetMetadata(fieldName, std::make_shared<MetaField<T>>(fieldName, value, fieldType, identifier, shown));
 	}
 
 	template <typename CastT, typename RefT>
-	void SetFieldFromPtr(const char* fieldName, RefT* ref, bool shown = true)
+	void SetFieldFromPtr(const char* fieldName, RefT* ref, bool shown = true, const char* identifier = "\0")
 	{
-		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT>, reinterpret_cast<CastT>(ref)), typeid(std::remove_pointer<CastT>), shown);
+		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT>, reinterpret_cast<CastT>(ref)), typeid(std::remove_pointer<CastT>), shown, identifier);
 	}
 
 	template <typename RefT>
-	void SetFieldFromPtr(const char* fieldName, RefT* ref, bool shown = true)
+	void SetFieldFromPtr(const char* fieldName, RefT* ref, bool shown = true, const char* identifier = "\0")
 	{
-		SetField<RefT*>(fieldName, std::any(ref), typeid(RefT), shown);
+		SetField<RefT*>(fieldName, std::any(ref), typeid(RefT), shown, identifier);
 	}
 
 	template <typename RefT>
-	void SetField(const char* fieldName, RefT& ref, bool shown = true)
+	void SetField(const char* fieldName, RefT& ref, bool shown = true, const char* identifier = "\0")
 	{
-		SetFieldFromPtr(fieldName, &ref, shown);
+		SetFieldFromPtr(fieldName, &ref, shown, identifier);
 	}
 
 	template <typename CastT, typename RefT>
-	void SetField(const char* fieldName, RefT& ref, bool shown = true)
+	void SetField(const char* fieldName, RefT& ref, bool shown = true, const char* identifier = "\0")
 	{
-		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref)), typeid(CastT), shown);
+		SetField<CastT*>(fieldName, std::any(std::in_place_type<CastT*>, reinterpret_cast<CastT*>(&ref)), typeid(CastT), shown, identifier);
 	}
 
-	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop, const char* identifier = "0", bool shown = true)
+	void SetProperty(const char* fieldName, CCProperty::IClearProperty* prop, const char* identifier = "\0", bool shown = true)
 	{
 		SetMetadata(fieldName, std::make_shared<MetaProperty>(fieldName, prop, identifier, shown));
 	}
