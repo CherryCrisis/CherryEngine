@@ -39,6 +39,33 @@ void Transform::PopulateMetadatas()
 	m_metadatas.SetProperty("parent", &parent);
 }
 
+void Transform::UpdateChildrenPosition() 
+{
+	for (Transform* child : m_children) 
+	{
+		child->UpdateChildrenPosition();
+		child->m_onPositionChange.Invoke(&*child);
+	}
+}
+
+void Transform::UpdateChildrenRotation()
+{
+	for (Transform* child : m_children)
+	{
+		child->UpdateChildrenRotation();
+		child->m_onRotationChange.Invoke(&*child);
+	}
+}
+
+void Transform::UpdateChildrenScale()
+{
+	for (Transform* child : m_children)
+	{
+		child->UpdateChildrenScale();
+		child->m_onScaleChange.Invoke(&*child);
+	}
+}
+
 void Transform::SetDirty(int dirtyFlag)
 {
 	m_isDirty = dirtyFlag;
@@ -189,8 +216,7 @@ void Transform::SetPosition(const Vector3& position)
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_POSITION);
 	m_onPositionChange.Invoke(this);
 
-	for (Transform* child : m_children)
-		child->m_onPositionChange.Invoke(&*child);
+	UpdateChildrenPosition();
 }
 
 void Transform::SetGlobalPosition(const Vector3& position)
@@ -215,8 +241,7 @@ void Transform::SetRotation(const Quaternion& rotation)
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_ROTATION);
 	m_onRotationChange.Invoke(this);
 
-	for (Transform* child : m_children)
-		child->m_onRotationChange.Invoke(&*child);
+	UpdateChildrenRotation();
 }
 
 void Transform::SetGlobalRotation(const Vector3& rotation)
@@ -246,8 +271,7 @@ void Transform::SetScale(const Vector3& scale)
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_SCALE);
 	m_onScaleChange.Invoke(this);
 
-	for (Transform* child : m_children)
-		child->m_onScaleChange.Invoke(&*child);
+	UpdateChildrenScale();
 }
 
 void Transform::SetGlobalScale(const Vector3& scale)

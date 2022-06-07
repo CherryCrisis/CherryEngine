@@ -12,6 +12,9 @@
 class Rigidbody : public Behaviour
 {
 public:
+	%immutable;
+	PhysicSystem::PhysicActor* m_physicActor;
+
 	// Set and gets used for the properties and Serialization
 	void	SetEnabled(const bool& isEnabled);
 	bool	GetEnabled();

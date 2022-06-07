@@ -16,9 +16,9 @@ namespace PhysicSystem
 		if (m_paused)
 			return;
 
-		m_pxScene->collide(deltaTime);
-		m_pxScene->fetchCollision(true);
-		m_pxScene->advance();
+		//m_pxScene->collide(deltaTime);
+		//m_pxScene->fetchCollision(true);
+		m_pxScene->simulate(deltaTime);
 		m_pxScene->fetchResults(true);
 
 		for (auto& actor : m_actors)

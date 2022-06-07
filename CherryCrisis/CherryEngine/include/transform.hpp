@@ -51,6 +51,10 @@ private:
 	void SetDirty(int dirtyFlag);
 
 	void PopulateMetadatas() override;
+	
+	void UpdateChildrenPosition();
+	void UpdateChildrenRotation();
+	void UpdateChildrenScale();
 
 public:
 	Event<Transform*>	m_onPositionChange;

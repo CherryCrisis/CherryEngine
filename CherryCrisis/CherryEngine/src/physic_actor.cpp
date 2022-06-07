@@ -113,7 +113,7 @@ namespace PhysicSystem
 	{
 		if (m_pxActor)
 		{
-			Quaternion rot = transform->GetGlobalRotation();
+			Quaternion rot = transform->GetGlobalRotation().Normalized();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
 				physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
@@ -153,14 +153,12 @@ namespace PhysicSystem
 			m_isDynamic = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
-			SetPxActor();
 		}
 		else if (!m_pxActor || m_isDynamic)
 		{
 			m_isDynamic = false;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
-			SetPxActor();
 		}
 
 		m_pxActor->userData = this;
@@ -169,6 +167,7 @@ namespace PhysicSystem
 		{
 			collider->SetPxShape();
 		}
+			SetPxActor();
 
 
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
@@ -387,7 +386,7 @@ namespace PhysicSystem
 			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Y, rotCons.y);
 			actor->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::Enum::eLOCK_ANGULAR_Z, rotCons.z);
 
-			if (actor->getScene() && !m_rigidbody->GetKinematic())
+			if (m_isEnabled && actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}
@@ -406,7 +405,7 @@ namespace PhysicSystem
 			else
 				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_SIMULATION, false);
 
-			if (actor->getScene() && !m_rigidbody->GetKinematic())
+			if (m_isEnabled && actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}
@@ -439,7 +438,7 @@ namespace PhysicSystem
 			}
 
 
-			if (actor->getScene() && !m_rigidbody->GetKinematic())
+			if (m_isEnabled && actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}
@@ -458,8 +457,7 @@ namespace PhysicSystem
 			else
 				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, true);
 
-
-			if (actor->getScene() && !m_rigidbody->GetKinematic())
+			if (m_isEnabled && actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();
 		}
 	}

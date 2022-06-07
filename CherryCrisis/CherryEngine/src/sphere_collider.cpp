@@ -140,7 +140,6 @@ void SphereCollider::SetAABBScale()
 			Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
 
 			m_editableScale = Max(Max(extents.x, extents.y), extents.z);
-			m_editableScale = Clamp(m_editableScale, 0.01f, m_editableScale);
 			m_localPosition = renderer->m_mesh->m_aabb.m_center;
 		}
 	}
@@ -153,6 +152,9 @@ void SphereCollider::SetEntityScale(Transform* transform)
 
 	m_totalScale = m_editableScale * m_entityScale;
 	
+	if (m_totalScale < 0.01f)
+		m_totalScale = 0.01f;
+
 	ComputeModelMatrices();
 	
 	ResetPxShape();
@@ -234,6 +236,10 @@ void SphereCollider::SetScale(const float& scale)
 	m_editableScale = scale;
 
 	m_totalScale = m_editableScale * m_entityScale;
+
+	if (m_totalScale < 0.01f)
+		m_totalScale = 0.01f;
+
 	ComputeModelMatrices();
 
 	ResetPxShape();

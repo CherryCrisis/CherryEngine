@@ -7639,6 +7639,18 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponent(void * jarg1)
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Rigidbody_m_physicActor_get(void * jarg1) {
+  void * jresult ;
+  Rigidbody *arg1 = (Rigidbody *) 0 ;
+  PhysicSystem::PhysicActor *result = 0 ;
+  
+  arg1 = (Rigidbody *)jarg1; 
+  result = (PhysicSystem::PhysicActor *) ((arg1)->m_physicActor);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Rigidbody_SetEnabled(void * jarg1, unsigned int jarg2) {
   Rigidbody *arg1 = (Rigidbody *) 0 ;
   bool *arg2 = 0 ;

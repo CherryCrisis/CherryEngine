@@ -137,13 +137,6 @@ void BoxCollider::SetAABBScale()
 		{
 			m_editableScale = renderer->m_mesh->m_aabb.m_extents;
 
-			if (m_editableScale.x == 0)
-				m_editableScale.x = 0.01f;
-			if (m_editableScale.y == 0)
-				m_editableScale.y = 0.01f;
-			if (m_editableScale.z == 0)
-				m_editableScale.z = 0.01f;
-
 			m_localPosition = renderer->m_mesh->m_aabb.m_center;
 		}
 	}
@@ -155,6 +148,13 @@ void BoxCollider::SetEntityScale(Transform* transform)
 
 	m_totalScale = m_editableScale;
 	m_totalScale *= m_entityScale;
+
+	if (m_totalScale.x < 0.01f)
+		m_totalScale.x = 0.01f;
+	if (m_totalScale.y < 0.01f)
+		m_totalScale.y = 0.01f;
+	if (m_totalScale.z < 0.01f)
+		m_totalScale.z = 0.01f;
 
 	ComputeModelMatrices();
 
@@ -249,6 +249,13 @@ void BoxCollider::SetScale(const CCMaths::Vector3& scale)
 
 	m_totalScale = m_editableScale;
 	m_totalScale *= m_entityScale;
+
+	if (m_totalScale.x < 0.01f)
+		m_totalScale.x = 0.01f;
+	if (m_totalScale.y < 0.01f)
+		m_totalScale.y = 0.01f;
+	if (m_totalScale.z < 0.01f)
+		m_totalScale.z = 0.01f;
 
 	ComputeModelMatrices();
 

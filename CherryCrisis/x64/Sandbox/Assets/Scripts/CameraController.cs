@@ -12,6 +12,7 @@ namespace CCScripting
 		Transform cubeOffset;
 
 		PickableCube pickedCube;
+		float throwingStrength = 5f;
 
 		float speedSensivity = 80.0f;
 		float interactRange = 25f;
@@ -78,7 +79,7 @@ namespace CCScripting
 
 		void ThrowCube()
 		{
-			pickedCube.Throw();
+			pickedCube.Throw(transform.Forward().Normalized(), throwingStrength);
 			pickedCube = null;
 		}
 	}

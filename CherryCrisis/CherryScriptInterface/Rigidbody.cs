@@ -34,6 +34,14 @@ public class Rigidbody : Behaviour {
     }
   }
 
+  public PhysicActor m_physicActor {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.Rigidbody_m_physicActor_get(swigCPtr);
+      PhysicActor ret = (cPtr == global::System.IntPtr.Zero) ? null : new PhysicActor(cPtr, false);
+      return ret;
+    } 
+  }
+
   public void SetEnabled(bool isEnabled) {
     CherryEnginePINVOKE.Rigidbody_SetEnabled(swigCPtr, isEnabled);
   }

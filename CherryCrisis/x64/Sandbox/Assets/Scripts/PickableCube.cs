@@ -9,26 +9,31 @@ namespace CCScripting
 
         Transform transform;
         Rigidbody rb;
+        BoxCollider collider;
 
         public void Start()
         {
             transform = GetBehaviour<Transform>();
             rb = GetBehaviour<Rigidbody>();
+            collider = GetBehaviour<BoxCollider>();
         }
 
         public void Pick(Transform parent) 
         {
-            rb.SetKinematic(true);
+            collider.SetTrigger(true);
+            rb.SetKinematic(true);  
             transform.SetParent(parent);
             transform.SetPosition(Vector3.Zero);
-            transform.SetRotation(Quaternion.Identity);
+            transform.SetRotation(Quaternion.Identity); 
         }
 
-        public void Throw() 
+        public void Throw(Vector3 direction, float strength) 
         {
             transform.SetParent(null, true, true);
+            collider.SetTrigger(false);
             rb.SetKinematic(false);
-            rb.AddForce(Vector3.Up * 500f, EForceMode.eFORCE);
+            
+            rb.AddForce(direction * strength, EForceMode.eFORCE); 
         }
     }
 }

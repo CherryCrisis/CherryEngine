@@ -127,6 +127,9 @@ bool Rigidbody::GetEnabled()
 void Rigidbody::Rigidbody::SetKinematic(const bool& isKinematic)
 {
 	m_isKinematic = isKinematic;
+
+	if (m_physicActor)
+		m_physicActor->SetActorKinematic();
 }
 
 bool Rigidbody::Rigidbody::GetKinematic()

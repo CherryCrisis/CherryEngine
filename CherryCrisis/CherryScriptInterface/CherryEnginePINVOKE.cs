@@ -1453,6 +1453,9 @@ class CherryEnginePINVOKE {
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_delete_PortalComponent")]
   public static extern void delete_PortalComponent(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Rigidbody_m_physicActor_get")]
+  public static extern global::System.IntPtr Rigidbody_m_physicActor_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("CherryEngine", EntryPoint="CSharp_CCEngine_Rigidbody_SetEnabled")]
   public static extern void Rigidbody_SetEnabled(global::System.Runtime.InteropServices.HandleRef jarg1, bool jarg2);
 

@@ -139,8 +139,8 @@ void CapsuleCollider::SetAABBScale()
 		{
 			Vector3& extents = renderer->m_mesh->m_aabb.m_extents;
 
-			m_editableScale = CCMaths::Clamp(extents.y, 0.01f, extents.y);
-			m_editableRadius = Max(extents.x, extents.z) > 0.01f ? Max(extents.x, extents.z) : 0.01f;
+			m_editableScale = extents.y;
+			m_editableRadius = Max(extents.x, extents.z);
 			m_localPosition = renderer->m_mesh->m_aabb.m_center;
 		}
 	}
@@ -156,6 +156,9 @@ void CapsuleCollider::SetEntityScale(Transform* transform)
 	m_totalRadius = m_editableRadius * m_entityRadius;
 
 	m_totalScale = CCMaths::Max(0.0001f, (m_editableScale * m_entityScale) - m_totalRadius);
+
+	if (m_totalRadius < 0.01f)
+		m_totalRadius = 0.01f;
 
 	ComputeModelMatrices();
 
@@ -262,6 +265,10 @@ void CapsuleCollider::SetRadius(const float& radius)
 	m_editableRadius = radius;
 
 	m_totalRadius = m_editableRadius * m_entityRadius;
+
+	if (m_totalRadius < 0.01f)
+		m_totalRadius = 0.01f;
+
 	ComputeModelMatrices();
 
 	ResetPxShape();
