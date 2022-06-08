@@ -47,10 +47,6 @@ ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 
 ScriptedBehaviour::~ScriptedBehaviour()
 {
-	GetHost().m_OnAwake.Unbind(&ScriptedBehaviour::Awake, this);
-	GetHost().m_OnStart.Unbind(&ScriptedBehaviour::Start, this);
-	GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
-
 	UnsetSignals();
 
 	if (m_scriptingAssembly)
@@ -72,6 +68,7 @@ void ScriptedBehaviour::OnSetOwner(Entity* newOwner)
 
 void ScriptedBehaviour::SetSignals()
 {
+	// Bind all the signals if they have a managed equivalent
 	if (m_managedUpdate)
 		GetHost().m_OnTick.Bind(&ScriptedBehaviour::Update, this);
 
@@ -99,6 +96,8 @@ void ScriptedBehaviour::SetSignals()
 
 void ScriptedBehaviour::UnsetSignals()
 {
+	// Unbind all the signals if they had a managed equivalent
+
 	if (m_managedUpdate)
 		GetHost().m_OnTick.Unbind(&ScriptedBehaviour::Update, this);
 
@@ -132,6 +131,8 @@ void ScriptedBehaviour::SetScriptClass(const std::string& scriptName)
 		return;
 
 	m_managedClass = m_scriptingAssembly->m_context->FindClass("CCScripting", scriptName.c_str());
+
+	// Create all UnmanagedThunk for function signals if they have a managed equivalent
 
 	if (m_managedUpdate = m_managedClass->FindMethod("Update"))
 		csUpdate = m_managedUpdate->GetMemberUnmanagedThunk<void>();
@@ -199,6 +200,10 @@ void ScriptedBehaviour::PopulateMetadatas()
 		else if (fieldType->Equals(mono::ManagedType::GetSingle()))
 		{
 			currentProperty = std::make_shared<ReflectedField<float>>(m_managedInstance, fieldRef.get());
+		}
+		else if (fieldType->Equals(mono::ManagedType::GetBoolean()))
+		{
+			currentProperty = std::make_shared<ReflectedField<bool>>(m_managedInstance, fieldRef.get());
 		}
 
 		if (currentProperty)
@@ -319,6 +324,8 @@ void ScriptedBehaviour::Update()
 
 void ScriptedBehaviour::OnCollisionEnter(Entity* other)
 {
+	// Create a managed instance from the already existing entity
+	// Save it in cache to avoir another instanciation in the Stay and Exit functions
 	mono::ManagedObject* entityInstance = m_physicEntities[other] = m_entityClass->CreateUnmanagedInstance(other, false);
 
 	MonoException* excep = nullptr;
@@ -327,6 +334,7 @@ void ScriptedBehaviour::OnCollisionEnter(Entity* other)
 
 void ScriptedBehaviour::OnCollisionStay(Entity* other)
 {
+	// Get the already existing managed Entity instance
 	auto entityIt = m_physicEntities.find(other);
 	if (entityIt == m_physicEntities.end())
 		return;
@@ -339,6 +347,7 @@ void ScriptedBehaviour::OnCollisionStay(Entity* other)
 
 void ScriptedBehaviour::OnCollisionExit(Entity* other)
 {
+	// Get the already existing managed Entity instance
 	auto entityIt = m_physicEntities.find(other);
 	if (entityIt == m_physicEntities.end())
 		return;
@@ -348,11 +357,15 @@ void ScriptedBehaviour::OnCollisionExit(Entity* other)
 	MonoException* excep = nullptr;
 	csCollideOut->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
 
+	// Remove it from cache
 	m_physicEntities.erase(entityIt);
 }
 
 void ScriptedBehaviour::OnTriggerEnter(Entity* other)
 {
+	// Create a managed instance from the already existing entity
+	// Save it in cache to avoir another instanciation in the Exit function
+
 	mono::ManagedObject* entityInstance = m_physicEntities[other] = m_entityClass->CreateUnmanagedInstance(other, false);
 
 	MonoException* excep = nullptr;
@@ -361,6 +374,7 @@ void ScriptedBehaviour::OnTriggerEnter(Entity* other)
 
 void ScriptedBehaviour::OnTriggerExit(Entity* other)
 {
+	// Get the already existing managed Entity instance
 	auto entityIt = m_physicEntities.find(other);
 	if (entityIt == m_physicEntities.end())
 		return;
@@ -370,6 +384,7 @@ void ScriptedBehaviour::OnTriggerExit(Entity* other)
 	MonoException* excep = nullptr;
 	csTriggerOut->Invoke(m_managedInstance->RawObject(), entityInstance->RawObject(), &excep);
 
+	// Remove it from cache
 	m_physicEntities.erase(entityIt);
 }
 
