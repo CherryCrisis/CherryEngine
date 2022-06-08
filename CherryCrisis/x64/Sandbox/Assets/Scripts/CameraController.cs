@@ -61,7 +61,7 @@ namespace CCScripting
 			float dt = Time.GetDeltaTime();
 
 			float sensitityY = deltaMouse.y;
-			double angleX = transform.eulerAngles.x + sensitityY * speedSensivity * dt;
+			double angleX = transform.eulerAngles.x + sensitityY * speedSensivity * 0.002f;
 			angleX = Math.Min(Math.Max(angleX, -Math.PI * 0.4f), Math.PI * 0.4f);
 
 			transform.eulerAngles = new Vector3((float)angleX, transform.eulerAngles.y, transform.eulerAngles.z);

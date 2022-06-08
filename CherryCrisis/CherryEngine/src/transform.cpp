@@ -241,6 +241,7 @@ void Transform::SetRotation(const Quaternion& rotation)
 	SetDirty((int)EDirtyFlag::WORLD_MATRIX | (int)EDirtyFlag::WORLD_ROTATION);
 	m_onRotationChange.Invoke(this);
 
+	UpdateChildrenPosition();
 	UpdateChildrenRotation();
 }
 

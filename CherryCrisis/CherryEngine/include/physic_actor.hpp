@@ -33,6 +33,8 @@ namespace PhysicSystem
 		bool	m_isEnabled			= true;
 		bool	m_isStatic			= false;
 
+		bool	m_dontResetPhysx = false;
+
 		CCMaths::Vector3 m_velocity			= CCMaths::Vector3::Zero;
 		CCMaths::Vector3 m_angularVelocity	= CCMaths::Vector3::Zero;
 		CCMaths::Vector3 m_InertiaTensor	= CCMaths::Vector3::Zero;
