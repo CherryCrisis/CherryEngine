@@ -32,7 +32,7 @@ namespace PhysicSystem
 			m_transform->m_onPositionChange.Unbind(&PhysicActor::SetActorPosition, this);
 			m_transform->m_onRotationChange.Unbind(&PhysicActor::SetActorRotation, this);
 			m_transform->m_onScaleChange.Unbind(&PhysicActor::SetActorScale, this);
-			m_transform->m_OnDestroy.Unbind(&PhysicActor::InvalidateTransform, this);
+			m_transform->m_OnDestroyed.Unbind(&PhysicActor::InvalidateTransform, this);
 		}
 	}
 
@@ -58,7 +58,7 @@ namespace PhysicSystem
 			m_transform->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
 			m_transform->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
 			m_transform->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
-			m_transform->m_OnDestroy.Bind(&PhysicActor::InvalidateTransform, this);
+			m_transform->m_OnDestroyed.Bind(&PhysicActor::InvalidateTransform, this);
 		}
 	}
 

@@ -22,8 +22,9 @@ namespace CCScripting
         public void Start() 
         {
             respawnTimer.totalTime = respawnTime;
-            emitter = GetBehaviour<AudioEmitter>();
             emitter.AddSound("Assets/Sounds/scream.wav");
+            emitter.SetLooping(false);
+            emitter.SetSpatialized(true);
         }
 
         public void SetInMovement()
@@ -33,9 +34,9 @@ namespace CCScripting
 
         public void Update() 
         {
+            float dt = Time.GetDeltaTime();
             if (isMoving && !opened) 
             {
-                float dt = Time.GetDeltaTime();
                 float offset = movementScale * dt;
                 
                 respawnTimer.Tick(dt);
@@ -53,8 +54,11 @@ namespace CCScripting
                 }
             }
 
-            if (InputManager.GetKeyDown(Keycode.K))
+            knockTimer.Tick(dt);
+            if (knockTimer.CheckAndReset())
+            {
                 emitter.Play();
+            }
         }
     }
 }

@@ -50,7 +50,7 @@ PortalComponent::~PortalComponent()
 	GetHost().m_OnTriggerExit.Unbind(&PortalComponent::OnTriggerExit, this);
 
 	if (m_linkedPortal)
-		m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
+		m_linkedPortal->m_OnDestroyed.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
 }
 
 void PortalComponent::PopulateMetadatas()
@@ -231,7 +231,7 @@ void PortalComponent::InvalidateLinkedPortal()
 	if (!m_linkedPortal)
 		return;
 
-	m_linkedPortal->m_OnDestroy.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
+	m_linkedPortal->m_OnDestroyed.Unbind(&PortalComponent::InvalidateLinkedPortal, this);
 	m_portal.m_linkedPortal = nullptr;
 	m_linkedPortal  = nullptr;
 };
@@ -247,7 +247,7 @@ void PortalComponent::SetLinkedPortal(Behaviour* linkedObject)
 
 	m_linkedPortal = linkedPortal;
 
-	m_linkedPortal->m_OnDestroy.Bind(&PortalComponent::InvalidateLinkedPortal, this);
+	m_linkedPortal->m_OnDestroyed.Bind(&PortalComponent::InvalidateLinkedPortal, this);
 
 	m_portal.m_linkedPortal = &linkedPortal->m_portal;
 

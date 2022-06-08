@@ -42,7 +42,7 @@ BoxCollider::~BoxCollider()
 		m_transform->m_onScaleChange.Unbind(&BoxCollider::SetEntityScale, this);
 		m_transform->m_onPositionChange.Unbind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_onRotationChange.Unbind(&BoxCollider::RecomputeMatrix, this);
-		m_transform->m_OnDestroy.Unbind(&BoxCollider::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Unbind(&BoxCollider::InvalidateTransform, this);
 	}
 
 	GetHost().m_cell->RemoveRenderer(this);
@@ -85,7 +85,7 @@ void BoxCollider::Initialize()
 		m_transform->m_onScaleChange.Bind(&BoxCollider::SetEntityScale, this);
 		m_transform->m_onPositionChange.Bind(&BoxCollider::RecomputeMatrix, this);
 		m_transform->m_onRotationChange.Bind(&BoxCollider::RecomputeMatrix, this);
-		m_transform->m_OnDestroy.Bind(&BoxCollider::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Bind(&BoxCollider::InvalidateTransform, this);
 	}
 
 	m_physicActor->Init();

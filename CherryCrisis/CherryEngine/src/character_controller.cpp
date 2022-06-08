@@ -35,7 +35,7 @@ CharacterController::~CharacterController()
 
 	if (m_transform)
 	{
-		m_transform->m_OnDestroy.Unbind(&CharacterController::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Unbind(&CharacterController::InvalidateTransform, this);
 	}
 }
 
@@ -68,7 +68,7 @@ void CharacterController::Initialize()
 	m_transform = owner.GetOrAddBehaviour<Transform>();
 
 	if (m_transform)
-		m_transform->m_OnDestroy.Bind(&CharacterController::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Bind(&CharacterController::InvalidateTransform, this);
 
 	m_physicActor->Init();
 

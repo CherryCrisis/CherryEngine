@@ -55,8 +55,6 @@ Entity::Entity(Entity* entity)
 // something is wrong here 
 Entity::~Entity()
 {
-	m_OnDestroyed.Invoke();
-
 	for (auto& [type, behaviour] : m_behaviours)
 		delete behaviour;
 

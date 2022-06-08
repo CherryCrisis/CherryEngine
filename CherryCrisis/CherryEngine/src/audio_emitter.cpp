@@ -96,6 +96,8 @@ AudioEmitter::AudioEmitter(CCUUID& id) : Behaviour(id)
 
 AudioEmitter::~AudioEmitter()
 {
+	Stop();
+	
 	if (CameraComponent::m_editorCamera)
 		UnsubscribeToPipeline(CameraComponent::m_editorCamera->m_pipeline.get());
 	
@@ -103,7 +105,7 @@ AudioEmitter::~AudioEmitter()
 	{
 		m_transform->m_onPositionChange.Unbind(&AudioEmitter::ChangePosition, this);
 		m_transform->m_onRotationChange.Unbind(&AudioEmitter::ChangeRotation, this);
-		m_transform->m_OnDestroy.Unbind(&AudioEmitter::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Unbind(&AudioEmitter::InvalidateTransform, this);
 	}
 }
 
@@ -115,7 +117,7 @@ void AudioEmitter::Initialize()
 	{
 		m_transform->m_onPositionChange.Bind(&AudioEmitter::ChangePosition, this);
 		m_transform->m_onRotationChange.Bind(&AudioEmitter::ChangeRotation, this);
-		m_transform->m_OnDestroy.Bind(&AudioEmitter::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Bind(&AudioEmitter::InvalidateTransform, this);
 	}
 
 	ChangePosition(m_transform);
@@ -128,8 +130,6 @@ void AudioEmitter::BindToSignals()
 {
 	GetHost().m_OnAwake.Bind(&AudioEmitter::Initialize, this);
 	GetHost().m_OnStart.Bind(&AudioEmitter::Start, this);
-	GetHost().m_OnDestroyed.Bind(&AudioEmitter::Stop, this);
-	
 }
 
 void AudioEmitter::InvalidateTransform()
@@ -140,14 +140,14 @@ void AudioEmitter::InvalidateTransform()
 void AudioEmitter::ChangePosition(Transform* transform)
 {
 	if (!m_sound || !m_isSpatial) return;
-	m_sound->SetPosition(transform->GetPosition());
+	m_sound->SetPosition(transform->GetGlobalPosition());
 }
 
 void AudioEmitter::ChangeRotation(Transform* transform)
 {
 	if (!m_sound || !m_isSpatial) return;
 	return;
-	m_sound->SetDirection(Quaternion::ToEuler(transform->GetRotation()));
+	m_sound->SetDirection(Quaternion::ToEuler(transform->GetGlobalRotation()));
 }
 
 void AudioEmitter::PopulateMetadatas() 

@@ -25,11 +25,9 @@ protected:
 	}
 
 public:
-	Event<> m_OnDestroy;
-
 	Behaviour() : Object() {}
 	Behaviour(CCUUID& id) : Object(id) {}
-	virtual ~Behaviour() { m_OnDestroy.Invoke(); }
+	virtual ~Behaviour() = default;
 
 	virtual const std::string TypeName();
 	virtual void OnSetOwner(Entity* newOwner);

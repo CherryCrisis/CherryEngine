@@ -37,7 +37,7 @@ LightComponent::~LightComponent()
 	{
 		m_transform->m_onPositionChange.Unbind(&LightComponent::ChangePosition, this);
 		m_transform->m_onRotationChange.Unbind(&LightComponent::ChangeRotation, this);
-		m_transform->m_OnDestroy.Unbind(&LightComponent::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Unbind(&LightComponent::InvalidateTransform, this);
 	}
 
 	UnsubscribeGuizmo();
@@ -61,7 +61,7 @@ void LightComponent::Initialize()
 	{
 		m_transform->m_onPositionChange.Bind(&LightComponent::ChangePosition, this);
 		m_transform->m_onRotationChange.Bind(&LightComponent::ChangeRotation, this);
-		m_transform->m_OnDestroy.Bind(&LightComponent::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Bind(&LightComponent::InvalidateTransform, this);
 	}
 
 	ChangePosition(m_transform);

@@ -51,7 +51,7 @@ CameraComponent::~CameraComponent()
 	{
 		m_transform->m_onPositionChange.Unbind(&CameraComponent::ChangePosition, this);
 		m_transform->m_onRotationChange.Unbind(&CameraComponent::ChangeRotation, this);
-		m_transform->m_OnDestroy.Unbind(&CameraComponent::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Unbind(&CameraComponent::InvalidateTransform, this);
 	}
 
 	GetHost().m_OnCellAdded.Unbind(&CameraComponent::OnCellAdded, this);
@@ -86,7 +86,7 @@ void CameraComponent::Initialize()
 	{
 		m_transform->m_onPositionChange.Bind(&CameraComponent::ChangePosition, this);
 		m_transform->m_onRotationChange.Bind(&CameraComponent::ChangeRotation, this);
-		m_transform->m_OnDestroy.Bind(&CameraComponent::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Bind(&CameraComponent::InvalidateTransform, this);
 	}
 
 	GetHost().m_OnAwake.Unbind(&CameraComponent::Initialize, this);

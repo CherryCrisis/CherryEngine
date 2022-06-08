@@ -1,10 +1,10 @@
 resources:
-  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
-  - Assets\Models\Rooms\Room_00\Room_00.obj
   - Assets\Models\Rooms\Room_01\Room_01.obj
+  - Assets\Models\Rooms\Room_00\Room_00.obj
 cells:
   160559355:
     name: Room_00
@@ -119,6 +119,8 @@ cells:
         name: Cube
       1608613446:
         name: CubePos
+      3081594081:
+        name: dofj
   1074273426:
     name: Room_01
     settings:
@@ -856,9 +858,9 @@ components:
     scriptName: Wardrobe
     leftDoor: 1255767839
     rightDoor: 1134409113
+    emitter: 2942879870
+    respawnTime: 1
     movementScale: 5
-    elapsedTime: 0
-    totalTime: 1
   937178011:
     type: Transform
     IsActive: true
@@ -1092,7 +1094,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3487056894
-    aspect: 0.826429963
+    aspect: 0.75
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
@@ -1176,6 +1178,25 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1220475265
+  3412409484:
+    type: Transform
+    IsActive: true
+    m_owner: 3081594081
+    position: 2.000000/0.000000/-1.309456
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  2942879870:
+    type: AudioEmitter
+    IsActive: true
+    m_owner: 3081594081
+    Sound: "null"
+    AutoPlay: false
+    Looping: false
+    Spatialized: false
+    Pitch: 1
+    RollOff: 1
+    ReferenceDistance: 1
   1598035751:
     type: Transform
     IsActive: true

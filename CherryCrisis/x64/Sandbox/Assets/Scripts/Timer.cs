@@ -15,10 +15,11 @@ class Timer
 
     public bool CheckAndReset()
     {
+        bool value = Finished;
         if (Finished)
             Reset();
 
-        return Finished;
+        return value;
     }
 
     public void Reset() 

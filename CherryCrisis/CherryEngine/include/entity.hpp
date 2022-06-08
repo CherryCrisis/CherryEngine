@@ -36,7 +36,6 @@ public:
 	Event<> m_OnTick;
 	Event<> m_OnFixedTick;
 	Event<> m_OnLateTick;
-	Event<> m_OnDestroyed;
 	Event<Cell*> m_OnCellAdded;
 	Event<Cell*> m_OnCellRemoved;
 

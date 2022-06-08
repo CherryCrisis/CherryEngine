@@ -57,11 +57,20 @@ private:
 	MonoMethod* m_handleMethod = nullptr;
 	mono::ManagedMethod* m_managedGetCPtr = nullptr;
 
+	void InvalidateField() { SetField(nullptr); }
+
 public:
 	void SetField(ManagedT value)
 	{
+		if (Object* objectPtr = GetField())
+			objectPtr->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+
+
 		mono::ManagedObject* managedInstance = m_baseClass->CreateUnmanagedInstance(value, false);
 		m_csOwner->SetField(m_reflectedField, managedInstance->RawObject());
+
+		if (Object* objectPtr = GetField())
+			objectPtr->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
 	}
 
 	ManagedT GetField()
@@ -86,4 +95,10 @@ public:
 	{
 		m_managedGetCPtr = m_baseClass->FindMethod("getCPtr");
 	}
+
+	virtual ~ReflectedManagedObjectField()
+	{
+		if (Object* objectPtr = GetField())
+			objectPtr->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+	};
 };

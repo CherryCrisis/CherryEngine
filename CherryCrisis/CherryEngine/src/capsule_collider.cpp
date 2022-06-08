@@ -44,7 +44,7 @@ CapsuleCollider::~CapsuleCollider()
 		m_transform->m_onScaleChange.Unbind(&CapsuleCollider::SetEntityScale, this);
 		m_transform->m_onPositionChange.Unbind(&CapsuleCollider::RecomputeMatrix, this);
 		m_transform->m_onRotationChange.Unbind(&CapsuleCollider::RecomputeMatrix, this);
-		m_transform->m_OnDestroy.Unbind(&CapsuleCollider::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Unbind(&CapsuleCollider::InvalidateTransform, this);
 	}
 
 	GetHost().m_cell->RemoveRenderer(this);
@@ -87,7 +87,7 @@ void CapsuleCollider::Initialize()
 		m_transform->m_onScaleChange.Bind(&CapsuleCollider::SetEntityScale, this);
 		m_transform->m_onPositionChange.Bind(&CapsuleCollider::RecomputeMatrix, this);
 		m_transform->m_onRotationChange.Bind(&CapsuleCollider::RecomputeMatrix, this);
-		m_transform->m_OnDestroy.Bind(&CapsuleCollider::InvalidateTransform, this);
+		m_transform->m_OnDestroyed.Bind(&CapsuleCollider::InvalidateTransform, this);
 	}
 	m_physicActor->Init();
 
