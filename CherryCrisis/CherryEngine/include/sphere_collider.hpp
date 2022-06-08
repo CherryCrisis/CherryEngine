@@ -30,7 +30,7 @@ public:
 	void BindToSignals() override;
 	void Initialize() override;
 	void InvalidateTransform() override;
-	void Unregister() override;
+	void Unregister(bool checkEmpty = true) override;
 
 	void SetAABBScale();
 	void SetEntityScale(Transform* transform) override;

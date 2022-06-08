@@ -60,7 +60,7 @@ public:
 	/*!
 	*	Unregister collider from the Physic Manager
 	*/
-	virtual void Unregister() {}
+	virtual void Unregister(bool checkEmpty = true) {}
 
 	//! Set collider scale
 	/*!

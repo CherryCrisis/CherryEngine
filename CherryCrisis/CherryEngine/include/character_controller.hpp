@@ -68,10 +68,11 @@ public:
 	CharacterController(CCUUID& id);
 	~CharacterController();
 
+	void Start();
 	void Initialize();
 
 	void BindToSignals() override;
-	void Unregister();
+	void Unregister(bool checkEmpty = true);
 
 	void Update();
 	void FixedUpdate();

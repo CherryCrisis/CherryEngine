@@ -55,7 +55,8 @@ void CharacterController::BindToSignals()
 {
 	GetHost().m_OnTick.Bind(&CharacterController::Update, this);
 	GetHost().m_OnFixedTick.Bind(&CharacterController::FixedUpdate, this);
-	GetHost().m_OnStart.Bind(&CharacterController::Initialize, this);
+	GetHost().m_OnAwake.Bind(&CharacterController::Initialize, this);
+	GetHost().m_OnStart.Bind(&CharacterController::Start, this);
 
 	PhysicSystem::PhysicManager::Register(this);
 	m_isRegistered = true;
@@ -71,6 +72,13 @@ void CharacterController::Initialize()
 		m_transform->m_OnDestroy.Bind(&CharacterController::InvalidateTransform, this);
 
 	m_physicActor->Init();
+
+	GetHost().m_OnAwake.Unbind(&CharacterController::Initialize, this);
+}
+
+void CharacterController::Start()
+{
+	Entity& owner = GetHost();
 
 	m_collider = owner.GetOrAddBehaviour<CapsuleCollider>();
 
@@ -95,14 +103,14 @@ void CharacterController::Initialize()
 		m_dynamicActor = static_cast<physx::PxRigidDynamic*>(m_physicActor->Get());
 
 	m_isStarted = true;
-	owner.m_OnStart.Unbind(&CharacterController::Initialize, this);
+	owner.m_OnStart.Unbind(&CharacterController::Start, this);
 }
 
-void CharacterController::Unregister()
+void CharacterController::Unregister(bool checkEmpty)
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager::Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this, checkEmpty);
 		m_isRegistered = false;
 	}
 }
@@ -194,7 +202,7 @@ void CharacterController::FixedUpdate()
 
 void CharacterController::AlignToGravity()
 {
-	m_alignement.m_lerpPercent += 0.005f;
+	m_alignement.m_lerpPercent += 0.01f;
 	
 	if (m_alignement.m_lerpPercent >= 1.0f)
 	{

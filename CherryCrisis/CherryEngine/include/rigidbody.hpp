@@ -34,7 +34,7 @@ private:
 
 	float	m_density = 10.0f;
 	float	m_maxLinearVelocity = 100.f;
-	float	m_maxAngularVelocity = 100.0f;
+	float	m_maxAngularVelocity = 7.0f;
 	float	m_maxDepenetrationVelocity = 100.f;
 
 	Bool3	m_positionConstraints = {};
@@ -62,7 +62,7 @@ public:
 	/*!
 	*	Unregister the rigidbody from the Physic Manager
 	*/
-	void	Unregister();
+	void	Unregister(bool checkEmpty = true);
 
 	void	SetEnabled();
 

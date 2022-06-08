@@ -86,12 +86,14 @@ namespace PhysicSystem
 			if (pxPos != m_oldPos)
 			{
 				m_oldPos = pxPos;
+				m_dontResetPhysx = true;
 				t->SetGlobalPosition(pxPos);
 			}
 
 			if (pxRot != m_oldRot)
 			{
 				m_oldRot = pxRot;
+				m_dontResetPhysx = true;
 				t->SetGlobalRotation(Quaternion::ToEuler(pxRot));
 			}
 		}
@@ -99,26 +101,30 @@ namespace PhysicSystem
 
 	void PhysicActor::SetActorPosition(Transform* transform)
 	{
-		if (m_pxActor)
+		if (m_pxActor && !m_dontResetPhysx)
 		{
 			Vector3 pos = transform->GetGlobalPosition();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			m_pxActor->setGlobalPose(physx::PxTransform(physx::PxVec3(pos.x, pos.y, pos.z),
-														pxT.q));
+				pxT.q));
 			m_oldPos = pos;
 		}
+		else
+			m_dontResetPhysx = false;
 	}
 
 	void PhysicActor::SetActorRotation(Transform* transform)
 	{
-		if (m_pxActor)
+		if (m_pxActor && !m_dontResetPhysx)
 		{
-			Quaternion rot = transform->GetGlobalRotation().Normalized();
+			Quaternion rot = transform->GetGlobalRotation();
 			physx::PxTransform pxT = m_pxActor->getGlobalPose();
 			m_pxActor->setGlobalPose(physx::PxTransform(pxT.p,
 				physx::PxQuat(rot.x, rot.y, rot.z, rot.w)));
 			m_oldRot = rot;
 		}
+		else
+			m_dontResetPhysx = false;
 	}
 
 	void PhysicActor::SetActorScale(Transform* transform)
@@ -142,33 +148,32 @@ namespace PhysicSystem
 
 		physx::PxPhysics* physics = PhysicSystem::PhysicManager::Get();
 
-		if (m_isStatic)
-		{
-			m_isDynamic = false;
-
-			m_pxActor = physics->createRigidStatic(transform);
-		}
-		else if (m_rigidbody)
+		if (m_rigidbody)
 		{
 			m_isDynamic = true;
 
 			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
+		
+			physx::PxRigidDynamic* actor = static_cast<physx::PxRigidDynamic*>(Get());
+
+			actor->setLinearDamping(0.2f);
+			actor->setAngularDamping(0.2f);
 		}
-		else if (!m_pxActor || m_isDynamic)
+		else
 		{
 			m_isDynamic = false;
+			m_isStatic = true;
 
-			m_pxActor = physics->createRigidDynamic(physx::PxTransform(transform));
+			m_pxActor = physics->createRigidStatic(transform);
 		}
-
-		m_pxActor->userData = this;
 
 		for (auto& collider : m_colliders)
 		{
 			collider->SetPxShape();
 		}
-			SetPxActor();
 
+		m_pxActor->userData = this;
+		SetPxActor();
 
 		m_owner->m_cell->m_physicCell->AddPxActor(this);
 	}
@@ -285,14 +290,14 @@ namespace PhysicSystem
 	void PhysicActor::Empty()
 	{
 		if (m_rigidbody)
-			m_rigidbody->Unregister();
+			m_rigidbody->Unregister(false);
 
 		if (m_controller)
-			m_controller->Unregister();
+			m_controller->Unregister(false);
 
 		while (!m_colliders.empty())
 		{
-			m_colliders.back()->Unregister();
+			m_colliders.back()->Unregister(false);
 		}
 	}
 
@@ -456,6 +461,7 @@ namespace PhysicSystem
 				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, false);
 			else
 				actor->setActorFlag(physx::PxActorFlag::Enum::eDISABLE_GRAVITY, true);
+
 
 			if (m_isEnabled && actor->getScene() && !m_rigidbody->GetKinematic())
 				actor->wakeUp();

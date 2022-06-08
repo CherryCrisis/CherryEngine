@@ -105,11 +105,11 @@ void SphereCollider::InvalidateTransform()
 	m_transform = nullptr;
 }
 
-void SphereCollider::Unregister()
+void SphereCollider::Unregister(bool checkEmpty)
 {
 	if (m_isRegistered)
 	{
-		PhysicSystem::PhysicManager::Unregister(this);
+		PhysicSystem::PhysicManager::Unregister(this, checkEmpty);
 		m_isRegistered = false;
 	}
 }
@@ -223,11 +223,21 @@ void SphereCollider::SetPxData()
 
 void SphereCollider::SubscribeToPipeline(ARenderingPipeline* pipeline)
 {
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
 	pipeline->SubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
 }
 
 void SphereCollider::UnsubscribeToPipeline(ARenderingPipeline* pipeline)
 {
+	Camera* cam = CameraComponent::m_editorCamera;
+
+	if (!cam || cam->m_pipeline.get() != pipeline)
+		return;
+
 	pipeline->UnsubscribeToPipeline<ColliderRenderPass>(dynamic_cast<Collider*>(this));
 }
 
