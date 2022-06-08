@@ -30,6 +30,7 @@ namespace CCScripting
         public void SetInMovement()
         {
             isMoving = true;
+            emitter.Stop();
         }
 
         public void Update() 
