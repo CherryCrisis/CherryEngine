@@ -11,6 +11,10 @@ class PortalTeleporterComponent;
 
 class CCENGINE_API PortalComponent : public Behaviour
 {
+private:
+	void SubscribeGuizmo();
+	void UnsubscribeGuizmo();
+
 protected:
 	void PopulateMetadatas() override;
 

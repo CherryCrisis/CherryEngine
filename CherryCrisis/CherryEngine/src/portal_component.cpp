@@ -15,21 +15,27 @@
 #include "skybox_renderpass.hpp"
 #include "mesh_renderer.hpp"
 #include "box_collider.hpp"
+#include "guizmo_renderpass.hpp"
+#include "camera_component.hpp"
+
 
 PortalComponent::PortalComponent()
 {
 	m_portal.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
+	SubscribeGuizmo();
 }
 
 PortalComponent::PortalComponent(CCUUID& id) : Behaviour(id)
 {
 	m_portal.m_pipeline = std::make_unique<MixedPipeline>();
 	PopulateMetadatas();
+	SubscribeGuizmo();
 }
 
 PortalComponent::~PortalComponent()
-{;
+{
+	UnsubscribeGuizmo();
 	InvalidateLinkedPortal();
 
 	GetHost().m_OnLateTick.Unbind(&PortalComponent::LateUpdate, this);
@@ -307,4 +313,16 @@ void PortalComponent::OnTriggerExit(Entity* other)
 			m_portalTeleporters.erase(it);
 		}
 	}
+}
+
+void PortalComponent::SubscribeGuizmo()
+{
+	if (CameraComponent::m_editorCamera)
+		CameraComponent::m_editorCamera->m_pipeline->SubscribeToPipeline<GuizmoRenderPass>(this);
+}
+
+void PortalComponent::UnsubscribeGuizmo()
+{
+	if (CameraComponent::m_editorCamera)
+		CameraComponent::m_editorCamera->m_pipeline->UnsubscribeToPipeline<GuizmoRenderPass>(this);
 }

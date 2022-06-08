@@ -34,23 +34,28 @@ void Texture::Delete()
     m_gpuTexture2D.reset();
 }
 
-void Texture::Load(std::shared_ptr<Texture> texture, void* data, int width, int height, ETextureFormat textureFormat)
+void Texture::Load(std::shared_ptr<Texture> texture, void* data, int width, int height, ETextureFormat textureFormat, ETextureFilter textureMinFilter, ETextureFilter textureMagFilter, ETextureWrap textureWrapS, ETextureWrap textureWrapT, ETextureWrap textureWrapR)
 {
     texture->m_data = std::move(data);
     texture->m_height = height;
     texture->m_width = width;
     texture->m_internalFormat = textureFormat;
+    texture->m_minFilter = textureMinFilter;
+    texture->m_magFilter = textureMagFilter;
+    texture->m_wrapS = textureWrapS;
+    texture->m_wrapT = textureWrapT;
+    texture->m_wrapR = textureWrapR;
     texture->m_stackAllocated = true;
 }
 
-void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureFormat textureFormat)
+void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureFormat textureFormat, ETextureFilter textureMinFilter, ETextureFilter textureMagFilter, ETextureWrap textureWrapS, ETextureWrap textureWrapT, ETextureWrap textureWrapR)
 {
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
     if (!LoadFromCache(texture, &data, textureHeader))
     {
-       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat, ETextureSurface::TEXTURE_2D, ETextureWrap::REPEAT, ETextureWrap::REPEAT, ETextureWrap::REPEAT, ETextureFilter::LINEAR_MIPMAP_LINEAR, ETextureFilter::LINEAR);
+       CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat, ETextureSurface::TEXTURE_2D, textureWrapS, textureWrapT, textureWrapR, textureMinFilter, textureMagFilter);
     }
 
     if (!data)

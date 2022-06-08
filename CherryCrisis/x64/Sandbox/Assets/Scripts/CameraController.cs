@@ -29,44 +29,24 @@ namespace CCScripting
 			if (InputManager.GetKeyDown(Keycode.LEFT_CLICK)) TryAction();
 		}
 
-		// fuck interfaces
 		void TryInteract()
 		{
-			// this needs to be improved, vectors seems to be wrongs
 			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
+			if (hit == null)
+				return;
 
-			if (hit != null && hit.actor != null && hit.actor.m_owner != null)
-			{
-				Debug.Log(ELogType.INFO, "Hitted " + hit.actor.m_owner.name);
+			PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
+			switcher?.Switch();	
 
-				PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
-				if (switcher != null) 
-				{
-					switcher.Switch();
-					return;
-				}
-
-				Wardrobe wardrobe = hit.actor.m_owner.GetBehaviour<Wardrobe>();
-				if (wardrobe != null)
-				{
-					wardrobe.SetInMovement();
-					return;
-				}
-
-				PickableCube cube = hit.actor.m_owner.GetBehaviour<PickableCube>();
-				if (cube != null) 
-				{
-					PickupCube(cube);
-					return;
-				}
-
-				CubeSpawner spawner = hit.actor.m_owner.GetBehaviour<CubeSpawner>();
-				if (spawner != null) 
-				{
-					spawner.SpawnCube();
-					return;
-				}
-			}
+			Wardrobe wardrobe = hit.actor.m_owner.GetBehaviour<Wardrobe>();
+			wardrobe?.SetInMovement();
+			
+			CubeSpawner spawner = hit.actor.m_owner.GetBehaviour<CubeSpawner>();
+			spawner?.SpawnCube(); 
+			
+			PickableCube cube = hit.actor.m_owner.GetBehaviour<PickableCube>();
+			if (cube != null) 
+				PickupCube(cube);
 		}
 
 		void TryAction() 

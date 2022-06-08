@@ -1,10 +1,10 @@
 resources:
-  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
-  - Assets\Models\Rooms\Room_01\Room_01.obj
   - Assets\Models\Rooms\Room_00\Room_00.obj
+  - Assets\Models\Rooms\Room_01\Room_01.obj
 cells:
   160559355:
     name: Room_00
@@ -1092,7 +1092,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3487056894
-    aspect: 1.4355346
+    aspect: 0.826429963
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
@@ -1116,6 +1116,13 @@ components:
     throwingStrength: 500
     pickedCube: ~
     speedSensivity: 0.5
+  2567659172:
+    type: ShapeRenderer
+    IsActive: true
+    m_owner: 804455480
+    transform: 1126502589
+    matFile: ""
+    Type: 1
   2396539789:
     type: ScriptedBehaviour
     IsActive: true
@@ -1127,13 +1134,6 @@ components:
     spawnLocation: 0.000000/0.000000/0.000000
     elapsedTime: 0
     respawnTime: 1
-  2567659172:
-    type: ShapeRenderer
-    IsActive: true
-    m_owner: 804455480
-    transform: 1126502589
-    matFile: ""
-    Type: 1
   736487742:
     type: PortalTeleporterComponent
     IsActive: true

@@ -12,8 +12,8 @@
 class AudioEmitter;
 class CameraComponent;
 class LightComponent;
+class PortalComponent;
 class Viewer;
-
 
 class GuizmoRenderPass : public ARenderingRenderPass
 {
@@ -22,12 +22,14 @@ private:
 	std::unordered_set<AudioEmitter*>	    m_audioEmitters;
 	std::unordered_set<CameraComponent*>	m_cameraComponents;
 	std::unordered_set<LightComponent*>	    m_lightComponents;
+	std::unordered_set<PortalComponent*>	m_portalComponents;
 
 	std::shared_ptr<Mesh> m_quadMesh;
 
 	std::shared_ptr<Texture> m_cameraIcon;
 	std::shared_ptr<Texture> m_audioIcon;
 	std::shared_ptr<Texture> m_lightIcon;
+	std::shared_ptr<Texture> m_portalIcon;
 
 protected:
 	ElementMeshGenerator m_meshGenerator;
@@ -61,6 +63,11 @@ public:
 	int Subscribe(LightComponent* toGenerate);
 	template <>
 	void Unsubscribe(LightComponent* toGenerate);
+
+	template <>
+	int Subscribe(PortalComponent* toGenerate);
+	template <>
+	void Unsubscribe(PortalComponent* toGenerate);
 
 	void Execute(Viewer*& viewer);
 };

@@ -136,10 +136,10 @@ public:
     void ClearData();
 
     static void Load(std::shared_ptr<Texture> texture, void* data, int width = 1, int height = 1,
-        ETextureFormat textureFormat = ETextureFormat::RGBA);
+        ETextureFormat textureFormat = ETextureFormat::RGBA, ETextureFilter textureMinFilter = ETextureFilter::LINEAR, ETextureFilter textureMagFilter = ETextureFilter::LINEAR, ETextureWrap textureWrapS = ETextureWrap::REPEAT, ETextureWrap textureWrapT = ETextureWrap::REPEAT, ETextureWrap textureWrapR = ETextureWrap::REPEAT);
 
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true, 
-        ETextureFormat textureFormat = ETextureFormat::DXT1);
+        ETextureFormat textureFormat = ETextureFormat::DXT1, ETextureFilter textureMinFilter = ETextureFilter::LINEAR, ETextureFilter textureMagFilter = ETextureFilter::LINEAR, ETextureWrap textureWrapS = ETextureWrap::REPEAT, ETextureWrap textureWrapT = ETextureWrap::REPEAT, ETextureWrap textureWrapR = ETextureWrap::REPEAT);
 
     static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     

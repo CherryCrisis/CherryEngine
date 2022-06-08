@@ -24,7 +24,7 @@ ScriptedBehaviour::ScriptedBehaviour()
 
 
 	Behaviour::PopulateMetadatas();
-	m_metadatas.SetProperty("scriptName", &scriptPath);
+	m_metadatas.SetProperty("scriptName", &scriptPath, "\0", false);
 
 	if (m_scriptingAssembly)
 		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
@@ -39,7 +39,7 @@ ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 	m_entityClass = m_interfaceAssembly->m_context->FindClass("CCEngine", "Entity");
 
 	Behaviour::PopulateMetadatas();
-	m_metadatas.SetProperty("scriptName", &scriptPath);
+	m_metadatas.SetProperty("scriptName", &scriptPath, "\0", false);
 
 	if (m_scriptingAssembly)
 		m_scriptingAssembly->m_OnDeleted.Bind(&ScriptedBehaviour::InvalidateAssembly, this);
