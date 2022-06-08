@@ -23,9 +23,6 @@
 PBRRenderPass::PBRRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/PBR/pbrShader.vert", "Assets/Shaders/PBR/pbrShader.frag")
 {
-	if (m_program)
-		OnPreDrawBind();
-
 	unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
 	std::shared_ptr<Texture> whiteTexture = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
 	m_defaultTextures[ETextureType::ALBEDO] = whiteTexture;

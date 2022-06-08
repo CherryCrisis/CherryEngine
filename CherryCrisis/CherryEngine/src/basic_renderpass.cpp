@@ -16,30 +16,30 @@
 BasicRenderPass::BasicRenderPass(const char* name)
 	: ARenderingRenderPass(name, "Assets/Shaders/LIT/basicShader.vert", "Assets/Shaders/LIT/basicShader.frag")
 {
-	if (m_program)
-	{
-		glUseProgram(m_program->m_shaderProgram);
+	unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
+	m_defaultTextures[ETextureType::CELSHADE_PALLET] = m_defaultTextures[ETextureType::ALBEDO] = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
 
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoTex"), 0);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.normalMap"), 1);
-		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.celshadePallet"), 2);
-
-		m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
-
-		glUniformBlockBinding(m_program->m_shaderProgram, glGetUniformBlockIndex(m_program->m_shaderProgram, "uLightsBlock"), LightGenerator::UBOBindingPoint);
-
-		glUseProgram(0);
-
-		unsigned char whiteColor[4] = { 255u, 255u, 255u, 255u };
-		m_defaultTextures[ETextureType::CELSHADE_PALLET] = m_defaultTextures[ETextureType::ALBEDO] = ResourceManager::GetInstance()->AddResource<Texture>("CC_WhiteTexture", true, whiteColor);
-
-		unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
-		m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
+	unsigned char blueTexture[4] = { 255u, 0u, 0u, 0u };
+	m_defaultTextures[ETextureType::NORMAL_MAP] = ResourceManager::GetInstance()->AddResource<Texture>("CC_BlueTexture", true, blueTexture);
 
 
-		for (auto& [texType, texRef] : m_defaultTextures)
-			m_textureGenerator.Generate(texRef.get());
-	}
+	for (auto& [texType, texRef] : m_defaultTextures)
+		m_textureGenerator.Generate(texRef.get());
+}
+
+void BasicRenderPass::OnPreDrawBind()
+{
+	glUseProgram(m_program->m_shaderProgram);
+
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.albedoTex"), 0);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.normalMap"), 1);
+	glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uMaterial.celshadePallet"), 2);
+
+	m_callExecute = CCCallback::BindCallback(&BasicRenderPass::Execute, this);
+
+	glUniformBlockBinding(m_program->m_shaderProgram, glGetUniformBlockIndex(m_program->m_shaderProgram, "uLightsBlock"), LightGenerator::UBOBindingPoint);
+
+	glUseProgram(0);
 }
 
 void BasicRenderPass::BindTexture(Material* material, ETextureType textureType, int id)
