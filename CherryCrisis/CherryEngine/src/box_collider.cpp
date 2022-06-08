@@ -286,8 +286,6 @@ void BoxCollider::Copy(Behaviour* copy)
 	m_entityScale = copiedCollider->m_entityScale;
 	SetScale(copiedCollider->m_editableScale);
 
-	SetAABBScale();
-	SetEntityScale(m_transform);
-
+	Initialize();
 	ResetPxShape();
 }
