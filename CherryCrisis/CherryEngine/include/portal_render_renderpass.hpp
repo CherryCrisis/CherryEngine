@@ -22,7 +22,7 @@ private:
 	std::unordered_set<Portal*>	m_portals;
 	std::shared_ptr<Mesh>		m_quadMesh;
 	bool						m_isExecuted = false;
-	int							m_portalRecursionCount = 3;
+	int							m_portalRecursionCount = 1;
 	int							m_recursionCell = 3;
 
 	struct PortalViewer

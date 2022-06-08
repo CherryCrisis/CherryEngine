@@ -1,17 +1,17 @@
 resources:
-  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
-  - Assets\Models\Rooms\Room_00\Room_00.obj
-  - Assets\Models\Rooms\Room_01\Room_01.obj
   - Assets\Models\Rooms\Room_01.2\Room_01.2.obj
+  - Assets\Models\Rooms\Room_01\Room_01.obj
+  - Assets\Models\Rooms\Room_00\Room_00.obj
   - Assets\Models\Rooms\Room_01.1\Room_01.1.obj
   - Assets\Models\Rooms\Room_01.3\Room_01.3.obj
   - Assets\Models\Rooms\Room_01.4\Room_01.4.obj
-  - Assets\Models\Rooms\Room_01.5\Room_01.5.obj
-  - Assets\Models\Rooms\Room_01.7\Room_01.7.obj
   - Assets\Models\Rooms\Room_01.8\Room_01.8.obj
+  - Assets\Models\Rooms\Room_01.7\Room_01.7.obj
+  - Assets\Models\Rooms\Room_01.5\Room_01.5.obj
   - Assets\Models\Rooms\Room_01.6\Room_01.6.obj
   - Assets\Models\Rooms\Room_01.81\Room_01.81.obj
   - Assets\Models\Rooms\Room_01.82\Room_01.82.obj
@@ -531,6 +531,10 @@ cells:
         name: Plane.057_Plane.056
       3977689471:
         name: Plane.057_Plane.056_M_Cellings_01
+      2267163475:
+        name: Portal_Up
+      3667714761:
+        name: Portal_01.3_To_01.4 [Switch]
   3295209113:
     name: Room_01.4
     settings:
@@ -780,6 +784,18 @@ cells:
         name: Plane.239_Plane.265
       2201338084:
         name: Plane.239_Plane.265_M_Cellings_01
+      1020476321:
+        name: Portal_01.4_To_01.3
+      2792491537:
+        name: Portal_01.4_To_01.5 [Switch]
+      1188138:
+        name: Portal
+      1587509625:
+        name: Portal
+      2614746999:
+        name: Portal
+      1816270877:
+        name: Portal
   1039108817:
     name: Room_01.5
     settings:
@@ -877,6 +893,10 @@ cells:
         name: Plane.240_Plane.266
       912078217:
         name: Plane.240_Plane.266_M_R0_Wall
+      2965422488:
+        name: Portal_01.5_To_01.6 [Switch]
+      3830635851:
+        name: Portal_01.5_To_01.4
   224556103:
     name: Room_01.6
     settings:
@@ -1112,6 +1132,14 @@ cells:
         name: Plane.241_Plane.267
       2134020518:
         name: Plane.241_Plane.267_M_R0_Wall
+      697297158:
+        name: Portal_01.6_To_01.7 [Switch]
+      1536021791:
+        name: Portal_01.6_To_01.5
+      619172741:
+        name: Portal [Switch]
+      1342926388:
+        name: Portal
   3777455833:
     name: Room_01.7
     settings:
@@ -1173,6 +1201,10 @@ cells:
         name: Plane.244_Plane.270
       3694240950:
         name: Plane.244_Plane.270_M_Cellings_01
+      154075413:
+        name: Portal_01.7_To_01.6
+      2017097938:
+        name: Portal_01.7_To_01.8
   1883668318:
     name: Room_01.8
     settings:
@@ -1300,6 +1332,14 @@ cells:
         name: Cube.051_Cube.062_M_Pyramide
       2916249544:
         name: Cube.051_Cube.062_M_Arche_2
+      718570252:
+        name: Portal_01.8_To_01.7
+      1604126601:
+        name: Portal_01.8_To_01.81
+      2298146428:
+        name: Portal_01.8_To_01.82
+      3775535170:
+        name: Portal_01.8_To_End [Switch]
   3873263615:
     name: Room_01.81
     settings:
@@ -1369,6 +1409,8 @@ cells:
         name: Plane.237_Plane.264
       306061332:
         name: Plane.237_Plane.264_M_R0_Wall
+      2335647099:
+        name: Portal_01.81_To_01.8
   2397776000:
     name: Room_01.82
     settings:
@@ -1462,6 +1504,8 @@ cells:
         name: Plane.245_Plane.151
       2720338228:
         name: Plane.245_Plane.151_M_R0_Wall
+      3724837477:
+        name: Portal_01.82_To_01.8
 components:
   2816241020:
     type: Transform
@@ -1479,6 +1523,10 @@ components:
     transform: 2816241020
     speedSensivity: 0.5
     interactRange: 25
+  3457976258:
+    type: AudioListener
+    IsActive: true
+    m_owner: 3293831829
   2404770261:
     type: CameraComponent
     IsActive: true
@@ -1488,10 +1536,6 @@ components:
     far: 1500
     fovY: 1.04719758
     transform: 2816241020
-  3457976258:
-    type: AudioListener
-    IsActive: true
-    m_owner: 3293831829
   2069731409:
     type: CapsuleCollider
     IsActive: true
@@ -2933,6 +2977,14 @@ components:
     IsActive: true
     m_owner: 486187623
     linkedPortalProp: 2529022723
+  2097697434:
+    type: Transform
+    IsActive: true
+    m_owner: 486187623
+    position: 0.010000/1.150000/4.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 0.900000/1.150000/1.000000
+    parent: ~
   4282802482:
     type: BoxCollider
     IsActive: true
@@ -2942,14 +2994,6 @@ components:
     Local Position: 0.000000/0.000000/0.000000
     Scale: 1.000000/1.000000/0.050000
     Block Raycast: true
-  2097697434:
-    type: Transform
-    IsActive: true
-    m_owner: 486187623
-    position: 0.010000/1.150000/4.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 0.900000/1.150000/1.000000
-    parent: ~
   3939304012:
     type: Transform
     IsActive: true
@@ -3071,14 +3115,6 @@ components:
     transform: 3023144929
     matFile: Assets\Models\Rooms\Room_01.1\M_R0_Wall.ccmat
     meshFile: Assets\Models\Rooms\Room_01.1\Room_01.1.obj\Plane.016_Plane.016_M_R0_Wall
-  3023144929:
-    type: Transform
-    IsActive: true
-    m_owner: 3583259197
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 941244012
   384627446:
     type: BoxCollider
     IsActive: true
@@ -3088,6 +3124,14 @@ components:
     Local Position: 5.140000/1.256000/-10.240000
     Scale: 3.060000/1.256000/0.010000
     Block Raycast: true
+  3023144929:
+    type: Transform
+    IsActive: true
+    m_owner: 3583259197
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 941244012
   2485870729:
     type: Transform
     IsActive: true
@@ -3305,6 +3349,15 @@ components:
     Local Position: 0.000000/0.000000/0.000000
     Scale: 1.000000/1.000000/0.050000
     Block Raycast: true
+  2277824960:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 134307848
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
   159684493:
     type: PortalComponent
     IsActive: true
@@ -3318,15 +3371,6 @@ components:
     rotation: 0.000000/0.000345/0.000000
     scale: 0.900000/1.149999/1.000000
     parent: ~
-  2277824960:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 134307848
-    Enabled: true
-    Is Trigger: true
-    Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
-    Block Raycast: true
   2585544028:
     type: Transform
     IsActive: true
@@ -4063,14 +4107,6 @@ components:
     transform: 965412298
     matFile: Assets\Models\Rooms\Room_01.2\M_Floor_01.ccmat
     meshFile: Assets\Models\Rooms\Room_01.2\Room_01.2.obj\Plane.036_Plane.038_M_Floor_01
-  965412298:
-    type: Transform
-    IsActive: true
-    m_owner: 3674349077
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 2585544028
   3923696262:
     type: BoxCollider
     IsActive: true
@@ -4080,6 +4116,14 @@ components:
     Local Position: 9.099999/0.000000/6.460333
     Scale: 4.000000/0.010000/1.340333
     Block Raycast: true
+  965412298:
+    type: Transform
+    IsActive: true
+    m_owner: 3674349077
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2585544028
   1460762206:
     type: Transform
     IsActive: true
@@ -4120,6 +4164,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2585544028
+  2995239971:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 227046519
+    transform: 4039405667
+    matFile: Assets\Models\Rooms\Room_01.2\M_Floor_01.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.2\Room_01.2.obj\Plane.038_Plane.040_M_Floor_01
   3551151076:
     type: BoxCollider
     IsActive: true
@@ -4129,13 +4180,6 @@ components:
     Local Position: 11.756666/0.000000/9.119999
     Scale: 1.343333/0.010000/1.333334
     Block Raycast: true
-  2995239971:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 227046519
-    transform: 4039405667
-    matFile: Assets\Models\Rooms\Room_01.2\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.2\Room_01.2.obj\Plane.038_Plane.040_M_Floor_01
   4039405667:
     type: Transform
     IsActive: true
@@ -4346,6 +4390,15 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2585544028
+  664911221:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3934320479
+    Enabled: true
+    Is Trigger: false
+    Local Position: 9.100000/3.135000/5.119999
+    Scale: 1.133333/0.665000/0.010000
+    Block Raycast: true
   3447483694:
     type: ModelRenderer
     IsActive: true
@@ -4361,20 +4414,11 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2585544028
-  664911221:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 3934320479
-    Enabled: true
-    Is Trigger: false
-    Local Position: 9.100000/3.135000/5.119999
-    Scale: 1.133333/0.665000/0.010000
-    Block Raycast: true
   1345615876:
     type: Transform
     IsActive: true
     m_owner: 1804661368
-    position: 4.000000/1.150000/-0.010000
+    position: 4.000000/1.150000/0.000000
     rotation: -3.141592/1.570308/-3.141592
     scale: 0.900000/1.149999/1.000000
     parent: ~
@@ -4558,6 +4602,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1154161986
+  741543982:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2845789515
+    transform: 2199165218
+    matFile: Assets\Models\Rooms\Room_01.3\M_Arche_2.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.3\Room_01.3.obj\Cube.028_Cube.029_M_Arche_2
   2199165218:
     type: Transform
     IsActive: true
@@ -4566,13 +4617,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1154161986
-  741543982:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 2845789515
-    transform: 2199165218
-    matFile: Assets\Models\Rooms\Room_01.3\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.3\Room_01.3.obj\Cube.028_Cube.029_M_Arche_2
   1983230160:
     type: Transform
     IsActive: true
@@ -5058,6 +5102,50 @@ components:
     transform: 508618705
     matFile: Assets\Models\Rooms\Room_01.3\M_Cellings_01.ccmat
     meshFile: Assets\Models\Rooms\Room_01.3\Room_01.3.obj\Plane.057_Plane.056_M_Cellings_01
+  1354842283:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2267163475
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  2845528965:
+    type: Transform
+    IsActive: true
+    m_owner: 2267163475
+    position: 0.000000/3.650000/-4.250000
+    rotation: 1.570796/0.000000/0.000000
+    scale: 1.200000/1.199999/1.000000
+    parent: ~
+  3115842333:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 2267163475
+    linkedPortalProp: 1512747883
+  98273300:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 3667714761
+    linkedPortalProp: 3115842333
+  473557111:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3667714761
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  2077140243:
+    type: Transform
+    IsActive: true
+    m_owner: 3667714761
+    position: 0.000000/1.150000/5.950000
+    rotation: 0.000000/0.000489/0.000000
+    scale: 0.900001/1.149999/1.000001
+    parent: ~
   3521307150:
     type: Transform
     IsActive: true
@@ -5629,6 +5717,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 3521307150
+  3640304965:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 937435127
+    transform: 130737868
+    matFile: Assets\Models\Rooms\Room_01.4\M_Floor_01.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.4\Room_01.4.obj\Plane.074_Plane.084_M_Floor_01
   130737868:
     type: Transform
     IsActive: true
@@ -5637,13 +5732,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 3521307150
-  3640304965:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 937435127
-    transform: 130737868
-    matFile: Assets\Models\Rooms\Room_01.4\M_Floor_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.4\Room_01.4.obj\Plane.074_Plane.084_M_Floor_01
   1793311731:
     type: Transform
     IsActive: true
@@ -6793,6 +6881,138 @@ components:
     transform: 3870909308
     matFile: Assets\Models\Rooms\Room_01.4\M_Cellings_01.ccmat
     meshFile: Assets\Models\Rooms\Room_01.4\Room_01.4.obj\Plane.239_Plane.265_M_Cellings_01
+  913834852:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1020476321
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  2890717111:
+    type: Transform
+    IsActive: true
+    m_owner: 1020476321
+    position: 0.000000/1.150000/-3.950000
+    rotation: 0.000000/0.000489/0.000000
+    scale: 0.900001/1.149999/1.000001
+    parent: ~
+  1492228151:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 1020476321
+    linkedPortalProp: 98273300
+  292561961:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 2792491537
+    linkedPortalProp: 1492228151
+  99769798:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2792491537
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  4061360697:
+    type: Transform
+    IsActive: true
+    m_owner: 2792491537
+    position: 0.000000/1.150000/3.950000
+    rotation: 0.000000/0.000489/0.000000
+    scale: 0.900001/1.149999/1.000001
+    parent: ~
+  3536726088:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1188138
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  432603445:
+    type: Transform
+    IsActive: true
+    m_owner: 1188138
+    position: -3.900000/1.150000/0.000000
+    rotation: -3.141591/1.570451/-3.141591
+    scale: 0.900001/1.149999/1.000001
+    parent: ~
+  984858810:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 1188138
+    linkedPortalProp: 450934545
+  2911860322:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1587509625
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  3231685372:
+    type: Transform
+    IsActive: true
+    m_owner: 1587509625
+    position: 20.000000/1.150000/0.000000
+    rotation: -3.141592/1.569883/-3.141592
+    scale: 0.900001/1.149999/1.000001
+    parent: ~
+  450934545:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 1587509625
+    linkedPortalProp: 984858810
+  2959366103:
+    type: Transform
+    IsActive: true
+    m_owner: 2614746999
+    position: 16.000000/1.150000/-3.900000
+    rotation: -3.141592/-0.001575/3.141592
+    scale: 0.900001/1.149999/1.000001
+    parent: ~
+  168451285:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 2614746999
+    linkedPortalProp: 3692747354
+  4008719492:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2614746999
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  3692747354:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 1816270877
+    linkedPortalProp: 168451285
+  2553682680:
+    type: Transform
+    IsActive: true
+    m_owner: 1816270877
+    position: 8.000000/1.150000/-1.900000
+    rotation: 0.000000/0.000977/0.000000
+    scale: 0.900002/1.149999/1.000001
+    parent: ~
+  1389615237:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1816270877
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
   2129278568:
     type: Transform
     IsActive: true
@@ -7211,13 +7431,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2129278568
-  1791061947:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 3487251368
-    transform: 4221342200
-    matFile: Assets\Models\Rooms\Room_01.5\M_R0_Wall.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.5\Room_01.5.obj\Plane.125_Plane.136_M_R0_Wall
   4221342200:
     type: Transform
     IsActive: true
@@ -7226,6 +7439,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2129278568
+  1791061947:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3487251368
+    transform: 4221342200
+    matFile: Assets\Models\Rooms\Room_01.5\M_R0_Wall.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.5\Room_01.5.obj\Plane.125_Plane.136_M_R0_Wall
   2034916401:
     type: BoxCollider
     IsActive: true
@@ -7491,6 +7711,50 @@ components:
     Local Position: 8.000000/2.400000/0.000000
     Scale: 0.010000/1.400000/2.000000
     Block Raycast: true
+  1745194130:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 2965422488
+    linkedPortalProp: 1227544010
+  3813353515:
+    type: Transform
+    IsActive: true
+    m_owner: 2965422488
+    position: 0.000000/1.150000/3.950000
+    rotation: -3.141592/-0.000977/3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  1903421512:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2965422488
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  4061224057:
+    type: Transform
+    IsActive: true
+    m_owner: 3830635851
+    position: 0.000000/1.150000/-3.950000
+    rotation: 0.000000/0.000977/0.000000
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  1227544010:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 3830635851
+    linkedPortalProp: 292561961
+  2273642444:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3830635851
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
   1981863543:
     type: Transform
     IsActive: true
@@ -7577,6 +7841,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1981863543
+  959536787:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3624754305
+    transform: 2526158801
+    matFile: Assets\Models\Rooms\Room_01.6\M_Cellings_01.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Plane.135_Plane.148_M_Cellings_01
   2526158801:
     type: Transform
     IsActive: true
@@ -7585,13 +7856,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1981863543
-  959536787:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 3624754305
-    transform: 2526158801
-    matFile: Assets\Models\Rooms\Room_01.6\M_Cellings_01.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Plane.135_Plane.148_M_Cellings_01
   2155943158:
     type: BoxCollider
     IsActive: true
@@ -9160,6 +9424,94 @@ components:
     transform: 1102282744
     matFile: Assets\Models\Rooms\Room_01.6\M_R0_Wall.ccmat
     meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Plane.241_Plane.267_M_R0_Wall
+  253128650:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 697297158
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  3598781522:
+    type: Transform
+    IsActive: true
+    m_owner: 697297158
+    position: 0.000000/1.150000/5.950000
+    rotation: -3.141592/-0.000977/3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  2193955224:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 697297158
+    linkedPortalProp: 3120096463
+  4002962145:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1536021791
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  4127997709:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 1536021791
+    linkedPortalProp: 1745194130
+  1124998824:
+    type: Transform
+    IsActive: true
+    m_owner: 1536021791
+    position: 0.000000/1.150000/-3.950000
+    rotation: -3.141592/-0.000977/3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  2208846639:
+    type: Transform
+    IsActive: true
+    m_owner: 619172741
+    position: 10.000000/1.150000/1.000000
+    rotation: 3.141592/1.569373/3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  3120096463:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 619172741
+    linkedPortalProp: 2193955224
+  1725105715:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 619172741
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  2560356410:
+    type: Transform
+    IsActive: true
+    m_owner: 1342926388
+    position: 9.900001/4.950000/0.950000
+    rotation: 0.000000/-1.569820/0.000000
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  3552290034:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1342926388
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  833887770:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 1342926388
+    linkedPortalProp: 3120096463
   2461005902:
     type: Transform
     IsActive: true
@@ -9570,6 +9922,50 @@ components:
     transform: 2997223646
     matFile: Assets\Models\Rooms\Room_01.7\M_Cellings_01.ccmat
     meshFile: Assets\Models\Rooms\Room_01.7\Room_01.7.obj\Plane.244_Plane.270_M_Cellings_01
+  1089234972:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 154075413
+    linkedPortalProp: 2193955224
+  1453051007:
+    type: Transform
+    IsActive: true
+    m_owner: 154075413
+    position: 0.000000/1.150000/-3.950000
+    rotation: -3.141592/-0.000977/3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  2796363167:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 154075413
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  2951063613:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2017097938
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  813866598:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 2017097938
+    linkedPortalProp: 3151472103
+  1513125690:
+    type: Transform
+    IsActive: true
+    m_owner: 2017097938
+    position: 0.000000/1.150000/3.200000
+    rotation: -3.141592/-0.000977/3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
   2883038421:
     type: Transform
     IsActive: true
@@ -9901,6 +10297,13 @@ components:
     transform: 504703393
     matFile: Assets\Models\Rooms\Room_01.8\M_WallCorner.ccmat
     meshFile: Assets\Models\Rooms\Room_01.8\Room_01.8.obj\Plane.194_Plane.216_M_WallCorner
+  3090745100:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 4075923766
+    transform: 850181046
+    matFile: Assets\Models\Rooms\Room_01.8\M_Arche_2.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.8\Room_01.8.obj\Plane.194_Plane.216_M_Arche_2
   850181046:
     type: Transform
     IsActive: true
@@ -9909,13 +10312,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2883038421
-  3090745100:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 4075923766
-    transform: 850181046
-    matFile: Assets\Models\Rooms\Room_01.8\M_Arche_2.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.8\Room_01.8.obj\Plane.194_Plane.216_M_Arche_2
   3581237835:
     type: Transform
     IsActive: true
@@ -10458,6 +10854,94 @@ components:
     transform: 3072004064
     matFile: Assets\Models\Rooms\Room_01.8\M_Arche_2.ccmat
     meshFile: Assets\Models\Rooms\Room_01.8\Room_01.8.obj\Cube.051_Cube.062_M_Arche_2
+  3151472103:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 718570252
+    linkedPortalProp: 813866598
+  3459601586:
+    type: Transform
+    IsActive: true
+    m_owner: 718570252
+    position: 0.000000/1.150000/-12.000000
+    rotation: -3.141592/-0.000977/3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  997411881:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 718570252
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  2399158917:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 1604126601
+    linkedPortalProp: 1493075572
+  2156503013:
+    type: Transform
+    IsActive: true
+    m_owner: 1604126601
+    position: 11.950000/1.150000/-4.000000
+    rotation: -3.141592/1.569820/-3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  3295466392:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 1604126601
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  1598565431:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 2298146428
+    linkedPortalProp: 902902772
+  3609354398:
+    type: Transform
+    IsActive: true
+    m_owner: 2298146428
+    position: 11.950000/1.150000/4.000000
+    rotation: -3.141592/1.569820/-3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  788966469:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2298146428
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  509576857:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3775535170
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
+  2465616198:
+    type: Transform
+    IsActive: true
+    m_owner: 3775535170
+    position: 0.000000/1.150000/7.750000
+    rotation: 0.000000/0.001322/0.000000
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  2181739827:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 3775535170
+    linkedPortalProp: 3151472103
   1408790859:
     type: Transform
     IsActive: true
@@ -10783,6 +11267,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1408790859
+  388562074:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2956284312
+    transform: 526953846
+    matFile: Assets\Models\Rooms\Room_01.81\M_TableButton.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.81\Room_01.81.obj\Sphere.004_Sphere.004_M_TableButton
   526953846:
     type: Transform
     IsActive: true
@@ -10791,13 +11282,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1408790859
-  388562074:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 2956284312
-    transform: 526953846
-    matFile: Assets\Models\Rooms\Room_01.81\M_TableButton.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.81\Room_01.81.obj\Sphere.004_Sphere.004_M_TableButton
   2814864752:
     type: ModelRenderer
     IsActive: true
@@ -10932,6 +11416,28 @@ components:
     Local Position: 11.999998/3.134999/-3.995003
     Scale: 0.010000/0.665000/1.135000
     Block Raycast: true
+  1408291514:
+    type: Transform
+    IsActive: true
+    m_owner: 2335647099
+    position: 12.000000/1.150000/-4.000000
+    rotation: -3.141592/1.569820/-3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  1493075572:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 2335647099
+    linkedPortalProp: 2399158917
+  2705826906:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 2335647099
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
   2139418873:
     type: Transform
     IsActive: true
@@ -10948,6 +11454,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2139418873
+  1584976949:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3795104489
+    transform: 3246557138
+    matFile: Assets\Models\Rooms\Room_01.82\M_Arche.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.82\Room_01.82.obj\Cube.055_Cube.066_M_Arche
   3246557138:
     type: Transform
     IsActive: true
@@ -10956,13 +11469,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2139418873
-  1584976949:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 3795104489
-    transform: 3246557138
-    matFile: Assets\Models\Rooms\Room_01.82\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.82\Room_01.82.obj\Cube.055_Cube.066_M_Arche
   3412735462:
     type: Transform
     IsActive: true
@@ -11530,6 +12036,14 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2139418873
+  4218520744:
+    type: Transform
+    IsActive: true
+    m_owner: 3800645235
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2139418873
   2497488562:
     type: ModelRenderer
     IsActive: true
@@ -11546,14 +12060,6 @@ components:
     Local Position: 14.959997/1.899999/-6.000003
     Scale: 0.960001/1.899999/0.000001
     Block Raycast: true
-  4218520744:
-    type: Transform
-    IsActive: true
-    m_owner: 3800645235
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 2139418873
   3464053034:
     type: Transform
     IsActive: true
@@ -11618,3 +12124,25 @@ components:
     transform: 3634008958
     matFile: Assets\Models\Rooms\Room_01.82\M_R0_Wall.ccmat
     meshFile: Assets\Models\Rooms\Room_01.82\Room_01.82.obj\Plane.245_Plane.151_M_R0_Wall
+  902902772:
+    type: PortalComponent
+    IsActive: true
+    m_owner: 3724837477
+    linkedPortalProp: 1598565431
+  3561634453:
+    type: Transform
+    IsActive: true
+    m_owner: 3724837477
+    position: 12.000000/1.150000/4.040000
+    rotation: -3.141592/1.569820/-3.141592
+    scale: 0.900000/1.149999/1.000000
+    parent: ~
+  3790233873:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 3724837477
+    Enabled: true
+    Is Trigger: true
+    Local Position: 0.000000/0.000000/0.000000
+    Scale: 1.000000/1.000000/0.050000
+    Block Raycast: true
