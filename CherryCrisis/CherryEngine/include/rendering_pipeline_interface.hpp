@@ -59,5 +59,5 @@ public:
 			subPipeline->Unsubscribe(renderer);
 	}
 
-	virtual void Execute(Viewer* viewer) = 0;
+	virtual void Execute(Viewer* viewer, Framebuffer* framebuffer) = 0;
 };

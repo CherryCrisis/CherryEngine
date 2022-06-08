@@ -48,15 +48,13 @@ void ColliderRenderPass::Unsubscribe(Collider* toGenerate)
 	m_colliders.erase(toGenerate);
 }
 
-void ColliderRenderPass::Execute(Viewer*& viewer)
+void ColliderRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
 	if (!viewer)
 		return;
-	
-	const Framebuffer& framebuffer = *viewer->m_framebuffer;
 
-	glViewport(0, 0, framebuffer.width, framebuffer.height);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+	glViewport(0, 0, framebuffer->width, framebuffer->height);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);

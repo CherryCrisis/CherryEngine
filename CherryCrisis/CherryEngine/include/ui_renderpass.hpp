@@ -43,5 +43,5 @@ public:
 	template <>
 	void Unsubscribe(UIImage* toGenerate);
 	
-	void Execute(Viewer*& viewer);
+	void Execute(Viewer* viewer, Framebuffer* framebuffer);
 };

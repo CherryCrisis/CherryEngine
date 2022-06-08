@@ -44,4 +44,5 @@ public:
 
 	static void ResetScene();
 	static void FlipScene();
+	static void EmptyScene();
 };

@@ -47,6 +47,8 @@ ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 
 ScriptedBehaviour::~ScriptedBehaviour()
 {
+	m_properties.clear();
+
 	UnsetSignals();
 
 	if (m_scriptingAssembly)

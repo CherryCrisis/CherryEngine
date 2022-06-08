@@ -37,6 +37,11 @@ public:
 
 	void Draw(int iteration, bool clearFBO = true)
 	{
+		DrawCustom(iteration, m_framebuffer.get(), clearFBO);
+	}
+
+	void DrawCustom(int iteration, Framebuffer* framebuffer, bool clearFBO = true)
+	{
 		glViewport(0, 0, m_framebuffer->width, m_framebuffer->height);
 
 		if (clearFBO)
@@ -46,10 +51,8 @@ public:
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 
-		// TODO: Make this parametrable
-		//camera.Draw(m_framebuffer, 1);
 		m_currentIteration = iteration;
-		m_pipeline->Execute(this);
+		m_pipeline->Execute(this, framebuffer);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}

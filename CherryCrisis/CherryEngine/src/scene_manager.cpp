@@ -62,8 +62,7 @@ bool SceneManager::LoadScene(const char* filepath)
 		return LoadEmptyScene("Assets/EmptyScene.ccscene");
 	}	
 
-	if (mng->m_currentScene)
-		mng->m_currentScene->Empty();
+	EmptyScene();
 
 	mng->m_currentScene =  ResourceManager::GetInstance()->AddResource<Scene>(filepath, false);
 	mng->Initialize();
@@ -94,8 +93,7 @@ void SceneManager::ResetScene()
 {
 	SceneManager* mng = GetInstance();
 	
-	if (mng->m_currentScene)
-		mng->m_currentScene->Empty();
+	EmptyScene();
 
 	mng->m_currentScene = ResourceManager::GetInstance()->AddResource<Scene>(mng->m_baseScene.c_str(), true);
 	Serializer::UnserializeScene(mng->m_currentScene, "Internal/temp");
@@ -104,6 +102,14 @@ void SceneManager::ResetScene()
 	ResourceManager::GetInstance()->Purge();
 
 	mng->m_sceneChanged.Invoke();
+}
+
+void SceneManager::EmptyScene() 
+{
+	SceneManager* mng = GetInstance();
+
+	if (mng->m_currentScene)
+		mng->m_currentScene->Empty();
 }
 
 void SceneManager::FlipScene() 

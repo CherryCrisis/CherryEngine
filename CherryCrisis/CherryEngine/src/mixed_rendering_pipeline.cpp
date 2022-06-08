@@ -1,6 +1,7 @@
 #include <pch.hpp>
 
 #include "mixed_rendering_pipeline.hpp"
+#include "framebuffer.hpp"
 
 //-- LIT --//
 #include "basic_postprocess_renderpass.hpp"
@@ -75,27 +76,27 @@ MixedPipeline::~MixedPipeline()
 	delete m_skydomePass;
 }
 
-void MixedPipeline::Execute(Viewer* viewer)
+void MixedPipeline::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
-	m_portalPass->CallOnExecute(viewer);
-	m_shadowPass->CallOnExecute(viewer);
+	m_portalPass->CallOnExecute(viewer, framebuffer);
+	m_shadowPass->CallOnExecute(viewer, framebuffer);
 
-	m_basicPass->CallOnExecute(viewer);
-	m_pbrPass->CallOnExecute(viewer);
+	m_basicPass->CallOnExecute(viewer, framebuffer);
+	m_pbrPass->CallOnExecute(viewer, framebuffer);
 
-	//m_bloomPass->CallOnExecute(viewer->framebuffer);
+	//m_bloomPass->CallOnExecute(viewer, framebuffer);
 	//if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
-	//	m_hdrPass->CallOnExecute(viewer->framebuffer);
+	//	m_hdrPass->CallOnExecute(viewer, framebuffer);
 	
-	m_colliderPass->CallOnExecute(viewer);
+	m_colliderPass->CallOnExecute(viewer, framebuffer);
 	
-	m_skyboxPass->CallOnExecute(viewer);
-	m_skydomePass->CallOnExecute(viewer);
+	m_skyboxPass->CallOnExecute(viewer, framebuffer);
+	m_skydomePass->CallOnExecute(viewer, framebuffer);
 	
-	m_guizmoPass->CallOnExecute(viewer);
+	m_guizmoPass->CallOnExecute(viewer, framebuffer);
 	
-	m_uiPass->CallOnExecute(viewer);
-	m_uiTextPass->CallOnExecute(viewer);
+	m_uiPass->CallOnExecute(viewer, framebuffer);
+	m_uiTextPass->CallOnExecute(viewer, framebuffer);
 	
 	//m_postprocessPass->CallOnExecute(viewer->framebuffer);
 }

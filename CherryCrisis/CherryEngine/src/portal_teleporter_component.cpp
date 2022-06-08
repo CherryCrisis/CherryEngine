@@ -44,6 +44,7 @@ void PortalTeleporterComponent::PopulateMetadatas()
 {
 	Behaviour::PopulateMetadatas();
 
+	m_metadatas.SetField<Behaviour*>("Transform", m_transform, true, "Transform");
 	// Add property
 	//m_metadatas.SetProperty("linkedPortalProp", &m_LinkedPortalProp, "PortalTeleporterComponent");
 }
@@ -57,11 +58,14 @@ void PortalTeleporterComponent::Initialize()
 {
 	GetHost().m_OnAwake.Unbind(&PortalTeleporterComponent::Initialize, this);
 	GetHost().m_OnStart.Bind(&PortalTeleporterComponent::Start, this);
+
+	m_transform = GetHost().GetBehaviour<Transform>();
 }
 
-void PortalTeleporterComponent::Start()
+void PortalTeleporterComponent::ReloadEntitiesClone()
 {
-	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
+	m_entityNode.reset();
+	m_cloneEntityNode.reset();
 
 	Transform* transform = GetHost().GetBehaviour<Transform>();
 
@@ -77,6 +81,14 @@ void PortalTeleporterComponent::Start()
 
 		m_cloneEntityNode->m_transform->GetHostPtr()->m_OnDestroyed.Bind(&PortalTeleporterComponent::OnRemovedClonedEntities, this);
 	}
+}
+
+
+void PortalTeleporterComponent::Start()
+{
+	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
+
+	ReloadEntitiesClone();
 }
 
 void PortalTeleporterComponent::OnRemovedClonedEntities()

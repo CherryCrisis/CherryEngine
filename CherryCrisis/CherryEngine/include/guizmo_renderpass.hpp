@@ -69,5 +69,5 @@ public:
 	template <>
 	void Unsubscribe(PortalComponent* toGenerate);
 
-	void Execute(Viewer*& viewer);
+	void Execute(Viewer* viewer, Framebuffer* framebuffer);
 };

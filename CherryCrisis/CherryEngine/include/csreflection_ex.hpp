@@ -69,6 +69,7 @@ public:
 		mono::ManagedObject* managedInstance = m_baseClass->CreateUnmanagedInstance(value, false);
 		m_csOwner->SetField(m_reflectedField, managedInstance->RawObject());
 
+		if (value)
 		if (Object* objectPtr = GetField())
 			objectPtr->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
 	}

@@ -5,6 +5,7 @@ settings:
   emissive: 0.000000/0.000000/0.000000
   shininess: 225
   hasNormal: false
+  hasCelshade: false
   specularFactor: 1
   metallicFactor: 0
   roughnessFactor: 1

@@ -36,6 +36,9 @@ PBRRenderPass::PBRRenderPass(const char* name)
 
 	for (auto& [texType, texRef] : m_defaultTextures)
 		m_textureGenerator.Generate(texRef.get());
+	
+	if (m_program)
+		OnPreDrawBind();
 }
 
 void PBRRenderPass::OnPreDrawBind()
@@ -166,15 +169,13 @@ void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, in
 	glBindTextureUnit(id, gpuTexture->ID);
 }
 
-void PBRRenderPass::Execute(Viewer*& viewer)
+void PBRRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
 	if (!viewer)
 		return;
 
-	const Framebuffer& framebuffer = *viewer->m_framebuffer;
-
-	glViewport(0, 0, framebuffer.width, framebuffer.height);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.FBO);
+	glViewport(0, 0, framebuffer->width, framebuffer->height);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
 
 
 	glEnable(GL_DEPTH_TEST);

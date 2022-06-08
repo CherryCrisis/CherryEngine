@@ -70,12 +70,13 @@ void CsScriptingSystem::ReloadContextes()
 
 void CsScriptingSystem::OnPreReload(CsAssembly* assembly)
 {
-	SceneManager::GetInstance()->FlipScene();
+	SceneManager::FlipScene();
+	SceneManager::EmptyScene();
 }
 
 void CsScriptingSystem::OnReload(CsAssembly* assembly)
 {
-	SceneManager::GetInstance()->ResetScene();
+	SceneManager::ResetScene();
 }
 
 void CsScriptingSystem::InitializeHotReload(const char* compilerPath, const char* solutionPath) 

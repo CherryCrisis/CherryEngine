@@ -17,9 +17,9 @@ FrustumPlanes FrustumPlanes::CreateFromInverse(const CCMaths::Matrix4& viewMatri
 {
 	FrustumPlanes frustumPlanes;
 
-	Vector3 up = viewMatrixInverse.up;
-	Vector3 right = viewMatrixInverse.right;
-	Vector3 forward = -viewMatrixInverse.back;
+	Vector3 up = viewMatrixInverse.up.Normalized();
+	Vector3 right = viewMatrixInverse.right.Normalized();
+	Vector3 forward = -viewMatrixInverse.back.Normalized();
 
 	const float halfVSide = far * CCMaths::Tan(fovY * 0.5f);
 	const float halfHSide = halfVSide * aspect;

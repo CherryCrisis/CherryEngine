@@ -40,21 +40,20 @@ BasicRPipeline::~BasicRPipeline()
 	delete m_postprocessPass;
 }
 
-void BasicRPipeline::Execute(Viewer* viewer)
+void BasicRPipeline::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
-	m_portalPass->CallOnExecute(viewer);
-	
-	m_shadowPass->CallOnExecute(viewer);
-	m_basicPass->CallOnExecute(viewer);
+	m_portalPass->CallOnExecute(viewer, framebuffer);
+
+	m_shadowPass->CallOnExecute(viewer, framebuffer);
+	m_basicPass->CallOnExecute(viewer, framebuffer);
 
 	m_bloomPass->CallOnExecute(*viewer->m_framebuffer);
 
 	if (m_hdrPass->inBrightness = m_bloomPass->outBrightness)
 		m_hdrPass->CallOnExecute(*viewer->m_framebuffer);
 	
-	m_colliderPass->CallOnExecute(viewer);
-
-	m_skyboxPass->CallOnExecute(viewer);
+	m_colliderPass->CallOnExecute(viewer, framebuffer);
+	m_skyboxPass->CallOnExecute(viewer, framebuffer);
 	//m_postprocessPass->CallOnExecute(viewer->m_framebuffer);
 	
 }

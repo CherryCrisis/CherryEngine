@@ -197,7 +197,7 @@ void SceneDisplayer::Render()
 
         m_camera.SetSize({ wsize.x, wsize.y });
         m_camera.m_isDrawed = false;
-        m_camera.Draw(1);
+        m_camera.Draw(2);
 
         uint64_t ViewTex = (uint64_t)m_camera.m_framebuffer->colorTex.texID;
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
@@ -207,7 +207,7 @@ void SceneDisplayer::Render()
             if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("NODE"))
             {
                 const char* data = (const char*)payload->Data;
-                std::string extension = String::ExtractValue(data, '.');
+                std::string extension = String::ExtractLastValue(data, '.');
 
                 if (sceneExtensions.compare('.' + extension) == 0)
                 {

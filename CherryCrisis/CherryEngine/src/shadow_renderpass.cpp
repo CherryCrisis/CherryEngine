@@ -71,7 +71,7 @@ void ShadowRenderPass::Unsubscribe(MeshRenderer* toGenerate)
 	m_models.erase(toGenerate);
 }
 
-void ShadowRenderPass::Execute(Viewer*& viewer)
+void ShadowRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_BACK);

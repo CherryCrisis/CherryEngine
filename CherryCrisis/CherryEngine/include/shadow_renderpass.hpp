@@ -44,5 +44,5 @@ public:
 	template <>
 	void Unsubscribe(MeshRenderer* toGenerate);
 
-	void Execute(Viewer*& viewer);
+	void Execute(Viewer* viewer, Framebuffer* framebuffer);
 };

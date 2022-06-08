@@ -22,7 +22,7 @@ namespace CCScripting
         public void Start() 
         {
             respawnTimer.totalTime = respawnTime;
-            emitter.AddSound("Assets/Sounds/scream.wav");
+            emitter.AddSound("Assets/Sounds/wardrobe_locked.wav");
             emitter.SetLooping(false);
             emitter.SetSpatialized(true);
         }
@@ -54,9 +54,9 @@ namespace CCScripting
                     isMoving = false;
                 }
             }
-
+            
             knockTimer.Tick(dt);
-            if (knockTimer.CheckAndReset())
+            if (knockTimer.Finished)
             {
                 emitter.Play();
             }

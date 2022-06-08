@@ -11,7 +11,7 @@ struct Framebuffer;
 class CCENGINE_API ARenderingRenderPass : public ARenderPass
 {
 protected:
-	std::shared_ptr<CCCallback::ACallback<Viewer*&>> m_callExecute = nullptr;
+	std::shared_ptr<CCCallback::ACallback<Viewer*, Framebuffer*>> m_callExecute = nullptr;
 
 public:
 	virtual void InvalidatePass() { m_program = nullptr; m_callExecute = nullptr; }
@@ -22,7 +22,7 @@ public:
 			OnPreDrawBind();
 	}
 
-	virtual void OnPreDrawBind() { }
+	virtual void OnPreDrawBind() {};
 
 	void OnProgramLoaded(std::shared_ptr<ShaderProgram> program)
 	{
@@ -37,12 +37,14 @@ public:
 		: ARenderPass(pipelineName, vert, frag)
 	{
 		m_program->m_OnLoaded.Bind(&ARenderingRenderPass::OnProgramLoaded, this);
+		if (m_program->GetResourceState() == EResourceState::LOADED)
+			PreDrawBind(m_program.get());
 	}
 
-	void CallOnExecute(Viewer* viewer)
+	void CallOnExecute(Viewer* viewer, Framebuffer* framebuffer)
 	{
 		if (m_callExecute)
-			m_callExecute->Invoke(viewer);
+			m_callExecute->Invoke(std::forward<Viewer*>(viewer), std::forward<Framebuffer*>(framebuffer));
 	}
 
 	virtual ~ARenderingRenderPass()

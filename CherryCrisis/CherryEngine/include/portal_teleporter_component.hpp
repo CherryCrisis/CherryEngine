@@ -23,15 +23,17 @@ public :
 protected:
 	void PopulateMetadatas() override;
 
-
 	void GenerateEntityNodesFromTransform(EntityNode* entityNode, Transform* transform);
 
 	//Return root transform
 	void CloneEntities(EntityNode* cloneMeshRendererNode, const EntityNode* meshRenderderNode, Cell* destCell, Scene* scene);
 	void SetIsVisibleEntityNode(EntityNode* entityNode, bool isVisible);
 public:
+	void ReloadEntitiesClone();
+
 	CCMaths::Vector3 m_previousOffsetFromPortal = Vector3::Zero;
 
+	Transform* m_transform = nullptr;
 	std::unique_ptr<EntityNode> m_entityNode = nullptr;
 	std::unique_ptr<EntityNode> m_cloneEntityNode = nullptr;
 
@@ -54,4 +56,5 @@ public:
 	void Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);
 
 	//CCProperty::CopyProperty<PortalComponent, Behaviour*> m_LinkedPortalProp{ this, &PortalComponent::SetLinkedPortal, &PortalComponent::GetLinkedPortal };
+
 };
