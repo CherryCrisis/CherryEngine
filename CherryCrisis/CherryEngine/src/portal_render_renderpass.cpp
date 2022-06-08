@@ -136,12 +136,13 @@ void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuf
 		std::vector<PortalViewer> portalViewers;
 		ComputePortalView(portal, viewer, framebuffer, portalViewers);
 
+		PortalViewer previousPortalViewer = SavePortalViewerParams(portal->m_linkedPortal);
+		
 		for (int i = 0; i < m_portalRecursionCount; ++i)
 		{
 			PortalViewer& portalViewer = portalViewers[i];
 
 			//Save previous portal viewer params
-			PortalViewer previousPortalViewer = SavePortalViewerParams(portal->m_linkedPortal);
 
 			ApplyPortalViewerParams(portal->m_linkedPortal, portalViewer);
 
@@ -154,9 +155,10 @@ void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuf
 			int recursion = i == m_portalRecursionCount - 1 ? currentRecursion - 1 : 0;
 			portal->m_linkedPortal->DrawCustom(recursion, gpuPortal->framebuffer.get(), false);
 
-			//Reaply previous portal viewer params
-			ApplyPortalViewerParams(portal->m_linkedPortal, previousPortalViewer);
 		}
+
+		//Reaply previous portal viewer params
+		ApplyPortalViewerParams(portal->m_linkedPortal, previousPortalViewer);
 	}
 }
 
