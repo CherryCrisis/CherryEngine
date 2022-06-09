@@ -267,7 +267,7 @@ void Scene::Empty()
 	{
 		for (auto& cell : m_cells)
 		{
-			RemoveCell(cell.first, true);
+			RemoveCell(cell.first);
 			break;
 		}
 	}
@@ -326,29 +326,13 @@ bool Scene::RenameCell(const std::string& oldName, const std::string& newName)
 	return false;
 }
 
-bool Scene::RemoveCell(const std::string& name, bool forceRemove)
+bool Scene::RemoveCell(const std::string& name)
 {
-	if (forceRemove)
-	{
-		auto entities = m_cells[name].GetEntities();
-		for (auto& entity : entities)
-			RemoveEntity(entity);
-
-		m_cells.erase(name);
-		return true;
-	}
-
-	if (name == m_defaultCellName)
-	{
-		m_debug->AddLog(ELogType::WARNING, "Cannot remove default cell");
-		return false;
-	}
-
 	if (m_cells.contains(name))
 	{
-		auto entities = m_cells[name].GetEntities();
-		for (auto& entity : entities)
-			MoveEntityFromCellToCell(name, m_defaultCellName, entity);
+		auto& entities = m_cells[name].GetEntities();
+		while (!entities.empty())
+			RemoveEntity(entities.back());
 
 		m_cells.erase(name);
 		return true;

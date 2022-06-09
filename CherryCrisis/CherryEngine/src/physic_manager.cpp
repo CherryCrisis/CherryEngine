@@ -264,11 +264,22 @@ namespace PhysicSystem
 		if (!currentInstance)
 			return;
 
+		PhysicManager& PM = *currentInstance;
+
 		PhysicScene* cellScene = cell->m_physicCell;
 		if (!cellScene)
 			return;
 
 		cellScene->m_cell = nullptr;
+		for (size_t i = 0; i < PM.m_scenes.size(); ++i)
+		{
+			if (cellScene == PM.m_scenes[i])
+			{
+				PM.m_scenes[i] = PM.m_scenes.back();
+				PM.m_scenes.pop_back();
+				return;
+			}
+		}
 	}
 
 	PhysicScene* PhysicManager::FindOrCreateScene(Cell* cell)
