@@ -126,7 +126,7 @@ void UIEditor::Render()
 
             // loop on every fields of the selected UI
             InspectSelectedItem();
-            if (ImGui::Button("rm")) 
+            if (ImGui::Button("Remove")) 
             {
                 context.RemoveItem(m_selectedItem);
                 m_selectedItem = nullptr;

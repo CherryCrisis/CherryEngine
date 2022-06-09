@@ -16,6 +16,9 @@
 
 void UIContext::RemoveItem(UIItem* item)
 {
+	if (!item)
+		return;
+
 	item->Delete();
 	m_items.erase(std::remove(m_items.begin(), m_items.end(), item), m_items.end());
 	delete item;
