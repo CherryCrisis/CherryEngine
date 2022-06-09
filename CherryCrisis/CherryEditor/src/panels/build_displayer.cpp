@@ -1,6 +1,7 @@
 #include "panels/build_displayer.hpp"
 
 #include <imgui.h>
+#include <imgui_stdlib.h>
 
 #include "core/builder.hpp"
 #include "portable-file-dialogs.hpp"
@@ -22,21 +23,20 @@ void BuildDisplayer::Render()
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(.5f, .5f));
     if (ImGui::Begin("Builder", &m_isOpened))
     {
-        IMGUI_LEFT_LABEL(ImGui::InputText, "Build Directory :", outDir, IM_ARRAYSIZE(outDir));
+        IMGUI_LEFT_LABEL(ImGui::InputText, "Build Directory :", &outDir);
         ImGui::SameLine(); if (ImGui::Button("...")) 
         {
             auto selection = pfd::select_folder("Select a folder").result();
-            const char* cSelection = selection.c_str();
 
             if (!selection.empty())
-                memcpy(outDir, cSelection, sizeof(char) * strlen(cSelection));
+                outDir = selection;
         }
 
         if (ImGui::Button("Close")) { m_isOpened = false; }
         ImGui::SameLine();
         if (ImGui::Button("Build")) 
         {
-            bool result = Builder::BuildGame(outDir, projectSettings->GetBuildSettings().gameName.c_str(), false, browser);
+            bool result = Builder::BuildGame(outDir.c_str(), projectSettings->GetBuildSettings().gameName.c_str(), false, browser);
             EditorNotifications::BuildGame(result);
             if (result)
                 m_isOpened = false;

@@ -32,7 +32,7 @@ namespace CCScripting
 		void TryInteract()
 		{
 			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
-			if (hit == null)
+			if (hit == null || hit.actor == null || hit.actor.m_owner == null)
 				return;
 
 			PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();

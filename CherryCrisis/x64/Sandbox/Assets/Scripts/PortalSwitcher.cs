@@ -23,7 +23,6 @@ namespace CCScripting
 
         void Awake() 
         {
-            //emitter = AddBehaviour<AudioEmitter>();
         }
         void Start()
         {
@@ -44,7 +43,8 @@ namespace CCScripting
         public void Switch() 
         {
             active = !active;
-            emitter.Play();
+            if (emitter != null)
+                emitter.Play();
 
             if (portal_0 == null || portal_1 == null || sourcePortal == null)
                 return;

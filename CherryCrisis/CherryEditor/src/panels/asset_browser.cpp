@@ -1070,7 +1070,6 @@ void AssetBrowser::QuerryBrowser()
 
     if (std::filesystem::exists(m_assetsDirectory))
     {
-       // LEAK: this possibly leads to leaks
        AAssetNode* assetNode = RecursiveQuerryBrowser(m_assetsDirectory, nullptr);
        m_assetsDirectoryNode = dynamic_cast<DirectoryNode*>(assetNode);
        m_assetsDirectoryNode->m_filename = "Assets";

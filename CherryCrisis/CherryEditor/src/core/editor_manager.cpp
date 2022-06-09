@@ -195,7 +195,7 @@ void EditorManager::HandleMenuBar()
             if (ImGui::MenuItem("Build")) { m_buildDisplayer.Toggle(true); } // Open Build Menu 
             if (ImGui::MenuItem("Build And Run")) 
             {
-                Builder::BuildGame(m_buildDisplayer.outDir, m_projSettingsDisplayer.GetBuildSettings().gameName.c_str(), true, &m_browser);
+                Builder::BuildGame(m_buildDisplayer.outDir.c_str(), m_projSettingsDisplayer.GetBuildSettings().gameName.c_str(), true, &m_browser);
             }
             ImGui::EndMenu();
         }
@@ -320,7 +320,7 @@ void EditorManager::ApplyPack(EditorPack pack)
     m_projSettingsDisplayer.ApplyBuildSettings(pack.ps);
 
     if (!pack.builder.outDir.empty())
-        strcpy_s(m_buildDisplayer.outDir, pack.builder.outDir.c_str());
+        m_buildDisplayer.outDir = pack.builder.outDir;
 }
 
 EditorPack EditorManager::GetPack() 

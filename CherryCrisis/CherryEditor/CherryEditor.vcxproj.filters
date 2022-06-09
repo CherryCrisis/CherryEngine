@@ -114,6 +114,9 @@
     <ClCompile Include="src\core\builder.cpp">
       <Filter>Fichiers sources\Core</Filter>
     </ClCompile>
+    <ClCompile Include="externals\src\imgui_stdlib.cpp">
+      <Filter>Fichiers externes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\editor_manager.hpp">
@@ -186,6 +189,9 @@
       <Filter>Fichiers d%27en-tête\Core</Filter>
     </ClInclude>
     <ClInclude Include="externals\include\stb_image_write.h">
+      <Filter>Fichiers externes</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\include\imgui_stdlib.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
   </ItemGroup>

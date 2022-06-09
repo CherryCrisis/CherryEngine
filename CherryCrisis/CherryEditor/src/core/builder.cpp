@@ -46,8 +46,8 @@ void Iterate(const std::string& path, AssetBrowser::DirectoryNode* dnode)
 		std::string newPath = path + "\\" + node->m_relativePath.string();
 		if (b)
 		{
-			if (b->m_assetNodes.size() > 0 && !std::filesystem::exists(newPath + b->m_filename))
-				CreateFolder(newPath, b->m_filename);
+			if (b->m_assetNodes.size() > 0 && !std::filesystem::exists(newPath + b->m_filename + b->m_extension))
+				CreateFolder(newPath, b->m_filename + b->m_extension);
 
 			Iterate(path, b);
 		}

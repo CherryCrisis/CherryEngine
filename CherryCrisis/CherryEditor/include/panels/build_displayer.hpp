@@ -8,7 +8,7 @@ class AssetBrowser;
 class BuildDisplayer : public Panel 
 {
 public:
-	char outDir[128] = "OutDirectory/";
+	std::string outDir = "OutDirectory/";
 
 	ProjectSettingsDisplayer* projectSettings;
 	AssetBrowser* browser = nullptr;
