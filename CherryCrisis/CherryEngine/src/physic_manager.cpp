@@ -82,8 +82,8 @@ namespace PhysicSystem
 		}
 
 		PxTolerancesScale toleranceScale;
-		toleranceScale.length = 100;
-		toleranceScale.speed = 981;
+		toleranceScale.length = 1;
+		toleranceScale.speed = 9.81;
 
 		if (!m_physics)
 			m_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_foundation, toleranceScale, true, m_pvd);
