@@ -6,11 +6,17 @@ class Timer
     float elapsedTime = 0f;
     public float totalTime = 1f;
 
+    bool isRunning = true;
     public bool Finished => elapsedTime >= totalTime;
 
-    public void Tick(float dt) 
+    public bool Tick(float dt) 
     {
+        if (Finished)
+            isRunning = false;
+
         elapsedTime += dt;
+
+        return Finished && isRunning;
     }
 
     public bool CheckAndReset()
@@ -24,6 +30,7 @@ class Timer
 
     public void Reset() 
     {
+        isRunning = true;
         elapsedTime = 0f;
     }
 }

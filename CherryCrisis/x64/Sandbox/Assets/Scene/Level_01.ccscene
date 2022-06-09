@@ -1,17 +1,17 @@
 resources:
-  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
-  - Assets\Models\Rooms\Room_00\Room_00.obj
-  - Assets\Models\Rooms\Room_01\Room_01.obj
   - Assets\Models\Rooms\Room_01.2\Room_01.2.obj
+  - Assets\Models\Rooms\Room_01\Room_01.obj
+  - Assets\Models\Rooms\Room_00\Room_00.obj
   - Assets\Models\Rooms\Room_01.1\Room_01.1.obj
   - Assets\Models\Rooms\Room_01.3\Room_01.3.obj
   - Assets\Models\Rooms\Room_01.4\Room_01.4.obj
-  - Assets\Models\Rooms\Room_01.5\Room_01.5.obj
-  - Assets\Models\Rooms\Room_01.7\Room_01.7.obj
   - Assets\Models\Rooms\Room_01.8\Room_01.8.obj
+  - Assets\Models\Rooms\Room_01.7\Room_01.7.obj
+  - Assets\Models\Rooms\Room_01.5\Room_01.5.obj
   - Assets\Models\Rooms\Room_01.6\Room_01.6.obj
   - Assets\Models\Rooms\Room_01.81\Room_01.81.obj
   - Assets\Models\Rooms\Room_01.82\Room_01.82.obj
@@ -1532,7 +1532,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3293831829
-    aspect: 0.717948735
+    aspect: 0.605198026
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
@@ -1568,12 +1568,12 @@ components:
     type: CharacterController
     IsActive: true
     m_owner: 2062820311
-    Walking Speed: 1.5
-    Running Speed: 2.5
+    Walking Speed: 2.25
+    Running Speed: 3.25
     Spring Dampling: 20
     String Strength: 150
     Rotation Sensivity: 1
-    Jump Force: 1
+    Jump Force: 2
   2704066835:
     type: PortalTeleporterComponent
     IsActive: true
@@ -1787,6 +1787,19 @@ components:
     Local Position: -2.750000/0.540000/0.000000
     Scale: 1.530000/0.400000/1.000000
     Block Raycast: true
+  1470366838:
+    type: ScriptedBehaviour
+    IsActive: true
+    m_owner: 1737862114
+    scriptName: PickableCube
+    collided: false
+    transform: ~
+    rb: ~
+    collider: ~
+    threw: false
+    spawnLocation: 0.000000/0.000000/0.000000
+    elapsedTime: 0
+    respawnTime: 1
   861270786:
     type: Transform
     IsActive: true
@@ -2237,6 +2250,17 @@ components:
     Local Position: 0.000000/0.000000/0.000000
     Scale: 1.000000/1.000000/0.050000
     Block Raycast: false
+  3672460697:
+    type: AudioEmitter
+    IsActive: true
+    m_owner: 638808306
+    Sound: "null"
+    AutoPlay: false
+    Looping: false
+    Spatialized: false
+    Pitch: 1
+    RollOff: 1
+    ReferenceDistance: 1
   2494638371:
     type: Transform
     IsActive: true
@@ -2250,17 +2274,6 @@ components:
     IsActive: true
     m_owner: 638808306
     linkedPortalProp: 1235515750
-  3672460697:
-    type: AudioEmitter
-    IsActive: true
-    m_owner: 638808306
-    Sound: "null"
-    AutoPlay: false
-    Looping: false
-    Spatialized: false
-    Pitch: 1
-    RollOff: 1
-    ReferenceDistance: 1
   1231503678:
     type: Transform
     IsActive: true
@@ -4275,9 +4288,12 @@ components:
     m_owner: 3446348402
     scriptName: PortalSwitcher
     sourcePortal: 1512747883
+    transformSourcePortal: ~
+    flipPortal: false
     portal_0: 1669515711
     active: false
     portal_1: 3115842333
+    emitter: ~
   3809631272:
     type: ModelRenderer
     IsActive: true
@@ -4594,9 +4610,12 @@ components:
     m_owner: 526468130
     scriptName: PortalSwitcher
     sourcePortal: 98273300
+    transformSourcePortal: ~
+    flipPortal: false
     portal_0: 3115842333
     active: false
     portal_1: 1492228151
+    emitter: ~
   137277080:
     type: Transform
     IsActive: true
@@ -6443,9 +6462,12 @@ components:
     m_owner: 4285992522
     scriptName: PortalSwitcher
     sourcePortal: 292561961
+    transformSourcePortal: ~
+    flipPortal: false
     portal_0: 1492228151
     active: false
     portal_1: 1227544010
+    emitter: ~
   4282221547:
     type: Transform
     IsActive: true
@@ -9475,15 +9497,6 @@ components:
     transform: 217134726
     matFile: Assets\Models\Rooms\Room_01.6\M_Button.ccmat
     meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Sphere.003_Sphere.003_M_Button
-  847350202:
-    type: ScriptedBehaviour
-    IsActive: true
-    m_owner: 2443027394
-    scriptName: PortalSwitcher
-    sourcePortal: 3120096463
-    portal_0: 2193955224
-    active: false
-    portal_1: 833887770
   1475360380:
     type: BoxCollider
     IsActive: true

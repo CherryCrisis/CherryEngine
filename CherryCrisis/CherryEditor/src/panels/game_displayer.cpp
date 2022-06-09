@@ -30,18 +30,20 @@ void GameDisplayer::Render()
         ImGui::BeginChild("GameFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
 
-        if (m_manager->m_engine && Engine::isPlaying)
+        CameraComponent* camComp = CameraComponent::GetMainCamera();
+        if (camComp)
         {
-            CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
+            Camera* mainCamera = &camComp->m_camera;
 
-            ImVec2 bufferPos = ImGui::GetWindowContentRegionMin(); bufferPos.x;
-
-            CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y) };
-            CCMaths::Vector2 framebufferPos = { ImGui::GetWindowPos().x + bufferPos.x, ImGui::GetWindowPos().y + bufferPos.y };
-
-            Camera* mainCamera = &CameraComponent::GetMainCamera()->m_camera;
-            if (mainCamera)
+            if (m_manager->m_engine && Engine::isPlaying)
             {
+                CCMaths::Vector2 mousePos = InputManager::GetInstance()->GetMousePos();
+
+                ImVec2 bufferPos = ImGui::GetWindowContentRegionMin(); bufferPos.x;
+
+                CCMaths::Vector2 mousebufferPos = { mousePos.x - (ImGui::GetWindowPos().x + bufferPos.x), mousePos.y - (ImGui::GetWindowPos().y + bufferPos.y) };
+                CCMaths::Vector2 framebufferPos = { ImGui::GetWindowPos().x + bufferPos.x, ImGui::GetWindowPos().y + bufferPos.y };
+
                 if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows)
                     && mousePos.x >= framebufferPos.x && mousePos.x <= framebufferPos.x + mainCamera->m_framebuffer->width
                     && mousePos.y >= framebufferPos.y && mousePos.y <= framebufferPos.y + mainCamera->m_framebuffer->height)
@@ -63,12 +65,6 @@ void GameDisplayer::Render()
                     glBindFramebuffer(GL_FRAMEBUFFER, 0);
                 }
             }
-        }
-
-        CameraComponent* camComp = CameraComponent::GetMainCamera();
-        if (camComp)
-        {
-            Camera* mainCamera = &camComp->m_camera;
 
             uint64_t viewTex;
 

@@ -55,6 +55,9 @@ Entity::Entity(Entity* entity)
 // something is wrong here 
 Entity::~Entity()
 {
+	if (GetUUID() == 1737862114)
+		std::cout << "Sdsf" << std::endl;
+
 	for (auto& [type, behaviour] : m_behaviours)
 		delete behaviour;
 

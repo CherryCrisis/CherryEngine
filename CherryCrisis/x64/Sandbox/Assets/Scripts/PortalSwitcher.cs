@@ -21,13 +21,18 @@ namespace CCScripting
 
         private Transform transformSourcePortal;
 
+        void Awake() 
+        {
+            //emitter = AddBehaviour<AudioEmitter>();
+        }
         void Start()
         {
             emitter = AddBehaviour<AudioEmitter>();
             emitter.AddSound("Assets/Sounds/portal_switcher_interact.wav");
             emitter.SetSpatialized(true);
             emitter.SetLooping(false);
-            transformSourcePortal = sourcePortal.GetBehaviour<Transform>();
+            if (sourcePortal != null)
+                transformSourcePortal = sourcePortal.GetBehaviour<Transform>();
         }
 
         void FlipPortal()
@@ -41,6 +46,9 @@ namespace CCScripting
             active = !active;
             emitter.Play();
 
+            if (portal_0 == null || portal_1 == null || sourcePortal == null)
+                return;
+
             if (flipPortal)
                 FlipPortal();
 
@@ -49,5 +57,5 @@ namespace CCScripting
             else
                 sourcePortal.SetLinkedPortal(portal_0);
         }
-    }
+    } 
 }

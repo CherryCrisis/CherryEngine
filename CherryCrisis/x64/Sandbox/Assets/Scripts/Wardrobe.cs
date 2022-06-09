@@ -55,11 +55,8 @@ namespace CCScripting
                 }
             }
             
-            knockTimer.Tick(dt);
-            if (knockTimer.Finished)
-            {
+            if (knockTimer.Tick(dt))
                 emitter.Play();
-            }
         }
     }
 }

@@ -59,19 +59,20 @@ private:
 
 	void InvalidateField() { SetField(nullptr); }
 
+	Object* m_currentlyHandledObject = nullptr;
 public:
+
 	void SetField(ManagedT value)
 	{
 		if (Object* objectPtr = GetField())
 			objectPtr->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
 
-
 		mono::ManagedObject* managedInstance = m_baseClass->CreateUnmanagedInstance(value, false);
 		m_csOwner->SetField(m_reflectedField, managedInstance->RawObject());
 
-		if (value)
-		if (Object* objectPtr = GetField())
-			objectPtr->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+		//if (value)
+		if (m_currentlyHandledObject = value)
+			m_currentlyHandledObject->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
 	}
 
 	ManagedT GetField()
@@ -87,7 +88,18 @@ public:
 		if (!res || excep)
 			return nullptr;
 
-		return *(ManagedT*)mono_object_unbox(res);
+		Object* objectPtr = *(ManagedT*)mono_object_unbox(res);
+		if (m_currentlyHandledObject != objectPtr)
+		{
+			if (m_currentlyHandledObject)
+				m_currentlyHandledObject->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+			
+			m_currentlyHandledObject = objectPtr;
+			
+			if (m_currentlyHandledObject)
+				m_currentlyHandledObject->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+		}
+		return static_cast<ManagedT>(objectPtr);
 	}
 
 	ReflectedManagedObjectField(mono::ManagedObject* owner, mono::ManagedField* field, mono::ManagedClass* baseClass, MonoMethod* handleMethod)

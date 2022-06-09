@@ -1,0 +1,37 @@
+resources:
+  - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\NonEuclidean\capsuleTemporel.obj
+  - Assets\Models\NonEuclidean\nonEuclideanModel.obj
+  - Assets\Models\Rooms\Room_00\Room_00.obj
+  - Assets\Models\Rooms\Room_01\Room_01.obj
+  - Assets\Models\Rooms\Room_01.2\Room_01.2.obj
+  - Assets\Models\Rooms\Room_01.1\Room_01.1.obj
+  - Assets\Models\Rooms\Room_01.3\Room_01.3.obj
+  - Assets\Models\Rooms\Room_01.4\Room_01.4.obj
+  - Assets\Models\Rooms\Room_01.5\Room_01.5.obj
+  - Assets\Models\Rooms\Room_01.7\Room_01.7.obj
+  - Assets\Models\Rooms\Room_01.8\Room_01.8.obj
+  - Assets\Models\Rooms\Room_01.6\Room_01.6.obj
+  - Assets\Models\Rooms\Room_01.81\Room_01.81.obj
+  - Assets\Models\Rooms\Room_01.82\Room_01.82.obj
+cells:
+  600385990:
+    name: default
+    settings:
+      texturePath: ""
+    entities:
+      2568905743:
+        name: Empty
+components:
+  1005757216:
+    type: ScriptedBehaviour
+    IsActive: true
+    m_owner: 2568905743
+    scriptName: PortalSwitcher
+    sourcePortal: ~
+    transformSourcePortal: ~
+    flipPortal: false
+    portal_0: ~
+    active: false
+    portal_1: ~

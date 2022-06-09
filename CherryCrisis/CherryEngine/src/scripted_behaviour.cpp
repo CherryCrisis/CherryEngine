@@ -47,6 +47,13 @@ ScriptedBehaviour::ScriptedBehaviour(CCUUID& id) : Behaviour(id)
 
 ScriptedBehaviour::~ScriptedBehaviour()
 {
+	for (auto& prop : m_properties)
+	{
+		Behaviour* defaultVal = nullptr;
+		Behaviour** valPtr = &defaultVal;
+		prop.second->Get((void**)&valPtr);
+	}
+
 	m_properties.clear();
 
 	UnsetSignals();
