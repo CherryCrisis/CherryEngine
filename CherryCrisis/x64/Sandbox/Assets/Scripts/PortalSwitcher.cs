@@ -15,7 +15,7 @@ namespace CCScripting
         AudioEmitter emitter;
 
         bool flipPortal = false;
-        bool rescalePortals = false;
+        bool rescalePortals = false; 
         // if active then link portal_1
         bool active = false;
 

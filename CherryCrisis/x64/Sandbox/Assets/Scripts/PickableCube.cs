@@ -37,7 +37,7 @@ namespace CCScripting
 
         public void Pick(Transform parent)
         {
-            traveler.SetActive(false);
+            traveler?.SetActive(false);
 
             ResetRespawnVariables();
 
@@ -54,7 +54,7 @@ namespace CCScripting
 
         public void Throw(Vector3 direction, float strength)
         {
-            traveler.SetActive(true);
+            traveler?.SetActive(true);
 
             Transform parent = transform.GetParent();
             threw = true;

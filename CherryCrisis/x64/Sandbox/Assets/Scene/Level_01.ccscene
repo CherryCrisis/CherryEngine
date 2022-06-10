@@ -645,6 +645,18 @@ cells:
         name: Line007
       2079525547:
         name: Line008
+      2794202162:
+        name: Open pelmet curtain.obj
+      2136019380:
+        name: Plane011
+      760988660:
+        name: Line008
+      426390837:
+        name: Line007
+      2104656672:
+        name: Plane012
+      2699406735:
+        name: Box004
   3295209113:
     name: Room_01.4
     settings:
@@ -1840,7 +1852,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: false
   3672460697:
     type: AudioEmitter
@@ -2060,6 +2072,7 @@ components:
     rb: ~
     emitter: ~
     collider: ~
+    traveler: ~
     threw: false
     spawnLocation: 0.000000/0.000000/0.000000
     elapsedTime: 0
@@ -2590,7 +2603,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3293831829
-    aspect: 0.854700863
+    aspect: 1.31343281
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
@@ -3016,6 +3029,13 @@ components:
     transform: 2238636286
     matFile: Assets\Models\reloj\Material.013.ccmat
     meshFile: Assets\Models\reloj\reloj2.0.obj\Circle.008
+  3424241632:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2237201532
+    transform: 3395062551
+    matFile: Assets\Models\reloj\Material.012.ccmat
+    meshFile: Assets\Models\reloj\reloj2.0.obj\Text.023
   3395062551:
     type: Transform
     IsActive: true
@@ -3024,20 +3044,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2985210751
-  3424241632:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 2237201532
-    transform: 3395062551
-    matFile: Assets\Models\reloj\Material.012.ccmat
-    meshFile: Assets\Models\reloj\reloj2.0.obj\Text.023
-  754958016:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 2185846259
-    transform: 2015696153
-    matFile: Assets\Models\reloj\Material.011.ccmat
-    meshFile: Assets\Models\reloj\reloj2.0.obj\Text.017
   2015696153:
     type: Transform
     IsActive: true
@@ -3046,6 +3052,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2985210751
+  754958016:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2185846259
+    transform: 2015696153
+    matFile: Assets\Models\reloj\Material.011.ccmat
+    meshFile: Assets\Models\reloj\reloj2.0.obj\Text.017
   3406478004:
     type: ModelRenderer
     IsActive: true
@@ -3795,7 +3808,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   1349373974:
     type: Transform
@@ -3825,7 +3838,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   3939304012:
     type: Transform
@@ -3847,7 +3860,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2429636410:
     type: PortalComponent
@@ -3869,7 +3882,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   1049490246:
     type: PortalComponent
@@ -3891,7 +3904,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   941244012:
     type: Transform
@@ -4180,7 +4193,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2277824960:
     type: BoxCollider
@@ -4189,7 +4202,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   159684493:
     type: PortalComponent
@@ -5298,7 +5311,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   4081905951:
     type: Transform
@@ -5320,7 +5333,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2367081075:
     type: BoxCollider
@@ -5329,7 +5342,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   1669515711:
     type: PortalComponent
@@ -5712,6 +5725,14 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1154161986
+  1092930477:
+    type: Transform
+    IsActive: true
+    m_owner: 3718606208
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 1154161986
   3215594439:
     type: BoxCollider
     IsActive: true
@@ -5728,14 +5749,6 @@ components:
     transform: 1092930477
     matFile: Assets\Models\Rooms\Room_01.3\M_R0_Wall.ccmat
     meshFile: Assets\Models\Rooms\Room_01.3\Room_01.3.obj\Plane.050_Plane.049_M_R0_Wall
-  1092930477:
-    type: Transform
-    IsActive: true
-    m_owner: 3718606208
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 1154161986
   603701720:
     type: Transform
     IsActive: true
@@ -6009,7 +6022,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2077140243:
     type: Transform
@@ -6026,7 +6039,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2845528965:
     type: Transform
@@ -6146,8 +6159,8 @@ components:
     type: Transform
     IsActive: true
     m_owner: 48002008
-    position: 2.219649/-0.144042/3.730390
-    rotation: 0.000000/-1.570451/0.000000
+    position: 2.219649/-0.144042/-3.700000
+    rotation: 0.000000/1.570451/0.000000
     scale: 0.043798/0.022927/0.020000
     parent: ~
   4242361005:
@@ -6225,6 +6238,89 @@ components:
     transform: 2984539658
     matFile: Assets\Models\Curtains\wire_225088199.ccmat
     meshFile: Assets\Models\Curtains\Open pelmet curtain.obj\Line008
+  2303357581:
+    type: Transform
+    IsActive: true
+    m_owner: 2794202162
+    position: 2.219649/-0.144042/3.730390
+    rotation: 0.000000/-1.570451/0.000000
+    scale: 0.043798/0.022927/0.020000
+    parent: ~
+  2456446229:
+    type: Transform
+    IsActive: true
+    m_owner: 2136019380
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2303357581
+  3681143891:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2136019380
+    transform: 2456446229
+    matFile: Assets\Models\Curtains\wire_135006006.ccmat
+    meshFile: Assets\Models\Curtains\Open pelmet curtain.obj\Plane011
+  3626702313:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 760988660
+    transform: 1137677592
+    matFile: Assets\Models\Curtains\wire_225088199.ccmat
+    meshFile: Assets\Models\Curtains\Open pelmet curtain.obj\Line008
+  1137677592:
+    type: Transform
+    IsActive: true
+    m_owner: 760988660
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2303357581
+  1491875558:
+    type: Transform
+    IsActive: true
+    m_owner: 426390837
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2303357581
+  1851220689:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 426390837
+    transform: 1491875558
+    matFile: Assets\Models\Curtains\wire_225088199.ccmat
+    meshFile: Assets\Models\Curtains\Open pelmet curtain.obj\Line007
+  1764207327:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2104656672
+    transform: 4105897551
+    matFile: Assets\Models\Curtains\wire_135006006.ccmat
+    meshFile: Assets\Models\Curtains\Open pelmet curtain.obj\Plane012
+  4105897551:
+    type: Transform
+    IsActive: true
+    m_owner: 2104656672
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2303357581
+  3337763912:
+    type: Transform
+    IsActive: true
+    m_owner: 2699406735
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2303357581
+  4109284743:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2699406735
+    transform: 3337763912
+    matFile: Assets\Models\Curtains\wire_225198087.ccmat
+    meshFile: Assets\Models\Curtains\Open pelmet curtain.obj\Box004
   3521307150:
     type: Transform
     IsActive: true
@@ -8011,7 +8107,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   292561961:
     type: PortalComponent
@@ -8025,7 +8121,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   4061360697:
     type: Transform
@@ -8042,7 +8138,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   432603445:
     type: Transform
@@ -8064,7 +8160,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   3231685372:
     type: Transform
@@ -8099,7 +8195,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   3692747354:
     type: PortalComponent
@@ -8121,7 +8217,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   913834852:
     type: BoxCollider
@@ -8130,7 +8226,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2890717111:
     type: Transform
@@ -8899,7 +8995,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   4061224057:
     type: Transform
@@ -8921,7 +9017,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2720319663:
     type: BoxCollider
@@ -8932,6 +9028,11 @@ components:
     Local Position: 0.000000/0.350000/0.000000
     Scale: 1.000000/1.000000/1.000000
     Block Raycast: true
+  2045074562:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 3217744714
+    Transform: 386111802
   386111802:
     type: Transform
     IsActive: true
@@ -8940,13 +9041,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 0.350000/0.350000/0.350000
     parent: ~
-  2607546006:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 3217744714
-    transform: 386111802
-    matFile: Assets\Models\Crate\Mat.ccmat
-    meshFile: Assets\Models\Crate\crate.obj\crate_Mesh
   610462374:
     type: AudioEmitter
     IsActive: true
@@ -8958,6 +9052,13 @@ components:
     Pitch: 1
     RollOff: 1
     ReferenceDistance: 1
+  2607546006:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3217744714
+    transform: 386111802
+    matFile: Assets\Models\Crate\Mat.ccmat
+    meshFile: Assets\Models\Crate\crate.obj\crate_Mesh
   3551640319:
     type: Rigidbody
     IsActive: true
@@ -8981,17 +9082,11 @@ components:
     rb: ~
     emitter: ~
     collider: ~
+    traveler: ~
     threw: false
     spawnLocation: 0.000000/0.000000/0.000000
     elapsedTime: 0
     respawnTime: 2
-  3852440801:
-    type: ShapeRenderer
-    IsActive: true
-    m_owner: 4176085559
-    transform: 3278226842
-    matFile: ""
-    Type: 1
   2644277422:
     type: ScriptedBehaviour
     IsActive: true
@@ -9066,7 +9161,7 @@ components:
     IsActive: true
     m_owner: 1433997818
     transform: 1693197188
-    matFile: Assets\Models\PalletJack\PalletJack2.ccmat
+    matFile: Assets\Models\PalletJack\SecondPAlletJack.ccmat
     meshFile: Assets\Models\PalletJack\palletjack.obj\Box002
   2527489452:
     type: Transform
@@ -10911,13 +11006,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1981863543
-  4228235573:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 226194256
-    transform: 1018122550
-    matFile: Assets\Models\Rooms\Room_01.6\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Cube.037_Cube.056_M_Arche
   1018122550:
     type: Transform
     IsActive: true
@@ -10926,6 +11014,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1981863543
+  4228235573:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 226194256
+    transform: 1018122550
+    matFile: Assets\Models\Rooms\Room_01.6\M_Arche.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Cube.037_Cube.056_M_Arche
   3674054573:
     type: Transform
     IsActive: true
@@ -10995,6 +11090,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1981863543
+  1543684070:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 2178269756
+    transform: 1918789984
+    matFile: Assets\Models\Rooms\Room_01.6\M_Arche.ccmat
+    meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Cube.041_Cube.057_M_Arche
   1918789984:
     type: Transform
     IsActive: true
@@ -11003,13 +11105,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 1981863543
-  1543684070:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 2178269756
-    transform: 1918789984
-    matFile: Assets\Models\Rooms\Room_01.6\M_Arche.ccmat
-    meshFile: Assets\Models\Rooms\Room_01.6\Room_01.6.obj\Cube.041_Cube.057_M_Arche
   2515882580:
     type: Transform
     IsActive: true
@@ -11235,7 +11330,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   3598781522:
     type: Transform
@@ -11257,7 +11352,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   4127997709:
     type: PortalComponent
@@ -11292,7 +11387,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   3552290034:
     type: BoxCollider
@@ -11301,7 +11396,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2560356410:
     type: Transform
@@ -11518,6 +11613,11 @@ components:
     transform: 3090387686
     matFile: Assets\Models\Greek\Wall\DefaultMaterial.ccmat
     meshFile: Assets\Models\Greek\Wall\ancient_wall.obj\anciant_wall_side_pillar
+  283307991:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 2036454021
+    Transform: 1775718159
   2940858895:
     type: BoxCollider
     IsActive: true
@@ -11576,6 +11676,7 @@ components:
     rb: ~
     emitter: ~
     collider: ~
+    traveler: ~
     threw: false
     spawnLocation: 0.000000/0.000000/0.000000
     elapsedTime: 0
@@ -12428,7 +12529,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   1453051007:
     type: Transform
@@ -12445,7 +12546,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   813866598:
     type: PortalComponent
@@ -13386,7 +13487,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   3295466392:
     type: BoxCollider
@@ -13395,7 +13496,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2399158917:
     type: PortalComponent
@@ -13430,7 +13531,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   509576857:
     type: BoxCollider
@@ -13439,7 +13540,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2465616198:
     type: Transform
@@ -14080,7 +14181,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   2139418873:
     type: Transform
@@ -14802,7 +14903,7 @@ components:
     Enabled: true
     Is Trigger: true
     Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/0.050000
+    Scale: 1.000000/1.000000/0.500000
     Block Raycast: true
   902902772:
     type: PortalComponent

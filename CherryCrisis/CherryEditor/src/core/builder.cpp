@@ -5,7 +5,7 @@
 #include "utils.hpp"
 #include "panels/asset_browser.hpp"
 
-const std::set<std::string> keptExtensions = { ".ttf", ".wav", ".cs", ".cctexture", ".ccmat", ".ccscene", ".vert", ".frag" };
+const std::set<std::string> keptExtensions = { ".ttf", ".wav", ".cs", ".cctexture", ".ccmat", ".ccscene", ".vert", ".frag" ,".ccinputs"};
 
 bool Builder::BuildGame(const char* outDir,const char* gameName, bool runGame, AssetBrowser* browser) 
 {
