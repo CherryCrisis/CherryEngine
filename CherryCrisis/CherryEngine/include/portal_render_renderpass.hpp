@@ -14,6 +14,8 @@
 #include "texture.hpp"
 #include "texture_generator.hpp"
 
+#define RECURSION_COUNT 4
+
 class Viewer;
 
 class PortalRenderPass : public ARenderingRenderPass
@@ -22,8 +24,6 @@ private:
 	std::unordered_set<Portal*>	m_portals;
 	std::shared_ptr<Mesh>		m_quadMesh;
 	bool						m_isExecuted = false;
-	int							m_portalRecursionCount = 2;
-
 
 	struct PortalViewer
 	{
@@ -34,7 +34,7 @@ private:
 		CCMaths::Vector3	m_position;
 	};
 
-	void ComputePortalView(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, std::vector<PortalViewer>& portalViewers);
+	void ComputePortalView(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, PortalViewer& portalViewer);
 	bool ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
 	void ComputePortals(std::unordered_set<Portal*>& portals, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
 	void DrawPortal(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
@@ -47,7 +47,7 @@ protected:
 	TextureGenerator m_textureGenerator;
 
 public:
-	static std::array<Framebuffer, 2> m_framebuffers;
+	static std::array<Framebuffer, RECURSION_COUNT> m_framebuffers;
 	static bool m_fboIsInit;
 
 	PortalRenderPass(const char* name);

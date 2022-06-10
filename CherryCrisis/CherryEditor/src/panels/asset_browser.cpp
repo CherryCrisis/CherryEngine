@@ -744,10 +744,21 @@ void AssetBrowser::SetAssetNode(const std::filesystem::path& path, AAssetNode* a
 
     assetNode->m_relativePath = String::ExtractValueStr(path.string(), "Assets\\");
 
+    bool isDirectory = std::filesystem::is_directory(path);
+
     std::string filename = path.filename().string();
     assetNode->m_relativePath = String::ExtractKeyStr(assetNode->m_relativePath.string(), filename.c_str());
-    assetNode->m_filename = String::ExtractLastKey(filename, '.');
-    assetNode->m_extension = path.extension().string();
+
+
+    if (!isDirectory)
+    {
+        assetNode->m_filename = String::ExtractLastKey(filename, '.');
+        assetNode->m_extension = path.extension().string();
+    }
+    else
+    {
+        assetNode->m_filename = filename;
+    }
 
     assetNode->m_assetBrowser = this;
     assetNode->m_fullFilename = assetNode->m_filename + assetNode->m_extension;
