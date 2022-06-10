@@ -112,18 +112,30 @@ void PortalRenderPass::ApplyPortalViewerParams(Portal* portal, const PortalViewe
 	portal->m_projectionMatrix = portalViewer.m_projectionMatrix;
 }
 
-void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion)
+bool PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion)
 {
-	//if (viewer == portal->m_linkedPortal)
+
+	//if (viewer->m_isPortalViewer && viewer->m_ownerCell == portal->m_ownerCell && viewer->m_ownerCell 
+	//	&& portal->m_linkedPortal->m_linkedPortal != portal)
 	//	return;
+	if (viewer == portal->m_linkedPortal)
+		if (portal->m_linkedPortal->m_linkedPortal == portal)
+			return 0;
 
 	if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
-		return;
+		return 0;
 
 	if (PortalGenerator::GPUBasicPortal* gpuPortal = static_cast<PortalGenerator::GPUBasicPortal*>(portal->m_gpuPortal.get()))
 	{
 		if (!gpuPortal->framebuffer)
-			return;
+			return 0;
+
+		//if (framebuffer == gpuPortal->framebuffer.get())
+		//	return 0;
+
+		//si le player voit le portal et le portalLinked ça explose 
+		//if (viewer == portal)
+		//	return;
 
 		//UpdateFrameBuffer verif if width and heigth are changed
 		gpuPortal->framebuffer->UpdateFramebuffer(static_cast<float>(framebuffer->width),
@@ -148,18 +160,26 @@ void PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuf
 
 			//TODO: Optimize ! 
 
-			glBindFramebuffer(GL_FRAMEBUFFER, gpuPortal->framebuffer->FBO);
-			glClear(GL_DEPTH_BUFFER_BIT);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 			int recursion = i == m_portalRecursionCount - 1 ? currentRecursion - 1 : 0;
 			portal->m_linkedPortal->DrawCustom(recursion, gpuPortal->framebuffer.get(), false);
 
+			if (!recursion)
+			{
+				glBindFramebuffer(GL_FRAMEBUFFER, gpuPortal->framebuffer->FBO);
+				glClear(GL_DEPTH_BUFFER_BIT);
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			}
+			//DrawPortal(portal, portal->m_linkedPortal, gpuPortal->framebuffer.get());
 		}
 
 		//Reaply previous portal viewer params
 		ApplyPortalViewerParams(portal->m_linkedPortal, previousPortalViewer);
+		
+		return 1;
 	}
+
+	return 0;
 }
 
 void PortalRenderPass::ComputePortals(std::unordered_set<Portal*>& portals, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion)
@@ -169,7 +189,61 @@ void PortalRenderPass::ComputePortals(std::unordered_set<Portal*>& portals, View
 		if (!portal->m_linkedPortal)
 			return;
 
-		ComputePortalFBO(portal, viewer, framebuffer, currentRecursion);
+		if (ComputePortalFBO(portal, viewer, framebuffer, currentRecursion))
+		{
+		}
+		DrawPortal(portal, viewer, framebuffer);
+	}
+}
+
+void PortalRenderPass::DrawPortal(Portal* portal, Viewer* viewer, Framebuffer* framebuffer)
+{
+	glViewport(0, 0, framebuffer->width, framebuffer->height);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glDisable(GL_CULL_FACE);
+
+	//glClearColor(0.f, 0.f, 0.f, 1.f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glUseProgram(m_program->m_shaderProgram);
+	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
+	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
+
+	if (auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(m_quadMesh->m_gpuMesh.get()))
+	{
+		glBindVertexArray(gpuMesh->VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
+
+		//for (Portal* portal : m_portals)
+		//{
+		if (PortalGenerator::GPUBasicPortal* gpuPortal = static_cast<PortalGenerator::GPUBasicPortal*>(portal->m_gpuPortal.get()))
+		{
+			//if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
+			//	continue;
+
+			glBindTextureUnit(0, gpuPortal->framebuffer->colorTex.texID);
+
+			glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, portal->m_modelMatrix.data);
+
+			glDrawElements(GL_TRIANGLES, gpuMesh->indicesCount, GL_UNSIGNED_INT, nullptr);
+
+			//{
+			//	glBindFramebuffer(GL_FRAMEBUFFER, gpuPortal->framebuffer->FBO);
+			//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			//}
+		}
+		//}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		glBindVertexArray(0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glUseProgram(0);
 	}
 }
 
@@ -183,6 +257,16 @@ void PortalRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 		//Todo: Add fbo in params
 		ComputePortals(m_portals, viewer, framebuffer, viewer->m_currentIteration);
 	}
+	else
+	{
+		//for (Portal* portal : m_portals)
+		//{
+		//	if (!portal->m_linkedPortal)
+		//		return;
+		//
+		//	DrawPortal(portal, viewer, framebuffer);
+		//}
+
 
  	glViewport(0, 0, framebuffer->width, framebuffer->height);
 
@@ -227,5 +311,6 @@ void PortalRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		glUseProgram(0);
+	}
 	}
 }

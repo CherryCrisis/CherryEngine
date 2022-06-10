@@ -68,8 +68,8 @@ void PortalComponent::BindToSignals()
 	GetHost().m_OnTriggerEnter.Bind(&PortalComponent::OnTriggerEnter, this);
 	GetHost().m_OnTriggerExit.Bind(&PortalComponent::OnTriggerExit, this);
 
-	GetHost().m_cell->AddViewer(&m_portal);
 	GetHost().m_cell->AddRenderer(&m_portal);
+	GetHost().m_cell->AddViewer(&m_portal);
 	GetHost().m_OnCellAdded.Bind(&PortalComponent::OnCellAdded, this);
 	GetHost().m_OnCellRemoved.Bind(&PortalComponent::OnCellRemoved, this);
 }
