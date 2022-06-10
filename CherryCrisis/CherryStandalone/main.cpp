@@ -157,7 +157,7 @@ int main()
                 }
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-                cam->Draw(1);
+                cam->Draw(2);
             }
             RenderManager::DrawMainWindow(mainWindow);
 

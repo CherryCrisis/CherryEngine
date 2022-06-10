@@ -1242,9 +1242,6 @@
     <ClInclude Include="externals\include\alc.h">
       <Filter>Fichiers externes</Filter>
     </ClInclude>
-    <ClInclude Include="include\portal_generator.hpp">
-      <Filter>Fichiers d%27en-tête\Rendering\Generator</Filter>
-    </ClInclude>
     <ClInclude Include="include\character_controller.hpp">
       <Filter>Fichiers d%27en-tête\Component</Filter>
     </ClInclude>
@@ -1828,9 +1825,6 @@
       <Filter>Fichiers sources\Component</Filter>
     </ClCompile>
     <ClCompile Include="src\texture_generator.cpp">
-      <Filter>Fichiers sources\Rendering\Generator</Filter>
-    </ClCompile>
-    <ClCompile Include="src\portal_generator.cpp">
       <Filter>Fichiers sources\Rendering\Generator</Filter>
     </ClCompile>
     <ClCompile Include="src\ui_context.cpp">

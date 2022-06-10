@@ -167,7 +167,7 @@ void CharacterController::FixedUpdate()
 		AlignToGravity();
 	}
 
-	PhysicSystem::RaycastHit hit = m_physicActor->Raycast(m_transform->GetGlobalPosition(), m_raycastDir, raycastDist);
+	PhysicSystem::RaycastHit hit = m_physicActor->Raycast(m_transform->GetGlobalPosition() + m_collider->GetLocalPos() , m_raycastDir, raycastDist);
 
 	physx::PxVec3 pxVel = m_dynamicActor->getLinearVelocity();
 	CCMaths::Vector3 vel = { pxVel.x, pxVel.y, pxVel.z };
@@ -202,7 +202,7 @@ void CharacterController::FixedUpdate()
 
 void CharacterController::AlignToGravity()
 {
-	m_alignement.m_lerpPercent += 0.01f;
+	m_alignement.m_lerpPercent += 0.03f;
 	
 	if (m_alignement.m_lerpPercent >= 1.0f)
 	{

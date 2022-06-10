@@ -360,7 +360,6 @@
     <ClInclude Include="include\picking_renderpass.hpp" />
     <ClInclude Include="include\portal.hpp" />
     <ClInclude Include="include\portal_component.hpp" />
-    <ClInclude Include="include\portal_generator.hpp" />
     <ClInclude Include="include\portal_render_renderpass.hpp" />
     <ClInclude Include="include\portal_teleporter_component.hpp" />
     <ClInclude Include="include\postprocess_renderpass_interface.hpp" />
@@ -588,7 +587,6 @@
     <ClCompile Include="src\physic_manager.cpp" />
     <ClCompile Include="src\pickinger.cpp" />
     <ClCompile Include="src\picking_renderpass.cpp" />
-    <ClCompile Include="src\portal_generator.cpp" />
     <ClCompile Include="src\portal_teleporter_component.cpp" />
     <ClCompile Include="src\prefilter_map_renderpass.cpp" />
     <ClCompile Include="src\portal.cpp" />
