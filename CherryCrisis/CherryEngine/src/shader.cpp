@@ -4,6 +4,8 @@
 
 #include <glad/gl.h>
 
+#include "debug.hpp"
+
 
 void Shader::Delete()
 {
@@ -66,8 +68,11 @@ unsigned int Shader::CompileShader(EShader shaderType, const char** shaderStr)
 	{
 		char infolog[1024];
 		glGetShaderInfoLog(shader, (sizeof(infolog) / sizeof(infolog[0])), nullptr, infolog);
-		fprintf(stderr, "Shader error: %s\n", infolog);
-		//TODO: add debug log
+
+		std::string log = "Shader error: ";
+		log += infolog;
+		Debug::GetInstance()->AddLog(ELogType::ERROR, log.c_str());
+
 	}
 
 	return shader;

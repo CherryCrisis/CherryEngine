@@ -10,7 +10,7 @@ TimeManager* Singleton<TimeManager>::currentInstance = nullptr;
 
 TimeManager::TimeManager()
 {
-    //m_currentZone = std::chrono::current_zone();
+    m_currentZone = std::chrono::current_zone();
 }
 
 void TimeManager::Update(const float time) 
@@ -30,11 +30,7 @@ void TimeManager::Update(const float time)
 
 FullDate TimeManager::GetCurrentTime()
 {
-    // TODO: See if we put it or not and how we handle leaks
-
-    return {};
-    /*
-    auto tp = std::chrono::zoned_time{ m_currentZone, std::chrono::system_clock::now() }.get_local_time();
+    auto tp = std::chrono::zoned_time{ currentInstance->m_currentZone, std::chrono::system_clock::now() }.get_local_time();
     auto dp = floor<std::chrono::days>(tp);
 
     std::chrono::year_month_day ymd{ dp };
@@ -49,7 +45,7 @@ FullDate TimeManager::GetCurrentTime()
         .year = static_cast<unsigned int>(static_cast<int>(ymd.year())),
         .month = static_cast<unsigned int>(ymd.month()),
         .day = static_cast<unsigned int>(ymd.day()),
-    };*/
+    };
 }
 
 unsigned int Chrono::GetCurrentTimeInMs()

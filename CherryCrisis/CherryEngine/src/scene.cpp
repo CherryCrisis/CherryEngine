@@ -133,12 +133,6 @@ void Scene::RemoveAllEntities()
 	m_isHierarchyDirty = true;
 }
 
-void Scene::RemoveEntity(const std::string& name)
-{
-	//TODO: Do this
-	m_isHierarchyDirty = true;
-}
-
 void Scene::Load(std::shared_ptr<Scene> scene)
 {
 	Serializer::UnserializeScene(scene);
@@ -283,7 +277,7 @@ void Scene::EmptyUI()
 Cell* Scene::AddCell(const std::string& name, CCUUID uuid)
 {
 	Cell* cell = nullptr;
-	// TODO: cache variables
+
 	if (!m_cells.contains(name))
 	{
 		auto it = m_cells.insert({ name, { uuid } });

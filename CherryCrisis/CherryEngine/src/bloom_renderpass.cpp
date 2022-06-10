@@ -49,7 +49,7 @@ void BloomRenderPass::Execute(Framebuffer& framebuffer)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 
 	bool horizontal = true, first_iteration = true;
-	// TODO: Change this all
+
 	unsigned int amount = 11u;
 	for (unsigned int i = 0; i < amount; i++)
 	{

@@ -193,7 +193,6 @@ int main(int argc, char** argv)
             editor.LinkEngine(&engine);
             engine.window_handle = window;
 
-            // TODO: Change to pre-compiled image
             stbi_set_flip_vertically_on_load(false);
             GLFWimage icon[1];
             icon[0].pixels = stbi_load("internal/icon.png", &icon[0].width, &icon[0].height, NULL, 4);

@@ -322,7 +322,6 @@ namespace CCMaths
 
 	inline Matrix4 Matrix4::Frustum(const float Left, const float Right, const float Bottom, const float Top, const float Near, const float Far)
 	{
-		// TODO: Optimizations
 		return
 		{
 			(Near * 2.f) / (Right - Left),   0.f,                              0.f,                               0.f,

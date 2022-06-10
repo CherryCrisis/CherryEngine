@@ -44,7 +44,6 @@ LightGenerator::GPULightBasic::~GPULightBasic()
 
 void LightGenerator::GPULightBasic::GetCorrectIndex()
 {
-	// TODO: set NBR_LIGHT shader define as value
 	for (unsigned int i = 0u; i < 8u; i++)
 	{
 		if (indices.find(i) == indices.end())

@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CherryEditor", "CherryEditor\CherryEditor.vcxproj", "{B01F048A-6BF8-44FD-B23E-321B43C55DD9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F12300A-CFFB-4962-B268-882C4BA99DB7} = {4F12300A-CFFB-4962-B268-882C4BA99DB7}
+		{CC32DA17-FA71-4568-89FF-10A9A068BDC0} = {CC32DA17-FA71-4568-89FF-10A9A068BDC0}
+		{44848127-F19F-415F-AC56-21890B376C5B} = {44848127-F19F-415F-AC56-21890B376C5B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CherryEngine", "CherryEngine\CherryEngine.vcxproj", "{44848127-F19F-415F-AC56-21890B376C5B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CherryStandalone", "CherryStandalone\CherryStandalone.vcxproj", "{CC32DA17-FA71-4568-89FF-10A9A068BDC0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F12300A-CFFB-4962-B268-882C4BA99DB7} = {4F12300A-CFFB-4962-B268-882C4BA99DB7}
+		{44848127-F19F-415F-AC56-21890B376C5B} = {44848127-F19F-415F-AC56-21890B376C5B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CherryLauncher", "CherryLauncher\CherryLauncher.vcxproj", "{1B2956CC-3970-46A4-A2AB-9ACDB81B9A80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B01F048A-6BF8-44FD-B23E-321B43C55DD9} = {B01F048A-6BF8-44FD-B23E-321B43C55DD9}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CherryScriptInterface", "CherryScriptInterface\CherryScriptInterface.csproj", "{4F12300A-CFFB-4962-B268-882C4BA99DB7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44848127-F19F-415F-AC56-21890B376C5B} = {44848127-F19F-415F-AC56-21890B376C5B}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B01F048A-6BF8-44FD-B23E-321B43C55DD9}.Debug|x64.ActiveCfg = Debug|x64
+		{B01F048A-6BF8-44FD-B23E-321B43C55DD9}.Debug|x64.Build.0 = Debug|x64
+		{B01F048A-6BF8-44FD-B23E-321B43C55DD9}.Release|x64.ActiveCfg = Release|x64
+		{B01F048A-6BF8-44FD-B23E-321B43C55DD9}.Release|x64.Build.0 = Release|x64
+		{44848127-F19F-415F-AC56-21890B376C5B}.Debug|x64.ActiveCfg = Debug|x64
+		{44848127-F19F-415F-AC56-21890B376C5B}.Debug|x64.Build.0 = Debug|x64
+		{44848127-F19F-415F-AC56-21890B376C5B}.Release|x64.ActiveCfg = Release|x64
+		{44848127-F19F-415F-AC56-21890B376C5B}.Release|x64.Build.0 = Release|x64
+		{CC32DA17-FA71-4568-89FF-10A9A068BDC0}.Debug|x64.ActiveCfg = Debug|x64
+		{CC32DA17-FA71-4568-89FF-10A9A068BDC0}.Debug|x64.Build.0 = Debug|x64
+		{CC32DA17-FA71-4568-89FF-10A9A068BDC0}.Release|x64.ActiveCfg = Release|x64
+		{CC32DA17-FA71-4568-89FF-10A9A068BDC0}.Release|x64.Build.0 = Release|x64
+		{1B2956CC-3970-46A4-A2AB-9ACDB81B9A80}.Debug|x64.ActiveCfg = Debug|x64
+		{1B2956CC-3970-46A4-A2AB-9ACDB81B9A80}.Debug|x64.Build.0 = Debug|x64
+		{1B2956CC-3970-46A4-A2AB-9ACDB81B9A80}.Release|x64.ActiveCfg = Release|x64
+		{1B2956CC-3970-46A4-A2AB-9ACDB81B9A80}.Release|x64.Build.0 = Release|x64
+		{4F12300A-CFFB-4962-B268-882C4BA99DB7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4F12300A-CFFB-4962-B268-882C4BA99DB7}.Debug|x64.Build.0 = Debug|Any CPU
+		{4F12300A-CFFB-4962-B268-882C4BA99DB7}.Release|x64.ActiveCfg = Release|Any CPU
+		{4F12300A-CFFB-4962-B268-882C4BA99DB7}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64367747-8C66-418F-804B-0ECB60906A72}
+	EndGlobalSection
+EndGlobal

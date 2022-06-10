@@ -8,7 +8,6 @@
 
 
 SkydomeRenderPass::SkydomeRenderPass(const char* name)
-// TODO: Set real path
 	: ARenderingRenderPass(name, "Assets/Shaders/PBR/skydomeShader.vert", "Assets/Shaders/PBR/skydomeShader.frag")
 {
 }

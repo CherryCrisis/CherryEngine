@@ -495,15 +495,7 @@ void EntitySelector::ApplyRange()
         for (int id = startID; id < endID; ++id)
             Add(entities[id].get());
     }
-    
-    //TODO: Remove this
-    // if (startIt - entities.begin() > endIt - entities.begin())
-    //    for (auto it = endIt; it != startIt+1; it++)
-    //        Add((*it).get());
-    //else
-    //    for (auto it = startIt; it != endIt+1; it++)
-    //        Add((*it).get());
-    
+
     m_endRange = nullptr;
 }
 

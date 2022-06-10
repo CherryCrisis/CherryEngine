@@ -56,7 +56,6 @@ public:
 	CCMaths::Vector2 GetSize() { return m_size; }
 	void		SetSize(const CCMaths::Vector2& size) { m_size = size; OnSetSize(); }
 
-	// TODO: Add dirty flag
 	CCMaths::Matrix4 GetModel() { return CCMaths::Matrix4::Translate(m_position) * CCMaths::Matrix4::Scale({ m_size, 1.f }); }
 
 	CCProperty::CopyProperty<UIItem, std::string>		   Name{ this,     &UIItem::SetName, &UIItem::GetName };

@@ -2,6 +2,7 @@
 
 #include "sound.hpp"
 
+#include "debug.hpp"
 #include "resource_manager.hpp"
 #include "sound_manager.hpp"
 
@@ -47,7 +48,7 @@ static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigne
     if (strncmp(header.chunkId, "RIFF", 4) != 0 || strncmp(header.format, "WAVE", 4) != 0)
     {
         fclose(wav);
-        fprintf(stderr, "WAVE: Unsupported wav file\n");
+        Debug::GetInstance()->AddLog(ELogType::ERROR, "WAVE: Unsupported wav file");
         return -1;
     }
 
@@ -56,7 +57,7 @@ static int wavLoad(const char* filename, int* channels, int* sampleRate, unsigne
     if (format.audioFormat != 1 || format.bitsPerSample != 16)
     {
         fclose(wav);
-        fprintf(stderr, "WAVE: Formats other than 16 bits PCM are not supported\n");
+        Debug::GetInstance()->AddLog(ELogType::ERROR, "WAVE: Formats other than 16 bits PCM are not supported");
         return -1;
     }
 
@@ -92,8 +93,7 @@ void Sound::Load(std::shared_ptr<Sound> sound)
 
     if (frameCount == -1)
     {
-        // TODO: Replace by log
-        std::cout << "Error while loading sound" << std::endl;
+        Debug::GetInstance()->AddLog(ELogType::ERROR, "Error while loading sound");
         return;
     }
 

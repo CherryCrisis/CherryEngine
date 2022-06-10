@@ -123,10 +123,6 @@ void GuizmoRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 	glBindVertexArray(gpuMesh->VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
 
-	// TODO: Clean this mess
-
-
-
 	auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(m_cameraIcon->m_gpuTexture2D.get());
 	glBindTextureUnit(0, gpuTexture->ID);
 

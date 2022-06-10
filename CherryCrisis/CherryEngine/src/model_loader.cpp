@@ -155,7 +155,7 @@ namespace CCImporter
     void CacheTextureData(const std::filesystem::path& texturePath, const unsigned char* cacheData, TextureHeader& textureHeader)
     {
         //-- Meta file --//
-        std::string fullFilepathMeta(texturePath.string() + ".cctexture"); //TODO: .cctexture in model_loader.hpp
+        std::string fullFilepathMeta(texturePath.string() + ".cctexture");
 
         YAML::Node yamlSave;
 
@@ -911,7 +911,6 @@ namespace CCImporter
         }
         else
         {
-            //TODO: Manage this addlog in multithread
             if (ThreadPool::GetInstance()->GetMainThreadID() == std::this_thread::get_id())
                 Debug::GetInstance()->AddLog(ELogType::ERROR, std::format("Error parsing : {}", importer.GetErrorString()).c_str());
 

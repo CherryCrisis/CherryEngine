@@ -1102,17 +1102,6 @@ namespace mono
 
 	ManagedScriptContext::~ManagedScriptContext()
 	{
-		// TODO: ca explose mais je sais pas pourquoi
-
-		/*for (auto& a : m_loadedAssemblies)
-		{
-			if (a->m_assembly)
-				mono_assembly_close(a->m_assembly);
-
-			//if (a->m_image)
-			//	mono_image_close(a->m_image);
-
-		}*/
 	}
 
 	bool ManagedScriptContext::Init()

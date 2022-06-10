@@ -20,7 +20,7 @@ private:
 	std::unordered_map<std::string, ARenderPass*> m_existingRenderpasses;
 
 public:
-	virtual ~ARenderingPipeline();
+	virtual ~ARenderingPipeline() {};
 
 	ARenderPass* GetRenderpass(const char* typeName);
 

@@ -949,7 +949,7 @@ AssetBrowser::AAssetNode* AssetBrowser::RecursiveQuerryBrowser(const std::filesy
                     if (m_timeModified[scriptNode->m_filename] != mod_time) 
                     {
                         m_timeModified[scriptNode->m_filename] = mod_time;
-                        // TODO: check if reload already started
+
                         if (m_manager->m_engine) 
                         {
                             if (Engine::isPlaying)

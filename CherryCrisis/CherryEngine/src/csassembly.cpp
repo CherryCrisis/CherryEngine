@@ -9,7 +9,6 @@
 
 void CsAssembly::Load(std::shared_ptr<CsAssembly> csassembly, const char* domainName, bool makeCopy)
 {
-	// TODO: try const_cast
 	CsScriptingSystem::GetInstance()->InitializeAssembly(csassembly, domainName, makeCopy);
 }
 
