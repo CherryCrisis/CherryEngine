@@ -70,7 +70,6 @@ public:
 		mono::ManagedObject* managedInstance = m_baseClass->CreateUnmanagedInstance(value, false);
 		m_csOwner->SetField(m_reflectedField, managedInstance->RawObject());
 
-		//if (value)
 		if (m_currentlyHandledObject = value)
 			m_currentlyHandledObject->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
 	}
@@ -89,16 +88,18 @@ public:
 			return nullptr;
 
 		Object* objectPtr = *(ManagedT*)mono_object_unbox(res);
-		if (m_currentlyHandledObject != objectPtr)
-		{
-			if (m_currentlyHandledObject)
-				m_currentlyHandledObject->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+
+		if (m_currentlyHandledObject == objectPtr)
+			return static_cast<ManagedT>(objectPtr);
+
+		if (m_currentlyHandledObject)
+			m_currentlyHandledObject->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
 			
-			m_currentlyHandledObject = objectPtr;
+		m_currentlyHandledObject = objectPtr;
 			
-			if (m_currentlyHandledObject)
-				m_currentlyHandledObject->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
-		}
+		if (m_currentlyHandledObject)
+			m_currentlyHandledObject->m_OnDestroyed.Bind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+
 		return static_cast<ManagedT>(objectPtr);
 	}
 
@@ -111,7 +112,7 @@ public:
 
 	virtual ~ReflectedManagedObjectField()
 	{
-		if (Object* objectPtr = GetField())
-			objectPtr->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
+		if (m_currentlyHandledObject)
+			m_currentlyHandledObject->m_OnDestroyed.Unbind(&ReflectedManagedObjectField<ManagedT>::InvalidateField, this);
 	};
 };
