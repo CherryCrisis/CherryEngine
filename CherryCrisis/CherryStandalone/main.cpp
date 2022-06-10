@@ -14,9 +14,9 @@
 #include "framebuffer.hpp"
 #include "pickinger.hpp"
 
+#include "portal_render_renderpass.hpp"
 
-
-//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 struct Context 
 {
@@ -53,7 +53,7 @@ void window_size_callback(GLFWwindow* window, int width, int height)
 int main()
 {
     // Check for leak
-   // _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
     int screenWidth = 1200;
     int screenHeight = 1000;
@@ -125,9 +125,8 @@ int main()
         MainWindow mainWindow{ window };
         RenderManager::GenerateMainWindow(mainWindow);
 
-        while (glfwWindowShouldClose(window) == false || (engine.isPlaying || engine.isPaused))
+        while (glfwWindowShouldClose(window) == false && (engine.isPlaying || engine.isPaused))
         {
-            //std::cout << 1/TimeManager::GetDeltaTime() << std::endl;
             InputManager::UpdateKeys();
             TimeManager::GetInstance()->Update((float)glfwGetTime());
             glfwPollEvents();
@@ -157,7 +156,7 @@ int main()
                 }
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-                cam->Draw(2);
+                cam->Draw(RECURSION_COUNT);
             }
             RenderManager::DrawMainWindow(mainWindow);
 

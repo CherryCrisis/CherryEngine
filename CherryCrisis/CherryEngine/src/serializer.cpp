@@ -698,6 +698,11 @@ bool Serializer::UnserializeScene(std::shared_ptr<Scene> scene, const char* file
 						Vector3 vec = value.as<CCMaths::Vector3>();
 						metadata->Set(&vec);
 					}
+					else if (type == typeid(CCMaths::Vector2))
+					{
+						Vector2 vec = value.as<CCMaths::Vector2>();
+						metadata->Set(&vec);
+					}
 					else if (type == typeid(Bool3))
 					{
 						Bool3 vec = value.as<Bool3>();

@@ -26,7 +26,14 @@ namespace CCScripting
 			UpdateCameraRotation();
 
 			if (InputManager.GetKeyDown("Interact")) TryInteract();
+
 			if (InputManager.GetKeyDown(Keycode.LEFT_CLICK)) TryAction();
+
+			if (InputManager.GetKeyDown(Keycode.ESCAPE)) 
+			{ 
+				InputManager.SetCursorDisplayed();
+				InputManager.SetUIFocus(true);
+			}
 		}
 
 		void TryInteract()

@@ -2590,7 +2590,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3293831829
-    aspect: 0.393858492
+    aspect: 0.854700863
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
@@ -15071,3 +15071,17 @@ components:
     Local Position: 0.000000/0.200000/0.000000
     Scale: 1.000000/1.000000/1.000000
     Block Raycast: true
+UI:
+  681543200:
+    type: UIButton
+    Text: sample text
+    Name: Button
+    Position: 0.000000/0.000000/0.000000
+    Size: 1920.000000/1920.000000
+    Text Size: 1920.000000/1920.000000
+    Font: Assets\Fonts\Urzeit.ttf
+    Background: Assets\Sprites\blank.png
+    Text Position: 0.000000/0.000000/0.000000
+    Background Size: 1920.000000/1920.000000
+    Behaviour: Assets\Scripts\FocusScript.cs
+    Background Position: 0.000000/0.000000/0.000000

@@ -92,6 +92,8 @@ void UIButton::Init()
 		return;
 
 	SubscribeToPipeline(cam->m_camera.m_pipeline.get());
+
+	m_background.SetSize(GetSize());
 }
 
 void UIButton::OnSetSize()
