@@ -8,7 +8,7 @@
 #include "camera_component.hpp"
 #include "core/editor_manager.hpp"
 #include "pickinger.hpp"
-
+#include "portal_render_renderpass.hpp"
 
 void GameDisplayer::Render() 
 {
@@ -75,7 +75,7 @@ void GameDisplayer::Render()
             if (m_isActive && mainCamera)
             {
                 mainCamera->SetSize({ wsize.x, wsize.y });
-                mainCamera->Draw(2);
+                mainCamera->Draw(RECURSION_COUNT);
 
                 viewTex = (uint64_t)mainCamera->m_framebuffer->colorTex.texID;
             }

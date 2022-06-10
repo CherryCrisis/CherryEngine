@@ -16,6 +16,7 @@
 #include "transform.hpp"
 #include "utils.hpp"
 #include "entity.hpp"
+#include "portal_render_renderpass.hpp"
 
 #undef near
 #undef far
@@ -195,8 +196,9 @@ void SceneDisplayer::Render()
         ImGui::BeginChild("SceneFrameBuffer");
         ImVec2 wsize = ImGui::GetWindowSize();
 
+        
         m_camera.SetSize({ wsize.x, wsize.y });
-        m_camera.Draw(2);
+        m_camera.Draw(RECURSION_COUNT);
 
         uint64_t ViewTex = (uint64_t)m_camera.m_framebuffer->colorTex.texID;
         ImGui::Image((ImTextureID)ViewTex, wsize, ImVec2(0, 1), ImVec2(1, 0));
