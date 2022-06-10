@@ -48,6 +48,9 @@ void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsiz
         }
     }();
 
+    if (type == GL_DEBUG_TYPE_PERFORMANCE)
+        return;
+
     auto const type_logType = [type]() {
         switch (type)
         {
@@ -84,7 +87,6 @@ void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsiz
 
 RenderManager::RenderManager()
 {
-	// TODO: REMOVE THAT
 	if (gladLoaderLoadGL() == 0)
 		printf("gladLoaderLoadGL failed\n");
 

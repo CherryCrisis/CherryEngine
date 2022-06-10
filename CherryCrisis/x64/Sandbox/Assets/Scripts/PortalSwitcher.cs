@@ -15,15 +15,12 @@ namespace CCScripting
         AudioEmitter emitter;
 
         bool flipPortal = false;
-
+        bool rescalePortals = false;
         // if active then link portal_1
         bool active = false;
 
         private Transform transformSourcePortal;
 
-        void Awake() 
-        {
-        }
         void Start()
         {
             emitter = AddBehaviour<AudioEmitter>();
@@ -52,10 +49,20 @@ namespace CCScripting
             if (flipPortal)
                 FlipPortal();
 
+            //PortalComponent activePortal = active ? portal_1 : portal_0;
+
             if (active)
+            {
                 sourcePortal.SetLinkedPortal(portal_1);
-            else
+                if (rescalePortals)
+                    transformSourcePortal.scale = portal_1.GetBehaviour<Transform>().scale;
+            }
+            else              
+            {
                 sourcePortal.SetLinkedPortal(portal_0);
+                if (rescalePortals)
+                    transformSourcePortal.scale = portal_0.GetBehaviour<Transform>().scale;
+            }
         }
     } 
 }

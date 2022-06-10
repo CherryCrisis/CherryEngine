@@ -19,8 +19,6 @@ class CCENGINE_API Scene : public Resource<Scene>
 private:
 	Debug* m_debug = nullptr;
 
-	static std::string m_defaultCellName;
-
 	std::queue<Entity*> m_toRemoveEntities;
 
 public:
@@ -39,7 +37,6 @@ public:
 	bool	RenameCell(const std::string& oldName, const std::string& newName);
 	bool	RemoveCell(const std::string& name);
 
-	void	AddEntityToDefault(Entity* entity);
 	void	AddEntityToCell(Entity* entity, const std::string& cellName);
 	void	MoveEntityFromCellToCell(const std::string& fromCell, const std::string& toCell, Entity* entity);
 	void	MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entity);
@@ -54,7 +51,6 @@ public:
 	void LateUpdate();
 
 	static void Load(std::shared_ptr<Scene> scene);
-	
 
 	void CopyEntity(Entity* toCopy, Entity* parent=nullptr);
 	Entity* AddEntity(std::unique_ptr<Entity>& toAdd);

@@ -18,8 +18,6 @@
 #include "transform.hpp"
 
 
-std::string Scene::m_defaultCellName = "Default";
-
 Scene::Scene(const char* filePath)
 	: Resource(filePath), m_debug(Debug::GetInstance()) 
 {
@@ -308,12 +306,6 @@ Cell* Scene::GetCell(const std::string& name)
 
 bool Scene::RenameCell(const std::string& oldName, const std::string& newName)
 {
-	if (oldName == m_defaultCellName)
-	{
-		m_debug->AddLog(ELogType::WARNING, "Cannot rename default cell");
-		return false;
-	}
-
 	if (m_cells.contains(oldName) && !m_cells.contains(newName))
 	{
 		auto cell = m_cells.extract(oldName);
@@ -338,12 +330,6 @@ bool Scene::RemoveCell(const std::string& name)
 		return true;
 	}
 	return false;
-}
-
-void Scene::AddEntityToDefault(Entity* entity)
-{
-	m_cells[m_defaultCellName].AddEntity(entity);
-	m_isHierarchyDirty = true;
 }
 
 void Scene::AddEntityToCell(Entity* entity, const std::string& cellName)
@@ -376,7 +362,6 @@ void Scene::MoveEntityFromCellToCell(Cell* fromCell, Cell* toCell, Entity* entit
 	i = toCell->PossessEntity(entity);
 	if (i != -1)
 	{
-		m_debug->AddLog(ELogType::ERROR, std::format("Trying to move an entity ({}) to a cell ({}) already owning it", entity->GetName(), fromCell->GetName()).c_str());
 		return;
 	}
 

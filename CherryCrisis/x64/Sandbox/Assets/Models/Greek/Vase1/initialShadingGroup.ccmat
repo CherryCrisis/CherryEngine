@@ -1,0 +1,26 @@
+settings:
+  ambient: 0.000000/0.000000/0.000000
+  diffuse: 0.600000/0.600000/0.600000
+  specular: 0.000000/0.000000/0.000000
+  emissive: 0.000000/0.000000/0.000000
+  shininess: 0
+  hasNormal: true
+  hasCelshade: false
+  specularFactor: 1
+  metallicFactor: 1
+  roughnessFactor: 0.699999988
+  ao: 1
+  clearCoatFactor: 0
+  clearCoatRoughnessFactor: 0
+  pipeline: 1
+  texturesCount: 5
+  texture_0: Assets\Models\Greek\Vase1\varillnew_low_lambert1_BaseColor.png
+  textureTypes_0: 1
+  texture_1: Assets\Models\Greek\Vase1\varillnew_low_lambert1_Normal.png
+  textureTypes_1: 2
+  texture_2: Assets\Models\Greek\Vase1\varillnew_low_lambert1_Metallic.png
+  textureTypes_2: 3
+  texture_3: Assets\Models\Greek\Vase1\varillnew_low_lambert1_Roughness.png
+  textureTypes_3: 4
+  texture_4: Assets\Models\Greek\Vase1\varillnew_low_lambert1_AO.png
+  textureTypes_4: 6

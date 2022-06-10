@@ -16,12 +16,7 @@ namespace CCScripting
             PickableCube cube = other.GetBehaviour<PickableCube>();
             if (cube != null) 
             {
-                /*if (switcher == null)
-                      Debug.Log(ELogType.ERROR, "There is no PortalSwitch to interact with");
-                  else
-                      switcher.Switch();*/
-
-                Switch();
+                Switch(); 
             }
         }
 
@@ -65,10 +60,8 @@ namespace CCScripting
             if (flipPortal)
                 FlipPortal();
 
-            if (active)
-                sourcePortal.SetLinkedPortal(portal_1);
-            else
-                sourcePortal.SetLinkedPortal(portal_0);
+            PortalComponent activePortal = active ? portal_1 : portal_0;
+            sourcePortal.SetLinkedPortal(activePortal);
         }
     }
 }

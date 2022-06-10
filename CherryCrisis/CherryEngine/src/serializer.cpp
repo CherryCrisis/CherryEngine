@@ -797,6 +797,7 @@ EditorPack Serializer::UnserializeEditor(const char* filepath)
 	if (!std::filesystem::exists(filepath)) 
 	{
 		SceneManager::LoadEmptyScene("Assets/Empty.ccscene");
+		return pack;
 	}
 
 	YAML::Node loader = YAML::LoadFile(filepath);

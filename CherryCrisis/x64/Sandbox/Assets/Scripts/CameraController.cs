@@ -32,10 +32,15 @@ namespace CCScripting
 		void TryInteract()
 		{
 			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
+			Debug.Info("Raycasting...");
 			if (hit == null || hit.actor == null || hit.actor.m_owner == null)
 				return;
-
+			Debug.Info("Raycast hitted smthing");
+			Debug.Info(hit.actor.m_owner);
 			PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
+			if (switcher == null)
+				Debug.Info("Raycast failed to switch");
+
 			switcher?.Switch();	
 
 			Wardrobe wardrobe = hit.actor.m_owner.GetBehaviour<Wardrobe>();
