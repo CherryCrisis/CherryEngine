@@ -41,8 +41,11 @@ namespace PhysicSystem
 		// Transform already set means Init() has already been called by another physic related component
 		if (m_transform)
 		{
-			if (PhysicManager::IsPlaying() && !Get())
+			if (PhysicManager::IsPlaying())
+			{
+				DestroyPxActor();
 				CreatePxActor();
+			}
 
 			return;
 		}

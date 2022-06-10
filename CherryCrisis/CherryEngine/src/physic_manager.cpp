@@ -359,12 +359,23 @@ namespace PhysicSystem
 	{
 		physx::PxRaycastBuffer hit = PhysicManager::RaycastBuff(scene, origin, dir, maxRange);
 
-		unsigned int hitNb = (unsigned int)hit.getNbTouches();
+		unsigned int hitNb = (unsigned int)hit.getNbAnyHits();
 
 		if (hitNb == 0)
 			return RaycastHit();
 
-		return PhysicManager::RaycastFromPxRaycast(hit.getTouch(hitNb - 1));
+		unsigned int index = 0;
+		float minDist = maxRange;
+		for (unsigned int i = 0; i < hitNb; i++)
+		{
+			if (hit.getAnyHit(i).distance < minDist)
+			{
+				minDist = hit.getAnyHit(i).distance;
+				index = i;
+			}
+		}
+
+		return PhysicManager::RaycastFromPxRaycast(hit.getAnyHit(index));
 	}
 
 	PxRaycastBuffer PhysicManager::RaycastBuff(PhysicScene& scene, const CCMaths::Vector3& origin, const CCMaths::Vector3& dir, const float maxRange)

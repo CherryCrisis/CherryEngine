@@ -89,7 +89,6 @@ void CapsuleCollider::Initialize()
 		m_transform->m_onRotationChange.Bind(&CapsuleCollider::RecomputeMatrix, this);
 		m_transform->m_OnDestroyed.Bind(&CapsuleCollider::InvalidateTransform, this);
 	}
-	m_physicActor->Init();
 
 	GetHost().m_OnAwake.Unbind(&CapsuleCollider::Initialize, this);
 
@@ -97,6 +96,8 @@ void CapsuleCollider::Initialize()
 		SetAABBScale();
 
 	SetEntityScale(m_transform);
+
+	m_physicActor->Init();
 }
 
 void CapsuleCollider::InvalidateTransform()
