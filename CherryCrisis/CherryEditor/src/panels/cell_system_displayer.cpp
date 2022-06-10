@@ -278,6 +278,12 @@ bool CellSystemDisplayer::Context()
             {
                 bool selected = m_rightClickedCell == m_displayedCell;
 
+                if (!m_rightClickedCell)
+                {
+                    ImGui::EndPopup();
+                    return false;
+                }
+
                 if (selected)
                     m_rightClickedCell->RemoveViewer(m_camera);
 

@@ -82,8 +82,8 @@ namespace PhysicSystem
 		}
 
 		PxTolerancesScale toleranceScale;
-		toleranceScale.length = 100;
-		toleranceScale.speed = 981;
+		toleranceScale.length = 1;
+		toleranceScale.speed = 9.81;
 
 		if (!m_physics)
 			m_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_foundation, toleranceScale, true, m_pvd);
@@ -264,11 +264,22 @@ namespace PhysicSystem
 		if (!currentInstance)
 			return;
 
+		PhysicManager& PM = *currentInstance;
+
 		PhysicScene* cellScene = cell->m_physicCell;
 		if (!cellScene)
 			return;
 
 		cellScene->m_cell = nullptr;
+		for (size_t i = 0; i < PM.m_scenes.size(); ++i)
+		{
+			if (cellScene == PM.m_scenes[i])
+			{
+				PM.m_scenes[i] = PM.m_scenes.back();
+				PM.m_scenes.pop_back();
+				return;
+			}
+		}
 	}
 
 	PhysicScene* PhysicManager::FindOrCreateScene(Cell* cell)

@@ -66,23 +66,23 @@ namespace PhysicSystem
 
 		physx::PxMaterial* CreateMaterial(float sf = 0.5f, float df = 0.5f, float cr = 0.5f);
 
-		static void Register(Rigidbody* rigidbody);						// Register the Rigidbody behaviour in the PhysicActor of its entity, create the PhysicActor if necessary
-		static void Register(Collider* collider);						// Same as above with a Collider component of any type (Box, Sphere, Capsule)
-		static void Register(CharacterController* controller);			// Same as above with a character controller
+		static void Register(Rigidbody* rigidbody);											// Register the Rigidbody behaviour in the PhysicActor of its entity, create the PhysicActor if necessary
+		static void Register(Collider* collider);											// Same as above with a Collider component of any type (Box, Sphere, Capsule)
+		static void Register(CharacterController* controller);								// Same as above with a character controller
 
 		static void Unregister(Rigidbody* rigidbody, bool checkEmpty = true);				// Unregister the Rigidbody behaviour in the PhysicActor of its entity, destroy the PhysicActor if empty
 		static void Unregister(Collider* collider, bool checkEmpty = true);					// Same as above with a Collider component of any type (Box, Sphere, Capsule)
 		static void Unregister(CharacterController* controller, bool checkEmpty = true);	// Same as above with a character controller
 
-		static PhysicActor* FindActor(Entity& owningEntity);			// Try and get the PhysicActor of the Entity, return nullptr if it doesn't find it
-		static PhysicActor* FindOrCreateActor(Entity& owningEntity);	// Same as above but create the PhysicActor if it doesn't find it
-		bool IsActorEmpty(PhysicActor& actor);							// Check if PhysicActor is empty, destroy it in this case
+		static PhysicActor* FindActor(Entity& owningEntity);								// Try and get the PhysicActor of the Entity, return nullptr if it doesn't find it
+		static PhysicActor* FindOrCreateActor(Entity& owningEntity);						// Same as above but create the PhysicActor if it doesn't find it
+		bool IsActorEmpty(PhysicActor& actor);												// Check if PhysicActor is empty, destroy it in this case
 
-		static void Register(Cell* cell);	// Create a PhysicScene for the Cell and link them
-		static void Unregister(Cell* cell);	// Destroy the PhysicScene of the Cell
+		static void Register(Cell* cell);													// Create a PhysicScene for the Cell and link them
+		static void Unregister(Cell* cell);													// Destroy the PhysicScene of the Cell
 		
-		static PhysicScene* FindScene(Cell* cell);			// Try and get the PhysicScene of the Cell, return nullptr if it doesn't find it
-		static PhysicScene* FindOrCreateScene(Cell* cell);	// Same as above but create the PhysicScene if it doesn't find it
+		static PhysicScene* FindScene(Cell* cell);											// Try and get the PhysicScene of the Cell, return nullptr if it doesn't find it
+		static PhysicScene* FindOrCreateScene(Cell* cell);									// Same as above but create the PhysicScene if it doesn't find it
 
 		// Instantiate physx for registered PhysicScenes and PhysicActors (create PxScene and PxActor)
 		static void Launch();
@@ -113,5 +113,7 @@ namespace PhysicSystem
 		static bool					IsPlaying() { return currentInstance->m_isPlaying; }	// True if physx simulates, else false
 		static physx::PxMaterial*	GetMaterial(const uint32_t& index = 0);
 		static physx::PxPhysics*	Get() { return currentInstance->m_physics; }
+	
+		static bool GetIsDebug() { return currentInstance->m_isInDebugMode; }
 	};
 }

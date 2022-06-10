@@ -48,6 +48,5 @@ void Collider::Copy(Behaviour* copy)
 	m_isTrigger = copiedCollider->m_isTrigger;
 	m_isAddedFromInspector = copiedCollider->m_isAddedFromInspector;
 
-	m_localPosition = copiedCollider->m_localPosition;
-	m_model = copiedCollider->m_model;
+	SetLocalPos(copiedCollider->m_localPosition);
 }

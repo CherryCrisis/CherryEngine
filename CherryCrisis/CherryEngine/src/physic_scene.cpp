@@ -13,7 +13,7 @@ namespace PhysicSystem
 {
 	void PhysicScene::Update(float deltaTime)
 	{
-		if (m_paused)
+		if (IsPaused())
 			return;
 
 		//m_pxScene->collide(deltaTime);
@@ -21,8 +21,19 @@ namespace PhysicSystem
 		m_pxScene->simulate(deltaTime);
 		m_pxScene->fetchResults(true);
 
-		for (auto& actor : m_actors)
+		uint32_t activeActor;
+		physx::PxActor** updatedActors = m_pxScene->getActiveActors(activeActor);
+		if (activeActor == 0u)
+		{
+			Pause(true);
+			return;
+		}
+
+		for (uint32_t i = 0; i < activeActor; ++i)
+		{
+			PhysicActor* actor = reinterpret_cast<PhysicActor*>(updatedActors[i]->userData);
 			actor->Update();
+		}
 	}
 
 	physx::PxFilterFlags FilterShader(
@@ -73,13 +84,17 @@ namespace PhysicSystem
 		}
 
 		m_pxScene->setGravity({ m_gravity.x, m_gravity.y, m_gravity.z });
+		m_pxScene->setFlag(physx::PxSceneFlag::eENABLE_ACTIVE_ACTORS, true);
 
-		physx::PxPvdSceneClient* pvdClient = m_pxScene->getScenePvdClient();
-		if (pvdClient)
+		if (PhysicManager::GetIsDebug())
 		{
-			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
-			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
-			pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+			physx::PxPvdSceneClient* pvdClient = m_pxScene->getScenePvdClient();
+			if (pvdClient)
+			{
+				pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
+				pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
+				pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+			}
 		}
 	}
 
@@ -95,6 +110,9 @@ namespace PhysicSystem
 
 	void PhysicScene::AddActor(PhysicActor* actor)
 	{
+		if (IsPaused())
+			Pause(false);
+
 		int index = PossessActor(actor);
 
 		if (index != -1)
@@ -114,6 +132,9 @@ namespace PhysicSystem
 
 	bool PhysicScene::RemoveActor(PhysicActor* actor)
 	{
+		if (IsPaused())
+			Pause(false);
+
 		int index = PossessActor(actor);
 
 		if (index == -1)
