@@ -1,0 +1,15 @@
+ActionSingle:
+  Jump:
+    - SPACE
+  Run:
+    - LEFT_SHIFT
+    - RIGHT_SHIFT
+  Interact:
+    - E
+ActionAxes:
+  Front_Back:
+    - W/S
+    - UP/DOWN
+  Left_Right:
+    - D/A
+    - LEFT/RIGHT

@@ -122,15 +122,15 @@ void CharacterController::Update()
 
 	InputManager::PushContext("User Context");
 
-	m_forwardMove = InputManager::GetAxis(Keycode::W, Keycode::S);
-	m_sideMove = InputManager::GetAxis(Keycode::D, Keycode::A);
+	m_forwardMove = InputManager::GetAxis("Front_Back");
+	m_sideMove = InputManager::GetAxis("Left_Right");
 
-	if (InputManager::GetKey(Keycode::SPACE) && m_isGrounded)
+	if (InputManager::GetKey("Jump") && m_isGrounded)
 	{
 		m_physicActor->AddForce({ 0, m_jumpForce, 0 }, PhysicSystem::EForceMode::eIMPULSE);
 		m_isGrounded = false;
 	}
-	m_isRunning = InputManager::GetKey(Keycode::LEFT_SHIFT);
+	m_isRunning = InputManager::GetKey("Run");
 
 	if (!m_alignement.m_isRotating)
 	{

@@ -109,7 +109,7 @@ void Scene::RemoveEntity(Entity* toRemove)
 		}
 	}
 
-	int entitiesCount = m_entities.size();
+	int entitiesCount = static_cast<int>(m_entities.size());
 	for (int id = 0; id < entitiesCount; ++id)
 	{
 		if (m_entities[id].get() == toRemove)

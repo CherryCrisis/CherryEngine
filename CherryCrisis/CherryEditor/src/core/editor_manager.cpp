@@ -57,8 +57,8 @@ EditorManager::~EditorManager()
 {
     auto width  = m_sceneDisplayer.m_camera.m_framebuffer->width;
     auto height = m_sceneDisplayer.m_camera.m_framebuffer->height;
-    static GLubyte* data = new GLubyte[3 * width * height];
-    memset(data, 0, 3 * width * height);
+    static GLubyte* data = new GLubyte[3 * (uint32_t)width * (uint32_t)height];
+    memset(data, 0, 3 * (uint32_t)width * (uint32_t)height);
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_sceneDisplayer.m_camera.m_framebuffer->FBO);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -68,7 +68,7 @@ EditorManager::~EditorManager()
     int numOfComponents = 3; // RGB
     int strideInBytes = width * 3;
     stbi_write_png("preview.png", width, height, 3, data, width * 3);
-    delete data;
+    delete [] data;
 }
 
 void EditorManager::GenerateGPUTexture(std::shared_ptr<Texture> texture)
@@ -463,7 +463,7 @@ void EntitySelector::SetEndRange()
 
 int Find(const std::vector<std::unique_ptr<Entity>>& entities, const Entity* toFind)
 {
-    int entitiesCount = entities.size();
+    int entitiesCount = static_cast<int>(entities.size());
     for (int id = 0; id < entitiesCount; ++id)
     {
         if (entities[id].get() == toFind)
