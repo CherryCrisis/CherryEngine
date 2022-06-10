@@ -3,6 +3,7 @@ bin
 
 !CherryCrisis/x64
 CherryCrisis/x64/*/*
+!CherryCrisis/x64/*/*.dll
 !Assets
 !Internal
 !imgui.ini
