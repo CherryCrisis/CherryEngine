@@ -14,7 +14,7 @@
 #include "texture.hpp"
 #include "texture_generator.hpp"
 
-#define RECURSION_COUNT 3
+#define RECURSION_COUNT 4
 
 class Viewer;
 

@@ -121,10 +121,10 @@ bool PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuf
 	if (!viewer->m_frustumPlanes.IsOnFrustum(portal->m_modelMatrix, m_quadMesh->m_aabb))
 		return 0;
 
-	m_framebuffers[currentRecursion - 1].UpdateFramebuffer(static_cast<float>(framebuffer->width),
+	m_framebuffers[(currentRecursion - 1)].UpdateFramebuffer(static_cast<float>(framebuffer->width),
 		static_cast<float>(framebuffer->height));
 
-	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffers[currentRecursion - 1].FBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffers[(currentRecursion - 1)].FBO);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -151,8 +151,6 @@ bool PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuf
 	ApplyPortalViewerParams(portal->m_linkedPortal, previousPortalViewer);
 
 	return 1;
-
-	return 0;
 }
 
 void PortalRenderPass::ComputePortals(std::unordered_set<Portal*>& portals, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion)
@@ -183,21 +181,8 @@ void PortalRenderPass::DrawPortal(Portal* portal, Viewer* viewer, Framebuffer* f
 	CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;
 	glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewProjection"), 1, GL_FALSE, viewProjection.data);
 
-	float factor = 0.f;
-	if (viewer != portal)
-	{
-		if (Portal* portalFromViewer = dynamic_cast<Portal*>(viewer))
-		{
-			if (portalFromViewer->m_linkedPortal == portal)
-			{
-				factor = 1.f - (currentRecursion - 1 / RECURSION_COUNT);
-			}
-		}
-		else
-		{
-			factor = 1.f - (currentRecursion / RECURSION_COUNT);
-		}
-	}
+	float factor = 1.f - (currentRecursion / (float)RECURSION_COUNT);
+	factor *= factor;
 
 	glUniform1f(glGetUniformLocation(m_program->m_shaderProgram, "uFogFactor"), factor);
 

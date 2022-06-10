@@ -11,7 +11,5 @@ uniform sampler2D uPortalTexture;
 void main()
 {
 	vec2 screenSpaceUV = uScreenPos.xy / uScreenPos.w;
-
-	float factor = 1.f - uFogFactor;
     oColor = texture(uPortalTexture, screenSpaceUV) * (1.f - uFogFactor);
 }
