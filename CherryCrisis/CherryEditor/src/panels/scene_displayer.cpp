@@ -196,7 +196,6 @@ void SceneDisplayer::Render()
         ImVec2 wsize = ImGui::GetWindowSize();
 
         m_camera.SetSize({ wsize.x, wsize.y });
-        m_camera.m_isDrawed = false;
         m_camera.Draw(2);
 
         uint64_t ViewTex = (uint64_t)m_camera.m_framebuffer->colorTex.texID;

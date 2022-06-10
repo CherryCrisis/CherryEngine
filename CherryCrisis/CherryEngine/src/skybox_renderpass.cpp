@@ -34,7 +34,7 @@ int SkyboxRenderPass::Subscribe(SkyRenderer* toGenerate)
 	{
 		if (!cubemap->GetData())
 		{
-			Resource<Texture>::ReloadResource(toGenerate->m_texture.get());
+			Resource<Texture>::ReloadResource(toGenerate->m_texture.get(), true, false);
 
 			if (!cubemap->GetData())
 				return -1;

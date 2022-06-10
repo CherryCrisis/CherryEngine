@@ -29,7 +29,7 @@ public :
 	Framebuffer() = default;
 	~Framebuffer();
 
-	void Init(float width = 1920, float height = 1080);
+	void Init(float width = 1.f, float height = 1.f);
 
 	//Verif if width and height are changed
 	void UpdateFramebuffer(float width, float height);

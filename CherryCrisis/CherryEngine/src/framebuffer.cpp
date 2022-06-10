@@ -4,7 +4,6 @@
 
 #include "camera.hpp"
 
-
 Framebuffer::~Framebuffer()
 {
     if (isInit)
@@ -13,6 +12,7 @@ Framebuffer::~Framebuffer()
        glDeleteTextures(1, &brightnessTex.texID);
        glDeleteRenderbuffers(1, &RBO);
        glDeleteFramebuffers(1, &FBO);
+       isInit = false;
     }
 }
 
@@ -63,12 +63,6 @@ void Framebuffer::UpdateFramebuffer(float _width, float _height)
 
     if (width != _width || height != _height)
         UpdateTextureSize(_width, _height);
-
-    //glViewport(0, 0, (GLsizei)width, (GLsizei)height);
-
-    // TODO: Make this parametrable
-    //camera.Draw(m_framebuffer, 1);
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Framebuffer::UpdateTextureSize(float _width, float _height)

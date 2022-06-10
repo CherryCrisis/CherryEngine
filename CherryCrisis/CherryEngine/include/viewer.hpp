@@ -30,8 +30,6 @@ public:
 	
 	Cell* m_ownerCell = nullptr;
 
-	bool m_isDrawed = false;
-
 	Viewer()
 		: m_framebuffer(std::make_shared<Framebuffer>()) {}
 

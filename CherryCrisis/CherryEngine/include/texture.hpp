@@ -141,9 +141,9 @@ public:
     static void Load(std::shared_ptr<Texture> texture, bool flipTexture = true, 
         ETextureFormat textureFormat = ETextureFormat::DXT1, ETextureFilter textureMinFilter = ETextureFilter::LINEAR, ETextureFilter textureMagFilter = ETextureFilter::LINEAR, ETextureWrap textureWrapS = ETextureWrap::REPEAT, ETextureWrap textureWrapT = ETextureWrap::REPEAT, ETextureWrap textureWrapR = ETextureWrap::REPEAT);
 
-    static bool LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
+    static bool LoadFromCache(Texture* texture, unsigned char** data, CCImporter::TextureHeader& textureHeader);
     
     void Delete() override;
 
-    void Reload(bool flipTexture = true);
+    void Reload(bool flipTexture = true, bool importTexture = true);
 };

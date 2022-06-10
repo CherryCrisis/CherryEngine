@@ -26,8 +26,6 @@ struct Portal : public Viewer, public ARenderer
 	//portal matrix relative to linked portal
 	CCMaths::Matrix4 m_relativeLinkedPortalMatrix = CCMaths::Matrix4::Identity;
 
-	std::unique_ptr<GPUPortal> m_gpuPortal;
-
 	Portal* m_linkedPortal = nullptr;
 
 	void Link(Portal* toLinkTo);

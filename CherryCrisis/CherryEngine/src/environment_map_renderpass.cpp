@@ -59,7 +59,7 @@ void EnvironmentMapRenderPass::SetupEnvironmentMap()
 	{
 		if (!spheremap->GetData())
 		{
-			Resource<Texture>::ReloadResource(m_skyRenderer->m_texture.get());
+			Resource<Texture>::ReloadResource(m_skyRenderer->m_texture.get(), true, false);
 
 			if (!spheremap->GetData())
 				return;
