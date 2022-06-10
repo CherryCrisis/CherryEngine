@@ -16,8 +16,6 @@ namespace PhysicSystem
 		if (IsPaused())
 			return;
 
-		//m_pxScene->collide(deltaTime);
-		//m_pxScene->fetchCollision(true);
 		m_pxScene->simulate(deltaTime);
 		m_pxScene->fetchResults(true);
 

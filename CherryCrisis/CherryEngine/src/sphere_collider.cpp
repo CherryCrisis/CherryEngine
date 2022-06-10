@@ -90,14 +90,14 @@ void SphereCollider::Initialize()
 		m_transform->m_OnDestroyed.Bind(&SphereCollider::InvalidateTransform, this);
 	}
 
-	m_physicActor->Init();
-
 	GetHost().m_OnAwake.Unbind(&SphereCollider::Initialize, this);
 
 	if (m_isAddedFromInspector)
 		SetAABBScale();
 
 	SetEntityScale(m_transform);
+
+	m_physicActor->Init();
 }
 
 void SphereCollider::InvalidateTransform()
