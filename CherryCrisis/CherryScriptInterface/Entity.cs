@@ -198,6 +198,23 @@ public class Entity : Object {
     return ret;
   }
 
+  private PortalTeleporterComponent GetPortalTeleporterComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetPortalTeleporterComponent(swigCPtr);
+    PortalTeleporterComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new PortalTeleporterComponent(cPtr, false);
+    return ret;
+  }
+
+  private PortalTeleporterComponent AddPortalTeleporterComponent() {
+    global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_AddPortalTeleporterComponent(swigCPtr);
+    PortalTeleporterComponent ret = (cPtr == global::System.IntPtr.Zero) ? null : new PortalTeleporterComponent(cPtr, false);
+    return ret;
+  }
+
+  private PortalTeleporterComponentVector GetAllOfPortalTeleporterComponent() {
+    PortalTeleporterComponentVector ret = new PortalTeleporterComponentVector(CherryEnginePINVOKE.Entity_GetAllOfPortalTeleporterComponent(swigCPtr), true);
+    return ret;
+  }
+
   private Rigidbody GetRigidbody() {
     global::System.IntPtr cPtr = CherryEnginePINVOKE.Entity_GetRigidbody(swigCPtr);
     Rigidbody ret = (cPtr == global::System.IntPtr.Zero) ? null : new Rigidbody(cPtr, false);
@@ -313,6 +330,9 @@ public class Entity : Object {
 		if (type == typeof(PortalComponent))
 			return AddPortalComponent();
 
+		if (type == typeof(PortalTeleporterComponent))
+			return AddPortalTeleporterComponent();
+
 		if (type == typeof(Rigidbody))
 			return AddRigidbody();
 
@@ -352,6 +372,9 @@ public class Entity : Object {
 									
 		if (type == typeof(PortalComponent))
 			return GetPortalComponent();
+
+		if (type == typeof(PortalTeleporterComponent))
+			return GetPortalTeleporterComponent();
 			
 		if (type == typeof(Rigidbody))
 			return GetRigidbody();

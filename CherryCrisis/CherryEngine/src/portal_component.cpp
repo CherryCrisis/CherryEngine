@@ -85,9 +85,11 @@ void PortalComponent::Initialize()
 	{
 		boxCollider = GetHost().AddBehaviour<BoxCollider>();
 		boxCollider->Initialize();
-		boxCollider->SetScale(m_boxColliderScale);
+		//boxCollider->SetScale(m_boxColliderScale);
 		boxCollider->SetTrigger(true);
 	}
+
+	boxCollider->SetScale(m_boxColliderScale);
 
 	UpdatePortalMatrices();
 
@@ -117,6 +119,13 @@ void PortalComponent::LateUpdate()
 {
 	for (PortalTeleporterComponent* portalTeleporter : m_portalTeleporters)
 	{
+		if (!portalTeleporter->IsActive())
+		{
+			portalTeleporter->ExitPortal();
+			m_portalTeleporters.erase(portalTeleporter);
+			return;
+		}
+
 		Transform* transform = portalTeleporter->m_transform;
 
 		Vector3 portalForward = -m_transform->GetWorldMatrix().back.Normalized();
@@ -182,9 +191,9 @@ void PortalComponent::LateUpdate()
 			portalTeleporter->m_previousOffsetFromPortal = offsetFromPortal;
 		}
 
-		Matrix4 worldMatrix = worldMatrixPortals * portalTeleporterMatrix;
+		portalTeleporter->UpdateCloneEntitiesMatrix(portalTeleporter->m_cloneEntityNode.get(), 
+			portalTeleporter->m_entityNode.get(), worldMatrixPortals);
 
-		portalTeleporter->UpdateEntityMatrix(portalTeleporter->m_cloneEntityNode->m_transform, worldMatrix);
 		UpdateSliceParamaters(portalTeleporter);
 	}
 }
@@ -289,7 +298,9 @@ void PortalComponent::OnEntityEnter(PortalTeleporterComponent* portalTeleporter)
 	if (m_portalTeleporters.end() != m_portalTeleporters.find(portalTeleporter))
 		return;
 
-	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal->m_modelMatrix;
+	Matrix4 worldMatrixLinkedPortal = m_portal.m_linkedPortal ? 
+		m_portal.m_linkedPortal->m_modelMatrix : Matrix4::Identity;
+
 	Matrix4 worldMatrix = worldMatrixLinkedPortal *
 		m_portal.m_modelMatrix.Inverse() *
 		portalTeleporter->m_entityNode->m_transform->GetWorldMatrix();
@@ -308,7 +319,8 @@ void PortalComponent::OnTriggerEnter(Entity* other)
 {
 	if (PortalTeleporterComponent* portalTeleporter = other->GetBehaviour<PortalTeleporterComponent>())
 	{
-		OnEntityEnter(portalTeleporter);
+		if (portalTeleporter->IsActive())
+			OnEntityEnter(portalTeleporter);
 	}
 }
 

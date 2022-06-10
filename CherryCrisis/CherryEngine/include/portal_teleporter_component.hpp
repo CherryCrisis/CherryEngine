@@ -13,13 +13,14 @@ class Transform;
 
 class CCENGINE_API PortalTeleporterComponent : public Behaviour
 {
-public :
+private :
 	struct EntityNode
 	{
 		Transform* m_transform = nullptr;
 		MeshRenderer* m_meshRenderer = nullptr;
 		std::vector<EntityNode> m_meshRendererChildren;
 	};
+
 protected:
 	void PopulateMetadatas() override;
 
@@ -46,11 +47,13 @@ public:
 	void Start();
 
 	void OnRemovedClonedEntities();
+	void RemoveCloneEntities();
 
 	void SetSliceParams(EntityNode* meshRendererNode, bool isSlice, const CCMaths::Vector3& sliceCentre, const CCMaths::Vector3& sliceNormal);
 	
 	void EnterPortal(const PortalComponent* linkedPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);
 	void UpdateEntityMatrix(Transform* transform, const Matrix4& newWorldMatrix);
+	void UpdateCloneEntitiesMatrix(EntityNode* entityCloneNode, EntityNode* entityNode, const Matrix4& worldMatrixPortal);
 	void ExitPortal();
 
 	void Teleport(PortalComponent* destPortal, const CCMaths::Vector3& newPos, const CCMaths::Vector3& newRot, const CCMaths::Vector3& newScale);

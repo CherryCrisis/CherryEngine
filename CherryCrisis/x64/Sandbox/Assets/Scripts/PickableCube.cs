@@ -10,6 +10,8 @@ namespace CCScripting
         Transform transform;
         Rigidbody rb;
         BoxCollider collider;
+        PortalTeleporterComponent traveler;
+
         AudioEmitter emitter;
         
         bool threw = false;
@@ -28,11 +30,15 @@ namespace CCScripting
             rb = GetBehaviour<Rigidbody>();
             collider = GetBehaviour<BoxCollider>();
             emitter = GetBehaviour<AudioEmitter>();
+            traveler = GetBehaviour<PortalTeleporterComponent>();
+
             SetRespawnPosition();
         }
 
         public void Pick(Transform parent)
         {
+            traveler.SetActive(false);
+
             ResetRespawnVariables();
 
             collider.SetTrigger(true);
@@ -40,16 +46,28 @@ namespace CCScripting
             transform.SetParent(parent);
             transform.SetPosition(Vector3.Zero);
             transform.SetRotation(Quaternion.Identity);
+
+            parent.GetParent()?.GetParent()?.GetBehaviour<PortalTeleporterComponent>()?.ReloadEntitiesClone();
+
+            Debug.Info("Parent = " + parent.GetParent() + " || Le Parent = " + parent.GetParent().GetParent());
         }
 
         public void Throw(Vector3 direction, float strength)
         {
+            traveler.SetActive(true);
+
+            Transform parent = transform.GetParent();
             threw = true;
             transform.SetParent(null, true, true);
             collider.SetTrigger(false);
             rb.SetKinematic(false);
 
             rb.AddForce(direction * strength, EForceMode.eFORCE);
+
+            parent.GetParent()?.GetParent()?.GetBehaviour<PortalTeleporterComponent>()?.ReloadEntitiesClone();
+            Debug.Info("Parent = " + parent.GetParent() + " || Le Parent = " + parent.GetParent().GetParent());
+
+
         }
 
         public void Update() 

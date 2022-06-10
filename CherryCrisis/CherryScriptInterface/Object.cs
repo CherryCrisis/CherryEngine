@@ -44,7 +44,13 @@ public class Object : global::System.IDisposable {
     }
   }
 
-  public Object() : this(CherryEnginePINVOKE.new_Object(), true) {
+  public bool IsActive() {
+    bool ret = CherryEnginePINVOKE.Object_IsActive(swigCPtr);
+    return ret;
+  }
+
+  public void SetActive(bool value) {
+    CherryEnginePINVOKE.Object_SetActive(swigCPtr, value);
   }
 
 }
