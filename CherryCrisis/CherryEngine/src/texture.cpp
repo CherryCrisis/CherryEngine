@@ -53,7 +53,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
-    if (!LoadFromCache(texture, &data, textureHeader))
+    if (!LoadFromCache(texture.get(), &data, textureHeader))
     {
        CCImporter::ImportTexture(*texture->GetFilesystemPath(), &data, textureHeader, flipTexture, textureFormat, ETextureSurface::TEXTURE_2D, textureWrapS, textureWrapT, textureWrapR, textureMinFilter, textureMagFilter);
     }
@@ -81,7 +81,7 @@ void Texture::Load(std::shared_ptr<Texture> texture, bool flipTexture, ETextureF
     texture->m_stackAllocated = false;
 }
 
-bool Texture::LoadFromCache(std::shared_ptr<Texture> texture, unsigned char** data, CCImporter::TextureHeader& textureHeader)
+bool Texture::LoadFromCache(Texture* texture, unsigned char** data, CCImporter::TextureHeader& textureHeader)
 {
     std::string fullTexturePath(CCImporter::cacheDirectory);
     fullTexturePath += texture->GetFilesystemPath()->filename().string();
@@ -117,12 +117,15 @@ void Texture::ClearData()
     m_data = nullptr;
 }
 
-void Texture::Reload(bool flipTexture)
+void Texture::Reload(bool flipTexture, bool importTexture)
 {
     unsigned char* data{};
     CCImporter::TextureHeader textureHeader{};
 
-    CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat, m_surface, m_wrapS, m_wrapT, m_wrapR, m_minFilter, m_magFilter, false);
+    if (importTexture)
+        CCImporter::ImportTexture(*GetFilesystemPath(), &data, textureHeader, flipTexture, m_internalFormat, m_surface, m_wrapS, m_wrapT, m_wrapR, m_minFilter, m_magFilter, false);
+    else
+        LoadFromCache(this, &data, textureHeader);
 
     if (!data)
     {

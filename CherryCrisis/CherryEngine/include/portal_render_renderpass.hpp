@@ -10,7 +10,6 @@
 #include "light.hpp"
 #include "mesh.hpp"
 #include "portal.hpp"
-#include "portal_generator.hpp"
 #include "rendering_renderpass_interface.hpp"
 #include "texture.hpp"
 #include "texture_generator.hpp"
@@ -25,7 +24,6 @@ private:
 	bool						m_isExecuted = false;
 	int							m_portalRecursionCount = 2;
 
-	static std::array<Framebuffer, 3> m_framebuffers;
 
 	struct PortalViewer
 	{
@@ -39,18 +37,21 @@ private:
 	void ComputePortalView(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, std::vector<PortalViewer>& portalViewers);
 	bool ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
 	void ComputePortals(std::unordered_set<Portal*>& portals, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
-	void DrawPortal(Portal* portal, Viewer* viewer, Framebuffer* framebuffer);
+	void DrawPortal(Portal* portal, Viewer* viewer, Framebuffer* framebuffer, int currentRecursion);
 
 	[[nodiscard]] PortalViewer SavePortalViewerParams(const Portal* portal);
 	void ApplyPortalViewerParams(Portal* portal, const PortalViewer& portalViewer);
 
 protected:
 	ElementMeshGenerator m_meshGenerator;
-	PortalGenerator m_portalGenerator;
 	TextureGenerator m_textureGenerator;
 
 public:
+	static std::array<Framebuffer, 2> m_framebuffers;
+	static bool m_fboIsInit;
+
 	PortalRenderPass(const char* name);
+	~PortalRenderPass();
 
 	template <typename RendererT>
 	int Subscribe(RendererT* toGenerate)
