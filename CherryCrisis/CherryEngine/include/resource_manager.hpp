@@ -31,6 +31,8 @@ private:
 	void AddResourceWithCallback(std::shared_ptr<T>& resource,
 		std::shared_ptr<CCCallback::AWrapCallback> wrappedCallback, Args... args);
 
+	//Create the resource add add it in the resource container corresponding to its type
+	//If the resource container corresponding to type doesn't exist, it is created
 	template<class T>
 	std::shared_ptr<T>& CreateResource(const char* filepath);
 
