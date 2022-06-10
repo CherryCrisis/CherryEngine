@@ -16,10 +16,10 @@ namespace CCScripting
             PickableCube cube = other.GetBehaviour<PickableCube>();
             if (cube != null) 
             {
-                /*             if (switcher == null)
-                                   Debug.Log(ELogType.ERROR, "There is no PortalSwitch to interact with");
-                               else
-                                   switcher.Switch();*/
+                /*if (switcher == null)
+                      Debug.Log(ELogType.ERROR, "There is no PortalSwitch to interact with");
+                  else
+                      switcher.Switch();*/
 
                 Switch();
             }
