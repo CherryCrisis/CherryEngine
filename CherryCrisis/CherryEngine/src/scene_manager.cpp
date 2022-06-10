@@ -53,6 +53,10 @@ void SceneManager::SetHierarchyDirty(bool value)
 
 bool SceneManager::LoadScene(const char* filepath) 
 {
+	float preTime = 0.f;
+	if (Engine::isPlaying)
+		preTime = TimeManager::GetInstance()->GetTime();
+	
 	SceneManager* mng = GetInstance();
 	
 	if (!std::filesystem::exists(filepath)) 
@@ -65,6 +69,10 @@ bool SceneManager::LoadScene(const char* filepath)
 	EmptyScene();
 
 	mng->m_currentScene =  ResourceManager::GetInstance()->AddResource<Scene>(filepath, false);
+	
+	if (Engine::isPlaying)
+		TimeManager::GetInstance()->SetTime(preTime);
+
 	mng->Initialize();
 
 	ResourceManager::GetInstance()->Purge();

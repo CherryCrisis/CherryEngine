@@ -1,4 +1,3 @@
-#include "cherry_header.hpp"
 
 #include <iostream>
 #include <crtdbg.h>
@@ -220,8 +219,7 @@ int main(int argc, char** argv)
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glClearColor(0.f, 0.f, 0.f, 1.f);
 
-                for (UIItem* item : SceneManager::GetInstance()->m_currentScene->m_UIContext.m_items)
-                    item->SetHovered(false);
+                SceneManager::GetInstance()->m_currentScene->m_UIContext.ResetHoveredValues();
 
                 ImGui_ImplOpenGL3_NewFrame();
                 ImGui_ImplGlfw_NewFrame();

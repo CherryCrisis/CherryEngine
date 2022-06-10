@@ -101,7 +101,7 @@ RenderManager::~RenderManager()
 
 void RenderManager::GenerateMainWindow(MainWindow& mainWindow) 
 {
-    mainWindow.shader = ResourceManager::GetInstance()->AddResource<ShaderProgram>("game", true, "Assets/Shaders/game.vert", "Assets/Shaders/game.frag")->m_shaderProgram;
+    mainWindow.shader = ResourceManager::GetInstance()->AddResource<ShaderProgram>("game", true, "Assets/Shaders/game.vert", "Assets/Shaders/game.frag");
     std::shared_ptr<Mesh> m_quadMesh = ResourceManager::GetInstance()->AddResourceRef<Mesh>("CC_NormalizedQuad", true);
 
     if (!m_quadMesh->m_gpuMesh)
@@ -122,7 +122,7 @@ void RenderManager::DrawMainWindow(const MainWindow& mainWindow)
 
         auto gpuMesh = static_cast<ElementMeshGenerator::GPUMeshBasic*>(mainWindow.quad);
 
-        glUseProgram(mainWindow.shader);
+        glUseProgram(mainWindow.shader->m_shaderProgram);
         glBindVertexArray(gpuMesh->VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gpuMesh->EBO);
         glDisable(GL_DEPTH_TEST);

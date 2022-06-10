@@ -34,7 +34,12 @@ InputManager::~InputManager()
 
 void InputManager::Init()
 {
+#ifdef CCSTANDALONE
+	m_defaultContext = GetOrAddContext("User Context");
+#else
 	m_defaultContext = GetOrAddContext("Editor Context");
+#endif
+
 	SetPollContext(m_defaultContext);
 	PushContext(m_defaultContext);
 }

@@ -104,3 +104,9 @@ UIItem* UIContext::Get(uint32_t id)
 	
 	return nullptr;
 }
+
+void UIContext::ResetHoveredValues() 
+{
+	for (UIItem* item : m_items)
+		item->SetHovered(false);
+}

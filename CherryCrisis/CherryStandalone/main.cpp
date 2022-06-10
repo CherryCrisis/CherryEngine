@@ -1,4 +1,3 @@
-#include <cherry_header.hpp>
 
 #include <iostream>
 
@@ -13,6 +12,9 @@
 
 #include "camera_component.hpp"
 #include "framebuffer.hpp"
+#include "pickinger.hpp"
+
+
 
 //#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
@@ -31,6 +33,16 @@ void ShowCursor(void* window)
 {
     GLFWwindow* castedWindow = (GLFWwindow*)window;
     glfwSetInputMode(castedWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+float GetTime()
+{
+    return glfwGetTime();
+}
+
+void SetTime(float time)
+{
+    glfwSetTime(time);
 }
 
 void window_size_callback(GLFWwindow* window, int width, int height)
@@ -97,12 +109,16 @@ int main()
         InputManager::GetInstance()->HideCursor = HideCursor;
         InputManager::GetInstance()->ShowCursor = ShowCursor;
 
+        TimeManager::GetInstance()->GetTime = GetTime;
+        TimeManager::GetInstance()->SetTime = SetTime;
+
         Engine::window_handle = window;
         Serializer::UnserializeGame("master");
         InputManager::SetCursorHidden();
         engine.Launch(false);
 
         Serializer::UnserializeInputs();
+
         InputManager::SetPollContext("User Context");
         InputManager::PushContext("User Context");
 
@@ -111,12 +127,15 @@ int main()
 
         while (glfwWindowShouldClose(window) == false || (engine.isPlaying || engine.isPaused))
         {
+            //std::cout << 1/TimeManager::GetDeltaTime() << std::endl;
             InputManager::UpdateKeys();
             TimeManager::GetInstance()->Update((float)glfwGetTime());
             glfwPollEvents();
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(0.f, 0.f, 0.f, 1.f);
+
+            SceneManager::GetInstance()->m_currentScene->m_UIContext.ResetHoveredValues();
 
             int width, height;
             glfwGetWindowSize(mainWindow.window, &width, &height);
@@ -126,6 +145,18 @@ int main()
                 Camera* cam = &cameraComp->m_camera;
                 cam->SetSize({ static_cast<float>(width), static_cast<float>(height) });
                 //Update FrameBuffer
+                
+                glBindFramebuffer(GL_FRAMEBUFFER, cam->m_framebuffer->FBO);
+                Pickinger::SetBuffer(cam);
+                if (UIItem* item = Pickinger::GetUIItem(InputManager::GetMousePos()))
+                {
+                    item->SetHovered(true);
+
+                    if (InputManager::GetKeyDown(Keycode::LEFT_CLICK))
+                        item->Interact();
+                }
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
                 cam->Draw(1);
             }
             RenderManager::DrawMainWindow(mainWindow);

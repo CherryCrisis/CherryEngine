@@ -7,6 +7,8 @@
 
 #include "singleton.hpp"
 
+#include "shader_program.hpp"
+
 struct	Framebuffer;
 class	Viewer;
 struct  GLFWwindow;
@@ -15,7 +17,7 @@ struct  GPUMesh;
 struct MainWindow
 {
 	GLFWwindow* window;
-	unsigned int shader;
+	std::shared_ptr<ShaderProgram> shader;
 	GPUMesh* quad;
 };
 

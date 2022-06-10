@@ -1,12 +1,13 @@
 resources:
-  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\Backpack\backpack.obj
+  - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
-  - Assets\Models\Rooms\Room_01.2\Room_01.2.obj
-  - Assets\Models\Rooms\Room_01\Room_01.obj
+  - Assets\Models\Crate\crate.obj
   - Assets\Models\Rooms\Room_00\Room_00.obj
+  - Assets\Models\Rooms\Room_01\Room_01.obj
   - Assets\Models\Rooms\Room_01.1\Room_01.1.obj
+  - Assets\Models\Rooms\Room_01.2\Room_01.2.obj
   - Assets\Models\Rooms\Room_01.3\Room_01.3.obj
   - Assets\Models\Rooms\Room_01.4\Room_01.4.obj
   - Assets\Models\Rooms\Room_01.8\Room_01.8.obj
@@ -117,6 +118,12 @@ cells:
         name: Wardrobe
       2608956056:
         name: Door_Left
+      2062820311:
+        name: Player
+      3293831829:
+        name: Camera
+      3068110835:
+        name: Cube Position
   3944506002:
     name: Room_01
     settings:
@@ -895,16 +902,10 @@ cells:
         name: Portal_01.5_To_01.6 [Switch]
       3830635851:
         name: Portal_01.5_To_01.4
-      3959382076:
-        name: ThrowableCube
+      3217744714:
+        name: ThrowableCrate
       4176085559:
         name: Receiver
-      2062820311:
-        name: Player
-      3293831829:
-        name: Camera
-      3068110835:
-        name: Cube Position
   224556103:
     name: Room_01.6
     settings:
@@ -1148,8 +1149,8 @@ cells:
         name: Portal [Switch]
       1342926388:
         name: Portal
-      836495171:
-        name: ThrowingCube
+      906977064:
+        name: ThrowableCrate
       4004732826:
         name: Receiver
   3777455833:
@@ -2206,6 +2207,92 @@ components:
     rotation: 0.000000/-0.016965/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 2832037884
+  2069731409:
+    type: CapsuleCollider
+    IsActive: true
+    m_owner: 2062820311
+    Enabled: true
+    Is Trigger: false
+    Local Position: 0.000000/0.000000/0.000000
+    Half height: 0.800000012
+    Radius: 0.25
+    Block Raycast: false
+  2140586399:
+    type: Rigidbody
+    IsActive: true
+    m_owner: 2062820311
+    Density: 10
+    Enabled: true
+    Kinematic: false
+    Use gravity: true
+    Position constraints: 0/0/0
+    Rotation constraints: 1/1/1
+    Max velocity: 100
+    Max angular velocity: 100
+    Max depenetration velocity: 100
+  3397280180:
+    type: CharacterController
+    IsActive: true
+    m_owner: 2062820311
+    Walking Speed: 2.75
+    Running Speed: 4
+    Spring Dampling: 20
+    String Strength: 150
+    Rotation Sensivity: 1
+    Jump Force: 2.25
+  2704066835:
+    type: PortalTeleporterComponent
+    IsActive: true
+    m_owner: 2062820311
+    Transform: 2247843852
+  2247843852:
+    type: Transform
+    IsActive: true
+    m_owner: 2062820311
+    position: -3.000000/1.000000/2.000000
+    rotation: 0.000000/-1.134464/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: ~
+  2816241020:
+    type: Transform
+    IsActive: true
+    m_owner: 3293831829
+    position: 0.000000/0.600000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2247843852
+  2404770261:
+    type: CameraComponent
+    IsActive: true
+    m_owner: 3293831829
+    aspect: 1.65363133
+    near: 0.00100000005
+    far: 1500
+    fovY: 1.04719758
+    transform: 2816241020
+  3457976258:
+    type: AudioListener
+    IsActive: true
+    m_owner: 3293831829
+  1526455153:
+    type: ScriptedBehaviour
+    IsActive: true
+    m_owner: 3293831829
+    scriptName: CameraController
+    cubeOffset: 1190898507
+    transform: 2816241020
+    interactRange: 25
+    throwingStrength: 250
+    pickedCube: ~
+    speedSensivity: 0.5
+  1190898507:
+    type: Transform
+    IsActive: true
+    m_owner: 3068110835
+    position: 0.000000/-0.696506/-1.214216
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 2816241020
   1231503678:
     type: Transform
     IsActive: true
@@ -6823,14 +6910,6 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 1.000000/1.000000/1.000000
     parent: 3521307150
-  4132248854:
-    type: Transform
-    IsActive: true
-    m_owner: 1529703256
-    position: 0.000000/0.000000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 3521307150
   719007439:
     type: BoxCollider
     IsActive: true
@@ -6840,6 +6919,14 @@ components:
     Local Position: 15.998707/3.135000/4.000003
     Scale: 1.133333/0.665000/0.000001
     Block Raycast: true
+  4132248854:
+    type: Transform
+    IsActive: true
+    m_owner: 1529703256
+    position: 0.000000/0.000000/0.000000
+    rotation: 0.000000/0.000000/0.000000
+    scale: 1.000000/1.000000/1.000000
+    parent: 3521307150
   233262444:
     type: ModelRenderer
     IsActive: true
@@ -7866,47 +7953,34 @@ components:
     Local Position: 0.000000/0.000000/0.000000
     Scale: 1.000000/1.000000/0.050000
     Block Raycast: true
-  1468394471:
-    type: ShapeRenderer
-    IsActive: true
-    m_owner: 3959382076
-    transform: 4291560604
-    matFile: ""
-    Type: 1
-  2003128824:
-    type: ScriptedBehaviour
-    IsActive: true
-    m_owner: 3959382076
-    scriptName: PickableCube
-    collided: false
-    transform: ~
-    rb: ~
-    collider: ~
-    threw: false
-    spawnLocation: 0.000000/0.000000/0.000000
-    elapsedTime: 0
-    respawnTime: 1
-  4291560604:
+  386111802:
     type: Transform
     IsActive: true
-    m_owner: 3959382076
-    position: -2.000000/1.000000/0.000000
+    m_owner: 3217744714
+    position: -2.340935/0.220560/0.242452
     rotation: 0.000000/0.000000/0.000000
-    scale: 0.300000/0.300000/0.300000
+    scale: 0.350000/0.350000/0.350000
     parent: ~
-  1624616265:
+  2607546006:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3217744714
+    transform: 386111802
+    matFile: Assets\Models\Crate\Mat.ccmat
+    meshFile: Assets\Models\Crate\crate.obj\crate_Mesh
+  2720319663:
     type: BoxCollider
     IsActive: true
-    m_owner: 3959382076
+    m_owner: 3217744714
     Enabled: true
     Is Trigger: false
-    Local Position: 0.000000/0.000000/0.000000
+    Local Position: 0.000000/0.350000/0.000000
     Scale: 1.000000/1.000000/1.000000
     Block Raycast: true
-  1166672791:
+  3551640319:
     type: Rigidbody
     IsActive: true
-    m_owner: 3959382076
+    m_owner: 3217744714
     Density: 2.5
     Enabled: true
     Kinematic: false
@@ -7916,6 +7990,19 @@ components:
     Max velocity: 100
     Max angular velocity: 7
     Max depenetration velocity: 100
+  2667246495:
+    type: ScriptedBehaviour
+    IsActive: true
+    m_owner: 3217744714
+    scriptName: PickableCube
+    collided: false
+    transform: ~
+    rb: ~
+    collider: ~
+    threw: false
+    spawnLocation: 0.000000/0.000000/0.000000
+    elapsedTime: 0
+    respawnTime: 2
   2644277422:
     type: ScriptedBehaviour
     IsActive: true
@@ -7952,92 +8039,6 @@ components:
     Local Position: 0.000000/0.000000/0.000000
     Scale: 1.000000/1.000000/1.000000
     Block Raycast: true
-  2069731409:
-    type: CapsuleCollider
-    IsActive: true
-    m_owner: 2062820311
-    Enabled: true
-    Is Trigger: false
-    Local Position: 0.000000/0.000000/0.000000
-    Half height: 0.800000012
-    Radius: 0.25
-    Block Raycast: false
-  2140586399:
-    type: Rigidbody
-    IsActive: true
-    m_owner: 2062820311
-    Density: 10
-    Enabled: true
-    Kinematic: false
-    Use gravity: true
-    Position constraints: 0/0/0
-    Rotation constraints: 1/1/1
-    Max velocity: 100
-    Max angular velocity: 100
-    Max depenetration velocity: 100
-  3397280180:
-    type: CharacterController
-    IsActive: true
-    m_owner: 2062820311
-    Walking Speed: 2.75
-    Running Speed: 4
-    Spring Dampling: 20
-    String Strength: 150
-    Rotation Sensivity: 1
-    Jump Force: 2.25
-  2704066835:
-    type: PortalTeleporterComponent
-    IsActive: true
-    m_owner: 2062820311
-    Transform: 2247843852
-  2247843852:
-    type: Transform
-    IsActive: true
-    m_owner: 2062820311
-    position: 0.000000/1.000000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: ~
-  2816241020:
-    type: Transform
-    IsActive: true
-    m_owner: 3293831829
-    position: 0.000000/0.600000/0.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 2247843852
-  2404770261:
-    type: CameraComponent
-    IsActive: true
-    m_owner: 3293831829
-    aspect: 1.28238714
-    near: 0.00100000005
-    far: 1500
-    fovY: 1.04719758
-    transform: 2816241020
-  3457976258:
-    type: AudioListener
-    IsActive: true
-    m_owner: 3293831829
-  1526455153:
-    type: ScriptedBehaviour
-    IsActive: true
-    m_owner: 3293831829
-    scriptName: CameraController
-    cubeOffset: 1190898507
-    transform: 2816241020
-    interactRange: 25
-    throwingStrength: 250
-    pickedCube: ~
-    speedSensivity: 0.5
-  1190898507:
-    type: Transform
-    IsActive: true
-    m_owner: 3068110835
-    position: 0.000000/-0.696506/-1.214216
-    rotation: 0.000000/0.000000/0.000000
-    scale: 1.000000/1.000000/1.000000
-    parent: 2816241020
   1981863543:
     type: Transform
     IsActive: true
@@ -9861,17 +9862,47 @@ components:
     IsActive: true
     m_owner: 1342926388
     linkedPortalProp: 3120096463
-  4016603517:
-    type: ShapeRenderer
+  3635329225:
+    type: Transform
     IsActive: true
-    m_owner: 836495171
-    transform: 37208297
-    matFile: ""
-    Type: 1
-  2122503306:
+    m_owner: 906977064
+    position: 3.833266/4.207815/0.897481
+    rotation: 0.000000/0.000000/0.000000
+    scale: 0.350000/0.350000/0.350000
+    parent: ~
+  3220439900:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 906977064
+    transform: 3635329225
+    matFile: Assets\Models\Crate\Mat.ccmat
+    meshFile: Assets\Models\Crate\crate.obj\crate_Mesh
+  3404567352:
+    type: BoxCollider
+    IsActive: true
+    m_owner: 906977064
+    Enabled: true
+    Is Trigger: false
+    Local Position: 0.000000/0.350000/0.000000
+    Scale: 1.000000/1.000000/1.000000
+    Block Raycast: true
+  947993781:
+    type: Rigidbody
+    IsActive: true
+    m_owner: 906977064
+    Density: 3.5
+    Enabled: true
+    Kinematic: false
+    Use gravity: true
+    Position constraints: 0/0/0
+    Rotation constraints: 0/0/0
+    Max velocity: 100
+    Max angular velocity: 7
+    Max depenetration velocity: 100
+  925068117:
     type: ScriptedBehaviour
     IsActive: true
-    m_owner: 836495171
+    m_owner: 906977064
     scriptName: PickableCube
     collided: false
     transform: ~
@@ -9881,36 +9912,6 @@ components:
     spawnLocation: 0.000000/0.000000/0.000000
     elapsedTime: 0
     respawnTime: 2
-  3879787254:
-    type: Rigidbody
-    IsActive: true
-    m_owner: 836495171
-    Density: 2
-    Enabled: true
-    Kinematic: false
-    Use gravity: true
-    Position constraints: 0/0/0
-    Rotation constraints: 0/0/0
-    Max velocity: 100
-    Max angular velocity: 7
-    Max depenetration velocity: 100
-  1108244223:
-    type: BoxCollider
-    IsActive: true
-    m_owner: 836495171
-    Enabled: true
-    Is Trigger: false
-    Local Position: 0.000000/0.000000/0.000000
-    Scale: 1.000000/1.000000/1.000000
-    Block Raycast: true
-  37208297:
-    type: Transform
-    IsActive: true
-    m_owner: 836495171
-    position: 4.000000/4.330238/1.000000
-    rotation: 0.000000/0.000000/0.000000
-    scale: 0.300000/0.300000/0.300000
-    parent: ~
   1478322442:
     type: Transform
     IsActive: true

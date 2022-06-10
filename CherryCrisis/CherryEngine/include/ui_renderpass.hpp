@@ -20,7 +20,7 @@ class CCENGINE_API UIRenderPass : public ARenderingRenderPass
 {
 private:
 	std::unordered_set<UIImage*>	m_uiImages;
-
+	TextureGenerator texGenerator;
 public:
 	UIRenderPass(const char* name);
 

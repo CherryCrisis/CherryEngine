@@ -24,7 +24,7 @@ int UIRenderPass::Subscribe(UIImage* toGenerate)
 		return -1;
 
 	m_uiImages.insert(toGenerate);
-
+	
 	return 1;
 }
 
@@ -65,6 +65,8 @@ void UIRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 		glUniformMatrix4fv(glGetUniformLocation(m_program->m_shaderProgram, "uModel"), 1, GL_FALSE, modelMat.data);
 		glUniform1i(glGetUniformLocation(m_program->m_shaderProgram, "uHovered"), image->IsHovered());
 
+
+		texGenerator.Generate(image->m_texture.get());
 		auto gpuTexture = static_cast<TextureGenerator::GPUTextureBasic*>(image->m_texture->m_gpuTexture2D.get());
 		glBindTextureUnit(0, gpuTexture->ID);
 

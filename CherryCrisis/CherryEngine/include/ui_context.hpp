@@ -40,4 +40,6 @@ public:
 	ItemT* Get(const std::string& name);
 
 	UIItem* Get(uint32_t id);
+
+	void ResetHoveredValues();
 };
