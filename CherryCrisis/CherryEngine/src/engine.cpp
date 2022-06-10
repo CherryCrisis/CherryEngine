@@ -79,10 +79,14 @@ void Engine::Launch(bool flipScene)
 {
 	isPlaying = true;
 	
+	float preTime = TimeManager::GetInstance()->GetTime();
+
 	if (flipScene)
 		SceneManager::FlipScene();
-	
+
 	PhysicSystem::PhysicManager::GetInstance()->Launch();
+
+	TimeManager::GetInstance()->SetTime(preTime);
 }
 
 void Engine::Stop()

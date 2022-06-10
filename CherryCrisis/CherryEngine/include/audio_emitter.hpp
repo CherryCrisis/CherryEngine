@@ -16,7 +16,7 @@ private:
 	using boolProperty	= CCProperty::ConstRefProperty<AudioEmitter, bool>;
 	using floatProperty	= CCProperty::ConstRefProperty<AudioEmitter, float>;
 
-	bool  m_isAutoplaying	  = true;
+	bool  m_isAutoplaying	  = false;
 	bool  m_isLooping		  = false;
 	bool  m_isSpatial		  = false;
 	float m_pitch			  = 1.f;
@@ -40,6 +40,7 @@ public:
 	void Stop();
 	
 	void SetLooping(const bool& loop);
+	void SetAutoPlay(const bool& autoplay);
 	void SetPitch(const float& value);
 	void SetRollOff(const float& value);
 	void SetReferenceDistance(const float& value);

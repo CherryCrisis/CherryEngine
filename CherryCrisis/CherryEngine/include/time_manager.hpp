@@ -6,6 +6,7 @@
 
 #include "singleton.hpp"
 
+#include "event.hpp"
 
 namespace std::chrono
 {
@@ -65,6 +66,9 @@ public:
 
 	static void  SetTimeScale(float newTime)      { currentInstance->m_timeScale = newTime; }
 	static void  SetFixedDeltaTime(float newTime) { currentInstance->m_fixedDeltaTime = newTime; }
-	
+
 	void  Update(const float time);
+
+	float (*GetTime)();
+	void  (*SetTime)(float time);
 };

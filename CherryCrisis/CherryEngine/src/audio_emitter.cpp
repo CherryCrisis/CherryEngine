@@ -33,6 +33,12 @@ void AudioEmitter::SetLooping(const bool& loop)
 	m_sound->SetLooping(m_isLooping);
 }
 
+void AudioEmitter::SetAutoPlay(const bool& autoplay)
+{
+	if (!m_sound) return;
+	m_isAutoplaying = autoplay;
+}
+
 void AudioEmitter::SetPitch(const float& value) 
 {
 	if (!m_sound) return;

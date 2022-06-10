@@ -6,11 +6,14 @@ class Timer
     float elapsedTime = 0f;
     public float totalTime = 1f;
 
-    bool isRunning = true;
+    public bool isRunning = true;
     public bool Finished => elapsedTime >= totalTime;
 
     public bool Tick(float dt) 
     {
+        if (!isRunning)
+            return false;
+
         if (Finished)
             isRunning = false;
 

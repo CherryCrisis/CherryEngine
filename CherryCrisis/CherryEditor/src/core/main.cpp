@@ -38,6 +38,16 @@ void ShowCursor(void* window)
     ImGui::GetIO().ConfigFlags = ImGui::GetIO().ConfigFlags & ~ImGuiConfigFlags_NoMouse;
 }
 
+float GetTime()
+{
+    return glfwGetTime();
+}
+
+void SetTime(float time)
+{
+    glfwSetTime(time);
+}
+
 void drop_callback(GLFWwindow* window, int count, const char** paths)
 {
     if (EditorManager* editor = static_cast<EditorManager*>(glfwGetWindowUserPointer(window)))
@@ -174,6 +184,9 @@ int main(int argc, char** argv)
             InputManager::GetInstance()->HideCursor = HideCursor;
             InputManager::GetInstance()->ShowCursor = ShowCursor; 
             
+            TimeManager::GetInstance()->GetTime = GetTime;
+            TimeManager::GetInstance()->SetTime = SetTime;
+
             Engine::window_handle = window;
 
             Serializer::UnserializeInputs();

@@ -1,17 +1,17 @@
 resources:
-  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\nonEuclideanRoom.obj
+  - Assets\Models\Backpack\backpack.obj
   - Assets\Models\NonEuclidean\capsuleTemporel.obj
   - Assets\Models\NonEuclidean\nonEuclideanModel.obj
-  - Assets\Models\Rooms\Room_00\Room_00.obj
-  - Assets\Models\Rooms\Room_01\Room_01.obj
   - Assets\Models\Rooms\Room_01.2\Room_01.2.obj
+  - Assets\Models\Rooms\Room_01\Room_01.obj
+  - Assets\Models\Rooms\Room_00\Room_00.obj
   - Assets\Models\Rooms\Room_01.1\Room_01.1.obj
   - Assets\Models\Rooms\Room_01.3\Room_01.3.obj
   - Assets\Models\Rooms\Room_01.4\Room_01.4.obj
-  - Assets\Models\Rooms\Room_01.5\Room_01.5.obj
-  - Assets\Models\Rooms\Room_01.7\Room_01.7.obj
   - Assets\Models\Rooms\Room_01.8\Room_01.8.obj
+  - Assets\Models\Rooms\Room_01.7\Room_01.7.obj
+  - Assets\Models\Rooms\Room_01.5\Room_01.5.obj
   - Assets\Models\Rooms\Room_01.6\Room_01.6.obj
   - Assets\Models\Rooms\Room_01.81\Room_01.81.obj
   - Assets\Models\Rooms\Room_01.82\Room_01.82.obj
@@ -7952,16 +7952,16 @@ components:
     Local Position: 0.000000/0.000000/0.000000
     Scale: 1.000000/1.000000/1.000000
     Block Raycast: true
-  3397280180:
-    type: CharacterController
+  2069731409:
+    type: CapsuleCollider
     IsActive: true
     m_owner: 2062820311
-    Walking Speed: 2.75
-    Running Speed: 4
-    Spring Dampling: 20
-    String Strength: 150
-    Rotation Sensivity: 1
-    Jump Force: 2.25
+    Enabled: true
+    Is Trigger: false
+    Local Position: 0.000000/0.000000/0.000000
+    Half height: 0.800000012
+    Radius: 0.25
+    Block Raycast: false
   2140586399:
     type: Rigidbody
     IsActive: true
@@ -7975,16 +7975,16 @@ components:
     Max velocity: 100
     Max angular velocity: 100
     Max depenetration velocity: 100
-  2069731409:
-    type: CapsuleCollider
+  3397280180:
+    type: CharacterController
     IsActive: true
     m_owner: 2062820311
-    Enabled: true
-    Is Trigger: false
-    Local Position: 0.000000/0.000000/0.000000
-    Half height: 0.800000012
-    Radius: 0.25
-    Block Raycast: false
+    Walking Speed: 2.75
+    Running Speed: 4
+    Spring Dampling: 20
+    String Strength: 150
+    Rotation Sensivity: 1
+    Jump Force: 2.25
   2704066835:
     type: PortalTeleporterComponent
     IsActive: true
@@ -8010,7 +8010,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3293831829
-    aspect: 0.944375753
+    aspect: 1.28238714
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758

@@ -36,27 +36,29 @@ namespace CCScripting
         public void Update() 
         {
             float dt = Time.GetDeltaTime();
-            if (isMoving && !opened) 
+            if (!opened) 
             {
-                float offset = movementScale * dt;
+                if (knockTimer.Tick(dt))
+                    emitter.Play();
                 
-                respawnTimer.Tick(dt);
-
-                Vector3 leftDoorRot = leftDoor.GetEuler(); 
-                leftDoor.eulerAngles = new Vector3( leftDoorRot.x, leftDoorRot.y + offset, leftDoorRot.z);
-
-                Vector3 rightDoorRot = rightDoor.GetEuler();
-                rightDoor.eulerAngles = new Vector3(rightDoorRot.x, rightDoorRot.y - offset, rightDoorRot.z);
-
-                if (respawnTimer.CheckAndReset()) 
+                if (isMoving) 
                 {
-                    opened = true;
-                    isMoving = false;
+                    float offset = movementScale * dt;
+                    respawnTimer.Tick(dt);
+
+                    Vector3 leftDoorRot = leftDoor.GetEuler(); 
+                    leftDoor.eulerAngles = new Vector3( leftDoorRot.x, leftDoorRot.y + offset, leftDoorRot.z);
+
+                    Vector3 rightDoorRot = rightDoor.GetEuler();
+                    rightDoor.eulerAngles = new Vector3(rightDoorRot.x, rightDoorRot.y - offset, rightDoorRot.z);
+
+                    if (respawnTimer.CheckAndReset()) 
+                    {
+                        opened = true;
+                        isMoving = false;
+                    }
                 }
             }
-            
-            if (knockTimer.Tick(dt))
-                emitter.Play();
         }
     }
 }
