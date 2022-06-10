@@ -10,7 +10,7 @@ class BuildDisplayer : public Panel
 public:
 	std::string outDir = "OutDirectory/";
 
-	ProjectSettingsDisplayer* projectSettings;
+	ProjectSettingsDisplayer* projectSettings = nullptr;
 	AssetBrowser* browser = nullptr;
 
 	BuildDisplayer(bool spawnOpened = true) : Panel(spawnOpened) {}

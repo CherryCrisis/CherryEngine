@@ -39,7 +39,7 @@ void ShowCursor(void* window)
 
 float GetTime()
 {
-    return glfwGetTime();
+    return static_cast<float>(glfwGetTime());
 }
 
 void SetTime(float time)

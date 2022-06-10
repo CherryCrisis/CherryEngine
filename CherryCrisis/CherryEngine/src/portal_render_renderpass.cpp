@@ -84,7 +84,7 @@ void PortalRenderPass::ComputePortalView(Portal* portal, Viewer* viewer, Framebu
 	Vector3 viewSpacePos = (portalView * Vector4(clipPlaneWorldMatrix.position, 1.f)).xyz;
 
 	portalView.position = Vector3::Zero; //To only rotate clipPlaneWorldMatrix
-	Vector3 viewSpaceNormal = (portalView * Vector4(clipPlaneForward, 1.f)).xyz * dot;
+	Vector3 viewSpaceNormal = (portalView * Vector4(clipPlaneForward, 1.f)).xyz * static_cast<const float>(dot);
 
 	float viewSpaceDist = -Vector3::Dot(viewSpacePos, viewSpaceNormal);
 

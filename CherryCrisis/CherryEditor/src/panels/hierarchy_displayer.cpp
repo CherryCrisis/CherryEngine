@@ -110,7 +110,7 @@ void HierarchyDisplayer::Render()
             average /= (float)m_fpsHistory.size();
 
             std::string str = std::format("Average : {}", (int)average);
-            ImGui::PlotLines("###FpsGraph", m_fpsHistory.data(), sizeof(m_fpsHistory.data()), m_fpsHistory.size(), str.c_str(), 1, 1000, {0.f,80.f});
+            ImGui::PlotLines("###FpsGraph", m_fpsHistory.data(), sizeof(m_fpsHistory.data()), static_cast<int>(m_fpsHistory.size()), str.c_str(), 1, 1000, {0.f,80.f});
             ImGui::Text(std::format("FPS : {}", IO->Framerate).c_str());
         }
 
