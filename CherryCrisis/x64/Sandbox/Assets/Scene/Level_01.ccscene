@@ -2590,7 +2590,7 @@ components:
     type: CameraComponent
     IsActive: true
     m_owner: 3293831829
-    aspect: 1.57584679
+    aspect: 0.393858492
     near: 0.00100000005
     far: 1500
     fovY: 1.04719758
@@ -5109,9 +5109,9 @@ components:
     IsActive: true
     m_owner: 3446348402
     Enabled: true
-    Is Trigger: false
-    Local Position: 9.139998/2.294304/13.057212
-    Scale: 0.278000/0.256000/0.174000
+    Is Trigger: true
+    Local Position: 9.139998/2.194000/13.057212
+    Scale: 0.478000/0.356000/0.274000
     Block Raycast: true
   4119828737:
     type: Transform
@@ -5403,9 +5403,9 @@ components:
     IsActive: true
     m_owner: 526468130
     Enabled: true
-    Is Trigger: false
+    Is Trigger: true
     Local Position: 7.501152/0.694304/-0.001638
-    Scale: 0.274000/0.256000/0.278000
+    Scale: 0.174000/0.356000/0.478000
     Block Raycast: true
   1285286625:
     type: ScriptedBehaviour
@@ -5419,7 +5419,7 @@ components:
     active: false
     portal_1: 1492228151
     emitter: ~
-    rescalePortals: false
+    rescalePortals: true
   137277080:
     type: Transform
     IsActive: true
@@ -8033,7 +8033,7 @@ components:
     m_owner: 2792491537
     position: 0.000000/1.150000/3.950000
     rotation: 0.000000/0.000489/0.000000
-    scale: 0.900001/1.149999/1.000001
+    scale: 0.900001/1.170000/1.000001
     parent: ~
   3536726088:
     type: BoxCollider
@@ -8138,7 +8138,7 @@ components:
     m_owner: 1020476321
     position: 0.000000/1.150000/-3.950000
     rotation: 0.000000/0.000489/0.000000
-    scale: 0.900001/1.149999/1.000001
+    scale: 0.900000/1.170000/1.000001
     parent: ~
   1492228151:
     type: PortalComponent
@@ -8940,6 +8940,13 @@ components:
     rotation: 0.000000/0.000000/0.000000
     scale: 0.350000/0.350000/0.350000
     parent: ~
+  2607546006:
+    type: ModelRenderer
+    IsActive: true
+    m_owner: 3217744714
+    transform: 386111802
+    matFile: Assets\Models\Crate\Mat.ccmat
+    meshFile: Assets\Models\Crate\crate.obj\crate_Mesh
   610462374:
     type: AudioEmitter
     IsActive: true
@@ -8951,13 +8958,6 @@ components:
     Pitch: 1
     RollOff: 1
     ReferenceDistance: 1
-  2607546006:
-    type: ModelRenderer
-    IsActive: true
-    m_owner: 3217744714
-    transform: 386111802
-    matFile: Assets\Models\Crate\Mat.ccmat
-    meshFile: Assets\Models\Crate\crate.obj\crate_Mesh
   3551640319:
     type: Rigidbody
     IsActive: true

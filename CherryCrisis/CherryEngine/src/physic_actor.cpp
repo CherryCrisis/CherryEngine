@@ -41,7 +41,7 @@ namespace PhysicSystem
 		// Transform already set means Init() has already been called by another physic related component
 		if (m_transform)
 		{
-			if (PhysicManager::IsPlaying())
+			if (PhysicManager::IsPlaying() && !Get())
 				CreatePxActor();
 
 			return;
@@ -52,13 +52,13 @@ namespace PhysicSystem
 
 		if (m_transform)
 		{
-			if (PhysicManager::IsPlaying())
-				CreatePxActor();
-
 			m_transform->m_onPositionChange.Bind(&PhysicActor::SetActorPosition, this);
 			m_transform->m_onRotationChange.Bind(&PhysicActor::SetActorRotation, this);
 			m_transform->m_onScaleChange.Bind(&PhysicActor::SetActorScale, this);
 			m_transform->m_OnDestroyed.Bind(&PhysicActor::InvalidateTransform, this);
+
+			if (PhysicManager::IsPlaying())
+				CreatePxActor();
 		}
 	}
 

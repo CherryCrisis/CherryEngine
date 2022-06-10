@@ -25,21 +25,16 @@ namespace CCScripting
 
 			UpdateCameraRotation();
 
-			if (InputManager.GetKeyDown(Keycode.E)) TryInteract();
+			if (InputManager.GetKeyDown("Interact")) TryInteract();
 			if (InputManager.GetKeyDown(Keycode.LEFT_CLICK)) TryAction();
 		}
 
 		void TryInteract()
 		{
 			RaycastHit hit = PhysicManager.Raycast(GetHost().m_cell, transform.GetGlobalPosition(), transform.Forward().Normalized(), interactRange);
-			Debug.Info("Raycasting...");
 			if (hit == null || hit.actor == null || hit.actor.m_owner == null)
 				return;
-			Debug.Info("Raycast hitted smthing");
-			Debug.Info(hit.actor.m_owner);
 			PortalSwitcher switcher = hit.actor.m_owner.GetBehaviour<PortalSwitcher>();
-			if (switcher == null)
-				Debug.Info("Raycast failed to switch");
 
 			switcher?.Switch();	
 

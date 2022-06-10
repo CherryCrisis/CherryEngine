@@ -88,7 +88,6 @@ namespace CCScripting
 
         public void SetRespawnPosition() 
         {
-            Debug.Log(ELogType.INFO, "Settings respawn position");
             spawnLocation = transform.position;
             spawnRot      = transform.rotation;
             cell          = host.m_cell;
