@@ -76,7 +76,7 @@ SceneDisplayer::~SceneDisplayer()
 
 void SceneDisplayer::UpdateCamera()
 {
-    CCMaths::Vector2 deltaMouse = InputManager::GetMouseDelta();
+    CCMaths::Vector2 deltaMouse = InputManager::GetMouseDelta() * 0.005f;
 
     Vector3 rotation = m_camera.GetRotation();
     CCMaths::Matrix4 view = Matrix4::RotateYXZ(rotation);
@@ -97,8 +97,8 @@ void SceneDisplayer::UpdateCamera()
     Vector3 rightwardMove = right * InputManager::GetAxis("RightLeft");
     Vector3 upwardMove = up * InputManager::GetAxis("UpDown");
 
-    m_camera.SetPitch(rotation.pitch + dt * deltaMouse.y);
-    m_camera.SetYaw(rotation.yaw + dt * deltaMouse.x);
+    m_camera.SetPitch(rotation.pitch + deltaMouse.y);
+    m_camera.SetYaw(rotation.yaw + deltaMouse.x);
     
     m_camera.SetPosition(m_camera.GetPosition() + (forwardMove + rightwardMove + upwardMove) * speed);
 }

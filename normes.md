@@ -82,7 +82,7 @@ namespace CCEngine
     - Singleton headers
     - Other headers
 
-    Each of these categories must be spaced with the others.
+    Each of these categories must be spaced with the others and follow alphabetic order.
 
 * Constructors must use chained constructors when possible.
 
@@ -104,6 +104,7 @@ namespace CCEngine
 #include "debug_manager.hpp"
 
 #include "texture.hpp"
+
 
 namespace CCEngine
 {
