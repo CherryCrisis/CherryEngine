@@ -10,6 +10,7 @@ namespace CCScripting
         Transform transform;
         Rigidbody rb;
         BoxCollider collider;
+        AudioEmitter emitter;
         
         bool threw = false;
         bool collided = false;
@@ -26,7 +27,7 @@ namespace CCScripting
             transform = GetBehaviour<Transform>(); 
             rb = GetBehaviour<Rigidbody>();
             collider = GetBehaviour<BoxCollider>();
-
+            emitter = GetBehaviour<AudioEmitter>();
             SetRespawnPosition();
         }
 
@@ -72,6 +73,7 @@ namespace CCScripting
                 return;
 
             collided = true;
+            emitter?.Play();
         }
 
         public void Respawn() 

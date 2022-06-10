@@ -15,8 +15,8 @@ namespace CCScripting
         public bool isMoving = false;
 
         Timer respawnTimer = new Timer(1f);
-        Timer knockTimer = new Timer(8f);
-        public float respawnTime = 1f;
+        Timer knockTimer = new Timer(13f);
+        public float respawnTime = .75f;
 
         public float movementScale = 5f;
         public void Start() 

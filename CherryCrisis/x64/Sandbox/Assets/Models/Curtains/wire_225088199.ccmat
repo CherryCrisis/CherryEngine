@@ -1,0 +1,16 @@
+settings:
+  ambient: 0.882400/0.345100/0.780400
+  diffuse: 0.882400/0.345100/0.780400
+  specular: 0.350000/0.350000/0.350000
+  emissive: 0.000000/0.000000/0.000000
+  shininess: 32
+  hasNormal: true
+  hasCelshade: false
+  specularFactor: 1
+  metallicFactor: 1
+  roughnessFactor: 1
+  ao: 0.882399976
+  clearCoatFactor: 0
+  clearCoatRoughnessFactor: 0
+  pipeline: 1
+  texturesCount: 0

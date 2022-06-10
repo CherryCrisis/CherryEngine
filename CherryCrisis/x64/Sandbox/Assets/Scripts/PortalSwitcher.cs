@@ -25,7 +25,7 @@ namespace CCScripting
         {
             emitter = AddBehaviour<AudioEmitter>();
             emitter.AddSound("Assets/Sounds/portal_switcher_interact.wav");
-            emitter.SetSpatialized(true);
+            emitter.SetSpatialized(false);
             emitter.SetLooping(false);
             if (sourcePortal != null)
                 transformSourcePortal = sourcePortal.GetBehaviour<Transform>();

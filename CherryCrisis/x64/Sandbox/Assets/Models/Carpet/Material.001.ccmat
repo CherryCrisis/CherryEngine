@@ -1,0 +1,18 @@
+settings:
+  ambient: 0.000000/0.000000/0.000000
+  diffuse: 0.800000/0.800000/0.800000
+  specular: 0.800000/0.800000/0.800000
+  emissive: 0.000000/0.000000/0.000000
+  shininess: 36
+  hasNormal: true
+  hasCelshade: false
+  specularFactor: 1
+  metallicFactor: 0.5
+  roughnessFactor: 1
+  ao: 1
+  clearCoatFactor: 0
+  clearCoatRoughnessFactor: 0
+  pipeline: 1
+  texturesCount: 1
+  texture_0: Assets\Models\Carpet\oriental-persian-carpet-texture_40015-242.jpg
+  textureTypes_0: 1

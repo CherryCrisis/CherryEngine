@@ -1,0 +1,18 @@
+settings:
+  ambient: 0.529400/0.023500/0.023500
+  diffuse: 1.000000/1.000000/1.000000
+  specular: 0.350000/0.350000/0.350000
+  emissive: 0.000000/0.000000/0.000000
+  shininess: 32
+  hasNormal: false
+  hasCelshade: false
+  specularFactor: 1
+  metallicFactor: 1
+  roughnessFactor: 1
+  ao: 0.529399991
+  clearCoatFactor: 0
+  clearCoatRoughnessFactor: 0
+  pipeline: 1
+  texturesCount: 1
+  texture_0: Assets\Models\Curtains\6c62b835d8f5a7051945a66954550ad9.jpg
+  textureTypes_0: 1

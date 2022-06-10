@@ -31,12 +31,14 @@ namespace CCScripting
         // if active then link portal_1
         bool active = false;
 
+        bool hasSwitched = false;
+
         private Transform transformSourcePortal;
         void Start()
         {
             emitter = AddBehaviour<AudioEmitter>();
-            emitter.AddSound("Assets/Sounds/portal_switcher_interact.wav");
-            emitter.SetSpatialized(true);
+            emitter.AddSound("Assets/Sounds/receiver_switch.wav");
+            emitter.SetSpatialized(false);
             emitter.SetLooping(false);
             if (sourcePortal != null)
                 transformSourcePortal = sourcePortal.GetBehaviour<Transform>();
@@ -50,7 +52,11 @@ namespace CCScripting
 
         public void Switch()
         {
+            if (hasSwitched)
+                return;
+
             active = !active;
+            hasSwitched = true;
             if (emitter != null)
                 emitter.Play();
 
