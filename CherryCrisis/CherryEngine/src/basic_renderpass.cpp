@@ -47,7 +47,6 @@ void BasicRenderPass::BindTexture(Material* material, ETextureType textureType, 
 	// Get correct texture from type
 	Texture* texture = material->m_textures[textureType].get();
 
-	// TODO: Add multiple default textures
 	// If is does not exist and its gpuTex too, get the default texture
 	auto& gpuTexPtr = texture && texture->m_gpuTexture2D ? texture->m_gpuTexture2D : m_defaultTextures[textureType]->m_gpuTexture2D;
 
@@ -141,7 +140,6 @@ void BasicRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 
 	glUniform3fv(glGetUniformLocation(m_program->m_shaderProgram, "uViewPosition"), 1, (-viewer->m_viewMatrix.position).data);
 
-	// TODO: Set shader define as upper bound
 	for (size_t lightID = 0u; lightID < std::min<size_t>(m_lights.size(), 8u); lightID++)
 	{
 		Light* light = m_lights[lightID];

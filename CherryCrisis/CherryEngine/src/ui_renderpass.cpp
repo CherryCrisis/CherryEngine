@@ -51,7 +51,6 @@ void UIRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	//TODO: Optimize !
 	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer->width),
 														   0.0f, static_cast<const float>(framebuffer->height), -1.f, 5.f);
 

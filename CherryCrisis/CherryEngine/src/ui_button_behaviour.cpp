@@ -13,7 +13,6 @@
 
 ButtonBehaviour::ButtonBehaviour()
 {
-	// TODO: Change path
 	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain", true);
 
 	if (m_assembly)
@@ -25,7 +24,6 @@ ButtonBehaviour::ButtonBehaviour()
 
 ButtonBehaviour::ButtonBehaviour(CCUUID& id)
 {
-	// TODO: Change path
 	m_assembly = ResourceManager::GetInstance()->AddResource<CsAssembly>("CherryScripting.dll", true, "ScriptingDomain", true);
 
 	if (m_assembly)

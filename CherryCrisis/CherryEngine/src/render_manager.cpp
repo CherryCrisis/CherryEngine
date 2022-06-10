@@ -84,9 +84,8 @@ void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsiz
 
 RenderManager::RenderManager()
 {
-	// TODO: REMOVE THAT
 	if (gladLoaderLoadGL() == 0)
-		printf("gladLoaderLoadGL failed\n");
+        Debug::GetInstance()->AddLog(ELogType::ERROR, "gladLoaderLoadGL failed\n");
 
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 	glDebugMessageCallback(debugCallback, NULL);

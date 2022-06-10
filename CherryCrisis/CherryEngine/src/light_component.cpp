@@ -90,7 +90,6 @@ void LightComponent::ChangePosition(Transform* transform)
 
 	m_light.m_lookAtMatrix = CCMaths::Matrix4::LookAt(m_light.m_position);
 
-	// TODO: Add real ortho values
 	m_light.m_lightSpace = CCMaths::Matrix4::Orthographic(-10.f, 10.f, -10.f, 10.f, -50.f, 20.f) * m_light.m_lookAtMatrix;
 
 	m_light.m_OnParamsChanged.Invoke(offsetof(Light, m_position), sizeof(Light::m_position), &m_light.m_position);
@@ -99,7 +98,6 @@ void LightComponent::ChangePosition(Transform* transform)
 
 void LightComponent::ChangeRotation(Transform* transform)
 {
-	//m_light.rotation = rotation;
 }
 
 void LightComponent::SubscribeToPipeline(ARenderingPipeline* pipeline)

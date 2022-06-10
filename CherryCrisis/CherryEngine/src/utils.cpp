@@ -4,6 +4,8 @@
 #include <cctype>
 #include <string>
 
+#include "debug.hpp"
+
 #include "bool3.hpp"
 #include "utils.hpp"
 
@@ -180,7 +182,7 @@ bool CreateFolder(const char* path, const char* name)
 	
 	if (!std::filesystem::exists(newPath)) 
 	{
-		// TODO: Debug log file location not valid
+		Debug::GetInstance()->AddLog(ELogType::ERROR, "File location not valid");
 		return false;
 	}
 

@@ -59,7 +59,6 @@ public:
 	void CopyEntity(Entity* toCopy, Entity* parent=nullptr);
 	Entity* AddEntity(std::unique_ptr<Entity>& toAdd);
 	void RemoveEntity(Entity* toRemove);
-	void RemoveEntity(const std::string& name);
 
 	void RemoveAllEntities();
 

@@ -9,7 +9,6 @@
 
 
 EnvironmentMapRenderPass::EnvironmentMapRenderPass(const char* name)
-// TODO: Set real path
 	: ARenderingRenderPass(name, "Assets/Shaders/PBR/environmentMapShader.vert", "Assets/Shaders/PBR/environmentMapShader.frag")
 {
 	if (m_program)
@@ -162,14 +161,10 @@ void EnvironmentMapRenderPass::GPUEnvironmentMap::Generate(Texture* texture)
 	glTextureParameteri(ID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTextureParameteri(ID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	//TODO: Integer Compressed spheremap
 	glTextureStorage2D(ID, 1, GL_RGB16F, texture->GetWidth(), texture->GetHeight());
 	glTextureSubImage2D(ID, 0, 0, 0, texture->GetWidth(), texture->GetHeight(), (GLenum)texture->GetInternalFormat(), GL_UNSIGNED_BYTE, texture->GetData());
 
 	texture->ClearData();
-
-	//if (m_OnGpuReloaded)
-	//	m_OnGpuReloaded->Invoke();
 }
 
 void EnvironmentMapRenderPass::GPUEnvironmentMap::Regenerate(Texture* texture)

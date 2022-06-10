@@ -158,8 +158,6 @@ bool PortalRenderPass::ComputePortalFBO(Portal* portal, Viewer* viewer, Framebuf
 			//Save previous portal viewer params
 			ApplyPortalViewerParams(portal->m_linkedPortal, portalViewer);
 
-			//TODO: Optimize ! 
-
 			int recursion = i == m_portalRecursionCount - 1 ? currentRecursion - 1 : 0;
 			portal->m_linkedPortal->DrawCustom(recursion, &m_framebuffers[currentRecursion - 1], false);
 
@@ -234,20 +232,10 @@ void PortalRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 
 	if (viewer->m_currentIteration > 0)
 	{
-		//Todo: Add fbo in params
 		ComputePortals(m_portals, viewer, framebuffer, viewer->m_currentIteration);
 	}
 	else
 	{
-		//for (Portal* portal : m_portals)
-		//{
-		//	if (!portal->m_linkedPortal)
-		//		return;
-		//
-		//	DrawPortal(portal, viewer, framebuffer);
-		//}
-
-
 		glViewport(0, 0, framebuffer->width, framebuffer->height);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->FBO);
@@ -255,9 +243,6 @@ void PortalRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		glDisable(GL_CULL_FACE);
-
-		//glClearColor(0.f, 0.f, 0.f, 1.f);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(m_program->m_shaderProgram);
 		CCMaths::Matrix4 viewProjection = viewer->m_projectionMatrix * viewer->m_viewMatrix;

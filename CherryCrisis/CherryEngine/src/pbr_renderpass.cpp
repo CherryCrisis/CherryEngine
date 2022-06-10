@@ -161,7 +161,6 @@ void PBRRenderPass::BindTexture(Material* material, ETextureType textureType, in
 	// Get correct texture from type
 	Texture* texture = material->m_textures[textureType].get();
 
-	// TODO: Add multiple default textures
 	// If is does not exist and its gpuTex too, get the default texture
 	auto& gpuTexPtr = texture && texture->m_gpuTexture2D ? texture->m_gpuTexture2D : m_defaultTextures[textureType]->m_gpuTexture2D;
 

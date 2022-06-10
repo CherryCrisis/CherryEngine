@@ -4,6 +4,7 @@
 
 #include <glad/gl.h>
 
+#include "debug.hpp"
 #include "resource_manager.hpp"
 
 #include "shader.hpp"
@@ -95,8 +96,10 @@ void ShaderProgram::CreateProgram()
 	{
 		char infolog[1024];
 		glGetProgramInfoLog(m_shaderProgram, (sizeof(infolog) / sizeof(infolog[0])), nullptr, infolog);
-		fprintf(stderr, "Program link error: %s\n", infolog);
-		//TODO: Add debug
+
+		std::string log = "Program link error: ";
+		log += infolog;
+		Debug::GetInstance()->AddLog(ELogType::ERROR, log.c_str());
 	}
 }
 

@@ -50,8 +50,6 @@ void UIButton::PopulateMetadatas()
 {
 	UIItem::PopulateMetadatas();
 
-	// TODO: Clean this mess
-
 	//----------------------------
 	// Text Metadatas
 	//----------------------------

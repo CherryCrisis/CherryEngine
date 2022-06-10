@@ -21,7 +21,6 @@ CsScriptingSystem::~CsScriptingSystem() = default;
 
 void CsScriptingSystem::Init()
 {
-	// TODO: Set generic pathes
 	mono_set_dirs("lib", "externals\\etc");
 
 	mono::ManagedScriptSystemSettings_t settings("RootDomain");

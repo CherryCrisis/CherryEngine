@@ -100,14 +100,12 @@ struct CCENGINE_API Metapack
 	template <typename T>
 	void SetField(const char* fieldName, Field& fieldToSet, bool shown = true, const char* identifier = "\0")
 	{
-		// todo use unique ptr
 		SetMetadata(fieldName, std::make_shared<MetaField<T>>(fieldName, fieldToSet, identifier, shown));
 	}
 
 	template <typename T>
 	void SetField(const char* fieldName, std::any value, const std::type_index& fieldType, bool shown = true, const char* identifier = "\0")
 	{
-		// todo use unique ptr
 		SetMetadata(fieldName, std::make_shared<MetaField<T>>(fieldName, value, fieldType, identifier, shown));
 	}
 

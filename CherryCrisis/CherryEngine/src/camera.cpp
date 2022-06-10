@@ -20,7 +20,6 @@ void Camera::UpdateViewMatrix()
 void Camera::SetType(EType type)
 {
     m_type = type;
-    //TODO : Change perspective 
 }
 
 void Camera::SetAspect(float apsect)

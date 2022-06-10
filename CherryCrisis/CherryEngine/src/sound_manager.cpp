@@ -21,20 +21,8 @@ SoundManager::~SoundManager()
     alcCloseDevice(m_device);
 }
 
-void SoundManager::PlaySound2D(unsigned int id, const float volume)
-{
-	// General play sound
-	alSourcePlay(id);
-}
-
-void SoundManager::PlaySoundAt(const CCMaths::Vector3& position, const float volume)
-{
-	// Play Sound at a given location nsm
-}
-
 bool SoundManager::Init() 
 {
-    // TODO: Send error messages
     SoundManager* instance = SoundManager::GetInstance();
     instance->m_device = alcOpenDevice(nullptr);
 

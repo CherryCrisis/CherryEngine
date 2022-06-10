@@ -45,7 +45,6 @@ void TextRenderPass::Unsubscribe(UIText* toGenerate)
 }
 // Font rendering from LearnGL
 // https://learnopengl.com/In-Practice/Text-Rendering
-// TODO: Optimize quad size calculation
 void TextRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 {
 	if (!viewer)
@@ -63,7 +62,6 @@ void TextRenderPass::Execute(Viewer* viewer, Framebuffer* framebuffer)
 
 	glUseProgram(m_program->m_shaderProgram);
 
-	//TODO: Optimize !
 	CCMaths::Matrix4 proj = CCMaths::Matrix4::Orthographic(0.0f, static_cast<const float>(framebuffer->width),
 														   0.0f, static_cast<const float>(framebuffer->height), -1.f, 5.f);
 
