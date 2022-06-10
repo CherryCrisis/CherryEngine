@@ -23,11 +23,11 @@ namespace PhysicSystem
 
 		uint32_t activeActor;
 		physx::PxActor** updatedActors = m_pxScene->getActiveActors(activeActor);
-		if (activeActor == 0u)
+		/*if (activeActor == 0u)
 		{
 			Pause(true);
 			return;
-		}
+		}*/
 
 		for (uint32_t i = 0; i < activeActor; ++i)
 		{

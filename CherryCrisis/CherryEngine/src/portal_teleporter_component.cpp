@@ -28,17 +28,24 @@ PortalTeleporterComponent::PortalTeleporterComponent(CCUUID& id) : Behaviour(id)
 
 PortalTeleporterComponent::~PortalTeleporterComponent()
 {
+	RemoveCloneEntities();
+
+	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
+}
+
+void PortalTeleporterComponent::RemoveCloneEntities()
+{
 	if (m_cloneEntityNode)
 	{
 		if (Entity* entity = m_cloneEntityNode->m_transform->GetHostPtr())
 		{
 			entity->m_OnDestroyed.Unbind(&PortalTeleporterComponent::OnRemovedClonedEntities, this);
 			OnRemovedClonedEntities();
+			entity->Destroy();
 		}
 	}
-
-	GetHost().m_OnStart.Unbind(&PortalTeleporterComponent::Start, this);
 }
+
 
 void PortalTeleporterComponent::PopulateMetadatas()
 {
@@ -65,7 +72,7 @@ void PortalTeleporterComponent::Initialize()
 void PortalTeleporterComponent::ReloadEntitiesClone()
 {
 	m_entityNode.reset();
-	m_cloneEntityNode.reset();
+	RemoveCloneEntities();
 
 	Transform* transform = GetHost().GetBehaviour<Transform>();
 
@@ -127,9 +134,22 @@ void PortalTeleporterComponent::UpdateEntityMatrix(Transform* transform, const M
 		CCMaths::Vector3 TRS[3] = {};
 		Matrix4::Decompose(newWorldMatrix, TRS[0], TRS[1], TRS[2]);
 
-		transform->SetPosition(TRS[0]);
-		transform->SetEuler(TRS[1]);
-		transform->SetScale(TRS[2]);
+		transform->SetGlobalPosition(TRS[0]);
+		transform->SetGlobalRotation(TRS[1]);
+		transform->SetGlobalScale(TRS[2]);
+	}
+}
+
+void PortalTeleporterComponent::UpdateCloneEntitiesMatrix(EntityNode* entityCloneNode, 
+	EntityNode* entityNode, const Matrix4& worldMatrixPortal)
+{
+	UpdateEntityMatrix(entityCloneNode->m_transform, worldMatrixPortal * entityNode->m_transform->GetWorldMatrix());
+
+	int entityChildrenCount = entityNode->m_meshRendererChildren.size();
+
+	for (int id = 0; id < entityChildrenCount; ++id)
+	{
+		UpdateCloneEntitiesMatrix(&entityCloneNode->m_meshRendererChildren[id], &entityNode->m_meshRendererChildren[id], worldMatrixPortal);
 	}
 }
 
@@ -178,6 +198,10 @@ void PortalTeleporterComponent::CloneEntities(EntityNode* cloneEntityNode, const
 
 	std::unique_ptr<Entity> cloneEntity = std::make_unique<Entity>(std::format("Clone_{}", entityNode->m_transform->GetHost().GetName()).c_str(), destCell);
 	cloneEntityNode->m_transform = cloneEntity->AddBehaviour<Transform>();
+
+	cloneEntityNode->m_transform->SetPosition(entityNode->m_transform->GetPosition());
+	cloneEntityNode->m_transform->SetRotation(entityNode->m_transform->GetRotation());
+	cloneEntityNode->m_transform->SetScale(entityNode->m_transform->GetGlobalScale());
 
 	if (entityNode->m_meshRenderer)
 	{

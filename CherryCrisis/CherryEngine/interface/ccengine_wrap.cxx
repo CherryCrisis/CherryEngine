@@ -464,6 +464,9 @@ namespace Swig {
 	#include "portal_component.hpp"
 
 
+	#include "portal_teleporter_component.hpp"
+
+
 	#include "rigidbody.hpp"
 
 	using namespace PhysicSystem;
@@ -1405,6 +1408,122 @@ SWIGINTERN int std_vector_Sl_PortalComponent_Sm__Sg__LastIndexOf(std::vector< Po
       }
 SWIGINTERN bool std_vector_Sl_PortalComponent_Sm__Sg__Remove(std::vector< PortalComponent * > *self,PortalComponent *const &value){
         std::vector< PortalComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end()) {
+          self->erase(it);
+          return true;
+        }
+        return false;
+      }
+SWIGINTERN std::vector< PortalTeleporterComponent * > *new_std_vector_Sl_PortalTeleporterComponent_Sm__Sg___SWIG_2(int capacity){
+        std::vector< PortalTeleporterComponent * >* pv = 0;
+        if (capacity >= 0) {
+          pv = new std::vector< PortalTeleporterComponent * >();
+          pv->reserve(capacity);
+       } else {
+          throw std::out_of_range("capacity");
+       }
+       return pv;
+      }
+SWIGINTERN PortalTeleporterComponent *std_vector_Sl_PortalTeleporterComponent_Sm__Sg__getitemcopy(std::vector< PortalTeleporterComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN std::vector< PortalTeleporterComponent * >::value_type const &std_vector_Sl_PortalTeleporterComponent_Sm__Sg__getitem(std::vector< PortalTeleporterComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          return (*self)[index];
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__setitem(std::vector< PortalTeleporterComponent * > *self,int index,PortalTeleporterComponent *const &val){
+        if (index>=0 && index<(int)self->size())
+          (*self)[index] = val;
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__AddRange(std::vector< PortalTeleporterComponent * > *self,std::vector< PortalTeleporterComponent * > const &values){
+        self->insert(self->end(), values.begin(), values.end());
+      }
+SWIGINTERN std::vector< PortalTeleporterComponent * > *std_vector_Sl_PortalTeleporterComponent_Sm__Sg__GetRange(std::vector< PortalTeleporterComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        return new std::vector< PortalTeleporterComponent * >(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Insert(std::vector< PortalTeleporterComponent * > *self,int index,PortalTeleporterComponent *const &x){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, x);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__InsertRange(std::vector< PortalTeleporterComponent * > *self,int index,std::vector< PortalTeleporterComponent * > const &values){
+        if (index>=0 && index<(int)self->size()+1)
+          self->insert(self->begin()+index, values.begin(), values.end());
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__RemoveAt(std::vector< PortalTeleporterComponent * > *self,int index){
+        if (index>=0 && index<(int)self->size())
+          self->erase(self->begin() + index);
+        else
+          throw std::out_of_range("index");
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__RemoveRange(std::vector< PortalTeleporterComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        self->erase(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN std::vector< PortalTeleporterComponent * > *std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Repeat(PortalTeleporterComponent *const &value,int count){
+        if (count < 0)
+          throw std::out_of_range("count");
+        return new std::vector< PortalTeleporterComponent * >(count, value);
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Reverse__SWIG_0(std::vector< PortalTeleporterComponent * > *self){
+        std::reverse(self->begin(), self->end());
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Reverse__SWIG_1(std::vector< PortalTeleporterComponent * > *self,int index,int count){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (count < 0)
+          throw std::out_of_range("count");
+        if (index >= (int)self->size()+1 || index+count > (int)self->size())
+          throw std::invalid_argument("invalid range");
+        std::reverse(self->begin()+index, self->begin()+index+count);
+      }
+SWIGINTERN void std_vector_Sl_PortalTeleporterComponent_Sm__Sg__SetRange(std::vector< PortalTeleporterComponent * > *self,int index,std::vector< PortalTeleporterComponent * > const &values){
+        if (index < 0)
+          throw std::out_of_range("index");
+        if (index+values.size() > self->size())
+          throw std::out_of_range("index");
+        std::copy(values.begin(), values.end(), self->begin()+index);
+      }
+SWIGINTERN bool std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Contains(std::vector< PortalTeleporterComponent * > *self,PortalTeleporterComponent *const &value){
+        return std::find(self->begin(), self->end(), value) != self->end();
+      }
+SWIGINTERN int std_vector_Sl_PortalTeleporterComponent_Sm__Sg__IndexOf(std::vector< PortalTeleporterComponent * > *self,PortalTeleporterComponent *const &value){
+        int index = -1;
+        std::vector< PortalTeleporterComponent * >::iterator it = std::find(self->begin(), self->end(), value);
+        if (it != self->end())
+          index = (int)(it - self->begin());
+        return index;
+      }
+SWIGINTERN int std_vector_Sl_PortalTeleporterComponent_Sm__Sg__LastIndexOf(std::vector< PortalTeleporterComponent * > *self,PortalTeleporterComponent *const &value){
+        int index = -1;
+        std::vector< PortalTeleporterComponent * >::reverse_iterator rit = std::find(self->rbegin(), self->rend(), value);
+        if (rit != self->rend())
+          index = (int)(self->rend() - 1 - rit);
+        return index;
+      }
+SWIGINTERN bool std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Remove(std::vector< PortalTeleporterComponent * > *self,PortalTeleporterComponent *const &value){
+        std::vector< PortalTeleporterComponent * >::iterator it = std::find(self->begin(), self->end(), value);
         if (it != self->end()) {
           self->erase(it);
           return true;
@@ -5679,13 +5798,25 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_Engine(void * jarg1) {
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_Object() {
-  void * jresult ;
-  Object *result = 0 ;
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_Object_IsActive(void * jarg1) {
+  unsigned int jresult ;
+  Object *arg1 = (Object *) 0 ;
+  bool result;
   
-  result = (Object *)new Object();
-  jresult = (void *)result; 
+  arg1 = (Object *)jarg1; 
+  result = (bool)(arg1)->IsActive();
+  jresult = result; 
   return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_Object_SetActive(void * jarg1, unsigned int jarg2) {
+  Object *arg1 = (Object *) 0 ;
+  bool arg2 ;
+  
+  arg1 = (Object *)jarg1; 
+  arg2 = jarg2 ? true : false; 
+  (arg1)->SetActive(arg2);
 }
 
 
@@ -7635,6 +7766,44 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponent(void * jarg1)
   PortalComponent *arg1 = (PortalComponent *) 0 ;
   
   arg1 = (PortalComponent *)jarg1; 
+  delete arg1;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponent_ReloadEntitiesClone(void * jarg1) {
+  PortalTeleporterComponent *arg1 = (PortalTeleporterComponent *) 0 ;
+  
+  arg1 = (PortalTeleporterComponent *)jarg1; 
+  (arg1)->ReloadEntitiesClone();
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponent_m_transform_get(void * jarg1) {
+  void * jresult ;
+  PortalTeleporterComponent *arg1 = (PortalTeleporterComponent *) 0 ;
+  Transform *result = 0 ;
+  
+  arg1 = (PortalTeleporterComponent *)jarg1; 
+  result = (Transform *) ((arg1)->m_transform);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalTeleporterComponent() {
+  void * jresult ;
+  PortalTeleporterComponent *result = 0 ;
+  
+  result = (PortalTeleporterComponent *)new PortalTeleporterComponent();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalTeleporterComponent(void * jarg1) {
+  PortalTeleporterComponent *arg1 = (PortalTeleporterComponent *) 0 ;
+  
+  arg1 = (PortalTeleporterComponent *)jarg1; 
   delete arg1;
 }
 
@@ -11375,6 +11544,415 @@ SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalComponentVector(void * 
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Clear(void * jarg1) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  (arg1)->clear();
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Add(void * jarg1, void * jarg2) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  PortalTeleporterComponent **arg2 = 0 ;
+  PortalTeleporterComponent *temp2 = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  temp2 = (PortalTeleporterComponent *)jarg2;
+  arg2 = (PortalTeleporterComponent **)&temp2; 
+  (arg1)->push_back((PortalTeleporterComponent *const &)*arg2);
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_size(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  std::vector< PortalTeleporterComponent * >::size_type result;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  result = ((std::vector< PortalTeleporterComponent * > const *)arg1)->size();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_capacity(void * jarg1) {
+  unsigned long jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  std::vector< PortalTeleporterComponent * >::size_type result;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  result = ((std::vector< PortalTeleporterComponent * > const *)arg1)->capacity();
+  jresult = (unsigned long)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_reserve(void * jarg1, unsigned long jarg2) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  std::vector< PortalTeleporterComponent * >::size_type arg2 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (std::vector< PortalTeleporterComponent * >::size_type)jarg2; 
+  (arg1)->reserve(arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalTeleporterComponentVector__SWIG_0() {
+  void * jresult ;
+  std::vector< PortalTeleporterComponent * > *result = 0 ;
+  
+  result = (std::vector< PortalTeleporterComponent * > *)new std::vector< PortalTeleporterComponent * >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalTeleporterComponentVector__SWIG_1(void * jarg1) {
+  void * jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = 0 ;
+  std::vector< PortalTeleporterComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1;
+  if (!arg1) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalTeleporterComponent * > const & type is null", 0);
+    return 0;
+  } 
+  result = (std::vector< PortalTeleporterComponent * > *)new std::vector< PortalTeleporterComponent * >((std::vector< PortalTeleporterComponent * > const &)*arg1);
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_new_PortalTeleporterComponentVector__SWIG_2(int jarg1) {
+  void * jresult ;
+  int arg1 ;
+  std::vector< PortalTeleporterComponent * > *result = 0 ;
+  
+  arg1 = (int)jarg1; 
+  try {
+    result = (std::vector< PortalTeleporterComponent * > *)new_std_vector_Sl_PortalTeleporterComponent_Sm__Sg___SWIG_2(arg1);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_getitemcopy(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  PortalTeleporterComponent *result = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (PortalTeleporterComponent *)std_vector_Sl_PortalTeleporterComponent_Sm__Sg__getitemcopy(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_getitem(void * jarg1, int jarg2) {
+  void * jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalTeleporterComponent * >::value_type *result = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< PortalTeleporterComponent * >::value_type *) &std_vector_Sl_PortalTeleporterComponent_Sm__Sg__getitem(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)*result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_setitem(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  PortalTeleporterComponent **arg3 = 0 ;
+  PortalTeleporterComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (PortalTeleporterComponent *)jarg3;
+  arg3 = (PortalTeleporterComponent **)&temp3; 
+  try {
+    std_vector_Sl_PortalTeleporterComponent_Sm__Sg__setitem(arg1,arg2,(PortalTeleporterComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_AddRange(void * jarg1, void * jarg2) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  std::vector< PortalTeleporterComponent * > *arg2 = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (std::vector< PortalTeleporterComponent * > *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalTeleporterComponent * > const & type is null", 0);
+    return ;
+  } 
+  std_vector_Sl_PortalTeleporterComponent_Sm__Sg__AddRange(arg1,(std::vector< PortalTeleporterComponent * > const &)*arg2);
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_GetRange(void * jarg1, int jarg2, int jarg3) {
+  void * jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  std::vector< PortalTeleporterComponent * > *result = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    result = (std::vector< PortalTeleporterComponent * > *)std_vector_Sl_PortalTeleporterComponent_Sm__Sg__GetRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Insert(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  PortalTeleporterComponent **arg3 = 0 ;
+  PortalTeleporterComponent *temp3 = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  temp3 = (PortalTeleporterComponent *)jarg3;
+  arg3 = (PortalTeleporterComponent **)&temp3; 
+  try {
+    std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Insert(arg1,arg2,(PortalTeleporterComponent *const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_InsertRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalTeleporterComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< PortalTeleporterComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalTeleporterComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_PortalTeleporterComponent_Sm__Sg__InsertRange(arg1,arg2,(std::vector< PortalTeleporterComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_RemoveAt(void * jarg1, int jarg2) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  try {
+    std_vector_Sl_PortalTeleporterComponent_Sm__Sg__RemoveAt(arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_RemoveRange(void * jarg1, int jarg2, int jarg3) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_PortalTeleporterComponent_Sm__Sg__RemoveRange(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Repeat(void * jarg1, int jarg2) {
+  void * jresult ;
+  PortalTeleporterComponent **arg1 = 0 ;
+  int arg2 ;
+  PortalTeleporterComponent *temp1 = 0 ;
+  std::vector< PortalTeleporterComponent * > *result = 0 ;
+  
+  temp1 = (PortalTeleporterComponent *)jarg1;
+  arg1 = (PortalTeleporterComponent **)&temp1; 
+  arg2 = (int)jarg2; 
+  try {
+    result = (std::vector< PortalTeleporterComponent * > *)std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Repeat((PortalTeleporterComponent *const &)*arg1,arg2);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return 0;
+  }
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Reverse__SWIG_0(void * jarg1) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Reverse__SWIG_0(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Reverse__SWIG_1(void * jarg1, int jarg2, int jarg3) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  try {
+    std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Reverse__SWIG_1(arg1,arg2,arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  } catch(std::invalid_argument &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentException, (&_e)->what(), "");
+    return ;
+  }
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_SetRange(void * jarg1, int jarg2, void * jarg3) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  int arg2 ;
+  std::vector< PortalTeleporterComponent * > *arg3 = 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (std::vector< PortalTeleporterComponent * > *)jarg3;
+  if (!arg3) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "std::vector< PortalTeleporterComponent * > const & type is null", 0);
+    return ;
+  } 
+  try {
+    std_vector_Sl_PortalTeleporterComponent_Sm__Sg__SetRange(arg1,arg2,(std::vector< PortalTeleporterComponent * > const &)*arg3);
+  } catch(std::out_of_range &_e) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, 0, (&_e)->what());
+    return ;
+  }
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Contains(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  PortalTeleporterComponent **arg2 = 0 ;
+  PortalTeleporterComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  temp2 = (PortalTeleporterComponent *)jarg2;
+  arg2 = (PortalTeleporterComponent **)&temp2; 
+  result = (bool)std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Contains(arg1,(PortalTeleporterComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_IndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  PortalTeleporterComponent **arg2 = 0 ;
+  PortalTeleporterComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  temp2 = (PortalTeleporterComponent *)jarg2;
+  arg2 = (PortalTeleporterComponent **)&temp2; 
+  result = (int)std_vector_Sl_PortalTeleporterComponent_Sm__Sg__IndexOf(arg1,(PortalTeleporterComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT int SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_LastIndexOf(void * jarg1, void * jarg2) {
+  int jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  PortalTeleporterComponent **arg2 = 0 ;
+  PortalTeleporterComponent *temp2 = 0 ;
+  int result;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  temp2 = (PortalTeleporterComponent *)jarg2;
+  arg2 = (PortalTeleporterComponent **)&temp2; 
+  result = (int)std_vector_Sl_PortalTeleporterComponent_Sm__Sg__LastIndexOf(arg1,(PortalTeleporterComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponentVector_Remove(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  PortalTeleporterComponent **arg2 = 0 ;
+  PortalTeleporterComponent *temp2 = 0 ;
+  bool result;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  temp2 = (PortalTeleporterComponent *)jarg2;
+  arg2 = (PortalTeleporterComponent **)&temp2; 
+  result = (bool)std_vector_Sl_PortalTeleporterComponent_Sm__Sg__Remove(arg1,(PortalTeleporterComponent *const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_delete_PortalTeleporterComponentVector(void * jarg1) {
+  std::vector< PortalTeleporterComponent * > *arg1 = (std::vector< PortalTeleporterComponent * > *) 0 ;
+  
+  arg1 = (std::vector< PortalTeleporterComponent * > *)jarg1; 
+  delete arg1;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_CCEngine_RigidbodyVector_Clear(void * jarg1) {
   std::vector< Rigidbody * > *arg1 = (std::vector< Rigidbody * > *) 0 ;
   
@@ -13368,6 +13946,42 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfPortalComponent(voi
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetPortalTeleporterComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  PortalTeleporterComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (PortalTeleporterComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehaviour< PortalTeleporterComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_AddPortalTeleporterComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  PortalTeleporterComponent *result = 0 ;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (PortalTeleporterComponent *)(arg1)->SWIGTEMPLATEDISAMBIGUATOR AddBehaviour< PortalTeleporterComponent >();
+  jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetAllOfPortalTeleporterComponent(void * jarg1) {
+  void * jresult ;
+  Entity *arg1 = (Entity *) 0 ;
+  std::vector< PortalTeleporterComponent * > result;
+  
+  arg1 = (Entity *)jarg1; 
+  result = (arg1)->SWIGTEMPLATEDISAMBIGUATOR GetBehavioursOfType< PortalTeleporterComponent >();
+  jresult = new std::vector< PortalTeleporterComponent * >((const std::vector< PortalTeleporterComponent * > &)result); 
+  return jresult;
+}
+
+
 SWIGEXPORT void * SWIGSTDCALL CSharp_CCEngine_Entity_GetRigidbody(void * jarg1) {
   void * jresult ;
   Entity *arg1 = (Entity *) 0 ;
@@ -14605,6 +15219,10 @@ SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_AudioEmitter_SWIGUpcast(Audio
 }
 
 SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_PortalComponent_SWIGUpcast(PortalComponent *jarg1) {
+    return (Behaviour *)jarg1;
+}
+
+SWIGEXPORT Behaviour * SWIGSTDCALL CSharp_CCEngine_PortalTeleporterComponent_SWIGUpcast(PortalTeleporterComponent *jarg1) {
     return (Behaviour *)jarg1;
 }
 

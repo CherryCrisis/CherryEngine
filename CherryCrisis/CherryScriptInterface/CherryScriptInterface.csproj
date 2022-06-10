@@ -81,6 +81,8 @@
     <Compile Include="PhysicManager.cs" />
     <Compile Include="PortalComponent.cs" />
     <Compile Include="PortalComponentVector.cs" />
+    <Compile Include="PortalTeleporterComponent.cs" />
+    <Compile Include="PortalTeleporterComponentVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quaternion.cs" />
     <Compile Include="RaycastHit.cs" />

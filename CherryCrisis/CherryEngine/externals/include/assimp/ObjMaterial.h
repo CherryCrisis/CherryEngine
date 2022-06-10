@@ -39,30 +39,46 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-#pragma once
-#ifndef AI_BASE64_HPP_INC
-#define AI_BASE64_HPP_INC
+/** @file OBJMATERIAL.h
+ *  @brief Obj-specific material macros
+ *  
+ */
 
-#include <stdint.h>
-#include <vector>
-#include <string>
+#ifndef AI_OBJMATERIAL_H_INC
+#define AI_OBJMATERIAL_H_INC
 
-namespace Assimp {
-namespace Base64 {
+#ifdef __GNUC__
+#   pragma GCC system_header
+#endif
 
-/// @brief Will encode the given 
-/// @param in 
-/// @param inLength 
-/// @param out 
-void Encode(const uint8_t *in, size_t inLength, std::string &out);
-void Encode(const std::vector<uint8_t>& in, std::string &out);
-std::string Encode(const std::vector<uint8_t>& in);
+#include <assimp/material.h>
 
-size_t Decode(const char *in, size_t inLength, uint8_t *&out);
-size_t Decode(const std::string& in, std::vector<uint8_t>& out);
-std::vector<uint8_t> Decode(const std::string& in);
+// ---------------------------------------------------------------------------
 
-} // namespace Base64
-} // namespace Assimp
+// the original illum property
+#define AI_MATKEY_OBJ_ILLUM "$mat.illum", 0, 0
 
-#endif // AI_BASE64_HPP_INC
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Pure key names for all obj texture-related properties
+//! @cond MATS_DOC_FULL
+
+// support for bump -bm 
+#define _AI_MATKEY_OBJ_BUMPMULT_BASE "$tex.bumpmult"
+//! @endcond
+
+// ---------------------------------------------------------------------------
+#define AI_MATKEY_OBJ_BUMPMULT(type, N) _AI_MATKEY_OBJ_BUMPMULT_BASE, type, N
+
+//! @cond MATS_DOC_FULL
+#define AI_MATKEY_OBJ_BUMPMULT_NORMALS(N) \
+    AI_MATKEY_OBJ_BUMPMULT(aiTextureType_NORMALS, N)
+
+#define AI_MATKEY_OBJ_BUMPMULT_HEIGHT(N) \
+    AI_MATKEY_OBJ_BUMPMULT(aiTextureType_HEIGHT, N)
+
+//! @endcond
+
+
+#endif

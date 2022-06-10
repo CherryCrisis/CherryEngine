@@ -10,47 +10,43 @@
 
 namespace CCEngine {
 
-public class Object : global::System.IDisposable {
+public class PortalTeleporterComponent : Behaviour {
   private global::System.Runtime.InteropServices.HandleRef swigCPtr;
-  protected bool swigCMemOwn;
 
-  public Object(global::System.IntPtr cPtr, bool cMemoryOwn) {
-    swigCMemOwn = cMemoryOwn;
+  public PortalTeleporterComponent(global::System.IntPtr cPtr, bool cMemoryOwn) : base(CherryEnginePINVOKE.PortalTeleporterComponent_SWIGUpcast(cPtr), cMemoryOwn) {
     swigCPtr = new global::System.Runtime.InteropServices.HandleRef(this, cPtr);
   }
 
-  public static global::System.Runtime.InteropServices.HandleRef getCPtr(Object obj) {
+  public static global::System.Runtime.InteropServices.HandleRef getCPtr(PortalTeleporterComponent obj) {
     return (obj == null) ? new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero) : obj.swigCPtr;
   }
 
-  ~Object() {
-    Dispose(false);
-  }
-
-  public void Dispose() {
-    Dispose(true);
-    global::System.GC.SuppressFinalize(this);
-  }
-
-  protected virtual void Dispose(bool disposing) {
+  protected override void Dispose(bool disposing) {
     lock(this) {
       if (swigCPtr.Handle != global::System.IntPtr.Zero) {
         if (swigCMemOwn) {
           swigCMemOwn = false;
-          CherryEnginePINVOKE.delete_Object(swigCPtr);
+          CherryEnginePINVOKE.delete_PortalTeleporterComponent(swigCPtr);
         }
         swigCPtr = new global::System.Runtime.InteropServices.HandleRef(null, global::System.IntPtr.Zero);
       }
+      base.Dispose(disposing);
     }
   }
 
-  public bool IsActive() {
-    bool ret = CherryEnginePINVOKE.Object_IsActive(swigCPtr);
-    return ret;
+  public void ReloadEntitiesClone() {
+    CherryEnginePINVOKE.PortalTeleporterComponent_ReloadEntitiesClone(swigCPtr);
   }
 
-  public void SetActive(bool value) {
-    CherryEnginePINVOKE.Object_SetActive(swigCPtr, value);
+  public Transform m_transform {
+    get {
+      global::System.IntPtr cPtr = CherryEnginePINVOKE.PortalTeleporterComponent_m_transform_get(swigCPtr);
+      Transform ret = (cPtr == global::System.IntPtr.Zero) ? null : new Transform(cPtr, false);
+      return ret;
+    } 
+  }
+
+  public PortalTeleporterComponent() : this(CherryEnginePINVOKE.new_PortalTeleporterComponent(), true) {
   }
 
 }

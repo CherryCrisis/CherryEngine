@@ -15,6 +15,7 @@
 %include audio_listener.i
 %include audio_emitter.i
 %include portal_component.i
+%include portal_teleporter_component.i
 %include rigidbody.i
 %include box_collider.i
 %include sphere_collider.i
@@ -47,6 +48,7 @@ COMP_STD_WRAP(LightComponent)
 COMP_STD_WRAP(AudioListener)
 COMP_STD_WRAP(AudioEmitter)
 COMP_STD_WRAP(PortalComponent)
+COMP_STD_WRAP(PortalTeleporterComponent)
 COMP_STD_WRAP(Rigidbody)
 COMP_STD_WRAP(BoxCollider)
 COMP_STD_WRAP(SphereCollider)
@@ -101,6 +103,7 @@ public:
 	COMP_TEMPLATE_WRAP(AudioListener)
 	COMP_TEMPLATE_WRAP(AudioEmitter)
 	COMP_TEMPLATE_WRAP(PortalComponent)
+	COMP_TEMPLATE_WRAP(PortalTeleporterComponent)
 	COMP_TEMPLATE_WRAP(Rigidbody)
 	COMP_TEMPLATE_WRAP(BoxCollider)
 	COMP_TEMPLATE_WRAP(SphereCollider)
@@ -154,6 +157,9 @@ public:
 		if (type == typeof(PortalComponent))
 			return AddPortalComponent();
 
+		if (type == typeof(PortalTeleporterComponent))
+			return AddPortalTeleporterComponent();
+
 		if (type == typeof(Rigidbody))
 			return AddRigidbody();
 
@@ -193,6 +199,9 @@ public:
 									
 		if (type == typeof(PortalComponent))
 			return GetPortalComponent();
+
+		if (type == typeof(PortalTeleporterComponent))
+			return GetPortalTeleporterComponent();
 			
 		if (type == typeof(Rigidbody))
 			return GetRigidbody();

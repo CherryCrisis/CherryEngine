@@ -1600,6 +1600,9 @@
     <None Include="interface\rigidbody.i">
       <Filter>Fichiers sources\Interface\Components</Filter>
     </None>
+    <None Include="interface\portal_teleporter_component.i">
+      <Filter>Fichiers sources\Interface\Components</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\transform.cpp">

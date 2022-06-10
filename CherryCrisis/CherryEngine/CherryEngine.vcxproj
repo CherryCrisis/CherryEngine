@@ -470,6 +470,7 @@
     <None Include="interface\physic_manager.i" />
     <None Include="interface\physic_scene.i" />
     <None Include="interface\portal_component.i" />
+    <None Include="interface\portal_teleporter_component.i" />
     <None Include="interface\quaternion.i" />
     <None Include="interface\rigidbody.i" />
     <None Include="interface\scene_manager.i" />

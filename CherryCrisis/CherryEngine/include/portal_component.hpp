@@ -18,7 +18,7 @@ private:
 protected:
 	void PopulateMetadatas() override;
 
-	const Vector3 m_boxColliderScale { 1.f,1.f,0.05f };
+	const Vector3 m_boxColliderScale { 1.f,1.f,0.5f };
 	const float m_offset { 0.005f };
 
 public:
