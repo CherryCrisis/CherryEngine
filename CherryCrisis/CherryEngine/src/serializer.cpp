@@ -219,7 +219,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 		cellSettings.reset();
 	}
 
-		const char* parseError = "#ERROR {}  is not handled !";//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
+		//std::string("#ERROR# ") + std::string(type.name()) + std::string(" is not handled !") + "\n";
 		//Components Saving
 		YAML::Node components = save["components"];
 		for (auto& entity : scene->m_entities)
@@ -317,7 +317,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 					}
 
 					//Unhandled Cases (useful to find them)
-					node[metaName] = std::format(parseError, type.name());
+					node[metaName] = std::format("#ERROR {}  is not handled !", type.name());
 				}
 				node.reset();
 			}
@@ -415,7 +415,7 @@ bool Serializer::SerializeScene(Scene* scene, const char* filepath)
 				}
 
 				//Unhandled Cases (useful to find them)
-				node[metaName] = std::format(parseError, type.name());
+				node[metaName] = std::format("#ERROR {}  is not handled !", type.name());
 			}
 			node.reset();
 		}
